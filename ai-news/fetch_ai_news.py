@@ -236,7 +236,8 @@ def main():
         }
         existing[item["url"]] = merged
 
-    all_items = list(existing.values())
+    allowed_sources = {f.get("name") for f in feeds if f.get("name")}
+    all_items = [it for it in existing.values() if it.get("source") in allowed_sources]
 
     # Parse/score/sort
     for it in all_items:
