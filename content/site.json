@@ -1,0 +1,18 @@
+{
+  "name": "Jez",
+  "tagline": "Builder, experimenter, and curious human.",
+  "about": "Welcome to my public corner of the internet. This site will grow to include projects, game experiments, photos, and an AI news stream I actually trust.",
+  "projects": [
+    {"name": "AI News Feed", "desc": "Curated AI/model releases and important updates.", "link": "./ai-news/public/index.html"},
+    {"name": "Game Experiments", "desc": "Playable prototypes and mechanics tests.", "link": "#"},
+    {"name": "Photo Gallery", "desc": "Personal photos and creative experiments.", "link": "#"}
+  ],
+  "games": [
+    "Prototype #1 (coming soon)",
+    "Prototype #2 (coming soon)"
+  ],
+  "photos": [
+    "Photo set coming soon",
+    "Behind-the-scenes shots coming soon"
+  ]
+}

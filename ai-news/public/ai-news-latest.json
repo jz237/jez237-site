@@ -1,53 +1,89 @@
 {
-  "updatedAt": "2026-03-05T21:40:49.016100+00:00",
+  "updatedAt": "2026-03-05T23:26:45.535564+00:00",
   "items": [
+    {
+      "title": "The Pentagon formally labels Anthropic a supply-chain risk",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/890347/pentagon-anthropic-supply-chain-risk",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "After weeks of failed negotiations, public ultimatums, and lawsuit threats, the Defense Department has formally labeled Anthropic a \"supply-chain risk\", escalating its fight with the AI company over their acceptable use policies and potentially bringing their fight to court. The decision, first reported by The Wall Street Journal on Thursday, citing one source familiar, will [&#8230;]",
+      "published": "2026-03-05T23:02:22+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.1376
+    },
+    {
+      "title": "Trump gets data center companies to pledge to pay for power generation",
+      "url": "https://arstechnica.com/tech-policy/2026/03/leading-ai-datacenter-companies-sign-pledge-to-buy-their-own-power",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "summary": "With no enforcement and questionable economics, it may not make a difference.",
+      "published": "2026-03-05T18:41:28+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.0139
+    },
+    {
+      "title": "Netflix is buying Ben Affleck’s AI startup",
+      "url": "https://www.theverge.com/streaming/889973/netflix-ben-affleck-interpositive-ai",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "Though Netflix lost the war for Warner Bros., it has just bought an AI startup from the internet's favorite Dunkin' Donuts aficionado. Today, Netflix announced that it has acquired InterPositive, Ben Affleck's AI company that specializes in tools for film and television production. The deal will see all 16 of InterPositive's current team of engineers [&#8230;]",
+      "published": "2026-03-05T18:27:16+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.0076
+    },
+    {
+      "title": "OpenAI’s new GPT-5.4 model is a big step toward autonomous agents",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/889926/openai-gpt-5-4-model-release-ai-agents",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "OpenAI is launching GPT-5.4, the latest version of its AI model that the company says combines advancements in reasoning, coding, and professional work involving spreadsheets, documents, and presentations. It's also OpenAI's first model with native computer use capabilities, meaning it can operate a computer on your behalf and complete tasks across different applications. The new [&#8230;]",
+      "published": "2026-03-05T18:00:00+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.2956
+    },
     {
       "title": "Ask a Techspert: How does AI understand my visual searches?",
       "url": "https://blog.google/company-news/inside-google/googlers/how-google-ai-visual-search-works",
       "source": "Google AI Blog",
       "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.9,
+      "sourceWeight": 0.95,
       "summary": "Mobile phone with a search bar that says \"Ask anything\"",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.2531
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.2756
     },
     {
-      "title": "OpenAI Releases Symphony: An Open Source Agentic Framework for Orchestrating Autonomous AI Agents through Structured, Scalable Implementation Runs",
-      "url": "https://www.marktechpost.com/2026/03/05/openai-releases-symphony-an-open-source-agentic-framework-for-orchestrating-autonomous-ai-agents-through-structured-scalable-implementation-runs",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.7,
-      "summary": "OpenAI has released Symphony, an open-source framework designed to manage autonomous AI coding agents through structured &#8216;implementation runs.&#8217; The project provides a system for automating software development tasks by connecting issue trackers to LLM-based agents. System Architecture: Elixir and the BEAM Symphony is built using Elixir and the Erlang/BEAM runtime. The choice of stack focuses [&#8230;]\nThe post OpenAI Releases Symphony: An Open Source Agentic Framework for Orchestrating Autonomous AI Agents through Structured, Scalable Implementation Runs appeared first on MarkTechP",
-      "published": "2026-03-05T17:37:15+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.6627
-    },
-    {
-      "title": "How to Design an Advanced Tree-of-Thoughts Multi-Branch Reasoning Agent with Beam Search, Heuristic Scoring, and Depth-Limited Pruning",
-      "url": "https://www.marktechpost.com/2026/03/05/how-to-design-an-advanced-tree-of-thoughts-multi-branch-reasoning-agent-with-beam-search-heuristic-scoring-and-depth-limited-pruning",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.7,
-      "summary": "In this tutorial, we build an advanced Tree-of-Thoughts (ToT) multi-branch reasoning agent from scratch. Instead of relying on linear chain-of-thought reasoning, we design a system that generates multiple reasoning branches, scores each branch using a heuristic evaluation function, prunes weak candidates, and continues expanding only the strongest paths. We combine an instruction-tuned transformer model with [&#8230;]\nThe post How to Design an Advanced Tree-of-Thoughts Multi-Branch Reasoning Agent with Beam Search, Heuristic Scoring, and Depth-Limited Pruning appeared first on MarkTechPost.",
-      "published": "2026-03-05T17:00:27+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.8961
+      "title": "Meta’s AI glasses reportedly send sensitive footage to human reviewers in Kenya",
+      "url": "https://www.theverge.com/tech/889637/meta-ai-smart-glasses-human-reviewers-kenya",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "Meta's AI-powered smart glasses could be sending sensitive footage to human reviewers in Nairobi, Kenya, according to an investigation by the Swedish outlets Svenska Dagbladet and G&#246;teborgs-Posten. The report, which was published last week, claims Meta contractors in Kenya have seen videos captured with the smart glasses that show \"bathroom visits, sex and other intimate [&#8230;]",
+      "published": "2026-03-05T16:37:52+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 1.9603
     },
     {
       "title": "The latest AI news we announced in February",
       "url": "https://blog.google/innovation-and-ai/products/google-ai-updates-february-2026",
       "source": "Google AI Blog",
       "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.9,
+      "sourceWeight": 0.95,
       "summary": "an MP4 of a carousel with images reading \"Gemini 3.1 Pro\" and \"Nano Banana 2\"",
       "published": "2026-03-05T16:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.2126
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.237
     },
     {
       "title": "Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations",
@@ -58,20 +94,56 @@
       "summary": "",
       "published": "2026-03-05T14:16:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.5256
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.4827
     },
     {
       "title": "March Into the Cloud With 15 New Games Coming to GeForce NOW",
       "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-march-2026-games-list",
       "source": "NVIDIA Blog",
       "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.8,
+      "sourceWeight": 0.85,
       "summary": "March is in full bloom, and that means a fresh wave of games heading to the cloud. 15 new titles are joining the GeForce NOW library this month. Leading the March lineup is Pearl Abyss’ Crimson Desert, an open‑world action‑adventure set in a war‑torn fantasy land, alongside plenty of other games to explore. Whether looking [&#8230;]",
       "published": "2026-03-05T14:00:30+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.0089
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.0363
+    },
+    {
+      "title": "Apple Music adds optional labels for AI songs and visuals",
+      "url": "https://www.theverge.com/tech/889836/apple-music-ai-transparency-tags-launch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "Apple is asking artists and record labels on its music streaming platform to voluntarily label songs that were made using AI. The new \"Transparency Tags\" metadata system for Apple Music was announced in a newsletter to industry partners yesterday, according to Music Business Worldwide, and covers four categories, including track, composition, artwork, and music videos. [&#8230;]",
+      "published": "2026-03-05T14:00:00+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 1.8961
+    },
+    {
+      "title": "AI tools can unmask anonymous accounts",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/889395/ai-agents-unmask-anonymous-online-accounts",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "Do you have a Reddit alt, secret X, finsta, or Glassdoor account you trash your boss with? AI might have just made it a lot easier to unmask you. That's the conclusion of a recently published study, which hints at some uncomfortable consequences for staying private online - even if it's not quite time to [&#8230;]",
+      "published": "2026-03-05T13:30:00+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 1.8845
+    },
+    {
+      "title": "Anthropic makes last-ditch effort to salvage deal with Pentagon after blowup",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/889782/anthropic-pentagon-discussions-ai-deal",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "Anthropic CEO Dario Amodei is reportedly back at the negotiating table with the Department of Defense in an attempt to salvage the company's relationship with the US military and prevent it from being iced out of defense work for being a \"supply chain risk.\" Talks between the two parties imploded on Friday after weeks of [&#8230;]",
+      "published": "2026-03-05T11:46:46+00:00",
+      "firstSeen": "2026-03-05T23:26:26.501642+00:00",
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 1.8455
     },
     {
       "title": "Reasoning models struggle to control their chains of thought, and that’s good",
@@ -82,8 +154,8 @@
       "summary": "OpenAI introduces CoT-Control and finds reasoning models struggle to control their chains of thought, reinforcing monitorability as an AI safety safeguard.",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.1952
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.1572
     },
     {
       "title": "Introducing GPT-5.4",
@@ -94,8 +166,8 @@
       "summary": "Introducing GPT-5.4, OpenAI’s most most capable and efficient frontier model for professional work, with state-of-the-art coding, computer use, tool search, and 1M-token context.",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.5452
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.5072
     },
     {
       "title": "Online harassment is entering its AI era",
@@ -106,8 +178,8 @@
       "summary": "Scott Shambaugh didn’t think twice when he denied an AI agent’s request to contribute to matplotlib, a software library that he helps manage. Like many open-source projects, matplotlib has been overwhelmed by a glut of AI code contributions, and so Shambaugh and his fellow maintainers have instituted a policy that all AI-written code must be&#8230;",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.2852
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.2472
     },
     {
       "title": "GPT-5.4 Thinking System Card",
@@ -118,8 +190,8 @@
       "summary": "",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.1952
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.1572
     },
     {
       "title": "Ensuring AI use in education leads to opportunity",
@@ -130,476 +202,404 @@
       "summary": "OpenAI shares new tools, certifications, and measurement resources to help schools and universities close AI capability gaps and expand opportunity.",
       "published": "2026-03-05T09:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 2.1734
-    },
-    {
-      "title": "YuanLab AI Releases Yuan 3.0 Ultra: A Flagship Multimodal MoE Foundation Model, Built for Stronger Intelligence and Unrivaled Efficiency",
-      "url": "https://www.marktechpost.com/2026/03/04/yuanlab-ai-releases-yuan-3-0-ultra-a-flagship-multimodal-moe-foundation-model-built-for-stronger-intelligence-and-unrivaled-efficiency",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.7,
-      "summary": "How can a trillion-parameter Large Language Model achieve state-of-the-art enterprise performance while simultaneously cutting its total parameter count by 33.3% and boosting pre-training efficiency by 49%? Yuan Lab AI releases Yuan3.0 Ultra, an open-source Mixture-of-Experts (MoE) large language model featuring 1T total parameters and 68.8B activated parameters. The model architecture is designed to optimize performance [&#8230;]\nThe post YuanLab AI Releases Yuan 3.0 Ultra: A Flagship Multimodal MoE Foundation Model, Built for Stronger Intelligence and Unrivaled Efficiency appeared first on M",
-      "published": "2026-03-05T05:55:02+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.04
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 2.1364
     },
     {
       "title": "Can Large Language Models Derive New Knowledge? A Dynamic Benchmark for Biological Knowledge Discovery",
       "url": "https://arxiv.org/abs/2603.03322",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03322v1 Announce Type: cross \nAbstract: Recent advancements in Large Language Model (LLM) agents have demonstrated remarkable potential in automatic knowledge discovery. However, rigorously evaluating an AI's capacity for knowledge discovery remains a critical challenge. Existing benchmarks predominantly rely on static datasets, leading to inevitable data contamination where models have likely seen the evaluation knowledge during training. Furthermore, the rapid release cycles of modern LLMs render static benchmarks quickly outdated, failing to assess the ability to discover truly n",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 4.7221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 4.829
     },
     {
       "title": "LabelBuddy: An Open Source Music and Audio Language Annotation Tagging Tool Using AI Assistance",
       "url": "https://arxiv.org/abs/2603.04293",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.04293v1 Announce Type: cross \nAbstract: The advancement of Machine learning (ML), Large Audio Language Models (LALMs), and autonomous AI agents in Music Information Retrieval (MIR) necessitates a shift from static tagging to rich, human-aligned representation learning. However, the scarcity of open-source infrastructure capable of capturing the subjective nuances of audio annotation remains a critical bottleneck. This paper introduces \\textbf{LabelBuddy}, an open-source collaborative auto-tagging audio annotation tool designed to bridge the gap between human intent and machine under",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 4.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 4.179
     },
     {
       "title": "RoboCasa365: A Large-Scale Simulation Framework for Training and Benchmarking Generalist Robots",
       "url": "https://arxiv.org/abs/2603.04356",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.04356v1 Announce Type: cross \nAbstract: Recent advances in robot learning have accelerated progress toward generalist robots that can perform everyday tasks in human environments. Yet it remains difficult to gauge how close we are to this vision. The field lacks a reproducible, large-scale benchmark for systematic evaluation. To fill this gap, we present RoboCasa365, a comprehensive simulation benchmark for household mobile manipulation. Built on the RoboCasa platform, RoboCasa365 introduces 365 everyday tasks across 2,500 diverse kitchen environments, with over 600 hours of human d",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.7221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.829
     },
     {
       "title": "A Rubric-Supervised Critic from Sparse Real-World Outcomes",
       "url": "https://arxiv.org/abs/2603.03800",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03800v1 Announce Type: new \nAbstract: Academic benchmarks for coding agents tend to reward autonomous task completion, measured by verifiable rewards such as unit-test success. In contrast, real-world coding agents operate with humans in the loop, where success signals are typically noisy, delayed, and sparse. How can we bridge this gap? In this paper, we propose a process to learn a \"critic\" model from sparse and noisy interaction data, which can then be used both as a reward model for either RL-based training or inference-time scaling. Specifically, we introduce Critic Rubrics, a ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.6221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.729
     },
     {
       "title": "ToolRLA: Multiplicative Reward Decomposition for Tool-Integrated Agents",
       "url": "https://arxiv.org/abs/2603.01620",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.01620v2 Announce Type: replace \nAbstract: Tool-integrated agents that interleave reasoning with API calls are promising for complex tasks, yet aligning them for high-stakes, domain-specific deployment remains challenging: existing reinforcement learning approaches rely on coarse binary rewards that cannot distinguish tool selection errors from malformed parameters. We present ToolRLA, a three-stage post-training pipeline (SFT $\\rightarrow$ GRPO $\\rightarrow$ DPO) for domain-specific tool agents. The core contribution is a fine-grained reward function with multiplicative correctness ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.6221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.729
     },
     {
       "title": "Escaping the BLEU Trap: A Signal-Grounded Framework with Decoupled Semantic Guidance for EEG-to-Text Decoding",
       "url": "https://arxiv.org/abs/2603.03312",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03312v1 Announce Type: cross \nAbstract: Decoding natural language from non-invasive EEG signals is a promising yet challenging task. However, current state-of-the-art models remain constrained by three fundamental limitations: Semantic Bias (mode collapse into generic templates), Signal Neglect (hallucination based on linguistic priors rather than neural inputs), and the BLEU Trap, where evaluation metrics are artificially inflated by high-frequency stopwords, masking a lack of true semantic fidelity. To address these challenges, we propose SemKey, a novel multi-stage framework that",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.4221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.529
     },
     {
       "title": "LadderSym: A Multimodal Interleaved Transformer for Music Practice Error Detection",
       "url": "https://arxiv.org/abs/2510.08580",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2510.08580v2 Announce Type: replace-cross \nAbstract: Music learners can greatly benefit from tools that accurately detect errors in their practice. Existing approaches typically compare audio recordings to music scores using heuristics or learnable models. This paper introduces LadderSym, a novel Transformer-based method for music error detection. LadderSym is guided by two key observations about the state-of-the-art approaches: (1) late fusion limits inter-stream alignment and cross-modality comparison capability; and (2) reliance on score audio introduces ambiguity in the frequency spe",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.4221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.529
     },
     {
       "title": "AgentSelect: Benchmark for Narrative Query-to-Agent Recommendation",
       "url": "https://arxiv.org/abs/2603.03761",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03761v1 Announce Type: new \nAbstract: LLM agents are rapidly becoming the practical interface for task automation, yet the ecosystem lacks a principled way to choose among an exploding space of deployable configurations. Existing LLM leaderboards and tool/agent benchmarks evaluate components in isolation and remain fragmented across tasks, metrics, and candidate pools, leaving a critical research gap: there is little query-conditioned supervision for learning to recommend end-to-end agent configurations that couple a backbone model with a toolkit. We address this gap with AgentSelec",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.479
     },
     {
       "title": "Raising Bars, Not Parameters: LilMoo Compact Language Model for Hindi",
       "url": "https://arxiv.org/abs/2603.03508",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03508v1 Announce Type: cross \nAbstract: The dominance of large multilingual foundation models has widened linguistic inequalities in Natural Language Processing (NLP), often leaving low-resource languages underrepresented. This paper introduces LilMoo, a 0.6-billion-parameter Hindi language model trained entirely from scratch to address this gap. Unlike prior Hindi models that rely on continual pretraining from opaque multilingual foundations, LilMoo is developed through a fully transparent and reproducible pipeline optimized for limited compute environments. We construct a high-qua",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.479
     },
     {
       "title": "Bielik-Q2-Sharp: A Comparative Study of Extreme 2-bit Quantization Methods for a Polish 11B Language Model",
       "url": "https://arxiv.org/abs/2603.04162",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.04162v1 Announce Type: cross \nAbstract: We present Bielik-Q2-Sharp, the first systematic academic evaluation of extreme 2-bit quantization applied to a Polish large language model. Using Bielik-11B-v2.3-Instruct (11B parameters, Mistral architecture) as our base model, we compare six state-of-the-art post-training quantization methods -- QuIP#, SpinQuant+GPTQ, ButterflyQuant, QTIP, VPTQ, and AQLM -- all calibrated on a Polish-language corpus (CulturaX-PL) with shared Hessian matrices. Our best variant (QuIP# E8P12) achieves 71.92% across 22 Polish benchmarks versus 72.07% for the IQ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.479
     },
     {
       "title": "ZipMap: Linear-Time Stateful 3D Reconstruction with Test-Time Training",
       "url": "https://arxiv.org/abs/2603.04385",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.04385v1 Announce Type: cross \nAbstract: Feed-forward transformer models have driven rapid progress in 3D vision, but state-of-the-art methods such as VGGT and $\\pi^3$ have a computational cost that scales quadratically with the number of input images, making them inefficient when applied to large image collections. Sequential-reconstruction approaches reduce this cost but sacrifice reconstruction quality. We introduce ZipMap, a stateful feed-forward model that achieves linear-time, bidirectional 3D reconstruction while matching or surpassing the accuracy of quadratic-time methods. Z",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.479
     },
     {
       "title": "Preference Leakage: A Contamination Problem in LLM-as-a-judge",
       "url": "https://arxiv.org/abs/2502.01534",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2502.01534v3 Announce Type: replace-cross \nAbstract: Large Language Models (LLMs) as judges and LLM-based data synthesis have emerged as two fundamental LLM-driven data annotation methods in model development. While their combination significantly enhances the efficiency of model training and evaluation, little attention has been given to the potential contamination brought by this new model development paradigm. In this work, we expose preference leakage, a contamination problem in LLM-as-a-judge caused by the relatedness between the synthetic data generators and LLM-based evaluators. T",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.479
     },
     {
       "title": "Agentics 2.0: Logical Transduction Algebra for Agentic Data Workflows",
       "url": "https://arxiv.org/abs/2603.04241",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.04241v1 Announce Type: new \nAbstract: Agentic AI is rapidly transitioning from research prototypes to enterprise deployments, where requirements extend to meet the software quality attributes of reliability, scalability, and observability beyond plausible text generation. We present Agentics 2.0, a lightweight, Python-native framework for building high-quality, structured, explainable, and type-safe agentic data workflows. At the core of Agentics 2.0, the logical transduction algebra formalizes a large language model inference call as a typed semantic transformation, which we call a",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "$\\tau$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge",
       "url": "https://arxiv.org/abs/2603.04370",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.04370v1 Announce Type: new \nAbstract: Conversational agents are increasingly deployed in knowledge-intensive settings, where correct behavior depends on retrieving and applying domain-specific knowledge from large, proprietary, and unstructured corpora during live interactions with users. Yet most existing benchmarks evaluate retrieval or tool use independently of each other, creating a gap in realistic, fully agentic evaluation over unstructured data in long-horizon interactions. We introduce $\\tau$-Knowledge, an extension of $\\tau$-Bench for evaluating agents in environments where",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "Draft-Conditioned Constrained Decoding for Structured Generation in LLMs",
       "url": "https://arxiv.org/abs/2603.03305",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03305v1 Announce Type: cross \nAbstract: Large language models (LLMs) are increasingly used to generate executable outputs, JSON objects, and API calls, where a single syntax error can make the output unusable. Constrained decoding enforces validity token-by-token via masking and renormalization, but it can distort generation when the model assigns low probability mass to valid continuations, pushing decoding toward locally valid yet semantically incorrect trajectories. We propose \\emph{Draft-Conditioned Constrained Decoding (DCCD)}, a simple two-step, training-free inference procedu",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "GeoSeg: Training-Free Reasoning-Driven Segmentation in Remote Sensing Imagery",
       "url": "https://arxiv.org/abs/2603.03983",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03983v1 Announce Type: cross \nAbstract: Recent advances in MLLMs are reframing segmentation from fixed-category prediction to instruction-grounded localization. While reasoning based segmentation has progressed rapidly in natural scenes, remote sensing lacks a generalizable solution due to the prohibitive cost of reasoning-oriented data and domain-specific challenges like overhead viewpoints. We present GeoSeg, a zero-shot, training-free framework that bypasses the supervision bottleneck for reasoning-driven remote sensing segmentation. GeoSeg couples MLLM reasoning with precise loc",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",
       "url": "https://arxiv.org/abs/2509.21782",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2509.21782v2 Announce Type: replace \nAbstract: Multimodal large language models (MLLMs) are increasingly deployed as the core reasoning engine for web-facing systems, powering GUI agents and front-end automation that must interpret page structure, select actionable widgets, and execute multi-step interactions reliably. However, existing benchmarks largely emphasize visual perception or UI code generation, showing insufficient evaluation on the reasoning, robustness and safety capability required for end-to-end web applications. To bridge the gap, we introduce a comprehensive web understa",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "Training High-Level Schedulers with Execution-Feedback Reinforcement Learning for Long-Horizon GUI Automation",
       "url": "https://arxiv.org/abs/2511.22235",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2511.22235v2 Announce Type: replace \nAbstract: The rapid development of large vision-language model (VLM) has greatly promoted the research of GUI agent. However, GUI agents still face significant challenges in handling long-horizon tasks. First, single-agent models struggle to balance high-level capabilities and low-level execution capability, facing prevalent issues of responsibility coupling and capability conflicts. Second, agents lack awareness of the task state, leading to progress loss in long-horizon tasks. To address these challenges, we propose a staged execution-feedback reinf",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "Why Do AI Agents Systematically Fail at Cloud Root Cause Analysis?",
       "url": "https://arxiv.org/abs/2602.09937",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2602.09937v2 Announce Type: replace \nAbstract: Failures in large-scale cloud systems incur substantial financial losses, making automated Root Cause Analysis (RCA) essential for operational stability. Recent efforts leverage Large Language Model (LLM) agents to automate this task, yet existing systems exhibit low detection accuracy even with capable models, and current evaluation frameworks assess only final answer correctness without revealing why the agent's reasoning failed. This paper presents a process level failure analysis of LLM-based RCA agents. We execute the full OpenRCA bench",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.3221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.429
     },
     {
       "title": "LiteVLA-Edge: Quantized On-Device Multimodal Control for Embedded Robotics",
       "url": "https://arxiv.org/abs/2603.03380",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03380v1 Announce Type: cross \nAbstract: Vision-Language-Action (VLA) models provide a unified framework for perception, language conditioning, and action generation, but many existing systems remain difficult to deploy in embedded robotic settings because of their computational requirements and inference latency. In this paper, we present LiteVLA-Edge, a deployment-oriented VLA pipeline for fully on-device inference on Jetson Orin-class hardware. Our approach combines supervised image-to-action fine-tuning in FP32 with post-training 4-bit GGUF quantization and GPU-accelerated infere",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.2721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.379
     },
     {
       "title": "Generalization of RLVR Using Causal Reasoning as a Testbed",
       "url": "https://arxiv.org/abs/2512.20760",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2512.20760v2 Announce Type: replace-cross \nAbstract: Reinforcement learning with verifiable rewards (RLVR) has emerged as a promising paradigm for post-training large language models (LLMs) on complex reasoning tasks. Yet, the conditions under which RLVR yields robust generalization remain underexplored. This paper provides an empirical study of RLVR generalization in the setting of probabilistic inference over causal graphical models. This setting offers two natural axes along which to examine generalization: (i) the level of the probabilistic query -- associational, interventional, or ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.2721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.379
     },
     {
       "title": "One Bias After Another: Mechanistic Reward Shaping and Persistent Biases in Language Reward Models",
       "url": "https://arxiv.org/abs/2603.03291",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03291v1 Announce Type: cross \nAbstract: Reward Models (RMs) are crucial for online alignment of language models (LMs) with human preferences. However, RM-based preference-tuning is vulnerable to reward hacking, whereby LM policies learn undesirable behaviors from flawed RMs. By systematically measuring biases in five high-quality RMs, including the state-of-the-art, we find that issues persist despite prior work with respect to length, sycophancy, and overconfidence. We also discover new issues related to bias toward model-specific styles and answer-order. We categorize RM failures ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.179
     },
     {
       "title": "From Exact Hits to Close Enough: Semantic Caching for LLM Embeddings",
       "url": "https://arxiv.org/abs/2603.03301",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03301v1 Announce Type: cross \nAbstract: The rapid adoption of large language models (LLMs) has created demand for faster responses and lower costs. Semantic caching, reusing semantically similar requests via their embeddings, addresses this need but breaks classic cache assumptions and raises new challenges. In this paper, we explore offline policies for semantic caching, proving that implementing an optimal offline policy is NP-hard, and propose several polynomial-time heuristics. We also present online semantic aware cache policies that combine recency, frequency, and locality. Ev",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.179
     },
     {
       "title": "Ethical and Explainable AI in Reusable MLOps Pipelines",
       "url": "https://arxiv.org/abs/2603.03341",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03341v1 Announce Type: cross \nAbstract: This paper introduces a unified machine learning operations (MLOps) framework that brings ethical artificial intelligence principles into practical use by enforcing fairness, explainability, and governance throughout the machine learning lifecycle. The proposed method reduces bias by lowering the demographic parity difference (DPD) from 0.31 to 0.04 without model retuning, and cross-dataset validation achieves an area under the curve (AUC) of 0.89 on the Statlog Heart dataset.\n  The framework maintains fairness metrics within operational limit",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.179
     },
     {
       "title": "Bridging the Reproducibility Divide: Open Source Software's Role in Standardizing Healthcare AI",
       "url": "https://arxiv.org/abs/2603.03367",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03367v1 Announce Type: cross \nAbstract: Our analysis of recent AI4H publications reveals that, despite a trend toward utilizing open datasets and sharing modeling code, 74% of AI4H papers still rely on private datasets or do not share their code. This is especially concerning in healthcare applications, where trust is essential. Furthermore, inconsistent and poorly documented data preprocessing pipelines result in variable model performance reports, even for identical tasks and datasets, making it challenging to evaluate the true effectiveness of AI models.\n  Despite the challenges ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.179
     },
     {
       "title": "Graph Negative Feedback Bias Correction Framework for Adaptive Heterophily Modeling",
       "url": "https://arxiv.org/abs/2603.03662",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03662v1 Announce Type: cross \nAbstract: Graph Neural Networks (GNNs) have emerged as a powerful framework for processing graph-structured data. However, conventional GNNs and their variants are inherently limited by the homophily assumption, leading to degradation in performance on heterophilic graphs. Although substantial efforts have been made to mitigate this issue, they remain constrained by the message-passing paradigm, which is inherently rooted in homophily. In this paper, a detailed analysis of how the underlying label autocorrelation of the homophily assumption introduces b",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.179
     },
     {
       "title": "Cross-Modal Mapping and Dual-Branch Reconstruction for 2D-3D Multimodal Industrial Anomaly Detection",
       "url": "https://arxiv.org/abs/2603.03939",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03939v1 Announce Type: cross \nAbstract: Multimodal industrial anomaly detection benefits from integrating RGB appearance with 3D surface geometry, yet existing \\emph{unsupervised} approaches commonly rely on memory banks, teacher-student architectures, or fragile fusion schemes, limiting robustness under noisy depth, weak texture, or missing modalities. This paper introduces \\textbf{CMDR-IAD}, a lightweight and modality-flexible unsupervised framework for reliable anomaly detection in 2D+3D multimodal as well as single-modality (2D-only or 3D-only) settings. \\textbf{CMDR-IAD} combin",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0721
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.179
     },
     {
       "title": "From Threat Intelligence to Firewall Rules: Semantic Relations in Hybrid AI Agent and Expert System Architectures",
       "url": "https://arxiv.org/abs/2603.03911",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03911v1 Announce Type: new \nAbstract: Web security demands rapid response capabilities to evolving cyber threats. Agentic Artificial Intelligence (AI) promises automation, but the need for trustworthy security responses is of the utmost importance. This work investigates the role of semantic relations in extracting information for sensitive operational tasks, such as configuring security controls for mitigating threats. To this end, it proposes to leverage hypernym-hyponym textual relations to extract relevant information from Cyber Threat Intelligence (CTI) reports. By leveraging a",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.129
     },
     {
       "title": "Certainty robustness: Evaluating LLM stability under self-challenging prompts",
       "url": "https://arxiv.org/abs/2603.03330",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03330v1 Announce Type: cross \nAbstract: Large language models (LLMs) often present answers with high apparent confidence despite lacking an explicit mechanism for reasoning about certainty or truth. While existing benchmarks primarily evaluate single-turn accuracy, truthfulness or confidence calibration, they do not capture how models behave when their responses are challenged in interactive settings. We introduce the Certainty Robustness Benchmark, a two-turn evaluation framework that measures how LLMs balance stability and adaptability under self-challenging prompts such as uncert",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.129
     },
     {
       "title": "Fragile Thoughts: How Large Language Models Handle Chain-of-Thought Perturbations",
       "url": "https://arxiv.org/abs/2603.03332",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03332v1 Announce Type: cross \nAbstract: Chain-of-Thought (CoT) prompting has emerged as a foundational technique for eliciting reasoning from Large Language Models (LLMs), yet the robustness of this approach to corruptions in intermediate reasoning steps remains poorly understood. This paper presents a comprehensive empirical evaluation of LLM robustness to a structured taxonomy of 5 CoT perturbation types: \\textit{MathError, UnitConversion, Sycophancy, SkippedSteps,} and \\textit{ExtraSteps}. We evaluate 13 models spanning three orders of magnitude in parameter count (3B to 1.5T\\foo",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.129
     },
     {
       "title": "mlx-snn: Spiking Neural Networks on Apple Silicon via MLX",
       "url": "https://arxiv.org/abs/2603.03529",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03529v1 Announce Type: cross \nAbstract: We introduce mlx-snn, the first spiking neural network (SNN) library built natively on Apple's MLX framework. As SNN research grows rapidly, all major libraries -- snnTorch, Norse, SpikingJelly, Lava -- target PyTorch or custom backends, leaving Apple Silicon users without a native option. mlx-snn provides six neuron models (LIF, IF, Izhikevich, Adaptive LIF, Synaptic, Alpha), four surrogate gradient functions, four spike encoding methods (including an EEG-specific encoder), and a complete backpropagation-through-time training pipeline. The li",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.129
     },
     {
       "title": "Tucano 2 Cool: Better Open Source LLMs for Portuguese",
       "url": "https://arxiv.org/abs/2603.03543",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03543v1 Announce Type: cross \nAbstract: We present Tucano 2, a fully open suite of large language models (LLMs) with 0.5-3.7 billion parameters, designed to address certain gaps in open-source development for Portuguese LLMs. Following our previous works, we now extend our dataset, GigaVerbo-v2, to a new degree of quality and scale, while also introducing a new synthetic dataset, GigaVerbo-v2 Synth, aimed at filling missing gaps in GigaVerbo-v2, and two post-training datasets, GigaVerbo-v2 SFT and GigaVerbo-v2 Preferences, that allow Portuguese LLMs to be trained in domains like ret",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.129
     },
     {
       "title": "Agentic Peer-to-Peer Networks: From Content Distribution to Capability and Action Sharing",
       "url": "https://arxiv.org/abs/2603.03753",
       "source": "arXiv cs.AI",
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
+      "sourceWeight": 0.8,
       "summary": "arXiv:2603.03753v1 Announce Type: cross \nAbstract: The ongoing shift of AI models from centralized cloud APIs to local AI agents on edge devices is enabling \\textit{Client-Side Autonomous Agents (CSAAs)} -- persistent personal agents that can plan, access local context, and invoke tools on behalf of users. As these agents begin to collaborate by delegating subtasks directly between clients, they naturally form \\emph{Agentic Peer-to-Peer (P2P) Networks}. Unlike classic file-sharing overlays where the exchanged object is static, hash-indexed content (e.g., files in BitTorrent), agentic overlays ",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
-    },
-    {
-      "title": "Rethinking Role-Playing Evaluation: Anonymous Benchmarking and a Systematic Study of Personality Effects",
-      "url": "https://arxiv.org/abs/2603.03915",
-      "source": "arXiv cs.AI",
-      "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
-      "summary": "arXiv:2603.03915v1 Announce Type: cross \nAbstract: Large language models (LLMs) have demonstrated significant potential in developing Role-Playing Agents (RPAs). However, current research primarily evaluates RPAs using famous fictional characters, allowing models to rely on memory associated with character names. This dependency creates a bias that limits the generalization of RPAs to unseen personas. To address this issue, we propose an anonymous evaluation method. Experiments across multiple benchmarks reveal that anonymization significantly degrades role-playing performance, confirming that",
-      "published": "2026-03-05T05:00:00+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
-    },
-    {
-      "title": "CodeTaste: Can LLMs Generate Human-Level Code Refactorings?",
-      "url": "https://arxiv.org/abs/2603.04177",
-      "source": "arXiv cs.AI",
-      "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
-      "summary": "arXiv:2603.04177v1 Announce Type: cross \nAbstract: Large language model (LLM) coding agents can generate working code, but their solutions often accumulate complexity, duplication, and architectural debt. Human developers address such issues through refactoring: behavior-preserving program transformations that improve structure and maintainability. In this paper, we investigate if LLM agents (i) can execute refactorings reliably and (ii) identify the refactorings that human developers actually chose in real codebases. We present CodeTaste, a benchmark of refactoring tasks mined from large-scal",
-      "published": "2026-03-05T05:00:00+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
-    },
-    {
-      "title": "Emotion-Gradient Metacognitive RSI (Part I): Theoretical Foundations and Single-Agent Architecture",
-      "url": "https://arxiv.org/abs/2505.07757",
-      "source": "arXiv cs.AI",
-      "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
-      "summary": "arXiv:2505.07757v2 Announce Type: replace \nAbstract: We present the Emotion-Gradient Metacognitive Recursive Self-Improvement (EG-MRSI) framework, a novel architecture that integrates introspective metacognition, emotion-based intrinsic motivation, and recursive self-modification into a unified theoretical system. The framework is explicitly capable of overwriting its own learning algorithm under formally bounded risk. Building upon the Noise-to-Meaning RSI (N2M-RSI) foundation, EG-MRSI introduces a differentiable intrinsic reward function driven by confidence, error, novelty, and cumulative s",
-      "published": "2026-03-05T05:00:00+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
-    },
-    {
-      "title": "See, Think, Act: Teaching Multimodal Agents to Effectively Interact with GUI by Identifying Toggles",
-      "url": "https://arxiv.org/abs/2509.13615",
-      "source": "arXiv cs.AI",
-      "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
-      "summary": "arXiv:2509.13615v4 Announce Type: replace \nAbstract: The advent of multimodal agents facilitates effective interaction within graphical user interface (GUI), especially in ubiquitous GUI control. However, their inability to reliably execute toggle control instructions remains a key bottleneck. To investigate this, we construct a state control benchmark with binary toggle instructions derived from public datasets. Evaluation results of existing agents demonstrate their notable unreliability, particularly when the current toggle state already matches the desired state. To address the challenge, ",
-      "published": "2026-03-05T05:00:00+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
-    },
-    {
-      "title": "GraphMERT: Efficient and Scalable Distillation of Reliable Knowledge Graphs from Unstructured Data",
-      "url": "https://arxiv.org/abs/2510.09580",
-      "source": "arXiv cs.AI",
-      "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
-      "sourceWeight": 0.7,
-      "summary": "arXiv:2510.09580v2 Announce Type: replace \nAbstract: Researchers have pursued neurosymbolic artificial intelligence (AI) applications for nearly three decades. A marriage of the neural and symbolic components can lead to rapid advancements in AI. Yet, the field has not realized this promise since most neurosymbolic AI frameworks fail to scale. In addition, the implicit representations and approximate reasoning of purely neural approaches limit interpretability and trust. Knowledge graphs (KGs), a gold-standard representation of explicit semantic knowledge, can address the symbolic side of the ",
-      "published": "2026-03-05T05:00:00+00:00",
-      "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-05T21:40:49.016100+00:00",
-      "score": 3.0221
+      "lastSeen": "2026-03-05T23:26:45.535564+00:00",
+      "score": 3.129
     }
   ],
   "errors": []
