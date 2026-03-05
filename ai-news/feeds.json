@@ -1,0 +1,13 @@
+[
+  {"name":"OpenAI News","url":"https://openai.com/news/rss.xml","weight":1.0},
+  {"name":"Microsoft AI Blog","url":"https://blogs.microsoft.com/ai/feed/","weight":0.85},
+  {"name":"Google AI Blog","url":"https://blog.google/technology/ai/rss/","weight":0.9},
+  {"name":"Google DeepMind Blog","url":"https://deepmind.google/blog/rss.xml","weight":0.95},
+  {"name":"Hugging Face Blog","url":"https://huggingface.co/blog/feed.xml","weight":0.95},
+  {"name":"NVIDIA Blog","url":"https://blogs.nvidia.com/feed/","weight":0.8},
+  {"name":"VentureBeat AI","url":"https://venturebeat.com/category/ai/feed/","weight":0.75},
+  {"name":"MIT Technology Review AI","url":"https://www.technologyreview.com/topic/artificial-intelligence/feed/","weight":0.85},
+  {"name":"MarkTechPost","url":"https://www.marktechpost.com/feed/","weight":0.7},
+  {"name":"Together AI Blog","url":"https://www.together.ai/blog/rss.xml","weight":0.8},
+  {"name":"arXiv cs.AI","url":"https://export.arxiv.org/rss/cs.AI","weight":0.7}
+]

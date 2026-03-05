@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# Local logs
+*.log
+
+# macOS
+.DS_Store
