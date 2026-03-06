@@ -1,18 +1,36 @@
 {
   "name": "Jez",
   "tagline": "Builder, experimenter, and curious human.",
-  "about": "Welcome to my public corner of the internet. This site will grow to include projects, game experiments, photos, and an AI news stream I actually trust.",
+  "about": "Welcome to my public corner of the internet. This site is evolving into a home for projects, tools, game prototypes, AI news, and personal creative stuff.",
   "projects": [
     {"name": "AI News Feed", "desc": "Curated AI/model releases and important updates.", "link": "./ai-news/public/index.html"},
-    {"name": "Game Experiments", "desc": "Playable prototypes and mechanics tests.", "link": "#"},
-    {"name": "Photo Gallery", "desc": "Personal photos and creative experiments.", "link": "#"}
+    {"name": "Game Experiments", "desc": "Playable prototypes and mechanics tests.", "link": "#games"},
+    {"name": "Photo Gallery", "desc": "Personal photos and creative experiments.", "link": "#photos"}
+  ],
+  "tools": [
+    "Image prep utility for web uploads (coming soon)",
+    "Print sizing / DPI checker (coming soon)",
+    "Filename batch cleaner (coming soon)"
   ],
   "games": [
-    "Prototype #1 (coming soon)",
-    "Prototype #2 (coming soon)"
+    "GameMaster prototype #1 (coming soon)",
+    "GameMaster prototype #2 (coming soon)"
   ],
   "photos": [
     "Photo set coming soon",
     "Behind-the-scenes shots coming soon"
+  ],
+  "homelab": [
+    "Model runtime snapshot panel (coming soon)",
+    "Agent activity quick view (coming soon)",
+    "System status tiles (coming soon)"
+  ],
+  "garden": [
+    "Small-space planting planner (coming soon)",
+    "Seasonal task checklist (coming soon)"
+  ],
+  "cats": [
+    "Marty spotlight card (coming soon)",
+    "Cat gallery section (coming soon)"
   ]
 }

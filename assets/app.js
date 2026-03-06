@@ -15,6 +15,13 @@ function fmtDate(iso) {
   try { return new Date(iso).toLocaleString(); } catch { return iso || ''; }
 }
 
+function renderSimpleList(containerId, items = []) {
+  const root = document.getElementById(containerId);
+  if (!root) return;
+  root.innerHTML = '';
+  items.forEach(x => root.appendChild(el('div', 'item', x)));
+}
+
 function renderSiteContent(data) {
   document.getElementById('hero-title').textContent = `${data.name} — personal site`;
   document.getElementById('hero-tagline').textContent = data.tagline;
@@ -33,13 +40,12 @@ function renderSiteContent(data) {
     projects.appendChild(i);
   });
 
-  const games = document.getElementById('games-list');
-  games.innerHTML = '';
-  (data.games || []).forEach(g => games.appendChild(el('div', 'item', g)));
-
-  const photos = document.getElementById('photos-list');
-  photos.innerHTML = '';
-  (data.photos || []).forEach(p => photos.appendChild(el('div', 'item', p)));
+  renderSimpleList('tools-list', data.tools || []);
+  renderSimpleList('games-list', data.games || []);
+  renderSimpleList('photos-list', data.photos || []);
+  renderSimpleList('homelab-list', data.homelab || []);
+  renderSimpleList('garden-list', data.garden || []);
+  renderSimpleList('cats-list', data.cats || []);
 }
 
 function renderNews(items) {
