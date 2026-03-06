@@ -11,12 +11,11 @@
     <nav>
       <div class="brand">jez237-site</div>
       <div class="links">
+        <a href="./index.html">Home</a>
         <a href="#projects">Projects</a>
         <a href="#tools">Tools</a>
         <a href="#games">Games</a>
-        <a href="#news">News</a>
-        <a href="#homelab">Lab</a>
-        <a href="#garden">Garden</a>
+        <a href="./news.html">AI News</a>
         <a href="#cats">Cats</a>
       </div>
     </nav>
@@ -28,6 +27,7 @@
       <h1 id="hero-title" class="title">Jez — personal site</h1>
       <p id="hero-tagline" class="muted">Builder, experimenter, curious human.</p>
       <p id="hero-about" class="muted"></p>
+      <p><a class="btn" href="./news.html">Open AI News Feed →</a></p>
     </section>
 
     <section id="projects" class="grid">
@@ -71,19 +71,6 @@
         <p class="muted">Because this is clearly mission-critical.</p>
         <div id="cats-list" class="list"></div>
       </article>
-    </section>
-
-    <section id="news" class="card col-12">
-      <h2>AI News (Feedly-style stream)</h2>
-      <p class="muted">Click headlines to expand details. Opens the source in a new tab.</p>
-      <div class="news-controls">
-        <button id="btn-latest">Sort: Latest</button>
-        <button id="btn-top">Sort: Top scored</button>
-        <select id="news-source" class="control"></select>
-        <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
-        <span id="news-updated" class="news-meta"></span>
-      </div>
-      <div id="news-list"></div>
     </section>
 
     <footer>

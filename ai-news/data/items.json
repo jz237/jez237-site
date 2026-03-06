@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T01:10:46.356570+00:00",
+  "updatedAt": "2026-03-06T01:19:46.552493+00:00",
   "items": [
     {
       "title": "The Pentagon formally labels Anthropic a supply-chain risk",
@@ -11,8 +11,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2263863571.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T23:02:22+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.0865
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0822
     },
     {
       "title": "Trump gets data center companies to pledge to pay for power generation",
@@ -24,8 +24,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/GettyImages-2258665361-1024x648.jpg",
       "published": "2026-03-05T18:41:28+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9686
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9648
     },
     {
       "title": "Netflix is buying Ben Affleck’s AI startup",
@@ -37,8 +37,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2256155551.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
       "published": "2026-03-05T18:27:16+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9626
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9588
     },
     {
       "title": "OpenAI’s new GPT-5.4 model is a big step toward autonomous agents",
@@ -50,8 +50,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.2511
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.2474
     },
     {
       "title": "Ask a Techspert: How does AI understand my visual searches?",
@@ -63,8 +63,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fan_out_query_hero.max-600x600.format-webp.webp",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.2311
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.2274
     },
     {
       "title": "Meta’s AI glasses reportedly send sensitive footage to human reviewers in Kenya",
@@ -76,8 +76,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/Verge-Ray-ban-Meta-Gen2-Stills-6.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.806933475316%2C100%2C78.386133049368&amp%3Bw=1200",
       "published": "2026-03-05T16:37:52+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9175
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9139
     },
     {
       "title": "The latest AI news we announced in February",
@@ -89,8 +89,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thumbnail_mPCqgRv.max-600x600.format-webp.webp",
       "published": "2026-03-05T16:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1943
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.1907
     },
     {
       "title": "Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations",
@@ -102,8 +102,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nxp/bringing-robotics-ai-to-embedded-platforms.png",
       "published": "2026-03-05T14:16:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.4427
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4393
     },
     {
       "title": "March Into the Cloud With 15 New Games Coming to GeForce NOW",
@@ -115,8 +115,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gfn-thursday-3-5-nv-blog-1280x680-logo.jpg",
       "published": "2026-03-05T14:00:30+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9965
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9932
     },
     {
       "title": "Apple Music adds optional labels for AI songs and visuals",
@@ -128,8 +128,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23925980/acastro_STK046_04.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T14:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8564
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.853
     },
     {
       "title": "AI tools can unmask anonymous accounts",
@@ -141,8 +141,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK419_DEEPFAKE_3_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T13:30:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8452
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.8419
     },
     {
       "title": "Anthropic makes last-ditch effort to salvage deal with Pentagon after blowup",
@@ -154,8 +154,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK202_DARIO_AMODEI_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T11:46:46+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8081
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.805
     },
     {
       "title": "Reasoning models struggle to control their chains of thought, and that’s good",
@@ -167,8 +167,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1uuAgWlWOgYMZuyLDaVFVL/af9711812b0868d52b15270a25f99913/OAI_Reasoning_Models_Struggle_to_Control_their_Chains_of_Thought__and_that%C3%A2__s_Good_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.1216
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1186
     },
     {
       "title": "Introducing GPT-5.4",
@@ -180,8 +180,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/261kYlzPT8cBKoynLi35ct/14e3cae5d20ab9349af93f6b034c2947/5.4_Thinking_Hero___SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.4716
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4686
     },
     {
       "title": "Online harassment is entering its AI era",
@@ -193,8 +193,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/ai-hitpiece.jpg?resize=1200%2C600",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.2116
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.2086
     },
     {
       "title": "GPT-5.4 Thinking System Card",
@@ -206,8 +206,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5t4zXynvPxIHXdXQMxiAwm/917d03bceb6cc7513cd2b34b7df46fe5/5.4_Thinking_System_Card_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1216
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.1186
     },
     {
       "title": "Ensuring AI use in education leads to opportunity",
@@ -219,8 +219,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6qY7eyvVrPtwOMwQUPzqOO/55ab458c03157e061c83215cf215e51a/IMG_0185.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T09:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1018
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0989
     },
     {
       "title": "Can Large Language Models Derive New Knowledge? A Dynamic Benchmark for Biological Knowledge Discovery",
@@ -232,8 +232,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 4.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 4.7954
     },
     {
       "title": "LabelBuddy: An Open Source Music and Audio Language Annotation Tagging Tool Using AI Assistance",
@@ -245,8 +245,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 4.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 4.1454
     },
     {
       "title": "RoboCasa365: A Large-Scale Simulation Framework for Training and Benchmarking Generalist Robots",
@@ -258,8 +258,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.7954
     },
     {
       "title": "A Rubric-Supervised Critic from Sparse Real-World Outcomes",
@@ -271,8 +271,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.6954
     },
     {
       "title": "ToolRLA: Multiplicative Reward Decomposition for Tool-Integrated Agents",
@@ -284,8 +284,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.6954
     },
     {
       "title": "Escaping the BLEU Trap: A Signal-Grounded Framework with Decoupled Semantic Guidance for EEG-to-Text Decoding",
@@ -297,8 +297,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.498
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4954
     },
     {
       "title": "LadderSym: A Multimodal Interleaved Transformer for Music Practice Error Detection",
@@ -310,8 +310,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.498
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4954
     },
     {
       "title": "AgentSelect: Benchmark for Narrative Query-to-Agent Recommendation",
@@ -320,11 +320,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03761v1 Announce Type: new \nAbstract: LLM agents are rapidly becoming the practical interface for task automation, yet the ecosystem lacks a principled way to choose among an exploding space of deployable configurations. Existing LLM leaderboards and tool/agent benchmarks evaluate components in isolation and remain fragmented across tasks, metrics, and candidate pools, leaving a critical research gap: there is little query-conditioned supervision for learning to recommend end-to-end agent configurations that couple a backbone model with a toolkit. We address this gap with AgentSelec",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Raising Bars, Not Parameters: LilMoo Compact Language Model for Hindi",
@@ -333,11 +333,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03508v1 Announce Type: cross \nAbstract: The dominance of large multilingual foundation models has widened linguistic inequalities in Natural Language Processing (NLP), often leaving low-resource languages underrepresented. This paper introduces LilMoo, a 0.6-billion-parameter Hindi language model trained entirely from scratch to address this gap. Unlike prior Hindi models that rely on continual pretraining from opaque multilingual foundations, LilMoo is developed through a fully transparent and reproducible pipeline optimized for limited compute environments. We construct a high-qua",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Bielik-Q2-Sharp: A Comparative Study of Extreme 2-bit Quantization Methods for a Polish 11B Language Model",
@@ -346,11 +346,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04162v1 Announce Type: cross \nAbstract: We present Bielik-Q2-Sharp, the first systematic academic evaluation of extreme 2-bit quantization applied to a Polish large language model. Using Bielik-11B-v2.3-Instruct (11B parameters, Mistral architecture) as our base model, we compare six state-of-the-art post-training quantization methods -- QuIP#, SpinQuant+GPTQ, ButterflyQuant, QTIP, VPTQ, and AQLM -- all calibrated on a Polish-language corpus (CulturaX-PL) with shared Hessian matrices. Our best variant (QuIP# E8P12) achieves 71.92% across 22 Polish benchmarks versus 72.07% for the IQ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "ZipMap: Linear-Time Stateful 3D Reconstruction with Test-Time Training",
@@ -359,11 +359,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04385v1 Announce Type: cross \nAbstract: Feed-forward transformer models have driven rapid progress in 3D vision, but state-of-the-art methods such as VGGT and $\\pi^3$ have a computational cost that scales quadratically with the number of input images, making them inefficient when applied to large image collections. Sequential-reconstruction approaches reduce this cost but sacrifice reconstruction quality. We introduce ZipMap, a stateful feed-forward model that achieves linear-time, bidirectional 3D reconstruction while matching or surpassing the accuracy of quadratic-time methods. Z",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Preference Leakage: A Contamination Problem in LLM-as-a-judge",
@@ -372,11 +372,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2502.01534v3 Announce Type: replace-cross \nAbstract: Large Language Models (LLMs) as judges and LLM-based data synthesis have emerged as two fundamental LLM-driven data annotation methods in model development. While their combination significantly enhances the efficiency of model training and evaluation, little attention has been given to the potential contamination brought by this new model development paradigm. In this work, we expose preference leakage, a contamination problem in LLM-as-a-judge caused by the relatedness between the synthetic data generators and LLM-based evaluators. T",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Agentics 2.0: Logical Transduction Algebra for Agentic Data Workflows",
@@ -385,11 +385,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04241v1 Announce Type: new \nAbstract: Agentic AI is rapidly transitioning from research prototypes to enterprise deployments, where requirements extend to meet the software quality attributes of reliability, scalability, and observability beyond plausible text generation. We present Agentics 2.0, a lightweight, Python-native framework for building high-quality, structured, explainable, and type-safe agentic data workflows. At the core of Agentics 2.0, the logical transduction algebra formalizes a large language model inference call as a typed semantic transformation, which we call a",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "$\\tau$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge",
@@ -398,11 +398,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04370v1 Announce Type: new \nAbstract: Conversational agents are increasingly deployed in knowledge-intensive settings, where correct behavior depends on retrieving and applying domain-specific knowledge from large, proprietary, and unstructured corpora during live interactions with users. Yet most existing benchmarks evaluate retrieval or tool use independently of each other, creating a gap in realistic, fully agentic evaluation over unstructured data in long-horizon interactions. We introduce $\\tau$-Knowledge, an extension of $\\tau$-Bench for evaluating agents in environments where",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Draft-Conditioned Constrained Decoding for Structured Generation in LLMs",
@@ -411,11 +411,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03305v1 Announce Type: cross \nAbstract: Large language models (LLMs) are increasingly used to generate executable outputs, JSON objects, and API calls, where a single syntax error can make the output unusable. Constrained decoding enforces validity token-by-token via masking and renormalization, but it can distort generation when the model assigns low probability mass to valid continuations, pushing decoding toward locally valid yet semantically incorrect trajectories. We propose \\emph{Draft-Conditioned Constrained Decoding (DCCD)}, a simple two-step, training-free inference procedu",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "GeoSeg: Training-Free Reasoning-Driven Segmentation in Remote Sensing Imagery",
@@ -424,11 +424,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03983v1 Announce Type: cross \nAbstract: Recent advances in MLLMs are reframing segmentation from fixed-category prediction to instruction-grounded localization. While reasoning based segmentation has progressed rapidly in natural scenes, remote sensing lacks a generalizable solution due to the prohibitive cost of reasoning-oriented data and domain-specific challenges like overhead viewpoints. We present GeoSeg, a zero-shot, training-free framework that bypasses the supervision bottleneck for reasoning-driven remote sensing segmentation. GeoSeg couples MLLM reasoning with precise loc",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",
@@ -437,11 +437,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2509.21782v2 Announce Type: replace \nAbstract: Multimodal large language models (MLLMs) are increasingly deployed as the core reasoning engine for web-facing systems, powering GUI agents and front-end automation that must interpret page structure, select actionable widgets, and execute multi-step interactions reliably. However, existing benchmarks largely emphasize visual perception or UI code generation, showing insufficient evaluation on the reasoning, robustness and safety capability required for end-to-end web applications. To bridge the gap, we introduce a comprehensive web understa",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Training High-Level Schedulers with Execution-Feedback Reinforcement Learning for Long-Horizon GUI Automation",
@@ -450,11 +450,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2511.22235v2 Announce Type: replace \nAbstract: The rapid development of large vision-language model (VLM) has greatly promoted the research of GUI agent. However, GUI agents still face significant challenges in handling long-horizon tasks. First, single-agent models struggle to balance high-level capabilities and low-level execution capability, facing prevalent issues of responsibility coupling and capability conflicts. Second, agents lack awareness of the task state, leading to progress loss in long-horizon tasks. To address these challenges, we propose a staged execution-feedback reinf",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Why Do AI Agents Systematically Fail at Cloud Root Cause Analysis?",
@@ -463,11 +463,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2602.09937v2 Announce Type: replace \nAbstract: Failures in large-scale cloud systems incur substantial financial losses, making automated Root Cause Analysis (RCA) essential for operational stability. Recent efforts leverage Large Language Model (LLM) agents to automate this task, yet existing systems exhibit low detection accuracy even with capable models, and current evaluation frameworks assess only final answer correctness without revealing why the agent's reasoning failed. This paper presents a process level failure analysis of LLM-based RCA agents. We execute the full OpenRCA bench",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "LiteVLA-Edge: Quantized On-Device Multimodal Control for Embedded Robotics",
@@ -476,11 +476,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03380v1 Announce Type: cross \nAbstract: Vision-Language-Action (VLA) models provide a unified framework for perception, language conditioning, and action generation, but many existing systems remain difficult to deploy in embedded robotic settings because of their computational requirements and inference latency. In this paper, we present LiteVLA-Edge, a deployment-oriented VLA pipeline for fully on-device inference on Jetson Orin-class hardware. Our approach combines supervised image-to-action fine-tuning in FP32 with post-training 4-bit GGUF quantization and GPU-accelerated infere",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.348
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3454
     },
     {
       "title": "Generalization of RLVR Using Causal Reasoning as a Testbed",
@@ -489,11 +489,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2512.20760v2 Announce Type: replace-cross \nAbstract: Reinforcement learning with verifiable rewards (RLVR) has emerged as a promising paradigm for post-training large language models (LLMs) on complex reasoning tasks. Yet, the conditions under which RLVR yields robust generalization remain underexplored. This paper provides an empirical study of RLVR generalization in the setting of probabilistic inference over causal graphical models. This setting offers two natural axes along which to examine generalization: (i) the level of the probabilistic query -- associational, interventional, or ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.348
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3454
     },
     {
       "title": "One Bias After Another: Mechanistic Reward Shaping and Persistent Biases in Language Reward Models",
@@ -502,11 +502,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03291v1 Announce Type: cross \nAbstract: Reward Models (RMs) are crucial for online alignment of language models (LMs) with human preferences. However, RM-based preference-tuning is vulnerable to reward hacking, whereby LM policies learn undesirable behaviors from flawed RMs. By systematically measuring biases in five high-quality RMs, including the state-of-the-art, we find that issues persist despite prior work with respect to length, sycophancy, and overconfidence. We also discover new issues related to bias toward model-specific styles and answer-order. We categorize RM failures ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "From Exact Hits to Close Enough: Semantic Caching for LLM Embeddings",
@@ -515,11 +515,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03301v1 Announce Type: cross \nAbstract: The rapid adoption of large language models (LLMs) has created demand for faster responses and lower costs. Semantic caching, reusing semantically similar requests via their embeddings, addresses this need but breaks classic cache assumptions and raises new challenges. In this paper, we explore offline policies for semantic caching, proving that implementing an optimal offline policy is NP-hard, and propose several polynomial-time heuristics. We also present online semantic aware cache policies that combine recency, frequency, and locality. Ev",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Ethical and Explainable AI in Reusable MLOps Pipelines",
@@ -528,11 +528,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03341v1 Announce Type: cross \nAbstract: This paper introduces a unified machine learning operations (MLOps) framework that brings ethical artificial intelligence principles into practical use by enforcing fairness, explainability, and governance throughout the machine learning lifecycle. The proposed method reduces bias by lowering the demographic parity difference (DPD) from 0.31 to 0.04 without model retuning, and cross-dataset validation achieves an area under the curve (AUC) of 0.89 on the Statlog Heart dataset.\n  The framework maintains fairness metrics within operational limit",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Bridging the Reproducibility Divide: Open Source Software's Role in Standardizing Healthcare AI",
@@ -541,11 +541,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03367v1 Announce Type: cross \nAbstract: Our analysis of recent AI4H publications reveals that, despite a trend toward utilizing open datasets and sharing modeling code, 74% of AI4H papers still rely on private datasets or do not share their code. This is especially concerning in healthcare applications, where trust is essential. Furthermore, inconsistent and poorly documented data preprocessing pipelines result in variable model performance reports, even for identical tasks and datasets, making it challenging to evaluate the true effectiveness of AI models.\n  Despite the challenges ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Graph Negative Feedback Bias Correction Framework for Adaptive Heterophily Modeling",
@@ -554,11 +554,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03662v1 Announce Type: cross \nAbstract: Graph Neural Networks (GNNs) have emerged as a powerful framework for processing graph-structured data. However, conventional GNNs and their variants are inherently limited by the homophily assumption, leading to degradation in performance on heterophilic graphs. Although substantial efforts have been made to mitigate this issue, they remain constrained by the message-passing paradigm, which is inherently rooted in homophily. In this paper, a detailed analysis of how the underlying label autocorrelation of the homophily assumption introduces b",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Cross-Modal Mapping and Dual-Branch Reconstruction for 2D-3D Multimodal Industrial Anomaly Detection",
@@ -567,11 +567,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03939v1 Announce Type: cross \nAbstract: Multimodal industrial anomaly detection benefits from integrating RGB appearance with 3D surface geometry, yet existing \\emph{unsupervised} approaches commonly rely on memory banks, teacher-student architectures, or fragile fusion schemes, limiting robustness under noisy depth, weak texture, or missing modalities. This paper introduces \\textbf{CMDR-IAD}, a lightweight and modality-flexible unsupervised framework for reliable anomaly detection in 2D+3D multimodal as well as single-modality (2D-only or 3D-only) settings. \\textbf{CMDR-IAD} combin",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "From Threat Intelligence to Firewall Rules: Semantic Relations in Hybrid AI Agent and Expert System Architectures",
@@ -583,8 +583,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Certainty robustness: Evaluating LLM stability under self-challenging prompts",
@@ -596,8 +596,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Fragile Thoughts: How Large Language Models Handle Chain-of-Thought Perturbations",
@@ -609,8 +609,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "mlx-snn: Spiking Neural Networks on Apple Silicon via MLX",
@@ -622,8 +622,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Tucano 2 Cool: Better Open Source LLMs for Portuguese",
@@ -635,8 +635,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Agentic Peer-to-Peer Networks: From Content Distribution to Capability and Action Sharing",
@@ -648,8 +648,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Rethinking Role-Playing Evaluation: Anonymous Benchmarking and a Systematic Study of Personality Effects",
@@ -661,8 +661,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "CodeTaste: Can LLMs Generate Human-Level Code Refactorings?",
@@ -674,8 +674,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Emotion-Gradient Metacognitive RSI (Part I): Theoretical Foundations and Single-Agent Architecture",
@@ -687,8 +687,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "See, Think, Act: Teaching Multimodal Agents to Effectively Interact with GUI by Identifying Toggles",
@@ -700,8 +700,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "GraphMERT: Efficient and Scalable Distillation of Reliable Knowledge Graphs from Unstructured Data",
@@ -713,8 +713,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "AMA-Bench: Evaluating Long-Horizon Memory for Agentic Applications",
@@ -726,8 +726,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Towards Personalized Deep Research: Benchmarks and Evaluations",
@@ -739,8 +739,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Multimodal Large Language Models for Low-Resource Languages: A Case Study for Basque",
@@ -752,8 +752,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Chimera: Neuro-Symbolic Attention Primitives for Trustworthy Dataplane Intelligence",
@@ -765,8 +765,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "QFlowNet: Fast, Diverse, and Efficient Unitary Synthesis with Generative Flow Networks",
@@ -778,8 +778,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
@@ -791,8 +791,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.048
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0454
     },
     {
       "title": "From Conflict to Consensus: Boosting Medical Reasoning via Multi-Round Agentic RAG",
@@ -804,8 +804,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.048
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0454
     },
     {
       "title": "MMAI Gym for Science: Training Liquid Foundation Models for Drug Discovery",
@@ -817,8 +817,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.048
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0454
     },
     {
       "title": "Social Norm Reasoning in Multimodal Language Models: An Evaluation",
@@ -830,8 +830,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.048
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0454
     },
     {
       "title": "To Think or Not To Think, That is The Question for Large Reasoning Models in Theory of Mind Tasks",
@@ -843,8 +843,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.048
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0454
     },
     {
       "title": "When Silence Is Golden: Can LLMs Learn to Abstain in Temporal QA and Beyond?",
@@ -856,8 +856,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.048
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0454
     },
     {
       "title": "IntPro: A Proxy Agent for Context-Aware Intent Understanding via Retrieval-conditioned Inference",
@@ -869,8 +869,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.998
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.9954
     },
     {
       "title": "Test-Time Meta-Adaptation with Self-Synthesis",
@@ -882,8 +882,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.998
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.9954
     },
     {
       "title": "GIPO: Gaussian Importance Sampling Policy Optimization",
@@ -895,8 +895,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.998
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.9954
     },
     {
       "title": "Right in Time: Reactive Reasoning in Regulated Traffic Spaces",
@@ -908,8 +908,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.998
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.9954
     },
     {
       "title": "TopicENA: Enabling Epistemic Network Analysis at Scale through Automated Topic-Based Coding",
@@ -921,8 +921,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "The Influence of Iconicity in Transfer Learning for Sign Language Recognition",
@@ -934,8 +934,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "A benchmark for joint dialogue satisfaction, emotion recognition, and emotion state transition prediction",
@@ -947,8 +947,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "On Google's SynthID-Text LLM Watermarking System: Theoretical Analysis and Empirical Validation",
@@ -960,8 +960,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "RAG-X: Systematic Diagnosis of Retrieval-Augmented Generation for Medical Question Answering",
@@ -973,8 +973,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "Image-based Prompt Injection: Hijacking Multimodal LLMs through Visually Embedded Adversarial Instructions",
@@ -986,8 +986,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "Towards Effective Orchestration of AI x DB Workloads",
@@ -999,8 +999,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "CzechTopic: A Benchmark for Zero-Shot Topic Localization in Historical Czech Documents",
@@ -1012,8 +1012,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "DQE-CIR: Distinctive Query Embeddings through Learnable Attribute Weights and Target Relative Negative Sampling in Composed Image Retrieval",
@@ -1025,8 +1025,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "RANGER: Sparsely-Gated Mixture-of-Experts with Adaptive Retrieval Re-ranking for Pathology Report Generation",
@@ -1038,8 +1038,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "Leveraging Taxonomy Similarity for Next Activity Prediction in Patient Treatment",
@@ -1051,8 +1051,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "TSPulse: Tiny Pre-Trained Models with Disentangled Representations for Rapid Time-Series Analysis",
@@ -1064,8 +1064,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "ObfusQAte: A Proposed Framework to Evaluate LLM Robustness on Obfuscated Factual Question Answering",
@@ -1077,8 +1077,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "A Systematic Analysis of Biases in Large Language Models",
@@ -1090,8 +1090,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "3D Wavelet-Based Structural Priors for Controlled Diffusion in Whole-Body Low-Dose PET Denoising",
@@ -1103,8 +1103,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "Tracing 3D Anatomy in 2D Strokes: A Multi-Stage Projection Driven Approach to Cervical Spine Fracture Identification",
@@ -1116,8 +1116,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "CMI-RewardBench: Evaluating Music Reward Models with Compositional Multimodal Instruction",
@@ -1129,8 +1129,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "From Variance to Invariance: Qualitative Content Analysis for Narrative Graph Annotation",
@@ -1142,8 +1142,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7954
     },
     {
       "title": "Build, Judge, Optimize: A Blueprint for Continuous Improvement of Multi-Agent Consumer Assistants",
@@ -1155,8 +1155,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Specification-Driven Generation and Evaluation of Discrete-Event World Models via the DEVS Formalism",
@@ -1168,8 +1168,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "In-Context Environments Induce Evaluation-Awareness in Language Models",
@@ -1181,8 +1181,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Token-Oriented Object Notation vs JSON: A Benchmark of Plain and Constrained Decoding Generation",
@@ -1194,8 +1194,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "DIALEVAL: Automated Type-Theoretic Evaluation of LLM Instruction Following",
@@ -1207,8 +1207,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Controlling Chat Style in Language Models via Single-Direction Editing",
@@ -1220,8 +1220,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "AutoHarness: improving LLM agents by automatically synthesizing a code harness",
@@ -1233,8 +1233,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "PulseLM: A Foundation Dataset and Benchmark for PPG-Text Learning",
@@ -1246,8 +1246,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Multi-Agent-Based Simulation of Archaeological Mobility in Uneven Landscapes",
@@ -1259,8 +1259,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "When Shallow Wins: Silent Failures and the Depth-Accuracy Paradox in Latent Reasoning",
@@ -1272,8 +1272,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Multi-Agent Influence Diagrams to Hybrid Threat Modeling",
@@ -1285,8 +1285,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "InEdit-Bench: Benchmarking Intermediate Logical Pathways for Intelligent Image Editing Models",
@@ -1298,8 +1298,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Interaction-Aware Whole-Body Control for Compliant Object Transport",
@@ -1311,8 +1311,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "T2S-Bench & Structure-of-Thought: Benchmarking and Prompting Comprehensive Text-to-Structure Reasoning",
@@ -1324,8 +1324,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "SWE-CI: Evaluating Agent Capabilities in Maintaining Codebases via Continuous Integration",
@@ -1337,8 +1337,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "RVN-Bench: A Benchmark for Reactive Visual Navigation",
@@ -1350,8 +1350,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "A Multi-Dimensional Quality Scoring Framework for Decentralized LLM Inference with Proof of Quality",
@@ -1363,8 +1363,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "PRAM-R: A Perception-Reasoning-Action-Memory Framework with LLM-Guided Modality Routing for Adaptive Autonomous Driving",
@@ -1376,8 +1376,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "VANGUARD: Vehicle-Anchored Ground Sample Distance Estimation for UAVs in GPS-Denied Environments",
@@ -1389,8 +1389,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Activation Outliers in Transformer Quantization: Reproduction, Statistical Analysis, and Deployment Tradeoffs",
@@ -1402,8 +1402,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "RLJP: Legal Judgment Prediction via First-Order Logic Rule-enhanced with Large Language Models",
@@ -1415,8 +1415,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "ToolVQA: A Dataset for Multi-step Reasoning VQA with External Tools",
@@ -1428,8 +1428,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "SycoEval-EM: Sycophancy Evaluation of Large Language Models in Simulated Clinical Encounters for Emergency Care",
@@ -1441,8 +1441,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Federated Inference: Toward Privacy-Preserving Collaborative and Incentivized Model Serving",
@@ -1454,8 +1454,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "A Review of Reward Functions for Reinforcement Learning in the context of Autonomous Driving",
@@ -1467,8 +1467,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Curriculum-enhanced GroupDRO: Challenging the Norm of Avoiding Curriculum Learning in Subpopulation Shift Setups",
@@ -1480,8 +1480,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Unraveling the Complexity of Memory in RL Agents: an Approach for Classification and Evaluation",
@@ -1493,8 +1493,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "LMUnit: Fine-grained Evaluation with Natural Language Unit Tests",
@@ -1506,8 +1506,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Memory, Benchmark & Robots: A Benchmark for Solving Complex Tasks with Reinforcement Learning",
@@ -1519,8 +1519,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Improving Multi-View Reconstruction via Texture-Guided Gaussian-Mesh Joint Optimization",
@@ -1532,8 +1532,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.748
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.7454
     },
     {
       "title": "Asymmetric Goal Drift in Coding Agents Under Value Conflict",
@@ -1545,8 +1545,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Mozi: Governed Autonomy for Drug Discovery LLM Agents",
@@ -1558,8 +1558,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "AI4S-SDS: A Neuro-Symbolic Solvent Design System via Sparse MCTS and Differentiable Physics Alignment",
@@ -1571,8 +1571,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "RAGNav: A Retrieval-Augmented Topological Reasoning Framework for Multi-Goal Visual-Language Navigation",
@@ -1584,8 +1584,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "BeamPERL: Parameter-Efficient RL with Verifiable Rewards Specializes Compact LLMs for Structured Beam Mechanics Reasoning",
@@ -1597,8 +1597,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "TTSR: Test-Time Self-Reflection for Continual Reasoning Improvement",
@@ -1610,8 +1610,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "TATRA: Training-Free Instance-Adaptive Prompting Through Rephrasing and Aggregation",
@@ -1623,8 +1623,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Controllable and explainable personality sliders for LLMs at inference time",
@@ -1636,8 +1636,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Perfect score on IPhO 2025 theory by Gemini agent",
@@ -1649,8 +1649,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "AOI: Turning Failed Trajectories into Training Signals for Autonomous Cloud Diagnosis",
@@ -1662,8 +1662,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Beyond Pixel Histories: World Models with Persistent 3D State",
@@ -1675,8 +1675,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Optimal trajectory-guided stochastic co-optimization for e-fuel system design and real-time operation",
@@ -1688,8 +1688,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "The Controllability Trap: A Governance Framework for Military AI Agents",
@@ -1701,8 +1701,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "MIND: Unified Inquiry and Diagnosis RL with Criteria Grounded Clinical Supports for Psychiatric Consultation",
@@ -1714,8 +1714,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "MPFlow: Multi-modal Posterior-Guided Flow Matching for Zero-Shot MRI Reconstruction",
@@ -1727,8 +1727,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "HALyPO: Heterogeneous-Agent Lyapunov Policy Optimization for Human-Robot Collaboration",
@@ -1740,8 +1740,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "From Narrow to Panoramic Vision: Attention-Guided Cold-Start Reshapes Multimodal Reasoning",
@@ -1753,8 +1753,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Inference-Time Toxicity Mitigation in Protein Language Models",
@@ -1766,8 +1766,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Unbiased Dynamic Pruning for Efficient Group-Based Policy Optimization",
@@ -1779,8 +1779,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Dual-Modality Multi-Stage Adversarial Safety Training: Robustifying Multimodal Web Agents Against Cross-Modal Attacks",
@@ -1792,8 +1792,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Low-Resource Guidance for Controllable Latent Audio Diffusion",
@@ -1805,8 +1805,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Robustness of Agentic AI Systems via Adversarially-Aligned Jacobian Regularization",
@@ -1818,8 +1818,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "R1-Code-Interpreter: LLMs Reason with Code via Supervised and Multi-stage Reinforcement Learning",
@@ -1831,8 +1831,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "SHE: Stepwise Hybrid Examination Reinforcement Learning Framework for E-commerce Search Relevance",
@@ -1844,8 +1844,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Cognition Envelopes for Bounded Decision Making in Autonomous UAS Operations",
@@ -1857,8 +1857,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Knowledge Graphs are Implicit Reward Models: Path-Derived Signals Enable Compositional Reasoning",
@@ -1870,8 +1870,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "NeuroProlog: Multi-Task Fine-Tuning for Neurosymbolic Mathematical Reasoning via the Cocktail Effect",
@@ -1883,8 +1883,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "When Your Own Output Becomes Your Training Data: Noise-to-Meaning Loops and a Formal RSI Trigger",
@@ -1896,8 +1896,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "MeanFlowSE: one-step generative speech enhancement via conditional mean flow",
@@ -1909,8 +1909,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Training-Free Reward-Guided Image Editing via Trajectory Optimal Control",
@@ -1922,8 +1922,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "REVISION:Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization",
@@ -1935,8 +1935,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Agent Data Protocol: Unifying Datasets for Diverse, Effective Fine-tuning of LLM Agents",
@@ -1948,8 +1948,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Weight Space Representation Learning via Neural Field Adaptation",
@@ -1961,8 +1961,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Agile Flight Emerges from Multi-Agent Competitive Racing",
@@ -1974,8 +1974,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Agentic Code Reasoning",
@@ -1987,8 +1987,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6954
     },
     {
       "title": "Towards Realistic Personalization: Evaluating Long-Horizon Preference Following in Personalized User-LLM Interactions",
@@ -2000,8 +2000,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Language Model Goal Selection Differs from Humans' in an Open-Ended Task",
@@ -2013,8 +2013,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "M-QUEST -- Meme Question-Understanding Evaluation on Semantics and Toxicity",
@@ -2026,8 +2026,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Automated Concept Discovery for LLM-as-a-Judge Preference Analysis",
@@ -2039,8 +2039,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Non-Invasive Reconstruction of Intracranial EEG Across the Deep Temporal Lobe from Scalp EEG based on Conditional Normalizing Flow",
@@ -2052,8 +2052,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Learning Order Forest for Qualitative-Attribute Data Clustering",
@@ -2065,8 +2065,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "RADAR: Learning to Route with Asymmetry-aware DistAnce Representations",
@@ -2078,8 +2078,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "PhyPrompt: RL-based Prompt Refinement for Physically Plausible Text-to-Video Generation",
@@ -2091,8 +2091,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Field imaging framework for morphological characterization of aggregates with computer vision: Algorithms and applications",
@@ -2104,8 +2104,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Why Do Unlearnable Examples Work: A Novel Perspective of Mutual Information",
@@ -2117,8 +2117,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Understanding Parents' Desires in Moderating Children's Interactions with GenAI Chatbots through LLM-Generated Probes",
@@ -2130,8 +2130,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "JANUS: Structured Bidirectional Generation for Guaranteed Constraints and Analytical Uncertainty",
@@ -2143,8 +2143,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Structure-Aware Distributed Backdoor Attacks in Federated Learning",
@@ -2156,8 +2156,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "A novel network for classification of cuneiform tablet metadata",
@@ -2169,8 +2169,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "TFWaveFormer: Temporal-Frequency Collaborative Multi-level Wavelet Transformer for Dynamic Link Prediction",
@@ -2182,8 +2182,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Measuring AI R&D Automation",
@@ -2195,8 +2195,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "SpotIt+: Verification-based Text-to-SQL Evaluation with Database Constraints",
@@ -2208,8 +2208,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "LeanTutor: Towards a Verified AI Mathematical Proof Tutor",
@@ -2221,8 +2221,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "SpatialBench: Benchmarking Multimodal Large Language Models for Spatial Cognition",
@@ -2234,8 +2234,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Rich Insights from Cheap Signals: Efficient Evaluations via Tensor Factorization",
@@ -2247,8 +2247,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Can machines be uncertain?",
@@ -2260,8 +2260,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Learning to Generate Conditional Tri-plane for 3D-aware Expression Controllable Portrait Animation",
@@ -2273,8 +2273,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Merlin: A Computed Tomography Vision-Language Foundation Model and Dataset",
@@ -2286,8 +2286,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "A Bayesian Framework for Active Tactile Object Recognition, Pose Estimation and Shape Transfer Learning",
@@ -2299,8 +2299,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Difficult Examples Hurt Unsupervised Contrastive Learning: A Theoretical Perspective",
@@ -2312,8 +2312,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "WebDS: An End-to-End Benchmark for Web-based Data Science",
@@ -2325,8 +2325,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "ERDES: A Benchmark Video Dataset for Retinal Detachment and Macular Status Classification in Ocular Ultrasound",
@@ -2338,8 +2338,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Effective Sample Size and Generalization Bounds for Temporal Networks",
@@ -2351,8 +2351,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Adaptive Quantized Planetary Crater Detection System for Autonomous Space Exploration",
@@ -2364,8 +2364,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "A Geometric Perspective on the Difficulties of Learning GNN-based SAT Solvers",
@@ -2377,8 +2377,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "SpotIt: Evaluating Text-to-SQL Evaluation with Formal Verification",
@@ -2390,8 +2390,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Succeeding at Scale: Automated Dataset Construction and Query-Side Adaptation for Multi-Tenant Search",
@@ -2403,8 +2403,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Exploring Semantic Labeling Strategies for Third-Party Cybersecurity Risk Assessment Questionnaires",
@@ -2416,8 +2416,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "Test Case Prioritization: A Snowballing Literature Review and TCPFramework with Approach Combinators",
@@ -2429,8 +2429,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4454
     },
     {
       "title": "MAGE: Meta-Reinforcement Learning for Language Agents toward Strategic Exploration and Exploitation",
@@ -2442,8 +2442,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Phi-4-reasoning-vision-15B Technical Report",
@@ -2455,8 +2455,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "A Dual-Helix Governance Approach Towards Reliable Agentic AI for WebGIS Development",
@@ -2468,8 +2468,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "AriadneMem: Threading the Maze of Lifelong Memory for LLM Agents",
@@ -2481,8 +2481,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
@@ -2494,8 +2494,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Developing an AI Assistant for Knowledge Management and Workforce Training in State DOTs",
@@ -2507,8 +2507,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "HumanLM: Simulating Users with State Alignment Beats Response Imitation",
@@ -2520,8 +2520,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Knowledge Graph and Hypergraph Transformers with Repository-Attention and Journey-Based Role Transport",
@@ -2533,8 +2533,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "From We to Me: Theory Informed Narrative Shift with Abductive Reasoning",
@@ -2546,8 +2546,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Neuro-Symbolic Decoding of Neural Activity",
@@ -2559,8 +2559,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "GreenPhase: A Green Learning Approach for Earthquake Phase Picking",
@@ -2572,8 +2572,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Sleeper Cell: Injecting Latent Malice Temporal Backdoors into Tool-Using LLMs",
@@ -2585,8 +2585,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "MemSifter: Offloading LLM Memory Retrieval via Outcome-Driven Proxy Reasoning",
@@ -2598,8 +2598,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Zero-Knowledge Federated Learning with Lattice-Based Hybrid Encryption for Quantum-Resilient Medical AI",
@@ -2611,8 +2611,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Heterogeneous Time Constants Improve Stability in Equilibrium Propagation",
@@ -2624,8 +2624,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Farther the Shift, Sparser the Representation: Analyzing OOD Mechanisms in LLMs",
@@ -2637,8 +2637,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Parallel Test-Time Scaling with Multi-Sequence Verifiers",
@@ -2650,8 +2650,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Phys4D: Fine-Grained Physics-Consistent 4D Modeling from Video Diffusion",
@@ -2663,8 +2663,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Role-Aware Conditional Inference for Spatiotemporal Ecosystem Carbon Flux Prediction",
@@ -2676,8 +2676,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Molt Dynamics: Emergent Social Phenomena in Autonomous AI Agent Populations",
@@ -2689,8 +2689,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Local Shapley: Model-Induced Locality and Optimal Reuse in Data Valuation",
@@ -2702,8 +2702,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "EvoPrune: Early-Stage Visual Token Pruning for Efficient MLLMs",
@@ -2715,8 +2715,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "UrbanHuRo: A Two-Layer Human-Robot Collaboration Framework for the Joint Optimization of Heterogeneous Urban Services",
@@ -2728,8 +2728,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Large-Language-Model-Guided State Estimation for Partially Observable Task and Motion Planning",
@@ -2741,8 +2741,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "PROSPECT: Unified Streaming Vision-Language Navigation via Semantic--Spatial Fusion and Latent Predictive Representation",
@@ -2754,8 +2754,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Confidence-Calibrated Small-Large Language Model Collaboration for Cost-Efficient Reasoning",
@@ -2767,8 +2767,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Learning Approximate Nash Equilibria in Cooperative Multi-Agent Reinforcement Learning via Mean-Field Subsampling",
@@ -2780,8 +2780,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Cognition to Control - Multi-Agent Learning for Human-Humanoid Collaborative Transport",
@@ -2793,8 +2793,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Not All Candidates are Created Equal: A Heterogeneity-Aware Approach to Pre-ranking in Recommender Systems",
@@ -2806,8 +2806,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "MACC: Multi-Agent Collaborative Competition for Scientific Exploration",
@@ -2819,8 +2819,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "DisenReason: Behavior Disentanglement and Latent Reasoning for Shared-Account Sequential Recommendation",
@@ -2832,8 +2832,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Relational In-Context Learning via Synthetic Pre-training with Structural Prior",
@@ -2845,8 +2845,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Separators in Enhancing Autoregressive Pretraining for Vision Mamba",
@@ -2858,8 +2858,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Fairness Begins with State: Purifying Latent Preferences for Hierarchical Reinforcement Learning in Interactive Recommendation",
@@ -2871,8 +2871,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Joint Hardware-Workload Co-Optimization for In-Memory Computing Accelerators",
@@ -2884,8 +2884,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "On the Suitability of LLM-Driven Agents for Dark Pattern Audits",
@@ -2897,8 +2897,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "BD-Merging: Bias-Aware Dynamic Model Merging with Evidence-Guided Contrastive Learning",
@@ -2910,8 +2910,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Towards Generalized Multimodal Homography Estimation",
@@ -2923,8 +2923,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Spectral Surgery: Training-Free Refinement of LoRA via Gradient-Guided Singular Value Reweighting",
@@ -2936,8 +2936,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Discriminative Perception via Anchored Description for Reasoning Segmentation",
@@ -2949,8 +2949,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Self-adapting Robotic Agents through Online Continual Reinforcement Learning with World Model Feedback",
@@ -2962,8 +2962,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Crab$^{+}$: A Scalable and Unified Audio-Visual Scene Understanding Model with Explicit Cooperation",
@@ -2975,8 +2975,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "GarmentPile++: Affordance-Driven Cluttered Garments Retrieval with Vision-Language Reasoning",
@@ -2988,8 +2988,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "PlaneCycle: Training-Free 2D-to-3D Lifting of Foundation Models Without Adapters",
@@ -3001,8 +3001,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Architectural Proprioception in State Space Models: Thermodynamic Training Induces Anticipatory Halt Detection",
@@ -3014,8 +3014,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Noise-aware Client Selection for carbon-efficient Federated Learning via Gradient Norm Thresholding",
@@ -3027,8 +3027,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "ZeSTA: Zero-Shot TTS Augmentation with Domain-Conditioned Training for Data-Efficient Personalized Speech Synthesis",
@@ -3040,8 +3040,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "FeedAIde: Guiding App Users to Submit Rich Feedback Reports by Asking Context-Aware Follow-Up Questions",
@@ -3053,8 +3053,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Online Learning for Multi-Layer Hierarchical Inference under Partial and Policy-Dependent Feedback",
@@ -3066,8 +3066,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "What Does Flow Matching Bring To TD Learning?",
@@ -3079,8 +3079,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Dissecting Quantization Error: A Concentration-Alignment Perspective",
@@ -3092,8 +3092,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Offline-to-Online Multi-Agent Reinforcement Learning with Offline Value Function Memory and Sequential Exploration",
@@ -3105,8 +3105,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "MuRAL: A Multi-Resident Ambient Sensor Dataset Annotated with Natural Language for Activities of Daily Living",
@@ -3118,8 +3118,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Synthetic emotions and consciousness: exploring architectural boundaries",
@@ -3131,8 +3131,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "HAMLET: A Hierarchical and Adaptive Multi-Agent Framework for Live Embodied Theatrics",
@@ -3144,8 +3144,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "From Privacy to Trust in the Agentic Era: A Taxonomy of Challenges in Trustworthy Federated Learning Through the Lens of Trust Report 2.0",
@@ -3157,8 +3157,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "The Geometry of Reasoning: Flowing Logics in Representation Space",
@@ -3170,8 +3170,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "From Agent-Only Social Networks to Autonomous Scientific Research: Lessons from OpenClaw and Moltbook, and the Architecture of ClawdLab and Beach.Science",
@@ -3183,8 +3183,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Toward Reasoning on the Boundary: A Mixup-based Approach for Graph Anomaly Detection",
@@ -3196,8 +3196,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "SafeDPO: A Simple Approach to Direct Preference Optimization with Enhanced Safety",
@@ -3209,8 +3209,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "AutoQD: Automatic Discovery of Diverse Behaviors with Quality-Diversity Optimization",
@@ -3222,8 +3222,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Q-Guided Stein Variational Model Predictive Control via RL-informed Policy Prior",
@@ -3235,8 +3235,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "When Relevance Meets Novelty: Dual-Stable Periodic Optimization for Serendipitous Recommendation",
@@ -3248,8 +3248,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "An LLM Agentic Approach for Legal-Critical Software: A Case Study for Tax Prep Software",
@@ -3261,8 +3261,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Best-of-$\\infty$ -- Asymptotic Performance of Test-Time LLM Ensembling",
@@ -3274,8 +3274,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Vision-Zero: Scalable VLM Self-Improvement via Strategic Gamified Self-Play",
@@ -3287,8 +3287,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "ELMUR: External Layer Memory with Update/Rewrite for Long-Horizon RL Problems",
@@ -3300,8 +3300,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "TIGeR: Tool-Integrated Geometric Reasoning in Vision-Language Models for Robotics",
@@ -3313,8 +3313,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "AMiD: Knowledge Distillation for LLMs with $\\alpha$-mixture Assistant Distribution",
@@ -3326,8 +3326,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Kaleido: Open-Sourced Multi-Subject Reference Video Generation Model",
@@ -3339,8 +3339,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "CareMedEval dataset: Evaluating Critical Appraisal and Reasoning in the Biomedical Field",
@@ -3352,8 +3352,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "AudAgent: Automated Auditing of Privacy Policy Compliance in AI Agents",
@@ -3365,8 +3365,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "NRR-Phi: Text-to-State Mapping for Ambiguity Preservation in LLM Inference",
@@ -3378,8 +3378,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "JPmHC Dynamical Isometry via Orthogonal Hyper-Connections",
@@ -3391,8 +3391,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Maximin Share Guarantees via Limited Cost-Sensitive Sharing",
@@ -3404,8 +3404,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Dynamic Adversarial Reinforcement Learning for Robust Multimodal Large Language Models",
@@ -3417,8 +3417,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Prompt Sensitivity and Answer Consistency of Small Open-Source Large Language Models on Clinical Question Answering: Implications for Low-Resource Healthcare Deployment",
@@ -3430,8 +3430,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Structured vs. Unstructured Pruning: An Exponential Gap",
@@ -3443,8 +3443,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "ITO: Images and Texts as One via Synergizing Multiple Alignment and Training-Time Fusion",
@@ -3456,8 +3456,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Learning to Generate and Extract: A Multi-Agent Collaboration Framework For Zero-shot Document-level Event Arguments Extraction",
@@ -3469,8 +3469,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "How to Model AI Agents as Personas?: Applying the Persona Ecosystem Playground to 41,300 Posts on Moltbook for Behavioral Insights",
@@ -3482,8 +3482,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3954
     },
     {
       "title": "Generative AI in Managerial Decision-Making: Redefining Boundaries through Ambiguity Resolution and Sycophancy Analysis",
@@ -3495,8 +3495,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Fine-Tuning and Evaluating Conversational AI for Agricultural Advisory",
@@ -3508,8 +3508,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Old Habits Die Hard: How Conversational History Geometrically Traps LLMs",
@@ -3521,8 +3521,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "How does fine-tuning improve sensorimotor representations in large language models?",
@@ -3534,8 +3534,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Towards Self-Robust LLMs: Intrinsic Prompt Noise Resistance via CoIPO",
@@ -3547,8 +3547,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Quantum-Inspired Self-Attention in a Large Language Model",
@@ -3560,8 +3560,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Discern Truth from Falsehood: Reducing Over-Refusal via Contrastive Refinement",
@@ -3573,8 +3573,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "StructLens: A Structural Lens for Language Models via Maximum Spanning Trees",
@@ -3586,8 +3586,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Cryo-SWAN: the Multi-Scale Wavelet-decomposition-inspired Autoencoder Network for molecular density representation of molecular volumes",
@@ -3599,8 +3599,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Physics-constrained symbolic regression for discovering closed-form equations of multimodal water retention curves from experimental data",
@@ -3612,8 +3612,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Inhibitory Cross-Talk Enables Functional Lateralization in Attention-Coupled Latent Memory",
@@ -3625,8 +3625,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "ACES: Accent Subspaces for Coupling, Explanations, and Stress-Testing in Automatic Speech Recognition",
@@ -3638,8 +3638,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "PRIVATEEDIT: A Privacy-Preserving Pipeline for Face-Centric Generative Image Editing",
@@ -3651,8 +3651,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Graph Hopfield Networks: Energy-Based Node Classification with Associative Memory",
@@ -3664,8 +3664,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Baseline Performance of AI Tools in Classifying Cognitive Demand of Mathematical Tasks",
@@ -3677,8 +3677,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Directional Neural Collapse Explains Few-Shot Transfer in Self-Supervised Learning",
@@ -3690,8 +3690,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "SafeCRS: Personalized Safety Alignment for LLM-Based Conversational Recommender Systems",
@@ -3703,8 +3703,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Belief-Sim: Towards Belief-Driven Simulation of Demographic Misinformation Susceptibility",
@@ -3716,8 +3716,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Goal-Driven Risk Assessment for LLM-Powered Systems: A Healthcare Case Study",
@@ -3729,8 +3729,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Bridging Pedagogy and Play: Introducing a Language Mapping Interface for Human-AI Co-Creation in Educational Game Design",
@@ -3742,8 +3742,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Mathematicians in the age of AI",
@@ -3755,8 +3755,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Error as Signal: Stiffness-Aware Diffusion Sampling via Embedded Runge-Kutta Guidance",
@@ -3768,8 +3768,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Generalization Properties of Score-matching Diffusion Models for Intrinsically Low-dimensional Data",
@@ -3781,8 +3781,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Order Is Not Layout: Order-to-Space Bias in Image Generation",
@@ -3794,8 +3794,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "IntroductionDMD-augmented Unpaired Neural Schr\\\"odinger Bridge for Ultra-Low Field MRI Enhancement",
@@ -3807,8 +3807,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "When and Where to Reset Matters for Long-Term Test-Time Adaptation",
@@ -3820,8 +3820,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Zero-Knowledge Proof (ZKP) Authentication for Offline CBDC Payment System Using IoT Devices",
@@ -3833,8 +3833,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning",
@@ -3846,8 +3846,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "IROSA: Interactive Robot Skill Adaptation using Natural Language",
@@ -3859,8 +3859,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "PatchDecomp: Interpretable Patch-Based Time Series Forecasting",
@@ -3872,8 +3872,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Selecting Offline Reinforcement Learning Algorithms for Stochastic Network Control",
@@ -3885,8 +3885,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "BLOCK: An Open-Source Bi-Stage MLLM Character-to-Skin Pipeline for Minecraft",
@@ -3898,8 +3898,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Upholding Epistemic Agency: A Brouwerian Assertibility Constraint for Responsible AI",
@@ -3911,8 +3911,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "When Visual Evidence is Ambiguous: Pareidolia as a Diagnostic Probe for Vision Models",
@@ -3924,8 +3924,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "STEM Faculty Perspectives on Generative AI in Higher Education",
@@ -3937,8 +3937,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Volumetric Directional Diffusion: Anchoring Uncertainty Quantification in Anatomical Consensus for Ambiguous Medical Image Segmentation",
@@ -3950,8 +3950,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "The Empty Quadrant: AI Teammates for Embodied Field Learning",
@@ -3963,8 +3963,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Sim2Sea: Sim-to-Real Policy Transfer for Maritime Vessel Navigation in Congested Waters",
@@ -3976,8 +3976,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Monitoring Emergent Reward Hacking During Generation via Internal Activations",
@@ -3989,8 +3989,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "SaFeR: Safety-Critical Scenario Generation for Autonomous Driving Test via Feasibility-Constrained Token Resampling",
@@ -4002,8 +4002,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "End-to-end event reconstruction for precision physics at future colliders",
@@ -4015,8 +4015,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Efficient Point Cloud Processing with High-Dimensional Positional Encoding and Non-Local MLPs",
@@ -4028,8 +4028,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Understanding Sources of Demographic Predictability in Brain MRI via Disentangling Anatomy and Contrast",
@@ -4041,8 +4041,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Data-Aware Random Feature Kernel for Transformers",
@@ -4054,8 +4054,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "CAM-LDS: Cyber Attack Manifestations for Automatic Interpretation of System Logs and Security Alerts",
@@ -4067,8 +4067,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "LikeThis! Empowering App Users to Submit UI Improvement Suggestions Instead of Complaints",
@@ -4080,8 +4080,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "When AI Fails, What Works? A Data-Driven Taxonomy of Real-World AI Risk Mitigation Strategies",
@@ -4093,8 +4093,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Causality Elicitation from Large Language Models",
@@ -4106,8 +4106,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "IPD: Boosting Sequential Policy with Imaginary Planning Distillation in Offline Reinforcement Learning",
@@ -4119,8 +4119,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "CubeComposer: Spatio-Temporal Autoregressive 4K 360{\\deg} Video Generation from Perspective Video",
@@ -4132,8 +4132,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "CRESTomics: Analyzing Carotid Plaques in the CREST-2 Trial with a New Additive Classification Model",
@@ -4145,8 +4145,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "MOO: A Multi-view Oriented Observations Dataset for Viewpoint Analysis in Cattle Re-Identification",
@@ -4158,8 +4158,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "World Properties without World Models: Recovering Spatial and Temporal Structure from Co-occurrence Statistics in Static Word Embeddings",
@@ -4171,8 +4171,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "SPRINT: Semi-supervised Prototypical Representation for Few-Shot Class-Incremental Tabular Learning",
@@ -4184,8 +4184,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Efficient Refusal Ablation in LLM through Optimal Transport",
@@ -4197,8 +4197,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Conjuring Semantic Similarity",
@@ -4210,8 +4210,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Self-Supervised Inductive Logic Programming",
@@ -4223,8 +4223,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Can a Small Model Learn to Look Before It Leaps? Dynamic Learning and Proactive Correction for Hallucination Detection",
@@ -4236,8 +4236,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Causal Identification from Counterfactual Data: Completeness and Bounding Results",
@@ -4249,8 +4249,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Catch Me If You Can Describe Me: Open-Vocabulary Camouflaged Instance Segmentation with Diffusion",
@@ -4262,8 +4262,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Leveraging Large Language Models for Semantic Query Processing in a Scholarly Knowledge Graph",
@@ -4275,8 +4275,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "DCENWCNet: A Deep CNN Ensemble Network for White Blood Cell Classification with LIME-Based Explainability",
@@ -4288,8 +4288,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Safety Guardrails for LLM-Enabled Robots",
@@ -4301,8 +4301,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "OSCAR: Online Soft Compression And Reranking",
@@ -4314,8 +4314,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "TPK: Trustworthy Trajectory Prediction Integrating Prior Knowledge For Interpretability and Kinematic Feasibility",
@@ -4327,8 +4327,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Unsupervised Representation Learning - an Invariant Risk Minimization Perspective",
@@ -4340,8 +4340,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Extremely Simple Multimodal Outlier Synthesis for Out-of-Distribution Detection and Segmentation",
@@ -4353,8 +4353,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Boosting In-Context Learning in LLMs Through the Lens of Classical Supervised Learning",
@@ -4366,8 +4366,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Robust Adversarial Quantification via Conflict-Aware Evidential Deep Learning",
@@ -4379,8 +4379,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "EgoWorld: Translating Exocentric View to Egocentric View using Rich Exocentric Observations",
@@ -4392,8 +4392,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "From Ambiguity to Accuracy: The Transformative Effect of Coreference Resolution on Retrieval-Augmented Generation systems",
@@ -4405,8 +4405,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Function Induction and Task Generalization: An Interpretability Study with Off-by-One Addition",
@@ -4418,8 +4418,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "VITA: Vision-to-Action Flow Matching Policy",
@@ -4431,8 +4431,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Zono-Conformal Prediction: Zonotope-Based Uncertainty Quantification for Regression and Classification Tasks",
@@ -4444,8 +4444,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Index-Preserving Lightweight Token Pruning for Efficient Document Understanding in Vision-Language Models",
@@ -4457,8 +4457,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Bridging Computational Social Science and Deep Learning: Cultural Dissemination-Inspired Graph Neural Networks",
@@ -4470,8 +4470,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Uni-NTFM: A Unified Foundation Model for EEG Signal Representation Learning",
@@ -4483,8 +4483,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Value Flows",
@@ -4496,8 +4496,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Topological Alignment of Shared Vision-Language Embedding Space",
@@ -4509,8 +4509,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Circuit Insights: Towards Interpretability Beyond Activations",
@@ -4522,8 +4522,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "MuSaG: A Multimodal German Sarcasm Dataset with Full-Modal Annotations",
@@ -4535,8 +4535,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Implicit Bias of Per-sample Adam on Separable Data: Departure from the Full-batch Regime",
@@ -4548,8 +4548,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "DecNefSimulator: A Modular, Interpretable Framework for Decoded Neurofeedback Simulation Using Generative Models",
@@ -4561,8 +4561,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Implicit Bias of the JKO Scheme",
@@ -4574,8 +4574,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "EnECG: Efficient Ensemble Learning for Electrocardiogram Multi-task Foundation Model",
@@ -4587,8 +4587,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Beyond the Prompt: An Empirical Study of Cursor Rules",
@@ -4600,8 +4600,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "The Epistemological Consequences of Large Language Models: Rethinking collective intelligence and institutional knowledge",
@@ -4613,8 +4613,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "AI Skills Improve Job Prospects: Causal Evidence from a Hiring Experiment",
@@ -4626,8 +4626,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "HealthMamba: An Uncertainty-aware Spatiotemporal Graph State Space Model for Effective and Reliable Healthcare Facility Visit Prediction",
@@ -4639,8 +4639,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Learning-guided Kansa collocation for forward and inverse PDEs beyond linearity",
@@ -4652,8 +4652,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Overcoming the Combinatorial Bottleneck in Symmetry-Driven Crystal Structure Prediction",
@@ -4665,8 +4665,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Learning Physical Principles from Interaction: Self-Evolving Planning via Test-Time Memory",
@@ -4678,8 +4678,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Beyond Dominant Patches: Spatial Credit Redistribution For Grounded Vision-Language Models",
@@ -4691,8 +4691,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "GENAI WORKBENCH: AI-Assisted Analysis and Synthesis of Engineering Systems from Multimodal Engineering Data",
@@ -4704,8 +4704,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "The Sentience Readiness Index: A Preliminary Framework for Measuring National Preparedness for the Possibility of Artificial Sentience",
@@ -4717,8 +4717,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Human-Certified Module Repositories for the AI Age",
@@ -4730,8 +4730,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "MoECLIP: Patch-Specialized Experts for Zero-shot Anomaly Detection",
@@ -4743,8 +4743,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0954
     },
     {
       "title": "Seven tech giants signed Trump’s pledge to keep electricity costs from spiking around data centers",
@@ -4756,8 +4756,8 @@
       "image": "",
       "published": "2026-03-05T00:17:37+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.601
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5987
     },
     {
       "title": "Introducing ChatGPT for Excel and new financial data integrations",
@@ -4769,8 +4769,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.6466
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.6443
     },
     {
       "title": "Key research and product announcements at the AI Native Conf",
@@ -4782,8 +4782,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.5666
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.5643
     },
     {
       "title": "FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling",
@@ -4795,8 +4795,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9666
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9643
     },
     {
       "title": "The five AI value models driving business reinvention",
@@ -4808,8 +4808,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9466
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9443
     },
     {
       "title": "Introducing the Adoption news channel",
@@ -4821,8 +4821,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9466
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9443
     },
     {
       "title": "Introducing Modular Diffusers - Composable Building Blocks for Diffusion Pipelines",
@@ -4834,8 +4834,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8766
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.8743
     },
     {
       "title": "NotebookLM can now summarize research in ‘cinematic’ video overviews",
@@ -4847,8 +4847,8 @@
       "image": "",
       "published": "2026-03-04T20:32:42+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.5465
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5445
     },
     {
       "title": "Google’s AI-powered workspace is now available to more users in Search",
@@ -4860,8 +4860,8 @@
       "image": "",
       "published": "2026-03-04T18:57:01+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.225
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.223
     },
     {
       "title": "Use Canvas in AI Mode to get things done and bring your ideas to life, right in Search.",
@@ -4873,8 +4873,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIMMode_Social.max-600x600.format-webp.webp",
       "published": "2026-03-04T17:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.78
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.7781
     },
     {
       "title": "Bridging the operational AI gap",
@@ -4886,8 +4886,8 @@
       "image": "",
       "published": "2026-03-04T14:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.904
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9023
     },
     {
       "title": "Extending single-minus amplitudes to gravitons",
@@ -4899,8 +4899,8 @@
       "image": "",
       "published": "2026-03-04T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.7705
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.7689
     },
     {
       "title": "Understanding AI and learning outcomes",
@@ -4912,8 +4912,8 @@
       "image": "",
       "published": "2026-03-04T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.3806
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.3794
     },
     {
       "title": "Cache-aware prefill–decode disaggregation (CPD) for up to 40% faster long-context LLM serving",
@@ -4925,8 +4925,8 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/699e0b27e4b6730f9f46bcaa_698c269bd185dc488ea8c517_CPD%2520Carousel%2520from%2520Together.ai.jpeg",
       "published": "2026-03-04T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.7006
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.6994
     },
     {
       "title": "How Axios uses AI to help deliver high-impact local journalism",
@@ -4938,8 +4938,8 @@
       "image": "",
       "published": "2026-03-04T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.6806
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.6794
     },
     {
       "title": "Downdetector, Speedtest sold to IT service-provider Accenture in $1.2B deal",
@@ -4951,8 +4951,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/GettyImages-1795499144-1152x648.jpg",
       "published": "2026-03-03T22:20:06+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.3179
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.3168
     },
     {
       "title": "Create new worlds in Project Genie with these 4 tips",
@@ -4964,8 +4964,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Genie_2.max-600x600.format-webp.webp",
       "published": "2026-03-03T17:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.561
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5601
     },
     {
       "title": "PRX Part 3 — Training a Text-to-Image Model in 24h!",
@@ -4977,8 +4977,8 @@
       "image": "",
       "published": "2026-03-03T16:50:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.86
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.8591
     },
     {
       "title": "Gemini 3.1 Flash-Lite: Built for intelligence at scale",
@@ -4990,8 +4990,8 @@
       "image": "https://lh3.googleusercontent.com/L943nW-XsLGjzWrBOj8x7RhlajW6yigzhd8q45ia33L0uNyClu_XT600bTZevv5c2end6MZ5dFKekGXGMjfxIsYCdlqYlcnyNEmAy4Gd0B6Ovd6Z=w528-h297-n-nu-rw-lo",
       "published": "2026-03-03T16:35:55+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.5585
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5575
     },
     {
       "title": "Gemini 3.1 Flash-Lite: Built for intelligence at scale",
@@ -5003,8 +5003,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.1_flash_Lite_blog_keyw.max-600x600.format-webp.webp",
       "published": "2026-03-03T16:34:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.5583
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5573
     },
     {
       "title": "LLMs can unmask pseudonymous users at scale with surprising accuracy",
@@ -5016,8 +5016,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/unmask-deanymize-privacy-1152x648.jpg",
       "published": "2026-03-03T12:30:24+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.2539
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.2531
     },
     {
       "title": "GPT-5.3 Instant: Smoother, more useful everyday conversations",
@@ -5029,8 +5029,8 @@
       "image": "",
       "published": "2026-03-03T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.5902
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5894
     },
     {
       "title": "GPT-5.3 Instant System Card",
@@ -5042,8 +5042,8 @@
       "image": "",
       "published": "2026-03-03T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.5902
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.5894
     },
     {
       "title": "OpenAI’s “compromise” with the Pentagon is what Anthropic feared",
@@ -5055,8 +5055,8 @@
       "image": "",
       "published": "2026-03-02T17:29:42+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.3103
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.3098
     },
     {
       "title": "I checked out one of the biggest anti-AI protests yet",
@@ -5068,8 +5068,8 @@
       "image": "",
       "published": "2026-03-02T12:55:20+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.2959
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.2955
     },
     {
       "title": "Introducing Together AI’s new look",
@@ -5081,8 +5081,8 @@
       "image": "",
       "published": "2026-03-02T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.194
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.1937
     },
     {
       "title": "NVIDIA Advances Autonomous Networks With Agentic AI Blueprints and Telco Reasoning Models",
@@ -5094,8 +5094,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/Autonomous-Networks-Blog-Image.png",
       "published": "2026-03-01T07:00:45+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8361
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.836
     },
     {
       "title": "NVIDIA and Partners Show That Software-Defined AI-RAN Is the Next Wireless Generation",
@@ -5107,8 +5107,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/AI-RAN-Commercialization-Blog-Image.jpg",
       "published": "2026-03-01T07:00:03+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.2361
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.2359
     },
     {
       "title": "Our agreement with the Department of War",
@@ -5120,8 +5120,8 @@
       "image": "",
       "published": "2026-02-28T12:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.4276
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.4275
     },
     {
       "title": "Google quantum-proofs HTTPS by squeezing 15kB of data into 700-byte space",
@@ -5133,8 +5133,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/06/https-1152x648.jpg",
       "published": "2026-02-28T01:26:41+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.0703
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.0702
     },
     {
       "title": "AI is rewiring how the world’s best Go players think",
@@ -5146,7 +5146,7 @@
       "image": "",
       "published": "2026-02-27T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.2032
     },
     {
@@ -5159,8 +5159,8 @@
       "image": "",
       "published": "2026-02-27T05:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.7117
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.7116
     },
     {
       "title": "OpenAI and Amazon announce strategic partnership",
@@ -5172,8 +5172,8 @@
       "image": "",
       "published": "2026-02-27T05:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.7117
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.7116
     },
     {
       "title": "Scaling AI for everyone",
@@ -5185,8 +5185,8 @@
       "image": "",
       "published": "2026-02-27T05:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.4117
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.4116
     },
     {
       "title": "Joint Statement from OpenAI and Microsoft",
@@ -5198,8 +5198,8 @@
       "image": "",
       "published": "2026-02-27T05:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.4117
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.4116
     },
     {
       "title": "An update on our mental health-related work",
@@ -5211,7 +5211,7 @@
       "image": "",
       "published": "2026-02-27T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.41
     },
     {
@@ -5224,7 +5224,7 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/Lilly-AI-Factory_Poster-Image-scaled.png",
       "published": "2026-02-26T19:00:58+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.8987
     },
     {
@@ -5237,7 +5237,7 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/691A1377_1920x1080.max-600x600.format-webp.webp",
       "published": "2026-02-26T18:55:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 2.3387
     },
     {
@@ -5250,8 +5250,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Translate_TextTranslate_1920x10.max-600x600.format-webp.webp",
       "published": "2026-02-26T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.3385
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.3384
     },
     {
       "title": "Nano Banana 2: Combining Pro capabilities with lightning-fast speed",
@@ -5263,7 +5263,7 @@
       "image": "https://lh3.googleusercontent.com/uzAd6nlnEh3lSFyE5Ay-1tvY6xesJLBuPucsK64LfxUwhMk5odcsyH-pAaIKRDVh1PniKOsihrha1qqspCc2f3CgPv61TSgTReKWdUlPiavUkH3R8lM=w528-h297-n-nu-rw-lo",
       "published": "2026-02-26T16:01:50+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.338
     },
     {
@@ -5276,7 +5276,7 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/NB2_Hero.max-600x600.format-webp.webp",
       "published": "2026-02-26T16:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.338
     },
     {
@@ -5289,7 +5289,7 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/BuildWith_Hero.max-600x600.format-webp.webp",
       "published": "2026-02-26T16:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.338
     },
     {
@@ -5302,8 +5302,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/06/wi-fi-1152x648-1751309982.jpg",
       "published": "2026-02-26T15:45:18+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.058
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.0579
     },
     {
       "title": "Finding value with AI and Industry 5.0 transformation",
@@ -5315,7 +5315,7 @@
       "image": "",
       "published": "2026-02-26T15:00:59+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.1978
     },
     {
@@ -5328,7 +5328,7 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/gfn-thursday-2-26-resident-evil-requiem-nv-blog-1280x680-logo.jpg",
       "published": "2026-02-26T14:00:48+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.8976
     },
     {
@@ -5341,7 +5341,7 @@
       "image": "",
       "published": "2026-02-26T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 2.0568
     },
     {
@@ -5354,8 +5354,8 @@
       "image": "",
       "published": "2026-02-26T06:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1061
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.106
     },
     {
       "title": "Mixture of Experts (MoEs) in Transformers",
@@ -5367,7 +5367,7 @@
       "image": "",
       "published": "2026-02-26T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.3351
     },
     {
@@ -5380,8 +5380,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Blog_header_2096x1182_withoutte.max-600x600.format-webp.webp",
       "published": "2026-02-25T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.3344
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.3343
     },
     {
       "title": "See the whole picture and find the look with Circle to Search",
@@ -5393,8 +5393,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/FTL__Try_On_Blog_header.max-600x600.format-webp.webp",
       "published": "2026-02-25T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.3344
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.3343
     },
     {
       "title": "CoderForge-Preview: SOTA open dataset for training efficient coding agents",
@@ -5406,7 +5406,7 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/699e0b249316bdc90ac3ce75_6876922781888597bd8e0dd0_DeepSeek-B200-Carousel.png",
       "published": "2026-02-25T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 2.0726
     },
     {
@@ -5419,7 +5419,7 @@
       "image": "",
       "published": "2026-02-25T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.4026
     },
     {
@@ -5432,7 +5432,7 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/hc-promo-pack-state-of-AI-2026-1280x680-1.png",
       "published": "2026-02-24T14:00:34+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.892
     },
     {
@@ -5445,7 +5445,7 @@
       "image": "",
       "published": "2026-02-24T13:40:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.402
     },
     {
@@ -5458,8 +5458,8 @@
       "image": "",
       "published": "2026-02-24T00:00:21+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.0314
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0313
     },
     {
       "title": "The human work behind humanoid robots is being hidden",
@@ -5471,7 +5471,7 @@
       "image": "",
       "published": "2026-02-23T17:05:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.1911
     },
     {
@@ -5484,7 +5484,7 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/cyber-gen-ai-press-1920x1080-1.jpg",
       "published": "2026-02-23T16:00:57+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.1911
     },
     {
@@ -5497,7 +5497,7 @@
       "image": "",
       "published": "2026-02-23T11:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.7009
     },
     {
@@ -5510,7 +5510,7 @@
       "image": "",
       "published": "2026-02-23T05:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 2.4008
     },
     {
@@ -5523,7 +5523,7 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/699e0b25dfc2264508309b8f_699c923fbf6c32f950afef36_How%2520Speech%2520Models%2520Fail%2520Carousel.png",
       "published": "2026-02-23T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.8207
     },
     {
@@ -5536,7 +5536,7 @@
       "image": "",
       "published": "2026-02-20T14:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
       "score": 1.7001
     },
     {

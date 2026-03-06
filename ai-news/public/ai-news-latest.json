@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T01:10:46.356570+00:00",
+  "updatedAt": "2026-03-06T01:19:46.552493+00:00",
   "items": [
     {
       "title": "The Pentagon formally labels Anthropic a supply-chain risk",
@@ -11,8 +11,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2263863571.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T23:02:22+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.0865
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0822
     },
     {
       "title": "Trump gets data center companies to pledge to pay for power generation",
@@ -24,8 +24,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/GettyImages-2258665361-1024x648.jpg",
       "published": "2026-03-05T18:41:28+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9686
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9648
     },
     {
       "title": "Netflix is buying Ben Affleck’s AI startup",
@@ -37,8 +37,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2256155551.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
       "published": "2026-03-05T18:27:16+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9626
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9588
     },
     {
       "title": "OpenAI’s new GPT-5.4 model is a big step toward autonomous agents",
@@ -50,8 +50,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.2511
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.2474
     },
     {
       "title": "Ask a Techspert: How does AI understand my visual searches?",
@@ -63,8 +63,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fan_out_query_hero.max-600x600.format-webp.webp",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.2311
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.2274
     },
     {
       "title": "Meta’s AI glasses reportedly send sensitive footage to human reviewers in Kenya",
@@ -76,8 +76,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/Verge-Ray-ban-Meta-Gen2-Stills-6.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.806933475316%2C100%2C78.386133049368&amp%3Bw=1200",
       "published": "2026-03-05T16:37:52+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9175
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9139
     },
     {
       "title": "The latest AI news we announced in February",
@@ -89,8 +89,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thumbnail_mPCqgRv.max-600x600.format-webp.webp",
       "published": "2026-03-05T16:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1943
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.1907
     },
     {
       "title": "Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations",
@@ -102,8 +102,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nxp/bringing-robotics-ai-to-embedded-platforms.png",
       "published": "2026-03-05T14:16:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.4427
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4393
     },
     {
       "title": "March Into the Cloud With 15 New Games Coming to GeForce NOW",
@@ -115,8 +115,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gfn-thursday-3-5-nv-blog-1280x680-logo.jpg",
       "published": "2026-03-05T14:00:30+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.9965
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.9932
     },
     {
       "title": "Apple Music adds optional labels for AI songs and visuals",
@@ -128,8 +128,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23925980/acastro_STK046_04.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T14:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8564
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.853
     },
     {
       "title": "AI tools can unmask anonymous accounts",
@@ -141,8 +141,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK419_DEEPFAKE_3_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T13:30:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8452
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.8419
     },
     {
       "title": "Anthropic makes last-ditch effort to salvage deal with Pentagon after blowup",
@@ -154,8 +154,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK202_DARIO_AMODEI_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T11:46:46+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 1.8081
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 1.805
     },
     {
       "title": "Reasoning models struggle to control their chains of thought, and that’s good",
@@ -167,8 +167,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1uuAgWlWOgYMZuyLDaVFVL/af9711812b0868d52b15270a25f99913/OAI_Reasoning_Models_Struggle_to_Control_their_Chains_of_Thought__and_that%C3%A2__s_Good_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.1216
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1186
     },
     {
       "title": "Introducing GPT-5.4",
@@ -180,8 +180,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/261kYlzPT8cBKoynLi35ct/14e3cae5d20ab9349af93f6b034c2947/5.4_Thinking_Hero___SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.4716
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.4686
     },
     {
       "title": "Online harassment is entering its AI era",
@@ -193,8 +193,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/ai-hitpiece.jpg?resize=1200%2C600",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.2116
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.2086
     },
     {
       "title": "GPT-5.4 Thinking System Card",
@@ -206,8 +206,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5t4zXynvPxIHXdXQMxiAwm/917d03bceb6cc7513cd2b34b7df46fe5/5.4_Thinking_System_Card_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1216
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.1186
     },
     {
       "title": "Ensuring AI use in education leads to opportunity",
@@ -219,8 +219,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6qY7eyvVrPtwOMwQUPzqOO/55ab458c03157e061c83215cf215e51a/IMG_0185.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T09:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 2.1018
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 2.0989
     },
     {
       "title": "Can Large Language Models Derive New Knowledge? A Dynamic Benchmark for Biological Knowledge Discovery",
@@ -232,8 +232,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 4.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 4.7954
     },
     {
       "title": "LabelBuddy: An Open Source Music and Audio Language Annotation Tagging Tool Using AI Assistance",
@@ -245,8 +245,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 4.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 4.1454
     },
     {
       "title": "RoboCasa365: A Large-Scale Simulation Framework for Training and Benchmarking Generalist Robots",
@@ -258,8 +258,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.798
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.7954
     },
     {
       "title": "A Rubric-Supervised Critic from Sparse Real-World Outcomes",
@@ -271,8 +271,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.6954
     },
     {
       "title": "ToolRLA: Multiplicative Reward Decomposition for Tool-Integrated Agents",
@@ -284,8 +284,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.698
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.6954
     },
     {
       "title": "Escaping the BLEU Trap: A Signal-Grounded Framework with Decoupled Semantic Guidance for EEG-to-Text Decoding",
@@ -297,8 +297,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.498
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4954
     },
     {
       "title": "LadderSym: A Multimodal Interleaved Transformer for Music Practice Error Detection",
@@ -310,8 +310,8 @@
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.498
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4954
     },
     {
       "title": "AgentSelect: Benchmark for Narrative Query-to-Agent Recommendation",
@@ -320,11 +320,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03761v1 Announce Type: new \nAbstract: LLM agents are rapidly becoming the practical interface for task automation, yet the ecosystem lacks a principled way to choose among an exploding space of deployable configurations. Existing LLM leaderboards and tool/agent benchmarks evaluate components in isolation and remain fragmented across tasks, metrics, and candidate pools, leaving a critical research gap: there is little query-conditioned supervision for learning to recommend end-to-end agent configurations that couple a backbone model with a toolkit. We address this gap with AgentSelec",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Raising Bars, Not Parameters: LilMoo Compact Language Model for Hindi",
@@ -333,11 +333,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03508v1 Announce Type: cross \nAbstract: The dominance of large multilingual foundation models has widened linguistic inequalities in Natural Language Processing (NLP), often leaving low-resource languages underrepresented. This paper introduces LilMoo, a 0.6-billion-parameter Hindi language model trained entirely from scratch to address this gap. Unlike prior Hindi models that rely on continual pretraining from opaque multilingual foundations, LilMoo is developed through a fully transparent and reproducible pipeline optimized for limited compute environments. We construct a high-qua",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Bielik-Q2-Sharp: A Comparative Study of Extreme 2-bit Quantization Methods for a Polish 11B Language Model",
@@ -346,11 +346,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04162v1 Announce Type: cross \nAbstract: We present Bielik-Q2-Sharp, the first systematic academic evaluation of extreme 2-bit quantization applied to a Polish large language model. Using Bielik-11B-v2.3-Instruct (11B parameters, Mistral architecture) as our base model, we compare six state-of-the-art post-training quantization methods -- QuIP#, SpinQuant+GPTQ, ButterflyQuant, QTIP, VPTQ, and AQLM -- all calibrated on a Polish-language corpus (CulturaX-PL) with shared Hessian matrices. Our best variant (QuIP# E8P12) achieves 71.92% across 22 Polish benchmarks versus 72.07% for the IQ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "ZipMap: Linear-Time Stateful 3D Reconstruction with Test-Time Training",
@@ -359,11 +359,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04385v1 Announce Type: cross \nAbstract: Feed-forward transformer models have driven rapid progress in 3D vision, but state-of-the-art methods such as VGGT and $\\pi^3$ have a computational cost that scales quadratically with the number of input images, making them inefficient when applied to large image collections. Sequential-reconstruction approaches reduce this cost but sacrifice reconstruction quality. We introduce ZipMap, a stateful feed-forward model that achieves linear-time, bidirectional 3D reconstruction while matching or surpassing the accuracy of quadratic-time methods. Z",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Preference Leakage: A Contamination Problem in LLM-as-a-judge",
@@ -372,11 +372,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2502.01534v3 Announce Type: replace-cross \nAbstract: Large Language Models (LLMs) as judges and LLM-based data synthesis have emerged as two fundamental LLM-driven data annotation methods in model development. While their combination significantly enhances the efficiency of model training and evaluation, little attention has been given to the potential contamination brought by this new model development paradigm. In this work, we expose preference leakage, a contamination problem in LLM-as-a-judge caused by the relatedness between the synthetic data generators and LLM-based evaluators. T",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.448
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.4454
     },
     {
       "title": "Agentics 2.0: Logical Transduction Algebra for Agentic Data Workflows",
@@ -385,11 +385,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04241v1 Announce Type: new \nAbstract: Agentic AI is rapidly transitioning from research prototypes to enterprise deployments, where requirements extend to meet the software quality attributes of reliability, scalability, and observability beyond plausible text generation. We present Agentics 2.0, a lightweight, Python-native framework for building high-quality, structured, explainable, and type-safe agentic data workflows. At the core of Agentics 2.0, the logical transduction algebra formalizes a large language model inference call as a typed semantic transformation, which we call a",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "$\\tau$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge",
@@ -398,11 +398,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04370v1 Announce Type: new \nAbstract: Conversational agents are increasingly deployed in knowledge-intensive settings, where correct behavior depends on retrieving and applying domain-specific knowledge from large, proprietary, and unstructured corpora during live interactions with users. Yet most existing benchmarks evaluate retrieval or tool use independently of each other, creating a gap in realistic, fully agentic evaluation over unstructured data in long-horizon interactions. We introduce $\\tau$-Knowledge, an extension of $\\tau$-Bench for evaluating agents in environments where",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Draft-Conditioned Constrained Decoding for Structured Generation in LLMs",
@@ -411,11 +411,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03305v1 Announce Type: cross \nAbstract: Large language models (LLMs) are increasingly used to generate executable outputs, JSON objects, and API calls, where a single syntax error can make the output unusable. Constrained decoding enforces validity token-by-token via masking and renormalization, but it can distort generation when the model assigns low probability mass to valid continuations, pushing decoding toward locally valid yet semantically incorrect trajectories. We propose \\emph{Draft-Conditioned Constrained Decoding (DCCD)}, a simple two-step, training-free inference procedu",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "GeoSeg: Training-Free Reasoning-Driven Segmentation in Remote Sensing Imagery",
@@ -424,11 +424,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03983v1 Announce Type: cross \nAbstract: Recent advances in MLLMs are reframing segmentation from fixed-category prediction to instruction-grounded localization. While reasoning based segmentation has progressed rapidly in natural scenes, remote sensing lacks a generalizable solution due to the prohibitive cost of reasoning-oriented data and domain-specific challenges like overhead viewpoints. We present GeoSeg, a zero-shot, training-free framework that bypasses the supervision bottleneck for reasoning-driven remote sensing segmentation. GeoSeg couples MLLM reasoning with precise loc",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",
@@ -437,11 +437,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2509.21782v2 Announce Type: replace \nAbstract: Multimodal large language models (MLLMs) are increasingly deployed as the core reasoning engine for web-facing systems, powering GUI agents and front-end automation that must interpret page structure, select actionable widgets, and execute multi-step interactions reliably. However, existing benchmarks largely emphasize visual perception or UI code generation, showing insufficient evaluation on the reasoning, robustness and safety capability required for end-to-end web applications. To bridge the gap, we introduce a comprehensive web understa",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Training High-Level Schedulers with Execution-Feedback Reinforcement Learning for Long-Horizon GUI Automation",
@@ -450,11 +450,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2511.22235v2 Announce Type: replace \nAbstract: The rapid development of large vision-language model (VLM) has greatly promoted the research of GUI agent. However, GUI agents still face significant challenges in handling long-horizon tasks. First, single-agent models struggle to balance high-level capabilities and low-level execution capability, facing prevalent issues of responsibility coupling and capability conflicts. Second, agents lack awareness of the task state, leading to progress loss in long-horizon tasks. To address these challenges, we propose a staged execution-feedback reinf",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "Why Do AI Agents Systematically Fail at Cloud Root Cause Analysis?",
@@ -463,11 +463,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2602.09937v2 Announce Type: replace \nAbstract: Failures in large-scale cloud systems incur substantial financial losses, making automated Root Cause Analysis (RCA) essential for operational stability. Recent efforts leverage Large Language Model (LLM) agents to automate this task, yet existing systems exhibit low detection accuracy even with capable models, and current evaluation frameworks assess only final answer correctness without revealing why the agent's reasoning failed. This paper presents a process level failure analysis of LLM-based RCA agents. We execute the full OpenRCA bench",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.398
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3954
     },
     {
       "title": "LiteVLA-Edge: Quantized On-Device Multimodal Control for Embedded Robotics",
@@ -476,11 +476,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03380v1 Announce Type: cross \nAbstract: Vision-Language-Action (VLA) models provide a unified framework for perception, language conditioning, and action generation, but many existing systems remain difficult to deploy in embedded robotic settings because of their computational requirements and inference latency. In this paper, we present LiteVLA-Edge, a deployment-oriented VLA pipeline for fully on-device inference on Jetson Orin-class hardware. Our approach combines supervised image-to-action fine-tuning in FP32 with post-training 4-bit GGUF quantization and GPU-accelerated infere",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.348
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3454
     },
     {
       "title": "Generalization of RLVR Using Causal Reasoning as a Testbed",
@@ -489,11 +489,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2512.20760v2 Announce Type: replace-cross \nAbstract: Reinforcement learning with verifiable rewards (RLVR) has emerged as a promising paradigm for post-training large language models (LLMs) on complex reasoning tasks. Yet, the conditions under which RLVR yields robust generalization remain underexplored. This paper provides an empirical study of RLVR generalization in the setting of probabilistic inference over causal graphical models. This setting offers two natural axes along which to examine generalization: (i) the level of the probabilistic query -- associational, interventional, or ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.348
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.3454
     },
     {
       "title": "One Bias After Another: Mechanistic Reward Shaping and Persistent Biases in Language Reward Models",
@@ -502,11 +502,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03291v1 Announce Type: cross \nAbstract: Reward Models (RMs) are crucial for online alignment of language models (LMs) with human preferences. However, RM-based preference-tuning is vulnerable to reward hacking, whereby LM policies learn undesirable behaviors from flawed RMs. By systematically measuring biases in five high-quality RMs, including the state-of-the-art, we find that issues persist despite prior work with respect to length, sycophancy, and overconfidence. We also discover new issues related to bias toward model-specific styles and answer-order. We categorize RM failures ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "From Exact Hits to Close Enough: Semantic Caching for LLM Embeddings",
@@ -515,11 +515,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03301v1 Announce Type: cross \nAbstract: The rapid adoption of large language models (LLMs) has created demand for faster responses and lower costs. Semantic caching, reusing semantically similar requests via their embeddings, addresses this need but breaks classic cache assumptions and raises new challenges. In this paper, we explore offline policies for semantic caching, proving that implementing an optimal offline policy is NP-hard, and propose several polynomial-time heuristics. We also present online semantic aware cache policies that combine recency, frequency, and locality. Ev",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Ethical and Explainable AI in Reusable MLOps Pipelines",
@@ -528,11 +528,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03341v1 Announce Type: cross \nAbstract: This paper introduces a unified machine learning operations (MLOps) framework that brings ethical artificial intelligence principles into practical use by enforcing fairness, explainability, and governance throughout the machine learning lifecycle. The proposed method reduces bias by lowering the demographic parity difference (DPD) from 0.31 to 0.04 without model retuning, and cross-dataset validation achieves an area under the curve (AUC) of 0.89 on the Statlog Heart dataset.\n  The framework maintains fairness metrics within operational limit",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Bridging the Reproducibility Divide: Open Source Software's Role in Standardizing Healthcare AI",
@@ -541,11 +541,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03367v1 Announce Type: cross \nAbstract: Our analysis of recent AI4H publications reveals that, despite a trend toward utilizing open datasets and sharing modeling code, 74% of AI4H papers still rely on private datasets or do not share their code. This is especially concerning in healthcare applications, where trust is essential. Furthermore, inconsistent and poorly documented data preprocessing pipelines result in variable model performance reports, even for identical tasks and datasets, making it challenging to evaluate the true effectiveness of AI models.\n  Despite the challenges ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Graph Negative Feedback Bias Correction Framework for Adaptive Heterophily Modeling",
@@ -554,11 +554,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03662v1 Announce Type: cross \nAbstract: Graph Neural Networks (GNNs) have emerged as a powerful framework for processing graph-structured data. However, conventional GNNs and their variants are inherently limited by the homophily assumption, leading to degradation in performance on heterophilic graphs. Although substantial efforts have been made to mitigate this issue, they remain constrained by the message-passing paradigm, which is inherently rooted in homophily. In this paper, a detailed analysis of how the underlying label autocorrelation of the homophily assumption introduces b",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "Cross-Modal Mapping and Dual-Branch Reconstruction for 2D-3D Multimodal Industrial Anomaly Detection",
@@ -567,11 +567,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03939v1 Announce Type: cross \nAbstract: Multimodal industrial anomaly detection benefits from integrating RGB appearance with 3D surface geometry, yet existing \\emph{unsupervised} approaches commonly rely on memory banks, teacher-student architectures, or fragile fusion schemes, limiting robustness under noisy depth, weak texture, or missing modalities. This paper introduces \\textbf{CMDR-IAD}, a lightweight and modality-flexible unsupervised framework for reliable anomaly detection in 2D+3D multimodal as well as single-modality (2D-only or 3D-only) settings. \\textbf{CMDR-IAD} combin",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.148
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.1454
     },
     {
       "title": "From Threat Intelligence to Firewall Rules: Semantic Relations in Hybrid AI Agent and Expert System Architectures",
@@ -583,8 +583,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Certainty robustness: Evaluating LLM stability under self-challenging prompts",
@@ -596,8 +596,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Fragile Thoughts: How Large Language Models Handle Chain-of-Thought Perturbations",
@@ -609,8 +609,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "mlx-snn: Spiking Neural Networks on Apple Silicon via MLX",
@@ -622,8 +622,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Tucano 2 Cool: Better Open Source LLMs for Portuguese",
@@ -635,8 +635,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     },
     {
       "title": "Agentic Peer-to-Peer Networks: From Content Distribution to Capability and Action Sharing",
@@ -648,8 +648,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
-      "score": 3.098
+      "lastSeen": "2026-03-06T01:19:46.552493+00:00",
+      "score": 3.0954
     }
   ],
   "errors": []
