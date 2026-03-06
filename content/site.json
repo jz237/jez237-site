@@ -100,16 +100,16 @@
   ],
   "cats": [
     {
-      "name": "Marty Spotlight",
-      "desc": "A dedicated card for Marty updates and photos.",
-      "status": "coming-soon",
-      "link": "#"
+      "name": "Luca, Cosmo & Taco",
+      "desc": "Fresh uploads from your phone, now on the site.",
+      "status": "live",
+      "link": "./cats.html"
     },
     {
       "name": "Cat Gallery",
-      "desc": "A clean gallery section for all cat photos.",
-      "status": "coming-soon",
-      "link": "#"
+      "desc": "Dedicated page for cat photos and future uploads.",
+      "status": "live",
+      "link": "./cats.html"
     }
   ]
 }
