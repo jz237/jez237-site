@@ -83,12 +83,24 @@ function renderNews(items) {
     const row = el('div', 'news-item' + (idx < 3 ? ' open' : ''));
     const head = el('div', 'news-head');
 
+    const leftWrap = el('div', 'news-left');
+    if (n.image) {
+      const thumb = document.createElement('img');
+      thumb.className = 'news-thumb';
+      thumb.src = n.image;
+      thumb.alt = '';
+      thumb.loading = 'lazy';
+      thumb.referrerPolicy = 'no-referrer';
+      leftWrap.appendChild(thumb);
+    }
+
     const left = el('div');
     left.appendChild(el('div', 'news-title', n.title || 'Untitled'));
     left.appendChild(el('div', 'news-meta', `${n.source || 'Unknown'} · ${fmtDate(n.published)}`));
+    leftWrap.appendChild(left);
 
     const right = el('div', 'news-meta', `Score ${n.score ?? '-'}`);
-    head.appendChild(left);
+    head.appendChild(leftWrap);
     head.appendChild(right);
 
     const body = el('div', 'news-body');

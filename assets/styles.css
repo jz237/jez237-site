@@ -179,6 +179,23 @@ button:hover { background: #22344d; cursor: pointer; }
   justify-content: space-between;
   gap: 12px;
   cursor: pointer;
+  align-items: flex-start;
+}
+
+.news-left {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+}
+
+.news-thumb {
+  width: 84px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #0c1118;
+  flex: 0 0 auto;
 }
 
 .news-title { font-weight: 600; }
@@ -196,4 +213,11 @@ footer {
   margin: 24px 0 40px;
   color: var(--muted);
   font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .news-thumb {
+    width: 64px;
+    height: 44px;
+  }
 }

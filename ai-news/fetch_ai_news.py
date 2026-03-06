@@ -96,6 +96,24 @@ def find_child(el, name):
     return None
 
 
+def strip_html(value):
+    value = value or ""
+    return re.sub("<[^>]+>", "", value).strip()
+
+
+def extract_first_img_from_html(value):
+    value = value or ""
+    m = re.search(r"<img[^>]+src=[\"']([^\"']+)[\"']", value, flags=re.IGNORECASE)
+    return m.group(1).strip() if m else ""
+
+
+def looks_like_image_url(url):
+    if not url:
+        return False
+    url_l = url.lower()
+    return any(ext in url_l for ext in [".jpg", ".jpeg", ".png", ".webp", ".gif", "format=jpg", "format=png"]) or "image" in url_l
+
+
 def parse_feed_xml(xml_bytes, source_name, source_url, source_weight):
     items = []
     root = ET.fromstring(xml_bytes)
@@ -113,13 +131,37 @@ def parse_feed_xml(xml_bytes, source_name, source_url, source_weight):
             title = text(find_child(it, "title"))
             link = text(find_child(it, "link"))
             pub = text(find_child(it, "pubDate")) or text(find_child(it, "date"))
-            summary = text(find_child(it, "description"))
+
+            desc_el = find_child(it, "description")
+            content_el = find_child(it, "encoded")
+            summary_html = text(desc_el) or text(content_el)
+
+            image = ""
+            # media:thumbnail / media:content / enclosure url
+            for c in it:
+                tag_l = c.tag.lower()
+                if tag_l.endswith("thumbnail") or tag_l.endswith("content"):
+                    u = c.attrib.get("url", "").strip()
+                    if u and (tag_l.endswith("thumbnail") or looks_like_image_url(u)):
+                        image = u
+                        break
+                if tag_l.endswith("enclosure"):
+                    u = c.attrib.get("url", "").strip()
+                    t = c.attrib.get("type", "").lower()
+                    if u and (t.startswith("image/") or looks_like_image_url(u)):
+                        image = u
+                        break
+
+            if not image:
+                image = extract_first_img_from_html(summary_html)
+
             if title and link:
                 items.append({
                     "title": title,
                     "url": link,
                     "published": try_parse_date(pub),
-                    "summary": re.sub("<[^>]+>", "", summary)[:600],
+                    "summary": strip_html(summary_html)[:600],
+                    "image": image,
                     "source": source_name,
                     "sourceUrl": source_url,
                     "sourceWeight": source_weight,
@@ -132,21 +174,30 @@ def parse_feed_xml(xml_bytes, source_name, source_url, source_weight):
                 continue
             title = text(find_child(ent, "title"))
             link = ""
+            image = ""
             for c in ent:
                 if c.tag.lower().endswith("link"):
                     href = c.attrib.get("href")
                     rel = c.attrib.get("rel", "alternate")
-                    if href and rel in ("alternate", ""):
+                    if href and rel in ("alternate", "") and not link:
                         link = href
-                        break
+                    if href and rel == "enclosure":
+                        t = c.attrib.get("type", "").lower()
+                        if t.startswith("image/") or looks_like_image_url(href):
+                            image = href
             pub = text(find_child(ent, "published")) or text(find_child(ent, "updated"))
-            summary = text(find_child(ent, "summary")) or text(find_child(ent, "content"))
+            summary_html = text(find_child(ent, "summary")) or text(find_child(ent, "content"))
+
+            if not image:
+                image = extract_first_img_from_html(summary_html)
+
             if title and link:
                 items.append({
                     "title": title,
                     "url": link,
                     "published": try_parse_date(pub),
-                    "summary": re.sub("<[^>]+>", "", summary)[:600],
+                    "summary": strip_html(summary_html)[:600],
+                    "image": image,
                     "source": source_name,
                     "sourceUrl": source_url,
                     "sourceWeight": source_weight,
@@ -230,6 +281,7 @@ def main():
             "sourceUrl": item.get("sourceUrl") or existing_item.get("sourceUrl", ""),
             "sourceWeight": item.get("sourceWeight", existing_item.get("sourceWeight", 0.7)),
             "summary": item.get("summary") or existing_item.get("summary", ""),
+            "image": canonicalize_url(item.get("image", "")) if item.get("image") else existing_item.get("image", ""),
             "published": (dt or now).isoformat(),
             "firstSeen": existing_item.get("firstSeen") or now.isoformat(),
             "lastSeen": now.isoformat(),
