@@ -35,38 +35,52 @@
         <h2>Projects</h2>
         <div id="projects-list" class="list"></div>
       </article>
+
       <article id="tools" class="card col-6">
         <h2>Tools & Utilities</h2>
+        <p class="muted">Vibecoded helpers for real work.</p>
         <div id="tools-list" class="list"></div>
       </article>
+
       <article id="games" class="card col-6">
         <h2>Games</h2>
+        <p class="muted">Playable prototypes and mechanics tests.</p>
         <div id="games-list" class="list"></div>
       </article>
+
       <article id="photos" class="card col-6">
         <h2>Photos</h2>
+        <p class="muted">Gallery and restoration showcase.</p>
         <div id="photos-list" class="list"></div>
       </article>
+
       <article id="homelab" class="card col-6">
         <h2>Local AI / Home Lab</h2>
+        <p class="muted">Runtime and system visibility panels.</p>
         <div id="homelab-list" class="list"></div>
       </article>
+
       <article id="garden" class="card col-6">
         <h2>Mini Garden Planner</h2>
+        <p class="muted">Small-space planning and seasonal tasks.</p>
         <div id="garden-list" class="list"></div>
       </article>
+
       <article id="cats" class="card col-12">
         <h2>Cat Corner</h2>
+        <p class="muted">Because this is clearly mission-critical.</p>
         <div id="cats-list" class="list"></div>
       </article>
     </section>
 
     <section id="news" class="card col-12">
       <h2>AI News (Feedly-style stream)</h2>
-      <p class="muted">Click any headline to expand details. Opens original source in a new tab.</p>
+      <p class="muted">Click headlines to expand details. Opens the source in a new tab.</p>
       <div class="news-controls">
         <button id="btn-latest">Sort: Latest</button>
         <button id="btn-top">Sort: Top scored</button>
+        <select id="news-source" class="control"></select>
+        <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
         <span id="news-updated" class="news-meta"></span>
       </div>
       <div id="news-list"></div>
