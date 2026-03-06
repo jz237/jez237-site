@@ -1,7 +1,20 @@
 {
   "date": "2026-03-06",
-  "updatedAt": "2026-03-06T17:56:20.506931+00:00",
+  "updatedAt": "2026-03-06T19:50:19.764312+00:00",
   "items": [
+    {
+      "title": "Conversational LLM Evaluations in Minutes with NVIDIA NeMo Evaluator Agent Skills",
+      "url": "https://huggingface.co/blog/nvidia/model-evaluation-skill",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/model-evaluation-skill.png",
+      "published": "2026-03-06T18:56:10+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 3.0528
+    },
     {
       "title": "How Balyasny Asset Management built an AI research engine for investing",
       "url": "https://openai.com/index/balyasny-asset-management",
@@ -12,8 +25,73 @@
       "image": "",
       "published": "2026-03-06T07:00:00+00:00",
       "firstSeen": "2026-03-06T15:57:03.808499+00:00",
-      "lastSeen": "2026-03-06T17:56:20.506931+00:00",
-      "score": 2.8618
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 2.82
+    },
+    {
+      "title": "Codex Security: now in research preview",
+      "url": "https://openai.com/index/codex-security-now-in-research-preview",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "summary": "Codex Security is an AI application security agent that analyzes project context to detect, validate, and patch complex vulnerabilities with higher confidence and less noise.",
+      "image": "",
+      "published": "2026-03-06T10:00:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 2.537
+    },
+    {
+      "title": "How our open-source AI model SpeciesNet is helping to promote wildlife conservation",
+      "url": "https://blog.google/company-news/outreach-and-initiatives/sustainability/speciesnet-open-source-ai-wildlife",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "summary": "Photos of animals being identified by the SpeciesNet AI model",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/specieshero_v2.max-600x600.format-webp.webp",
+      "published": "2026-03-06T18:00:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 2.3752
+    },
+    {
+      "title": "Is the Pentagon allowed to surveil Americans with AI?",
+      "url": "https://www.technologyreview.com/2026/03/06/1134012/is-the-pentagon-allowed-to-surveil-americans-with-ai",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "summary": "The ongoing public feud between the Department of Defense and AI company Anthropic over its technology has raised a deep open question: does the law actually allow the US government to conduct mass surveillance on Americans? Surprisingly, the answer is not straightforward. More than a decade after Edward Snowden exposed the NSA’s collection of bulk&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/crawl-data2.jpg?resize=1200%2C600",
+      "published": "2026-03-06T19:21:22+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 2.2753
+    },
+    {
+      "title": "How Descript enables multilingual video dubbing at scale",
+      "url": "https://openai.com/index/descript",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "summary": "Descript uses OpenAI models to scale multilingual video dubbing, optimizing translations for both meaning and timing so dubbed speech sounds natural across languages.",
+      "image": "",
+      "published": "2026-03-06T10:00:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 2.237
+    },
+    {
+      "title": "The AI Doc is an overwrought hype piece for doomers and accelerationists alike",
+      "url": "https://www.theverge.com/entertainment/890806/the-ai-doc-or-how-i-became-an-apocaloptimist-review",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "We are in the thick of a massive push to incorporate generative AI into almost every aspect of our lives, but it is still easy to be confused about what it is and how it works. It doesn't help that many of gen AI's proponents and detractors both speak about it with a feverish hyperbole [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-06-at-1.32.13%E2%80%AFPM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.6342944624415%2C100%2C94.731411075117&amp%3Bw=1200",
+      "published": "2026-03-06T19:05:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T19:50:19.764312+00:00",
+      "score": 2.1272
     }
   ],
   "errors": []
