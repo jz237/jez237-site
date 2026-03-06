@@ -1,6 +1,6 @@
 {
   "date": "2026-03-06",
-  "updatedAt": "2026-03-06T21:01:32.334449+00:00",
+  "updatedAt": "2026-03-06T21:56:38.766886+00:00",
   "items": [
     {
       "title": "Conversational LLM Evaluations in Minutes with NVIDIA NeMo Evaluator Agent Skills",
@@ -12,8 +12,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/model-evaluation-skill.png",
       "published": "2026-03-06T18:56:10+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 3.018
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.9918
     },
     {
       "title": "How Balyasny Asset Management built an AI research engine for investing",
@@ -25,8 +25,8 @@
       "image": "",
       "published": "2026-03-06T07:00:00+00:00",
       "firstSeen": "2026-03-06T15:57:03.808499+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.7951
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.7763
     },
     {
       "title": "Codex Security: now in research preview",
@@ -38,8 +38,8 @@
       "image": "",
       "published": "2026-03-06T10:00:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.5098
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.4894
     },
     {
       "title": "How our open-source AI model SpeciesNet is helping to promote wildlife conservation",
@@ -51,8 +51,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/specieshero_v2.max-600x600.format-webp.webp",
       "published": "2026-03-06T18:00:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.3413
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.3159
     },
     {
       "title": "Is the Pentagon allowed to surveil Americans with AI?",
@@ -64,8 +64,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/crawl-data2.jpg?resize=1200%2C600",
       "published": "2026-03-06T19:21:22+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.2402
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.2137
     },
     {
       "title": "How Descript enables multilingual video dubbing at scale",
@@ -77,8 +77,8 @@
       "image": "",
       "published": "2026-03-06T10:00:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.2098
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.1894
     },
     {
       "title": "Grammarly is using our identities without permission",
@@ -86,12 +86,12 @@
       "source": "The Verge AI",
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
-      "summary": "Grammarly's \"expert review\" feature offers to give users writing advice \"inspired by\" subject matter experts, including recently-deceased professors, as Wired reported on Wednesday. When I tried the feature out myself, I found some experts that came as a surprise for a different reason - one of them was my boss. The AI-generated feedback included comments [&#8230;]",
+      "summary": "Grammarly's \"expert review\" feature offers to give users writing advice \"inspired by\" subject matter experts, including recently deceased professors, as Wired reported on Wednesday. When I tried the feature out myself, I found some experts that came as a surprise for a different reason - one of them was my boss. The AI-generated feedback included [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/grammr-crop.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=9.622877930477%2C0%2C80.754244139046%2C100",
       "published": "2026-03-06T20:58:24+00:00",
       "firstSeen": "2026-03-06T21:01:32.334449+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.1484
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.1207
     },
     {
       "title": "Feds take notice of iOS vulnerabilities exploited under mysterious circumstances",
@@ -103,8 +103,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/iphone-14-1152x648.jpg",
       "published": "2026-03-06T19:41:33+00:00",
       "firstSeen": "2026-03-06T21:01:32.334449+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.11
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.0833
     },
     {
       "title": "The AI Doc is an overwrought hype piece for doomers and accelerationists alike",
@@ -116,8 +116,8 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-06-at-1.32.13%E2%80%AFPM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.6342944624415%2C100%2C94.731411075117&amp%3Bw=1200",
       "published": "2026-03-06T19:05:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T21:01:32.334449+00:00",
-      "score": 2.0922
+      "lastSeen": "2026-03-06T21:56:38.766886+00:00",
+      "score": 2.066
     }
   ],
   "errors": []
