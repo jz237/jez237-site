@@ -1,36 +1,115 @@
 {
   "name": "Jez",
   "tagline": "Builder, experimenter, and curious human.",
-  "about": "Welcome to my public corner of the internet. This site is evolving into a home for projects, tools, game prototypes, AI news, and personal creative stuff.",
+  "about": "Welcome to my public corner of the internet. This site is evolving into a home for projects, utilities, game prototypes, AI news, and personal creative stuff.",
   "projects": [
-    {"name": "AI News Feed", "desc": "Curated AI/model releases and important updates.", "link": "./ai-news/public/index.html"},
-    {"name": "Game Experiments", "desc": "Playable prototypes and mechanics tests.", "link": "#games"},
-    {"name": "Photo Gallery", "desc": "Personal photos and creative experiments.", "link": "#photos"}
+    {
+      "name": "AI News Feed",
+      "desc": "Curated AI model releases, tooling updates, and notable research.",
+      "status": "live",
+      "link": "./ai-news/public/index.html"
+    },
+    {
+      "name": "Game Experiments",
+      "desc": "Playable prototypes and mechanics tests from GameMaster runs.",
+      "status": "in-progress",
+      "link": "#games"
+    },
+    {
+      "name": "Photo Gallery",
+      "desc": "Personal photos, edits, and restoration showcases.",
+      "status": "planned",
+      "link": "#photos"
+    }
   ],
   "tools": [
-    "Image prep utility for web uploads (coming soon)",
-    "Print sizing / DPI checker (coming soon)",
-    "Filename batch cleaner (coming soon)"
+    {
+      "name": "Image Prep Utility",
+      "desc": "Resize + rename uploads for cleaner website workflows.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Print Sizing / DPI Checker",
+      "desc": "Quickly verify output dimensions and print-safe quality.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Filename Batch Cleaner",
+      "desc": "Normalize messy file names before publishing.",
+      "status": "planned",
+      "link": "#"
+    }
   ],
   "games": [
-    "GameMaster prototype #1 (coming soon)",
-    "GameMaster prototype #2 (coming soon)"
+    {
+      "name": "GameMaster Prototype #1",
+      "desc": "First playable concept from the game experiments track.",
+      "status": "coming-soon",
+      "link": "#"
+    },
+    {
+      "name": "GameMaster Prototype #2",
+      "desc": "Mechanic-focused test build.",
+      "status": "coming-soon",
+      "link": "#"
+    }
   ],
   "photos": [
-    "Photo set coming soon",
-    "Behind-the-scenes shots coming soon"
+    {
+      "name": "Photo Set",
+      "desc": "Curated personal shots and behind-the-scenes moments.",
+      "status": "coming-soon",
+      "link": "#"
+    }
   ],
   "homelab": [
-    "Model runtime snapshot panel (coming soon)",
-    "Agent activity quick view (coming soon)",
-    "System status tiles (coming soon)"
+    {
+      "name": "Model Runtime Snapshot",
+      "desc": "At-a-glance view of model/runtime usage and status.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Agent Activity",
+      "desc": "Quick view of what assistants/agents are working on.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "System Tiles",
+      "desc": "CPU / memory / process tiles for home lab visibility.",
+      "status": "planned",
+      "link": "#"
+    }
   ],
   "garden": [
-    "Small-space planting planner (coming soon)",
-    "Seasonal task checklist (coming soon)"
+    {
+      "name": "Small-space Plant Planner",
+      "desc": "Plan crops by space, season, and sunlight.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Seasonal Checklist",
+      "desc": "Simple timeline of what to do next in the garden.",
+      "status": "planned",
+      "link": "#"
+    }
   ],
   "cats": [
-    "Marty spotlight card (coming soon)",
-    "Cat gallery section (coming soon)"
+    {
+      "name": "Marty Spotlight",
+      "desc": "A dedicated card for Marty updates and photos.",
+      "status": "coming-soon",
+      "link": "#"
+    },
+    {
+      "name": "Cat Gallery",
+      "desc": "A clean gallery section for all cat photos.",
+      "status": "coming-soon",
+      "link": "#"
+    }
   ]
 }
