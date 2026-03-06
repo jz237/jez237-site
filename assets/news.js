@@ -95,7 +95,7 @@ function renderNews(items, featuredUrlSet = new Set()) {
 
 async function init() {
   try {
-    const news = await loadJson('./ai-news/public/ai-news-latest.json');
+    const news = await loadJson('https://raw.githubusercontent.com/jz237/jez237-site/main/ai-news/public/ai-news-latest.json');
     const baseItems = news.items || [];
 
     document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)}`;
