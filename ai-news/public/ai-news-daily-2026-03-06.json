@@ -1,6 +1,20 @@
 {
   "date": "2026-03-06",
-  "updatedAt": "2026-03-06T14:08:23.526430+00:00",
-  "items": [],
+  "updatedAt": "2026-03-06T15:57:03.808499+00:00",
+  "items": [
+    {
+      "title": "How Balyasny Asset Management built an AI research engine for investing",
+      "url": "https://openai.com/index/balyasny-asset-management",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "summary": "See how Balyasny built an AI research system with GPT-5.4, rigorous model evaluation, and agent workflows to transform investment analysis at scale.",
+      "image": "",
+      "published": "2026-03-06T07:00:00+00:00",
+      "firstSeen": "2026-03-06T15:57:03.808499+00:00",
+      "lastSeen": "2026-03-06T15:57:03.808499+00:00",
+      "score": 2.9078
+    }
+  ],
   "errors": []
 }
