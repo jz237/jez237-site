@@ -14,12 +14,15 @@ DATA_DIR = os.path.join(BASE, "data")
 PUBLIC_DIR = os.path.join(BASE, "public")
 FEEDS_PATH = os.path.join(BASE, "feeds.json")
 STORE_PATH = os.path.join(DATA_DIR, "items.json")
+IMAGE_CACHE_PATH = os.path.join(DATA_DIR, "image_cache.json")
 
 USER_AGENT = "Mozilla/5.0 (compatible; AI-News-Bot/1.0; +https://openclaw.ai)"
 MAX_STORE_ITEMS = 1500
 MAX_ITEM_AGE_DAYS = 14
 TOP_DAILY_COUNT = 12
 TOP_LATEST_COUNT = 50
+MAX_OG_FETCH_PER_RUN = 20
+IMAGE_CACHE_TTL_DAYS = 7
 
 KEYWORDS = {
     "major": ["release", "launch", "announces", "introduces", "debut", "new model", "api", "open source"],
@@ -112,6 +115,42 @@ def looks_like_image_url(url):
         return False
     url_l = url.lower()
     return any(ext in url_l for ext in [".jpg", ".jpeg", ".png", ".webp", ".gif", "format=jpg", "format=png"]) or "image" in url_l
+
+
+def extract_og_image_from_html(html, page_url):
+    if not html:
+        return ""
+
+    patterns = [
+        r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+        r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)["\']',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
+    ]
+
+    for pat in patterns:
+        m = re.search(pat, html, flags=re.IGNORECASE)
+        if m:
+            candidate = m.group(1).strip()
+            if candidate.startswith("//"):
+                candidate = "https:" + candidate
+            candidate = urllib.parse.urljoin(page_url, candidate)
+            if candidate.startswith("http://") or candidate.startswith("https://"):
+                return candidate
+    return ""
+
+
+def fetch_og_image(page_url):
+    try:
+        req = urllib.request.Request(page_url, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            content_type = r.headers.get("Content-Type", "")
+            if "text/html" not in content_type:
+                return ""
+            html = r.read(350000).decode("utf-8", errors="ignore")
+            return extract_og_image_from_html(html, page_url)
+    except Exception:
+        return ""
 
 
 def parse_feed_xml(xml_bytes, source_name, source_url, source_weight):
@@ -240,6 +279,8 @@ def main():
 
     feeds = load_json(FEEDS_PATH, [])
     store = load_json(STORE_PATH, {"items": []})
+    image_cache = load_json(IMAGE_CACHE_PATH, {"items": {}})
+    cache_items = image_cache.get("items", {})
 
     existing = {}
     for it in store.get("items", []):
@@ -291,9 +332,39 @@ def main():
     allowed_sources = {f.get("name") for f in feeds if f.get("name")}
     all_items = [it for it in existing.values() if it.get("source") in allowed_sources]
 
-    # Parse/score/sort
+    # Parse dates first
     for it in all_items:
         it["published_dt"] = try_parse_date(it.get("published")) or now
+
+    # Enrich missing images using page og:image/twitter:image (cached)
+    cache_cutoff = now - timedelta(days=IMAGE_CACHE_TTL_DAYS)
+    recent_first = sorted(all_items, key=lambda x: x["published_dt"], reverse=True)
+    candidates = [it for it in recent_first if not it.get("image") and it.get("url")][:MAX_OG_FETCH_PER_RUN]
+
+    og_fetched = 0
+    for it in candidates:
+        url = it.get("url")
+        cached = cache_items.get(url, {})
+        checked_at = try_parse_date(cached.get("checkedAt", "")) if isinstance(cached, dict) else None
+
+        if checked_at and checked_at > cache_cutoff:
+            cached_image = cached.get("image", "") if isinstance(cached, dict) else ""
+            if cached_image:
+                it["image"] = canonicalize_url(cached_image)
+            continue
+
+        img = fetch_og_image(url)
+        if img:
+            it["image"] = canonicalize_url(img)
+            og_fetched += 1
+
+        cache_items[url] = {
+            "image": img,
+            "checkedAt": now.isoformat(),
+        }
+
+    # Score and sort
+    for it in all_items:
         it["score"] = score_item(it, now)
 
     all_items.sort(key=lambda x: (x["published_dt"], x["score"]), reverse=True)
@@ -313,6 +384,7 @@ def main():
             it.pop("published_dt", None)
 
     save_json(STORE_PATH, {"updatedAt": now.isoformat(), "items": all_items})
+    save_json(IMAGE_CACHE_PATH, {"updatedAt": now.isoformat(), "items": cache_items})
     save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {"updatedAt": now.isoformat(), "items": latest, "errors": errors})
     save_json(os.path.join(PUBLIC_DIR, f"ai-news-daily-{today.isoformat()}.json"), {"date": today.isoformat(), "updatedAt": now.isoformat(), "items": daily_top, "errors": errors})
 
@@ -352,6 +424,7 @@ def main():
     print(f"Fetched feeds: {len(feeds)}")
     print(f"Stored items: {len(all_items)}")
     print(f"Today's top: {len(daily_top)}")
+    print(f"OG images fetched this run: {og_fetched}")
     if errors:
         print(f"Feed errors: {len(errors)}")
 

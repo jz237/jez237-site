@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T01:06:18.262575+00:00",
+  "updatedAt": "2026-03-06T01:10:46.356570+00:00",
   "items": [
     {
       "title": "The Pentagon formally labels Anthropic a supply-chain risk",
@@ -8,11 +8,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "After weeks of failed negotiations, public ultimatums, and lawsuit threats, the Defense Department has formally labeled Anthropic a \"supply-chain risk\", escalating its fight with the AI company over their acceptable use policies and potentially bringing their fight to court. The decision, first reported by The Wall Street Journal on Thursday, citing one source familiar, will [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2263863571.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T23:02:22+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.0887
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.0865
     },
     {
       "title": "Trump gets data center companies to pledge to pay for power generation",
@@ -24,8 +24,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/GettyImages-2258665361-1024x648.jpg",
       "published": "2026-03-05T18:41:28+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.9705
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.9686
     },
     {
       "title": "Netflix is buying Ben Affleck’s AI startup",
@@ -34,11 +34,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "Though Netflix lost the war for Warner Bros., it has just bought an AI startup from the internet's favorite Dunkin' Donuts aficionado. Today, Netflix announced that it has acquired InterPositive, Ben Affleck's AI company that specializes in tools for film and television production. The deal will see all 16 of InterPositive's current team of engineers [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2256155551.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
       "published": "2026-03-05T18:27:16+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.9645
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.9626
     },
     {
       "title": "OpenAI’s new GPT-5.4 model is a big step toward autonomous agents",
@@ -47,11 +47,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "OpenAI is launching GPT-5.4, the latest version of its AI model that the company says combines advancements in reasoning, coding, and professional work involving spreadsheets, documents, and presentations. It's also OpenAI's first model with native computer use capabilities, meaning it can operate a computer on your behalf and complete tasks across different applications. The new [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.253
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.2511
     },
     {
       "title": "Ask a Techspert: How does AI understand my visual searches?",
@@ -63,8 +63,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fan_out_query_hero.max-600x600.format-webp.webp",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.233
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.2311
     },
     {
       "title": "Meta’s AI glasses reportedly send sensitive footage to human reviewers in Kenya",
@@ -73,11 +73,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "Meta's AI-powered smart glasses could be sending sensitive footage to human reviewers in Nairobi, Kenya, according to an investigation by the Swedish outlets Svenska Dagbladet and G&#246;teborgs-Posten. The report, which was published last week, claims Meta contractors in Kenya have seen videos captured with the smart glasses that show \"bathroom visits, sex and other intimate [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/Verge-Ray-ban-Meta-Gen2-Stills-6.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.806933475316%2C100%2C78.386133049368&amp%3Bw=1200",
       "published": "2026-03-05T16:37:52+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.9193
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.9175
     },
     {
       "title": "The latest AI news we announced in February",
@@ -89,8 +89,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thumbnail_mPCqgRv.max-600x600.format-webp.webp",
       "published": "2026-03-05T16:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.1961
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.1943
     },
     {
       "title": "Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations",
@@ -99,11 +99,11 @@
       "sourceUrl": "https://huggingface.co/blog/feed.xml",
       "sourceWeight": 0.95,
       "summary": "",
-      "image": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nxp/bringing-robotics-ai-to-embedded-platforms.png",
       "published": "2026-03-05T14:16:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.4443
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.4427
     },
     {
       "title": "March Into the Cloud With 15 New Games Coming to GeForce NOW",
@@ -115,8 +115,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gfn-thursday-3-5-nv-blog-1280x680-logo.jpg",
       "published": "2026-03-05T14:00:30+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.9982
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.9965
     },
     {
       "title": "Apple Music adds optional labels for AI songs and visuals",
@@ -125,11 +125,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "Apple is asking artists and record labels on its music streaming platform to voluntarily label songs that were made using AI. The new \"Transparency Tags\" metadata system for Apple Music was announced in a newsletter to industry partners yesterday, according to Music Business Worldwide, and covers four categories, including track, composition, artwork, and music videos. [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23925980/acastro_STK046_04.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T14:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.858
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.8564
     },
     {
       "title": "AI tools can unmask anonymous accounts",
@@ -138,11 +138,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "Do you have a Reddit alt, secret X, finsta, or Glassdoor account you trash your boss with? AI might have just made it a lot easier to unmask you. That's the conclusion of a recently published study, which hints at some uncomfortable consequences for staying private online - even if it's not quite time to [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK419_DEEPFAKE_3_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T13:30:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.8469
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.8452
     },
     {
       "title": "Anthropic makes last-ditch effort to salvage deal with Pentagon after blowup",
@@ -151,11 +151,11 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.75,
       "summary": "Anthropic CEO Dario Amodei is reportedly back at the negotiating table with the Department of Defense in an attempt to salvage the company's relationship with the US military and prevent it from being iced out of defense work for being a \"supply chain risk.\" Talks between the two parties imploded on Friday after weeks of [&#8230;]",
-      "image": "",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK202_DARIO_AMODEI_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-05T11:46:46+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 1.8097
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 1.8081
     },
     {
       "title": "Reasoning models struggle to control their chains of thought, and that’s good",
@@ -164,11 +164,11 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "summary": "OpenAI introduces CoT-Control and finds reasoning models struggle to control their chains of thought, reinforcing monitorability as an AI safety safeguard.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1uuAgWlWOgYMZuyLDaVFVL/af9711812b0868d52b15270a25f99913/OAI_Reasoning_Models_Struggle_to_Control_their_Chains_of_Thought__and_that%C3%A2__s_Good_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1231
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.1216
     },
     {
       "title": "Introducing GPT-5.4",
@@ -177,11 +177,11 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "summary": "Introducing GPT-5.4, OpenAI’s most most capable and efficient frontier model for professional work, with state-of-the-art coding, computer use, tool search, and 1M-token context.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/261kYlzPT8cBKoynLi35ct/14e3cae5d20ab9349af93f6b034c2947/5.4_Thinking_Hero___SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.4731
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.4716
     },
     {
       "title": "Online harassment is entering its AI era",
@@ -190,11 +190,11 @@
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "summary": "Scott Shambaugh didn’t think twice when he denied an AI agent’s request to contribute to matplotlib, a software library that he helps manage. Like many open-source projects, matplotlib has been overwhelmed by a glut of AI code contributions, and so Shambaugh and his fellow maintainers have instituted a policy that all AI-written code must be&#8230;",
-      "image": "",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/ai-hitpiece.jpg?resize=1200%2C600",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.2131
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.2116
     },
     {
       "title": "GPT-5.4 Thinking System Card",
@@ -203,11 +203,11 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "summary": "",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5t4zXynvPxIHXdXQMxiAwm/917d03bceb6cc7513cd2b34b7df46fe5/5.4_Thinking_System_Card_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.1231
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.1216
     },
     {
       "title": "Ensuring AI use in education leads to opportunity",
@@ -216,11 +216,11 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "summary": "OpenAI shares new tools, certifications, and measurement resources to help schools and universities close AI capability gaps and expand opportunity.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6qY7eyvVrPtwOMwQUPzqOO/55ab458c03157e061c83215cf215e51a/IMG_0185.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T09:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 2.1032
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 2.1018
     },
     {
       "title": "Can Large Language Models Derive New Knowledge? A Dynamic Benchmark for Biological Knowledge Discovery",
@@ -229,11 +229,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03322v1 Announce Type: cross \nAbstract: Recent advancements in Large Language Model (LLM) agents have demonstrated remarkable potential in automatic knowledge discovery. However, rigorously evaluating an AI's capacity for knowledge discovery remains a critical challenge. Existing benchmarks predominantly rely on static datasets, leading to inevitable data contamination where models have likely seen the evaluation knowledge during training. Furthermore, the rapid release cycles of modern LLMs render static benchmarks quickly outdated, failing to assess the ability to discover truly n",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 4.7993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 4.798
     },
     {
       "title": "LabelBuddy: An Open Source Music and Audio Language Annotation Tagging Tool Using AI Assistance",
@@ -242,11 +242,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04293v1 Announce Type: cross \nAbstract: The advancement of Machine learning (ML), Large Audio Language Models (LALMs), and autonomous AI agents in Music Information Retrieval (MIR) necessitates a shift from static tagging to rich, human-aligned representation learning. However, the scarcity of open-source infrastructure capable of capturing the subjective nuances of audio annotation remains a critical bottleneck. This paper introduces \\textbf{LabelBuddy}, an open-source collaborative auto-tagging audio annotation tool designed to bridge the gap between human intent and machine under",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 4.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 4.148
     },
     {
       "title": "RoboCasa365: A Large-Scale Simulation Framework for Training and Benchmarking Generalist Robots",
@@ -255,11 +255,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.04356v1 Announce Type: cross \nAbstract: Recent advances in robot learning have accelerated progress toward generalist robots that can perform everyday tasks in human environments. Yet it remains difficult to gauge how close we are to this vision. The field lacks a reproducible, large-scale benchmark for systematic evaluation. To fill this gap, we present RoboCasa365, a comprehensive simulation benchmark for household mobile manipulation. Built on the RoboCasa platform, RoboCasa365 introduces 365 everyday tasks across 2,500 diverse kitchen environments, with over 600 hours of human d",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.7993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.798
     },
     {
       "title": "A Rubric-Supervised Critic from Sparse Real-World Outcomes",
@@ -268,11 +268,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03800v1 Announce Type: new \nAbstract: Academic benchmarks for coding agents tend to reward autonomous task completion, measured by verifiable rewards such as unit-test success. In contrast, real-world coding agents operate with humans in the loop, where success signals are typically noisy, delayed, and sparse. How can we bridge this gap? In this paper, we propose a process to learn a \"critic\" model from sparse and noisy interaction data, which can then be used both as a reward model for either RL-based training or inference-time scaling. Specifically, we introduce Critic Rubrics, a ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.6993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.698
     },
     {
       "title": "ToolRLA: Multiplicative Reward Decomposition for Tool-Integrated Agents",
@@ -281,11 +281,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.01620v2 Announce Type: replace \nAbstract: Tool-integrated agents that interleave reasoning with API calls are promising for complex tasks, yet aligning them for high-stakes, domain-specific deployment remains challenging: existing reinforcement learning approaches rely on coarse binary rewards that cannot distinguish tool selection errors from malformed parameters. We present ToolRLA, a three-stage post-training pipeline (SFT $\\rightarrow$ GRPO $\\rightarrow$ DPO) for domain-specific tool agents. The core contribution is a fine-grained reward function with multiplicative correctness ",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.6993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.698
     },
     {
       "title": "Escaping the BLEU Trap: A Signal-Grounded Framework with Decoupled Semantic Guidance for EEG-to-Text Decoding",
@@ -294,11 +294,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2603.03312v1 Announce Type: cross \nAbstract: Decoding natural language from non-invasive EEG signals is a promising yet challenging task. However, current state-of-the-art models remain constrained by three fundamental limitations: Semantic Bias (mode collapse into generic templates), Signal Neglect (hallucination based on linguistic priors rather than neural inputs), and the BLEU Trap, where evaluation metrics are artificially inflated by high-frequency stopwords, masking a lack of true semantic fidelity. To address these challenges, we propose SemKey, a novel multi-stage framework that",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.498
     },
     {
       "title": "LadderSym: A Multimodal Interleaved Transformer for Music Practice Error Detection",
@@ -307,11 +307,11 @@
       "sourceUrl": "https://export.arxiv.org/rss/cs.AI",
       "sourceWeight": 0.8,
       "summary": "arXiv:2510.08580v2 Announce Type: replace-cross \nAbstract: Music learners can greatly benefit from tools that accurately detect errors in their practice. Existing approaches typically compare audio recordings to music scores using heuristics or learnable models. This paper introduces LadderSym, a novel Transformer-based method for music error detection. LadderSym is guided by two key observations about the state-of-the-art approaches: (1) late fusion limits inter-stream alignment and cross-modality comparison capability; and (2) reliance on score audio introduces ambiguity in the frequency spe",
-      "image": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.498
     },
     {
       "title": "AgentSelect: Benchmark for Narrative Query-to-Agent Recommendation",
@@ -323,8 +323,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.448
     },
     {
       "title": "Raising Bars, Not Parameters: LilMoo Compact Language Model for Hindi",
@@ -336,8 +336,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.448
     },
     {
       "title": "Bielik-Q2-Sharp: A Comparative Study of Extreme 2-bit Quantization Methods for a Polish 11B Language Model",
@@ -349,8 +349,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.448
     },
     {
       "title": "ZipMap: Linear-Time Stateful 3D Reconstruction with Test-Time Training",
@@ -362,8 +362,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.448
     },
     {
       "title": "Preference Leakage: A Contamination Problem in LLM-as-a-judge",
@@ -375,8 +375,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.4493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.448
     },
     {
       "title": "Agentics 2.0: Logical Transduction Algebra for Agentic Data Workflows",
@@ -388,8 +388,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "$\\tau$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge",
@@ -401,8 +401,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "Draft-Conditioned Constrained Decoding for Structured Generation in LLMs",
@@ -414,8 +414,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "GeoSeg: Training-Free Reasoning-Driven Segmentation in Remote Sensing Imagery",
@@ -427,8 +427,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",
@@ -440,8 +440,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "Training High-Level Schedulers with Execution-Feedback Reinforcement Learning for Long-Horizon GUI Automation",
@@ -453,8 +453,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "Why Do AI Agents Systematically Fail at Cloud Root Cause Analysis?",
@@ -466,8 +466,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.398
     },
     {
       "title": "LiteVLA-Edge: Quantized On-Device Multimodal Control for Embedded Robotics",
@@ -479,8 +479,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.348
     },
     {
       "title": "Generalization of RLVR Using Causal Reasoning as a Testbed",
@@ -492,8 +492,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.3493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.348
     },
     {
       "title": "One Bias After Another: Mechanistic Reward Shaping and Persistent Biases in Language Reward Models",
@@ -505,8 +505,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.148
     },
     {
       "title": "From Exact Hits to Close Enough: Semantic Caching for LLM Embeddings",
@@ -518,8 +518,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.148
     },
     {
       "title": "Ethical and Explainable AI in Reusable MLOps Pipelines",
@@ -531,8 +531,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.148
     },
     {
       "title": "Bridging the Reproducibility Divide: Open Source Software's Role in Standardizing Healthcare AI",
@@ -544,8 +544,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.148
     },
     {
       "title": "Graph Negative Feedback Bias Correction Framework for Adaptive Heterophily Modeling",
@@ -557,8 +557,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.148
     },
     {
       "title": "Cross-Modal Mapping and Dual-Branch Reconstruction for 2D-3D Multimodal Industrial Anomaly Detection",
@@ -570,8 +570,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.1493
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.148
     },
     {
       "title": "From Threat Intelligence to Firewall Rules: Semantic Relations in Hybrid AI Agent and Expert System Architectures",
@@ -583,8 +583,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.0993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.098
     },
     {
       "title": "Certainty robustness: Evaluating LLM stability under self-challenging prompts",
@@ -596,8 +596,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.0993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.098
     },
     {
       "title": "Fragile Thoughts: How Large Language Models Handle Chain-of-Thought Perturbations",
@@ -609,8 +609,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.0993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.098
     },
     {
       "title": "mlx-snn: Spiking Neural Networks on Apple Silicon via MLX",
@@ -622,8 +622,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.0993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.098
     },
     {
       "title": "Tucano 2 Cool: Better Open Source LLMs for Portuguese",
@@ -635,8 +635,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.0993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.098
     },
     {
       "title": "Agentic Peer-to-Peer Networks: From Content Distribution to Capability and Action Sharing",
@@ -648,8 +648,8 @@
       "image": "",
       "published": "2026-03-05T05:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-06T01:06:18.262575+00:00",
-      "score": 3.0993
+      "lastSeen": "2026-03-06T01:10:46.356570+00:00",
+      "score": 3.098
     }
   ],
   "errors": []
