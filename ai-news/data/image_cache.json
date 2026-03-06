@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T01:19:46.552493+00:00",
+  "updatedAt": "2026-03-06T01:20:35.025460+00:00",
   "items": {
     "https://www.theverge.com/ai-artificial-intelligence/890347/pentagon-anthropic-supply-chain-risk": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2263863571.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
@@ -160,6 +160,86 @@
     "https://arxiv.org/abs/2603.03939": {
       "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
       "checkedAt": "2026-03-06T01:19:46.552493+00:00"
+    },
+    "https://www.theverge.com/news/889578/data-center-power-pledge-white-house-google-meta-microsoft": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2264235364.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.737892056687%2C100%2C78.524215886627&amp;w=1200",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/chatgpt-for-excel": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/7bSi1GJxlKgzkl3OaftYh5/453b92e8255940d43f2474386c5ae031/ChatGPT_Excel_seo.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.together.ai/blog/ai-native-conf-research-and-product-announcements": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69a95e9ab0b54c9d621b600e_Together.ai%20Announcements.png",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.together.ai/blog/flashattention-4": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69a8eb1ec38c7210ed4d3f8d_20260304_FlashAttention-4_1200x630.jpg",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/the-five-ai-value-models-driving-business-reinvention": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/48FHdIK9VMlMr4I1Imtmjz/545d367833f9c21d9195e915af8d951f/OAI_The_five_AI_value_modelsdriving_business_reinvention_16x9_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/introducing-the-adoption-news-channel": {
+      "image": "",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://huggingface.co/blog/modular-diffusers": {
+      "image": "https://huggingface.co/blog/assets/modular-diffusers/thumbnail.png",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/889475/notebooklm-can-now-summarize-research-in-cinematic-video-overviews": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK093_Google_02.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.theverge.com/tech/889339/google-canvas-ai-mode-search-us-launch": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Canvas-in-AI-Mode-scholarship-tracker.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/04/1133642/bridging-the-operational-ai-gap": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/Celigo-Social-Card-Gold.png?resize=1200,600",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/extending-single-minus-amplitudes-to-gravitons": {
+      "image": "",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/understanding-ai-and-learning-outcomes": {
+      "image": "",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/axios-allison-murphy": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4Sy9STpO47cS5wGOZDCUeo/e16403170cddc3cf8608d39ed2fbb250/EF_Ep19_16.9.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://huggingface.co/blog/Photoroom/prx-part3": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/68e529af513e724edd8702f6/zMyALdakGbN6SDG3ucmLd.jpeg",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/gpt-5-3-instant": {
+      "image": "",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/gpt-5-3-instant-system-card": {
+      "image": "",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/02/1133850/openais-compromise-with-the-pentagon-is-what-anthropic-feared": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/triad-version.jpg?resize=1200,600",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/02/1133814/i-checked-out-londons-biggest-ever-anti-ai-protest": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/PXL_20260228_140922914-EDIT.jpg?resize=1200,600",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://www.together.ai/blog/introducing-together-ai-new-look": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69a5b2ad74a26e0d1ab3f1ee_20260228_Intro_TAI_New_Look_Blog_1200x630.png",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
+    },
+    "https://openai.com/index/our-agreement-with-the-department-of-war": {
+      "image": "",
+      "checkedAt": "2026-03-06T01:20:35.025460+00:00"
     }
   }
 }
