@@ -31,7 +31,7 @@ function isLikelyBadImage(url) {
   );
 }
 
-function renderNews(items) {
+function renderNews(items, featuredUrlSet = new Set()) {
   const wrap = document.getElementById('news-grid');
   wrap.innerHTML = '';
 
@@ -41,7 +41,8 @@ function renderNews(items) {
   }
 
   items.forEach((n) => {
-    const card = el('article', 'news-card');
+    const isFeatured = featuredUrlSet.has(n.url);
+    const card = el('article', `news-card ${isFeatured ? 'featured' : 'compact'}`);
 
     if (n.image && !isLikelyBadImage(n.image)) {
       const img = document.createElement('img');
@@ -111,10 +112,15 @@ async function init() {
         });
       }
 
+      const featuredByScore = [...items]
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, Math.max(10, Math.round(items.length * 0.22)));
+      const featuredSet = new Set(featuredByScore.map(i => i.url));
+
       if (mode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
       else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
 
-      renderNews(items.slice(0, 60));
+      renderNews(items.slice(0, 75), featuredSet);
     }
 
     latestBtn.onclick = () => { mode = 'latest'; applyFilters(); };
