@@ -7,7 +7,7 @@
       "name": "AI News Feed",
       "desc": "Curated AI model releases, tooling updates, and notable research.",
       "status": "live",
-      "link": "#news"
+      "link": "./news.html"
     },
     {
       "name": "Game Experiments",

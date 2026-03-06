@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jez237 — AI News Feed</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="./index.html">Home</a>
+        <a href="./news.html">AI News</a>
+        <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">AI News Feed</div>
+      <h1 class="title">AI model + tooling stream</h1>
+      <p class="muted">Two-column feed with source filter, search, and article thumbnails when available.</p>
+    </section>
+
+    <section class="card col-12" style="margin-top:16px;">
+      <div class="news-controls">
+        <button id="btn-latest">Sort: Latest</button>
+        <button id="btn-top">Sort: Top scored</button>
+        <select id="news-source" class="control"></select>
+        <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
+        <span id="news-updated" class="news-meta"></span>
+      </div>
+      <div id="news-grid" class="news-grid"></div>
+    </section>
+
+    <footer>
+      Live feed from curated sources · Repo: <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">https://github.com/jz237/jez237-site</a>
+    </footer>
+  </main>
+
+  <script src="./assets/news.js"></script>
+</body>
+</html>
