@@ -102,24 +102,30 @@ async function init() {
 
     const latestBtn = document.getElementById('btn-latest');
     const topBtn = document.getElementById('btn-top');
+    const categorySelect = document.getElementById('news-category');
     const sourceSelect = document.getElementById('news-source');
     const queryInput = document.getElementById('news-query');
 
-    sourceSelect.innerHTML = '<option value="">All sources</option>';
-    uniqueSources(baseItems).forEach(source => {
-      const opt = document.createElement('option');
-      opt.value = source;
-      opt.textContent = source;
-      sourceSelect.appendChild(opt);
-    });
-
     let mode = 'latest';
 
+    function populateSources(category) {
+      const categoryItems = baseItems.filter(i => (i.category || 'AI') === category);
+      const sources = uniqueSources(categoryItems);
+      sourceSelect.innerHTML = '<option value="">All sources</option>';
+      sources.forEach(source => {
+        const opt = document.createElement('option');
+        opt.value = source;
+        opt.textContent = source;
+        sourceSelect.appendChild(opt);
+      });
+    }
+
     function applyFilters() {
+      const category = categorySelect?.value || 'AI';
       const source = sourceSelect?.value || '';
       const q = (queryInput?.value || '').trim().toLowerCase();
 
-      let items = [...baseItems];
+      let items = baseItems.filter(i => (i.category || 'AI') === category);
       if (source) items = items.filter(i => i.source === source);
       if (q) {
         items = items.filter(i => {
@@ -132,36 +138,34 @@ async function init() {
       if (mode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
       else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
 
-      const aiItems = items.filter(i => (i.category || 'AI') === 'AI').slice(0, 60);
-      const sciItems = items.filter(i => i.category === 'Science').slice(0, 30);
+      const limit = category === 'Science' ? 30 : 60;
+      items = items.slice(0, limit);
 
       const wrap = document.getElementById('news-grid');
       wrap.innerHTML = '';
 
-      function renderSection(title, sectionItems) {
-        if (!sectionItems.length) return;
-        const hdr = document.createElement('h2');
-        hdr.className = 'news-section-heading';
-        hdr.textContent = title;
-        wrap.appendChild(hdr);
-        const grid = document.createElement('div');
-        grid.className = 'news-inner-grid';
-        wrap.appendChild(grid);
-        const featuredByScore = [...sectionItems]
-          .sort((a, b) => (b.score || 0) - (a.score || 0))
-          .slice(0, Math.max(4, Math.round(sectionItems.length * 0.22)));
-        const featuredSet = new Set(featuredByScore.map(i => i.url));
-        renderNews(sectionItems, featuredSet, grid);
-      }
+      const grid = document.createElement('div');
+      grid.className = 'news-inner-grid';
+      wrap.appendChild(grid);
 
-      renderSection('🤖 Artificial Intelligence', aiItems);
-      renderSection('🔬 Discover / Science', sciItems);
+      const featuredByScore = [...items]
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, Math.max(4, Math.round(items.length * 0.22)));
+      const featuredSet = new Set(featuredByScore.map(i => i.url));
+      renderNews(items, featuredSet, grid);
     }
 
+    categorySelect.onchange = () => {
+      populateSources(categorySelect.value);
+      applyFilters();
+    };
     latestBtn.onclick = () => { mode = 'latest'; applyFilters(); };
     topBtn.onclick = () => { mode = 'top'; applyFilters(); };
     sourceSelect.onchange = applyFilters;
     queryInput.oninput = applyFilters;
+
+    // Init with default category
+    populateSources(categorySelect.value);
 
     applyFilters();
   } catch (e) {
