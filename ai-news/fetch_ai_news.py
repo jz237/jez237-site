@@ -295,11 +295,14 @@ def main():
         name = feed.get("name")
         url = feed.get("url")
         weight = float(feed.get("weight", 0.7))
+        category = feed.get("category", "AI")
         if not name or not url:
             continue
         try:
             body = fetch_url(url)
             items = parse_feed_xml(body, name, url, weight)
+            for item in items:
+                item["category"] = category
             fetched.extend(items)
         except Exception as e:
             errors.append({"source": name, "url": url, "error": str(e)})
@@ -321,6 +324,7 @@ def main():
             "source": item.get("source") or existing_item.get("source", "Unknown"),
             "sourceUrl": item.get("sourceUrl") or existing_item.get("sourceUrl", ""),
             "sourceWeight": item.get("sourceWeight", existing_item.get("sourceWeight", 0.7)),
+            "category": item.get("category") or existing_item.get("category", "AI"),
             "summary": item.get("summary") or existing_item.get("summary", ""),
             "image": canonicalize_url(item.get("image", "")) if item.get("image") else existing_item.get("image", ""),
             "published": (dt or now).isoformat(),
