@@ -3,19 +3,6 @@
   "updatedAt": "2026-03-06T23:54:39.383659+00:00",
   "items": [
     {
-      "title": "Conversational LLM Evaluations in Minutes with NVIDIA NeMo Evaluator Agent Skills",
-      "url": "https://huggingface.co/blog/nvidia/model-evaluation-skill",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/model-evaluation-skill.png",
-      "published": "2026-03-06T18:56:10+00:00",
-      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
-      "score": 2.938
-    },
-    {
       "title": "How Balyasny Asset Management built an AI research engine for investing",
       "url": "https://openai.com/index/balyasny-asset-management",
       "source": "OpenAI News",
@@ -60,7 +47,7 @@
       "source": "MIT Technology Review AI",
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
-      "summary": "The ongoing public feud between the Department of Defense and the AI company Anthropic has raised a deep and still unanswered question: Does the law actually allow the US government to conduct mass surveillance on Americans? Surprisingly, the answer is not straightforward. More than a decade after Edward Snowden exposed the NSA’s collection of bulk&#8230;",
+      "summary": "The ongoing public feud between the Department of Defense and the AI company Anthropic has raised a deep and still unanswered question: Does the law actually allow the US government to conduct mass surveillance on Americans? Surprisingly, the answer is not straightforward. More than a decade after Edward Snowden exposed the NSA\u2019s collection of bulk&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/crawl-data2.jpg?resize=1200%2C600",
       "published": "2026-03-06T19:21:22+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
