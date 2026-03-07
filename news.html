@@ -32,8 +32,10 @@
           <option value="AI">🤖 AI News</option>
           <option value="Science">🔬 Discovery News</option>
         </select>
-        <button id="btn-latest">Sort: Latest</button>
-        <button id="btn-top">Sort: Top scored</button>
+        <select id="news-sort" class="control">
+          <option value="latest">Sort: Latest</option>
+          <option value="top">Sort: Top scored</option>
+        </select>
         <select id="news-source" class="control"></select>
         <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
         <span id="news-updated" class="news-meta"></span>
