@@ -100,13 +100,10 @@ async function init() {
 
     document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)}`;
 
-    const latestBtn = document.getElementById('btn-latest');
-    const topBtn = document.getElementById('btn-top');
+    const sortSelect = document.getElementById('news-sort');
     const categorySelect = document.getElementById('news-category');
     const sourceSelect = document.getElementById('news-source');
     const queryInput = document.getElementById('news-query');
-
-    let mode = 'latest';
 
     function populateSources(category) {
       const categoryItems = baseItems.filter(i => (i.category || 'AI') === category);
@@ -135,6 +132,7 @@ async function init() {
         });
       }
 
+      const mode = sortSelect?.value || 'latest';
       if (mode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
       else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
 
@@ -159,8 +157,7 @@ async function init() {
       populateSources(categorySelect.value);
       applyFilters();
     };
-    latestBtn.onclick = () => { mode = 'latest'; applyFilters(); };
-    topBtn.onclick = () => { mode = 'top'; applyFilters(); };
+    sortSelect.onchange = applyFilters;
     sourceSelect.onchange = applyFilters;
     queryInput.oninput = applyFilters;
 
