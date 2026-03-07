@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-07T22:53:47.594316+00:00",
+  "updatedAt": "2026-03-07T23:48:19.011163+00:00",
   "items": [
     {
       "title": "Feds take notice of iOS vulnerabilities exploited under mysterious circumstances",
@@ -12,8 +12,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/iphone-14-1152x648.jpg",
       "published": "2026-03-06T19:41:33+00:00",
       "firstSeen": "2026-03-06T21:01:32.334449+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5667
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5538
     },
     {
       "title": "Is the Pentagon allowed to surveil Americans with AI?",
@@ -22,12 +22,12 @@
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "The ongoing public feud between the Department of Defense and the AI company Anthropic has raised a deep and still unanswered question: Does the law actually allow the US government to conduct mass surveillance on Americans? Surprisingly, the answer is not straightforward. More than a decade after Edward Snowden exposed the NSA\u2019s collection of bulk&#8230;",
+      "summary": "The ongoing public feud between the Department of Defense and the AI company Anthropic has raised a deep and still unanswered question: Does the law actually allow the US government to conduct mass surveillance on Americans? Surprisingly, the answer is not straightforward. More than a decade after Edward Snowden exposed the NSA’s collection of bulk&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/crawl-data2.jpg?resize=1200%2C600",
       "published": "2026-03-06T19:21:22+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.7019
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.6891
     },
     {
       "title": "How our open-source AI model SpeciesNet is helping to promote wildlife conservation",
@@ -40,8 +40,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/specieshero_v2.max-600x600.format-webp.webp",
       "published": "2026-03-06T18:00:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.8229
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.8107
     },
     {
       "title": "Codex Security: now in research preview",
@@ -54,8 +54,8 @@
       "image": "",
       "published": "2026-03-06T10:00:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 2.0947
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 2.0849
     },
     {
       "title": "How Descript enables multilingual video dubbing at scale",
@@ -68,8 +68,8 @@
       "image": "",
       "published": "2026-03-06T10:00:00+00:00",
       "firstSeen": "2026-03-06T19:50:19.764312+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.7947
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.7849
     },
     {
       "title": "How Balyasny Asset Management built an AI research engine for investing",
@@ -82,8 +82,8 @@
       "image": "",
       "published": "2026-03-06T07:00:00+00:00",
       "firstSeen": "2026-03-06T15:57:03.808499+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 2.4132
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 2.4041
     },
     {
       "title": "Amazon appears to be down, with over 20,000 reported problems",
@@ -96,8 +96,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2024/10/GettyImages-535059003-1024x648.jpg",
       "published": "2026-03-05T21:06:05+00:00",
       "firstSeen": "2026-03-06T15:57:03.808499+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.3259
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.319
     },
     {
       "title": "Trump gets data center companies to pledge to pay for power generation",
@@ -110,8 +110,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/GettyImages-2258665361-1024x648.jpg",
       "published": "2026-03-05T18:41:28+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.308
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.3016
     },
     {
       "title": "Ask a Techspert: How does AI understand my visual searches?",
@@ -124,8 +124,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fan_out_query_hero.max-600x600.format-webp.webp",
       "published": "2026-03-05T18:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5831
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5768
     },
     {
       "title": "The latest AI news we announced in February",
@@ -138,11 +138,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thumbnail_mPCqgRv.max-600x600.format-webp.webp",
       "published": "2026-03-05T16:30:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5728
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5667
     },
     {
-      "title": "Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine\u2011Tuning, and On\u2011Device Optimizations",
+      "title": "Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations",
       "url": "https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms",
       "source": "Hugging Face Blog",
       "sourceUrl": "https://huggingface.co/blog/feed.xml",
@@ -152,8 +152,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nxp/bringing-robotics-ai-to-embedded-platforms.png",
       "published": "2026-03-05T14:16:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.8582
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.8525
     },
     {
       "title": "March Into the Cloud With 15 New Games Coming to GeForce NOW",
@@ -162,15 +162,15 @@
       "sourceUrl": "https://blogs.nvidia.com/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "March is in full bloom, and that means a fresh wave of games heading to the cloud. 15 new titles are joining the GeForce NOW library this month. Leading the March lineup is Pearl Abyss\u2019 Crimson Desert, an open\u2011world action\u2011adventure set in a war\u2011torn fantasy land, alongside plenty of other games to explore. Whether looking [&#8230;]",
+      "summary": "March is in full bloom, and that means a fresh wave of games heading to the cloud. 15 new titles are joining the GeForce NOW library this month. Leading the March lineup is Pearl Abyss’ Crimson Desert, an open‑world action‑adventure set in a war‑torn fantasy land, alongside plenty of other games to explore. Whether looking [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gfn-thursday-3-5-nv-blog-1280x680-logo.jpg",
       "published": "2026-03-05T14:00:30+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4165
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4109
     },
     {
-      "title": "Reasoning models struggle to control their chains of thought, and that\u2019s good",
+      "title": "Reasoning models struggle to control their chains of thought, and that’s good",
       "url": "https://openai.com/index/reasoning-models-chain-of-thought-controllability",
       "source": "OpenAI News",
       "sourceUrl": "https://openai.com/news/rss.xml",
@@ -180,8 +180,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1uuAgWlWOgYMZuyLDaVFVL/af9711812b0868d52b15270a25f99913/OAI_Reasoning_Models_Struggle_to_Control_their_Chains_of_Thought__and_that%C3%A2__s_Good_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 2.6027
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 2.5976
     },
     {
       "title": "Introducing GPT-5.4",
@@ -190,12 +190,12 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "category": "AI",
-      "summary": "Introducing GPT-5.4, OpenAI\u2019s most most capable and efficient frontier model for professional work, with state-of-the-art coding, computer use, tool search, and 1M-token context.",
+      "summary": "Introducing GPT-5.4, OpenAI’s most most capable and efficient frontier model for professional work, with state-of-the-art coding, computer use, tool search, and 1M-token context.",
       "image": "https://images.ctfassets.net/kftzwdyauwt9/261kYlzPT8cBKoynLi35ct/14e3cae5d20ab9349af93f6b034c2947/5.4_Thinking_Hero___SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.9527
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.9476
     },
     {
       "title": "Online harassment is entering its AI era",
@@ -204,12 +204,12 @@
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Scott Shambaugh didn\u2019t think twice when he denied an AI agent\u2019s request to contribute to matplotlib, a software library that he helps manage. Like many open-source projects, matplotlib has been overwhelmed by a glut of AI code contributions, and so Shambaugh and his fellow maintainers have instituted a policy that all AI-written code must be&#8230;",
+      "summary": "Scott Shambaugh didn’t think twice when he denied an AI agent’s request to contribute to matplotlib, a software library that he helps manage. Like many open-source projects, matplotlib has been overwhelmed by a glut of AI code contributions, and so Shambaugh and his fellow maintainers have instituted a policy that all AI-written code must be&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/ai-hitpiece.jpg?resize=1200%2C600",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.6927
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.6876
     },
     {
       "title": "GPT-5.4 Thinking System Card",
@@ -222,8 +222,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5t4zXynvPxIHXdXQMxiAwm/917d03bceb6cc7513cd2b34b7df46fe5/5.4_Thinking_System_Card_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.6027
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5976
     },
     {
       "title": "Ensuring AI use in education leads to opportunity",
@@ -236,8 +236,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6qY7eyvVrPtwOMwQUPzqOO/55ab458c03157e061c83215cf215e51a/IMG_0185.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T09:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5971
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5922
     },
     {
       "title": "Introducing ChatGPT for Excel and new financial data integrations",
@@ -250,8 +250,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/7bSi1GJxlKgzkl3OaftYh5/453b92e8255940d43f2474386c5ae031/ChatGPT_Excel_seo.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 2.2535
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 2.2497
     },
     {
       "title": "Key research and product announcements at the AI Native Conf",
@@ -260,12 +260,12 @@
       "sourceUrl": "https://www.together.ai/blog/rss.xml",
       "sourceWeight": 0.8,
       "category": "AI",
-      "summary": "At AI Native Conf, Together AI announced breakthroughs across kernels, RL, and inference optimization \u2014 including FlashAttention-4, ThunderAgent, and together.compile. Research that ships to production. That's the AI Native Cloud.",
+      "summary": "At AI Native Conf, Together AI announced breakthroughs across kernels, RL, and inference optimization — including FlashAttention-4, ThunderAgent, and together.compile. Research that ships to production. That's the AI Native Cloud.",
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69a95e9ab0b54c9d621b600e_Together.ai%20Announcements.png",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 2.1735
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 2.1697
     },
     {
       "title": "FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling",
@@ -278,8 +278,8 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69a8eb1ec38c7210ed4d3f8d_20260304_FlashAttention-4_1200x630.jpg",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5735
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5697
     },
     {
       "title": "The five AI value models driving business reinvention",
@@ -292,8 +292,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/48FHdIK9VMlMr4I1Imtmjz/545d367833f9c21d9195e915af8d951f/OAI_The_five_AI_value_modelsdriving_business_reinvention_16x9_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5535
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5497
     },
     {
       "title": "Introducing the Adoption news channel",
@@ -306,8 +306,8 @@
       "image": "",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.5535
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5497
     },
     {
       "title": "Introducing Modular Diffusers - Composable Building Blocks for Diffusion Pipelines",
@@ -320,8 +320,8 @@
       "image": "https://huggingface.co/blog/assets/modular-diffusers/thumbnail.png",
       "published": "2026-03-05T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4835
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4797
     },
     {
       "title": "Use Canvas in AI Mode to get things done and bring your ideas to life, right in Search.",
@@ -334,8 +334,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIMMode_Social.max-600x600.format-webp.webp",
       "published": "2026-03-04T17:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4564
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4532
     },
     {
       "title": "Bridging the operational AI gap",
@@ -348,8 +348,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/Celigo-Social-Card-Gold.png?resize=1200%2C600",
       "published": "2026-03-04T14:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.6063
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.6034
     },
     {
       "title": "Extending single-minus amplitudes to gravitons",
@@ -362,8 +362,8 @@
       "image": "",
       "published": "2026-03-04T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.504
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.5015
     },
     {
       "title": "Understanding AI and learning outcomes",
@@ -372,15 +372,15 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "category": "AI",
-      "summary": "OpenAI introduces the Learning Outcomes Measurement Suite to assess AI\u2019s impact on student learning across diverse educational environments over time.",
+      "summary": "OpenAI introduces the Learning Outcomes Measurement Suite to assess AI’s impact on student learning across diverse educational environments over time.",
       "image": "",
       "published": "2026-03-04T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 2.1788
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 2.1768
     },
     {
-      "title": "Cache-aware prefill\u2013decode disaggregation (CPD) for up to 40% faster long-context LLM serving",
+      "title": "Cache-aware prefill–decode disaggregation (CPD) for up to 40% faster long-context LLM serving",
       "url": "https://www.together.ai/blog/cache-aware-disaggregated-inference",
       "source": "Together AI Blog",
       "sourceUrl": "https://www.together.ai/blog/rss.xml",
@@ -390,8 +390,8 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/699e0b27e4b6730f9f46bcaa_698c269bd185dc488ea8c517_CPD%2520Carousel%2520from%2520Together.ai.jpeg",
       "published": "2026-03-04T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4988
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4968
     },
     {
       "title": "How Axios uses AI to help deliver high-impact local journalism",
@@ -404,8 +404,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4Sy9STpO47cS5wGOZDCUeo/e16403170cddc3cf8608d39ed2fbb250/EF_Ep19_16.9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-04T00:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4788
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4768
     },
     {
       "title": "Downdetector, Speedtest sold to IT service-provider Accenture in $1.2B deal",
@@ -418,8 +418,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/GettyImages-1795499144-1152x648.jpg",
       "published": "2026-03-03T22:20:06+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.1252
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.1234
     },
     {
       "title": "Create new worlds in Project Genie with these 4 tips",
@@ -432,11 +432,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Genie_2.max-600x600.format-webp.webp",
       "published": "2026-03-03T17:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.3949
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.3933
     },
     {
-      "title": "PRX Part 3 \u2014 Training a Text-to-Image Model in 24h!",
+      "title": "PRX Part 3 — Training a Text-to-Image Model in 24h!",
       "url": "https://huggingface.co/blog/Photoroom/prx-part3",
       "source": "Hugging Face Blog",
       "sourceUrl": "https://huggingface.co/blog/feed.xml",
@@ -446,8 +446,8 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/68e529af513e724edd8702f6/zMyALdakGbN6SDG3ucmLd.jpeg",
       "published": "2026-03-03T16:50:49+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.6946
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.693
     },
     {
       "title": "Gemini 3.1 Flash-Lite: Built for intelligence at scale",
@@ -460,8 +460,8 @@
       "image": "https://lh3.googleusercontent.com/L943nW-XsLGjzWrBOj8x7RhlajW6yigzhd8q45ia33L0uNyClu_XT600bTZevv5c2end6MZ5dFKekGXGMjfxIsYCdlqYlcnyNEmAy4Gd0B6Ovd6Z=w528-h297-n-nu-rw-lo",
       "published": "2026-03-03T16:35:55+00:00",
       "firstSeen": "2026-03-05T21:40:49.016100+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.3942
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.3926
     },
     {
       "title": "Gemini 3.1 Flash-Lite: Built for intelligence at scale",
@@ -474,8 +474,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.1_flash_Lite_blog_keyw.max-600x600.format-webp.webp",
       "published": "2026-03-03T16:34:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.3941
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.3925
     },
     {
       "title": "LLMs can unmask pseudonymous users at scale with surprising accuracy",
@@ -488,8 +488,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/unmask-deanymize-privacy-1152x648.jpg",
       "published": "2026-03-03T12:30:24+00:00",
       "firstSeen": "2026-03-05T23:26:26.501642+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.1073
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.1058
     },
     {
       "title": "GPT-5.3 Instant: Smoother, more useful everyday conversations",
@@ -502,8 +502,8 @@
       "image": "",
       "published": "2026-03-03T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4534
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4521
     },
     {
       "title": "GPT-5.3 Instant System Card",
@@ -516,22 +516,22 @@
       "image": "",
       "published": "2026-03-03T10:00:00+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.4534
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4521
     },
     {
-      "title": "OpenAI\u2019s \u201ccompromise\u201d with the Pentagon is what Anthropic feared",
+      "title": "OpenAI’s “compromise” with the Pentagon is what Anthropic feared",
       "url": "https://www.technologyreview.com/2026/03/02/1133850/openais-compromise-with-the-pentagon-is-what-anthropic-feared",
       "source": "MIT Technology Review AI",
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "On February 28, OpenAI announced it had reached a deal that will allow the US military to use its technologies in classified settings. CEO Sam Altman said the negotiations, which the company began pursuing only after the Pentagon\u2019s public reprimand of Anthropic, were \u201cdefinitely rushed.\u201d In its announcements, OpenAI took great pains to say that&#8230;",
+      "summary": "On February 28, OpenAI announced it had reached a deal that will allow the US military to use its technologies in classified settings. CEO Sam Altman said the negotiations, which the company began pursuing only after the Pentagon’s public reprimand of Anthropic, were “definitely rushed.” In its announcements, OpenAI took great pains to say that&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/triad-version.jpg?resize=1200%2C600",
       "published": "2026-03-02T17:29:42+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.2238
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.2229
     },
     {
       "title": "I checked out one of the biggest anti-AI protests yet",
@@ -540,12 +540,26 @@
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Pull the plug! Pull the plug! Stop the slop! Stop the slop! For a few hours this Saturday, February 28, I watched as a couple of hundred anti-AI protesters marched through London\u2019s King\u2019s Cross tech hub, home to the UK headquarters of OpenAI, Meta, and Google DeepMind, chanting slogans and waving signs. The march was&#8230;",
+      "summary": "Pull the plug! Pull the plug! Stop the slop! Stop the slop! For a few hours this Saturday, February 28, I watched as a couple of hundred anti-AI protesters marched through London’s King’s Cross tech hub, home to the UK headquarters of OpenAI, Meta, and Google DeepMind, chanting slogans and waving signs. The march was&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/PXL_20260228_140922914-EDIT.jpg?resize=1200%2C600",
       "published": "2026-03-02T12:55:20+00:00",
       "firstSeen": "2026-03-05T21:39:07.641122+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.2197
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.219
+    },
+    {
+      "title": "Introducing Together AI’s new look",
+      "url": "https://www.together.ai/blog/introducing-together-ai-new-look",
+      "source": "Together AI Blog",
+      "sourceUrl": "https://www.together.ai/blog/rss.xml",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "We've refreshed our visual identity — designed with Pentagram to express how Together AI connects open-source innovation, systems research, and builders to unlock new possibilities.",
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69a5b2ad74a26e0d1ab3f1ee_20260228_Intro_TAI_New_Look_Blog_1200x630.png",
+      "published": "2026-03-02T00:00:00+00:00",
+      "firstSeen": "2026-03-05T21:40:49.016100+00:00",
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.1403
     },
     {
       "title": "Introducing... Life Without",
@@ -558,8 +572,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.499
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.4895
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -568,12 +582,12 @@
       "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "sourceWeight": 0.85,
       "category": "Science",
-      "summary": "The COP30 climate summit is taking place in the Brazilian city of Bel\u00e9m, a gateway to the Amazon rainforest, which continues to face widespread deforestation. We all know that our climate is changing and that we are largely responsible for this, but we can\u2019t tackle the problem unless we understand what\u2019s going on.One scientist who\u2019s done more than most to rectify this is Professor Pierre Friedlingstein. He\u2019s a prominent climate scientist and Chair in Mathematical Modelling of the Climate System at Exeter University. His models have transformed our understanding of climate change, revealing a c",
+      "summary": "The COP30 climate summit is taking place in the Brazilian city of Belém, a gateway to the Amazon rainforest, which continues to face widespread deforestation. We all know that our climate is changing and that we are largely responsible for this, but we can’t tackle the problem unless we understand what’s going on.One scientist who’s done more than most to rectify this is Professor Pierre Friedlingstein. He’s a prominent climate scientist and Chair in Mathematical Modelling of the Climate System at Exeter University. His models have transformed our understanding of climate change, revealing a c",
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.2272
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.2263
     },
     {
       "title": "The Life Scientific: Julia Simner",
@@ -582,12 +596,12 @@
       "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "sourceWeight": 0.85,
       "category": "Science",
-      "summary": "Imagine if you were listening to an opera or a Taylor Swift concert, and as the lights in the auditorium dimmed, the music was accompanied by a rainbow of colours only you could see. Perhaps while listening to your friends talking, you simultaneously experience a smorgasbord of tastes, with different words evoking different flavours, maybe a delicious ice cream, or something as disgusting as ear wax...\nThis merging of the senses is known as synaesthesia, and it\u2019s the rich research world of neuropsychologist Professor Julia Simner. Julia runs the Multisense lab at the University of Sussex and h",
+      "summary": "Imagine if you were listening to an opera or a Taylor Swift concert, and as the lights in the auditorium dimmed, the music was accompanied by a rainbow of colours only you could see. Perhaps while listening to your friends talking, you simultaneously experience a smorgasbord of tastes, with different words evoking different flavours, maybe a delicious ice cream, or something as disgusting as ear wax...\nThis merging of the senses is known as synaesthesia, and it’s the rich research world of neuropsychologist Professor Julia Simner. Julia runs the Multisense lab at the University of Sussex and h",
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-02-23T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-07T22:53:47.594316+00:00",
-      "score": 1.1904
+      "lastSeen": "2026-03-07T23:48:19.011163+00:00",
+      "score": 1.1903
     }
   ],
   "errors": []
