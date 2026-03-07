@@ -1,6 +1,20 @@
 {
   "date": "2026-03-07",
-  "updatedAt": "2026-03-07T13:51:43.159138+00:00",
-  "items": [],
+  "updatedAt": "2026-03-07T14:54:39.405327+00:00",
+  "items": [
+    {
+      "title": "The OpenClaw superfan meetup serves optimism and lobster",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/890517/openclaw-clawcon-meetup-nyc-open-source-ai",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "The woman at the door wore a plush lobster headdress. She sat in the front hallway of a multistory event venue in Manhattan, beside a bundle of wristbands. If she granted you one, the world of ClawCon beckoned behind her - full of vibey pink and purple lighting, lobster claw headbands, multicolored name tags, sponsor [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268393_Clawcon_HField_0007.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-03-07T14:00:00+00:00",
+      "firstSeen": "2026-03-07T14:54:39.405327+00:00",
+      "lastSeen": "2026-03-07T14:54:39.405327+00:00",
+      "score": 2.1225
+    }
+  ],
   "errors": []
 }
