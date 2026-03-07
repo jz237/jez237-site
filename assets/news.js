@@ -40,9 +40,9 @@ function placeholderImage(source) {
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
-function renderNews(items, featuredUrlSet = new Set()) {
-  const wrap = document.getElementById('news-grid');
-  wrap.innerHTML = '';
+function renderNews(items, featuredUrlSet = new Set(), container = null) {
+  const wrap = container || document.getElementById('news-grid');
+  if (!container) wrap.innerHTML = '';
 
   if (!items.length) {
     wrap.appendChild(el('div', 'item', 'No news items available right now.'));
@@ -129,15 +129,33 @@ async function init() {
         });
       }
 
-      const featuredByScore = [...items]
-        .sort((a, b) => (b.score || 0) - (a.score || 0))
-        .slice(0, Math.max(10, Math.round(items.length * 0.22)));
-      const featuredSet = new Set(featuredByScore.map(i => i.url));
-
       if (mode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
       else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
 
-      renderNews(items.slice(0, 75), featuredSet);
+      const aiItems = items.filter(i => (i.category || 'AI') === 'AI').slice(0, 60);
+      const sciItems = items.filter(i => i.category === 'Science').slice(0, 30);
+
+      const wrap = document.getElementById('news-grid');
+      wrap.innerHTML = '';
+
+      function renderSection(title, sectionItems) {
+        if (!sectionItems.length) return;
+        const hdr = document.createElement('h2');
+        hdr.className = 'news-section-heading';
+        hdr.textContent = title;
+        wrap.appendChild(hdr);
+        const grid = document.createElement('div');
+        grid.className = 'news-inner-grid';
+        wrap.appendChild(grid);
+        const featuredByScore = [...sectionItems]
+          .sort((a, b) => (b.score || 0) - (a.score || 0))
+          .slice(0, Math.max(4, Math.round(sectionItems.length * 0.22)));
+        const featuredSet = new Set(featuredByScore.map(i => i.url));
+        renderNews(sectionItems, featuredSet, grid);
+      }
+
+      renderSection('🤖 Artificial Intelligence', aiItems);
+      renderSection('🔬 Discover / Science', sciItems);
     }
 
     latestBtn.onclick = () => { mode = 'latest'; applyFilters(); };
