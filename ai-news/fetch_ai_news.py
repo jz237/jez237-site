@@ -380,7 +380,11 @@ def main():
     today_items.sort(key=lambda x: x["score"], reverse=True)
     daily_top = today_items[:TOP_DAILY_COUNT]
 
-    latest = sorted(all_items, key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:TOP_LATEST_COUNT]
+    ai_items = sorted([i for i in all_items if i.get("category","AI") == "AI"],
+                      key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:40]
+    sci_items = sorted([i for i in all_items if i.get("category") == "Science"],
+                       key=lambda x: (x["published_dt"], x["score"]), reverse=True)[:20]
+    latest = ai_items + sci_items
 
     # Strip helper key
     for coll in (all_items, daily_top, latest):
