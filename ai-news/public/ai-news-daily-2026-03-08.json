@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T09:01:09.800544+00:00",
+  "updatedAt": "2026-03-08T09:56:04.191271+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 3.0559
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 3.0319
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -28,7 +28,7 @@
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.4193
+      "score": 2.3925
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -42,7 +42,21 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.3834
+      "score": 2.3574
+    },
+    {
+      "title": "I finally left ChatGPT: Here are the 5 steps I took first",
+      "url": "https://www.androidauthority.com/chatgpt-steps-before-leaving-3646981",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Leaving is easy in theory, but if you don't take a few extra steps, you could end up regretting it. ChatGPT has received a lot of negative attention after announcing its partnership with the US Department of Defense, essentially taking the job from Anthropic after the latter company refused to back …",
+      "image": "https://ic-cdn.flipboard.com/androidauthority.com/b51c9c07d655e2bea79dade7919dfbad39113c43/_xlarge.jpeg",
+      "published": "2026-03-08T09:00:08+00:00",
+      "firstSeen": "2026-03-08T09:56:04.191271+00:00",
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.1219
     },
     {
       "title": "Why have an Apple Watch when you can have smart rosary beads?",
@@ -55,8 +69,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/s83zrzihhsYcGKo5AsWGG-1920-80.jpg",
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.1193
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.0925
     },
     {
       "title": "OpenAI robotics lead quits after Pentagon AI network deal",
@@ -70,7 +84,7 @@
       "published": "2026-03-08T07:53:33+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.1161
+      "score": 2.0893
     },
     {
       "title": "Honor&#8217;s Robot phone is real, and coming later this year",
@@ -83,8 +97,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Honor-Robot-Phone.png",
       "published": "2026-03-08T07:00:24+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0902
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.0641
     },
     {
       "title": "A roadmap for AI, if anyone will listen",
@@ -97,8 +111,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
       "published": "2026-03-08T06:05:26+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0641
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.0386
     },
     {
       "title": "International Women’s Day: Women Hold Just 18% Leadership Roles In India But Outpace Men In AI Readiness",
@@ -111,8 +125,8 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/f801b26c073174d648e61566ccf63a15454ad340/_xlarge.jpeg",
       "published": "2026-03-08T05:43:23+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0538
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.0286
     },
     {
       "title": "OpenAI robotics chief quits over AI’s potential use for war and surveillance",
@@ -125,8 +139,8 @@
       "image": "https://s.france24.com/media/display/aa643d1c-1aad-11f1-b81a-005056bfb2b6/w:1280/p:16x9/2026-03-04T012358Z-954232101-RC2LU7AFX5KU-RTRMADP-3-OPENAI-NATO.jpg",
       "published": "2026-03-08T05:26:37+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.046
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.021
     },
     {
       "title": "10 ways teachers can use AI",
@@ -139,8 +153,8 @@
       "image": "https://ic-cdn.flipboard.com/fastcompany.com/5f42692455616f4366c2407397c22a4af1fee938/_xlarge.webp",
       "published": "2026-03-08T05:05:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0361
+      "lastSeen": "2026-03-08T09:56:04.191271+00:00",
+      "score": 2.0113
     },
     {
       "title": "NotebookLM is readying a new feature to make its notebooks easier to understand",
@@ -154,7 +168,7 @@
       "published": "2026-03-08T00:53:07+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
       "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 1.9275
+      "score": 1.9055
     }
   ],
   "errors": []
