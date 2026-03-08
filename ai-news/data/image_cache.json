@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-08T07:53:56.645626+00:00",
+  "updatedAt": "2026-03-08T09:01:09.800544+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -164,6 +164,10 @@
     "https://www.sciencedaily.com/releases/2026/03/260302030642.htm": {
       "image": "https://www.sciencedaily.com/images/1920/ai-therapy-robot.webp",
       "checkedAt": "2026-03-08T05:02:47.839700+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/07/building-next-gen-agentic-ai-a-complete-framework-for-cognitive-blueprint-driven-runtime-agents-with-memory-tools-and-validation": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-27-1024x731.png",
+      "checkedAt": "2026-03-08T09:01:09.800544+00:00"
     }
   }
 }
