@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T19:46:43.125737+00:00",
+  "updatedAt": "2026-03-08T20:54:59.264103+00:00",
   "items": [
     {
       "title": "ChatGPT 5.4 Introduces Native Computer Control for Web Tasks",
@@ -14,7 +14,7 @@
       "published": "2026-03-08T12:38:09+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
       "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 3.352
+      "score": 3.324
     },
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -27,8 +27,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 2.809
+      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
+      "score": 2.7869
     },
     {
       "title": "Apple's not done: 3 more products coming this spring",
@@ -41,8 +41,8 @@
       "image": "https://ic-cdn.flipboard.com/cultofmac.com/8f9e36ad55d55a97d2c617c9884f6b2bb6fb7ba7/_large.webp",
       "published": "2026-03-08T14:00:43+00:00",
       "firstSeen": "2026-03-08T14:55:02.222857+00:00",
-      "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 2.6872
+      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
+      "score": 2.658
     },
     {
       "title": "5 things Samsung needs to do to get me excited about its flagships again",
@@ -56,7 +56,7 @@
       "published": "2026-03-08T13:00:10+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.6613
+      "score": 2.6329
     },
     {
       "title": "I Wrote A Resume For A $180,000 Job Using ChatGPT 5.4. This Happened",
@@ -69,8 +69,8 @@
       "image": "https://ic-cdn.flipboard.com/forbes.com/5f89bc69a9271706008905d3d71c89634263494d/_large.jpeg",
       "published": "2026-03-08T11:14:34+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 2.6178
+      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
+      "score": 2.5908
     },
     {
       "title": "Explainable AI is making black box models worthless in the agentic era",
@@ -83,8 +83,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/gWr6NrfMqA5kB42af2aice-2200-80.jpg",
       "published": "2026-03-08T15:00:00+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 2.3133
+      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
+      "score": 2.2833
     },
     {
       "title": "Trump’s DHS agents are wearing Meta AI glasses. But who are they recording – and why?",
@@ -98,7 +98,21 @@
       "published": "2026-03-08T14:38:28+00:00",
       "firstSeen": "2026-03-08T16:58:20.710532+00:00",
       "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.3037
+      "score": 2.274
+    },
+    {
+      "title": "Memory shortage raises concerns for AI smartphone supply",
+      "url": "https://www.techinasia.com/news/memory-shortage-raises-concerns-for-ai-smartphone-supply",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At MWC Barcelona 2026, device makers showcased AI-powered phones, but concerns over a Middle East conflict and a global memory chip shortage cast …",
+      "image": "https://cdn.techinasia.com/cloudinary/transformations/wp-content/uploads/2026/03/1772413742_2afebf8cfff0df2257a820337a8d8235_v1772413742_xlarge.jpg",
+      "published": "2026-03-08T20:01:48+00:00",
+      "firstSeen": "2026-03-08T20:54:59.264103+00:00",
+      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
+      "score": 2.1232
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -112,7 +126,7 @@
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 2.143
+      "score": 2.1184
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -126,7 +140,7 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.1164
+      "score": 2.0926
     },
     {
       "title": "Is AI productivity prompting burnout? Study finds new pattern of \"AI brain fry\"",
@@ -140,7 +154,7 @@
       "published": "2026-03-08T17:57:54+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
       "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 2.096
+      "score": 2.0634
     },
     {
       "title": "Musk’s two-word response to Anthropic CEO’s claim its AI may have gained consciousness",
@@ -153,22 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/6d0a8561277292e518ce0ecee62c256d3833137f/_xlarge.jpeg",
       "published": "2026-03-08T17:13:05+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
-      "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 2.0745
-    },
-    {
-      "title": "Meta smart glasses privacy concerns grow",
-      "url": "https://www.foxnews.com/tech/meta-smart-glasses-privacy-concerns-grow",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Smart glasses promise a future where technology blends into everyday life. You can ask a question, snap a quick video or identify what you are looking at in seconds. It sounds convenient. However, a new investigation suggests the experience may come with a privacy tradeoff many users never expected. …",
-      "image": "https://ic-cdn.flipboard.com/foxnews.com/ae5def5125b088a056fe1a33ef3762b18b6bafc6/_xlarge.jpeg",
-      "published": "2026-03-08T17:00:45+00:00",
-      "firstSeen": "2026-03-08T19:03:42.489548+00:00",
-      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 2.0686
+      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
+      "score": 2.0426
     }
   ],
   "errors": []
