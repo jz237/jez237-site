@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-08T22:54:59.852078+00:00",
+  "updatedAt": "2026-03-08T23:52:37.584082+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -168,6 +168,10 @@
     "https://www.marktechpost.com/2026/03/07/building-next-gen-agentic-ai-a-complete-framework-for-cognitive-blueprint-driven-runtime-agents-with-memory-tools-and-validation": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-27-1024x731.png",
       "checkedAt": "2026-03-08T09:01:09.800544+00:00"
+    },
+    "https://www.aol.com/ryan-gosling-breaks-character-over-161802856.html": {
+      "image": "",
+      "checkedAt": "2026-03-08T23:52:37.584082+00:00"
     }
   }
 }

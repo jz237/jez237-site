@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T22:54:59.852078+00:00",
+  "updatedAt": "2026-03-08T23:52:37.584082+00:00",
   "items": [
     {
       "title": "ChatGPT 5.4 Introduces Native Computer Control for Web Tasks",
@@ -14,7 +14,7 @@
       "published": "2026-03-08T12:38:09+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
       "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 3.2767
+      "score": 3.255
     },
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -27,8 +27,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 2.7498
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.7327
     },
     {
       "title": "Apple's not done: 3 more products coming this spring",
@@ -41,8 +41,8 @@
       "image": "https://ic-cdn.flipboard.com/cultofmac.com/8f9e36ad55d55a97d2c617c9884f6b2bb6fb7ba7/_large.webp",
       "published": "2026-03-08T14:00:43+00:00",
       "firstSeen": "2026-03-08T14:55:02.222857+00:00",
-      "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 2.609
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.5863
     },
     {
       "title": "5 things Samsung needs to do to get me excited about its flagships again",
@@ -56,7 +56,7 @@
       "published": "2026-03-08T13:00:10+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.5852
+      "score": 2.5632
     },
     {
       "title": "I Wrote A Resume For A $180,000 Job Using ChatGPT 5.4. This Happened",
@@ -69,8 +69,8 @@
       "image": "https://ic-cdn.flipboard.com/forbes.com/5f89bc69a9271706008905d3d71c89634263494d/_large.jpeg",
       "published": "2026-03-08T11:14:34+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 2.5454
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.5244
     },
     {
       "title": "Explainable AI is making black box models worthless in the agentic era",
@@ -84,7 +84,7 @@
       "published": "2026-03-08T15:00:00+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
       "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 2.2329
+      "score": 2.2096
     },
     {
       "title": "Trump’s DHS agents are wearing Meta AI glasses. But who are they recording – and why?",
@@ -97,8 +97,22 @@
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/ac600e3bf50a70e018b7449966d5550fc7ee0e27/_xlarge.jpeg",
       "published": "2026-03-08T14:38:28+00:00",
       "firstSeen": "2026-03-08T16:58:20.710532+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.2241
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.2011
+    },
+    {
+      "title": "I’m begging photographers not to use AI to write their Instagram captions. Here’s why it’s such a bad idea",
+      "url": "https://www.digitalcameraworld.com/tech/artificial-intelligence/im-begging-photographers-not-to-use-ai-to-write-their-instagram-captions-heres-why-its-such-a-bad-idea",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A few days ago, the Instagram algorithm served me a gorgeous image of a leopard by a photographer I don’t follow. I clicked the caption to find out …",
+      "image": "https://cdn.mos.cms.futurecdn.net/gwDx5oUGYdDvUwvnGngZvi-2560-80.jpg",
+      "published": "2026-03-08T22:20:00+00:00",
+      "firstSeen": "2026-03-08T23:52:37.584082+00:00",
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.1038
     },
     {
       "title": "Why women are disappearing from Europe’s tech workforce",
@@ -111,8 +125,8 @@
       "image": "https://ic-cdn.flipboard.com/euronews.com/1d7390d95191e57168084e11afe399c0b4f96ee4/_xlarge.jpeg",
       "published": "2026-03-08T22:17:46+00:00",
       "firstSeen": "2026-03-08T11:46:04.657457+00:00",
-      "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 2.1312
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.1027
     },
     {
       "title": "Anthropic finally reveals which jobs AI cannot replace",
@@ -125,8 +139,8 @@
       "image": "https://ic-cdn.flipboard.com/thestreet.com/18e25eff5a204b40bab959c78177aadaea1bdacd/_xlarge.jpeg",
       "published": "2026-03-08T21:37:00+00:00",
       "firstSeen": "2026-03-08T22:54:59.852078+00:00",
-      "lastSeen": "2026-03-08T22:54:59.852078+00:00",
-      "score": 2.111
+      "lastSeen": "2026-03-08T23:52:37.584082+00:00",
+      "score": 2.0831
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -140,7 +154,7 @@
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 2.0768
+      "score": 2.0577
     },
     {
       "title": "Memory shortage raises concerns for AI smartphone supply",
@@ -154,21 +168,7 @@
       "published": "2026-03-08T20:01:48+00:00",
       "firstSeen": "2026-03-08T20:54:59.264103+00:00",
       "lastSeen": "2026-03-08T20:54:59.264103+00:00",
-      "score": 2.0652
-    },
-    {
-      "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
-      "url": "https://www.marktechpost.com/2026/03/07/building-next-gen-agentic-ai-a-complete-framework-for-cognitive-blueprint-driven-runtime-agents-with-memory-tools-and-validation",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In this tutorial, we build a complete cognitive blueprint and runtime agent framework. We define structured blueprints for identity, goals, planning, …",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-27-1024x731.png",
-      "published": "2026-03-08T06:46:10+00:00",
-      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0524
+      "score": 2.0385
     }
   ],
   "errors": []
