@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T05:02:47.839700+00:00",
+  "updatedAt": "2026-03-08T07:09:08.796191+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,50 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T05:02:47.839700+00:00",
-      "score": 3.1675
+      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
+      "score": 3.1068
+    },
+    {
+      "title": "A roadmap for AI, if anyone will listen",
+      "url": "https://techcrunch.com/2026/03/07/a-roadmap-for-ai-if-anyone-will-listen",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "While Washington’s breakup with Anthropic exposed the complete lack of any coherent rules governing artificial intelligence, a bipartisan coalition of thinkers has assembled something the government has so far declined to produce: a framework for what responsible AI development should actually look …",
+      "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
+      "published": "2026-03-08T06:05:26+00:00",
+      "firstSeen": "2026-03-08T07:09:08.796191+00:00",
+      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
+      "score": 2.118
+    },
+    {
+      "title": "International Women’s Day: Women Hold Just 18% Leadership Roles In India But Outpace Men In AI Readiness",
+      "url": "https://in.mashable.com/tech/106743/international-womens-day-women-hold-just-18-leadership-roles-in-india-but-outpace-men-in-ai-readines",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "On International Women's Day, new data from LinkedIn highlights that women remain underrepresented in India’s workforce, with women making up 35.5% of entry-level roles but only 28.1% of the overall workforce. The data also shows that women with bachelor’s degrees experience the steepest drop in …",
+      "image": "https://ic-cdn.flipboard.com/mashable.com/f801b26c073174d648e61566ccf63a15454ad340/_xlarge.jpeg",
+      "published": "2026-03-08T05:43:43+00:00",
+      "firstSeen": "2026-03-08T07:09:08.796191+00:00",
+      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
+      "score": 2.1073
+    },
+    {
+      "title": "NotebookLM is readying a new feature to make its notebooks easier to understand",
+      "url": "https://www.androidpolice.com/notebooklm-readying-new-feature-make-notebooks-easier-to-understand",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "You may have come across debates on social media platforms and forums about whether Google's NotebookLM is as useful as people think. While it may …",
+      "image": "https://static0.anpoimages.com/wordpress/wp-content/uploads/2025/10/a-notebook-with-the-notebooklm-logo-on-its-cover-a-blue-pen-resting-on-top-and-the-notebooklm-name-displayed-below.png?w=1600&h=900&fit=crop",
+      "published": "2026-03-08T00:53:07+00:00",
+      "firstSeen": "2026-03-08T07:09:08.796191+00:00",
+      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
+      "score": 1.9742
     }
   ],
   "errors": []
