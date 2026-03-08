@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T07:53:56.645626+00:00",
+  "updatedAt": "2026-03-08T09:01:09.800544+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -14,7 +14,63 @@
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
       "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 3.0862
+      "score": 3.0559
+    },
+    {
+      "title": "AI agents: Powering Europe’s most ambitious startups",
+      "url": "https://www.techradar.com/pro/ai-agents-powering-europes-most-ambitious-startups",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "There is little indication that the momentum of Europe’s startup community will slow down, with $44 billion of funding raised last year. Yet, …",
+      "image": "https://cdn.mos.cms.futurecdn.net/rNZmVCrdHzszaDCyTrBWmj-2560-80.jpg",
+      "published": "2026-03-08T08:00:00+00:00",
+      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.4193
+    },
+    {
+      "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
+      "url": "https://www.marktechpost.com/2026/03/07/building-next-gen-agentic-ai-a-complete-framework-for-cognitive-blueprint-driven-runtime-agents-with-memory-tools-and-validation",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In this tutorial, we build a complete cognitive blueprint and runtime agent framework. We define structured blueprints for identity, goals, planning, …",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-27-1024x731.png",
+      "published": "2026-03-08T06:46:10+00:00",
+      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.3834
+    },
+    {
+      "title": "Why have an Apple Watch when you can have smart rosary beads?",
+      "url": "https://www.creativebloq.com/design/product-design/why-have-an-apple-watch-when-you-can-have-smart-rosary-beads",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Faith meets firmware. Acer has put out some curious products over the last 50 years. As well as laptops, PCs and monitors, the Taiwanese brand has …",
+      "image": "https://cdn.mos.cms.futurecdn.net/s83zrzihhsYcGKo5AsWGG-1920-80.jpg",
+      "published": "2026-03-08T08:00:00+00:00",
+      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.1193
+    },
+    {
+      "title": "OpenAI robotics lead quits after Pentagon AI network deal",
+      "url": "https://www.techinasia.com/news/openai-robotics-lead-quits-after-pentagon-ai-network-deal",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Caitlin Kalinowski, a member of OpenAI’s robotics team, resigned after the company agreed to deploy its AI models on the Pentagon’s classified …",
+      "image": "https://cdn.techinasia.com/cloudinary/transformations/wp-content/uploads/2026/03/1772956443_010642f7e68ce3c9467ec2cbcde8aa6e_v1772956442_xlarge.jpg",
+      "published": "2026-03-08T07:53:33+00:00",
+      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.1161
     },
     {
       "title": "Honor&#8217;s Robot phone is real, and coming later this year",
@@ -27,8 +83,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Honor-Robot-Phone.png",
       "published": "2026-03-08T07:00:24+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 2.1231
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.0902
     },
     {
       "title": "A roadmap for AI, if anyone will listen",
@@ -41,8 +97,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
       "published": "2026-03-08T06:05:26+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 2.0961
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.0641
     },
     {
       "title": "International Women’s Day: Women Hold Just 18% Leadership Roles In India But Outpace Men In AI Readiness",
@@ -53,10 +109,10 @@
       "category": "AI",
       "summary": "On International Women's Day, new data from LinkedIn highlights that women remain underrepresented in India’s workforce, with women making up 35.5% of entry-level roles but only 28.1% of the overall workforce. The data also shows that women with bachelor’s degrees experience the steepest drop in …",
       "image": "https://ic-cdn.flipboard.com/mashable.com/f801b26c073174d648e61566ccf63a15454ad340/_xlarge.jpeg",
-      "published": "2026-03-08T05:43:43+00:00",
+      "published": "2026-03-08T05:43:23+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 2.0856
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.0538
     },
     {
       "title": "OpenAI robotics chief quits over AI’s potential use for war and surveillance",
@@ -69,8 +125,22 @@
       "image": "https://s.france24.com/media/display/aa643d1c-1aad-11f1-b81a-005056bfb2b6/w:1280/p:16x9/2026-03-04T012358Z-954232101-RC2LU7AFX5KU-RTRMADP-3-OPENAI-NATO.jpg",
       "published": "2026-03-08T05:26:37+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 2.0775
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.046
+    },
+    {
+      "title": "10 ways teachers can use AI",
+      "url": "https://www.fastcompany.com/91504492/10-ways-teachers-can-use-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A few practical ways anyone who teaches, coaches, or leads can put AI to work. This article is republished with permission from Wonder Tools, a newsletter that helps you discover the most useful sites and apps. I recently talked with Lance Eaton, Senior Associate Director of AI and Teaching & …",
+      "image": "https://ic-cdn.flipboard.com/fastcompany.com/5f42692455616f4366c2407397c22a4af1fee938/_xlarge.webp",
+      "published": "2026-03-08T05:05:00+00:00",
+      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
+      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
+      "score": 2.0361
     },
     {
       "title": "NotebookLM is readying a new feature to make its notebooks easier to understand",
@@ -84,7 +154,7 @@
       "published": "2026-03-08T00:53:07+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
       "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 1.9553
+      "score": 1.9275
     }
   ],
   "errors": []
