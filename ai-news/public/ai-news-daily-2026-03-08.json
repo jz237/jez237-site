@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T14:55:02.222857+00:00",
+  "updatedAt": "2026-03-08T15:49:13.252327+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
-      "score": 2.9115
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.8914
     },
     {
       "title": "Apple's not done: 3 more products coming this spring",
@@ -27,8 +27,8 @@
       "image": "https://ic-cdn.flipboard.com/cultofmac.com/8f9e36ad55d55a97d2c617c9884f6b2bb6fb7ba7/_large.webp",
       "published": "2026-03-08T14:00:43+00:00",
       "firstSeen": "2026-03-08T14:55:02.222857+00:00",
-      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
-      "score": 2.8227
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.7961
     },
     {
       "title": "5 things Samsung needs to do to get me excited about its flagships again",
@@ -42,7 +42,35 @@
       "published": "2026-03-08T13:00:10+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.793
+      "score": 2.7672
+    },
+    {
+      "title": "I Wrote A Resume For A $180,000 Job Using ChatGPT 5.4. This Happened",
+      "url": "https://www.forbes.com/sites/rachelwells/2026/03/08/i-wrote-a-resume-for-a-180000-job-using-chatgpt-54-this-happened",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Just mere days after ChatGPT 5.3 was released, now we have another version, ChatGPT 5.4 (also known as GPT‑5.4 Thinking). OpenAI stated on its website that version 5.4 is designed to be the most capable professional workhorse to date, with more advanced functionality and better usability features …",
+      "image": "https://ic-cdn.flipboard.com/forbes.com/5f89bc69a9271706008905d3d71c89634263494d/_large.jpeg",
+      "published": "2026-03-08T11:14:34+00:00",
+      "firstSeen": "2026-03-08T15:49:13.252327+00:00",
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.7187
+    },
+    {
+      "title": "Explainable AI is making black box models worthless in the agentic era",
+      "url": "https://www.techradar.com/pro/explainable-ai-is-making-black-box-models-worthless-in-the-agentic-era",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For years, enterprises tolerated opaque automation because outcomes were predictable. Early systems followed fixed rules, handled narrow tasks, and …",
+      "image": "https://cdn.mos.cms.futurecdn.net/gWr6NrfMqA5kB42af2aice-2200-80.jpg",
+      "published": "2026-03-08T15:00:00+00:00",
+      "firstSeen": "2026-03-08T15:49:13.252327+00:00",
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.4252
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -56,7 +84,7 @@
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.2577
+      "score": 2.2352
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -70,7 +98,35 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.2272
+      "score": 2.2055
+    },
+    {
+      "title": "How to draw Marvel superheroes with attitude using a hybrid art approach",
+      "url": "https://www.creativebloq.com/art/digital-art/how-to-draw-marvel-superheroes-with-attitude-using-a-hybrid-art-approach",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Léo Chiola reveals how he created his Spider-Punk Marvel Snap card illustration. I had the chance to illustrate several Spider-Verse cards for …",
+      "image": "https://cdn.mos.cms.futurecdn.net/22YL7MX8voSSnPnTwBRNZK-1000-80.jpg",
+      "published": "2026-03-08T14:00:00+00:00",
+      "firstSeen": "2026-03-08T15:49:13.252327+00:00",
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.0958
+    },
+    {
+      "title": "ChatGPT has delayed the roll out of its adult mode again: 'Getting the experience right will take more time'",
+      "url": "https://www.techradar.com/ai-platforms-assistants/chatgpt/chatgpt-has-delayed-the-roll-out-of-its-adult-mode-again-getting-the-experience-right-will-take-more-time",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It was last October when OpenAI CEO Sam Altman promised that ChatGPT would get an adult mode — for generating erotica and other kinds of similar …",
+      "image": "https://cdn.mos.cms.futurecdn.net/8ymAbncGYJmbanK33tBzZ6-2560-80.jpg",
+      "published": "2026-03-08T13:30:00+00:00",
+      "firstSeen": "2026-03-08T15:49:13.252327+00:00",
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.0813
     },
     {
       "title": "BYD’s 1.5 MW “Flash” Charging Wasn’t A Gimmick. The Battery Chemistry Behind It Could Change The Industry.",
@@ -83,8 +139,8 @@
       "image": "https://ic-cdn.flipboard.com/cleantechnica.com/b3f262926a18dce81b049f0103162e7777edeb28/_xlarge.jpeg",
       "published": "2026-03-08T13:12:05+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
-      "score": 2.0988
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.0728
     },
     {
       "title": "I used to swear by Pixel's camera greatness, but now I'm moving on",
@@ -97,8 +153,8 @@
       "image": "https://ic-cdn.flipboard.com/androidauthority.com/36024140a9adf3eaa3bd7d636680ca5f6d4d2474/_xlarge.jpeg",
       "published": "2026-03-08T13:02:48+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
-      "score": 2.0943
+      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
+      "score": 2.0684
     },
     {
       "title": "'Women don't need another inspirational slogan': the problem with International Women’s Day branding",
@@ -112,63 +168,7 @@
       "published": "2026-03-08T13:00:00+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.0929
-    },
-    {
-      "title": "I Asked ChatGPT To Compare Everyday Expenses From 2019 to 2026 — Here’s What Changed",
-      "url": "https://www.gobankingrates.com/money/economy/i-asked-chatgpt-compare-everyday-expenses-2019-to-2026-what-changed",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "From groceries to rent to car insurance, everyday costs have climbed since 2019. Tips from ChatGPT help families adjust and save.",
-      "image": "https://ic-cdn.flipboard.com/gobankingrates.com/b8d400c29a3d4d99060f2012691fe06ae96bc189/_xlarge.jpeg",
-      "published": "2026-03-08T12:22:42+00:00",
-      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
-      "score": 2.0751
-    },
-    {
-      "title": "Why women are disappearing from Europe’s tech workforce",
-      "url": "https://www.euronews.com/next/2026/03/08/why-women-are-disappearing-from-europes-tech-workforce",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Workplace culture is the biggest reason why women are leaving their tech jobs, a new report shows. Women make up less than one in five tech workers in …",
-      "image": "https://ic-cdn.flipboard.com/euronews.com/1d7390d95191e57168084e11afe399c0b4f96ee4/_xlarge.jpeg",
-      "published": "2026-03-08T11:45:53+00:00",
-      "firstSeen": "2026-03-08T11:46:04.657457+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0578
-    },
-    {
-      "title": "The Etymology of the N-Word",
-      "url": "https://www.levelman.com/the-etymology-of-the-n-word",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Etymology: The study of the origin of words and the way in which their meanings have changed throughout history.Warning: For those offended by the …",
-      "image": "https://ic-cdn.flipboard.com/levelman.com/207f0944d82b8e81218077ec15a2a812b4a545b9/_xlarge.jpeg",
-      "published": "2026-03-08T11:30:44+00:00",
-      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
-      "score": 2.0507
-    },
-    {
-      "title": "OpenAI on Surveillance and Autonomous Killings: You’re Going to Have to Trust Us",
-      "url": "https://theintercept.com/2026/03/08/openai-anthropic-military-contract-ethics-surveillance",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI says Americans shouldn’t worry about the ethics of its new Pentagon contract. You’ll have to take their word for it (and Pete …",
-      "image": "https://ic-cdn.flipboard.com/theintercept.com/9af095341a79b45a1c44956c037627a14ca51d21/_xlarge.jpeg",
-      "published": "2026-03-08T11:10:00+00:00",
-      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.0412
+      "score": 2.0671
     }
   ],
   "errors": []
