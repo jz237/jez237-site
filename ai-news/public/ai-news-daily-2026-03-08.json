@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T07:09:08.796191+00:00",
+  "updatedAt": "2026-03-08T07:53:56.645626+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,22 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 3.1068
+      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
+      "score": 3.0862
+    },
+    {
+      "title": "Honor&#8217;s Robot phone is real, and coming later this year",
+      "url": "https://thenextweb.com/news/honors-robot-phone-is-real-and-coming-later-this-year",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The camera nods, dances to music, and tracks faces. The rest of the specs are a secret. Something unusual happened at Mobile World Congress this year. A device sat in a glass case at the Honor booth in Hall 3,  present, demonstrably functional, performing little robotic gestures for anyone who stopped to watch,  and yet [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Honor-Robot-Phone.png",
+      "published": "2026-03-08T07:00:24+00:00",
+      "firstSeen": "2026-03-08T07:53:56.645626+00:00",
+      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
+      "score": 2.1231
     },
     {
       "title": "A roadmap for AI, if anyone will listen",
@@ -27,8 +41,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
       "published": "2026-03-08T06:05:26+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 2.118
+      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
+      "score": 2.0961
     },
     {
       "title": "International Women’s Day: Women Hold Just 18% Leadership Roles In India But Outpace Men In AI Readiness",
@@ -41,8 +55,22 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/f801b26c073174d648e61566ccf63a15454ad340/_xlarge.jpeg",
       "published": "2026-03-08T05:43:43+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 2.1073
+      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
+      "score": 2.0856
+    },
+    {
+      "title": "OpenAI robotics chief quits over AI’s potential use for war and surveillance",
+      "url": "https://www.france24.com/en/americas/20260308-openai-robotics-chief-quits-over-ai-potential-use-for-war-and-surveillance-artificial-intelligence-pentagon",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A top robotics executive at OpenAI said Saturday she had resigned over the company’s deal with the US Department of Defense to allow its artificial intelligence to be used for war and potential domestic surveillance. OpenAI's top robotics executive said Saturday she had resigned over the artificial …",
+      "image": "https://s.france24.com/media/display/aa643d1c-1aad-11f1-b81a-005056bfb2b6/w:1280/p:16x9/2026-03-04T012358Z-954232101-RC2LU7AFX5KU-RTRMADP-3-OPENAI-NATO.jpg",
+      "published": "2026-03-08T05:26:37+00:00",
+      "firstSeen": "2026-03-08T07:53:56.645626+00:00",
+      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
+      "score": 2.0775
     },
     {
       "title": "NotebookLM is readying a new feature to make its notebooks easier to understand",
@@ -56,7 +84,7 @@
       "published": "2026-03-08T00:53:07+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
       "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 1.9742
+      "score": 1.9553
     }
   ],
   "errors": []
