@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T13:53:03.848580+00:00",
+  "updatedAt": "2026-03-08T14:55:02.222857+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,22 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.9351
+      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
+      "score": 2.9115
+    },
+    {
+      "title": "Apple's not done: 3 more products coming this spring",
+      "url": "https://www.cultofmac.com/news/apple-spring-2026",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple released no less than seven products last week, including the MacBook Neo, the M5 MacBook Air, the iPhone 17e and much more. But there are still three more products likely to be coming out of Cupertino this spring — and one of them is among Apple’s most popular offerings. Here’s what we can …",
+      "image": "https://ic-cdn.flipboard.com/cultofmac.com/8f9e36ad55d55a97d2c617c9884f6b2bb6fb7ba7/_large.webp",
+      "published": "2026-03-08T14:00:43+00:00",
+      "firstSeen": "2026-03-08T14:55:02.222857+00:00",
+      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
+      "score": 2.8227
     },
     {
       "title": "5 things Samsung needs to do to get me excited about its flagships again",
@@ -28,7 +42,7 @@
       "published": "2026-03-08T13:00:10+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.8234
+      "score": 2.793
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -42,7 +56,7 @@
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.2841
+      "score": 2.2577
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -56,7 +70,7 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.2527
+      "score": 2.2272
     },
     {
       "title": "BYD’s 1.5 MW “Flash” Charging Wasn’t A Gimmick. The Battery Chemistry Behind It Could Change The Industry.",
@@ -69,8 +83,8 @@
       "image": "https://ic-cdn.flipboard.com/cleantechnica.com/b3f262926a18dce81b049f0103162e7777edeb28/_xlarge.jpeg",
       "published": "2026-03-08T13:12:05+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.1293
+      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
+      "score": 2.0988
     },
     {
       "title": "I used to swear by Pixel's camera greatness, but now I'm moving on",
@@ -83,8 +97,8 @@
       "image": "https://ic-cdn.flipboard.com/androidauthority.com/36024140a9adf3eaa3bd7d636680ca5f6d4d2474/_xlarge.jpeg",
       "published": "2026-03-08T13:02:48+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.1247
+      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
+      "score": 2.0943
     },
     {
       "title": "'Women don't need another inspirational slogan': the problem with International Women’s Day branding",
@@ -98,7 +112,7 @@
       "published": "2026-03-08T13:00:00+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.1233
+      "score": 2.0929
     },
     {
       "title": "I Asked ChatGPT To Compare Everyday Expenses From 2019 to 2026 — Here’s What Changed",
@@ -111,8 +125,8 @@
       "image": "https://ic-cdn.flipboard.com/gobankingrates.com/b8d400c29a3d4d99060f2012691fe06ae96bc189/_xlarge.jpeg",
       "published": "2026-03-08T12:22:42+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.1049
+      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
+      "score": 2.0751
     },
     {
       "title": "Why women are disappearing from Europe’s tech workforce",
@@ -126,7 +140,7 @@
       "published": "2026-03-08T11:45:53+00:00",
       "firstSeen": "2026-03-08T11:46:04.657457+00:00",
       "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0871
+      "score": 2.0578
     },
     {
       "title": "The Etymology of the N-Word",
@@ -139,8 +153,8 @@
       "image": "https://ic-cdn.flipboard.com/levelman.com/207f0944d82b8e81218077ec15a2a812b4a545b9/_xlarge.jpeg",
       "published": "2026-03-08T11:30:44+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.0799
+      "lastSeen": "2026-03-08T14:55:02.222857+00:00",
+      "score": 2.0507
     },
     {
       "title": "OpenAI on Surveillance and Autonomous Killings: You’re Going to Have to Trust Us",
@@ -154,21 +168,7 @@
       "published": "2026-03-08T11:10:00+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.07
-    },
-    {
-      "title": "The Future We Feared Is Already Here",
-      "url": "https://www.nytimes.com/2026/03/08/opinion/ai-anthropic-claude-pentagon-hegseth-amodei.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "For years now, questions about A.I. have taken the form of “what happens if?” What happens if A.I. begins replacing workers? What happens if it becomes capable of writing its own code? What happens if it begins to deceive those testing its capabilities? What happens if governments use it for …",
-      "image": "https://static01.nyt.com/images/2026/03/08/multimedia/08klein-wklz/08klein-wklz-facebookJumbo.jpg",
-      "published": "2026-03-08T10:00:19+00:00",
-      "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.0376
+      "score": 2.0412
     }
   ],
   "errors": []
