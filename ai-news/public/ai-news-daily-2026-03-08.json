@@ -1,6 +1,21 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T00:05:52.647122+00:00",
-  "items": [],
+  "updatedAt": "2026-03-08T05:02:47.839700+00:00",
+  "items": [
+    {
+      "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
+      "url": "https://www.marktechpost.com/2026/03/07/yann-lecuns-new-ai-paper-argues-agi-is-misdefined-and-introduces-superhuman-adaptable-intelligence-sai-instead",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "What if the AI industry is optimizing for a goal that cannot be clearly defined or reliably measured? That is the central argument of a new paper by …",
+      "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
+      "published": "2026-03-08T03:57:57+00:00",
+      "firstSeen": "2026-03-08T05:02:47.839700+00:00",
+      "lastSeen": "2026-03-08T05:02:47.839700+00:00",
+      "score": 3.1675
+    }
+  ],
   "errors": []
 }
