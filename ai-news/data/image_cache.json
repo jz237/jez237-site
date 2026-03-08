@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-07T23:48:19.011163+00:00",
+  "updatedAt": "2026-03-08T00:05:52.647122+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -80,6 +80,74 @@
     "https://openai.com/index/frontier-alliance-partners": {
       "image": "",
       "checkedAt": "2026-03-07T23:48:19.011163+00:00"
+    },
+    "https://www.techrepublic.com/article/news-oracle-layoffs-ai-infrastructure-investment": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/boliviainteligente-k2jksaz9oWg-unsplash.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-bill-gates-terrapower-nuclear-reactor": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/bill-gates.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-byd-5-minute-ev-charging": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Screenshot-2026-03-07-025439.png",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-upgrades-security-breaches-and-industry-shakeups-define-the-week-in-tech": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_j3gj8vj3gj8vj3gj-1024x572.png",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/chatgpt-workplace-claims-fair-work-commission-australia": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/selective-focus-of-human-and-robot-hands-typing-on-2026-01-06-00-42-44-utc-1.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-hiring-bias-research": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AI-Hiring-Bias.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-amazon-connect-health-launch": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_vbbvitvbbvitvbbv.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/eightfold-ai-screening-laws": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AI-Candidate-Screening-Laws.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-efficiency-operational-blind-spots": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_353575025.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/cultural-cost-of-ai-efficiency": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_294548986.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-fastest-growing-tech-jobs-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/compagnons-Im_cQ6hQo10-unsplash-1.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-openai-codex-windows-app-launch": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/codex.png",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-anthropic-ceo-openai-military-messaging-lies": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/53202070940_ea57312b1a_k.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-underwater-data-centers-offshore-wind-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/windmill.png",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-kevin-oleary-ai-data-center-wonder-valley-utah": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03052026-kevin-oleary.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-anthropic-claude-ai-used-iran-war-despite-ban": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_12scjw12scjw12sc.jpg",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-music-transparency-tags-ai-music": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_afcidsafcidsafci-1024x572.png",
+      "checkedAt": "2026-03-08T00:05:52.647122+00:00"
     }
   }
 }
