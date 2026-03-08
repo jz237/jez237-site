@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T10:55:30.007850+00:00",
+  "updatedAt": "2026-03-08T11:46:04.657457+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 3.0066
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.9857
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -27,8 +27,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/rNZmVCrdHzszaDCyTrBWmj-2560-80.jpg",
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.3642
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.3407
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -42,7 +42,21 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.3301
+      "score": 2.3074
+    },
+    {
+      "title": "Why women are disappearing from Europe’s tech workforce",
+      "url": "https://www.euronews.com/next/2026/03/08/why-women-are-disappearing-from-europes-tech-workforce",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Workplace culture is the biggest reason why women are leaving their tech jobs, a new report shows. Women make up less than one in five tech workers in …",
+      "image": "https://ic-cdn.flipboard.com/euronews.com/1d7390d95191e57168084e11afe399c0b4f96ee4/_xlarge.jpeg",
+      "published": "2026-03-08T11:45:53+00:00",
+      "firstSeen": "2026-03-08T11:46:04.657457+00:00",
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.1499
     },
     {
       "title": "The Future We Feared Is Already Here",
@@ -55,8 +69,8 @@
       "image": "https://static01.nyt.com/images/2026/03/08/multimedia/08klein-wklz/08klein-wklz-facebookJumbo.jpg",
       "published": "2026-03-08T10:00:19+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.1223
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0974
     },
     {
       "title": "AI-generated videos are entering a truly troubling era",
@@ -66,11 +80,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "And I'm not the only one falling for it. Oh, how far we've come since the days of Will Smith eating spaghetti. While AI-generated images have become …",
-      "image": "https://cdn.mos.cms.futurecdn.net/yLn8PQYEaMCRGoDkHeRtDU-1916-80.jpg",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/14c9b9ae45cbe5bcc99a3eb1a15e3a4af63804a3/_xlarge.jpeg",
       "published": "2026-03-08T10:00:00+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.1221
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0973
     },
     {
       "title": "I finally left ChatGPT: Here are the 5 steps I took first",
@@ -83,8 +97,8 @@
       "image": "https://ic-cdn.flipboard.com/androidauthority.com/b51c9c07d655e2bea79dade7919dfbad39113c43/_xlarge.jpeg",
       "published": "2026-03-08T09:00:08+00:00",
       "firstSeen": "2026-03-08T09:56:04.191271+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0928
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0687
     },
     {
       "title": "This AI founder who quit her 9-to-5 law job has a warning for anyone dreaming of doing the same: ‘I’m working harder now than I ever did’",
@@ -97,8 +111,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/abb674ff8508e1d8c3794b611b280409f8f1ac33/_xlarge.jpeg",
       "published": "2026-03-08T08:03:00+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0656
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0421
     },
     {
       "title": "Why have an Apple Watch when you can have smart rosary beads?",
@@ -111,8 +125,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/s83zrzihhsYcGKo5AsWGG-1920-80.jpg",
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0642
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0407
     },
     {
       "title": "OpenAI robotics lead quits after Pentagon AI network deal",
@@ -126,7 +140,7 @@
       "published": "2026-03-08T07:53:33+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0611
+      "score": 2.0377
     },
     {
       "title": "Honor&#8217;s Robot phone is real, and coming later this year",
@@ -139,8 +153,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Honor-Robot-Phone.png",
       "published": "2026-03-08T07:00:24+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0366
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0137
     },
     {
       "title": "A roadmap for AI, if anyone will listen",
@@ -153,22 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
       "published": "2026-03-08T06:05:26+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0118
-    },
-    {
-      "title": "International Women’s Day: Women Hold Just 18% Leadership Roles In India But Outpace Men In AI Readiness",
-      "url": "https://in.mashable.com/tech/106743/international-womens-day-women-hold-just-18-leadership-roles-in-india-but-outpace-men-in-ai-readines",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "On International Women's Day, new data from LinkedIn highlights that women remain underrepresented in India’s workforce, with women making up 35.5% of entry-level roles but only 28.1% of the overall workforce. The data also shows that women with bachelor’s degrees experience the steepest drop in …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/f801b26c073174d648e61566ccf63a15454ad340/_xlarge.jpeg",
-      "published": "2026-03-08T05:43:23+00:00",
-      "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.002
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.9895
     }
   ],
   "errors": []
