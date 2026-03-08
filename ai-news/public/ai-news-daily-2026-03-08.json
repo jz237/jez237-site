@@ -1,6 +1,6 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T11:46:04.657457+00:00",
+  "updatedAt": "2026-03-08T13:53:03.848580+00:00",
   "items": [
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -13,8 +13,22 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.9857
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.9351
+    },
+    {
+      "title": "5 things Samsung needs to do to get me excited about its flagships again",
+      "url": "https://www.androidauthority.com/things-samsung-flagships-need-to-change-3645114",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "I'm tired of seeing the same thing each year. I used to look forward to Samsung’s Galaxy Unpacked event with excitement, waiting to see where the company was going to push its phones to next. But over the past few years, that enthusiasm waned and eventually turned into skepticism. With the launch of …",
+      "image": "https://ic-cdn.flipboard.com/androidauthority.com/f7871a3a965a567f004325903ddb90ed81ee2bd5/_xlarge.jpeg",
+      "published": "2026-03-08T13:00:10+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.8234
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -27,8 +41,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/rNZmVCrdHzszaDCyTrBWmj-2560-80.jpg",
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.3407
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.2841
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -42,7 +56,63 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.3074
+      "score": 2.2527
+    },
+    {
+      "title": "BYD’s 1.5 MW “Flash” Charging Wasn’t A Gimmick. The Battery Chemistry Behind It Could Change The Industry.",
+      "url": "https://cleantechnica.com/2026/03/08/byds-1-5-mw-flash-charging-wasnt-a-gimmick-the-battery-chemistry-behind-it-could-change-the-industry",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Earlier this week, fellow CleanTechnica writer Larry Evans covered the raw numbers behind BYD’s new 1.5-megawatt Flash Charging system. You can read …",
+      "image": "https://ic-cdn.flipboard.com/cleantechnica.com/b3f262926a18dce81b049f0103162e7777edeb28/_xlarge.jpeg",
+      "published": "2026-03-08T13:12:05+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.1293
+    },
+    {
+      "title": "I used to swear by Pixel's camera greatness, but now I'm moving on",
+      "url": "https://www.androidauthority.com/pixel-vs-xiaomi-best-camera-phone-3645685",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sorry Google, camera hardware still trumps software smarts. I love Pixels, and the Pixel 6 Pro marked my conversion to Google’s ecosystem, thanks in no small part to its incredibly powerful triple rear camera. Computational photography has proven its value over the years and remains a core part of …",
+      "image": "https://ic-cdn.flipboard.com/androidauthority.com/36024140a9adf3eaa3bd7d636680ca5f6d4d2474/_xlarge.jpeg",
+      "published": "2026-03-08T13:02:48+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.1247
+    },
+    {
+      "title": "'Women don't need another inspirational slogan': the problem with International Women’s Day branding",
+      "url": "https://www.creativebloq.com/design/advertising/women-dont-need-another-inspirational-slogan-the-problem-with-international-womens-day-branding",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sunny Bonnell reveals how brands can build lasting authenticity. International Women's Day (IWD) is a time to celebrate the social, economic, …",
+      "image": "https://cdn.mos.cms.futurecdn.net/TaLLTbEQAWnfKikmKLn7P8-1920-80.jpg",
+      "published": "2026-03-08T13:00:00+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.1233
+    },
+    {
+      "title": "I Asked ChatGPT To Compare Everyday Expenses From 2019 to 2026 — Here’s What Changed",
+      "url": "https://www.gobankingrates.com/money/economy/i-asked-chatgpt-compare-everyday-expenses-2019-to-2026-what-changed",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "From groceries to rent to car insurance, everyday costs have climbed since 2019. Tips from ChatGPT help families adjust and save.",
+      "image": "https://ic-cdn.flipboard.com/gobankingrates.com/b8d400c29a3d4d99060f2012691fe06ae96bc189/_xlarge.jpeg",
+      "published": "2026-03-08T12:22:42+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.1049
     },
     {
       "title": "Why women are disappearing from Europe’s tech workforce",
@@ -56,7 +126,35 @@
       "published": "2026-03-08T11:45:53+00:00",
       "firstSeen": "2026-03-08T11:46:04.657457+00:00",
       "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.1499
+      "score": 2.0871
+    },
+    {
+      "title": "The Etymology of the N-Word",
+      "url": "https://www.levelman.com/the-etymology-of-the-n-word",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Etymology: The study of the origin of words and the way in which their meanings have changed throughout history.Warning: For those offended by the …",
+      "image": "https://ic-cdn.flipboard.com/levelman.com/207f0944d82b8e81218077ec15a2a812b4a545b9/_xlarge.jpeg",
+      "published": "2026-03-08T11:30:44+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.0799
+    },
+    {
+      "title": "OpenAI on Surveillance and Autonomous Killings: You’re Going to Have to Trust Us",
+      "url": "https://theintercept.com/2026/03/08/openai-anthropic-military-contract-ethics-surveillance",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI says Americans shouldn’t worry about the ethics of its new Pentagon contract. You’ll have to take their word for it (and Pete …",
+      "image": "https://ic-cdn.flipboard.com/theintercept.com/9af095341a79b45a1c44956c037627a14ca51d21/_xlarge.jpeg",
+      "published": "2026-03-08T11:10:00+00:00",
+      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.07
     },
     {
       "title": "The Future We Feared Is Already Here",
@@ -69,106 +167,8 @@
       "image": "https://static01.nyt.com/images/2026/03/08/multimedia/08klein-wklz/08klein-wklz-facebookJumbo.jpg",
       "published": "2026-03-08T10:00:19+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0974
-    },
-    {
-      "title": "AI-generated videos are entering a truly troubling era",
-      "url": "https://www.creativebloq.com/ai/ai-generated-videos-are-entering-a-truly-troubling-era",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "And I'm not the only one falling for it. Oh, how far we've come since the days of Will Smith eating spaghetti. While AI-generated images have become …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/14c9b9ae45cbe5bcc99a3eb1a15e3a4af63804a3/_xlarge.jpeg",
-      "published": "2026-03-08T10:00:00+00:00",
-      "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0973
-    },
-    {
-      "title": "I finally left ChatGPT: Here are the 5 steps I took first",
-      "url": "https://www.androidauthority.com/chatgpt-steps-before-leaving-3646981",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Leaving is easy in theory, but if you don't take a few extra steps, you could end up regretting it. ChatGPT has received a lot of negative attention after announcing its partnership with the US Department of Defense, essentially taking the job from Anthropic after the latter company refused to back …",
-      "image": "https://ic-cdn.flipboard.com/androidauthority.com/b51c9c07d655e2bea79dade7919dfbad39113c43/_xlarge.jpeg",
-      "published": "2026-03-08T09:00:08+00:00",
-      "firstSeen": "2026-03-08T09:56:04.191271+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0687
-    },
-    {
-      "title": "This AI founder who quit her 9-to-5 law job has a warning for anyone dreaming of doing the same: ‘I’m working harder now than I ever did’",
-      "url": "https://fortune.com/2026/03/08/ai-founder-logan-brown-quit-law-job-entrepreneurship-working-harder-now-than-ever",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Office workers who daydream of being their own boss may fantasize about calling the shots, earning sky-high salaries, and setting their own …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/abb674ff8508e1d8c3794b611b280409f8f1ac33/_xlarge.jpeg",
-      "published": "2026-03-08T08:03:00+00:00",
-      "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0421
-    },
-    {
-      "title": "Why have an Apple Watch when you can have smart rosary beads?",
-      "url": "https://www.creativebloq.com/design/product-design/why-have-an-apple-watch-when-you-can-have-smart-rosary-beads",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Faith meets firmware. Acer has put out some curious products over the last 50 years. As well as laptops, PCs and monitors, the Taiwanese brand has …",
-      "image": "https://cdn.mos.cms.futurecdn.net/s83zrzihhsYcGKo5AsWGG-1920-80.jpg",
-      "published": "2026-03-08T08:00:00+00:00",
-      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0407
-    },
-    {
-      "title": "OpenAI robotics lead quits after Pentagon AI network deal",
-      "url": "https://www.techinasia.com/news/openai-robotics-lead-quits-after-pentagon-ai-network-deal",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Caitlin Kalinowski, a member of OpenAI’s robotics team, resigned after the company agreed to deploy its AI models on the Pentagon’s classified …",
-      "image": "https://cdn.techinasia.com/cloudinary/transformations/wp-content/uploads/2026/03/1772956443_010642f7e68ce3c9467ec2cbcde8aa6e_v1772956442_xlarge.jpg",
-      "published": "2026-03-08T07:53:33+00:00",
-      "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0377
-    },
-    {
-      "title": "Honor&#8217;s Robot phone is real, and coming later this year",
-      "url": "https://thenextweb.com/news/honors-robot-phone-is-real-and-coming-later-this-year",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The camera nods, dances to music, and tracks faces. The rest of the specs are a secret. Something unusual happened at Mobile World Congress this year. A device sat in a glass case at the Honor booth in Hall 3,  present, demonstrably functional, performing little robotic gestures for anyone who stopped to watch,  and yet [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Honor-Robot-Phone.png",
-      "published": "2026-03-08T07:00:24+00:00",
-      "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 2.0137
-    },
-    {
-      "title": "A roadmap for AI, if anyone will listen",
-      "url": "https://techcrunch.com/2026/03/07/a-roadmap-for-ai-if-anyone-will-listen",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "While Washington’s breakup with Anthropic exposed the complete lack of any coherent rules governing artificial intelligence, a bipartisan coalition of thinkers has assembled something the government has so far declined to produce: a framework for what responsible AI development should actually look …",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
-      "published": "2026-03-08T06:05:26+00:00",
-      "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
-      "score": 1.9895
+      "lastSeen": "2026-03-08T13:53:03.848580+00:00",
+      "score": 2.0376
     }
   ],
   "errors": []
