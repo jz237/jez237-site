@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-08T00:05:52.647122+00:00",
+  "updatedAt": "2026-03-08T05:02:47.839700+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -148,6 +148,22 @@
     "https://www.techrepublic.com/article/news-apple-music-transparency-tags-ai-music": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_afcidsafcidsafci-1024x572.png",
       "checkedAt": "2026-03-08T00:05:52.647122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-xiaomi-humanoid-robots-ev-factory-trial": {
+      "image": "",
+      "checkedAt": "2026-03-08T05:02:47.839700+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-march-2026-pixel-drop": {
+      "image": "",
+      "checkedAt": "2026-03-08T05:02:47.839700+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-spring-launch-2026": {
+      "image": "",
+      "checkedAt": "2026-03-08T05:02:47.839700+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/03/260302030642.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/ai-therapy-robot.webp",
+      "checkedAt": "2026-03-08T05:02:47.839700+00:00"
     }
   }
 }
