@@ -1,7 +1,21 @@
 {
   "date": "2026-03-08",
-  "updatedAt": "2026-03-08T17:53:41.031678+00:00",
+  "updatedAt": "2026-03-08T19:03:42.489548+00:00",
   "items": [
+    {
+      "title": "ChatGPT 5.4 Introduces Native Computer Control for Web Tasks",
+      "url": "https://www.geeky-gadgets.com/chatgpt-tool-search-feature",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI has introduced ChatGPT 5.4, a new model that expands the boundaries of artificial intelligence with notable updates in functionality and …",
+      "image": "https://ic-cdn.flipboard.com/geeky-gadgets.com/9cdd9382cae4ac1c934a2910ba122ccf4903efd6/_xlarge.jpeg",
+      "published": "2026-03-08T12:38:09+00:00",
+      "firstSeen": "2026-03-08T19:03:42.489548+00:00",
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 3.3702
+    },
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
       "url": "https://www.marktechpost.com/2026/03/07/yann-lecuns-new-ai-paper-argues-agi-is-misdefined-and-introduces-superhuman-adaptable-intelligence-sai-instead",
@@ -13,8 +27,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.8471
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.8232
     },
     {
       "title": "Apple's not done: 3 more products coming this spring",
@@ -23,12 +37,12 @@
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Apple released no less than seven products last week, including the MacBook Neo, the M5 MacBook Air, the iPhone 17e and much more. But there are still three more products likely to be coming out of Cupertino this spring — and one of them is among Apple’s most popular offerings. Here’s what we can …",
+      "summary": "Apple released no fewer than seven products last week, including the MacBook Neo, the M5 MacBook Air, the iPhone 17e and much more. But there are still three more products likely to be coming out of Cupertino this spring — and one of them is among Apple’s most popular offerings. Here’s what new …",
       "image": "https://ic-cdn.flipboard.com/cultofmac.com/8f9e36ad55d55a97d2c617c9884f6b2bb6fb7ba7/_large.webp",
       "published": "2026-03-08T14:00:43+00:00",
       "firstSeen": "2026-03-08T14:55:02.222857+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.7375
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.706
     },
     {
       "title": "5 things Samsung needs to do to get me excited about its flagships again",
@@ -42,7 +56,7 @@
       "published": "2026-03-08T13:00:10+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.7102
+      "score": 2.6796
     },
     {
       "title": "I Wrote A Resume For A $180,000 Job Using ChatGPT 5.4. This Happened",
@@ -55,8 +69,8 @@
       "image": "https://ic-cdn.flipboard.com/forbes.com/5f89bc69a9271706008905d3d71c89634263494d/_large.jpeg",
       "published": "2026-03-08T11:14:34+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.6644
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.6353
     },
     {
       "title": "Explainable AI is making black box models worthless in the agentic era",
@@ -69,8 +83,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/gWr6NrfMqA5kB42af2aice-2200-80.jpg",
       "published": "2026-03-08T15:00:00+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.365
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.3326
     },
     {
       "title": "Trump’s DHS agents are wearing Meta AI glasses. But who are they recording – and why?",
@@ -84,7 +98,7 @@
       "published": "2026-03-08T14:38:28+00:00",
       "firstSeen": "2026-03-08T16:58:20.710532+00:00",
       "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.3549
+      "score": 2.3229
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -98,7 +112,7 @@
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T13:53:03.848580+00:00",
-      "score": 2.1857
+      "score": 2.159
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -112,63 +126,49 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.1576
+      "score": 2.1318
     },
     {
-      "title": "I used to swear by Pixel's camera greatness, but now I'm moving on",
-      "url": "https://www.androidauthority.com/pixel-vs-xiaomi-best-camera-phone-3645685",
+      "title": "Is AI productivity prompting burnout? Study finds new pattern of \"AI brain fry\"",
+      "url": "https://www.cbsnews.com/news/is-ai-productivity-prompting-burnout-study-finds-new-pattern-of-ai-brain-fry",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Sorry Google, camera hardware still trumps software smarts. I love Pixels, and the Pixel 6 Pro marked my conversion to Google’s ecosystem, thanks in no small part to its incredibly powerful triple rear camera. Computational photography has proven its value over the years and remains a core part of …",
-      "image": "https://ic-cdn.flipboard.com/androidauthority.com/36024140a9adf3eaa3bd7d636680ca5f6d4d2474/_xlarge.jpeg",
-      "published": "2026-03-08T16:38:57+00:00",
-      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.1126
+      "summary": "The promise of artificial intelligence has been simple: let the machines do the work. Instead, it may be creating a new headache from babysitting the …",
+      "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/03/07/2f6cc657-64fe-4131-80b3-14d399b28099/thumbnail/1200x630/69b7f86718be51ad0d0b9588f95bfc8e/cbsn-fusion-ai-overuse-brain-fry-study-thumbnail.jpg",
+      "published": "2026-03-08T17:57:54+00:00",
+      "firstSeen": "2026-03-08T19:03:42.489548+00:00",
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.117
     },
     {
-      "title": "Why women are disappearing from Europe’s tech workforce",
-      "url": "https://www.euronews.com/next/2026/03/08/why-women-are-disappearing-from-europes-tech-workforce",
+      "title": "Musk’s two-word response to Anthropic CEO’s claim its AI may have gained consciousness",
+      "url": "https://www.independent.co.uk/news/world/americas/elon-musk-anthropic-ai-consciousness-b2934300.html",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Workplace culture is the biggest reason why women are leaving their tech jobs, a new report shows. Women make up less than one in five tech workers in …",
-      "image": "https://ic-cdn.flipboard.com/euronews.com/1d7390d95191e57168084e11afe399c0b4f96ee4/_xlarge.jpeg",
-      "published": "2026-03-08T16:35:38+00:00",
-      "firstSeen": "2026-03-08T11:46:04.657457+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.111
+      "summary": "Elon Musk had a two-word retort for Anthropic CEO Dario Amodei after he said his company’s artificial intelligence models may have gained …",
+      "image": "https://ic-cdn.flipboard.com/independent.co.uk/6d0a8561277292e518ce0ecee62c256d3833137f/_xlarge.jpeg",
+      "published": "2026-03-08T17:13:05+00:00",
+      "firstSeen": "2026-03-08T19:03:42.489548+00:00",
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.0951
     },
     {
-      "title": "Owner of ICE detention facility sees big opportunity in AI man camps",
-      "url": "https://techcrunch.com/2026/03/08/owner-of-ice-detention-facility-sees-big-opportunity-in-ai-man-camps",
+      "title": "Meta smart glasses privacy concerns grow",
+      "url": "https://www.foxnews.com/tech/meta-smart-glasses-privacy-concerns-grow",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "To house the hundreds or thousands of temporary workers needed to build an AI data center, developers are increasingly relying on temporary villages known as man camps. This style of camp was popularized as housing for men working in remote oil fields. For example, as a Bitcoin mining facility in …",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/0025adb6df260732b7364d6501988f411110b105/_large.jpeg",
-      "published": "2026-03-08T16:30:00+00:00",
-      "firstSeen": "2026-03-08T16:58:20.710532+00:00",
-      "lastSeen": "2026-03-08T17:53:41.031678+00:00",
-      "score": 2.1082
-    },
-    {
-      "title": "I Asked ChatGPT To Make Me a Costco Weekly Grocery Shopping List for Under $100",
-      "url": "https://www.gobankingrates.com/saving-money/food/i-asked-chatgpt-to-make-me-a-costco-weekly-grocery-shopping-list-for-under-100",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "These days, grocery prices make it easy to spend more than your budget allows without realizing it. To see what’s possible, I asked ChatGPT to build …",
-      "image": "https://ic-cdn.flipboard.com/gobankingrates.com/f0026c30f3ec750e49a1d5b0b69f92fc283b5291/_xlarge.jpeg",
-      "published": "2026-03-08T15:05:06+00:00",
-      "firstSeen": "2026-03-08T16:58:20.710532+00:00",
-      "lastSeen": "2026-03-08T16:58:20.710532+00:00",
-      "score": 2.0674
+      "summary": "Smart glasses promise a future where technology blends into everyday life. You can ask a question, snap a quick video or identify what you are looking at in seconds. It sounds convenient. However, a new investigation suggests the experience may come with a privacy tradeoff many users never expected. …",
+      "image": "https://ic-cdn.flipboard.com/foxnews.com/ae5def5125b088a056fe1a33ef3762b18b6bafc6/_xlarge.jpeg",
+      "published": "2026-03-08T17:00:45+00:00",
+      "firstSeen": "2026-03-08T19:03:42.489548+00:00",
+      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
+      "score": 2.0891
     }
   ],
   "errors": []
