@@ -1,6 +1,20 @@
 {
-  "updatedAt": "2026-03-08T10:55:30.007850+00:00",
+  "updatedAt": "2026-03-08T11:46:04.657457+00:00",
   "items": [
+    {
+      "title": "Why women are disappearing from Europe’s tech workforce",
+      "url": "https://www.euronews.com/next/2026/03/08/why-women-are-disappearing-from-europes-tech-workforce",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Workplace culture is the biggest reason why women are leaving their tech jobs, a new report shows. Women make up less than one in five tech workers in …",
+      "image": "https://ic-cdn.flipboard.com/euronews.com/1d7390d95191e57168084e11afe399c0b4f96ee4/_xlarge.jpeg",
+      "published": "2026-03-08T11:45:53+00:00",
+      "firstSeen": "2026-03-08T11:46:04.657457+00:00",
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.1499
+    },
     {
       "title": "The Future We Feared Is Already Here",
       "url": "https://www.nytimes.com/2026/03/08/opinion/ai-anthropic-claude-pentagon-hegseth-amodei.html",
@@ -12,8 +26,8 @@
       "image": "https://static01.nyt.com/images/2026/03/08/multimedia/08klein-wklz/08klein-wklz-facebookJumbo.jpg",
       "published": "2026-03-08T10:00:19+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.1223
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0974
     },
     {
       "title": "AI-generated videos are entering a truly troubling era",
@@ -23,11 +37,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "And I'm not the only one falling for it. Oh, how far we've come since the days of Will Smith eating spaghetti. While AI-generated images have become …",
-      "image": "https://cdn.mos.cms.futurecdn.net/yLn8PQYEaMCRGoDkHeRtDU-1916-80.jpg",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/14c9b9ae45cbe5bcc99a3eb1a15e3a4af63804a3/_xlarge.jpeg",
       "published": "2026-03-08T10:00:00+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.1221
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0973
     },
     {
       "title": "I finally left ChatGPT: Here are the 5 steps I took first",
@@ -40,8 +54,8 @@
       "image": "https://ic-cdn.flipboard.com/androidauthority.com/b51c9c07d655e2bea79dade7919dfbad39113c43/_xlarge.jpeg",
       "published": "2026-03-08T09:00:08+00:00",
       "firstSeen": "2026-03-08T09:56:04.191271+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0928
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0687
     },
     {
       "title": "This AI founder who quit her 9-to-5 law job has a warning for anyone dreaming of doing the same: ‘I’m working harder now than I ever did’",
@@ -54,8 +68,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/abb674ff8508e1d8c3794b611b280409f8f1ac33/_xlarge.jpeg",
       "published": "2026-03-08T08:03:00+00:00",
       "firstSeen": "2026-03-08T10:55:30.007850+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0656
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0421
     },
     {
       "title": "AI agents: Powering Europe’s most ambitious startups",
@@ -68,8 +82,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/rNZmVCrdHzszaDCyTrBWmj-2560-80.jpg",
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.3642
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.3407
     },
     {
       "title": "Why have an Apple Watch when you can have smart rosary beads?",
@@ -82,8 +96,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/s83zrzihhsYcGKo5AsWGG-1920-80.jpg",
       "published": "2026-03-08T08:00:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0642
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0407
     },
     {
       "title": "OpenAI robotics lead quits after Pentagon AI network deal",
@@ -97,7 +111,7 @@
       "published": "2026-03-08T07:53:33+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.0611
+      "score": 2.0377
     },
     {
       "title": "Honor&#8217;s Robot phone is real, and coming later this year",
@@ -110,8 +124,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Honor-Robot-Phone.png",
       "published": "2026-03-08T07:00:24+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0366
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.0137
     },
     {
       "title": "Building Next-Gen Agentic AI: A Complete Framework for Cognitive Blueprint Driven Runtime Agents with Memory Tools and Validation",
@@ -125,7 +139,7 @@
       "published": "2026-03-08T06:46:10+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 2.3301
+      "score": 2.3074
     },
     {
       "title": "A roadmap for AI, if anyone will listen",
@@ -138,8 +152,22 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/15fea263ac0e0233057f4a20138fe257b6551920/_xlarge.jpeg",
       "published": "2026-03-08T06:05:26+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.0118
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.9895
+    },
+    {
+      "title": "Why Storytelling Is Critical For Personal Branding In The Age Of AI",
+      "url": "https://www.forbes.com/sites/williamarruda/2026/03/08/why-storytelling-is-critical-for-personal-branding-in-the-age-of-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "There’s a reason Merriam-Webster selected slop as the word of the year in 2025. Two years ago, about 5% of web articles were AI-generated. Today it’s about 50%. The internet didn’t just grow. It multiplied. And if that isn’t dramatic enough, some experts predict that up to 90% of online content …",
+      "image": "https://ic-cdn.flipboard.com/forbes.com/f454ad7c644d3916ca2316de1e582f7637095815/_large.jpeg",
+      "published": "2026-03-08T06:00:00+00:00",
+      "firstSeen": "2026-03-08T11:46:04.657457+00:00",
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.9872
     },
     {
       "title": "International Women’s Day: Women Hold Just 18% Leadership Roles In India But Outpace Men In AI Readiness",
@@ -152,8 +180,8 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/f801b26c073174d648e61566ccf63a15454ad340/_xlarge.jpeg",
       "published": "2026-03-08T05:43:23+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.002
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.98
     },
     {
       "title": "OpenAI robotics chief quits over AI’s potential use for war and surveillance",
@@ -167,7 +195,21 @@
       "published": "2026-03-08T05:26:37+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
       "lastSeen": "2026-03-08T09:56:04.191271+00:00",
-      "score": 1.9946
+      "score": 1.9728
+    },
+    {
+      "title": "AI is spurring a big expansion of high-voltage power lines. Landowners and locals are fighting back",
+      "url": "https://apnews.com/article/ai-trump-energy-transmission-lines-f1c6b1251054d2a7e193297e4111b8d1",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SUGARLOAF, Pa. (AP) — For John Zola, the 40 acres were like a paradise: apple orchards tucked into northern Pennsylvania’s rolling hills, a barn, meadows and more than enough land for four houses: one for himself and his wife and each of his three adult children. It’s been “hell,” however, since a …",
+      "image": "https://ic-cdn.flipboard.com/apnews.com/6349b2193f72d5dfc2bf9ed2fcb2c43a1e0a2772/_large.jpeg",
+      "published": "2026-03-08T05:14:29+00:00",
+      "firstSeen": "2026-03-08T11:46:04.657457+00:00",
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.9676
     },
     {
       "title": "10 ways teachers can use AI",
@@ -180,8 +222,8 @@
       "image": "https://ic-cdn.flipboard.com/fastcompany.com/5f42692455616f4366c2407397c22a4af1fee938/_xlarge.webp",
       "published": "2026-03-08T05:05:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.9852
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.9636
     },
     {
       "title": "Yann LeCun’s New AI Paper Argues AGI Is Misdefined and Introduces Superhuman Adaptable Intelligence (SAI) Instead",
@@ -194,8 +236,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/10027c2143948d81eab2196ca1657e0e04a87f1e/_large.png",
       "published": "2026-03-08T03:57:57+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 3.0066
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.9857
     },
     {
       "title": "NotebookLM is readying a new feature to make its notebooks easier to understand",
@@ -209,7 +251,7 @@
       "published": "2026-03-08T00:53:07+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
       "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 1.8823
+      "score": 1.863
     },
     {
       "title": "India Can Train A Sovereign Model But Still Cannot Prove It Works",
@@ -223,7 +265,7 @@
       "published": "2026-03-07T22:43:09+00:00",
       "firstSeen": "2026-03-08T07:09:08.796191+00:00",
       "lastSeen": "2026-03-08T07:09:08.796191+00:00",
-      "score": 2.1337
+      "score": 2.1156
     },
     {
       "title": "OpenAI’s Head of Robotics Resigns Over Company’s Pentagon Deal",
@@ -237,7 +279,7 @@
       "published": "2026-03-07T22:25:21+00:00",
       "firstSeen": "2026-03-08T07:53:56.645626+00:00",
       "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 1.8273
+      "score": 1.8093
     },
     {
       "title": "OpenAI’s robotics chief quits over the Pentagon deal",
@@ -250,8 +292,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAIs-robotics-chief-quits-over-the-Pentagon-deal.png",
       "published": "2026-03-07T22:19:18+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.8251
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.8071
     },
     {
       "title": "There Was Just an Unusually Unsettling Pentagon-Related Resignation at OpenAI",
@@ -265,7 +307,7 @@
       "published": "2026-03-07T21:02:58+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T00:05:52.647122+00:00",
-      "score": 1.7982
+      "score": 1.7809
     },
     {
       "title": "The U.S. is sending an AI-powered anti-drone system to the Mideast as response to countering Iran’s Shahed has been ‘disappointing’",
@@ -279,7 +321,7 @@
       "published": "2026-03-07T21:00:03+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.7972
+      "score": 1.7799
     },
     {
       "title": "Top Pentagon official recalls the ‘whoa moment’ when defense leaders realized how indispensable Anthropic is and saw the risk of losing access",
@@ -292,8 +334,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/3cc19702085219d24367a44c2ef77627a0f5fab9/_xlarge.jpeg",
       "published": "2026-03-07T20:10:50+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.7803
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.7634
     },
     {
       "title": "When DOGE Unleashed ChatGPT on the Humanities",
@@ -306,8 +348,8 @@
       "image": "https://ic-cdn.flipboard.com/nyt.com/c573821573ca1d7743cd5c4a0c1c8961faa8513c/_xlarge.jpeg",
       "published": "2026-03-07T20:09:01+00:00",
       "firstSeen": "2026-03-08T09:56:04.191271+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.7797
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.7628
     },
     {
       "title": "Apple still has over a dozen products in the pipeline for 2026, here’s what’s coming",
@@ -320,8 +362,8 @@
       "image": "https://ic-cdn.flipboard.com/wp.com/ca742c4e5ab15bb16a450b132267d586b1152c5d/_xlarge.jpeg",
       "published": "2026-03-07T19:53:10+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.7744
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.7576
     },
     {
       "title": "Why Millions Are Turning to ChatGPT for Mental Health",
@@ -335,7 +377,7 @@
       "published": "2026-03-07T19:30:57+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T05:02:47.839700+00:00",
-      "score": 1.767
+      "score": 1.7504
     },
     {
       "title": "Peter Thiel warned AI is coming for ‘math people before word people.’ Banks have already said smaller headcounts are possible",
@@ -349,7 +391,7 @@
       "published": "2026-03-07T18:09:44+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T09:01:09.800544+00:00",
-      "score": 1.7405
+      "score": 1.7245
     },
     {
       "title": "Watch: Physical AI humanoids get to work at BMW factory",
@@ -362,8 +404,8 @@
       "image": "https://ic-cdn.flipboard.com/newatlas.com/a4807f2934bd261dfcc4a5d466390f63f187f77c/_xlarge.jpeg",
       "published": "2026-03-07T18:03:00+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.7384
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.7224
     },
     {
       "title": "OpenAI's robotics head quits after company's Pentagon deal: 'This was about principle'",
@@ -376,8 +418,8 @@
       "image": "https://ic-cdn.flipboard.com/insider.com/da93cf8423a8f0f364e6fd2f6703cb3bba94decc/_large.jpeg",
       "published": "2026-03-07T17:43:08+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.7321
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.7163
     },
     {
       "title": "OpenAI is delaying its 'adult mode' for ChatGPT",
@@ -391,7 +433,7 @@
       "published": "2026-03-07T17:07:57+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T09:56:04.191271+00:00",
-      "score": 2.421
+      "score": 2.4055
     },
     {
       "title": "Philosopher Studying AI Consciousness Startled When AI Agent Emails Him About Its Own “Experience”",
@@ -404,8 +446,8 @@
       "image": "https://ic-cdn.flipboard.com/futurism.com/9051953250e448d41be12c2a70488ba2e460d3de/_xlarge.jpeg",
       "published": "2026-03-07T15:30:00+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 1.9913
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.9764
     },
     {
       "title": "Philosopher Studying AI Consciousness Startled When AI Agent Emails Him About Its Own “Experience”",
@@ -419,7 +461,7 @@
       "published": "2026-03-07T15:30:00+00:00",
       "firstSeen": "2026-03-08T09:01:09.800544+00:00",
       "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.9913
+      "score": 1.9764
     },
     {
       "title": "This AI agent freed itself and started secretly mining crypto",
@@ -433,7 +475,7 @@
       "published": "2026-03-07T13:49:08+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T00:05:52.647122+00:00",
-      "score": 2.312
+      "score": 2.2979
     },
     {
       "title": "This AI agent freed itself and started secretly mining crypto",
@@ -446,8 +488,8 @@
       "image": "https://ic-cdn.flipboard.com/axios.com/9e06023c7384e7bafaad88f880f929aea8672405/_xlarge.jpeg",
       "published": "2026-03-07T13:49:08+00:00",
       "firstSeen": "2026-03-08T05:02:47.839700+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.312
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.2979
     },
     {
       "title": "I Asked ChatGPT How To Maximize My Social Security Check — Here’s What It Said",
@@ -461,7 +503,7 @@
       "published": "2026-03-07T13:18:33+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 1.6534
+      "score": 1.6395
     },
     {
       "title": "Anthropic’s Ethical Stand Could Be Paying Off",
@@ -475,7 +517,7 @@
       "published": "2026-03-07T13:00:00+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
       "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 1.6483
+      "score": 1.6344
     },
     {
       "title": "You’ll Choke When You Hear How Many Full-Time Jobs a $136 Million Data Center Will Actually Create",
@@ -488,8 +530,8 @@
       "image": "https://ic-cdn.flipboard.com/futurism.com/7e68b31956c7cddcbce59241ecdce5528daf10e6/_xlarge.jpeg",
       "published": "2026-03-07T12:30:00+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.64
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.6264
     },
     {
       "title": "It Took Me Just 2 Hours to Vibe Code a Mass Surveillance Site With OpenAI's Codex",
@@ -502,8 +544,8 @@
       "image": "https://ic-cdn.flipboard.com/pcmag.com/9fdebdc4099d895bff3bf87a5f33ac04e51c0360/_xlarge.jpeg",
       "published": "2026-03-07T11:00:00+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.6159
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.6028
     },
     {
       "title": "Why Hoppers looks so different from other Pixar movies",
@@ -516,50 +558,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/189c9ee978df6ec25787f3a8eafd330a8fe0b98a/_xlarge.jpeg",
       "published": "2026-03-07T10:30:00+00:00",
       "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 2.3081
-    },
-    {
-      "title": "I work at Google and saw AI change the tech industry. Here's how I upskilled and made a 'future-defining' career pivot.",
-      "url": "https://www.businessinsider.com/ai-disrupting-tech-industry-career-pivot-google-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "This as-told-to essay is based on a conversation with Gautami Nadkarni, 33, who lives in New Jersey. The following has been edited for length and clarity. In 2024, six years into my time at Google, I started questioning myself. I joined as a customer engineer in the Google Cloud org in 2018. My job …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/3638b578eca09cc8d76f63dcbdd58dee75a7cdc0/_xlarge.jpeg",
-      "published": "2026-03-07T10:01:01+00:00",
-      "firstSeen": "2026-03-08T07:53:56.645626+00:00",
-      "lastSeen": "2026-03-08T07:53:56.645626+00:00",
-      "score": 1.6007
-    },
-    {
-      "title": "One platform gives you lifetime access to Gemini, ChatGPT, Anthropic, and more for $70",
-      "url": "https://flip.it/Qk27O2",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Pay once for a lifetime of AI generation. TL;DR: Get lifetime access to ChatGPT, Gemini, and more with 1min.AI, now only $70. Opens in a new window Credit: 1minAI 1min.AI Advanced Business Plan Lifetime Subscription $69.97 $540 Save $470.03 Get Deal AI subscriptions aren’t cheap, and the bills really add …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/ca8e79f8133c499c89a91e1cffdc8367ca66bd79/_xlarge.jpeg",
-      "published": "2026-03-07T10:00:00+00:00",
-      "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.6004
-    },
-    {
-      "title": "How an AI system beat experienced doctors at diagnosing rare diseases",
-      "url": "https://thenextweb.com/news/how-an-ai-system-beat-experienced-doctors-at-diagnosing-rare-diseases",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "DeepRare, an agentic AI system integrating 40 specialised tools, outperformed medical specialists in identifying rare conditions in a head-to-head study published in Nature. For millions of people with rare diseases, the path to diagnosis is a labyrinth. Patients bounce between generalist GPs and specialists across years, sometimes decades, piecing together symptoms that fall outside textbook [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/DeepRare-outperforms-doctors-in-a-rare-disease-diagnosis-study.png",
-      "published": "2026-03-07T09:30:57+00:00",
-      "firstSeen": "2026-03-08T00:05:52.647122+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.8931
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 2.2952
     },
     {
       "title": "Introducing... Life Without",
@@ -572,8 +572,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.3913
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.385
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -586,8 +586,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.2167
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.216
     },
     {
       "title": "The Life Scientific: Julia Simner",
@@ -600,8 +600,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-02-23T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-08T10:55:30.007850+00:00",
-      "score": 1.1903
+      "lastSeen": "2026-03-08T11:46:04.657457+00:00",
+      "score": 1.1902
     }
   ],
   "errors": []
