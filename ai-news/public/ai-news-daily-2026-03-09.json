@@ -1,6 +1,6 @@
 {
   "date": "2026-03-09",
-  "updatedAt": "2026-03-09T08:02:41.333391+00:00",
+  "updatedAt": "2026-03-09T10:31:52.573851+00:00",
   "items": [
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
@@ -13,8 +13,36 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ae98303db3ff8fdbce739bd169676a066e828ed1/_xlarge.png",
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 3.3007
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 3.2373
+    },
+    {
+      "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
+      "url": "https://www.nbcnews.com/politics/elections/politicians-attention-white-collar-workers-rcna259447",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Rapid advancements in AI have industry and political leaders warning of massive job displacement for white-collar workers. It could reshape U.S. politics. Blue-collar workers have been at the center of political messaging for years. Politicians meet with waitresses at a diner to pitch raising the …",
+      "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
+      "published": "2026-03-09T09:18:00+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.813
+    },
+    {
+      "title": "Nscale raises $2bn Series C at $14.6bn valuation",
+      "url": "https://thenextweb.com/news/nscale-raises-2bn-series-c-at-14-6bn-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The UK hyperscaler has now raised over $4.5bn across equity rounds in less than six months, and says it is the largest Series C ever closed in Europe. That claim deserves scrutiny. When Josh Payne founded Nscale, the company was barely a year old, and the world’s appetite for GPU compute had not yet tipped [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nscale-funding.png",
+      "published": "2026-03-09T08:20:48+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.3852
     },
     {
       "title": "Nvidia taps Samsung to boost Groq AI chip production",
@@ -28,7 +56,63 @@
       "published": "2026-03-09T07:28:45+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.4329
+      "score": 2.3606
+    },
+    {
+      "title": "The next phase of the corporate AI boom: measuring which employees actually understand it",
+      "url": "https://www.businessinsider.com/ai-adoption-companies-workera-assessing-employees-2026-3",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Executives are hyping their AI adoption rates like it's their quarterly revenue. Over the past 90 days, CEOs have referenced \"early AI adopters\" at least 60 times in earnings calls, conference presentations, speeches, and other prepared remarks, according to business intelligence platform …",
+      "image": "https://ic-cdn.flipboard.com/insider.com/6d25b8ce10e836e8dbc56f1e9cc1d594e5b93c3c/_xlarge.jpeg",
+      "published": "2026-03-09T09:01:01+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.1047
+    },
+    {
+      "title": "U.S. Draft Rules that Require Permits for All AI Chip Exports",
+      "url": "https://www.theinformation.com/briefings/u-s-draft-rules-require-permits-ai-chip-exports",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The U.S. government is working on rules that would require American approval for all exports of AI chips, and on the conditions of stringent security …",
+      "image": "https://tii.imgix.net/global/defaults/article_image_unavailable.jpg",
+      "published": "2026-03-09T08:23:16+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0864
+    },
+    {
+      "title": "How ImagineFX has been inspiring and championing the digital art community for 20 years",
+      "url": "https://www.creativebloq.com/art/digital-art/how-imaginefx-has-been-inspiring-and-championing-the-digital-art-community-for-20-years",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "We look back at some highlights as the digital art magazine celebrates its anniversary. The year 2026 marks two decades since ImagineFX burst onto …",
+      "image": "https://cdn.mos.cms.futurecdn.net/RAaNiiMmQiyvkMG7ughcCE-1000-80.jpg",
+      "published": "2026-03-09T08:00:00+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0753
+    },
+    {
+      "title": "Augur raises $15m from Plural to turn existing surveillance infrastructure into real-time intelligence",
+      "url": "https://thenextweb.com/news/augur-15m-plural-ai-surveillance-critical-infrastructure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A London startup founded by the creator of safety app Path is betting that the cameras and sensors already deployed across Europe’s transport hubs, stadiums, and power stations are gathering dust when they matter most. In the first week of February 2026, anarchists severed electrical cables near Bologna on the opening day of the Milan–Cortina [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Augur-raises-15-million-from-Plural.png",
+      "published": "2026-03-09T07:57:10+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.074
     },
     {
       "title": "Munich’s Telura exits stealth with €4M to make deep geothermal economically viable",
@@ -41,8 +125,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Telura-exits-stealth-with-E4M-.png",
       "published": "2026-03-09T07:33:21+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.1352
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0627
     },
     {
       "title": "Alphabet handed Sundar Pichai a $692M pay package",
@@ -55,8 +139,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sundar-Pichai.png",
       "published": "2026-03-09T07:17:29+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.1272
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0553
     },
     {
       "title": "How AI is changing SEO tools: Citation tracking, GEO &#038; AI visibility",
@@ -69,8 +153,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-Article-Banner-1.png",
       "published": "2026-03-09T07:09:53+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.1234
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0518
     },
     {
       "title": "I can text Claude like a personal assistant now — this iPhone shortcut made it possible",
@@ -83,92 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
       "published": "2026-03-09T05:30:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0749
-    },
-    {
-      "title": "ChatGPT and Gemini are nudging users towards illegal gambling, says investigation",
-      "url": "https://www.digitaltrends.com/cool-tech/chatgpt-and-gemini-are-nudging-users-towards-illegal-gambling-says-investigation",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A new investigation suggests that popular AI chatbots, including ChatGPT and Gemini, may inadvertently steer users toward illegal gambling websites. …",
-      "image": "https://ic-cdn.flipboard.com/digitaltrends.com/033ed676abe61343a00cf38df838aa573c976c25/_xlarge.jpeg",
-      "published": "2026-03-09T05:16:59+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0688
-    },
-    {
-      "title": "OpenAI is feeling the heat, but it’s not cooked",
-      "url": "https://www.morningbrew.com/stories/2026/03/09/openai-is-feeling-the-heat-but-it-s-not-cooked",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The company is dealing with problems from several sides... Late last year, when ChatGPT faced pressure from competitors, OpenAI CEO Sam Altman went …",
-      "image": "https://ic-cdn.flipboard.com/morningbrew.com/c8f4337346a48b164c89cec44c5677fd36bbfcd6/_large.jpeg",
-      "published": "2026-03-09T05:15:00+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0678
-    },
-    {
-      "title": "Ring’s Jamie Siminoff has been trying to calm privacy fears since the Super Bowl, but his answers may not help",
-      "url": "https://techcrunch.com/2026/03/08/rings-jamie-siminoff-has-been-trying-to-calm-privacy-fears-since-the-super-bowl-but-his-answers-may-not-help",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "When Ring founder and CEO Jamie Siminoff decided to use the company’s first-ever Super Bowl commercial to introduce Search Party — an AI-powered feature that uses Ring camera footage to help find lost dogs — he expected Americans to love it. Instead, the TV spot set off a firestorm. In fact, …",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/6af18ee6d7f3a2d15bde06ef024c39db2cca305f/_xlarge.jpeg",
-      "published": "2026-03-09T04:35:06+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 2.0492
-    },
-    {
-      "title": "UK eyes sweeping powers to regulate tech without parliamentary scrutiny",
-      "url": "https://www.politico.eu/article/uk-eyes-sweeping-powers-to-regulate-tech-without-parliamentary-scrutiny",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The U.K. government has laid two amendments that would let it sidestep parliamentary debate so it can update online safety laws. LONDON — Keir Starmer …",
-      "image": "https://ic-cdn.flipboard.com/politico.eu/45eb9bb472acd75a8bd5eb9b027088beafc78d49/_large.jpeg",
-      "published": "2026-03-09T03:17:30+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0139
-    },
-    {
-      "title": "Landmark Lawsuit Against OpenAI For Allowing ChatGPT To Provide Legal Advice Could Be A Huge Game-Changer For All AI Makers",
-      "url": "https://www.forbes.com/sites/lanceeliot/2026/03/09/landmark-lawsuit-against-openai-for-allowing-chatgpt-to-provide-legal-advice-could-be-a-huge-game-changer-for-all-ai-makers",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In today’s column, I examine a newly filed lawsuit against OpenAI regarding the noteworthy aspect that ChatGPT is being allowed by the AI maker to provide legal advice. Here’s the deal. Presumably, contemporary generative AI and large language models (LLMs) are not supposed to be handing out legal …",
-      "image": "https://ic-cdn.flipboard.com/forbes.com/9d5b426efce4ade92a4b52a98e311bdc3250048a/_large.jpeg",
-      "published": "2026-03-09T03:15:00+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0128
-    },
-    {
-      "title": "5 Effective Ways to Use NotebookLM to Learn Anything in 2026",
-      "url": "https://aitoolsclub.com/5-effective-ways-to-use-notebooklm-to-learn-anything-in-2026",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Learning has no age. You can learn something new every day, regardless of your age; however, we often find ourselves trying to consume information, …",
-      "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--1-.gif",
-      "published": "2026-03-09T02:33:02+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9943
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0065
     }
   ],
   "errors": []

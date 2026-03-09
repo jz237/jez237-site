@@ -1,6 +1,90 @@
 {
-  "updatedAt": "2026-03-09T08:02:41.333391+00:00",
+  "updatedAt": "2026-03-09T10:31:52.573851+00:00",
   "items": [
+    {
+      "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
+      "url": "https://www.nbcnews.com/politics/elections/politicians-attention-white-collar-workers-rcna259447",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Rapid advancements in AI have industry and political leaders warning of massive job displacement for white-collar workers. It could reshape U.S. politics. Blue-collar workers have been at the center of political messaging for years. Politicians meet with waitresses at a diner to pitch raising the …",
+      "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
+      "published": "2026-03-09T09:18:00+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.813
+    },
+    {
+      "title": "The next phase of the corporate AI boom: measuring which employees actually understand it",
+      "url": "https://www.businessinsider.com/ai-adoption-companies-workera-assessing-employees-2026-3",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Executives are hyping their AI adoption rates like it's their quarterly revenue. Over the past 90 days, CEOs have referenced \"early AI adopters\" at least 60 times in earnings calls, conference presentations, speeches, and other prepared remarks, according to business intelligence platform …",
+      "image": "https://ic-cdn.flipboard.com/insider.com/6d25b8ce10e836e8dbc56f1e9cc1d594e5b93c3c/_xlarge.jpeg",
+      "published": "2026-03-09T09:01:01+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.1047
+    },
+    {
+      "title": "U.S. Draft Rules that Require Permits for All AI Chip Exports",
+      "url": "https://www.theinformation.com/briefings/u-s-draft-rules-require-permits-ai-chip-exports",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The U.S. government is working on rules that would require American approval for all exports of AI chips, and on the conditions of stringent security …",
+      "image": "https://tii.imgix.net/global/defaults/article_image_unavailable.jpg",
+      "published": "2026-03-09T08:23:16+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0864
+    },
+    {
+      "title": "Nscale raises $2bn Series C at $14.6bn valuation",
+      "url": "https://thenextweb.com/news/nscale-raises-2bn-series-c-at-14-6bn-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The UK hyperscaler has now raised over $4.5bn across equity rounds in less than six months, and says it is the largest Series C ever closed in Europe. That claim deserves scrutiny. When Josh Payne founded Nscale, the company was barely a year old, and the world’s appetite for GPU compute had not yet tipped [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nscale-funding.png",
+      "published": "2026-03-09T08:20:48+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.3852
+    },
+    {
+      "title": "How ImagineFX has been inspiring and championing the digital art community for 20 years",
+      "url": "https://www.creativebloq.com/art/digital-art/how-imaginefx-has-been-inspiring-and-championing-the-digital-art-community-for-20-years",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "We look back at some highlights as the digital art magazine celebrates its anniversary. The year 2026 marks two decades since ImagineFX burst onto …",
+      "image": "https://cdn.mos.cms.futurecdn.net/RAaNiiMmQiyvkMG7ughcCE-1000-80.jpg",
+      "published": "2026-03-09T08:00:00+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0753
+    },
+    {
+      "title": "Augur raises $15m from Plural to turn existing surveillance infrastructure into real-time intelligence",
+      "url": "https://thenextweb.com/news/augur-15m-plural-ai-surveillance-critical-infrastructure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A London startup founded by the creator of safety app Path is betting that the cameras and sensors already deployed across Europe’s transport hubs, stadiums, and power stations are gathering dust when they matter most. In the first week of February 2026, anarchists severed electrical cables near Bologna on the opening day of the Milan–Cortina [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Augur-raises-15-million-from-Plural.png",
+      "published": "2026-03-09T07:57:10+00:00",
+      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.074
+    },
     {
       "title": "Munich’s Telura exits stealth with €4M to make deep geothermal economically viable",
       "url": "https://thenextweb.com/news/telura-exits-stealth-with-e4m",
@@ -12,8 +96,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Telura-exits-stealth-with-E4M-.png",
       "published": "2026-03-09T07:33:21+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.1352
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0627
     },
     {
       "title": "Nvidia taps Samsung to boost Groq AI chip production",
@@ -27,7 +111,7 @@
       "published": "2026-03-09T07:28:45+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.4329
+      "score": 2.3606
     },
     {
       "title": "Alphabet handed Sundar Pichai a $692M pay package",
@@ -40,8 +124,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sundar-Pichai.png",
       "published": "2026-03-09T07:17:29+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.1272
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0553
     },
     {
       "title": "How AI is changing SEO tools: Citation tracking, GEO &#038; AI visibility",
@@ -54,8 +138,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-Article-Banner-1.png",
       "published": "2026-03-09T07:09:53+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.1234
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0518
     },
     {
       "title": "I can text Claude like a personal assistant now — this iPhone shortcut made it possible",
@@ -68,8 +152,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
       "published": "2026-03-09T05:30:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0749
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0065
     },
     {
       "title": "ChatGPT and Gemini are nudging users towards illegal gambling, says investigation",
@@ -82,8 +166,8 @@
       "image": "https://ic-cdn.flipboard.com/digitaltrends.com/033ed676abe61343a00cf38df838aa573c976c25/_xlarge.jpeg",
       "published": "2026-03-09T05:16:59+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0688
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 2.0008
     },
     {
       "title": "OpenAI is feeling the heat, but it’s not cooked",
@@ -96,8 +180,8 @@
       "image": "https://ic-cdn.flipboard.com/morningbrew.com/c8f4337346a48b164c89cec44c5677fd36bbfcd6/_large.jpeg",
       "published": "2026-03-09T05:15:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0678
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.9999
     },
     {
       "title": "Ring’s Jamie Siminoff has been trying to calm privacy fears since the Super Bowl, but his answers may not help",
@@ -111,7 +195,7 @@
       "published": "2026-03-09T04:35:06+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
       "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 2.0492
+      "score": 1.9825
     },
     {
       "title": "UK eyes sweeping powers to regulate tech without parliamentary scrutiny",
@@ -124,8 +208,8 @@
       "image": "https://ic-cdn.flipboard.com/politico.eu/45eb9bb472acd75a8bd5eb9b027088beafc78d49/_large.jpeg",
       "published": "2026-03-09T03:17:30+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0139
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.9496
     },
     {
       "title": "Landmark Lawsuit Against OpenAI For Allowing ChatGPT To Provide Legal Advice Could Be A Huge Game-Changer For All AI Makers",
@@ -138,8 +222,8 @@
       "image": "https://ic-cdn.flipboard.com/forbes.com/9d5b426efce4ade92a4b52a98e311bdc3250048a/_large.jpeg",
       "published": "2026-03-09T03:15:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0128
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.9486
     },
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
@@ -152,8 +236,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ae98303db3ff8fdbce739bd169676a066e828ed1/_xlarge.png",
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 3.3007
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 3.2373
     },
     {
       "title": "5 Effective Ways to Use NotebookLM to Learn Anything in 2026",
@@ -166,8 +250,8 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--1-.gif",
       "published": "2026-03-09T02:33:02+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9943
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.9313
     },
     {
       "title": "What China's latest economic plans say about its tech ambitions and rivalry with the US",
@@ -181,7 +265,7 @@
       "published": "2026-03-09T01:04:03+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9562
+      "score": 1.8957
     },
     {
       "title": "Using ‘pre-mortem’ AI prompt before every big decision can save you from making bad mistakes",
@@ -194,8 +278,8 @@
       "image": "https://ic-cdn.flipboard.com/supercarblondie.com/46b9d30f918638d4a23f331c7ef68f6320026a6b/_xlarge.webp",
       "published": "2026-03-09T00:08:00+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.933
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.8741
     },
     {
       "title": "I'm a 78-year-old retiree who's vibe coding. Being out of the workforce doesn't mean we can't use AI like tech pros.",
@@ -209,7 +293,7 @@
       "published": "2026-03-09T00:00:02+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9297
+      "score": 1.871
     },
     {
       "title": "AI Needs Management Consultants After All",
@@ -222,8 +306,8 @@
       "image": "https://images.wsj.net/im-36462962/social",
       "published": "2026-03-09T00:00:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9297
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.871
     },
     {
       "title": "When Knees Buckle, then Bend, then Break",
@@ -236,8 +320,8 @@
       "image": "https://spyglass.org/content/images/2026/03/438356-theon-greyjoy-reek-played-alfie-allen.jpg",
       "published": "2026-03-08T23:15:33+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9118
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.8543
     },
     {
       "title": "The Insidious Cost of ‘AI Brain Fry’",
@@ -250,8 +334,8 @@
       "image": "https://ic-cdn.flipboard.com/inc.com/83526a487fd6a84cb775081ae55795bca0eb8586/_xlarge.webp",
       "published": "2026-03-08T23:06:18+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.9081
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.8508
     },
     {
       "title": "I’m begging photographers not to use AI to write their Instagram captions. Here’s why it’s such a bad idea",
@@ -264,8 +348,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/gwDx5oUGYdDvUwvnGngZvi-2560-80.jpg",
       "published": "2026-03-08T22:20:00+00:00",
       "firstSeen": "2026-03-08T23:52:37.584082+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.8899
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.8339
     },
     {
       "title": "Anthropic finally reveals which jobs AI cannot replace",
@@ -278,8 +362,8 @@
       "image": "https://ic-cdn.flipboard.com/thestreet.com/18e25eff5a204b40bab959c78177aadaea1bdacd/_xlarge.jpeg",
       "published": "2026-03-08T21:37:00+00:00",
       "firstSeen": "2026-03-08T22:54:59.852078+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.8734
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.8184
     },
     {
       "title": "Microsoft Broke the Only Thing That Actually Mattered",
@@ -292,8 +376,8 @@
       "image": "https://ic-cdn.flipboard.com/yankodesign.com/92bda39e6ea13ef8ed536989c576d541de6ca1d1/_xlarge.jpeg",
       "published": "2026-03-08T20:32:09+00:00",
       "firstSeen": "2026-03-09T00:26:45.827800+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.849
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.7957
     },
     {
       "title": "Memory shortage raises concerns for AI smartphone supply",
@@ -307,7 +391,7 @@
       "published": "2026-03-08T20:01:48+00:00",
       "firstSeen": "2026-03-08T20:54:59.264103+00:00",
       "lastSeen": "2026-03-08T20:54:59.264103+00:00",
-      "score": 1.8379
+      "score": 1.7853
     },
     {
       "title": "Study Finds That Execs Are Outsourcing Their Thinking to AI",
@@ -321,7 +405,7 @@
       "published": "2026-03-08T18:15:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7999
+      "score": 1.7498
     },
     {
       "title": "Is AI productivity prompting burnout? Study finds new pattern of \"AI brain fry\"",
@@ -335,7 +419,7 @@
       "published": "2026-03-08T17:57:54+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7939
+      "score": 1.7443
     },
     {
       "title": "Musk’s two-word response to Anthropic CEO’s claim its AI may have gained consciousness",
@@ -348,8 +432,8 @@
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/6d0a8561277292e518ce0ecee62c256d3833137f/_xlarge.jpeg",
       "published": "2026-03-08T17:13:05+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7787
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.73
     },
     {
       "title": "Meta smart glasses privacy concerns grow",
@@ -363,7 +447,7 @@
       "published": "2026-03-08T17:00:45+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
       "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 1.7745
+      "score": 1.7262
     },
     {
       "title": "I used to swear by Pixel's camera greatness, but now I'm moving on",
@@ -377,7 +461,7 @@
       "published": "2026-03-08T16:38:57+00:00",
       "firstSeen": "2026-03-08T13:53:03.848580+00:00",
       "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 1.7672
+      "score": 1.7194
     },
     {
       "title": "Owner of ICE detention facility sees big opportunity in AI man camps",
@@ -390,8 +474,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/0025adb6df260732b7364d6501988f411110b105/_large.jpeg",
       "published": "2026-03-08T16:30:00+00:00",
       "firstSeen": "2026-03-08T16:58:20.710532+00:00",
-      "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 1.7643
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.7166
     },
     {
       "title": "Ryan Gosling breaks character over surprise last-minute changes — including “Barbie” joke — in hilarious “SNL” sketch",
@@ -405,7 +489,7 @@
       "published": "2026-03-08T16:18:02+00:00",
       "firstSeen": "2026-03-08T23:52:37.584082+00:00",
       "lastSeen": "2026-03-08T23:52:37.584082+00:00",
-      "score": 1.7603
+      "score": 1.7129
     },
     {
       "title": "A Machine Learning Engineer Thought He Was Safe From AI Layoffs. Then He Got Some Depressing News",
@@ -419,7 +503,7 @@
       "published": "2026-03-08T16:00:00+00:00",
       "firstSeen": "2026-03-08T20:54:59.264103+00:00",
       "lastSeen": "2026-03-08T20:54:59.264103+00:00",
-      "score": 1.7544
+      "score": 1.7074
     },
     {
       "title": "It’s not just data centers. New power lines for AI are also stirring local anger and turned one man’s 40 acres of paradise into ‘hell’",
@@ -433,7 +517,7 @@
       "published": "2026-03-08T15:17:40+00:00",
       "firstSeen": "2026-03-08T19:03:42.489548+00:00",
       "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 1.7407
+      "score": 1.6947
     },
     {
       "title": "I Asked ChatGPT To Make Me a Costco Weekly Grocery Shopping List for Under $100",
@@ -447,7 +531,7 @@
       "published": "2026-03-08T15:05:06+00:00",
       "firstSeen": "2026-03-08T16:58:20.710532+00:00",
       "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 1.7367
+      "score": 1.6909
     },
     {
       "title": "Explainable AI is making black box models worthless in the agentic era",
@@ -460,8 +544,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/gWr6NrfMqA5kB42af2aice-2200-80.jpg",
       "published": "2026-03-08T15:00:00+00:00",
       "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 2.0351
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.9894
     },
     {
       "title": "OpenAI's robotics hardware lead resigns following deal with the Department of Defense",
@@ -474,92 +558,8 @@
       "image": "https://ic-cdn.flipboard.com/yimg.com/4807362457e00277a222f6c0c1f24fcaab6e9a1f/_xlarge.jpeg",
       "published": "2026-03-08T14:44:19+00:00",
       "firstSeen": "2026-03-09T00:26:45.827800+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7302
-    },
-    {
-      "title": "Trump’s DHS agents are wearing Meta AI glasses. But who are they recording – and why?",
-      "url": "https://www.independent.co.uk/news/world/americas/us-politics/dhs-border-patrol-meta-ai-sunglasses-b2904325.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Immigration agents are wearing personal pairs of Meta AI smart glasses to surveil communities, alarming protesters and civil liberties experts who …",
-      "image": "https://ic-cdn.flipboard.com/independent.co.uk/ac600e3bf50a70e018b7449966d5550fc7ee0e27/_xlarge.jpeg",
-      "published": "2026-03-08T14:38:28+00:00",
-      "firstSeen": "2026-03-08T16:58:20.710532+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.0283
-    },
-    {
-      "title": "7 Money Decisions Where Claude Is Better Than ChatGPT — From Social Security to Banking",
-      "url": "https://www.aol.com/7-money-decisions-where-claude-140907692.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Millions of Americans now use artificial intelligence (AI) for financial guidance. However, experts say ChatGPT and Claude don’t always deliver the same answers. For high-stakes money decisions, that gap can translate into real dollars lost. Here are seven money decisions where Claude is better than …",
-      "image": "https://ic-cdn.flipboard.com/yimg.com/2a69b441b308c3021fc6c4f94aaee6ff35f3f661/_xlarge.jpeg",
-      "published": "2026-03-08T14:09:07+00:00",
-      "firstSeen": "2026-03-08T17:53:41.031678+00:00",
-      "lastSeen": "2026-03-08T19:03:42.489548+00:00",
-      "score": 1.7192
-    },
-    {
-      "title": "Apple's not done: 3 more products coming this spring",
-      "url": "https://www.cultofmac.com/news/apple-spring-2026",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple released no fewer than seven products last week, including the MacBook Neo, the M5 MacBook Air, the iPhone 17e and much more. But there are still three more products likely to be coming out of Cupertino this spring — and one of them is among Apple’s most popular offerings. Here’s what new …",
-      "image": "https://ic-cdn.flipboard.com/cultofmac.com/8f9e36ad55d55a97d2c617c9884f6b2bb6fb7ba7/_large.webp",
-      "published": "2026-03-08T14:00:43+00:00",
-      "firstSeen": "2026-03-08T14:55:02.222857+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.4166
-    },
-    {
-      "title": "How to draw Marvel superheroes with attitude using a hybrid art approach",
-      "url": "https://www.creativebloq.com/art/digital-art/how-to-draw-marvel-superheroes-with-attitude-using-a-hybrid-art-approach",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Léo Chiola reveals how he created his Spider-Punk Marvel Snap card illustration. I had the chance to illustrate several Spider-Verse cards for …",
-      "image": "https://cdn.mos.cms.futurecdn.net/22YL7MX8voSSnPnTwBRNZK-1000-80.jpg",
-      "published": "2026-03-08T14:00:00+00:00",
-      "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T19:46:43.125737+00:00",
-      "score": 1.7164
-    },
-    {
-      "title": "ChatGPT has delayed the roll out of its adult mode again: 'Getting the experience right will take more time'",
-      "url": "https://www.techradar.com/ai-platforms-assistants/chatgpt/chatgpt-has-delayed-the-roll-out-of-its-adult-mode-again-getting-the-experience-right-will-take-more-time",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "It was last October when OpenAI CEO Sam Altman promised that ChatGPT would get an adult mode — for generating erotica and other kinds of similar …",
-      "image": "https://cdn.mos.cms.futurecdn.net/8ymAbncGYJmbanK33tBzZ6-2560-80.jpg",
-      "published": "2026-03-08T13:30:00+00:00",
-      "firstSeen": "2026-03-08T15:49:13.252327+00:00",
-      "lastSeen": "2026-03-08T15:49:13.252327+00:00",
-      "score": 1.7072
-    },
-    {
-      "title": "BYD’s 1.5 MW “Flash” Charging Wasn’t A Gimmick. The Battery Chemistry Behind It Could Change The Industry.",
-      "url": "https://cleantechnica.com/2026/03/08/byds-1-5-mw-flash-charging-wasnt-a-gimmick-the-battery-chemistry-behind-it-could-change-the-industry",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Earlier this week, fellow CleanTechnica writer Larry Evans covered the raw numbers behind BYD’s new 1.5-megawatt Flash Charging system. You can read …",
-      "image": "https://ic-cdn.flipboard.com/cleantechnica.com/b3f262926a18dce81b049f0103162e7777edeb28/_xlarge.jpeg",
-      "published": "2026-03-08T13:12:05+00:00",
-      "firstSeen": "2026-03-08T13:53:03.848580+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7017
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.6848
     },
     {
       "title": "Introducing... Life Without",
@@ -572,8 +572,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.2709
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.2608
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -586,8 +586,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.2048
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
+      "score": 1.2038
     },
     {
       "title": "The Life Scientific: Julia Simner",
@@ -600,7 +600,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-02-23T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
       "score": 1.1901
     }
   ],
