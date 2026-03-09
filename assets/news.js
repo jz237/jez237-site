@@ -84,6 +84,12 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
     title.textContent = n.title || 'Untitled';
 
     const meta = el('div', 'news-meta', `${n.source || 'Unknown'} · ${fmtDate(n.published)} · score ${n.score ?? '-'}`);
+
+    if (n.model_release) {
+      const badge = el('span', 'model-release-badge', '🔥 Model Release');
+      body.insertBefore(badge, body.firstChild);
+    }
+
     body.appendChild(title);
     body.appendChild(meta);
 
@@ -135,6 +141,21 @@ async function init() {
       const mode = sortSelect?.value || 'latest';
       if (mode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
       else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
+
+      // Pin recent model releases to the top regardless of sort mode.
+      // "Recent" = published within the last 48 hours.
+      const MODEL_RELEASE_PIN_HOURS = 48;
+      items.sort((a, b) => {
+        const aAge = (Date.now() - new Date(a.published).getTime()) / 3600000;
+        const bAge = (Date.now() - new Date(b.published).getTime()) / 3600000;
+        const aPin = a.model_release && aAge < MODEL_RELEASE_PIN_HOURS;
+        const bPin = b.model_release && bAge < MODEL_RELEASE_PIN_HOURS;
+        if (aPin && !bPin) return -1;
+        if (!aPin && bPin) return 1;
+        // Both pinned → most recent first
+        if (aPin && bPin) return new Date(b.published) - new Date(a.published);
+        return 0; // preserve existing order for non-pinned
+      });
 
       const limit = category === 'Science' ? 30 : 60;
       items = items.slice(0, limit);
