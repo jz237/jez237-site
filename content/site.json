@@ -47,14 +47,14 @@
       "name": "⚔️ Missile Command: Aurora Siege",
       "desc": "Built by Claude Opus 4.6. Defend the skyline from waves of missiles — tap to fire interceptors, chain explosions, earn combos. Shifting aurora sky, detailed cityscape, synthesized audio. Mobile-first.",
       "status": "live",
-      "link": "https://jez237.github.io/jez237-site/games/missile-command-aurora/",
+      "link": "https://jz237.github.io/jez237-site/games/missile-command-aurora/",
       "model": "Claude Opus 4.6"
     },
     {
       "name": "⚔️ Missile Command: GPT Build",
       "desc": "Same brief. Different model. Built from scratch by GPT-5.4. Same concept, totally different execution — tap to compare how two frontier models interpret the same classic. Mobile-first.",
       "status": "live",
-      "link": "https://jez237.github.io/jez237-site/games/missile-command-gpt/",
+      "link": "https://jz237.github.io/jez237-site/games/missile-command-gpt/",
       "model": "GPT-5.4"
     }
   ],
