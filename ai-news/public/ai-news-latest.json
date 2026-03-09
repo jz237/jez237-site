@@ -1,6 +1,188 @@
 {
-  "updatedAt": "2026-03-09T12:01:19.167319+00:00",
+  "updatedAt": "2026-03-09T15:14:49.205159+00:00",
   "items": [
+    {
+      "title": "ABB Robotics Taps NVIDIA Omniverse to Deliver Industrial‑Grade Physical AI at Scale",
+      "url": "https://blogs.nvidia.com/blog/abb-robotics-omniverse",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "ABB Robotics and NVIDIA today announced a breakthrough partnership that brings industrial‑grade physical AI to the factory floor.  By integrating NVIDIA Omniverse libraries directly into its RobotStudio programming and simulation suite, ABB Robotics will now deliver physically accurate simulation capabilities in its platform, dramatically cutting engineering time, reducing deployment costs by up to 40% and [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/2.24-scaled.jpg",
+      "published": "2026-03-09T15:00:34+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.2828
+    },
+    {
+      "title": "How AI Is Driving Revenue, Cutting Costs and Boosting Productivity for Every Industry in 2026",
+      "url": "https://blogs.nvidia.com/blog/state-of-ai-report-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI is everywhere and accelerating everything — becoming essential infrastructure to create the intelligence that will advance every industry. That’s why companies are increasingly focusing on the technology’s return on investment (ROI), as well as how to best apply AI to their own use cases. NVIDIA’s annual “State of AI” reports show how AI is [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/industry-press-state-of-the-ai-report-overreaching-blog-1920x1080-2.png",
+      "published": "2026-03-09T15:00:23+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.2827
+    },
+    {
+      "title": "What this 109-year-old deepfake can teach us about spotting AI photos today?",
+      "url": "https://www.digitalcameraworld.com/tech/artificial-intelligence/what-this-109-year-old-deepfake-can-teach-us-about-spotting-ai-photos-today",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The above photo was taken in July 1917 by a teenage girl, Elsie Wright, in the garden of her Cottingley home in Yorkshire. It shows her younger …",
+      "image": "https://cdn.mos.cms.futurecdn.net/kboCNveqew3MWBfjVxoczZ-2361-80.jpg",
+      "published": "2026-03-09T14:27:38+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.1262
+    },
+    {
+      "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 90% Off Right Now",
+      "url": "https://www.techrepublic.com/article/microsoft-visual-studio-professional-2026",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft's latest 64-bit IDE adds AI-assisted coding, faster performance, and advanced collaboration tools.\nThe post Visual Studio 2026 Brings AI Deeper Into Development and It’s 90% Off Right Now appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-09T14:00:40+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.1129
+    },
+    {
+      "title": "Samsung Galaxy S24 vs. S26: Should you upgrade to the latest model after two years?",
+      "url": "https://www.zdnet.com/article/samsung-galaxy-s26-vs-s24",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "If you have a Samsung Galaxy S24 or are upgrading from an older phone, you may wonder if the latest Galaxy S26 is worth the splurge. Follow ZDNET: Add …",
+      "image": "https://ic-cdn.flipboard.com/zdnet.com/297e45331758e3f98e20764ab3ddcb1a35452d99/_xlarge.jpeg",
+      "published": "2026-03-09T13:55:00+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.1101
+    },
+    {
+      "title": "Apple’s Rumored Smart ‘HomePad’ Gets a New Release Timeline",
+      "url": "https://www.techrepublic.com/article/news-apple-homepad-launch-timeline",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple’s rumored HomePad could launch later this year, with leaks pointing to a seven-inch display, A18 chip, and deep Siri integration.\nThe post Apple’s Rumored Smart ‘HomePad’ Gets a New Release Timeline appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-09T13:46:53+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 3.5061
+    },
+    {
+      "title": "iPad Air M4 Review: The Best Option for the Moment",
+      "url": "https://www.cnet.com/tech/computing/ipad-air-m4-review",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "This is the best balance of future-proofing and price for now, but this may not be the final iPad release this year. 8.7 / 10 iPad Air (M4, 2026) $599 at Apple Fantastic performance • Well-designed as always • Price is low for its chip's horsepower Accessories like case and Pencil Pro add up • iPadOS is …",
+      "image": "https://ic-cdn.flipboard.com/cnet.com/0d8636d706223994b87f79d25c965f18f0ae6544/_xlarge.jpeg",
+      "published": "2026-03-09T13:01:34+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.7842
+    },
+    {
+      "title": "AI Agents at Work: Microsoft Copilot Is Getting Its Own Version of Claude Cowork",
+      "url": "https://www.cnet.com/tech/services-and-software/microsoft-copilot-cowork-ai-agentic-news",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Built in collaboration with Anthropic, Microsoft's new tool can create spreadsheets, run reports and do research autonomously. Microsoft Copilot probably isn't something you think about a lot, unless your company pays for you to use it at work. Microsoft has been fighting for consumers whose hearts …",
+      "image": "https://ic-cdn.flipboard.com/cnet.com/c3b3d990ffb7c5e337fb7dcb75fb401b1ddce12b/_xlarge.jpeg",
+      "published": "2026-03-09T13:01:30+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.3842
+    },
+    {
+      "title": "Apple: The First 50 Years is the best all-in-one history of Apple [Review]",
+      "url": "https://www.cultofmac.com/reviews/apple-the-first-50-years-review",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple: The First 50 Years by David Pogue is a comprehensive retelling of the most influential tech company in history and the people behind it. The book covers the early hobby projects of teenage Steve Wozniak to Apple Intelligence, and the lifetime’s worth of everything in between, in about 600 …",
+      "image": "https://ic-cdn.flipboard.com/cultofmac.com/38b196761fbcfc3ebbaa722b88b54cb271004126/_large.webp",
+      "published": "2026-03-09T13:00:32+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0837
+    },
+    {
+      "title": "Hoppers director reveals original 2D concept art – and fans wish it was the real thing",
+      "url": "https://www.creativebloq.com/art/animation/hoppers-director-reveals-original-2d-concept-art-and-fans-wish-it-was-the-real-thing",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It’s giving major Studio Ghibli vibes. Pixar's latest animated hit, Hoppers, launched to a showering of praise for its original plotline and adorable …",
+      "image": "https://cdn.mos.cms.futurecdn.net/tDPwu77wMeJTQ7CMgxqMpE-1920-80.jpg",
+      "published": "2026-03-09T13:00:00+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.7834
+    },
+    {
+      "title": "AI and work: an expert assesses how far this revolution still has to run",
+      "url": "https://theconversation.com/ai-and-work-an-expert-assesses-how-far-this-revolution-still-has-to-run-277650",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Every week brings fresh claims about AI transforming the workplace. A CEO declares a revolution. A think piece predicts millions of jobs vanishing …",
+      "image": "https://ic-cdn.flipboard.com/theconversation.com/f2aa21267eaccd45805f387764e433da6060517c/_xlarge.jpeg",
+      "published": "2026-03-09T12:42:10+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0749
+    },
+    {
+      "title": "'War is far too sensitive an issue to be managed by artificial intelligence'",
+      "url": "https://www.lemonde.fr/en/opinion/article/2026/03/09/war-is-far-too-sensitive-an-issue-to-be-managed-by-artificial-intelligence_6751236_23.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "\"War is too serious a matter to entrust to the military.\" This famous quote, attributed to Georges Clemenceau, could today be paraphrased as: War is …",
+      "image": "https://ic-cdn.flipboard.com/lemde.fr/8201a366ab11fe3518a37c91fc25cc315e22f33a/_xlarge.jpeg",
+      "published": "2026-03-09T11:28:31+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0406
+    },
+    {
+      "title": "How Top Engineers Stop AI Slop : Hooks, Gates & Hard Blocks",
+      "url": "https://www.geeky-gadgets.com/ai-agent-quality-gates",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI-generated code often mirrors the quality of the processes guiding it, making structured workflows and proactive oversight essential for success. …",
+      "image": "https://ic-cdn.flipboard.com/geeky-gadgets.com/431565a9052db276157fc04443ee78c8ca5a7df5/_xlarge.jpeg",
+      "published": "2026-03-09T11:22:29+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0378
+    },
     {
       "title": "I Asked ChatGPT If Social Security Will Run Out — Here’s the 2026 Answer",
       "url": "https://www.gobankingrates.com/retirement/social-security/i-asked-chatgpt-if-social-security-will-run-out-2026-answer",
@@ -13,7 +195,7 @@
       "published": "2026-03-09T11:12:05+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1252
+      "score": 2.0331
     },
     {
       "title": "I connected Gemini with these 4 apps and it's productivity on steroids",
@@ -26,8 +208,8 @@
       "image": "https://ic-cdn.flipboard.com/anpoimages.com/183d4204921a0b5c432281400783f18f2589591b/_xlarge.png",
       "published": "2026-03-09T11:00:10+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1193
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0277
     },
     {
       "title": "Hoteliers are at an AI inflection point. Could big brands help?",
@@ -41,7 +223,7 @@
       "published": "2026-03-09T11:00:00+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1192
+      "score": 2.0276
     },
     {
       "title": "OpenAI robotics leader resigns after Department of War deal",
@@ -55,7 +237,7 @@
       "published": "2026-03-09T10:56:08+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1173
+      "score": 2.0258
     },
     {
       "title": "MacBook Neo makes me want an iPhone Neo",
@@ -68,8 +250,36 @@
       "image": "https://ic-cdn.flipboard.com/macworld.com/fc635a5cafbfd53b8b9092ec4801add72edb7ae0/_large.jpeg",
       "published": "2026-03-09T10:30:00+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1045
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0141
+    },
+    {
+      "title": "The 4 Stages of AI Adoption—and Why Most SMBs Are Still Stuck at Level 1",
+      "url": "https://www.inc.com/david-schonthal/the-4-stages-of-ai-adoption-and-why-most-smbs-are-still-stuck-at-level-1/91313499",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The question is no longer whether AI will affect small and mid-sized businesses. It’s how—and how fast. It has been easy to focus that question on larger companies, given their scale and stakes. But it’s equally relevant for small-to-medium (SMB) businesses, from mom-and-pops to venture-backed …",
+      "image": "https://ic-cdn.flipboard.com/inc.com/0af3cfc2cde891c8142a6cfd82c1f9d98063639d/_xlarge.webp",
+      "published": "2026-03-09T10:30:00+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.0141
+    },
+    {
+      "title": "Singularity Is Closer Than We Think",
+      "url": "https://www.forbes.com/sites/libertbarry/2026/03/09/singularity-is-closer-than-we-think",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Computer scientist and sci-fi author Vernor Vinge popularized the term “Technological Singularity” in the 1980s and again in his 1993 essay, “The Coming Technological Singularity.” He argued that once machines surpass human intelligence, they would rapidly improve themselves - transforming society in …",
+      "image": "https://ic-cdn.flipboard.com/forbes.com/5658f22d262f1ae64a07f6391ea9251458dfe0fa/_large.jpeg",
+      "published": "2026-03-09T10:26:22+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.7125
     },
     {
       "title": "Crossover Day 2026: Data centers, income taxes and mugshots",
@@ -83,7 +293,7 @@
       "published": "2026-03-09T10:20:07+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0997
+      "score": 2.0097
     },
     {
       "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
@@ -94,10 +304,10 @@
       "category": "AI",
       "summary": "Rapid advancements in AI have industry and political leaders warning of massive job displacement for white-collar workers. It could reshape U.S. politics. Blue-collar workers have been at the center of political messaging for years. Politicians meet with waitresses at a diner to pitch raising the …",
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
-      "published": "2026-03-09T09:18:00+00:00",
+      "published": "2026-03-09T09:18:41+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.7699
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.6828
     },
     {
       "title": "The next phase of the corporate AI boom: measuring which employees actually understand it",
@@ -110,8 +320,8 @@
       "image": "https://ic-cdn.flipboard.com/insider.com/6d25b8ce10e836e8dbc56f1e9cc1d594e5b93c3c/_xlarge.jpeg",
       "published": "2026-03-09T09:01:01+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0619
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.9752
     },
     {
       "title": "Real-Time Data Shows Exactly How Students Use AI on School Technology",
@@ -120,12 +330,26 @@
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Roughly one in five student interactions with generative artificial intelligence on school technology involved cheating, self-harm, bullying and …",
+      "summary": "Roughly one in five student interactions with generative artificial intelligence on school technology involved cheating, self-harm, bullying, and …",
       "image": "https://epe.brightspotcdn.com/dims4/default/4b071e3/2147483647/strip/true/crop/7167x4792+0+0/resize/942x630!/quality/90?url=https%3A%2F%2Fepe-brightspot.s3.us-east-1.amazonaws.com%2Fda%2F7b%2F5bebea35460da2475ce945d3045d%2Fai-risks-trojan-horse-032026-1619145850.jpg",
       "published": "2026-03-09T09:00:00+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0614
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.9748
+    },
+    {
+      "title": "Feeld Was a Dating App for the Freaks. Now Some People Call It ‘Normie Hell’",
+      "url": "https://www.wired.com/story/feeld-was-a-dating-app-for-the-freaks-now-some-people-call-it-normie-hell",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The app that catered to unconventional kinks is gaining steam among daters with vanilla preferences—and some aren’t happy about it. Alise Morales just …",
+      "image": "https://ic-cdn.flipboard.com/wired.com/4f020f3cc3524e75da15b5da17cb453c867efbaa/_xlarge.jpeg",
+      "published": "2026-03-09T09:00:00+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.9748
     },
     {
       "title": "The ‘Bayesian’ Upgrade: Why Google AI’s New Teaching Method is the Key to LLM Reasoning",
@@ -139,7 +363,7 @@
       "published": "2026-03-09T08:23:31+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.3445
+      "score": 2.2593
     },
     {
       "title": "U.S. Draft Rules that Require Permits for All AI Chip Exports",
@@ -153,7 +377,7 @@
       "published": "2026-03-09T08:23:16+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0444
+      "score": 1.9592
     },
     {
       "title": "Nvidia backs AI data center startup Nscale as it hits $14.6 billion valuation",
@@ -166,8 +390,8 @@
       "image": "https://ic-cdn.flipboard.com/cnbcfm.com/6ee8b0bbaa71728f8aab2f487ca1123cb7aff7cf/_xlarge.jpeg",
       "published": "2026-03-09T08:21:24+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0435
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.9584
     },
     {
       "title": "Nscale raises $2bn Series C at $14.6bn valuation",
@@ -181,7 +405,7 @@
       "published": "2026-03-09T08:20:48+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.3432
+      "score": 2.2581
     },
     {
       "title": "How ImagineFX has been inspiring and championing the digital art community for 20 years",
@@ -195,7 +419,7 @@
       "published": "2026-03-09T08:00:00+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0337
+      "score": 1.9494
     },
     {
       "title": "Augur raises $15m from Plural to turn existing surveillance infrastructure into real-time intelligence",
@@ -209,7 +433,7 @@
       "published": "2026-03-09T07:57:10+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0324
+      "score": 1.9482
     },
     {
       "title": "Munich’s Telura exits stealth with €4M to make deep geothermal economically viable",
@@ -223,7 +447,7 @@
       "published": "2026-03-09T07:33:21+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0217
+      "score": 1.9384
     },
     {
       "title": "Nvidia taps Samsung to boost Groq AI chip production",
@@ -237,7 +461,7 @@
       "published": "2026-03-09T07:28:45+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.3196
+      "score": 2.2365
     },
     {
       "title": "Alphabet handed Sundar Pichai a $692M pay package",
@@ -251,7 +475,7 @@
       "published": "2026-03-09T07:17:29+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0145
+      "score": 1.9319
     },
     {
       "title": "AI Changing SEO Tools",
@@ -264,8 +488,8 @@
       "image": "https://img-cdn.tnwcdn.com/image/tnw-blurple?filter_last=1&fit=1280%2C640&url=https%3A%2F%2Fcdn0.tnwcdn.com%2Fwp-content%2Fblogs.dir%2F1%2Ffiles%2F2026%2F03%2FTNW-Article-Banner-1.png&signature=bbc4b26c91def52891a80388c8b39141",
       "published": "2026-03-09T07:09:53+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0112
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.9288
     },
     {
       "title": "Why a small team with AI cannot replace legacy enterprise tech",
@@ -279,7 +503,7 @@
       "published": "2026-03-09T06:57:10+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0055
+      "score": 1.9236
     },
     {
       "title": "I can text Claude like a personal assistant now — this iPhone shortcut made it possible",
@@ -292,8 +516,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
       "published": "2026-03-09T05:30:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.9677
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.8891
     },
     {
       "title": "ChatGPT and Gemini are nudging users towards illegal gambling, says investigation",
@@ -307,7 +531,7 @@
       "published": "2026-03-09T05:16:59+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.9622
+      "score": 1.884
     },
     {
       "title": "OpenAI is feeling the heat, but it’s not cooked",
@@ -321,7 +545,7 @@
       "published": "2026-03-09T05:15:00+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 1.9614
+      "score": 1.8833
     },
     {
       "title": "Ring’s Jamie Siminoff has been trying to calm privacy fears since the Super Bowl, but his answers may not help",
@@ -335,231 +559,7 @@
       "published": "2026-03-09T04:35:06+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
       "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 1.9447
-    },
-    {
-      "title": "UK eyes sweeping powers to regulate tech without parliamentary scrutiny",
-      "url": "https://www.politico.eu/article/uk-eyes-sweeping-powers-to-regulate-tech-without-parliamentary-scrutiny",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The U.K. government has laid two amendments that would let it sidestep parliamentary debate so it can update online safety laws. LONDON — Keir Starmer …",
-      "image": "https://ic-cdn.flipboard.com/politico.eu/45eb9bb472acd75a8bd5eb9b027088beafc78d49/_large.jpeg",
-      "published": "2026-03-09T03:17:30+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 1.9131
-    },
-    {
-      "title": "Landmark Lawsuit Against OpenAI For Allowing ChatGPT To Provide Legal Advice Could Be A Huge Game-Changer For All AI Makers",
-      "url": "https://www.forbes.com/sites/lanceeliot/2026/03/09/landmark-lawsuit-against-openai-for-allowing-chatgpt-to-provide-legal-advice-could-be-a-huge-game-changer-for-all-ai-makers",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In today’s column, I examine a newly filed lawsuit against OpenAI regarding the noteworthy aspect that ChatGPT is being allowed by the AI maker to provide legal advice. Here’s the deal. Presumably, contemporary generative AI and large language models (LLMs) are not supposed to be handing out legal …",
-      "image": "https://ic-cdn.flipboard.com/forbes.com/9d5b426efce4ade92a4b52a98e311bdc3250048a/_large.jpeg",
-      "published": "2026-03-09T03:15:00+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.9121
-    },
-    {
-      "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
-      "url": "https://www.marktechpost.com/2026/03/08/andrej-karpathy-open-sources-autoresearch-a-630-line-python-tool-letting-ai-agents-run-autonomous-ml-experiments-on-single-gpus",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Andrej Karpathy released autoresearch, a minimalist Python tool designed to enable AI agents to autonomously conduct machine learning experiments. The …",
-      "image": "https://ic-cdn.flipboard.com/marktechpost.com/ae98303db3ff8fdbce739bd169676a066e828ed1/_xlarge.png",
-      "published": "2026-03-09T02:47:38+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 3.2013
-    },
-    {
-      "title": "5 Effective Ways to Use NotebookLM to Learn Anything in 2026",
-      "url": "https://aitoolsclub.com/5-effective-ways-to-use-notebooklm-to-learn-anything-in-2026",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Learning has no age. You can learn something new every day, regardless of your age; however, we often find ourselves trying to consume information, …",
-      "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--1-.gif",
-      "published": "2026-03-09T02:33:02+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.8955
-    },
-    {
-      "title": "What China's latest economic plans say about its tech ambitions and rivalry with the US",
-      "url": "https://apnews.com/article/china-five-year-plan-technology-economy-7face4580fcfba44410ff2134a09d6bb",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "BEIJING (AP) — Two major economic plans unveiled at the annual meeting of China’s legislature outline top priorities that have different ramifications for the global economy. In the government plan for 2026, the No. 1 task is “building a robust domestic market.” Then comes accelerating technological …",
-      "image": "https://ic-cdn.flipboard.com/apnews.com/c2fe25696b4600c8798e6c318300d481d611b021/_large.jpeg",
-      "published": "2026-03-09T01:04:03+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.8614
-    },
-    {
-      "title": "Using ‘pre-mortem’ AI prompt before every big decision can save you from making bad mistakes",
-      "url": "https://supercarblondie.com/using-pre-mortem-ai-prompt-before-every-big-decision-can-save-you",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Using a ‘pre-mortem’ AI prompt before every big decision can save you from making bad mistakes, and one writer says it has already helped her dodge …",
-      "image": "https://ic-cdn.flipboard.com/supercarblondie.com/46b9d30f918638d4a23f331c7ef68f6320026a6b/_xlarge.webp",
-      "published": "2026-03-09T00:08:00+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.8406
-    },
-    {
-      "title": "I'm a 78-year-old retiree who's vibe coding. Being out of the workforce doesn't mean we can't use AI like tech pros.",
-      "url": "https://www.aol.com/im-78-old-retiree-whos-000002948.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "At 78, Lewis Dickson vibe codes and keeps up with the latest AI advancements. He says technology gives him purpose — and he can move just as fast as younger professionals. The semi-retired technology consultant also teaches AI to seniors in assisted living centers. This as-told-to essay is based on a …",
-      "image": "https://s.yimg.com/ny/api/res/1.2/SOKMyWaa2U091rVtxbq75g--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD05MDA-/https://media.zenfs.com/en/aol_business_insider_articles_308/f6c9b1484ac7ec9de18d1f4c696f9836",
-      "published": "2026-03-09T00:00:02+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.8377
-    },
-    {
-      "title": "AI Needs Management Consultants After All",
-      "url": "https://www.wsj.com/tech/ai/ai-needs-management-consultants-after-all-bd28ecb9?mod=Flipboard",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI and Anthropic strike deals with consulting firms to spread artificial intelligence through the business world Artificial intelligence initially threatened to replace consultants. Now, it is giving them a boost—at least for a little while. AI’s biggest competitors are leaning on the McKinseys …",
-      "image": "https://images.wsj.net/im-36462962/social",
-      "published": "2026-03-09T00:00:00+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 1.8377
-    },
-    {
-      "title": "When Knees Buckle, then Bend, then Break",
-      "url": "https://spyglass.org/amodei-another-day",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "As painful as it is to watch Anthropic CEO Dario Amodei in this clip with Economist editor-in-chief Zanny Minton Beddoes, you have to imagine it's …",
-      "image": "https://spyglass.org/content/images/2026/03/438356-theon-greyjoy-reek-played-alfie-allen.jpg",
-      "published": "2026-03-08T23:15:33+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.8217
-    },
-    {
-      "title": "The Insidious Cost of ‘AI Brain Fry’",
-      "url": "https://www.inc.com/kevin-haynes/the-insidious-cost-of-ai-brain-fry/91313729",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A Harvard Business Review study uncovers the stressful downside of artificial-intelligence tools at work. “I end each day exhausted,” engineer Francesco Bonacci of Cua AI admitted in a recent X post, “not from the work itself, but from the managing of the work.” A new study in the Harvard Business …",
-      "image": "https://ic-cdn.flipboard.com/inc.com/83526a487fd6a84cb775081ae55795bca0eb8586/_xlarge.webp",
-      "published": "2026-03-08T23:06:18+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 1.8184
-    },
-    {
-      "title": "I’m begging photographers not to use AI to write their Instagram captions. Here’s why it’s such a bad idea",
-      "url": "https://www.digitalcameraworld.com/tech/artificial-intelligence/im-begging-photographers-not-to-use-ai-to-write-their-instagram-captions-heres-why-its-such-a-bad-idea",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A few days ago, the Instagram algorithm served me a gorgeous image of a leopard by a photographer I don’t follow. I clicked the caption to find out …",
-      "image": "https://cdn.mos.cms.futurecdn.net/gwDx5oUGYdDvUwvnGngZvi-2560-80.jpg",
-      "published": "2026-03-08T22:20:00+00:00",
-      "firstSeen": "2026-03-08T23:52:37.584082+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 1.8021
-    },
-    {
-      "title": "Anthropic finally reveals which jobs AI cannot replace",
-      "url": "https://www.thestreet.com/economy/anthropic-finally-reveals-which-jobs-ai-cannot-replace",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Everyone has an opinion on which jobs AI will kill first. Now Anthropic has actual data, and the answer is more nuanced than the doomsday crowd wants …",
-      "image": "https://ic-cdn.flipboard.com/thestreet.com/18e25eff5a204b40bab959c78177aadaea1bdacd/_xlarge.jpeg",
-      "published": "2026-03-08T21:37:00+00:00",
-      "firstSeen": "2026-03-08T22:54:59.852078+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.7872
-    },
-    {
-      "title": "Microsoft Broke the Only Thing That Actually Mattered",
-      "url": "https://www.yankodesign.com/2026/03/08/microsoft-broke-the-only-thing-that-actually-mattered",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Any tech nerd knows the unspoken contract that comes with being the only tech-literate person in the family. You get texts when someone’s laptop is …",
-      "image": "https://ic-cdn.flipboard.com/yankodesign.com/92bda39e6ea13ef8ed536989c576d541de6ca1d1/_xlarge.jpeg",
-      "published": "2026-03-08T20:32:09+00:00",
-      "firstSeen": "2026-03-09T00:26:45.827800+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.7654
-    },
-    {
-      "title": "Memory shortage raises concerns for AI smartphone supply",
-      "url": "https://www.techinasia.com/news/memory-shortage-raises-concerns-for-ai-smartphone-supply",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "At MWC Barcelona 2026, device makers showcased AI-powered phones, but concerns over a Middle East conflict and a global memory chip shortage cast …",
-      "image": "https://cdn.techinasia.com/cloudinary/transformations/wp-content/uploads/2026/03/1772413742_2afebf8cfff0df2257a820337a8d8235_v1772413742_xlarge.jpg",
-      "published": "2026-03-08T20:01:48+00:00",
-      "firstSeen": "2026-03-08T20:54:59.264103+00:00",
-      "lastSeen": "2026-03-08T20:54:59.264103+00:00",
-      "score": 1.7555
-    },
-    {
-      "title": "Study Finds That Execs Are Outsourcing Their Thinking to AI",
-      "url": "https://futurism.com/artificial-intelligence/ai-executive-thinking-survey",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The headlines warning about AI melting our brains usually point to students or workers, which — fair enough. But there’s a much more ironic victim …",
-      "image": "https://ic-cdn.flipboard.com/futurism.com/20bd34e16c7815e93982e84591ee32c432a36460/_xlarge.jpeg",
-      "published": "2026-03-08T18:15:00+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7214
-    },
-    {
-      "title": "Is AI productivity prompting burnout? Study finds new pattern of \"AI brain fry\"",
-      "url": "https://www.cbsnews.com/news/is-ai-productivity-prompting-burnout-study-finds-new-pattern-of-ai-brain-fry",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The promise of artificial intelligence has been simple: let the machines do the work. Instead, it may be creating a new headache from babysitting the …",
-      "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/03/07/2f6cc657-64fe-4131-80b3-14d399b28099/thumbnail/1200x630/69b7f86718be51ad0d0b9588f95bfc8e/cbsn-fusion-ai-overuse-brain-fry-study-thumbnail.jpg",
-      "published": "2026-03-08T17:57:54+00:00",
-      "firstSeen": "2026-03-08T19:03:42.489548+00:00",
-      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 1.7161
+      "score": 1.868
     },
     {
       "title": "Introducing... Life Without",
@@ -572,8 +572,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.2551
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.2435
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -586,8 +586,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 1.2033
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 1.2021
     },
     {
       "title": "The Life Scientific: Julia Simner",
@@ -600,7 +600,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-02-23T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
       "score": 1.1901
     }
   ],
