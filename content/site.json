@@ -56,6 +56,12 @@
       "status": "live",
       "link": "https://jz237.github.io/jez237-site/games/missile-command-gpt/",
       "model": "GPT-5.4"
+    },
+    {
+      "name": "🪨 Boulder Dash",
+      "desc": "Dig through caves, collect diamonds, dodge falling boulders and enemies. Classic arcade puzzler rebuilt from scratch.",
+      "status": "live",
+      "link": "https://jz237.github.io/jez237-site/games/boulder-dash/"
     }
   ],
   "photos": [
