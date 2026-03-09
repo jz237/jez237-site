@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jez237 — Game Experiments</title>
-  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="stylesheet" href="../assets/styles.css" />
   <style>
     .games-grid {
       display: grid;
@@ -121,10 +121,10 @@
     <nav>
       <div class="brand">jez237-site</div>
       <div class="links">
-        <a href="./index.html">Home</a>
-        <a href="./games.html">Games</a>
-        <a href="./news.html">AI News</a>
-        <a href="./cats.html">Cats</a>
+        <a href="../index.html">Home</a>
+        <a href="./index.html">Games</a>
+        <a href="../ai-news/">AI News</a>
+        <a href="../cats/">Cats</a>
         <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">GitHub</a>
       </div>
     </nav>
@@ -225,7 +225,7 @@
       });
     }
 
-    loadJson('./content/site.json')
+    loadJson('../content/site.json')
       .then(data => renderGames(data.games || []))
       .catch(e => {
         document.getElementById('games-empty').textContent = 'Could not load games: ' + e.message;
