@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T05:13:54.027091+00:00",
+  "updatedAt": "2026-03-09T08:02:41.333391+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -172,6 +172,10 @@
     "https://www.aol.com/ryan-gosling-breaks-character-over-161802856.html": {
       "image": "",
       "checkedAt": "2026-03-08T23:52:37.584082+00:00"
+    },
+    "https://www.aol.com/im-78-old-retiree-whos-000002948.html": {
+      "image": "https://s.yimg.com/ny/api/res/1.2/SOKMyWaa2U091rVtxbq75g--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD05MDA-/https://media.zenfs.com/en/aol_business_insider_articles_308/f6c9b1484ac7ec9de18d1f4c696f9836",
+      "checkedAt": "2026-03-09T08:02:41.333391+00:00"
     }
   }
 }

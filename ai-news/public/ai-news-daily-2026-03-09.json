@@ -1,6 +1,6 @@
 {
   "date": "2026-03-09",
-  "updatedAt": "2026-03-09T05:13:54.027091+00:00",
+  "updatedAt": "2026-03-09T08:02:41.333391+00:00",
   "items": [
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
@@ -14,7 +14,105 @@
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
       "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 3.378
+      "score": 3.3007
+    },
+    {
+      "title": "Nvidia taps Samsung to boost Groq AI chip production",
+      "url": "https://www.techinasia.com/news/nvidia-taps-samsung-to-boost-groq-ai-chip-production",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nvidia has asked Samsung Electronics’ foundry business division to boost production of Groq-designed inference AI chips as demand for …",
+      "image": "https://cdn.techinasia.com/cloudinary/transformations/wp-content/uploads/2026/03/1772615244_b84d1d977fcaea1d6b720790e2d29c8f_v1772615244_xlarge.jpg",
+      "published": "2026-03-09T07:28:45+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.4329
+    },
+    {
+      "title": "Munich’s Telura exits stealth with €4M to make deep geothermal economically viable",
+      "url": "https://thenextweb.com/news/telura-exits-stealth-with-e4m",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Telura has come out of stealth with €4 million and a bold claim: it can make deep geothermal economically viable almost anywhere on Earth. The problem with geothermal energy has never been the heat. The Earth’s core sits at roughly 5,000 degrees Celsius, and the thermal gradient beneath the surface is consistent enough that, in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Telura-exits-stealth-with-E4M-.png",
+      "published": "2026-03-09T07:33:21+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.1352
+    },
+    {
+      "title": "Alphabet handed Sundar Pichai a $692M pay package",
+      "url": "https://thenextweb.com/news/sundar-pichai-692-million-pay-waymo-wing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The new deal ties Google’s CEO to the future of its most ambitious bets, and signals that the board has finally decided they’re bets worth making. Sundar Pichai has run Google since 2015 and Alphabet since 2019. In that time, the company’s market value has grown from roughly $535 billion to approximately $3.6 trillion. On [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sundar-Pichai.png",
+      "published": "2026-03-09T07:17:29+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.1272
+    },
+    {
+      "title": "How AI is changing SEO tools: Citation tracking, GEO &#038; AI visibility",
+      "url": "https://thenextweb.com/news/ai-changing-seo-tools",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "If you’ve been feeling like the ground is shifting under your feet in search right now, you’re not imagining it. Twelve months ago, AI in SEO meant one thing: content generation. Every platform rushed to add a “write with AI” button, and the industry spent its collective energy arguing about whether Google would penalize AI-written [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-Article-Banner-1.png",
+      "published": "2026-03-09T07:09:53+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.1234
+    },
+    {
+      "title": "I can text Claude like a personal assistant now — this iPhone shortcut made it possible",
+      "url": "https://www.tomsguide.com/ai/i-can-text-claude-like-a-personal-assistant-now-this-iphone-shortcut-made-it-possible",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For the past few years, most AI assistants have lived inside apps. If you want help from ChatGPT, Claude or Gemini, you open the app, type a prompt …",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
+      "published": "2026-03-09T05:30:00+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.0749
+    },
+    {
+      "title": "ChatGPT and Gemini are nudging users towards illegal gambling, says investigation",
+      "url": "https://www.digitaltrends.com/cool-tech/chatgpt-and-gemini-are-nudging-users-towards-illegal-gambling-says-investigation",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A new investigation suggests that popular AI chatbots, including ChatGPT and Gemini, may inadvertently steer users toward illegal gambling websites. …",
+      "image": "https://ic-cdn.flipboard.com/digitaltrends.com/033ed676abe61343a00cf38df838aa573c976c25/_xlarge.jpeg",
+      "published": "2026-03-09T05:16:59+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.0688
+    },
+    {
+      "title": "OpenAI is feeling the heat, but it’s not cooked",
+      "url": "https://www.morningbrew.com/stories/2026/03/09/openai-is-feeling-the-heat-but-it-s-not-cooked",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The company is dealing with problems from several sides... Late last year, when ChatGPT faced pressure from competitors, OpenAI CEO Sam Altman went …",
+      "image": "https://ic-cdn.flipboard.com/morningbrew.com/c8f4337346a48b164c89cec44c5677fd36bbfcd6/_large.jpeg",
+      "published": "2026-03-09T05:15:00+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.0678
     },
     {
       "title": "Ring’s Jamie Siminoff has been trying to calm privacy fears since the Super Bowl, but his answers may not help",
@@ -28,7 +126,35 @@
       "published": "2026-03-09T04:35:06+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
       "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 2.1304
+      "score": 2.0492
+    },
+    {
+      "title": "UK eyes sweeping powers to regulate tech without parliamentary scrutiny",
+      "url": "https://www.politico.eu/article/uk-eyes-sweeping-powers-to-regulate-tech-without-parliamentary-scrutiny",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The U.K. government has laid two amendments that would let it sidestep parliamentary debate so it can update online safety laws. LONDON — Keir Starmer …",
+      "image": "https://ic-cdn.flipboard.com/politico.eu/45eb9bb472acd75a8bd5eb9b027088beafc78d49/_large.jpeg",
+      "published": "2026-03-09T03:17:30+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.0139
+    },
+    {
+      "title": "Landmark Lawsuit Against OpenAI For Allowing ChatGPT To Provide Legal Advice Could Be A Huge Game-Changer For All AI Makers",
+      "url": "https://www.forbes.com/sites/lanceeliot/2026/03/09/landmark-lawsuit-against-openai-for-allowing-chatgpt-to-provide-legal-advice-could-be-a-huge-game-changer-for-all-ai-makers",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In today’s column, I examine a newly filed lawsuit against OpenAI regarding the noteworthy aspect that ChatGPT is being allowed by the AI maker to provide legal advice. Here’s the deal. Presumably, contemporary generative AI and large language models (LLMs) are not supposed to be handing out legal …",
+      "image": "https://ic-cdn.flipboard.com/forbes.com/9d5b426efce4ade92a4b52a98e311bdc3250048a/_large.jpeg",
+      "published": "2026-03-09T03:15:00+00:00",
+      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 2.0128
     },
     {
       "title": "5 Effective Ways to Use NotebookLM to Learn Anything in 2026",
@@ -41,22 +167,8 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--1-.gif",
       "published": "2026-03-09T02:33:02+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 2.0711
-    },
-    {
-      "title": "Using ‘pre-mortem’ AI prompt before every big decision can save you from making bad mistakes",
-      "url": "https://supercarblondie.com/using-pre-mortem-ai-prompt-before-every-big-decision-can-save-you",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Using a ‘pre-mortem’ AI prompt before every big decision can save you from making bad mistakes, and one writer says it has already helped her dodge …",
-      "image": "https://ic-cdn.flipboard.com/supercarblondie.com/46b9d30f918638d4a23f331c7ef68f6320026a6b/_xlarge.webp",
-      "published": "2026-03-09T00:08:00+00:00",
-      "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T05:13:54.027091+00:00",
-      "score": 2.0047
+      "lastSeen": "2026-03-09T08:02:41.333391+00:00",
+      "score": 1.9943
     }
   ],
   "errors": []
