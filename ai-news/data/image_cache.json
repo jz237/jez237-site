@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T18:10:08.452865+00:00",
+  "updatedAt": "2026-03-09T19:54:49.238278+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -196,6 +196,26 @@
     "https://huggingface.co/blog/lerobot-release-v050": {
       "image": "https://huggingface.co/blog/assets/lerobot-release-v050/thumbnail.png",
       "checkedAt": "2026-03-09T18:10:08.452865+00:00"
+    },
+    "https://www.techrepublic.com/article/news-amazon-robotics-layoffs-march-2026": {
+      "image": "",
+      "checkedAt": "2026-03-09T19:54:49.238278+00:00"
+    },
+    "https://www.techrepublic.com/article/news-x-tests-product-mention-shopping-ads": {
+      "image": "",
+      "checkedAt": "2026-03-09T19:54:49.238278+00:00"
+    },
+    "https://huggingface.co/blog/ibm-granite/granite-4-speech": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-speech.png",
+      "checkedAt": "2026-03-09T19:54:49.238278+00:00"
+    },
+    "https://www.techrepublic.com/article/news-veeam-agent-commander-ai-resilience": {
+      "image": "",
+      "checkedAt": "2026-03-09T19:54:49.238278+00:00"
+    },
+    "https://huggingface.co/blog/ulysses-sp": {
+      "image": "https://huggingface.co/blog/assets/ulysses/thumbnail.png",
+      "checkedAt": "2026-03-09T19:54:49.238278+00:00"
     }
   }
 }
