@@ -1,7 +1,21 @@
 {
   "date": "2026-03-09",
-  "updatedAt": "2026-03-09T12:01:19.167319+00:00",
+  "updatedAt": "2026-03-09T15:14:49.205159+00:00",
   "items": [
+    {
+      "title": "Apple’s Rumored Smart ‘HomePad’ Gets a New Release Timeline",
+      "url": "https://www.techrepublic.com/article/news-apple-homepad-launch-timeline",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple’s rumored HomePad could launch later this year, with leaks pointing to a seven-inch display, A18 chip, and deep Siri integration.\nThe post Apple’s Rumored Smart ‘HomePad’ Gets a New Release Timeline appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-09T13:46:53+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 3.5061
+    },
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
       "url": "https://www.marktechpost.com/2026/03/08/andrej-karpathy-open-sources-autoresearch-a-630-line-python-tool-letting-ai-agents-run-autonomous-ml-experiments-on-single-gpus",
@@ -13,8 +27,50 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ae98303db3ff8fdbce739bd169676a066e828ed1/_xlarge.png",
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 3.2013
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 3.1283
+    },
+    {
+      "title": "iPad Air M4 Review: The Best Option for the Moment",
+      "url": "https://www.cnet.com/tech/computing/ipad-air-m4-review",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "This is the best balance of future-proofing and price for now, but this may not be the final iPad release this year. 8.7 / 10 iPad Air (M4, 2026) $599 at Apple Fantastic performance • Well-designed as always • Price is low for its chip's horsepower Accessories like case and Pencil Pro add up • iPadOS is …",
+      "image": "https://ic-cdn.flipboard.com/cnet.com/0d8636d706223994b87f79d25c965f18f0ae6544/_xlarge.jpeg",
+      "published": "2026-03-09T13:01:34+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.7842
+    },
+    {
+      "title": "Hoppers director reveals original 2D concept art – and fans wish it was the real thing",
+      "url": "https://www.creativebloq.com/art/animation/hoppers-director-reveals-original-2d-concept-art-and-fans-wish-it-was-the-real-thing",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It’s giving major Studio Ghibli vibes. Pixar's latest animated hit, Hoppers, launched to a showering of praise for its original plotline and adorable …",
+      "image": "https://cdn.mos.cms.futurecdn.net/tDPwu77wMeJTQ7CMgxqMpE-1920-80.jpg",
+      "published": "2026-03-09T13:00:00+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.7834
+    },
+    {
+      "title": "Singularity Is Closer Than We Think",
+      "url": "https://www.forbes.com/sites/libertbarry/2026/03/09/singularity-is-closer-than-we-think",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Computer scientist and sci-fi author Vernor Vinge popularized the term “Technological Singularity” in the 1980s and again in his 1993 essay, “The Coming Technological Singularity.” He argued that once machines surpass human intelligence, they would rapidly improve themselves - transforming society in …",
+      "image": "https://ic-cdn.flipboard.com/forbes.com/5658f22d262f1ae64a07f6391ea9251458dfe0fa/_large.jpeg",
+      "published": "2026-03-09T10:26:22+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.7125
     },
     {
       "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
@@ -25,10 +81,52 @@
       "category": "AI",
       "summary": "Rapid advancements in AI have industry and political leaders warning of massive job displacement for white-collar workers. It could reshape U.S. politics. Blue-collar workers have been at the center of political messaging for years. Politicians meet with waitresses at a diner to pitch raising the …",
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
-      "published": "2026-03-09T09:18:00+00:00",
+      "published": "2026-03-09T09:18:41+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.7699
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.6828
+    },
+    {
+      "title": "AI Agents at Work: Microsoft Copilot Is Getting Its Own Version of Claude Cowork",
+      "url": "https://www.cnet.com/tech/services-and-software/microsoft-copilot-cowork-ai-agentic-news",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Built in collaboration with Anthropic, Microsoft's new tool can create spreadsheets, run reports and do research autonomously. Microsoft Copilot probably isn't something you think about a lot, unless your company pays for you to use it at work. Microsoft has been fighting for consumers whose hearts …",
+      "image": "https://ic-cdn.flipboard.com/cnet.com/c3b3d990ffb7c5e337fb7dcb75fb401b1ddce12b/_xlarge.jpeg",
+      "published": "2026-03-09T13:01:30+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.3842
+    },
+    {
+      "title": "ABB Robotics Taps NVIDIA Omniverse to Deliver Industrial‑Grade Physical AI at Scale",
+      "url": "https://blogs.nvidia.com/blog/abb-robotics-omniverse",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "ABB Robotics and NVIDIA today announced a breakthrough partnership that brings industrial‑grade physical AI to the factory floor.  By integrating NVIDIA Omniverse libraries directly into its RobotStudio programming and simulation suite, ABB Robotics will now deliver physically accurate simulation capabilities in its platform, dramatically cutting engineering time, reducing deployment costs by up to 40% and [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/2.24-scaled.jpg",
+      "published": "2026-03-09T15:00:34+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.2828
+    },
+    {
+      "title": "How AI Is Driving Revenue, Cutting Costs and Boosting Productivity for Every Industry in 2026",
+      "url": "https://blogs.nvidia.com/blog/state-of-ai-report-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI is everywhere and accelerating everything — becoming essential infrastructure to create the intelligence that will advance every industry. That’s why companies are increasingly focusing on the technology’s return on investment (ROI), as well as how to best apply AI to their own use cases. NVIDIA’s annual “State of AI” reports show how AI is [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/industry-press-state-of-the-ai-report-overreaching-blog-1920x1080-2.png",
+      "published": "2026-03-09T15:00:23+00:00",
+      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
+      "lastSeen": "2026-03-09T15:14:49.205159+00:00",
+      "score": 2.2827
     },
     {
       "title": "The ‘Bayesian’ Upgrade: Why Google AI’s New Teaching Method is the Key to LLM Reasoning",
@@ -42,7 +140,7 @@
       "published": "2026-03-09T08:23:31+00:00",
       "firstSeen": "2026-03-09T12:01:19.167319+00:00",
       "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.3445
+      "score": 2.2593
     },
     {
       "title": "Nscale raises $2bn Series C at $14.6bn valuation",
@@ -56,7 +154,7 @@
       "published": "2026-03-09T08:20:48+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.3432
+      "score": 2.2581
     },
     {
       "title": "Nvidia taps Samsung to boost Groq AI chip production",
@@ -70,105 +168,7 @@
       "published": "2026-03-09T07:28:45+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.3196
-    },
-    {
-      "title": "I Asked ChatGPT If Social Security Will Run Out — Here’s the 2026 Answer",
-      "url": "https://www.gobankingrates.com/retirement/social-security/i-asked-chatgpt-if-social-security-will-run-out-2026-answer",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "ChatGPT explained Social Security won't disappear but may face benefit cuts of 20% in coming years if Congress doesn't act, plus why current retirees …",
-      "image": "https://ic-cdn.flipboard.com/gobankingrates.com/d7043a00241715b5ebbc62913492bf6cb138611b/_xlarge.jpeg",
-      "published": "2026-03-09T11:12:05+00:00",
-      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1252
-    },
-    {
-      "title": "I connected Gemini with these 4 apps and it's productivity on steroids",
-      "url": "https://www.androidpolice.com/connected-gemini-with-these-apps-its-productivity-on-steroids",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Most people use AI as a separate tab, but the real magic happens when AI lives where your data does. I spent the last week integrating across my …",
-      "image": "https://ic-cdn.flipboard.com/anpoimages.com/183d4204921a0b5c432281400783f18f2589591b/_xlarge.png",
-      "published": "2026-03-09T11:00:10+00:00",
-      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1193
-    },
-    {
-      "title": "Hoteliers are at an AI inflection point. Could big brands help?",
-      "url": "https://www.ciodive.com/news/hotels-adopt-AI-report-wyndham/814088",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Owners are embracing AI more than ever, but are also in need of greater guidance around adoption and how to drive returns, a Wyndham report …",
-      "image": "https://imgproxy.divecdn.com/fPE-51d7bC6pJyZOpA4f72o--i3cvcrQUHl9XULcnBc/g:ce/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9HZXR0eUltYWdlcy0xMzcyMDM2MTczLmpwZw==.webp",
-      "published": "2026-03-09T11:00:00+00:00",
-      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1192
-    },
-    {
-      "title": "OpenAI robotics leader resigns after Department of War deal",
-      "url": "https://www.the-independent.com/tech/openai-leader-resigns-department-of-war-deal-b2934567.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The head of OpenAI’s robotics team has resigned from the AI company after voicing concerns about a recent deal with the US Department of War. Caitlin …",
-      "image": "https://ic-cdn.flipboard.com/the-independent.com/9d87028b9073873d5e23badfe73027176623cd7f/_xlarge.jpeg",
-      "published": "2026-03-09T10:56:08+00:00",
-      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1173
-    },
-    {
-      "title": "MacBook Neo makes me want an iPhone Neo",
-      "url": "https://www.macworld.com/article/3074613/the-macbook-neo-makes-me-want-an-iphone-neo.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Can Apple do cheap? Yes and no, based on the MacBook Neo and iPhone 17e. In the past, I’ve wondered whether Apple is even able, let alone willing, to …",
-      "image": "https://ic-cdn.flipboard.com/macworld.com/fc635a5cafbfd53b8b9092ec4801add72edb7ae0/_large.jpeg",
-      "published": "2026-03-09T10:30:00+00:00",
-      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.1045
-    },
-    {
-      "title": "Crossover Day 2026: Data centers, income taxes and mugshots",
-      "url": "https://www.axios.com/local/atlanta/2026/03/09/georgia-legislature-crossover-day-2026-tax-cut-ai-safety-data-centers-gambling",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Taxes, data centers and even psychedelics remain on Georgia lawmakers' agendas as the legislative session moves toward its final weeks. Why it matters: …",
-      "image": "https://ic-cdn.flipboard.com/axios.com/98e7198623039b549058de0b418be7973ace30f3/_xlarge.jpeg",
-      "published": "2026-03-09T10:20:07+00:00",
-      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0997
-    },
-    {
-      "title": "The next phase of the corporate AI boom: measuring which employees actually understand it",
-      "url": "https://www.businessinsider.com/ai-adoption-companies-workera-assessing-employees-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Executives are hyping their AI adoption rates like it's their quarterly revenue. Over the past 90 days, CEOs have referenced \"early AI adopters\" at least 60 times in earnings calls, conference presentations, speeches, and other prepared remarks, according to business intelligence platform …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/6d25b8ce10e836e8dbc56f1e9cc1d594e5b93c3c/_xlarge.jpeg",
-      "published": "2026-03-09T09:01:01+00:00",
-      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
-      "score": 2.0619
+      "score": 2.2365
     }
   ],
   "errors": []
