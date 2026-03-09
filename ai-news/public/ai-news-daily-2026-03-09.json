@@ -1,6 +1,6 @@
 {
   "date": "2026-03-09",
-  "updatedAt": "2026-03-09T10:31:52.573851+00:00",
+  "updatedAt": "2026-03-09T12:01:19.167319+00:00",
   "items": [
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
@@ -13,8 +13,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ae98303db3ff8fdbce739bd169676a066e828ed1/_xlarge.png",
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 3.2373
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 3.2013
     },
     {
       "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
@@ -27,8 +27,22 @@
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
       "published": "2026-03-09T09:18:00+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.813
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.7699
+    },
+    {
+      "title": "The ‘Bayesian’ Upgrade: Why Google AI’s New Teaching Method is the Key to LLM Reasoning",
+      "url": "https://www.marktechpost.com/2026/03/09/the-bayesian-upgrade-why-google-ais-new-teaching-method-is-the-key-to-llm-reasoning",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Large Language Models (LLMs) are the world’s best mimics, but when it comes to the cold, hard logic of updating beliefs based on new evidence, they …",
+      "image": "https://ic-cdn.flipboard.com/marktechpost.com/030afa1849a35f5f31215388641c5ab6702dbcd4/_xlarge.png",
+      "published": "2026-03-09T08:23:31+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.3445
     },
     {
       "title": "Nscale raises $2bn Series C at $14.6bn valuation",
@@ -42,7 +56,7 @@
       "published": "2026-03-09T08:20:48+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
       "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.3852
+      "score": 2.3432
     },
     {
       "title": "Nvidia taps Samsung to boost Groq AI chip production",
@@ -56,7 +70,91 @@
       "published": "2026-03-09T07:28:45+00:00",
       "firstSeen": "2026-03-09T08:02:41.333391+00:00",
       "lastSeen": "2026-03-09T08:02:41.333391+00:00",
-      "score": 2.3606
+      "score": 2.3196
+    },
+    {
+      "title": "I Asked ChatGPT If Social Security Will Run Out — Here’s the 2026 Answer",
+      "url": "https://www.gobankingrates.com/retirement/social-security/i-asked-chatgpt-if-social-security-will-run-out-2026-answer",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "ChatGPT explained Social Security won't disappear but may face benefit cuts of 20% in coming years if Congress doesn't act, plus why current retirees …",
+      "image": "https://ic-cdn.flipboard.com/gobankingrates.com/d7043a00241715b5ebbc62913492bf6cb138611b/_xlarge.jpeg",
+      "published": "2026-03-09T11:12:05+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.1252
+    },
+    {
+      "title": "I connected Gemini with these 4 apps and it's productivity on steroids",
+      "url": "https://www.androidpolice.com/connected-gemini-with-these-apps-its-productivity-on-steroids",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Most people use AI as a separate tab, but the real magic happens when AI lives where your data does. I spent the last week integrating across my …",
+      "image": "https://ic-cdn.flipboard.com/anpoimages.com/183d4204921a0b5c432281400783f18f2589591b/_xlarge.png",
+      "published": "2026-03-09T11:00:10+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.1193
+    },
+    {
+      "title": "Hoteliers are at an AI inflection point. Could big brands help?",
+      "url": "https://www.ciodive.com/news/hotels-adopt-AI-report-wyndham/814088",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Owners are embracing AI more than ever, but are also in need of greater guidance around adoption and how to drive returns, a Wyndham report …",
+      "image": "https://imgproxy.divecdn.com/fPE-51d7bC6pJyZOpA4f72o--i3cvcrQUHl9XULcnBc/g:ce/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9HZXR0eUltYWdlcy0xMzcyMDM2MTczLmpwZw==.webp",
+      "published": "2026-03-09T11:00:00+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.1192
+    },
+    {
+      "title": "OpenAI robotics leader resigns after Department of War deal",
+      "url": "https://www.the-independent.com/tech/openai-leader-resigns-department-of-war-deal-b2934567.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The head of OpenAI’s robotics team has resigned from the AI company after voicing concerns about a recent deal with the US Department of War. Caitlin …",
+      "image": "https://ic-cdn.flipboard.com/the-independent.com/9d87028b9073873d5e23badfe73027176623cd7f/_xlarge.jpeg",
+      "published": "2026-03-09T10:56:08+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.1173
+    },
+    {
+      "title": "MacBook Neo makes me want an iPhone Neo",
+      "url": "https://www.macworld.com/article/3074613/the-macbook-neo-makes-me-want-an-iphone-neo.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Can Apple do cheap? Yes and no, based on the MacBook Neo and iPhone 17e. In the past, I’ve wondered whether Apple is even able, let alone willing, to …",
+      "image": "https://ic-cdn.flipboard.com/macworld.com/fc635a5cafbfd53b8b9092ec4801add72edb7ae0/_large.jpeg",
+      "published": "2026-03-09T10:30:00+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.1045
+    },
+    {
+      "title": "Crossover Day 2026: Data centers, income taxes and mugshots",
+      "url": "https://www.axios.com/local/atlanta/2026/03/09/georgia-legislature-crossover-day-2026-tax-cut-ai-safety-data-centers-gambling",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Taxes, data centers and even psychedelics remain on Georgia lawmakers' agendas as the legislative session moves toward its final weeks. Why it matters: …",
+      "image": "https://ic-cdn.flipboard.com/axios.com/98e7198623039b549058de0b418be7973ace30f3/_xlarge.jpeg",
+      "published": "2026-03-09T10:20:07+00:00",
+      "firstSeen": "2026-03-09T12:01:19.167319+00:00",
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.0997
     },
     {
       "title": "The next phase of the corporate AI boom: measuring which employees actually understand it",
@@ -69,106 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/insider.com/6d25b8ce10e836e8dbc56f1e9cc1d594e5b93c3c/_xlarge.jpeg",
       "published": "2026-03-09T09:01:01+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.1047
-    },
-    {
-      "title": "U.S. Draft Rules that Require Permits for All AI Chip Exports",
-      "url": "https://www.theinformation.com/briefings/u-s-draft-rules-require-permits-ai-chip-exports",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The U.S. government is working on rules that would require American approval for all exports of AI chips, and on the conditions of stringent security …",
-      "image": "https://tii.imgix.net/global/defaults/article_image_unavailable.jpg",
-      "published": "2026-03-09T08:23:16+00:00",
-      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0864
-    },
-    {
-      "title": "How ImagineFX has been inspiring and championing the digital art community for 20 years",
-      "url": "https://www.creativebloq.com/art/digital-art/how-imaginefx-has-been-inspiring-and-championing-the-digital-art-community-for-20-years",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "We look back at some highlights as the digital art magazine celebrates its anniversary. The year 2026 marks two decades since ImagineFX burst onto …",
-      "image": "https://cdn.mos.cms.futurecdn.net/RAaNiiMmQiyvkMG7ughcCE-1000-80.jpg",
-      "published": "2026-03-09T08:00:00+00:00",
-      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0753
-    },
-    {
-      "title": "Augur raises $15m from Plural to turn existing surveillance infrastructure into real-time intelligence",
-      "url": "https://thenextweb.com/news/augur-15m-plural-ai-surveillance-critical-infrastructure",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A London startup founded by the creator of safety app Path is betting that the cameras and sensors already deployed across Europe’s transport hubs, stadiums, and power stations are gathering dust when they matter most. In the first week of February 2026, anarchists severed electrical cables near Bologna on the opening day of the Milan–Cortina [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Augur-raises-15-million-from-Plural.png",
-      "published": "2026-03-09T07:57:10+00:00",
-      "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.074
-    },
-    {
-      "title": "Munich’s Telura exits stealth with €4M to make deep geothermal economically viable",
-      "url": "https://thenextweb.com/news/telura-exits-stealth-with-e4m",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Telura has come out of stealth with €4 million and a bold claim: it can make deep geothermal economically viable almost anywhere on Earth. The problem with geothermal energy has never been the heat. The Earth’s core sits at roughly 5,000 degrees Celsius, and the thermal gradient beneath the surface is consistent enough that, in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Telura-exits-stealth-with-E4M-.png",
-      "published": "2026-03-09T07:33:21+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0627
-    },
-    {
-      "title": "Alphabet handed Sundar Pichai a $692M pay package",
-      "url": "https://thenextweb.com/news/sundar-pichai-692-million-pay-waymo-wing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The new deal ties Google’s CEO to the future of its most ambitious bets, and signals that the board has finally decided they’re bets worth making. Sundar Pichai has run Google since 2015 and Alphabet since 2019. In that time, the company’s market value has grown from roughly $535 billion to approximately $3.6 trillion. On [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sundar-Pichai.png",
-      "published": "2026-03-09T07:17:29+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0553
-    },
-    {
-      "title": "How AI is changing SEO tools: Citation tracking, GEO &#038; AI visibility",
-      "url": "https://thenextweb.com/news/ai-changing-seo-tools",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "If you’ve been feeling like the ground is shifting under your feet in search right now, you’re not imagining it. Twelve months ago, AI in SEO meant one thing: content generation. Every platform rushed to add a “write with AI” button, and the industry spent its collective energy arguing about whether Google would penalize AI-written [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-Article-Banner-1.png",
-      "published": "2026-03-09T07:09:53+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0518
-    },
-    {
-      "title": "I can text Claude like a personal assistant now — this iPhone shortcut made it possible",
-      "url": "https://www.tomsguide.com/ai/i-can-text-claude-like-a-personal-assistant-now-this-iphone-shortcut-made-it-possible",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "For the past few years, most AI assistants have lived inside apps. If you want help from ChatGPT, Claude or Gemini, you open the app, type a prompt …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
-      "published": "2026-03-09T05:30:00+00:00",
-      "firstSeen": "2026-03-09T08:02:41.333391+00:00",
-      "lastSeen": "2026-03-09T10:31:52.573851+00:00",
-      "score": 2.0065
+      "lastSeen": "2026-03-09T12:01:19.167319+00:00",
+      "score": 2.0619
     }
   ],
   "errors": []
