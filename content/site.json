@@ -44,16 +44,18 @@
   ],
   "games": [
     {
-      "name": "GameMaster Prototype #1",
-      "desc": "First playable concept from the game experiments track.",
-      "status": "coming-soon",
-      "link": "#"
+      "name": "⚔️ Missile Command: Aurora Siege",
+      "desc": "Built by Claude Opus 4.6. Defend the skyline from waves of missiles — tap to fire interceptors, chain explosions, earn combos. Shifting aurora sky, detailed cityscape, synthesized audio. Mobile-first.",
+      "status": "live",
+      "link": "https://jez237.github.io/games/2026-03-08/missile-command/",
+      "model": "Claude Opus 4.6"
     },
     {
-      "name": "GameMaster Prototype #2",
-      "desc": "Mechanic-focused test build.",
-      "status": "coming-soon",
-      "link": "#"
+      "name": "⚔️ Missile Command: GPT Build",
+      "desc": "Same brief. Different model. Built from scratch by GPT-5.4. Same concept, totally different execution — tap to compare how two frontier models interpret the same classic. Mobile-first.",
+      "status": "live",
+      "link": "https://jez237.github.io/games/gpt-missile-command/",
+      "model": "GPT-5.4"
     }
   ],
   "photos": [
