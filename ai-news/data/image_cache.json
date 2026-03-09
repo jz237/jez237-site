@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T15:14:49.205159+00:00",
+  "updatedAt": "2026-03-09T18:10:08.452865+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -184,6 +184,18 @@
     "https://www.techrepublic.com/article/news-apple-homepad-launch-timeline": {
       "image": "",
       "checkedAt": "2026-03-09T15:14:49.205159+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/09/1134063/how-ai-is-turning-the-iran-conflict-into-theater": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/photo-BASEd3.jpg?resize=1200,600",
+      "checkedAt": "2026-03-09T18:10:08.452865+00:00"
+    },
+    "https://openai.com/index/openai-to-acquire-promptfoo": {
+      "image": "",
+      "checkedAt": "2026-03-09T18:10:08.452865+00:00"
+    },
+    "https://huggingface.co/blog/lerobot-release-v050": {
+      "image": "https://huggingface.co/blog/assets/lerobot-release-v050/thumbnail.png",
+      "checkedAt": "2026-03-09T18:10:08.452865+00:00"
     }
   }
 }
