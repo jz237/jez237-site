@@ -111,13 +111,13 @@
       "name": "Luca, Cosmo, Taco & Marty",
       "desc": "Fresh uploads from your phone, now on the site.",
       "status": "live",
-      "link": "./cats.html"
+      "link": "./cats/"
     },
     {
       "name": "Cat Gallery",
       "desc": "Dedicated page for cat photos and future uploads.",
       "status": "live",
-      "link": "./cats.html"
+      "link": "./cats/"
     }
   ]
 }
