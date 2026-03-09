@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T19:54:49.238278+00:00",
+  "updatedAt": "2026-03-09T21:48:57.264770+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -216,6 +216,10 @@
     "https://huggingface.co/blog/ulysses-sp": {
       "image": "https://huggingface.co/blog/assets/ulysses/thumbnail.png",
       "checkedAt": "2026-03-09T19:54:49.238278+00:00"
+    },
+    "https://www.techrepublic.com/article/news-cbp-systems-not-ready-for-massive-tariff-refunds": {
+      "image": "",
+      "checkedAt": "2026-03-09T21:48:57.264770+00:00"
     }
   }
 }
