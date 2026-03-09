@@ -1,7 +1,22 @@
 {
   "date": "2026-03-09",
-  "updatedAt": "2026-03-09T18:10:08.452865+00:00",
+  "updatedAt": "2026-03-09T19:54:49.238278+00:00",
   "items": [
+    {
+      "title": "iOS 26.4 adds new emoji to your iPhone, here’s what’s coming",
+      "url": "https://9to5mac.com/2026/03/09/ios-26-4-will-add-these-new-emoji-to-your-iphone",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "iOS 26.4 beta 4 rolled out today for developers, and it includes a number of brand new emoji for iPhone users. Here are all the new emoji coming with iOS 26.4. New emoji coming with iOS 26.4 are available now in beta Every year, a group called the Unicode Consortium votes to approve a new batch of …",
+      "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/new-emoji-ios-26-4-distorted.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+      "published": "2026-03-09T17:26:23+00:00",
+      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "model_release": true,
+      "score": 8.0769
+    },
     {
       "title": "The open-source AI red-teaming tool used by Fortune 500 companies is now part of OpenAI",
       "url": "https://thenextweb.com/news/openai-acquires-promptfoo-ai-security-frontier",
@@ -13,8 +28,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IMG_1729.png",
       "published": "2026-03-09T17:39:38+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 3.4346
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 3.3833
     },
     {
       "title": "Apple’s Rumored Smart ‘HomePad’ Gets a New Release Timeline",
@@ -27,8 +42,22 @@
       "image": "",
       "published": "2026-03-09T13:46:53+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 3.4238
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 3.3777
+    },
+    {
+      "title": "Apple's Smart Home Hub Won't Launch Until September as Siri Remains Unfinished",
+      "url": "https://www.macrumors.com/2026/03/09/apple-smart-home-hub-september",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple is postponing the launch of its planned smart home hub until September 2026, reports Bloomberg. Apple has pushed back the debut of the home hub multiple times due to ongoing issues with the revamped version of Siri. The hub has a heavy AI focus and it is tied to the more intelligent ‌Siri‌ …",
+      "image": "https://ic-cdn.flipboard.com/macrumors.com/105457ca12522a7b4349436f70d2b705c7aa2427/_xlarge.jpeg",
+      "published": "2026-03-09T12:17:52+00:00",
+      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 3.3403
     },
     {
       "title": "Microsoft announces Copilot Cowork with help from Anthropic — a cloud-powered AI agent that works across M365 apps",
@@ -41,8 +70,8 @@
       "image": "https://ic-cdn.flipboard.com/ctfassets.net/57d56652a33bbb6ff9176d26208ba4e4ab7cdb72/_large.png",
       "published": "2026-03-09T16:08:45+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 3.0899
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 3.0407
     },
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
@@ -56,7 +85,7 @@
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 3.0676
+      "score": 3.0337
     },
     {
       "title": "XBox Project Helix suggests the 'console war' is over",
@@ -69,8 +98,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/fvHXxYMe5SHxyBkAFc4o4J-1440-80.jpg",
       "published": "2026-03-09T15:04:10+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 2.7593
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 2.7115
     },
     {
       "title": "iPad Air M4 Review: The Best Option for the Moment",
@@ -83,8 +112,8 @@
       "image": "https://ic-cdn.flipboard.com/cnet.com/0d8636d706223994b87f79d25c965f18f0ae6544/_xlarge.jpeg",
       "published": "2026-03-09T13:01:34+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 2.7036
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 2.6585
     },
     {
       "title": "Hoppers director reveals original 2D concept art – and fans wish it was the real thing",
@@ -98,7 +127,7 @@
       "published": "2026-03-09T13:00:00+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 2.7029
+      "score": 2.6578
     },
     {
       "title": "Singularity Is Closer Than We Think",
@@ -112,7 +141,7 @@
       "published": "2026-03-09T10:26:22+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 2.6375
+      "score": 2.5955
     },
     {
       "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
@@ -125,50 +154,22 @@
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
       "published": "2026-03-09T09:18:41+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 2.6101
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 2.5694
     },
     {
-      "title": "AI Agents at Work: Microsoft Copilot Is Getting Its Own Version of Claude Cowork",
-      "url": "https://www.cnet.com/tech/services-and-software/microsoft-copilot-cowork-ai-agentic-news",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "title": "Veeam’s ‘Agent Commander’: Bringing Guardrails and Resilience to the Wild West of AI",
+      "url": "https://www.techrepublic.com/article/news-veeam-agent-commander-ai-resilience",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Built in collaboration with Anthropic, Microsoft's new tool can create spreadsheets, run reports and do research autonomously. Microsoft Copilot probably isn't something you think about a lot, unless your company pays for you to use it at work. Microsoft has been fighting for consumers whose hearts …",
-      "image": "https://ic-cdn.flipboard.com/cnet.com/c3b3d990ffb7c5e337fb7dcb75fb401b1ddce12b/_xlarge.jpeg",
-      "published": "2026-03-09T13:01:30+00:00",
-      "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 2.3035
-    },
-    {
-      "title": "OpenAI to acquire Promptfoo",
-      "url": "https://openai.com/index/openai-to-acquire-promptfoo",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "OpenAI is acquiring Promptfoo, an AI security platform that helps enterprises identify and remediate vulnerabilities in AI systems during development.",
+      "summary": "Veeam’s Agent Commander turns backup into an AI-era command center, giving enterprises the guardrails, visibility, and precision “undo” they need to safely scale autonomous agents.\nThe post Veeam’s ‘Agent Commander’: Bringing Guardrails and Resilience to the Wild West of AI appeared first on TechRepublic.",
       "image": "",
-      "published": "2026-03-09T10:00:00+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 2.2767
-    },
-    {
-      "title": "AI consultant shares how he uses AI agents that saves him hours and makes everything more efficient",
-      "url": "https://supercarblondie.com/ai-consultant-shares-how-he-uses-ai-agents-efficiently",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AI consultant Justin Parnell has shared how he uses AI agents while working, which have made his whole life more efficient. The San Francisco-based …",
-      "image": "https://ic-cdn.flipboard.com/supercarblondie.com/bf0b864e84ccea8923a4ba4f5c49d5ca176e96a9/_xlarge.webp",
-      "published": "2026-03-09T09:48:24+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 2.222
+      "published": "2026-03-09T18:35:43+00:00",
+      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
+      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
+      "score": 2.4104
     }
   ],
   "errors": []
