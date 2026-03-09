@@ -1,6 +1,6 @@
 {
   "date": "2026-03-09",
-  "updatedAt": "2026-03-09T23:01:18.033837+00:00",
+  "updatedAt": "2026-03-09T23:54:24.518190+00:00",
   "items": [
     {
       "title": "iOS 26.4 adds new emoji to your iPhone, here’s what’s coming",
@@ -15,7 +15,7 @@
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
       "model_release": true,
-      "score": 7.992
+      "score": 7.9691
     },
     {
       "title": "Apple’s Rumored Smart ‘HomePad’ Gets a New Release Timeline",
@@ -28,8 +28,8 @@
       "image": "",
       "published": "2026-03-09T13:46:53+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 3.301
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 3.2803
     },
     {
       "title": "The open-source AI red-teaming tool used by Fortune 500 companies is now part of OpenAI",
@@ -42,8 +42,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IMG_1729.png",
       "published": "2026-03-09T17:39:38+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 3.2978
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 3.2748
     },
     {
       "title": "Apple's Smart Home Hub Won't Launch Until September as Siri Remains Unfinished",
@@ -57,7 +57,7 @@
       "published": "2026-03-09T12:17:52+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 3.2666
+      "score": 3.2468
     },
     {
       "title": "Andrej Karpathy Open-Sources ‘Autoresearch’: A 630-Line Python Tool Letting AI Agents Run Autonomous ML Experiments on Single GPUs",
@@ -71,7 +71,7 @@
       "published": "2026-03-09T02:47:38+00:00",
       "firstSeen": "2026-03-09T05:13:54.027091+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 2.9771
+      "score": 2.9619
     },
     {
       "title": "Microsoft announces Copilot Cowork with help from Anthropic — a cloud-powered AI agent that works across M365 apps",
@@ -84,22 +84,8 @@
       "image": "https://ic-cdn.flipboard.com/ctfassets.net/57d56652a33bbb6ff9176d26208ba4e4ab7cdb72/_large.png",
       "published": "2026-03-09T16:08:45+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.9587
-    },
-    {
-      "title": "This new Claude Code Review tool uses AI agents to check your pull requests for bugs - here's how",
-      "url": "https://www.zdnet.com/article/claude-code-review-ai-agents-pull-request-bug-detection",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Each pull request can cost up to $25. Here's why companies might still pay to prevent catastrophic bugs. Follow ZDNET: Add us as a preferred source on …",
-      "image": "https://ic-cdn.flipboard.com/zdnet.com/d29dfc9594265703437ee1ef8689d5af6d046a4c/_xlarge.jpeg",
-      "published": "2026-03-09T19:00:44+00:00",
-      "firstSeen": "2026-03-09T23:01:18.033837+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.6341
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.9367
     },
     {
       "title": "XBox Project Helix suggests the 'console war' is over",
@@ -112,8 +98,22 @@
       "image": "https://cdn.mos.cms.futurecdn.net/fvHXxYMe5SHxyBkAFc4o4J-1440-80.jpg",
       "published": "2026-03-09T15:04:10+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.632
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.6106
+    },
+    {
+      "title": "This new Claude Code Review tool uses AI agents to check your pull requests for bugs - here's how",
+      "url": "https://www.zdnet.com/article/claude-code-review-ai-agents-pull-request-bug-detection",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Each pull request can cost up to $25. Here's why companies might still pay to prevent catastrophic bugs. Follow ZDNET: Add us as a preferred source on …",
+      "image": "https://ic-cdn.flipboard.com/zdnet.com/d29dfc9594265703437ee1ef8689d5af6d046a4c/_xlarge.jpeg",
+      "published": "2026-03-09T19:00:44+00:00",
+      "firstSeen": "2026-03-09T23:01:18.033837+00:00",
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.6102
     },
     {
       "title": "iPad Air M4 Review: The Best Option for the Moment",
@@ -126,8 +126,8 @@
       "image": "https://ic-cdn.flipboard.com/cnet.com/0d8636d706223994b87f79d25c965f18f0ae6544/_xlarge.jpeg",
       "published": "2026-03-09T13:01:34+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.5833
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.5631
     },
     {
       "title": "Hoppers director reveals original 2D concept art – and fans wish it was the real thing",
@@ -141,7 +141,7 @@
       "published": "2026-03-09T13:00:00+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 2.5827
+      "score": 2.5625
     },
     {
       "title": "Singularity Is Closer Than We Think",
@@ -155,7 +155,7 @@
       "published": "2026-03-09T10:26:22+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 2.5255
+      "score": 2.5067
     },
     {
       "title": "Politicians are starting to pay a lot more attention to the plight of white-collar workers",
@@ -168,8 +168,8 @@
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/46841fa8960697084900472d31a0af0730548bef/_xlarge.jpeg",
       "published": "2026-03-09T09:18:41+00:00",
       "firstSeen": "2026-03-09T10:31:52.573851+00:00",
-      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 2.5016
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.4834
     }
   ],
   "errors": []
