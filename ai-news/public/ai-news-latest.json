@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T23:01:18.033837+00:00",
+  "updatedAt": "2026-03-09T23:54:24.518190+00:00",
   "items": [
     {
       "title": "Anthropic sues the Pentagon over supply chain risk designation",
@@ -13,7 +13,7 @@
       "published": "2026-03-09T22:13:59+00:00",
       "firstSeen": "2026-03-09T23:01:18.033837+00:00",
       "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.1262
+      "score": 2.1
     },
     {
       "title": "How AI is disrupting art history",
@@ -27,7 +27,7 @@
       "published": "2026-03-09T21:41:30+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
       "lastSeen": "2026-03-09T21:48:57.264770+00:00",
-      "score": 2.1101
+      "score": 2.0844
     },
     {
       "title": "Rogue AI agent secretly mined cryptocurrency without permission during testing",
@@ -40,8 +40,8 @@
       "image": "https://ic-cdn.flipboard.com/flipboard.com/1ee0485b44baeebb6f3043f6ec4b4bbe153c5455/_xlarge.webp",
       "published": "2026-03-09T20:00:05+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.3615
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.3369
     },
     {
       "title": "US CBP Says Its Systems Aren’t Ready for Massive Tariff Refunds",
@@ -54,8 +54,8 @@
       "image": "",
       "published": "2026-03-09T19:37:31+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.051
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.0267
     },
     {
       "title": "This new Claude Code Review tool uses AI agents to check your pull requests for bugs - here's how",
@@ -68,8 +68,8 @@
       "image": "https://ic-cdn.flipboard.com/zdnet.com/d29dfc9594265703437ee1ef8689d5af6d046a4c/_xlarge.jpeg",
       "published": "2026-03-09T19:00:44+00:00",
       "firstSeen": "2026-03-09T23:01:18.033837+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.6341
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.6102
     },
     {
       "title": "AI layoffs are coming. The problem may be compounded because nearly 75% of people don’t apply for unemployment benefits",
@@ -82,8 +82,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/a21bde41d23931838b0463afb74249d666c9445e/_xlarge.jpeg",
       "published": "2026-03-09T19:00:40+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.034
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.0101
     },
     {
       "title": "Anthropic adds Code Review to Claude Code to streamline bug hunting",
@@ -97,7 +97,7 @@
       "published": "2026-03-09T19:00:00+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 2.0337
+      "score": 2.0098
     },
     {
       "title": "Robots Rise, Humans Fall: Amazon Cuts Robotics Staff Amid Automation Push",
@@ -110,8 +110,8 @@
       "image": "",
       "published": "2026-03-09T18:56:51+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0323
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.0084
     },
     {
       "title": "X Tests Ad Format That Turns Product Mentions Into Shopping Prompts",
@@ -124,8 +124,8 @@
       "image": "",
       "published": "2026-03-09T18:37:17+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0234
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9998
     },
     {
       "title": "Granite 4.0 1B Speech: Compact, Multilingual, and Built for the Edge",
@@ -138,8 +138,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-speech.png",
       "published": "2026-03-09T18:36:33+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.3031
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.2795
     },
     {
       "title": "Veeam’s ‘Agent Commander’: Bringing Guardrails and Resilience to the Wild West of AI",
@@ -152,8 +152,8 @@
       "image": "",
       "published": "2026-03-09T18:35:43+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.3227
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.2991
     },
     {
       "title": "Gemini is currently the fastest-growing AI website by a huge margin",
@@ -166,8 +166,8 @@
       "image": "https://i0.wp.com/9to5google.com/wp-content/uploads/sites/4/2026/03/gemini-logo.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-09T17:55:00+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0046
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9814
     },
     {
       "title": "ChatGPT users are flocking to Claude then realizing they can’t use it the same way — ‘For new users, it’s a shock’",
@@ -180,8 +180,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/43486062915401d0b05d14ba57dfcaa6090f68a8/_xlarge.jpeg",
       "published": "2026-03-09T17:52:42+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0036
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9804
     },
     {
       "title": "The open-source AI red-teaming tool used by Fortune 500 companies is now part of OpenAI",
@@ -194,8 +194,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IMG_1729.png",
       "published": "2026-03-09T17:39:38+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 3.2978
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 3.2748
     },
     {
       "title": "Microsoft Adds Anthropic Models To Copilot In Push For Enterprise AI Agent Adoption",
@@ -208,8 +208,8 @@
       "image": "https://ic-cdn.flipboard.com/allwork.space/970d82878cf7df304ec995abb872201a350c7e52/_xlarge.webp",
       "published": "2026-03-09T17:35:59+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.2962
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.2732
     },
     {
       "title": "Trump admin sued as company claims 'extreme punishment' for defying president",
@@ -223,7 +223,7 @@
       "published": "2026-03-09T17:34:30+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.9956
+      "score": 1.9726
     },
     {
       "title": "Trump's latest AI announcements: Tech Corps, data center costs, modern warfare",
@@ -237,7 +237,7 @@
       "published": "2026-03-09T17:32:56+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
       "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 1.9949
+      "score": 1.9719
     },
     {
       "title": "iOS 26.4 adds new emoji to your iPhone, here’s what’s coming",
@@ -252,7 +252,7 @@
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
       "model_release": true,
-      "score": 7.992
+      "score": 7.9691
     },
     {
       "title": "Iran’s attacks on Amazon data centers in UAE, Bahrain signal a new kind of war as AI plays an increasingly strategic role, analysts say",
@@ -266,7 +266,7 @@
       "published": "2026-03-09T17:05:58+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.9831
+      "score": 1.9605
     },
     {
       "title": "Billionaire Peter Diamandis offers $3.5 million to filmmakers who portray AI as the hero—not the villain",
@@ -280,7 +280,7 @@
       "published": "2026-03-09T16:38:06+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.9712
+      "score": 1.9488
     },
     {
       "title": "Italy&#8217;s Mirai Robotics raises $4.2M to build autonomous vessels for the &#8216;blue economy&#8217;",
@@ -293,8 +293,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mirai-Robotics-raises-4.2M-to-build-autonomous-vessels.png",
       "published": "2026-03-09T16:37:56+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9711
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9487
     },
     {
       "title": "ChatGPT's explicit 'adult mode' gets postponed once again",
@@ -308,7 +308,7 @@
       "published": "2026-03-09T16:28:14+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
       "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 1.967
+      "score": 1.9447
     },
     {
       "title": "AI causes ‘brain fry’ at work, researchers warn",
@@ -321,8 +321,8 @@
       "image": "https://ic-cdn.flipboard.com/the-independent.com/06b75878b9b731829f6f85a199757ae9c9928f45/_xlarge.png",
       "published": "2026-03-09T16:26:09+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9661
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9439
     },
     {
       "title": "Anthropic sues Pentagon over national security risk label",
@@ -336,7 +336,7 @@
       "published": "2026-03-09T16:11:29+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.9599
+      "score": 1.9378
     },
     {
       "title": "Anthropic sues US Defense Department over supply chain risk label",
@@ -350,7 +350,7 @@
       "published": "2026-03-09T16:09:24+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
       "lastSeen": "2026-03-09T21:48:57.264770+00:00",
-      "score": 1.959
+      "score": 1.9369
     },
     {
       "title": "Microsoft announces Copilot Cowork with help from Anthropic — a cloud-powered AI agent that works across M365 apps",
@@ -363,8 +363,8 @@
       "image": "https://ic-cdn.flipboard.com/ctfassets.net/57d56652a33bbb6ff9176d26208ba4e4ab7cdb72/_large.png",
       "published": "2026-03-09T16:08:45+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.9587
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.9367
     },
     {
       "title": "Rosalía broke every branding rule and won – here's what creatives can learn from her",
@@ -377,22 +377,22 @@
       "image": "https://cdn.mos.cms.futurecdn.net/CDgTBFdB5KMUiqQmVsyi69-1120-80.jpg",
       "published": "2026-03-09T16:00:00+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9551
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9331
     },
     {
-      "title": "Anthropic sues Trump administration amid AI dispute with Pentagon",
+      "title": "Anthropic sues Trump administration in AI dispute with Pentagon",
       "url": "https://www.nbcnews.com/tech/tech-news/anthropic-sues-trump-administration-ai-dispute-pentagon-rcna262444",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "AI company Anthropic filed two lawsuits against several federal agencies and officials after being labeled last week a supply-chain risk to national security. Anthropic on Monday sued the Defense Department and other federal agencies after the Pentagon labelled it a threat to national security and …",
+      "summary": "AI company Anthropic filed two lawsuits against several federal agencies and officials after it was labeled last week as a supply-chain risk to national security. Anthropic sued the Defense Department and other federal agencies Monday after the Pentagon labeled it a threat to national security and …",
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/54ae4a79c5ee8ee5f3133582310eef92d4877008/_xlarge.jpeg",
       "published": "2026-03-09T15:57:12+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9539
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.932
     },
     {
       "title": "Anthropic sues Trump admin over supply-chain risk label",
@@ -405,8 +405,8 @@
       "image": "https://ic-cdn.flipboard.com/politico.com/60f5998a5993ecacc6773e325f6b291264a6f175/_xlarge.jpeg",
       "published": "2026-03-09T15:40:41+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.947
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.9252
     },
     {
       "title": "Anthropic sues Defense Department over supply chain risk designation",
@@ -420,7 +420,7 @@
       "published": "2026-03-09T15:39:36+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
       "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 1.9466
+      "score": 1.9248
     },
     {
       "title": "AI company Anthropic sues Trump administration seeking to undo 'supply chain risk' designation",
@@ -434,7 +434,7 @@
       "published": "2026-03-09T15:27:55+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T21:48:57.264770+00:00",
-      "score": 1.9417
+      "score": 1.9201
     },
     {
       "title": "Anthropic sues Trump administration over Pentagon blacklist",
@@ -447,8 +447,8 @@
       "image": "https://ic-cdn.flipboard.com/cnbcfm.com/c98ef101d1eb6251fcf3f1265aea67356022dfe2/_xlarge.jpeg",
       "published": "2026-03-09T15:17:51+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9376
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.916
     },
     {
       "title": "How AI is turning the Iran conflict into theater",
@@ -461,8 +461,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/photo-BASEd3.jpg?resize=1200%2C600",
       "published": "2026-03-09T15:11:01+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0748
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.0533
     },
     {
       "title": "XBox Project Helix suggests the 'console war' is over",
@@ -475,8 +475,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/fvHXxYMe5SHxyBkAFc4o4J-1440-80.jpg",
       "published": "2026-03-09T15:04:10+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.632
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.6106
     },
     {
       "title": "ABB Robotics Taps NVIDIA Omniverse to Deliver Industrial‑Grade Physical AI at Scale",
@@ -489,8 +489,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/2.24-scaled.jpg",
       "published": "2026-03-09T15:00:34+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0705
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.0491
     },
     {
       "title": "How AI Is Driving Revenue, Cutting Costs and Boosting Productivity for Every Industry in 2026",
@@ -503,8 +503,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/industry-press-state-of-the-ai-report-overreaching-blog-1920x1080-2.png",
       "published": "2026-03-09T15:00:23+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 2.0704
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 2.0491
     },
     {
       "title": "What this 109-year-old deepfake can teach us about spotting AI photos today?",
@@ -518,7 +518,7 @@
       "published": "2026-03-09T14:27:38+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
       "lastSeen": "2026-03-09T15:14:49.205159+00:00",
-      "score": 1.9172
+      "score": 1.8961
     },
     {
       "title": "How to Talk to Someone Experiencing 'AI Psychosis'",
@@ -531,8 +531,8 @@
       "image": "https://ic-cdn.flipboard.com/404media.co/469099b140f485eeb2d4b2f845c944b818af1a47/_xlarge.jpeg",
       "published": "2026-03-09T14:12:22+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9111
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.8902
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 90% Off Right Now",
@@ -545,8 +545,8 @@
       "image": "",
       "published": "2026-03-09T14:00:40+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9064
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.8856
     },
     {
       "title": "Samsung Galaxy S24 vs. S26: Should you upgrade to the latest model after two years?",
@@ -559,8 +559,8 @@
       "image": "https://ic-cdn.flipboard.com/zdnet.com/297e45331758e3f98e20764ab3ddcb1a35452d99/_xlarge.jpeg",
       "published": "2026-03-09T13:55:00+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.9042
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.8834
     },
     {
       "title": "Introducing... Life Without",
@@ -573,8 +573,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.2195
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.2171
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -587,8 +587,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.1998
+      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
+      "score": 1.1995
     },
     {
       "title": "The Life Scientific: Julia Simner",
