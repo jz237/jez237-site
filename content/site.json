@@ -62,6 +62,12 @@
       "desc": "Dig through caves, collect diamonds, dodge falling boulders and enemies. Classic arcade puzzler rebuilt from scratch.",
       "status": "live",
       "link": "https://jz237.github.io/jez237-site/games/boulder-dash/"
+    },
+    {
+      "name": "☄️ Asteroids HD",
+      "desc": "Neon vector-style Asteroids. Destroy rocks, dodge debris, survive as long as you can.",
+      "status": "live",
+      "link": "https://jz237.github.io/jez237-site/games/asteroids-hd/"
     }
   ],
   "photos": [
