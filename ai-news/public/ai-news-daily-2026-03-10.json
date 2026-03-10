@@ -1,7 +1,36 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T05:02:21.868084+00:00",
+  "updatedAt": "2026-03-10T07:30:10.565243+00:00",
   "items": [
+    {
+      "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
+      "url": "https://www.marktechpost.com/2026/03/09/bytedance-releases-deerflow-2-0-an-open-source-superagent-harness-that-orchestrates-sub-agents-memory-and-sandboxes-to-do-complex-tasks",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The era of the &#8216;Copilot&#8217; is officially getting an upgrade. While the tech world has spent the last two years getting comfortable with AI that suggests code or drafts emails, ByteDance team is moving the goalposts. They released DeerFlow 2.0, a newly open-sourced &#8216;SuperAgent&#8217; framework that doesn&#8217;t just suggest work; it executes it. DeerFlow is [&#8230;]\nThe post ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
+      "published": "2026-03-10T06:10:37+00:00",
+      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "model_release": true,
+      "score": 9.1802
+    },
+    {
+      "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
+      "url": "https://www.marktechpost.com/2026/03/09/how-to-build-a-risk-aware-ai-agent-with-internal-critic-self-consistency-reasoning-and-uncertainty-estimation-for-reliable-decision-making",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build an advanced agent system that goes beyond simple response generation by integrating an internal critic and uncertainty estimation framework. We simulate multi-sample inference, evaluate candidate responses across accuracy, coherence, and safety dimensions, and quantify predictive uncertainty using entropy, variance, and consistency measures. We implement risk-sensitive selection strategies to balance confidence [&#8230;]\nThe post How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Makin",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
+      "published": "2026-03-10T06:35:45+00:00",
+      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 3.0926
+    },
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
       "url": "https://venturebeat.com/technology/andrej-karpathys-new-open-source-autoresearch-lets-you-run-hundreds-of-ai",
@@ -10,11 +39,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Over the weekend, Andrej Karpathy—the influential former Tesla AI lead and co-founder and former member of OpenAI who coined the term \"vibe coding\"— posted on X about his new open source project, autoresearch. It wasn't a finished model or a massive corporate product: it was by his own admission a …",
-      "image": "https://images.ctfassets.net/jdtwqhzvc2n1/2jUMX5tvR9PuuhlFIxezYp/55bab7b88fe8bd1f5c0a21f51a3da6c0/Gemini_Generated_Image_gusyegusyegusyeg.png?w=800&q=75",
+      "image": "https://ic-cdn.flipboard.com/ctfassets.net/2f3f3d4ec9294e138715d6e29dc3220c141d3ddf/_large.png",
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
-      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.7121
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 2.6484
     },
     {
       "title": "Rogue AI agent goes off script and attempts crypto mining",
@@ -28,7 +57,7 @@
       "published": "2026-03-10T00:00:00+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
       "lastSeen": "2026-03-10T05:02:21.868084+00:00",
-      "score": 2.6063
+      "score": 2.5431
     },
     {
       "title": "It’s tempting to offload your thinking to AI. Cognitive science shows why that’s a bad idea",
@@ -41,8 +70,8 @@
       "image": "https://ic-cdn.flipboard.com/theconversation.com/405e0d105ccf9df0eb2647f82b27b34061c0ab0b/_xlarge.jpeg",
       "published": "2026-03-10T01:32:26+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
-      "score": 2.3481
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 2.2821
     },
     {
       "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
@@ -55,8 +84,50 @@
       "image": "",
       "published": "2026-03-10T05:00:00+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
-      "score": 2.2888
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 2.2161
+    },
+    {
+      "title": "Is this the adorable face of Apple's new AI chatbot?",
+      "url": "https://www.creativebloq.com/art/character-design/is-this-the-adorable-face-of-apples-new-ai-chatbot",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Lil' Finder Guy is taking the internet by storm. It's been an eventful few days for Apple fans, with the company announcing new iPhones, iPads and, of …",
+      "image": "https://cdn.mos.cms.futurecdn.net/6gqMc9p2TN2FQY8UJtXpfk-1920-80.jpg",
+      "published": "2026-03-10T06:00:00+00:00",
+      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 2.105
+    },
+    {
+      "title": "For the first time in years, there are no blockchain gaming talks at GDC",
+      "url": "https://www.pcgamer.com/gaming-industry/for-the-first-time-in-years-there-are-no-blockchain-gaming-talks-at-gdc",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "NFTs are out, generative AI is in at this year's Game Developers Conference—though much of the industry isn't on board with that, either. Not long …",
+      "image": "https://cdn.mos.cms.futurecdn.net/EUyV2bbfqcNXQoZ6AQ8jDL-2048-80.jpg",
+      "published": "2026-03-10T05:07:13+00:00",
+      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 2.0796
+    },
+    {
+      "title": "Apple's new Studio Display is on my desk. Here's what I think",
+      "url": "https://www.creativebloq.com/tech/monitors/apples-new-studio-display-is-here-heres-what-i-found-when-i-tried-it",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Is the new and improved monitor worth having? I've already got my hands on the new MacBook Air M5 as well as the MacBook Pro M5 Max, but had yet to …",
+      "image": "https://cdn.mos.cms.futurecdn.net/EjjWpPEBJNso9cmopPdRAf-1920-80.jpg",
+      "published": "2026-03-10T05:00:00+00:00",
+      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 2.0761
     },
     {
       "title": "The good, bad, and ugly of AI healthcare, according to a doctor who uses AI",
@@ -69,8 +140,8 @@
       "image": "https://ic-cdn.flipboard.com/zdnet.com/aa1d7e4d8f6b783492bcdade00dcc3ab138dd74a/_xlarge.jpeg",
       "published": "2026-03-10T01:00:44+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
-      "score": 2.0336
+      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
+      "score": 1.9685
     }
   ],
   "errors": []

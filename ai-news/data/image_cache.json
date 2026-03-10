@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T05:02:21.868084+00:00",
+  "updatedAt": "2026-03-10T07:30:10.565243+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -312,6 +312,14 @@
     "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models": {
       "image": "",
       "checkedAt": "2026-03-10T05:02:21.868084+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/09/how-to-build-a-risk-aware-ai-agent-with-internal-critic-self-consistency-reasoning-and-uncertainty-estimation-for-reliable-decision-making": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
+      "checkedAt": "2026-03-10T07:30:10.565243+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/09/bytedance-releases-deerflow-2-0-an-open-source-superagent-harness-that-orchestrates-sub-agents-memory-and-sandboxes-to-do-complex-tasks": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
+      "checkedAt": "2026-03-10T07:30:10.565243+00:00"
     }
   }
 }
