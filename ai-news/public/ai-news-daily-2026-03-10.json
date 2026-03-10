@@ -1,7 +1,64 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T01:32:50.345218+00:00",
+  "updatedAt": "2026-03-10T12:01:07.759785+00:00",
   "items": [
+    {
+      "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
+      "url": "https://www.marktechpost.com/2026/03/09/bytedance-releases-deerflow-2-0-an-open-source-superagent-harness-that-orchestrates-sub-agents-memory-and-sandboxes-to-do-complex-tasks",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The era of the &#8216;Copilot&#8217; is officially getting an upgrade. While the tech world has spent the last two years getting comfortable with AI that suggests code or drafts emails, ByteDance team is moving the goalposts. They released DeerFlow 2.0, a newly open-sourced &#8216;SuperAgent&#8217; framework that doesn&#8217;t just suggest work; it executes it. DeerFlow is [&#8230;]\nThe post ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
+      "published": "2026-03-10T06:10:37+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "model_release": true,
+      "score": 9.0552
+    },
+    {
+      "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
+      "url": "https://www.marktechpost.com/2026/03/09/how-to-build-a-risk-aware-ai-agent-with-internal-critic-self-consistency-reasoning-and-uncertainty-estimation-for-reliable-decision-making",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build an advanced agent system that goes beyond simple response generation by integrating an internal critic and uncertainty estimation framework. We simulate multi-sample inference, evaluate candidate responses across accuracy, coherence, and safety dimensions, and quantify predictive uncertainty using entropy, variance, and consistency measures. We implement risk-sensitive selection strategies to balance confidence [&#8230;]\nThe post How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Makin",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
+      "published": "2026-03-10T06:35:45+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.9662
+    },
+    {
+      "title": "AI Is a 5-Layer Cake",
+      "url": "https://blogs.nvidia.com/blog/ai-5-layer-cake",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI is one of the most powerful forces shaping the world today. It is not a clever app or a single model; it is essential infrastructure, like electricity and the internet.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
+      "published": "2026-03-10T10:00:03+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.93
+    },
+    {
+      "title": "BMW Group brings humanoid robots to Germany",
+      "url": "https://thenextweb.com/news/bmw-group-brings-humanoid-robots-to-germany",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The automaker has launched a pilot at its Leipzig plant using Hexagon Robotics’ AEON humanoid. The move follows a successful 11-month run in the US with Figure AI’s robots, and arrives just as the production chief who championed the programme prepares to take the top job. A new colleague has arrived on the shop floor [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
+      "published": "2026-03-10T10:16:45+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.7981
+    },
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
       "url": "https://venturebeat.com/technology/andrej-karpathys-new-open-source-autoresearch-lets-you-run-hundreds-of-ai",
@@ -14,8 +71,98 @@
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.8101
+      "score": 2.5425
+    },
+    {
+      "title": "Escape raises $18M to replace pen-testers with AI agents",
+      "url": "https://thenextweb.com/news/escape-18m-series-a-ai-security-vibe-coding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The timing is not coincidental. In October 2025, Escape published research that scanned more than 5,600 publicly deployed applications built with vibe coding platforms, tools like Lovable, Base44, and Bolt.new that let non-developers build and ship apps by describing what they want in plain English. The results were stark: over 2,000 high-impact vulnerabilities, hundreds of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Escape-raises-18M.png",
+      "published": "2026-03-10T09:31:06+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.3762
+    },
+    {
+      "title": "Yann LeCun just raised $1bn to prove the AI industry has got it wrong",
+      "url": "https://thenextweb.com/news/yann-lecun-ami-labs-world-models-billion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Turing Award winner left Meta four months ago convinced that large language models are a dead end. Today he announced $1.03 billion in seed funding, Europe’s largest ever, to build something different. In November 2025, Yann LeCun walked into Mark Zuckerberg’s office and told his boss he was leaving. He had spent twelve years [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Yann-LeCun-just-raised-1bn.png",
+      "published": "2026-03-10T11:06:09+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.1224
+    },
+    {
+      "title": "Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries",
+      "url": "https://huggingface.co/blog/async-rl-training-landscape",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
+      "published": "2026-03-10T00:00:00+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.1178
+    },
+    {
+      "title": "Mantle8 secures €2.06M EU grant to scale natural hydrogen tech",
+      "url": "https://thenextweb.com/news/mantle8-secures-e2-06m-eu-grant-to-scale-natural-hydrogen-tech",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A €2.06 million EU grant gives the Grenoble deep-tech startup non-dilutive runway to industrialise a four-component technology platform, and moves it one step closer to its first commercial drilling campaign. Fourteen months after closing a €3.4 million seed round backed by Bill Gates’ Breakthrough Energy Ventures and Kiko Ventures, Mantle8 has secured a second source [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mantle8-secures-E2.06M-EU-grant.png",
+      "published": "2026-03-10T10:38:49+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.1089
+    },
+    {
+      "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
+      "url": "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AMI Labs, the new venture cofounded by Turing Prize winner Yann LeCun after he left Meta, has raised $1.03 billion at a $3.5 billion pre-money valuation.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2261869274.jpg?resize=1200%2C800",
+      "published": "2026-03-10T05:00:00+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.0951
+    },
+    {
+      "title": "The Oberlo veterans taking on Europe&#8217;s restaurant supply chain raise €20M",
+      "url": "https://thenextweb.com/news/saltz-series-a-restaurant-supply-europe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Lithuanian food marketplace Saltz pulls in a €20M Series A backed by the EBRD, Inovo, Lifeline, and a roster of Baltic tech founders, to digitalise how restaurants across Europe source their ingredients. When Andrius and Tomas Šlimas sold their dropshipping platform Oberlo to Shopify in 2017, they could have sat out the next decade comfortably. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Saltz-pulls-in-a-E20M-Series-A.png",
+      "published": "2026-03-10T10:00:42+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.0903
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Flipboard AI",
+      "url": "https://flipboard.com/topic/artificialintelligence.rss",
+      "error": "HTTP Error 502: Bad Gateway"
+    }
+  ]
 }
