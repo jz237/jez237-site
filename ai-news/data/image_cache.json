@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T18:09:59.198938+00:00",
+  "updatedAt": "2026-03-10T19:00:04.202544+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -365,41 +365,49 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_0402.CR3_.jpg?resize=1200,800",
       "checkedAt": "2026-03-10T15:13:25.916572+00:00"
     },
+    "https://techcrunch.com/2026/03/10/ai-powered-apps-can-make-money-but-struggle-with-long-term-retention-new-data-shows": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
+    },
     "https://techcrunch.com/2026/03/10/chatgpt-can-now-create-interactive-visuals-to-help-you-understand-math-and-science-concepts": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://www.techrepublic.com/article/news-nscale-raises-2b-nvidia-ai-data-centers": {
-      "image": "",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-2026-03-11T003159.412.png",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://techcrunch.com/2026/03/10/agentmail-raises-6m-to-build-an-email-service-for-ai-agents": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200,713",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://www.techrepublic.com/article/news-fake-google-coin-scam-ai-chatbot-gemini": {
-      "image": "",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-03-10T233525.266.png",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://www.techrepublic.com/article/news-fake-claude-code-install-pages-malware-windows-macos": {
-      "image": "",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03102026-fake-claude-code.jpg",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/meta-acquired-moltbook-the-ai-agent-social-network-that-went-viral-because-of-fake-posts": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-1485567434.jpg?resize=1200,827",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://openai.com/index/instruction-hierarchy-challenge": {
-      "image": "",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1hgOrtUKV9JbWpgIZLElGG/f1e68fcb747aeb0cb87633a34bb71bb3/SEO_Card__1_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt": {
-      "image": "",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6WeStJuG7Vpz0AfZWGS6cm/27e0b45847fa1d82241e7ea5af01a7ad/Learning_Blocks_SEO_16x9.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://huggingface.co/blog/storage-buckets": {
       "image": "https://huggingface.co/blog/assets/storage-buckets/buckets-annoucement.png",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     },
     "https://www.together.ai/blog/new-in-together-gpu-clusters-autoscaling-observability-self-healing": {
-      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b041c7bad904fb16ab083b_20260309_Clusters_1200x630.png",
-      "checkedAt": "2026-03-10T18:09:59.198938+00:00"
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0635c649e603128f02ea9_20260309_Clusters_1200x630%20(1).png",
+      "checkedAt": "2026-03-10T19:00:04.202544+00:00"
     }
   }
 }
