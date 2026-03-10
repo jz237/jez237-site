@@ -41,6 +41,29 @@
       opacity: 1;
     }
 
+    .load-more-wrap {
+      text-align: center;
+      margin: 24px 0;
+    }
+    .load-more-btn {
+      background: var(--accent, #5865f2);
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .load-more-btn:hover {
+      opacity: 0.85;
+    }
+    .photo-count {
+      color: var(--muted, #888);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
     /* Lightbox */
     .lightbox-overlay {
       display: none;
@@ -100,46 +123,11 @@
       <p class="muted">Click any photo to enlarge.</p>
     </section>
 
-    <div class="masonry">
-      <div class="masonry-item" data-caption="Marty on lookout duty">
-        <img src="../assets/cats/marty-cat-tree.jpg" alt="Marty on cat tree" loading="lazy" />
-        <div class="caption">Marty on lookout duty</div>
-      </div>
+    <div class="masonry" id="gallery"></div>
 
-      <div class="masonry-item" data-caption="Luca &amp; Cosmo">
-        <img src="../assets/cats/luca-cosmo.jpg" alt="Luca and Cosmo together" loading="lazy" />
-        <div class="caption">Luca & Cosmo</div>
-      </div>
-
-      <div class="masonry-item" data-caption="Taco (belly mode)">
-        <img src="../assets/cats/taco-belly.jpg" alt="Taco relaxing on blanket" loading="lazy" />
-        <div class="caption">Taco (belly mode)</div>
-      </div>
-
-      <div class="masonry-item" data-caption="Luca gaming assistant">
-        <img src="../assets/cats/luca-gaming.jpg" alt="Luca pawing at game screen" loading="lazy" />
-        <div class="caption">Luca gaming assistant</div>
-      </div>
-
-      <div class="masonry-item" data-caption="Taco: professional model">
-        <img src="../assets/cats/taco-portrait.jpg" alt="Taco portrait" loading="lazy" />
-        <div class="caption">Taco: professional model</div>
-      </div>
-
-      <div class="masonry-item" data-caption="Marty's &quot;we need to talk&quot; face">
-        <img src="../assets/cats/marty-closeup.jpg" alt="Marty closeup" loading="lazy" />
-        <div class="caption">Marty's "we need to talk" face</div>
-      </div>
-
-      <div class="masonry-item" data-caption="Luca: do not disturb">
-        <img src="../assets/cats/luca-napping.jpg" alt="Luca napping" loading="lazy" />
-        <div class="caption">Luca: do not disturb</div>
-      </div>
-
-      <div class="masonry-item" data-caption="Cosmo vs. the spring toy (spring winning)">
-        <img src="../assets/cats/cosmo-sprawl.jpg" alt="Cosmo sprawled on carpet" loading="lazy" />
-        <div class="caption">Cosmo vs. the spring toy (spring winning)</div>
-      </div>
+    <div class="load-more-wrap">
+      <button class="load-more-btn" id="load-more">Load more</button>
+      <div class="photo-count" id="photo-count"></div>
     </div>
 
     <footer>
@@ -154,22 +142,60 @@
   </div>
 
   <script>
+    const BATCH_SIZE = 12;
+    let loaded = 0;
+
+    const photos = [
+      { src: "../assets/cats/marty-cat-tree.jpg", alt: "Marty on cat tree", caption: "Marty on lookout duty" },
+      { src: "../assets/cats/luca-cosmo.jpg", alt: "Luca and Cosmo together", caption: "Luca & Cosmo" },
+      { src: "../assets/cats/taco-belly.jpg", alt: "Taco relaxing on blanket", caption: "Taco (belly mode)" },
+      { src: "../assets/cats/luca-gaming.jpg", alt: "Luca pawing at game screen", caption: "Luca gaming assistant" },
+      { src: "../assets/cats/taco-portrait.jpg", alt: "Taco portrait", caption: "Taco: professional model" },
+      { src: "../assets/cats/marty-closeup.jpg", alt: "Marty closeup", caption: "Marty's \"we need to talk\" face" },
+      { src: "../assets/cats/luca-napping.jpg", alt: "Luca napping", caption: "Luca: do not disturb" },
+      { src: "../assets/cats/cosmo-sprawl.jpg", alt: "Cosmo sprawled on carpet", caption: "Cosmo vs. the spring toy (spring winning)" },
+    ];
+
+    const gallery = document.getElementById('gallery');
+    const btn = document.getElementById('load-more');
+    const countEl = document.getElementById('photo-count');
+
+    function loadBatch() {
+      const end = Math.min(loaded + BATCH_SIZE, photos.length);
+      for (let i = loaded; i < end; i++) {
+        const p = photos[i];
+        const div = document.createElement('div');
+        div.className = 'masonry-item';
+        div.dataset.caption = p.caption;
+        div.innerHTML = `<img src="${p.src}" alt="${p.alt}" loading="lazy" /><div class="caption">${p.caption}</div>`;
+        div.addEventListener('click', () => openLightbox(p.src, p.caption));
+        gallery.appendChild(div);
+      }
+      loaded = end;
+      countEl.textContent = `${loaded} of ${photos.length}`;
+      if (loaded >= photos.length) {
+        btn.style.display = 'none';
+      }
+    }
+
+    // Lightbox
     const overlay = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightbox-img');
     const lbCap = document.getElementById('lightbox-cap');
 
-    document.querySelectorAll('.masonry-item').forEach(item => {
-      item.addEventListener('click', () => {
-        lbImg.src = item.querySelector('img').src;
-        lbCap.textContent = item.dataset.caption;
-        overlay.classList.add('active');
-      });
-    });
-
+    function openLightbox(src, caption) {
+      lbImg.src = src;
+      lbCap.textContent = caption;
+      overlay.classList.add('active');
+    }
     overlay.addEventListener('click', () => {
       overlay.classList.remove('active');
       lbImg.src = '';
     });
+
+    // Initial load
+    loadBatch();
+    btn.addEventListener('click', loadBatch);
   </script>
 </body>
 </html>
