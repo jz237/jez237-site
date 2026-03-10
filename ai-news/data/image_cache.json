@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T07:30:10.565243+00:00",
+  "updatedAt": "2026-03-10T10:08:58.754400+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -320,6 +320,10 @@
     "https://www.marktechpost.com/2026/03/09/bytedance-releases-deerflow-2-0-an-open-source-superagent-harness-that-orchestrates-sub-agents-memory-and-sandboxes-to-do-complex-tasks": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "checkedAt": "2026-03-10T07:30:10.565243+00:00"
+    },
+    "https://huggingface.co/blog/async-rl-training-landscape": {
+      "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
+      "checkedAt": "2026-03-10T10:08:58.754400+00:00"
     }
   }
 }
