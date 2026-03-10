@@ -1,19 +1,104 @@
 [
-  {"name":"OpenAI News","url":"https://openai.com/news/rss.xml","weight":1.0,"category":"AI"},
-  {"name":"Google AI Blog","url":"https://blog.google/technology/ai/rss/","weight":0.95,"category":"AI"},
-  {"name":"Google DeepMind Blog","url":"https://deepmind.google/blog/rss.xml","weight":0.95,"category":"AI"},
-
-  {"name":"Hugging Face Blog","url":"https://huggingface.co/blog/feed.xml","weight":0.95,"category":"AI"},
-  {"name":"NVIDIA Blog","url":"https://blogs.nvidia.com/feed/","weight":0.85,"category":"AI"},
-  {"name":"MIT Technology Review AI","url":"https://www.technologyreview.com/topic/artificial-intelligence/feed/","weight":0.85,"category":"AI"},
-  {"name":"Ars Technica (AI/Tech)","url":"https://feeds.arstechnica.com/arstechnica/technology-lab","weight":0.75,"category":"AI"},
-
-  {"name":"Together AI Blog","url":"https://www.together.ai/blog/rss.xml","weight":0.8,"category":"AI"},
-  {"name":"Flipboard AI","url":"https://flipboard.com/topic/artificialintelligence.rss","weight":0.75,"category":"AI"},
-  {"name":"TechRepublic AI","url":"https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/","weight":0.75,"category":"AI"},
-  {"name":"ScienceDaily AI","url":"https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml","weight":0.8,"category":"AI"},
-  {"name":"The Next Web","url":"https://thenextweb.com/feed","weight":0.75,"category":"AI"},
-  {"name":"BBC Discovery","url":"https://podcasts.files.bbci.co.uk/p002w557.rss","weight":0.85,"category":"Science"},
-  {"name":"BBC Infinite Monkey Cage","url":"https://podcasts.files.bbci.co.uk/b00snr0w.rss","weight":0.8,"category":"Science"},
-  {"name":"BBC The Life Scientific","url":"https://podcasts.files.bbci.co.uk/b015sqc7.rss","weight":0.8,"category":"Science"}
+  {
+    "name": "OpenAI News",
+    "url": "https://openai.com/news/rss.xml",
+    "weight": 1.0,
+    "category": "AI"
+  },
+  {
+    "name": "Google AI Blog",
+    "url": "https://blog.google/technology/ai/rss/",
+    "weight": 0.95,
+    "category": "AI"
+  },
+  {
+    "name": "Google DeepMind Blog",
+    "url": "https://deepmind.google/blog/rss.xml",
+    "weight": 0.95,
+    "category": "AI"
+  },
+  {
+    "name": "Hugging Face Blog",
+    "url": "https://huggingface.co/blog/feed.xml",
+    "weight": 0.95,
+    "category": "AI"
+  },
+  {
+    "name": "NVIDIA Blog",
+    "url": "https://blogs.nvidia.com/feed/",
+    "weight": 0.85,
+    "category": "AI"
+  },
+  {
+    "name": "MIT Technology Review AI",
+    "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+    "weight": 0.85,
+    "category": "AI"
+  },
+  {
+    "name": "Ars Technica (AI/Tech)",
+    "url": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    "weight": 0.75,
+    "category": "AI"
+  },
+  {
+    "name": "Together AI Blog",
+    "url": "https://www.together.ai/blog/rss.xml",
+    "weight": 0.8,
+    "category": "AI"
+  },
+  {
+    "name": "Flipboard AI",
+    "url": "https://flipboard.com/topic/artificialintelligence.rss",
+    "weight": 0.75,
+    "category": "AI"
+  },
+  {
+    "name": "TechRepublic AI",
+    "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+    "weight": 0.75,
+    "category": "AI"
+  },
+  {
+    "name": "ScienceDaily AI",
+    "url": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
+    "weight": 0.8,
+    "category": "AI"
+  },
+  {
+    "name": "The Next Web",
+    "url": "https://thenextweb.com/feed",
+    "weight": 0.75,
+    "category": "AI"
+  },
+  {
+    "name": "BBC Discovery",
+    "url": "https://podcasts.files.bbci.co.uk/p002w557.rss",
+    "weight": 0.85,
+    "category": "Science"
+  },
+  {
+    "name": "BBC Infinite Monkey Cage",
+    "url": "https://podcasts.files.bbci.co.uk/b00snr0w.rss",
+    "weight": 0.8,
+    "category": "Science"
+  },
+  {
+    "name": "BBC The Life Scientific",
+    "url": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
+    "weight": 0.8,
+    "category": "Science"
+  },
+  {
+    "name": "MarkTechPost",
+    "url": "https://www.marktechpost.com/feed/",
+    "weight": 0.8,
+    "category": "AI"
+  },
+  {
+    "name": "TechCrunch AI",
+    "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "weight": 0.85,
+    "category": "AI"
+  }
 ]

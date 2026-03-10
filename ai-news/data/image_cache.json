@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T23:54:24.518190+00:00",
+  "updatedAt": "2026-03-10T01:01:46.917274+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -220,6 +220,54 @@
     "https://www.techrepublic.com/article/news-cbp-systems-not-ready-for-massive-tariff-refunds": {
       "image": "",
       "checkedAt": "2026-03-09T21:48:57.264770+00:00"
+    },
+    "https://techcrunch.com/2026/03/09/openai-and-google-employees-rush-to-anthropics-defense-in-dod-lawsuit": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200,801",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/09/anthropic-introduces-code-review-via-claude-code-to-automate-complex-security-research-using-advanced-agentic-multi-step-reasoning-loops": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-30.png",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/09/anthropic-launches-code-review-tool-to-check-flood-of-ai-generated-code": {
+      "image": "",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/09/openai-acquires-promptfoo-to-secure-its-ai-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200,800",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/09/qualcomms-partnership-with-neura-robotics-is-just-the-beginning": {
+      "image": "",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/09/sandberg-clegg-join-nscale-board-as-this-stargate-norway-startup-hits-14-6b-valuation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2235971874.jpg?resize=1200,800",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://www.miamiherald.com/news/business/article314984415.html": {
+      "image": "",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/08/a-coding-guide-to-build-a-complete-single-cell-rna-sequencing-analysis-pipeline-using-scanpy-for-clustering-visualization-and-cell-type-annotation": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-2-1-1024x731.png",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/08/will-the-pentagons-anthropic-controversy-scare-startups-away-from-defense-work": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-1461207630.jpg?resize=1200,857",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/07/how-to-build-progress-monitoring-using-advanced-tqdm-for-async-parallel-pandas-logging-and-high-performance-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-26-1024x731.png",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/07/google-just-gave-sundar-pichai-a-692m-pay-package": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2215577882.jpg?resize=1200,800",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
+    },
+    "https://techcrunch.com/2026/03/07/grammarlys-expert-review-is-just-missing-the-actual-experts": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/08/brain-brain.jpg?resize=1200,675",
+      "checkedAt": "2026-03-10T01:01:46.917274+00:00"
     }
   }
 }
