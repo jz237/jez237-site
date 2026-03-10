@@ -1,6 +1,6 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T18:09:59.198938+00:00",
+  "updatedAt": "2026-03-10T19:00:04.202544+00:00",
   "items": [
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -13,39 +13,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
       "model_release": true,
-      "score": 8.9084
-    },
-    {
-      "title": "How 6,000 Bad Coding Lessons Turned a Chatbot Evil",
-      "url": "https://www.nytimes.com/2026/03/10/opinion/ai-chatbots-virtue-vice.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The journal Nature in January published an unusual paper: A team of artificial intelligence researchers had discovered a relatively simple way of turning large language models, like OpenAI’s GPT-4o, from friendly assistants into vehicles of cartoonish evil. They had given the models a data set of …",
-      "image": "https://ic-cdn.flipboard.com/nyt.com/59d5ded2a2044f4f783f7e1df159c8140614cfb2/_xlarge.jpeg",
-      "published": "2026-03-10T09:00:33+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "model_release": true,
-      "score": 8.2529
-    },
-    {
-      "title": "One of the Year's Best Sci-Fi Films (So Far) Is Now Available at Home",
-      "url": "https://gizmodo.com/one-of-the-years-best-sci-fi-films-so-far-is-now-available-at-home-2000731691",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sam Rockwell stars in Gore Verbinski's 'Good Luck, Have Fun, Don't Die,' which is out now. How would you like to watch a time-travelling Sam Rockwell …",
-      "image": "https://ic-cdn.flipboard.com/gizmodo.com/1d06a1d2fde8a5f97f89427a4eb827537b855bcb/_xlarge.jpeg",
-      "published": "2026-03-10T12:00:59+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "model_release": true,
-      "score": 7.9773
+      "score": 8.8903
     },
     {
       "title": "AgentMail raises $6M to build an email service for AI agents",
@@ -57,9 +27,9 @@
       "summary": "AgentMail provides an API platform that lets you give AI agents their own email inboxes, with support for two-way conversations, parsing, threading, labeling, searching, and replying.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200%2C713",
       "published": "2026-03-10T16:00:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 3.2258
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 3.202
     },
     {
       "title": "New ways to learn math and science in ChatGPT",
@@ -69,11 +39,11 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "ChatGPT introduces interactive visual explanations for math and science, helping students explore formulas, variables, and concepts in real time.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6WeStJuG7Vpz0AfZWGS6cm/27e0b45847fa1d82241e7ea5af01a7ad/Learning_Blocks_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-10T10:00:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.9767
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.9567
     },
     {
       "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
@@ -86,8 +56,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
       "published": "2026-03-10T13:47:26+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.8641
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.8418
     },
     {
       "title": "Adobe is debuting an AI assistant for Photoshop",
@@ -100,8 +70,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
       "published": "2026-03-10T13:06:51+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.846
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.8241
     },
     {
       "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
@@ -114,8 +84,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.8429
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.8211
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -128,8 +98,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.8176
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.7994
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -142,22 +112,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.7668
-    },
-    {
-      "title": "Apple's new emoji has a controversial past but fans love it anyway",
-      "url": "https://www.creativebloq.com/design/apples-new-emoji-has-a-controversial-past-but-fans-love-it-anyway",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "I guess we’ve recovered from that problematic ad... In line with the new iOS 26.4 update, Apple has launched a collection of new emojis, including a …",
-      "image": "https://cdn.mos.cms.futurecdn.net/8kMoN53pyZd2At9Wz8M7ed-1920-80.jpg",
-      "published": "2026-03-10T13:00:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.7029
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.7467
     },
     {
       "title": "BMW Group brings humanoid robots to Germany",
@@ -170,9 +126,57 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
       "published": "2026-03-10T10:16:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.6336
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.6133
+    },
+    {
+      "title": "Gemini in Google Sheets just achieved state-of-the-art performance.",
+      "url": "https://blog.google/products-and-platforms/products/workspace/gemini-google-sheets-state-of-the-art",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Today we announced new beta features for Gemini in Sheets to help you create, organize and edit entire sheets, from basic tasks to complex data analysis — just describe …",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Workspace_Jan_Moment_Sheets_Blo.max-600x600.format-webp.webp",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.6111
+    },
+    {
+      "title": "NVIDIA Virtualizes Game Development With RTX PRO Server",
+      "url": "https://blogs.nvidia.com/blog/gdc-2026-virtual-game-development",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Game development teams are working across larger worlds, more complex pipelines and more distributed teams than ever. At the same time, many studios still rely on fixed, desk-bound GPU hardware for critical production work. At the Game Developers Conference (GDC) this week in San Francisco, NVIDIA is showcasing a new approach to bring together disparate [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gdc-rtx-pro-server-1920x1080-1.jpg",
+      "published": "2026-03-10T15:30:07+00:00",
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.4881
+    },
+    {
+      "title": "NVIDIA and ComfyUI Streamline Local AI Video Generation for Game Developers and Creators at GDC",
+      "url": "https://blogs.nvidia.com/blog/rtx-ai-garage-flux-ltx-video-comfyui-gdc",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Game developers and artists are building cinematic worlds and iconic characters — raising the bar for immersive experiences on NVIDIA RTX AI PCs.  At the Game Developers Conference (GDC) in San Francisco this week, NVIDIA announced a suite of updates that streamline AI video generation for concept development and storyboarding on RTX GPUs and the [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-1.jpg",
+      "published": "2026-03-10T15:30:05+00:00",
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.4881
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Flipboard AI",
+      "url": "https://flipboard.com/topic/artificialintelligence.rss",
+      "error": "HTTP Error 502: Bad Gateway"
+    }
+  ]
 }

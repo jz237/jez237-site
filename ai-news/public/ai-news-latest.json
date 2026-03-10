@@ -1,6 +1,20 @@
 {
-  "updatedAt": "2026-03-10T18:09:59.198938+00:00",
+  "updatedAt": "2026-03-10T19:00:04.202544+00:00",
   "items": [
+    {
+      "title": "AI-powered apps can make money, but struggle with long-term retention, new data shows",
+      "url": "https://techcrunch.com/2026/03/10/ai-powered-apps-can-make-money-but-struggle-with-long-term-retention-new-data-shows",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI can drive stronger early\nmonetization for apps, but sustaining value remains the challenge, RevenueCat's latest report finds.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
+      "published": "2026-03-10T18:42:33+00:00",
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.2811
+    },
     {
       "title": "ChatGPT can now create interactive visuals to help you understand math and science concepts",
       "url": "https://techcrunch.com/2026/03/10/chatgpt-can-now-create-interactive-visuals-to-help-you-understand-math-and-science-concepts",
@@ -11,37 +25,9 @@
       "summary": "On Tuesday, OpenAI introduced dynamic visual explanations, a new ChatGPT feature that allows users to see how formulas, variables, and mathematical relationships change in real time.  Instead of just reading an explanation or looking at a static diagram, users can now interact directly with interactive visuals. For example, when exploring the Pythagorean theorem, you can [&#8230;]",
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-03-10T17:51:25+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.2806
-    },
-    {
-      "title": "AI causes ‘brain fry’ at work, researchers warn",
-      "url": "https://www.the-independent.com/tech/ai-brain-fry-artificial-intelligence-b2934903.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Artificial intelligence tools are causing workers to suffer from mental fatigue and a phenomenon referred to as “brain fry”, according to new …",
-      "image": "https://ic-cdn.flipboard.com/the-independent.com/06b75878b9b731829f6f85a199757ae9c9928f45/_xlarge.png",
-      "published": "2026-03-10T17:12:15+00:00",
-      "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.121
-    },
-    {
-      "title": "ChatGPT is evidence in murder trial of ex-NFL, Ohio State star Darron Lee: ‘What do I do?’",
-      "url": "https://www.latimes.com/sports/story/2026-03-10/darron-lee-murder-trial-chatgpt-nfl-jets-ohio-state",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Prosecutors presented grisly evidence to support the first-degree murder charge against former NFL and Ohio State star linebacker Darron Lee during a preliminary hearing Monday in Chattanooga, Tenn. Most shocking were the injuries to the body of victim Gabriella Carvalho Perpétuo, Lee’s girlfriend. …",
-      "image": "https://ca-times.brightspotcdn.com/dims4/default/161ace1/2147483647/strip/true/crop/3896x2045+0+276/resize/1200x630!/quality/75?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffa%2F6e%2F4a98765144f8b4ecf899caedfb71%2Fap18298103465620.jpg",
-      "published": "2026-03-10T17:05:48+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1178
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.2556
     },
     {
       "title": "As Open Models Spark AI Boom, NVIDIA Jetson Brings It to Life at the Edge",
@@ -53,9 +39,9 @@
       "summary": "The Cat 306 CR mini-excavator weighs just under eight tons and fits inside a standard shipping container. It’s the machine a contractor rents when the job site is tight: a utility trench near a foundation, a basement dig in a dense neighborhood. The cab is roughly the size of a phone booth. The operator sits [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/Jetson_OSS_KV_new_v013-scaled.jpg",
       "published": "2026-03-10T16:43:40+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.2469
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.2227
     },
     {
       "title": "Nvidia-Backed Nscale Raises $2B as AI Drives ‘Largest Infrastructure Buildout in Human History’",
@@ -65,11 +51,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "AI data center startup Nscale raised $2 billion at a $14.6 billion valuation from chip giant Nvidia.\nThe post Nvidia-Backed Nscale Raises $2B as AI Drives ‘Largest Infrastructure Buildout in Human History’ appeared first on TechRepublic.",
-      "image": "",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-2026-03-11T003159.412.png",
       "published": "2026-03-10T16:42:47+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1065
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.0823
     },
     {
       "title": "AgentMail raises $6M to build an email service for AI agents",
@@ -81,9 +67,9 @@
       "summary": "AgentMail provides an API platform that lets you give AI agents their own email inboxes, with support for two-way conversations, parsing, threading, labeling, searching, and replying.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200%2C713",
       "published": "2026-03-10T16:00:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 3.2258
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 3.202
     },
     {
       "title": "Fake Gemini AI Chatbot Promotes ‘Google Coin’ in New Crypto Scam",
@@ -93,11 +79,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "A fake Gemini-style chatbot is pushing a bogus Google Coin presale, using Google branding and scripted AI replies to lure victims into crypto payments.\nThe post Fake Gemini AI Chatbot Promotes ‘Google Coin’ in New Crypto Scam appeared first on TechRepublic.",
-      "image": "",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-03-10T233525.266.png",
       "published": "2026-03-10T15:38:43+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.0756
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.0521
     },
     {
       "title": "NVIDIA Virtualizes Game Development With RTX PRO Server",
@@ -109,9 +95,9 @@
       "summary": "Game development teams are working across larger worlds, more complex pipelines and more distributed teams than ever. At the same time, many studios still rely on fixed, desk-bound GPU hardware for critical production work. At the Game Developers Conference (GDC) this week in San Francisco, NVIDIA is showcasing a new approach to bring together disparate [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gdc-rtx-pro-server-1920x1080-1.jpg",
       "published": "2026-03-10T15:30:07+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.5115
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.4881
     },
     {
       "title": "NVIDIA and ComfyUI Streamline Local AI Video Generation for Game Developers and Creators at GDC",
@@ -123,9 +109,9 @@
       "summary": "Game developers and artists are building cinematic worlds and iconic characters — raising the bar for immersive experiences on NVIDIA RTX AI PCs.  At the Game Developers Conference (GDC) in San Francisco this week, NVIDIA announced a suite of updates that streamline AI video generation for concept development and storyboarding on RTX GPUs and the [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-03-10T15:30:05+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.5115
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.4881
     },
     {
       "title": "Anthropic sues the US government over its Pentagon blacklist",
@@ -137,9 +123,9 @@
       "summary": "The AI company filed two federal lawsuits on Monday, arguing the Trump administration’s ‘supply chain risk’ designation is unconstitutional retaliation for protected speech. There is a phrase in Anthropic’s court filing that sets the tone for everything that follows: “Anthropic turns to the judiciary as a last resort to vindicate its rights and halt the [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Pentagon-labels-Anthropic-a-supply-chain-risk.png",
       "published": "2026-03-10T15:18:54+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.0662
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.0429
     },
     {
       "title": "Thinking Machines Lab inks massive compute deal with Nvidia",
@@ -152,8 +138,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-1730510668.jpg?resize=1200%2C800",
       "published": "2026-03-10T15:08:39+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.2014
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.1782
     },
     {
       "title": "Fake Claude Code Spreads Malware to Windows, macOS Users",
@@ -163,25 +149,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Attackers are using fake Claude Code install pages and malicious search ads to spread infostealer malware targeting Windows and macOS systems.\nThe post Fake Claude Code Spreads Malware to Windows, macOS Users appeared first on TechRepublic.",
-      "image": "",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03102026-fake-claude-code.jpg",
       "published": "2026-03-10T15:02:46+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.0587
-    },
-    {
-      "title": "An AI Agent Broke Into McKinsey’s Internal Chatbot and Accessed Millions of Records in Just 2 Hours",
-      "url": "https://www.inc.com/leila-sheridan/an-ai-agent-broke-into-mckinseys-internal-chatbot-and-accessed-millions-of-records-in-just-2-hours/91314432",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A red-team experiment found an AI agent could autonomously exploit a vulnerability in McKinsey’s internal chatbot platform, exposing millions of conversations before the issue was patched. A security startup said their autonomous AI agent was able to break into McKinsey’s internal generative-AI …",
-      "image": "https://ic-cdn.flipboard.com/inc.com/2d26b2e6df21dd2be0f1cd45c7988ca4897d580c/_xlarge.webp",
-      "published": "2026-03-10T14:58:35+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.3567
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.0356
     },
     {
       "title": "Google gives in to users’ complaints over AI-powered ‘Ask Photos’ search feature",
@@ -194,8 +166,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/google-photos-GettyImages-2165351446.jpg?w=1024",
       "published": "2026-03-10T14:58:29+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1967
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.1736
     },
     {
       "title": "Meta has bought Moltbook, the AI agent ‘social network’",
@@ -208,22 +180,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-has-bought-Moltbook.png",
       "published": "2026-03-10T14:50:19+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.3529
-    },
-    {
-      "title": "Windows 12 could be the tipping point that finally pushes you to Linux - here's why",
-      "url": "https://www.zdnet.com/article/windows-12-rumors-linux-migration",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Some rumored Windows 12 features could frustrate users and be the reason Linux finally starts looking better. Follow ZDNET: Add us as a preferred …",
-      "image": "https://ic-cdn.flipboard.com/zdnet.com/fa016d3d20ad9ebd1a0c5445ffd1a5f722f237f0/_xlarge.jpeg",
-      "published": "2026-03-10T14:40:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.0481
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.3299
     },
     {
       "title": "Legora reaches $5.55 billion valuation as AI legal tech boom endures",
@@ -236,8 +194,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/MaxJunestrand1.jpeg?resize=1200%2C765",
       "published": "2026-03-10T14:34:24+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1855
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.1627
     },
     {
       "title": "Google brings Gemini deeper into Docs, Sheets, Slides, and Drive with new beta features",
@@ -250,8 +208,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Workspace-with-Gemini.jpg",
       "published": "2026-03-10T14:33:49+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.3952
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.3724
     },
     {
       "title": "Meta acquired Moltbook, the AI agent social network that went viral because of fake posts",
@@ -261,11 +219,11 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "Meta says that Moltbook's approach to \"connecting agents through an always-on-directory\" is novel.",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/23693b19786b592863309fa377f79176c96d3bfe/_xlarge.jpeg",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-1485567434.jpg?resize=1200%2C827",
       "published": "2026-03-10T14:32:05+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.4844
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.4617
     },
     {
       "title": "YouTube expands AI deepfake detection to politicians, government officials, and journalists",
@@ -278,8 +236,8 @@
       "image": "",
       "published": "2026-03-10T14:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1698
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.1473
     },
     {
       "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
@@ -292,8 +250,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
       "published": "2026-03-10T13:47:26+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.8641
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.8418
     },
     {
       "title": "Legal AI platform Legora raises $550m at a $5.55bn valuation",
@@ -306,8 +264,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Legora-raised-550-million-1.png",
       "published": "2026-03-10T13:27:54+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.0153
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.9932
     },
     {
       "title": "Adobe is debuting an AI assistant for Photoshop",
@@ -320,8 +278,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
       "published": "2026-03-10T13:06:51+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.846
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.8241
     },
     {
       "title": "NVIDIA and Thinking Machines Lab Announce Long-Term Gigawatt-Scale Strategic Partnership",
@@ -334,8 +292,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/jensen-huang-mira-murati-nvidia-debs-3127-2-scaled.jpg",
       "published": "2026-03-10T13:00:11+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.443
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.4212
     },
     {
       "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
@@ -348,22 +306,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.8429
-    },
-    {
-      "title": "Apple's new emoji has a controversial past but fans love it anyway",
-      "url": "https://www.creativebloq.com/design/apples-new-emoji-has-a-controversial-past-but-fans-love-it-anyway",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "I guess we’ve recovered from that problematic ad... In line with the new iOS 26.4 update, Apple has launched a collection of new emojis, including a …",
-      "image": "https://cdn.mos.cms.futurecdn.net/8kMoN53pyZd2At9Wz8M7ed-1920-80.jpg",
-      "published": "2026-03-10T13:00:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.7029
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.8211
     },
     {
       "title": "Gemini in Google Sheets just achieved state-of-the-art performance.",
@@ -376,8 +320,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Workspace_Jan_Moment_Sheets_Blo.max-600x600.format-webp.webp",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.6329
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.6111
     },
     {
       "title": "Google rolls out new Gemini capabilities to Docs, Sheets, Slides, and Drive",
@@ -387,11 +331,11 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "The idea behind the new features is to make the apps more personal and capable to help users get things done faster, right within the platforms themselves.",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/32b5f2397d3279e73ed124c590f565f2d1255709/_xlarge.jpeg",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1429
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.1211
     },
     {
       "title": "Anchr raises $5.8m to automate food distribution’s manual back office",
@@ -404,8 +348,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anchr-Raises-5.8M.png",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.0029
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.9811
     },
     {
       "title": "Sandbar secures $23M Series A for its AI note-taking ring",
@@ -418,8 +362,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_0402.CR3_.jpg?resize=1200%2C800",
       "published": "2026-03-10T12:40:37+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.1344
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.1128
     },
     {
       "title": "Swiss startup Seprify raises €13.4M to replace titanium dioxide with cellulose",
@@ -432,23 +376,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Seprify-raises-E13.4M-to-replace-titanium-dioxide-with-cellulose.png",
       "published": "2026-03-10T12:19:49+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.9854
-    },
-    {
-      "title": "One of the Year's Best Sci-Fi Films (So Far) Is Now Available at Home",
-      "url": "https://gizmodo.com/one-of-the-years-best-sci-fi-films-so-far-is-now-available-at-home-2000731691",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sam Rockwell stars in Gore Verbinski's 'Good Luck, Have Fun, Don't Die,' which is out now. How would you like to watch a time-travelling Sam Rockwell …",
-      "image": "https://ic-cdn.flipboard.com/gizmodo.com/1d06a1d2fde8a5f97f89427a4eb827537b855bcb/_xlarge.jpeg",
-      "published": "2026-03-10T12:00:59+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "model_release": true,
-      "score": 7.9773
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.9639
     },
     {
       "title": "Breakout Ventures closes $114m Fund III to back AI-powered science startups",
@@ -461,49 +390,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Breakout-Ventures-closes-114m-Fund-III-.png",
       "published": "2026-03-10T11:56:29+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.9753
-    },
-    {
-      "title": "Seattle Opera's response to Timothée Chalamet controversy is pure class",
-      "url": "https://www.creativebloq.com/design/branding/seattle-operas-response-to-timothee-chalamet-controversy-is-pure-class",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "\"Give your marketing director a raise right now.\" Silly Timothée Chalamet. The actor has, you've probably heard, come under fire this week for …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/80f04ada0258e0fe915825a9cacb3a4854f564ff/_xlarge.jpeg",
-      "published": "2026-03-10T11:49:58+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.9725
-    },
-    {
-      "title": "Imagine Losing Your Job to the Mere Possibility of AI",
-      "url": "https://www.theatlantic.com/technology/2026/03/ai-layoffs-block-jack-dorsey/686304",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The technology may not be ready to replace workers, but that isn’t stopping execs from pushing forward anyway. Late last month, at an event in Washington, D.C., Andrew Yang delivered a bleak message. “I have bad news, America,” he told the crowd. “The Fuckening is here.” The Fuckening is the name …",
-      "image": "https://ic-cdn.flipboard.com/theatlantic.com/ee1eaf2b72357e35ecef9a14db940286d4506e0d/_xlarge.jpeg",
-      "published": "2026-03-10T11:30:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.9641
-    },
-    {
-      "title": "Family of child injured in Canada school shooting sues OpenAI",
-      "url": "https://www.bbc.com/news/articles/c309y25prnlo?at_medium=RSS&at_campaign=rss",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The family of a girl critically injured during a mass shooting at a Canadian school is suing ChatGPT-maker OpenAI, claiming it had been aware the suspect had been planning an attack but failed to alert the authorities. Twelve-year-old Maya Gebala was shot in the neck and head in the attack in …",
-      "image": "https://ichef.bbci.co.uk/news/480/cpsprodpb/b21a/live/b079eeb0-1c6d-11f1-8206-178b2777dfa1.jpg.webp",
-      "published": "2026-03-10T11:06:21+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
       "score": 1.9541
     },
     {
@@ -517,8 +404,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Yann-LeCun-just-raised-1bn.png",
       "published": "2026-03-10T11:06:09+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.954
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.9333
     },
     {
       "title": "Improving instruction hierarchy in frontier LLMs",
@@ -528,11 +415,11 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "IH-Challenge trains models to prioritize trusted instructions, improving instruction hierarchy, safety steerability, and resistance to prompt injection attacks.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1hgOrtUKV9JbWpgIZLElGG/f1e68fcb747aeb0cb87633a34bb71bb3/SEO_Card__1_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-10T11:00:00+00:00",
-      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.3014
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.2808
     },
     {
       "title": "Mantle8 secures €2.06M EU grant to scale natural hydrogen tech",
@@ -545,8 +432,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mantle8-secures-E2.06M-EU-grant.png",
       "published": "2026-03-10T10:38:49+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.9426
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.9222
     },
     {
       "title": "BMW Group brings humanoid robots to Germany",
@@ -559,8 +446,121 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
       "published": "2026-03-10T10:16:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 2.6336
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.6133
+    },
+    {
+      "title": "The Oberlo veterans taking on Europe&#8217;s restaurant supply chain raise €20M",
+      "url": "https://thenextweb.com/news/saltz-series-a-restaurant-supply-europe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Lithuanian food marketplace Saltz pulls in a €20M Series A backed by the EBRD, Inovo, Lifeline, and a roster of Baltic tech founders, to digitalise how restaurants across Europe source their ingredients. When Andrius and Tomas Šlimas sold their dropshipping platform Oberlo to Shopify in 2017, they could have sat out the next decade comfortably. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Saltz-pulls-in-a-E20M-Series-A.png",
+      "published": "2026-03-10T10:00:42+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 1.9069
+    },
+    {
+      "title": "AI Is a 5-Layer Cake",
+      "url": "https://blogs.nvidia.com/blog/ai-5-layer-cake",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI is one of the most powerful forces shaping the world today. It is not a clever app or a single model; it is essential infrastructure, like electricity and the internet.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
+      "published": "2026-03-10T10:00:03+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.7467
+    },
+    {
+      "title": "New ways to learn math and science in ChatGPT",
+      "url": "https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "ChatGPT introduces interactive visual explanations for math and science, helping students explore formulas, variables, and concepts in real time.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6WeStJuG7Vpz0AfZWGS6cm/27e0b45847fa1d82241e7ea5af01a7ad/Learning_Blocks_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-03-10T10:00:00+00:00",
+      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.9567
+    },
+    {
+      "title": "Escape raises $18M to replace pen-testers with AI agents",
+      "url": "https://thenextweb.com/news/escape-18m-series-a-ai-security-vibe-coding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The timing is not coincidental. In October 2025, Escape published research that scanned more than 5,600 publicly deployed applications built with vibe coding platforms, tools like Lovable, Base44, and Bolt.new that let non-developers build and ship apps by describing what they want in plain English. The results were stark: over 2,000 high-impact vulnerabilities, hundreds of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Escape-raises-18M.png",
+      "published": "2026-03-10T09:31:06+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "score": 2.1953
+    },
+    {
+      "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
+      "url": "https://www.marktechpost.com/2026/03/09/how-to-build-a-risk-aware-ai-agent-with-internal-critic-self-consistency-reasoning-and-uncertainty-estimation-for-reliable-decision-making",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build an advanced agent system that goes beyond simple response generation by integrating an internal critic and uncertainty estimation framework. We simulate multi-sample inference, evaluate candidate responses across accuracy, coherence, and safety dimensions, and quantify predictive uncertainty using entropy, variance, and consistency measures. We implement risk-sensitive selection strategies to balance confidence [&#8230;]\nThe post How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Makin",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
+      "published": "2026-03-10T06:35:45+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 2.7994
+    },
+    {
+      "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
+      "url": "https://www.marktechpost.com/2026/03/09/bytedance-releases-deerflow-2-0-an-open-source-superagent-harness-that-orchestrates-sub-agents-memory-and-sandboxes-to-do-complex-tasks",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The era of the &#8216;Copilot&#8217; is officially getting an upgrade. While the tech world has spent the last two years getting comfortable with AI that suggests code or drafts emails, ByteDance team is moving the goalposts. They released DeerFlow 2.0, a newly open-sourced &#8216;SuperAgent&#8217; framework that doesn&#8217;t just suggest work; it executes it. DeerFlow is [&#8230;]\nThe post ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
+      "published": "2026-03-10T06:10:37+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "model_release": true,
+      "score": 8.8903
+    },
+    {
+      "title": "Yann LeCun’s AMI Labs raises $1.03B to build world models",
+      "url": "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "“My prediction is that ‘world models’ will be the next buzzword,” AMI Labs CEO Alexandre LeBrun told TechCrunch. “In six months, every company will call itself a world model to raise funding.”",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2261869274.jpg?resize=1200%2C800",
+      "published": "2026-03-10T05:00:00+00:00",
+      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.9356
+    },
+    {
+      "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
+      "url": "https://venturebeat.com/technology/andrej-karpathys-new-open-source-autoresearch-lets-you-run-hundreds-of-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Over the weekend, Andrej Karpathy—the influential former Tesla AI lead and co-founder and former member of OpenAI who coined the term \"vibe coding\"— posted on X about his new open source project, autoresearch. It wasn't a finished model or a massive corporate product: it was by his own admission a …",
+      "image": "https://images.ctfassets.net/jdtwqhzvc2n1/2jUMX5tvR9PuuhlFIxezYp/55bab7b88fe8bd1f5c0a21f51a3da6c0/Gemini_Generated_Image_gusyegusyegusyeg.png?w=800&q=75",
+      "published": "2026-03-10T00:13:00+00:00",
+      "firstSeen": "2026-03-10T01:32:50.345218+00:00",
+      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
+      "score": 2.4028
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -573,8 +573,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.801
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.787
     },
     {
       "title": "Introducing... Life Without",
@@ -587,8 +587,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.1785
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.1771
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -601,8 +601,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
-      "score": 1.1957
+      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
+      "score": 1.1956
     },
     {
       "title": "The Life Scientific: Julia Simner",
@@ -619,5 +619,11 @@
       "score": 1.1901
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Flipboard AI",
+      "url": "https://flipboard.com/topic/artificialintelligence.rss",
+      "error": "HTTP Error 502: Bad Gateway"
+    }
+  ]
 }
