@@ -1,6 +1,21 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T01:01:46.917274+00:00",
-  "items": [],
+  "updatedAt": "2026-03-10T01:32:50.345218+00:00",
+  "items": [
+    {
+      "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
+      "url": "https://venturebeat.com/technology/andrej-karpathys-new-open-source-autoresearch-lets-you-run-hundreds-of-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Over the weekend, Andrej Karpathy—the influential former Tesla AI lead and co-founder and former member of OpenAI who coined the term \"vibe coding\"— posted on X about his new open source project, autoresearch. It wasn't a finished model or a massive corporate product: it was by his own admission a …",
+      "image": "https://images.ctfassets.net/jdtwqhzvc2n1/2jUMX5tvR9PuuhlFIxezYp/55bab7b88fe8bd1f5c0a21f51a3da6c0/Gemini_Generated_Image_gusyegusyegusyeg.png?w=800&q=75",
+      "published": "2026-03-10T00:13:00+00:00",
+      "firstSeen": "2026-03-10T01:32:50.345218+00:00",
+      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
+      "score": 2.8101
+    }
+  ],
   "errors": []
 }
