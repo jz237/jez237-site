@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T19:00:04.202544+00:00",
+  "updatedAt": "2026-03-10T19:55:29.113859+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -408,6 +408,10 @@
     "https://www.together.ai/blog/new-in-together-gpu-clusters-autoscaling-observability-self-healing": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0635c649e603128f02ea9_20260309_Clusters_1200x630%20(1).png",
       "checkedAt": "2026-03-10T19:00:04.202544+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/open-data-for-ai": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/open-data-for-ai.png",
+      "checkedAt": "2026-03-10T19:55:29.113859+00:00"
     }
   }
 }
