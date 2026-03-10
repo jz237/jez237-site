@@ -1,7 +1,22 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T19:55:29.113859+00:00",
+  "updatedAt": "2026-03-10T21:40:17.801229+00:00",
   "items": [
+    {
+      "title": "Amazon launches its healthcare AI assistant on its website and app",
+      "url": "https://techcrunch.com/2026/03/10/amazon-launches-its-healthcare-ai-assistant-on-its-website-and-app",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Health AI can answer questions, explain health records, manage prescription renewals, book appointments, and more.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/amazon-health-ai.jpeg?resize=1200%2C675",
+      "published": "2026-03-10T20:10:06+00:00",
+      "firstSeen": "2026-03-10T21:40:17.801229+00:00",
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "model_release": true,
+      "score": 8.945
+    },
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
       "url": "https://www.marktechpost.com/2026/03/09/bytedance-releases-deerflow-2-0-an-open-source-superagent-harness-that-orchestrates-sub-agents-memory-and-sandboxes-to-do-complex-tasks",
@@ -13,9 +28,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
       "model_release": true,
-      "score": 8.8708
+      "score": 8.8353
     },
     {
       "title": "How 6,000 Bad Coding Lessons Turned a Chatbot Evil",
@@ -28,9 +43,9 @@
       "image": "https://ic-cdn.flipboard.com/nyt.com/59d5ded2a2044f4f783f7e1df159c8140614cfb2/_xlarge.jpeg",
       "published": "2026-03-10T09:00:33+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
       "model_release": true,
-      "score": 8.2123
+      "score": 8.1738
     },
     {
       "title": "One of the Year's Best Sci-Fi Films (So Far) Is Now Available at Home",
@@ -43,9 +58,23 @@
       "image": "https://ic-cdn.flipboard.com/gizmodo.com/1d06a1d2fde8a5f97f89427a4eb827537b855bcb/_xlarge.jpeg",
       "published": "2026-03-10T12:00:59+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
       "model_release": true,
-      "score": 7.9331
+      "score": 7.8912
+    },
+    {
+      "title": "NVIDIA AI Releases Nemotron-Terminal: A Systematic Data Engineering Pipeline for Scaling LLM Terminal Agents",
+      "url": "https://www.marktechpost.com/2026/03/10/nvidia-ai-releases-nemotron-terminal-a-systematic-data-engineering-pipeline-for-scaling-llm-terminal-agents",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The race to build autonomous AI agents has hit a massive bottleneck: data. While frontier models like Claude Code and Codex CLI have demonstrated impressive proficiency in terminal environments, the training strategies and data mixtures behind them have remained closely guarded secrets. This lack of transparency has forced researchers and devs into a costly cycle [&#8230;]\nThe post NVIDIA AI Releases Nemotron-Terminal: A Systematic Data Engineering Pipeline for Scaling LLM Terminal Agents appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-10-at-1.14.02-PM-1-150x150.png",
+      "published": "2026-03-10T20:15:08+00:00",
+      "firstSeen": "2026-03-10T21:40:17.801229+00:00",
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 3.4775
     },
     {
       "title": "AgentMail raises $6M to build an email service for AI agents",
@@ -58,8 +87,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200%2C713",
       "published": "2026-03-10T16:00:00+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 3.1764
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 3.1297
     },
     {
       "title": "New ways to learn math and science in ChatGPT",
@@ -72,8 +101,8 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6WeStJuG7Vpz0AfZWGS6cm/27e0b45847fa1d82241e7ea5af01a7ad/Learning_Blocks_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-10T10:00:00+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.935
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 2.8954
     },
     {
       "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
@@ -86,8 +115,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
       "published": "2026-03-10T13:47:26+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.8177
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 2.7737
     },
     {
       "title": "Adobe is debuting an AI assistant for Photoshop",
@@ -100,8 +129,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
       "published": "2026-03-10T13:06:51+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.8004
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 2.7573
     },
     {
       "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
@@ -114,8 +143,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.7975
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 2.7545
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -128,8 +157,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.7796
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 2.7436
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -142,36 +171,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.725
-    },
-    {
-      "title": "Apple's new emoji has a controversial past but fans love it anyway",
-      "url": "https://www.creativebloq.com/design/apples-new-emoji-has-a-controversial-past-but-fans-love-it-anyway",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "I guess we’ve recovered from that problematic ad... In line with the new iOS 26.4 update, Apple has launched a collection of new emojis, including a …",
-      "image": "https://cdn.mos.cms.futurecdn.net/8kMoN53pyZd2At9Wz8M7ed-1920-80.jpg",
-      "published": "2026-03-10T13:00:00+00:00",
-      "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.6575
-    },
-    {
-      "title": "BMW Group brings humanoid robots to Germany",
-      "url": "https://thenextweb.com/news/bmw-group-brings-humanoid-robots-to-germany",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The automaker has launched a pilot at its Leipzig plant using Hexagon Robotics’ AEON humanoid. The move follows a successful 11-month run in the US with Figure AI’s robots, and arrives just as the production chief who championed the programme prepares to take the top job. A new colleague has arrived on the shop floor [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
-      "published": "2026-03-10T10:16:45+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T19:00:04.202544+00:00",
-      "score": 2.5915
+      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "score": 2.6854
     }
   ],
   "errors": []

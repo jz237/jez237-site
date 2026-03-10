@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T19:55:29.113859+00:00",
+  "updatedAt": "2026-03-10T21:40:17.801229+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -412,6 +412,14 @@
     "https://huggingface.co/blog/nvidia/open-data-for-ai": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/open-data-for-ai.png",
       "checkedAt": "2026-03-10T19:55:29.113859+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/amazon-launches-its-healthcare-ai-assistant-on-its-website-and-app": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/amazon-health-ai.jpeg?resize=1200,675",
+      "checkedAt": "2026-03-10T21:40:17.801229+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/ai-powered-apps-struggle-with-long-term-retention-new-report-shows": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
+      "checkedAt": "2026-03-10T21:40:17.801229+00:00"
     }
   }
 }
