@@ -1,6 +1,6 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T01:32:50.345218+00:00",
+  "updatedAt": "2026-03-10T05:02:21.868084+00:00",
   "items": [
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
@@ -14,7 +14,63 @@
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.8101
+      "score": 2.7121
+    },
+    {
+      "title": "Rogue AI agent goes off script and attempts crypto mining",
+      "url": "https://www.techradar.com/ai-platforms-assistants/rogue-ai-agent-goes-off-script-and-attempts-crypto-mining",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI models can surprise developers; that's part of the point. But one group of researchers found an unnerving surprise when a training run for an …",
+      "image": "https://cdn.mos.cms.futurecdn.net/yUunQzVPdrXTNAdH9tyJ6-1920-80.jpg",
+      "published": "2026-03-10T00:00:00+00:00",
+      "firstSeen": "2026-03-10T05:02:21.868084+00:00",
+      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
+      "score": 2.6063
+    },
+    {
+      "title": "It’s tempting to offload your thinking to AI. Cognitive science shows why that’s a bad idea",
+      "url": "https://theconversation.com/its-tempting-to-offload-your-thinking-to-ai-cognitive-science-shows-why-thats-a-bad-idea-276766",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "With so many artificial intelligence (AI) products on offer now, it’s increasingly tempting to offload difficult thinking tasks to chatbots, agents …",
+      "image": "https://ic-cdn.flipboard.com/theconversation.com/405e0d105ccf9df0eb2647f82b27b34061c0ab0b/_xlarge.jpeg",
+      "published": "2026-03-10T01:32:26+00:00",
+      "firstSeen": "2026-03-10T05:02:21.868084+00:00",
+      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
+      "score": 2.3481
+    },
+    {
+      "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
+      "url": "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AMI Labs, the new venture cofounded by Turing Prize winner Yann LeCun after he left Meta, has raised $1.03 billion at a $3.5 billion pre-money valuation.",
+      "image": "",
+      "published": "2026-03-10T05:00:00+00:00",
+      "firstSeen": "2026-03-10T05:02:21.868084+00:00",
+      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
+      "score": 2.2888
+    },
+    {
+      "title": "The good, bad, and ugly of AI healthcare, according to a doctor who uses AI",
+      "url": "https://www.zdnet.com/article/good-bad-ugly-of-ai-healthcare-according-to-a-doctor-who-uses-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "There's a right way and a wrong way to use AI for health advice. Consider the technology a springboard for conversations with a medical …",
+      "image": "https://ic-cdn.flipboard.com/zdnet.com/aa1d7e4d8f6b783492bcdade00dcc3ab138dd74a/_xlarge.jpeg",
+      "published": "2026-03-10T01:00:44+00:00",
+      "firstSeen": "2026-03-10T05:02:21.868084+00:00",
+      "lastSeen": "2026-03-10T05:02:21.868084+00:00",
+      "score": 2.0336
     }
   ],
   "errors": []

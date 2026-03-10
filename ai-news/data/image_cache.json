@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T01:32:50.345218+00:00",
+  "updatedAt": "2026-03-10T05:02:21.868084+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -308,6 +308,10 @@
     "https://techcrunch.com/2026/03/06/after-europe-whatsapp-will-let-rival-ai-companies-offer-chatbots-in-brazil": {
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/whatsapp-getty.jpg?w=1200",
       "checkedAt": "2026-03-10T01:32:50.345218+00:00"
+    },
+    "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models": {
+      "image": "",
+      "checkedAt": "2026-03-10T05:02:21.868084+00:00"
     }
   }
 }
