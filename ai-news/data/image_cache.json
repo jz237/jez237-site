@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T12:01:07.759785+00:00",
+  "updatedAt": "2026-03-10T15:13:25.916572+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -328,6 +328,42 @@
     "http://www.bbc.co.uk/programmes/w3ct6sxf": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "checkedAt": "2026-03-10T12:01:07.759785+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/thinking-machines-lab-inks-massive-compute-deal-with-nvidia": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-1730510668.jpg?resize=1200,800",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/google-gives-in-to-users-complaints-over-ai-powered-ask-photos-search-feature": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/google-photos-GettyImages-2165351446.jpg?w=1024",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/legora-reaches-5-55-billion-valuation-as-ai-legaltech-boom-endures": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/MaxJunestrand1.jpeg?resize=1200,765",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/youtube-expands-ai-deepfake-detection-to-politicians-government-officials-and-journalists": {
+      "image": "",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/10/1134099/how-pokemon-go-is-helping-robots-deliver-pizza-on-time": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200,600",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/adobe-is-debuting-an-ai-assistant-for-photoshop": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200,675",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/zoom-launches-an-ai-powered-office-suite-says-ai-avatars-for-meetings-are-coming-soon": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200,750",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/google-rolls-out-new-gemini-capabilities-to-docs-sheets-slides-and-drive": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/sandbar-secures-23m-series-a-for-its-ai-note-taking-ring": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_0402.CR3_.jpg?resize=1200,800",
+      "checkedAt": "2026-03-10T15:13:25.916572+00:00"
     }
   }
 }
