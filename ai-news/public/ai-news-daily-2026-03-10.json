@@ -1,6 +1,6 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T15:13:25.916572+00:00",
+  "updatedAt": "2026-03-10T18:09:59.198938+00:00",
   "items": [
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -13,9 +13,67 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
       "model_release": true,
-      "score": 8.9756
+      "score": 8.9084
+    },
+    {
+      "title": "How 6,000 Bad Coding Lessons Turned a Chatbot Evil",
+      "url": "https://www.nytimes.com/2026/03/10/opinion/ai-chatbots-virtue-vice.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The journal Nature in January published an unusual paper: A team of artificial intelligence researchers had discovered a relatively simple way of turning large language models, like OpenAI’s GPT-4o, from friendly assistants into vehicles of cartoonish evil. They had given the models a data set of …",
+      "image": "https://ic-cdn.flipboard.com/nyt.com/59d5ded2a2044f4f783f7e1df159c8140614cfb2/_xlarge.jpeg",
+      "published": "2026-03-10T09:00:33+00:00",
+      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "model_release": true,
+      "score": 8.2529
+    },
+    {
+      "title": "One of the Year's Best Sci-Fi Films (So Far) Is Now Available at Home",
+      "url": "https://gizmodo.com/one-of-the-years-best-sci-fi-films-so-far-is-now-available-at-home-2000731691",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sam Rockwell stars in Gore Verbinski's 'Good Luck, Have Fun, Don't Die,' which is out now. How would you like to watch a time-travelling Sam Rockwell …",
+      "image": "https://ic-cdn.flipboard.com/gizmodo.com/1d06a1d2fde8a5f97f89427a4eb827537b855bcb/_xlarge.jpeg",
+      "published": "2026-03-10T12:00:59+00:00",
+      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "model_release": true,
+      "score": 7.9773
+    },
+    {
+      "title": "AgentMail raises $6M to build an email service for AI agents",
+      "url": "https://techcrunch.com/2026/03/10/agentmail-raises-6m-to-build-an-email-service-for-ai-agents",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AgentMail provides an API platform that lets you give AI agents their own email inboxes, with support for two-way conversations, parsing, threading, labeling, searching, and replying.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200%2C713",
+      "published": "2026-03-10T16:00:00+00:00",
+      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 3.2258
+    },
+    {
+      "title": "New ways to learn math and science in ChatGPT",
+      "url": "https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "ChatGPT introduces interactive visual explanations for math and science, helping students explore formulas, variables, and concepts in real time.",
+      "image": "",
+      "published": "2026-03-10T10:00:00+00:00",
+      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.9767
     },
     {
       "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
@@ -28,8 +86,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
       "published": "2026-03-10T13:47:26+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.9471
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.8641
     },
     {
       "title": "Adobe is debuting an AI assistant for Photoshop",
@@ -38,12 +96,12 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Adobe is also adding new AI-powered image editing features to Firefly.",
+      "summary": "Adobe is also adding new AI-powered image-editing features to Firefly.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
       "published": "2026-03-10T13:06:51+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.9274
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.846
     },
     {
       "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
@@ -52,12 +110,12 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Zoom is also introducing a real-time deepfake detection tech for meetings",
+      "summary": "Zoom is also introducing real-time deepfake detection tech for meetings.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.9241
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.8429
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -70,8 +128,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.8856
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.8176
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -84,22 +142,22 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.8414
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.7668
     },
     {
-      "title": "Gemini in Google Sheets just achieved state-of-the-art performance.",
-      "url": "https://blog.google/products-and-platforms/products/workspace/gemini-google-sheets-state-of-the-art",
-      "source": "Google AI Blog",
-      "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.95,
+      "title": "Apple's new emoji has a controversial past but fans love it anyway",
+      "url": "https://www.creativebloq.com/design/apples-new-emoji-has-a-controversial-past-but-fans-love-it-anyway",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Today we announced new beta features for Gemini in Sheets to help you create, organize and edit entire sheets, from basic tasks to complex data analysis — just describe …",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Workspace_Jan_Moment_Sheets_Blo.max-600x600.format-webp.webp",
+      "summary": "I guess we’ve recovered from that problematic ad... In line with the new iOS 26.4 update, Apple has launched a collection of new emojis, including a …",
+      "image": "https://cdn.mos.cms.futurecdn.net/8kMoN53pyZd2At9Wz8M7ed-1920-80.jpg",
       "published": "2026-03-10T13:00:00+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.7141
+      "firstSeen": "2026-03-10T18:09:59.198938+00:00",
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.7029
     },
     {
       "title": "BMW Group brings humanoid robots to Germany",
@@ -112,71 +170,9 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
       "published": "2026-03-10T10:16:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.7088
-    },
-    {
-      "title": "NVIDIA and Thinking Machines Lab Announce Long-Term Gigawatt-Scale Strategic Partnership",
-      "url": "https://blogs.nvidia.com/blog/nvidia-thinking-machines-lab",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "NVIDIA and Thinking Machines Lab announced today a multiyear strategic partnership to deploy at least one gigawatt of next-generation NVIDIA Vera Rubin systems to support Thinking Machines’ frontier model training and platforms delivering customizable AI at scale. Deployment on the NVIDIA Vera Rubin platform is targeted for early next year. The partnership also includes an [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/jensen-huang-mira-murati-nvidia-debs-3127-2-scaled.jpg",
-      "published": "2026-03-10T13:00:11+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.5242
-    },
-    {
-      "title": "Google brings Gemini deeper into Docs, Sheets, Slides, and Drive with new beta features",
-      "url": "https://thenextweb.com/news/google-brings-gemini-deeper-into-docs-sheets-slides-and-drive-with-new-beta-features",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A wave of Workspace updates puts Gemini inside Docs, Sheets, Slides, and Drive, with a benchmark result Google is happy to shout about. The blinking cursor is Google’s enemy. Every time a Workspace user stares at an empty document, spreadsheet, or slide deck and reaches for a different tool to get unstuck, that’s a moment [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Workspace-with-Gemini.jpg",
-      "published": "2026-03-10T14:33:49+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.48
-    },
-    {
-      "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
-      "url": "https://venturebeat.com/technology/andrej-karpathys-new-open-source-autoresearch-lets-you-run-hundreds-of-ai",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Over the weekend, Andrej Karpathy—the influential former Tesla AI lead and co-founder and former member of OpenAI who coined the term \"vibe coding\"— posted on X about his new open source project, autoresearch. It wasn't a finished model or a massive corporate product: it was by his own admission a …",
-      "image": "https://images.ctfassets.net/jdtwqhzvc2n1/2jUMX5tvR9PuuhlFIxezYp/55bab7b88fe8bd1f5c0a21f51a3da6c0/Gemini_Generated_Image_gusyegusyegusyeg.png?w=800&q=75",
-      "published": "2026-03-10T00:13:00+00:00",
-      "firstSeen": "2026-03-10T01:32:50.345218+00:00",
-      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.475
-    },
-    {
-      "title": "Meta has bought Moltbook, the AI agent ‘social network’",
-      "url": "https://thenextweb.com/news/meta-acquires-moltbook-ai-agent-social-network",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Do you remember the name? Moltbook, the vibe-coded platform, famous for an unsecured database that let humans impersonate AI agents, is joining Meta Superintelligence Labs. Moltbook was, in many ways, a product of chaos. Its code was written almost entirely by an AI assistant. Its security was so porous that anyone with basic technical knowledge [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-has-bought-Moltbook.png",
-      "published": "2026-03-10T14:50:19+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
-      "score": 2.4383
+      "lastSeen": "2026-03-10T18:09:59.198938+00:00",
+      "score": 2.6336
     }
   ],
-  "errors": [
-    {
-      "source": "Flipboard AI",
-      "url": "https://flipboard.com/topic/artificialintelligence.rss",
-      "error": "HTTP Error 502: Bad Gateway"
-    }
-  ]
+  "errors": []
 }
