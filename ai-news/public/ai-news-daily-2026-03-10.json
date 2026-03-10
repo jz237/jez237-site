@@ -1,6 +1,6 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T10:08:58.754400+00:00",
+  "updatedAt": "2026-03-10T11:49:41.937430+00:00",
   "items": [
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -13,9 +13,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
       "model_release": true,
-      "score": 9.1051
+      "score": 9.0602
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -28,8 +28,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 3.0166
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.9712
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -42,8 +42,22 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.9855
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.9356
+    },
+    {
+      "title": "BMW Group brings humanoid robots to Germany",
+      "url": "https://thenextweb.com/news/bmw-group-brings-humanoid-robots-to-germany",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The automaker has launched a pilot at its Leipzig plant using Hexagon Robotics’ AEON humanoid. The move follows a successful 11-month run in the US with Figure AI’s robots, and arrives just as the production chief who championed the programme prepares to take the top job. A new colleague has arrived on the shop floor [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
+      "published": "2026-03-10T10:16:45+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.8037
     },
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
@@ -56,8 +70,8 @@
       "image": "https://ic-cdn.flipboard.com/ctfassets.net/2f3f3d4ec9294e138715d6e29dc3220c141d3ddf/_large.png",
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.5848
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.5467
     },
     {
       "title": "Rogue AI agent goes off script and attempts crypto mining",
@@ -71,7 +85,35 @@
       "published": "2026-03-10T00:00:00+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
       "lastSeen": "2026-03-10T05:02:21.868084+00:00",
-      "score": 2.4798
+      "score": 2.442
+    },
+    {
+      "title": "6 Claude Code Levels Explained : Map Skills from Prompts to Agent Teams",
+      "url": "https://www.geeky-gadgets.com/claude-code-skill-creator",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Chase AI breaks down the journey of mastering Claude Code into six distinct levels, each building on the last to deepen your understanding and expand …",
+      "image": "https://ic-cdn.flipboard.com/geeky-gadgets.com/afa6b2f03ee6b13536415e1821a5d372f6c9776c/_xlarge.jpeg",
+      "published": "2026-03-10T10:45:58+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.418
+    },
+    {
+      "title": "I built a library of 'thinking prompts' for Claude — these are the ones I use most",
+      "url": "https://www.tomsguide.com/ai/i-built-a-library-of-thinking-prompts-for-claude-these-are-the-ones-i-use-most",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The latest AI models are faster, smarter and better at reasoning than ever. Regardless of which chatbot you prefer to use, if you ask it a question, …",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
+      "published": "2026-03-10T10:00:00+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.3955
     },
     {
       "title": "Escape raises $18M to replace pen-testers with AI agents",
@@ -84,8 +126,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Escape-raises-18M.png",
       "published": "2026-03-10T09:31:06+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.4309
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.3816
     },
     {
       "title": "Silicon Valley is buzzing about this new idea: AI compute as compensation",
@@ -98,8 +140,8 @@
       "image": "https://ic-cdn.flipboard.com/insider.com/27d2398ffadd2698f82d6ee595354d61c79b9ff7/_xlarge.jpeg",
       "published": "2026-03-10T09:00:02+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.4154
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.3669
     },
     {
       "title": "It’s tempting to offload your thinking to AI. Cognitive science shows why that’s a bad idea",
@@ -112,64 +154,22 @@
       "image": "https://ic-cdn.flipboard.com/theconversation.com/405e0d105ccf9df0eb2647f82b27b34061c0ab0b/_xlarge.jpeg",
       "published": "2026-03-10T01:32:26+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
-      "score": 2.216
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.1766
     },
     {
-      "title": "Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries",
-      "url": "https://huggingface.co/blog/async-rl-training-landscape",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
-      "published": "2026-03-10T00:00:00+00:00",
-      "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1598
-    },
-    {
-      "title": "The Oberlo veterans taking on Europe&#8217;s restaurant supply chain raise €20M",
-      "url": "https://thenextweb.com/news/saltz-series-a-restaurant-supply-europe",
+      "title": "Yann LeCun just raised $1bn to prove the AI industry has got it wrong",
+      "url": "https://thenextweb.com/news/yann-lecun-ami-labs-world-models-billion",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Lithuanian food marketplace Saltz pulls in a €20M Series A backed by the EBRD, Inovo, Lifeline, and a roster of Baltic tech founders, to digitalise how restaurants across Europe source their ingredients. When Andrius and Tomas Šlimas sold their dropshipping platform Oberlo to Shopify in 2017, they could have sat out the next decade comfortably. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Saltz-pulls-in-a-E20M-Series-A.png",
-      "published": "2026-03-10T10:00:42+00:00",
-      "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1458
-    },
-    {
-      "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
-      "url": "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AMI Labs, the new venture cofounded by Turing Prize winner Yann LeCun after he left Meta, has raised $1.03 billion at a $3.5 billion pre-money valuation.",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/79a0ac254c184f83d7342181427aa3f87ce5935e/_xlarge.jpeg",
-      "published": "2026-03-10T05:00:00+00:00",
-      "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1434
-    },
-    {
-      "title": "Lawsuit says DOGE used ChatGPT to flag Jewish-themed humanities grants as ‘DEI’ before canceling them",
-      "url": "https://forward.com/fast-forward/811174/lawsuit-says-doge-used-chatgpt-to-flag-jewish-themed-humanities-grants-as-dei-before-canceling-them",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "(JTA) — The Department of Government Efficiency tagged Jewish themes as “DEI” in ChatGPT when searching for federal humanities grants to cancel last …",
-      "image": "https://ic-cdn.flipboard.com/forward.com/471f44986d2b2bdc0ca8698ea416ba5eda36e8fa/_xlarge.jpeg",
-      "published": "2026-03-10T09:20:22+00:00",
-      "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1255
+      "summary": "The Turing Award winner left Meta four months ago convinced that large language models are a dead end. Today he announced $1.03 billion in seed funding, Europe’s largest ever, to build something different. In November 2025, Yann LeCun walked into Mark Zuckerberg’s office and told his boss he was leaving. He had spent twelve years [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Yann-LeCun-just-raised-1bn.png",
+      "published": "2026-03-10T11:06:09+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.128
     }
   ],
   "errors": []

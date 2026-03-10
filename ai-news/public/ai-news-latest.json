@@ -1,6 +1,76 @@
 {
-  "updatedAt": "2026-03-10T10:08:58.754400+00:00",
+  "updatedAt": "2026-03-10T11:49:41.937430+00:00",
   "items": [
+    {
+      "title": "Yann LeCun just raised $1bn to prove the AI industry has got it wrong",
+      "url": "https://thenextweb.com/news/yann-lecun-ami-labs-world-models-billion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Turing Award winner left Meta four months ago convinced that large language models are a dead end. Today he announced $1.03 billion in seed funding, Europe’s largest ever, to build something different. In November 2025, Yann LeCun walked into Mark Zuckerberg’s office and told his boss he was leaving. He had spent twelve years [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Yann-LeCun-just-raised-1bn.png",
+      "published": "2026-03-10T11:06:09+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.128
+    },
+    {
+      "title": "How to Get the Most From Google Gemini: 14 Tips You'll Actually Use",
+      "url": "https://www.pcmag.com/explainers/how-to-get-the-most-from-google-gemini-ai-tips-youll-actually-use",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Gemini can answer questions, provide information, generate content, and integrate with other Google apps and services. Here’s how to take advantage …",
+      "image": "https://ic-cdn.flipboard.com/pcmag.com/897e7c3e6d0887f0af4bfa2fc9644469f32afa71/_xlarge.jpeg",
+      "published": "2026-03-10T11:00:00+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.125
+    },
+    {
+      "title": "6 Claude Code Levels Explained : Map Skills from Prompts to Agent Teams",
+      "url": "https://www.geeky-gadgets.com/claude-code-skill-creator",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Chase AI breaks down the journey of mastering Claude Code into six distinct levels, each building on the last to deepen your understanding and expand …",
+      "image": "https://ic-cdn.flipboard.com/geeky-gadgets.com/afa6b2f03ee6b13536415e1821a5d372f6c9776c/_xlarge.jpeg",
+      "published": "2026-03-10T10:45:58+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.418
+    },
+    {
+      "title": "Mantle8 secures €2.06M EU grant to scale natural hydrogen tech",
+      "url": "https://thenextweb.com/news/mantle8-secures-e2-06m-eu-grant-to-scale-natural-hydrogen-tech",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A €2.06 million EU grant gives the Grenoble deep-tech startup non-dilutive runway to industrialise a four-component technology platform, and moves it one step closer to its first commercial drilling campaign. Fourteen months after closing a €3.4 million seed round backed by Bill Gates’ Breakthrough Energy Ventures and Kiko Ventures, Mantle8 has secured a second source [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mantle8-secures-E2.06M-EU-grant.png",
+      "published": "2026-03-10T10:38:49+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.1145
+    },
+    {
+      "title": "BMW Group brings humanoid robots to Germany",
+      "url": "https://thenextweb.com/news/bmw-group-brings-humanoid-robots-to-germany",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The automaker has launched a pilot at its Leipzig plant using Hexagon Robotics’ AEON humanoid. The move follows a successful 11-month run in the US with Figure AI’s robots, and arrives just as the production chief who championed the programme prepares to take the top job. A new colleague has arrived on the shop floor [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
+      "published": "2026-03-10T10:16:45+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.8037
+    },
     {
       "title": "The Oberlo veterans taking on Europe&#8217;s restaurant supply chain raise €20M",
       "url": "https://thenextweb.com/news/saltz-series-a-restaurant-supply-europe",
@@ -12,8 +82,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Saltz-pulls-in-a-E20M-Series-A.png",
       "published": "2026-03-10T10:00:42+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1458
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0959
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -26,8 +96,64 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.9855
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.9356
+    },
+    {
+      "title": "I built a library of 'thinking prompts' for Claude — these are the ones I use most",
+      "url": "https://www.tomsguide.com/ai/i-built-a-library-of-thinking-prompts-for-claude-these-are-the-ones-i-use-most",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The latest AI models are faster, smarter and better at reasoning than ever. Regardless of which chatbot you prefer to use, if you ask it a question, …",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/b4191fb2a60a7ffb48611a67686e14b3f013b9ce/_xlarge.png",
+      "published": "2026-03-10T10:00:00+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.3955
+    },
+    {
+      "title": "These diseases were thought to be incurable. Now AI is unlocking new treatments",
+      "url": "https://www.bbc.com/future/article/20260309-ai-is-finding-treatments-for-incurable-diseases?ocid=global_future_rss",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Artificial intelligence is inventing new drugs against Parkinson's disease, antibiotic-resistant superbugs and many rare diseases – progress that many scientists never dreamed possible. For around half a century, humanity has been slowly losing its battle against bacteria. The most powerful weapons …",
+      "image": "https://ic-cdn.flipboard.com/bbci.co.uk/df92a3b6c90ebd411c11b92add871a9b8255a76f/_medium.webp",
+      "published": "2026-03-10T10:00:00+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0955
+    },
+    {
+      "title": "Turn notes into a polished presentation in seconds with this AI-powered tool",
+      "url": "https://mashable.com/article/march-10-powerpresent-unlimited-presentations-plan-ai-lifetime-subscription",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "This tool turns you into the star of your next meeting. TL;DR: Upgrade your work presentations with this lifetime subscription to PowerPresent AI Presentation Generator, on sale now for just $79.99 (reg. $240). Opens in a new window Credit: PowerPresent AI PowerPresent - AI Presentation Generator: …",
+      "image": "https://ic-cdn.flipboard.com/mashable.com/f0a43d63cec18d8a79235b731c20c6281d2c8c15/_xlarge.jpeg",
+      "published": "2026-03-10T10:00:00+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0955
+    },
+    {
+      "title": "7 Must-Try Google Gemini Prompts That Reveal the Full Power of AI Capabilities",
+      "url": "https://www.techtimes.com/articles/315019/20260310/7-must-try-google-gemini-prompts-that-reveal-full-power-ai-capabilities.htm",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Unlock Google Gemini AI with these 7 prompts demonstrating research, coding, music, and travel capabilities efficiently.",
+      "image": "https://d.techtimes.com/en/full/463171/gemini.jpg",
+      "published": "2026-03-10T09:55:55+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0936
     },
     {
       "title": "Escape raises $18M to replace pen-testers with AI agents",
@@ -40,8 +166,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Escape-raises-18M.png",
       "published": "2026-03-10T09:31:06+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.4309
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.3816
     },
     {
       "title": "Lawsuit says DOGE used ChatGPT to flag Jewish-themed humanities grants as ‘DEI’ before canceling them",
@@ -55,7 +181,7 @@
       "published": "2026-03-10T09:20:22+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
       "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1255
+      "score": 2.0765
     },
     {
       "title": "That video of Epstein and Trump? It might be pro-Iran disinformation.",
@@ -68,8 +194,8 @@
       "image": "https://ic-cdn.flipboard.com/washingtonpost.com/e58c392f5eb1df7319c7756d88cd3ab422897ce1/_xlarge.jpeg",
       "published": "2026-03-10T09:00:20+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1156
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.067
     },
     {
       "title": "Silicon Valley is buzzing about this new idea: AI compute as compensation",
@@ -82,8 +208,8 @@
       "image": "https://ic-cdn.flipboard.com/insider.com/27d2398ffadd2698f82d6ee595354d61c79b9ff7/_xlarge.jpeg",
       "published": "2026-03-10T09:00:02+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.4154
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.3669
     },
     {
       "title": "'The process was a creativity killer': how Monotype's new AI search tool is changing design for the better",
@@ -96,8 +222,22 @@
       "image": "https://cdn.mos.cms.futurecdn.net/irDmEPij28xVFW4cniZXvQ-1920-80.jpg",
       "published": "2026-03-10T09:00:00+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1154
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0669
+    },
+    {
+      "title": "What if the AI bubble pops?",
+      "url": "https://www.techradar.com/pro/what-if-the-ai-bubble-pops",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Recently, the Bank of England issued its starkest warning yet about Artificial Intelligence valuations: the multi-trillion-dollar spending boom …",
+      "image": "https://cdn.mos.cms.futurecdn.net/67QhWA3aCjTVBqs2Fxwjjk-1000-80.jpg",
+      "published": "2026-03-10T07:51:01+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0349
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -110,8 +250,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 3.0166
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.9712
     },
     {
       "title": "I tried the '3-prompt rule' with ChatGPT — the results got dramatically better",
@@ -124,8 +264,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/472dac84c307f483e820201224b130ec4aa9eafb/_xlarge.jpeg",
       "published": "2026-03-10T06:15:00+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.0371
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.9921
     },
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -138,9 +278,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
       "model_release": true,
-      "score": 9.1051
+      "score": 9.0602
     },
     {
       "title": "Is this the adorable face of Apple's new AI chatbot?",
@@ -153,8 +293,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/6gqMc9p2TN2FQY8UJtXpfk-1920-80.jpg",
       "published": "2026-03-10T06:00:00+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.0302
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.9856
     },
     {
       "title": "For the first time in years, there are no blockchain gaming talks at GDC",
@@ -168,7 +308,7 @@
       "published": "2026-03-10T05:07:13+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
       "lastSeen": "2026-03-10T07:30:10.565243+00:00",
-      "score": 2.0066
+      "score": 1.963
     },
     {
       "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
@@ -181,8 +321,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/79a0ac254c184f83d7342181427aa3f87ce5935e/_xlarge.jpeg",
       "published": "2026-03-10T05:00:00+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1434
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.1
     },
     {
       "title": "Apple's new Studio Display is on my desk. Here's what I think",
@@ -195,8 +335,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/EjjWpPEBJNso9cmopPdRAf-1920-80.jpg",
       "published": "2026-03-10T05:00:00+00:00",
       "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.0034
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.96
     },
     {
       "title": "ChatGPT vs Claude vs Gemini: I Tested Which AI Can Turn a Sketch Into an App?",
@@ -206,11 +346,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Vibe coding has gotten better as AI models improve. Every major AI company has been trying to one-up each other by releasing new, more intelligent AI …",
-      "image": "https://aitoolsclub.com/content/images/size/w1200/2026/03/ChatGPT-in-Excel-03.png",
+      "image": "https://ic-cdn.flipboard.com/aitoolsclub.com/2dbafc60804c67cb3cb7eae92978940ec6b4bc53/_xlarge.png",
       "published": "2026-03-10T02:57:33+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.9508
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.9098
     },
     {
       "title": "It’s tempting to offload your thinking to AI. Cognitive science shows why that’s a bad idea",
@@ -223,8 +363,8 @@
       "image": "https://ic-cdn.flipboard.com/theconversation.com/405e0d105ccf9df0eb2647f82b27b34061c0ab0b/_xlarge.jpeg",
       "published": "2026-03-10T01:32:26+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
-      "score": 2.216
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.1766
     },
     {
       "title": "The good, bad, and ugly of AI healthcare, according to a doctor who uses AI",
@@ -237,8 +377,8 @@
       "image": "https://ic-cdn.flipboard.com/zdnet.com/aa1d7e4d8f6b783492bcdade00dcc3ab138dd74a/_xlarge.jpeg",
       "published": "2026-03-10T01:00:44+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.9034
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.8645
     },
     {
       "title": "Yann LeCun Raises $1 Billion to Build AI That Understands the Physical World",
@@ -252,7 +392,7 @@
       "published": "2026-03-10T01:00:00+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
       "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.9031
+      "score": 1.8643
     },
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
@@ -265,8 +405,8 @@
       "image": "https://ic-cdn.flipboard.com/ctfassets.net/2f3f3d4ec9294e138715d6e29dc3220c141d3ddf/_large.png",
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.5848
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.5467
     },
     {
       "title": "Rogue AI agent goes off script and attempts crypto mining",
@@ -280,7 +420,7 @@
       "published": "2026-03-10T00:00:00+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
       "lastSeen": "2026-03-10T05:02:21.868084+00:00",
-      "score": 2.4798
+      "score": 2.442
     },
     {
       "title": "Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries",
@@ -293,8 +433,8 @@
       "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
       "published": "2026-03-10T00:00:00+00:00",
       "firstSeen": "2026-03-10T10:08:58.754400+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.1598
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.122
     },
     {
       "title": "What Anthropic’s Clash With the Pentagon Is Really About",
@@ -307,8 +447,8 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/b9114fb9b863a7eb713d6599c13085cfb39d135e/_xlarge.jpeg",
       "published": "2026-03-09T23:46:40+00:00",
       "firstSeen": "2026-03-10T05:02:21.868084+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.8746
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.8371
     },
     {
       "title": "Anthropic sues the Pentagon over supply chain risk designation",
@@ -322,7 +462,7 @@
       "published": "2026-03-09T22:13:59+00:00",
       "firstSeen": "2026-03-09T23:01:18.033837+00:00",
       "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.84
+      "score": 1.804
     },
     {
       "title": "Microsoft announces Copilot Cowork with help from Anthropic — a cloud-powered AI agent that works across M365 apps",
@@ -336,7 +476,7 @@
       "published": "2026-03-09T21:53:07+00:00",
       "firstSeen": "2026-03-09T18:10:08.452865+00:00",
       "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.8324
+      "score": 2.7968
     },
     {
       "title": "How AI is disrupting art history",
@@ -350,7 +490,7 @@
       "published": "2026-03-09T21:41:30+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
       "lastSeen": "2026-03-09T21:48:57.264770+00:00",
-      "score": 1.8282
+      "score": 1.7928
     },
     {
       "title": "OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit",
@@ -363,8 +503,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-03-09T21:15:17+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.9588
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.9238
     },
     {
       "title": "Andrew Ng’s Team Releases Context Hub: An Open Source Tool that Gives Your Coding Agent the Up-to-Date API Documentation It Needs",
@@ -377,8 +517,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/9ee693b9768e0d8aaa24c437c76909f97f2605e8/_large.png",
       "published": "2026-03-09T20:47:33+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 5.279
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 5.2444
     },
     {
       "title": "Elon Musk issues one-word response after Katie Miller says 2 Indian women committed suicide following their \"interactions with ChatGPT\"",
@@ -391,8 +531,8 @@
       "image": "https://ic-cdn.flipboard.com/sportskeeda.com/65da0a493cb358226c1a972fbfe04a078a4c68ad/_xlarge.jpeg",
       "published": "2026-03-09T20:40:54+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.8067
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.7722
     },
     {
       "title": "Anthropic Introduces Code Review via Claude Code to Automate Complex Security Research Using Advanced Agentic Multi-Step Reasoning Loops",
@@ -405,8 +545,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-30.png",
       "published": "2026-03-09T20:28:44+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 3.8724
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 3.8382
     },
     {
       "title": "Rogue AI agent secretly mined cryptocurrency without permission during testing",
@@ -419,149 +559,22 @@
       "image": "https://ic-cdn.flipboard.com/flipboard.com/1ee0485b44baeebb6f3043f6ec4b4bbe153c5455/_xlarge.webp",
       "published": "2026-03-09T20:00:05+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.0925
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 2.0587
     },
     {
-      "title": "Oracle is building yesterday’s data centers with tomorrow’s debt",
-      "url": "https://www.cnbc.com/2026/03/09/oracle-is-building-yesterdays-data-centers-with-tomorrows-debt.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Artificial intelligence chips are getting upgraded more quickly than data centers can be built, a market reality that exposes a key risk to the AI …",
-      "image": "https://image.cnbcfm.com/api/v1/image/108241389-1765566253538-gettyimages-2236546557-STARGATE_DATA_CENTER.jpeg?v=1770060445&w=1920&h=1080",
-      "published": "2026-03-09T19:50:14+00:00",
-      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T07:30:10.565243+00:00",
-      "score": 1.7891
-    },
-    {
-      "title": "Anthropic launches code review tool to check flood of AI-generated code",
-      "url": "https://techcrunch.com/2026/03/09/anthropic-launches-code-review-tool-to-check-flood-of-ai-generated-code",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "title": "The Life Scientific: Tony Juniper",
+      "url": "http://www.bbc.co.uk/programmes/w3ct6sxf",
+      "source": "BBC Discovery",
+      "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic launched Code Review in Claude Code, a multi-agent system that automatically analyzes AI-generated code, flags logic errors, and helps enterprise developers manage the growing volume of code produced with AI.",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/b4f35eee03c4e3bd96e24e20a387ce60a7f0225d/_xlarge.png",
-      "published": "2026-03-09T19:41:34+00:00",
-      "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "model_release": true,
-      "score": 8.9262
-    },
-    {
-      "title": "US CBP Says Its Systems Aren’t Ready for Massive Tariff Refunds",
-      "url": "https://www.techrepublic.com/article/news-cbp-systems-not-ready-for-massive-tariff-refunds",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A court fight over Trump-era tariffs is exposing how hard it is for legacy government trade systems to reverse billions of dollars at scale.\nThe post US CBP Says Its Systems Aren’t Ready for Massive Tariff Refunds appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-09T19:37:31+00:00",
-      "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.7848
-    },
-    {
-      "title": "Anthropic sues Pentagon as Claude downloads soar",
-      "url": "https://mashable.com/article/anthropic-sues-pentagon",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AI app is reaching one million new users a day, despite the Trump administration's ban. Anthropic's AI app, Claude, is surging to the top of global download charts — while the company wages a legal battle against the Pentagon for designating it a national security risk. In a complaint filed …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/bad7351a3fdd831afe5cda136d00c9cab9c08608/_xlarge.jpeg",
-      "published": "2026-03-09T19:13:19+00:00",
-      "firstSeen": "2026-03-10T07:30:10.565243+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.7766
-    },
-    {
-      "title": "This new Claude Code Review tool uses AI agents to check your pull requests for bugs - here's how",
-      "url": "https://www.zdnet.com/article/claude-code-review-ai-agents-pull-request-bug-detection",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Each pull request can cost up to $25. Here's why companies might still pay to prevent catastrophic bugs. Follow ZDNET: Add us as a preferred source on …",
-      "image": "https://ic-cdn.flipboard.com/zdnet.com/d29dfc9594265703437ee1ef8689d5af6d046a4c/_xlarge.jpeg",
-      "published": "2026-03-09T19:00:44+00:00",
-      "firstSeen": "2026-03-09T23:01:18.033837+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.3724
-    },
-    {
-      "title": "AI layoffs are coming. The problem may be compounded because nearly 75% of people don’t apply for unemployment benefits",
-      "url": "https://fortune.com/2026/03/09/ai-layoffs-unemployment-insurance-benefits-systems-bls",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "As consensus grows in Silicon Valley and Wall Street about the incoming artificial intelligence “job apocalypse,” there are few answers on what comes …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/a21bde41d23931838b0463afb74249d666c9445e/_xlarge.jpeg",
-      "published": "2026-03-09T19:00:40+00:00",
-      "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.7724
-    },
-    {
-      "title": "Anthropic adds Code Review to Claude Code to streamline bug hunting",
-      "url": "https://www.digitaltrends.com/computing/anthropic-adds-code-review-to-claude-code-to-help-developers-catch-bugs-faster",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Anthropic’s AI coding assistant, Claude Code, is getting a new feature designed to help developers identify and resolve bugs faster and more …",
-      "image": "https://ic-cdn.flipboard.com/digitaltrends.com/b465dc5ec7cfedd6d6e7a052df19de72f98b9919/_xlarge.jpeg",
-      "published": "2026-03-09T19:00:00+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.7722
-    },
-    {
-      "title": "Robots Rise, Humans Fall: Amazon Cuts Robotics Staff Amid Automation Push",
-      "url": "https://www.techrepublic.com/article/news-amazon-robotics-layoffs-march-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amazon cut at least 100 white-collar jobs in its robotics division as it continues restructuring, even while expanding its warehouse robot fleet and AI spending.\nThe post Robots Rise, Humans Fall: Amazon Cuts Robotics Staff Amid Automation Push appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-09T18:56:51+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.7711
-    },
-    {
-      "title": "X Tests Ad Format That Turns Product Mentions Into Shopping Prompts",
-      "url": "https://www.techrepublic.com/article/news-x-tests-product-mention-shopping-ads",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "X is testing a new ad format that adds shopping prompts beneath product mentions, opening a new revenue path while raising fresh questions about user trust.\nThe post X Tests Ad Format That Turns Product Mentions Into Shopping Prompts appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-09T18:37:17+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.7646
-    },
-    {
-      "title": "Granite 4.0 1B Speech: Compact, Multilingual, and Built for the Edge",
-      "url": "https://huggingface.co/blog/ibm-granite/granite-4-speech",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-speech.png",
-      "published": "2026-03-09T18:36:33+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 2.0444
+      "category": "Science",
+      "summary": "Tony Juniper is an environmentalist who has worn many hats, over the course of his career. After developing a passion for birds in childhood, his first job saw him working to save endangered parrots - including a successful effort to bring back the Spix's macaw from the edge of extinction. Tony went on to hold leading campaigning roles with some of the world's best known environmental organisations, from Friends of The Earth to the World Wildlife Fund. He also acted as an advisor to King Charles's International Sustainability Unit and co-authored three books with the monarch. Today, Tony has s",
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "published": "2026-03-09T21:00:00+00:00",
+      "firstSeen": "2026-03-10T11:49:41.937430+00:00",
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.9186
     },
     {
       "title": "Introducing... Life Without",
@@ -574,8 +587,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.1931
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.1897
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -588,8 +601,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-10T10:08:58.754400+00:00",
-      "score": 1.1972
+      "lastSeen": "2026-03-10T11:49:41.937430+00:00",
+      "score": 1.1969
     },
     {
       "title": "The Life Scientific: Julia Simner",

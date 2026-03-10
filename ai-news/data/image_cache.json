@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-10T10:08:58.754400+00:00",
+  "updatedAt": "2026-03-10T11:49:41.937430+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -324,6 +324,14 @@
     "https://huggingface.co/blog/async-rl-training-landscape": {
       "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
       "checkedAt": "2026-03-10T10:08:58.754400+00:00"
+    },
+    "https://www.techtimes.com/articles/315019/20260310/7-must-try-google-gemini-prompts-that-reveal-full-power-ai-capabilities.htm": {
+      "image": "https://d.techtimes.com/en/full/463171/gemini.jpg",
+      "checkedAt": "2026-03-10T11:49:41.937430+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct6sxf": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-03-10T11:49:41.937430+00:00"
     }
   }
 }
