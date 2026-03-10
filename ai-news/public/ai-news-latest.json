@@ -1,6 +1,244 @@
 {
-  "updatedAt": "2026-03-10T12:01:07.759785+00:00",
+  "updatedAt": "2026-03-10T15:13:25.916572+00:00",
   "items": [
+    {
+      "title": "Thinking Machines Lab inks massive compute deal with Nvidia",
+      "url": "https://techcrunch.com/2026/03/10/thinking-machines-lab-inks-massive-compute-deal-with-nvidia",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The multi-year deal involves at least a gigawatt of compute power and also includes a strategic investment from Nvidia",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-1730510668.jpg?resize=1200%2C800",
+      "published": "2026-03-10T15:08:39+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.2876
+    },
+    {
+      "title": "Google gives in to users’ complaints over AI-powered ‘Ask Photos’ search feature",
+      "url": "https://techcrunch.com/2026/03/10/google-gives-in-to-users-complaints-over-ai-powered-ask-photos-search-feature",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The option appears on the Google Photos Search screen and lets users pick which experience they want.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/google-photos-GettyImages-2165351446.jpg?w=1024",
+      "published": "2026-03-10T14:58:29+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.2824
+    },
+    {
+      "title": "Meta has bought Moltbook, the AI agent ‘social network’",
+      "url": "https://thenextweb.com/news/meta-acquires-moltbook-ai-agent-social-network",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Do you remember the name? Moltbook, the vibe-coded platform, famous for an unsecured database that let humans impersonate AI agents, is joining Meta Superintelligence Labs. Moltbook was, in many ways, a product of chaos. Its code was written almost entirely by an AI assistant. Its security was so porous that anyone with basic technical knowledge [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-has-bought-Moltbook.png",
+      "published": "2026-03-10T14:50:19+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.4383
+    },
+    {
+      "title": "Legora reaches $5.55 billion valuation as AI legaltech boom endures",
+      "url": "https://techcrunch.com/2026/03/10/legora-reaches-5-55-billion-valuation-as-ai-legaltech-boom-endures",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Legora, an AI platform for lawyers, is now valued at $5.55 billion following a $550 million Series D led by Accel to fuel its growth in the U.S.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/MaxJunestrand1.jpeg?resize=1200%2C765",
+      "published": "2026-03-10T14:34:24+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.2703
+    },
+    {
+      "title": "Google brings Gemini deeper into Docs, Sheets, Slides, and Drive with new beta features",
+      "url": "https://thenextweb.com/news/google-brings-gemini-deeper-into-docs-sheets-slides-and-drive-with-new-beta-features",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A wave of Workspace updates puts Gemini inside Docs, Sheets, Slides, and Drive, with a benchmark result Google is happy to shout about. The blinking cursor is Google’s enemy. Every time a Workspace user stares at an empty document, spreadsheet, or slide deck and reaches for a different tool to get unstuck, that’s a moment [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Workspace-with-Gemini.jpg",
+      "published": "2026-03-10T14:33:49+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.48
+    },
+    {
+      "title": "YouTube expands AI deepfake detection to politicians, government officials, and journalists",
+      "url": "https://techcrunch.com/2026/03/10/youtube-expands-ai-deepfake-detection-to-politicians-government-officials-and-journalists",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "YouTube's AI deepfake detection tool is becoming available to politicians, journalists, and officials, letting them flag unauthorized likenesses for removal.",
+      "image": "",
+      "published": "2026-03-10T14:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.2532
+    },
+    {
+      "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
+      "url": "https://www.technologyreview.com/2026/03/10/1134099/how-pokemon-go-is-helping-robots-deliver-pizza-on-time",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Pokémon Go was the world’s first augmented-reality megahit. Released in 2016 by the Google spinout Niantic, the AR twist on the juggernaut Pokémon franchise fast became a global phenomenon. From Chicago to Oslo to Enoshima, players hit the streets in the urgent hope of catching a Jigglypuff or a Squirtle or (with a huge amount&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
+      "published": "2026-03-10T13:47:26+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.9471
+    },
+    {
+      "title": "Legal AI platform Legora raises $550m at a $5.55bn valuation",
+      "url": "https://thenextweb.com/news/legora-series-d-550m-legal-ai-us-expansion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Stockholm-born company has gone from zero to $5.55 billion in under two years, and it is not slowing down. There is a standard piece of mythology in the legal profession: that lawyers are resistant to technology, constitutionally sceptical of change, and will be the last white-collar workers standing when the AI reckoning comes. Max [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Legora-raised-550-million-1.png",
+      "published": "2026-03-10T13:27:54+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.0975
+    },
+    {
+      "title": "Adobe is debuting an AI assistant for Photoshop",
+      "url": "https://techcrunch.com/2026/03/10/adobe-is-debuting-an-ai-assistant-for-photoshop",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Adobe is also adding new AI-powered image editing features to Firefly.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
+      "published": "2026-03-10T13:06:51+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.9274
+    },
+    {
+      "title": "NVIDIA and Thinking Machines Lab Announce Long-Term Gigawatt-Scale Strategic Partnership",
+      "url": "https://blogs.nvidia.com/blog/nvidia-thinking-machines-lab",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "NVIDIA and Thinking Machines Lab announced today a multiyear strategic partnership to deploy at least one gigawatt of next-generation NVIDIA Vera Rubin systems to support Thinking Machines’ frontier model training and platforms delivering customizable AI at scale. Deployment on the NVIDIA Vera Rubin platform is targeted for early next year. The partnership also includes an [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/jensen-huang-mira-murati-nvidia-debs-3127-2-scaled.jpg",
+      "published": "2026-03-10T13:00:11+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.5242
+    },
+    {
+      "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
+      "url": "https://techcrunch.com/2026/03/10/zoom-launches-an-ai-powered-office-suite-says-ai-avatars-for-meetings-are-coming-soon",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Zoom is also introducing a real-time deepfake detection tech for meetings",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.9241
+    },
+    {
+      "title": "Gemini in Google Sheets just achieved state-of-the-art performance.",
+      "url": "https://blog.google/products-and-platforms/products/workspace/gemini-google-sheets-state-of-the-art",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Today we announced new beta features for Gemini in Sheets to help you create, organize and edit entire sheets, from basic tasks to complex data analysis — just describe …",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Workspace_Jan_Moment_Sheets_Blo.max-600x600.format-webp.webp",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.7141
+    },
+    {
+      "title": "Google rolls out new Gemini capabilities to Docs, Sheets, Slides, and Drive",
+      "url": "https://techcrunch.com/2026/03/10/google-rolls-out-new-gemini-capabilities-to-docs-sheets-slides-and-drive",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The idea behind the new features is to make the apps more personal and capable to help users get things done faster, right within the platforms themselves.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.2241
+    },
+    {
+      "title": "Anchr raises $5.8m to automate food distribution’s manual back office",
+      "url": "https://thenextweb.com/news/anchr-preseed-ai-food-distribution-automation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anchr has raised a $5.8 million pre-seed round to automate the back office of America’s food distribution industry, a sector still running on phone calls, spreadsheets, and manual order entry. On any given morning, the operations team at a mid-size food distributor might spend hours logging orders from restaurant clients, received by email, text, voicemail, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anchr-Raises-5.8M.png",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.0841
+    },
+    {
+      "title": "Sandbar secures $23M Series A for its AI note-taking ring",
+      "url": "https://techcrunch.com/2026/03/10/sandbar-secures-23m-series-a-for-its-ai-note-taking-ring",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Sandbar aims to ship the Stream, which can be used to take notes, chat with an AI assistant, and for media playback, this summer.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_0402.CR3_.jpg?resize=1200%2C800",
+      "published": "2026-03-10T12:40:37+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.2149
+    },
+    {
+      "title": "Swiss startup Seprify raises €13.4M to replace titanium dioxide with cellulose",
+      "url": "https://thenextweb.com/news/swiss-startup-seprify-raises-e13-4m-to-replace-titanium-dioxide-with-cellulose",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Swiss startup Seprify has raised €13.4 million to scale a cellulose-based alternative to one of the most widely used, and increasingly banned, industrial whiteners on the planet. IKEA is backing it. Somewhere in Southeast Asia, a small beetle called Cyphochilus produces the whitest surface found in nature, not through pigment, but through the microscopic structure [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Seprify-raises-E13.4M-to-replace-titanium-dioxide-with-cellulose.png",
+      "published": "2026-03-10T12:19:49+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.065
+    },
+    {
+      "title": "Breakout Ventures closes $114m Fund III to back AI-powered science startups",
+      "url": "https://thenextweb.com/news/breakout-ventures-fund-iii-114-million-ai-biotech",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The San Francisco firm has closed its third fund at $114 million, its largest to date, betting that AI and biology are now inseparable, and that the founders who understand both will build the companies that matter most. Lindy Fishburne started Breakout in a somewhat unusual place: inside the Thiel Foundation, running a grant programme [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Breakout-Ventures-closes-114m-Fund-III-.png",
+      "published": "2026-03-10T11:56:29+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.0541
+    },
     {
       "title": "Yann LeCun just raised $1bn to prove the AI industry has got it wrong",
       "url": "https://thenextweb.com/news/yann-lecun-ami-labs-world-models-billion",
@@ -12,8 +250,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Yann-LeCun-just-raised-1bn.png",
       "published": "2026-03-10T11:06:09+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1224
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.031
     },
     {
       "title": "Mantle8 secures €2.06M EU grant to scale natural hydrogen tech",
@@ -26,8 +264,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mantle8-secures-E2.06M-EU-grant.png",
       "published": "2026-03-10T10:38:49+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1089
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.0187
     },
     {
       "title": "BMW Group brings humanoid robots to Germany",
@@ -40,8 +278,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
       "published": "2026-03-10T10:16:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.7981
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.7088
     },
     {
       "title": "The Oberlo veterans taking on Europe&#8217;s restaurant supply chain raise €20M",
@@ -54,8 +292,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Saltz-pulls-in-a-E20M-Series-A.png",
       "published": "2026-03-10T10:00:42+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.0903
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.0017
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -68,8 +306,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.93
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.8414
     },
     {
       "title": "Escape raises $18M to replace pen-testers with AI agents",
@@ -83,7 +321,7 @@
       "published": "2026-03-10T09:31:06+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
       "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.3762
+      "score": 2.2888
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -96,8 +334,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.9662
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.8856
     },
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -110,9 +348,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
       "model_release": true,
-      "score": 9.0552
+      "score": 8.9756
     },
     {
       "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
@@ -125,8 +363,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2261869274.jpg?resize=1200%2C800",
       "published": "2026-03-10T05:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.0951
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.018
     },
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
@@ -140,7 +378,7 @@
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.5425
+      "score": 2.475
     },
     {
       "title": "Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries",
@@ -153,8 +391,8 @@
       "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
       "published": "2026-03-10T00:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1178
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.0507
     },
     {
       "title": "Anthropic sues the Pentagon over supply chain risk designation",
@@ -168,7 +406,7 @@
       "published": "2026-03-09T22:13:59+00:00",
       "firstSeen": "2026-03-09T23:01:18.033837+00:00",
       "lastSeen": "2026-03-09T23:01:18.033837+00:00",
-      "score": 1.8
+      "score": 1.7362
     },
     {
       "title": "How AI is disrupting art history",
@@ -182,7 +420,7 @@
       "published": "2026-03-09T21:41:30+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
       "lastSeen": "2026-03-09T21:48:57.264770+00:00",
-      "score": 1.7888
+      "score": 1.7259
     },
     {
       "title": "OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit",
@@ -195,8 +433,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-03-09T21:15:17+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.9199
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 1.8578
     },
     {
       "title": "Andrew Ng’s Team Releases Context Hub: An Open Source Tool that Gives Your Coding Agent the Up-to-Date API Documentation It Needs",
@@ -209,8 +447,8 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/9ee693b9768e0d8aaa24c437c76909f97f2605e8/_large.png",
       "published": "2026-03-09T20:47:33+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 5.2406
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 5.1792
     },
     {
       "title": "Elon Musk issues one-word response after Katie Miller says 2 Indian women committed suicide following their \"interactions with ChatGPT\"",
@@ -224,7 +462,7 @@
       "published": "2026-03-09T20:40:54+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 1.7684
+      "score": 1.7072
     },
     {
       "title": "Anthropic Introduces Code Review via Claude Code to Automate Complex Security Research Using Advanced Agentic Multi-Step Reasoning Loops",
@@ -237,8 +475,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-30.png",
       "published": "2026-03-09T20:28:44+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 3.8344
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 3.7735
     },
     {
       "title": "Rogue AI agent secretly mined cryptocurrency without permission during testing",
@@ -252,7 +490,7 @@
       "published": "2026-03-09T20:00:05+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.055
+      "score": 1.9949
     },
     {
       "title": "Anthropic launches code review tool to check flood of AI-generated code",
@@ -265,9 +503,9 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/b4f35eee03c4e3bd96e24e20a387ce60a7f0225d/_xlarge.png",
       "published": "2026-03-09T19:41:34+00:00",
       "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
       "model_release": true,
-      "score": 8.8889
+      "score": 8.8294
     },
     {
       "title": "US CBP Says Its Systems Aren’t Ready for Massive Tariff Refunds",
@@ -280,8 +518,8 @@
       "image": "",
       "published": "2026-03-09T19:37:31+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.7476
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 1.6882
     },
     {
       "title": "This new Claude Code Review tool uses AI agents to check your pull requests for bugs - here's how",
@@ -295,7 +533,7 @@
       "published": "2026-03-09T19:00:44+00:00",
       "firstSeen": "2026-03-09T23:01:18.033837+00:00",
       "lastSeen": "2026-03-09T23:54:24.518190+00:00",
-      "score": 2.3359
+      "score": 2.2774
     },
     {
       "title": "AI layoffs are coming. The problem may be compounded because nearly 75% of people don’t apply for unemployment benefits",
@@ -309,7 +547,7 @@
       "published": "2026-03-09T19:00:40+00:00",
       "firstSeen": "2026-03-09T21:48:57.264770+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 1.7358
+      "score": 1.6774
     },
     {
       "title": "Anthropic adds Code Review to Claude Code to streamline bug hunting",
@@ -323,246 +561,7 @@
       "published": "2026-03-09T19:00:00+00:00",
       "firstSeen": "2026-03-09T19:54:49.238278+00:00",
       "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.7356
-    },
-    {
-      "title": "Robots Rise, Humans Fall: Amazon Cuts Robotics Staff Amid Automation Push",
-      "url": "https://www.techrepublic.com/article/news-amazon-robotics-layoffs-march-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amazon cut at least 100 white-collar jobs in its robotics division as it continues restructuring, even while expanding its warehouse robot fleet and AI spending.\nThe post Robots Rise, Humans Fall: Amazon Cuts Robotics Staff Amid Automation Push appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-09T18:56:51+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.7346
-    },
-    {
-      "title": "X Tests Ad Format That Turns Product Mentions Into Shopping Prompts",
-      "url": "https://www.techrepublic.com/article/news-x-tests-product-mention-shopping-ads",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "X is testing a new ad format that adds shopping prompts beneath product mentions, opening a new revenue path while raising fresh questions about user trust.\nThe post X Tests Ad Format That Turns Product Mentions Into Shopping Prompts appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-09T18:37:17+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.7284
-    },
-    {
-      "title": "Granite 4.0 1B Speech: Compact, Multilingual, and Built for the Edge",
-      "url": "https://huggingface.co/blog/ibm-granite/granite-4-speech",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-speech.png",
-      "published": "2026-03-09T18:36:33+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.0082
-    },
-    {
-      "title": "Veeam’s ‘Agent Commander’: Bringing Guardrails and Resilience to the Wild West of AI",
-      "url": "https://www.techrepublic.com/article/news-veeam-agent-commander-ai-resilience",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Veeam’s Agent Commander turns backup into an AI-era command center, giving enterprises the guardrails, visibility, and precision “undo” they need to safely scale autonomous agents.\nThe post Veeam’s ‘Agent Commander’: Bringing Guardrails and Resilience to the Wild West of AI appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-09T18:35:43+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.028
-    },
-    {
-      "title": "Gemini is currently the fastest-growing AI website by a huge margin",
-      "url": "https://9to5google.com/2026/03/09/gemini-is-currently-the-fastest-growing-ai-website-by-a-huge-margin",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "As AI tools continue to grow in popularity, Google’s Gemini is the fastest-growing one by a huge margin, new data reveals. SimilarWeb reports that, based on website traffic, Google Gemini is not only growing, but is the fastest-growing AI website by a huge margin. Looking at February 2026 versus …",
-      "image": "https://i0.wp.com/9to5google.com/wp-content/uploads/sites/4/2026/03/gemini-logo.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
-      "published": "2026-03-09T17:55:00+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 1.7153
-    },
-    {
-      "title": "ChatGPT users are flocking to Claude then realizing they can’t use it the same way — ‘For new users, it’s a shock’",
-      "url": "https://www.techradar.com/ai-platforms-assistants/claude/chatgpt-users-are-flocking-to-claude-then-realizing-they-cant-use-it-the-same-way-for-new-users-its-a-shock",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Huge numbers of people are canceling their ChatGPT subscriptions and switching to Claude. This exodus began after OpenAI announced a deal with the …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/43486062915401d0b05d14ba57dfcaa6090f68a8/_xlarge.jpeg",
-      "published": "2026-03-09T17:52:42+00:00",
-      "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-10T01:01:46.917274+00:00",
-      "score": 1.7146
-    },
-    {
-      "title": "OpenAI acquires Promptfoo to secure its AI agents",
-      "url": "https://techcrunch.com/2026/03/09/openai-acquires-promptfoo-to-secure-its-ai-agents",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "This deal underscores how frontier labs are scrambling to prove their technology can be used safely in critical business operations.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
-      "published": "2026-03-09T17:49:04+00:00",
-      "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1535
-    },
-    {
-      "title": "An AI Tsunami is about to Hit Science - 3 Quarks Daily",
-      "url": "https://3quarksdaily.com/3quarksdaily/2026/03/an-ai-tsunami-is-about-to-hit-science.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Cesar A. Hidalgo at his own website: Much of the public conversation about AI focuses on chat interfaces like ChatGPT. But a quieter revolution is …",
-      "image": "https://3quarksdaily.com/wp-content/uploads/2026/03/Screenshot-2026-03-08-150132.png",
-      "published": "2026-03-09T17:45:13+00:00",
-      "firstSeen": "2026-03-10T01:01:46.917274+00:00",
-      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 1.7123
-    },
-    {
-      "title": "The open-source AI red-teaming tool used by Fortune 500 companies is now part of OpenAI",
-      "url": "https://thenextweb.com/news/openai-acquires-promptfoo-ai-security-frontier",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The acquisition of Promptfoo, which counts more than 125,000 developers and 30-plus Fortune 500 companies among its users, is OpenAI’s most direct move yet into AI application security. Its technology will go into Frontier, the company’s enterprise agent platform launched just a month ago. When Ian Webster was leading the LLM engineering team at Discord, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IMG_1729.png",
-      "published": "2026-03-09T17:39:38+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 3.0106
-    },
-    {
-      "title": "Microsoft Adds Anthropic Models To Copilot In Push For Enterprise AI Agent Adoption",
-      "url": "https://allwork.space/2026/03/microsoft-adds-anthropic-models-to-copilot-in-push-for-enterprise-ai-agent-adoption",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft is adding Anthropic’s AI technology to its Copilot service to tap growing demand for autonomous agents, weeks after the startup’s new tools …",
-      "image": "https://ic-cdn.flipboard.com/allwork.space/970d82878cf7df304ec995abb872201a350c7e52/_xlarge.webp",
-      "published": "2026-03-09T17:35:59+00:00",
-      "firstSeen": "2026-03-09T21:48:57.264770+00:00",
-      "lastSeen": "2026-03-09T23:54:24.518190+00:00",
-      "score": 2.0095
-    },
-    {
-      "title": "Trump admin sued as company claims 'extreme punishment' for defying president",
-      "url": "https://www.rawstory.com/anthropic",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Trump administration was hit with a major lawsuit on Monday by AI developer Anthropic after it enacted an “extreme punishment” on the company …",
-      "image": "https://ic-cdn.flipboard.com/rawstory.com/5a58bbb5a42365720e203be8267b0be5fbdc4cd9/_xlarge.jpeg",
-      "published": "2026-03-09T17:34:30+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.709
-    },
-    {
-      "title": "Trump's latest AI announcements: Tech Corps, data center costs, modern warfare",
-      "url": "https://mashable.com/article/trump-ai-tech-corps-data-centers-military",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Is the AI Action Plan still on track? It's been less than a year since the Trump administration announced its sprawling AI action plan, and the government continues to push for America to be the global leader in AI. And while American opinion on AI remains mixed, adoption of AI tools has grown …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/ec83b5a005b04dabedc240208a657a4732c960ca/_xlarge.jpeg",
-      "published": "2026-03-09T17:32:56+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T18:10:08.452865+00:00",
-      "score": 1.7085
-    },
-    {
-      "title": "iOS 26.4 adds new emoji to your iPhone, here’s what’s coming",
-      "url": "https://9to5mac.com/2026/03/09/ios-26-4-will-add-these-new-emoji-to-your-iphone",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "iOS 26.4 beta 4 rolled out today for developers, and it includes a number of brand new emoji for iPhone users. Here are all the new emoji coming with iOS 26.4. New emoji coming with iOS 26.4 are available now in beta Every year, a group called the Unicode Consortium votes to approve a new batch of …",
-      "image": "https://ic-cdn.flipboard.com/wp.com/b1398b23f51fb99d9adf3427bf439d5bc6d48533/_xlarge.jpeg",
-      "published": "2026-03-09T17:26:23+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "model_release": true,
-      "score": 7.7065
-    },
-    {
-      "title": "Anthropic sues Defense Department over supply-chain risk designation",
-      "url": "https://techcrunch.com/2026/03/09/anthropic-sues-defense-department-over-supply-chain-risk-designation",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic filed suit against the Department of Defense on Monday after the agency labeled it a supply-chain risk. The complaint calls the DOD's actions \"unprecedented and unlawful.\"",
-      "image": "https://ic-cdn.flipboard.com/techcrunch.com/49bdb82309743e2bf1d4bedba679f766dd31ed7c/_large.jpeg",
-      "published": "2026-03-09T17:25:40+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.8463
-    },
-    {
-      "title": "Iran’s attacks on Amazon data centers in UAE, Bahrain signal a new kind of war as AI plays an increasingly strategic role, analysts say",
-      "url": "https://fortune.com/2026/03/09/irans-attacks-on-amazon-data-centers-in-uae-bahrain-signal-a-new-kind-of-war-as-ai-plays-an-increasingly-strategic-role-analysts-say",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The tech industry often talks about “the cloud” as though it were something abstract and untouchable. But the cloud runs on data centers, those data …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/59acacc97ddfc016fd17657d0162a9fb2e42f888/_xlarge.jpeg",
-      "published": "2026-03-09T17:05:58+00:00",
-      "firstSeen": "2026-03-09T19:54:49.238278+00:00",
-      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.7004
-    },
-    {
-      "title": "Billionaire Peter Diamandis offers $3.5 million to filmmakers who portray AI as the hero—not the villain",
-      "url": "https://fortune.com/2026/03/09/xprize-foundation-future-vision-xprize-peter-diamandis-films-scifi-ai-fears",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Billionaire founder of XPRIZE Peter Diamandis is tired of the doomsday scenarios painted by movies like Terminator or Ex Machina. The engineer and …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/a5f698e0dda7d3ad05b8ab65279f33f4f6e4fc10/_xlarge.jpeg",
-      "published": "2026-03-09T16:38:06+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-09T19:54:49.238278+00:00",
-      "score": 1.692
-    },
-    {
-      "title": "Italy&#8217;s Mirai Robotics raises $4.2M to build autonomous vessels for the &#8216;blue economy&#8217;",
-      "url": "https://thenextweb.com/news/mirai-robotics-42m-pre-seed-autonomous-vessels",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A Puglia-based startup founded by the man behind aircraft maker Blackshape has closed a pre-seed round to build software-defined ships and maritime AI. The ocean, it argues, is the last major physical environment not yet governed by software. Mirai Robotics, a startup headquartered in Puglia, southern Italy, wants to change that. The company has closed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mirai-Robotics-raises-4.2M-to-build-autonomous-vessels.png",
-      "published": "2026-03-09T16:37:56+00:00",
-      "firstSeen": "2026-03-09T18:10:08.452865+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.692
+      "score": 1.6772
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -575,8 +574,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.9148
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 1.853
     },
     {
       "title": "Introducing... Life Without",
@@ -589,8 +588,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.1894
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 1.1835
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -603,8 +602,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 1.1968
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 1.1962
     },
     {
       "title": "The Life Scientific: Julia Simner",

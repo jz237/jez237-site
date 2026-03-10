@@ -1,6 +1,6 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T12:01:07.759785+00:00",
+  "updatedAt": "2026-03-10T15:13:25.916572+00:00",
   "items": [
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -13,9 +13,51 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
       "model_release": true,
-      "score": 9.0552
+      "score": 8.9756
+    },
+    {
+      "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
+      "url": "https://www.technologyreview.com/2026/03/10/1134099/how-pokemon-go-is-helping-robots-deliver-pizza-on-time",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Pokémon Go was the world’s first augmented-reality megahit. Released in 2016 by the Google spinout Niantic, the AR twist on the juggernaut Pokémon franchise fast became a global phenomenon. From Chicago to Oslo to Enoshima, players hit the streets in the urgent hope of catching a Jigglypuff or a Squirtle or (with a huge amount&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
+      "published": "2026-03-10T13:47:26+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.9471
+    },
+    {
+      "title": "Adobe is debuting an AI assistant for Photoshop",
+      "url": "https://techcrunch.com/2026/03/10/adobe-is-debuting-an-ai-assistant-for-photoshop",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Adobe is also adding new AI-powered image editing features to Firefly.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
+      "published": "2026-03-10T13:06:51+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.9274
+    },
+    {
+      "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
+      "url": "https://techcrunch.com/2026/03/10/zoom-launches-an-ai-powered-office-suite-says-ai-avatars-for-meetings-are-coming-soon",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Zoom is also introducing a real-time deepfake detection tech for meetings",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.9241
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -28,8 +70,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.9662
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.8856
     },
     {
       "title": "AI Is a 5-Layer Cake",
@@ -42,8 +84,22 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
       "published": "2026-03-10T10:00:03+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.93
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.8414
+    },
+    {
+      "title": "Gemini in Google Sheets just achieved state-of-the-art performance.",
+      "url": "https://blog.google/products-and-platforms/products/workspace/gemini-google-sheets-state-of-the-art",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Today we announced new beta features for Gemini in Sheets to help you create, organize and edit entire sheets, from basic tasks to complex data analysis — just describe …",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Workspace_Jan_Moment_Sheets_Blo.max-600x600.format-webp.webp",
+      "published": "2026-03-10T13:00:00+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.7141
     },
     {
       "title": "BMW Group brings humanoid robots to Germany",
@@ -56,8 +112,36 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BMW-brings-humanoid-robots-to-Germany.png",
       "published": "2026-03-10T10:16:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.7981
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.7088
+    },
+    {
+      "title": "NVIDIA and Thinking Machines Lab Announce Long-Term Gigawatt-Scale Strategic Partnership",
+      "url": "https://blogs.nvidia.com/blog/nvidia-thinking-machines-lab",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "NVIDIA and Thinking Machines Lab announced today a multiyear strategic partnership to deploy at least one gigawatt of next-generation NVIDIA Vera Rubin systems to support Thinking Machines’ frontier model training and platforms delivering customizable AI at scale. Deployment on the NVIDIA Vera Rubin platform is targeted for early next year. The partnership also includes an [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/jensen-huang-mira-murati-nvidia-debs-3127-2-scaled.jpg",
+      "published": "2026-03-10T13:00:11+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.5242
+    },
+    {
+      "title": "Google brings Gemini deeper into Docs, Sheets, Slides, and Drive with new beta features",
+      "url": "https://thenextweb.com/news/google-brings-gemini-deeper-into-docs-sheets-slides-and-drive-with-new-beta-features",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A wave of Workspace updates puts Gemini inside Docs, Sheets, Slides, and Drive, with a benchmark result Google is happy to shout about. The blinking cursor is Google’s enemy. Every time a Workspace user stares at an empty document, spreadsheet, or slide deck and reaches for a different tool to get unstuck, that’s a moment [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Workspace-with-Gemini.jpg",
+      "published": "2026-03-10T14:33:49+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.48
     },
     {
       "title": "Andrej Karpathy's new open source 'autoresearch' lets you run hundreds of AI experiments a night — with revolutionary implications",
@@ -71,91 +155,21 @@
       "published": "2026-03-10T00:13:00+00:00",
       "firstSeen": "2026-03-10T01:32:50.345218+00:00",
       "lastSeen": "2026-03-10T01:32:50.345218+00:00",
-      "score": 2.5425
+      "score": 2.475
     },
     {
-      "title": "Escape raises $18M to replace pen-testers with AI agents",
-      "url": "https://thenextweb.com/news/escape-18m-series-a-ai-security-vibe-coding",
+      "title": "Meta has bought Moltbook, the AI agent ‘social network’",
+      "url": "https://thenextweb.com/news/meta-acquires-moltbook-ai-agent-social-network",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The timing is not coincidental. In October 2025, Escape published research that scanned more than 5,600 publicly deployed applications built with vibe coding platforms, tools like Lovable, Base44, and Bolt.new that let non-developers build and ship apps by describing what they want in plain English. The results were stark: over 2,000 high-impact vulnerabilities, hundreds of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Escape-raises-18M.png",
-      "published": "2026-03-10T09:31:06+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.3762
-    },
-    {
-      "title": "Yann LeCun just raised $1bn to prove the AI industry has got it wrong",
-      "url": "https://thenextweb.com/news/yann-lecun-ami-labs-world-models-billion",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Turing Award winner left Meta four months ago convinced that large language models are a dead end. Today he announced $1.03 billion in seed funding, Europe’s largest ever, to build something different. In November 2025, Yann LeCun walked into Mark Zuckerberg’s office and told his boss he was leaving. He had spent twelve years [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Yann-LeCun-just-raised-1bn.png",
-      "published": "2026-03-10T11:06:09+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1224
-    },
-    {
-      "title": "Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries",
-      "url": "https://huggingface.co/blog/async-rl-training-landscape",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://huggingface.co/blog/assets/async-rl-landscape/thumbnail.png",
-      "published": "2026-03-10T00:00:00+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1178
-    },
-    {
-      "title": "Mantle8 secures €2.06M EU grant to scale natural hydrogen tech",
-      "url": "https://thenextweb.com/news/mantle8-secures-e2-06m-eu-grant-to-scale-natural-hydrogen-tech",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A €2.06 million EU grant gives the Grenoble deep-tech startup non-dilutive runway to industrialise a four-component technology platform, and moves it one step closer to its first commercial drilling campaign. Fourteen months after closing a €3.4 million seed round backed by Bill Gates’ Breakthrough Energy Ventures and Kiko Ventures, Mantle8 has secured a second source [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mantle8-secures-E2.06M-EU-grant.png",
-      "published": "2026-03-10T10:38:49+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.1089
-    },
-    {
-      "title": "Yann LeCun’s AMI Labs raises $1.03 billion to build world models",
-      "url": "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AMI Labs, the new venture cofounded by Turing Prize winner Yann LeCun after he left Meta, has raised $1.03 billion at a $3.5 billion pre-money valuation.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2261869274.jpg?resize=1200%2C800",
-      "published": "2026-03-10T05:00:00+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.0951
-    },
-    {
-      "title": "The Oberlo veterans taking on Europe&#8217;s restaurant supply chain raise €20M",
-      "url": "https://thenextweb.com/news/saltz-series-a-restaurant-supply-europe",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Lithuanian food marketplace Saltz pulls in a €20M Series A backed by the EBRD, Inovo, Lifeline, and a roster of Baltic tech founders, to digitalise how restaurants across Europe source their ingredients. When Andrius and Tomas Šlimas sold their dropshipping platform Oberlo to Shopify in 2017, they could have sat out the next decade comfortably. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Saltz-pulls-in-a-E20M-Series-A.png",
-      "published": "2026-03-10T10:00:42+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T12:01:07.759785+00:00",
-      "score": 2.0903
+      "summary": "Do you remember the name? Moltbook, the vibe-coded platform, famous for an unsecured database that let humans impersonate AI agents, is joining Meta Superintelligence Labs. Moltbook was, in many ways, a product of chaos. Its code was written almost entirely by an AI assistant. Its security was so porous that anyone with basic technical knowledge [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-has-bought-Moltbook.png",
+      "published": "2026-03-10T14:50:19+00:00",
+      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
+      "lastSeen": "2026-03-10T15:13:25.916572+00:00",
+      "score": 2.4383
     }
   ],
   "errors": [
