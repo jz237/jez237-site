@@ -1,6 +1,6 @@
 {
   "date": "2026-03-10",
-  "updatedAt": "2026-03-10T21:40:17.801229+00:00",
+  "updatedAt": "2026-03-10T22:59:45.892627+00:00",
   "items": [
     {
       "title": "Amazon launches its healthcare AI assistant on its website and app",
@@ -13,9 +13,9 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/amazon-health-ai.jpeg?resize=1200%2C675",
       "published": "2026-03-10T20:10:06+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
       "model_release": true,
-      "score": 8.945
+      "score": 8.9069
     },
     {
       "title": "ByteDance Releases DeerFlow 2.0: An Open-Source SuperAgent Harness that Orchestrates Sub-Agents, Memory, and Sandboxes to do Complex Tasks",
@@ -28,9 +28,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-33-1024x731.png",
       "published": "2026-03-10T06:10:37+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
       "model_release": true,
-      "score": 8.8353
+      "score": 8.8094
     },
     {
       "title": "How 6,000 Bad Coding Lessons Turned a Chatbot Evil",
@@ -45,7 +45,7 @@
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
       "lastSeen": "2026-03-10T21:40:17.801229+00:00",
       "model_release": true,
-      "score": 8.1738
+      "score": 8.1459
     },
     {
       "title": "One of the Year's Best Sci-Fi Films (So Far) Is Now Available at Home",
@@ -58,9 +58,9 @@
       "image": "https://ic-cdn.flipboard.com/gizmodo.com/1d06a1d2fde8a5f97f89427a4eb827537b855bcb/_xlarge.jpeg",
       "published": "2026-03-10T12:00:59+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
       "model_release": true,
-      "score": 7.8912
+      "score": 7.8608
     },
     {
       "title": "NVIDIA AI Releases Nemotron-Terminal: A Systematic Data Engineering Pipeline for Scaling LLM Terminal Agents",
@@ -73,8 +73,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-10-at-1.14.02-PM-1-150x150.png",
       "published": "2026-03-10T20:15:08+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 3.4775
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 3.4393
     },
     {
       "title": "AgentMail raises $6M to build an email service for AI agents",
@@ -87,8 +87,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200%2C713",
       "published": "2026-03-10T16:00:00+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 3.1297
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 3.0957
     },
     {
       "title": "New ways to learn math and science in ChatGPT",
@@ -101,8 +101,22 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6WeStJuG7Vpz0AfZWGS6cm/27e0b45847fa1d82241e7ea5af01a7ad/Learning_Blocks_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-10T10:00:00+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.8954
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 2.8667
+    },
+    {
+      "title": "Amazon Admits Extensive AI Use Is Wreaking Havoc on Its Core Business",
+      "url": "https://futurism.com/artificial-intelligence/amazon-ai-tools-business",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Businesses are learning the hard way that rapidly deploying AI tools — and forcing or strongly encouraging their employees to use them — can backfire …",
+      "image": "https://ic-cdn.flipboard.com/futurism.com/9724fbb75d2ddf9589a62e6bf1548b5e2f9d5714/_xlarge.jpeg",
+      "published": "2026-03-10T20:22:37+00:00",
+      "firstSeen": "2026-03-10T22:59:45.892627+00:00",
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 2.7728
     },
     {
       "title": "How Pokémon Go is giving delivery robots an inch-perfect view of the world",
@@ -115,8 +129,8 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/coco-night-4.jpg?resize=1200%2C600",
       "published": "2026-03-10T13:47:26+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.7737
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 2.7418
     },
     {
       "title": "Adobe is debuting an AI assistant for Photoshop",
@@ -129,8 +143,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/AIAssistant-1440X810_1x.jpg?resize=1200%2C675",
       "published": "2026-03-10T13:06:51+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.7573
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 2.7259
     },
     {
       "title": "Zoom introduces an AI-powered office suite, says AI avatars for meetings arrive this month",
@@ -143,8 +157,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Realistic-and-stylized-avatars-in-Zoom-Meetings.jpeg?resize=1200%2C750",
       "published": "2026-03-10T13:00:00+00:00",
       "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.7545
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 2.7233
     },
     {
       "title": "How to Build a Risk-Aware AI Agent with Internal Critic, Self-Consistency Reasoning, and Uncertainty Estimation for Reliable Decision-Making",
@@ -157,22 +171,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-34.png",
       "published": "2026-03-10T06:35:45+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.7436
-    },
-    {
-      "title": "AI Is a 5-Layer Cake",
-      "url": "https://blogs.nvidia.com/blog/ai-5-layer-cake",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AI is one of the most powerful forces shaping the world today. It is not a clever app or a single model; it is essential infrastructure, like electricity and the internet.",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/5-layer-cake-hero-tablet-static.jpg",
-      "published": "2026-03-10T10:00:03+00:00",
-      "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.6854
+      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
+      "score": 2.7175
     }
   ],
   "errors": []
