@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T15:08:09.955763+00:00",
+  "updatedAt": "2026-03-11T16:20:00.326734+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -452,6 +452,22 @@
     "https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/lobster-pets2a.jpg?resize=1200,600",
       "checkedAt": "2026-03-11T15:08:09.955763+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/rivian-mind-robotics-series-a-500m-fund-raise-industrial-ai-powered-robots": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/12/rj-scaringe.jpeg?resize=1200,900",
+      "checkedAt": "2026-03-11T16:20:00.326734+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/synthetic-code-concepts": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/synthetic-code-concepts.png",
+      "checkedAt": "2026-03-11T16:20:00.326734+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/meta-didnt-buy-moltbook-for-bots-it-bought-into-the-agentic-web": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
+      "checkedAt": "2026-03-11T16:20:00.326734+00:00"
+    },
+    "https://www.together.ai/blog/nvidia-nemotron-3-super": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0f604c8aa89aae2c97599_20260309_NEMOTRON_1200x630.png",
+      "checkedAt": "2026-03-11T16:20:00.326734+00:00"
     }
   }
 }
