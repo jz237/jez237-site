@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T20:00:01.886568+00:00",
+  "updatedAt": "2026-03-11T19:54:44.510832+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -477,25 +477,25 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_je1bk8je1bk8je1b.jpg",
       "checkedAt": "2026-03-11T17:00:01.491672+00:00"
     },
-    "https://techcrunch.com/2026/03/11/replit-snags-9b-valuation-6-months-after-hitting-3b": {
-      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200,715",
-      "checkedAt": "2026-03-11T20:00:01.886568+00:00"
-    },
-    "https://techcrunch.com/2026/03/11/metas-moltbook-deal-points-to-a-future-built-around-ai-agents": {
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
-      "checkedAt": "2026-03-11T20:00:01.886568+00:00"
-    },
-    "https://openai.com/index/designing-agents-to-resist-prompt-injection": {
-      "image": "",
-      "checkedAt": "2026-03-11T20:00:01.886568+00:00"
-    },
     "https://openai.com/index/wayfair": {
       "image": "",
-      "checkedAt": "2026-03-11T20:00:01.886568+00:00"
+      "checkedAt": "2026-03-11T18:04:29.679665+00:00"
     },
     "https://openai.com/index/equip-responses-api-computer-environment": {
       "image": "",
-      "checkedAt": "2026-03-11T20:00:01.886568+00:00"
+      "checkedAt": "2026-03-11T18:04:29.679665+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/replit-snags-9b-valuation-6-months-after-hitting-3b": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200,715",
+      "checkedAt": "2026-03-11T19:54:44.510832+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/metas-moltbook-deal-points-to-a-future-built-around-ai-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
+      "checkedAt": "2026-03-11T19:54:44.510832+00:00"
+    },
+    "https://openai.com/index/designing-agents-to-resist-prompt-injection": {
+      "image": "",
+      "checkedAt": "2026-03-11T19:54:44.510832+00:00"
     }
   }
 }
