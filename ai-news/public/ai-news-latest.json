@@ -1,6 +1,118 @@
 {
-  "updatedAt": "2026-03-11T19:54:44.510832+00:00",
+  "updatedAt": "2026-03-11T21:50:19.641054+00:00",
   "items": [
+    {
+      "title": "Lovable says it added $100M in revenue last month alone, with just 146 employees",
+      "url": "https://techcrunch.com/2026/03/11/lovable-says-it-added-100m-in-revenue-last-month-alone-with-just-146-employees",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Swedish vibe-coding unicorn Lovable crossed $400 million in annual recurring revenue (ARR) in February.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
+      "published": "2026-03-11T21:40:49+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.2852
+    },
+    {
+      "title": "10 Android Trends That Will Define Smartphones in 2026",
+      "url": "https://www.techrepublic.com/article/news-android-trends-defining-smartphones-2026",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Android phones are evolving fast in 2026, with AI-native features, massive batteries, robot-inspired cameras, and creaseless foldables changing mobile tech.\nThe post 10 Android Trends That Will Define Smartphones in 2026 appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-11T21:08:59+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.1291
+    },
+    {
+      "title": "Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce",
+      "url": "https://www.techrepublic.com/article/news-salesforce-agentforce-contact-center-launch",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Salesforce launches Agentforce Contact Center to unify voice, AI, and CRM data on a single platform, aiming to eliminate fragmented customer support systems.\nThe post Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-11T21:03:40+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 3.1265
+    },
+    {
+      "title": "Dario Amodei’s Oppenheimer Moment",
+      "url": "https://www.theatlantic.com/technology/2026/03/anthropic-dod-ai-utopianism/686327",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It came earlier than expected. More than a year before his recent standoff with the Pentagon, Dario Amodei, the chief executive of Anthropic, published a 15,000-word manifesto describing a glorious AI future. Its title, “Machines of Loving Grace,” is borrowed from a Richard Brautigan poem, but as …",
+      "image": "https://ic-cdn.flipboard.com/theatlantic.com/d98feda319d37215ddb23d5eecaab2596fd55e5f/_xlarge.jpeg",
+      "published": "2026-03-11T21:02:00+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.1257
+    },
+    {
+      "title": "Replit CEO Says Their New AI Agent Can Vibe Code a Startup From Scratch",
+      "url": "https://www.inc.com/ben-sherry/replit-ceo-says-their-new-ai-agent-can-vibe-code-a-startup-from-scratch/91315098",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amjad Masad announced that Replit has raised $400 million in a series D, and also unveiled a powerful new agent. Replit founder and CEO Amjad Masad says the company’s latest AI agent can vibe code an entire company from scratch. Masad, whose company released one of the first commercially available AI …",
+      "image": "https://ic-cdn.flipboard.com/inc.com/a7f5e90644d309064371c86ee20c5bd2710cab2b/_xlarge.webp",
+      "published": "2026-03-11T21:00:15+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 3.1248
+    },
+    {
+      "title": "‘Agents of Chaos’: New Study Shows AI Agents Can Leak Data, Be Easily Manipulated",
+      "url": "https://www.techrepublic.com/article/news-ai-agents-security-risks-governance",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "As enterprise AI agent adoption accelerates, a new study exposes a governance gap that leaves most organizations unable to stop their own systems\nThe post ‘Agents of Chaos’: New Study Shows AI Agents Can Leak Data, Be Easily Manipulated appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-11T20:59:53+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.4246
+    },
+    {
+      "title": "Meta Buys AI Social Network Moltbook as Superintelligence Labs Expands",
+      "url": "https://www.techrepublic.com/article/news-meta-acquires-moltbook-bot-only-social-network",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta is acquiring Moltbook, the AI-agent social network, as it ramps up 2026 spending on Llama, smart glasses, and AI infrastructure.\nThe post Meta Buys AI Social Network Moltbook as Superintelligence Labs Expands appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-11T20:54:37+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.422
+    },
+    {
+      "title": "'Rectal garlic insertion for immune support': Medical chatbots confidently give disastrously misguided advice, experts say",
+      "url": "https://www.livescience.com/health/rectal-garlic-insertion-for-immune-support-medical-chatbots-confidently-give-disastrously-misguided-advice-experts-say",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI chatbots are seduced by misinformation that is delivered in medical jargon, leading them to give potentially dangerous advice. Popular AI chatbots …",
+      "image": "https://cdn.mos.cms.futurecdn.net/9MieLUDkhdu3WRjbnqmwQH-1920-80.jpg",
+      "published": "2026-03-11T20:29:01+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.1094
+    },
     {
       "title": "Replit snags $9B valuation 6 months after hitting $3B",
       "url": "https://techcrunch.com/2026/03/11/replit-snags-9b-valuation-6-months-after-hitting-3b",
@@ -12,8 +124,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200%2C715",
       "published": "2026-03-11T18:52:52+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.2589
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.2032
     },
     {
       "title": "Ars Fires Reporter For Accidentally Using Fake AI Quotes",
@@ -27,7 +139,7 @@
       "published": "2026-03-11T18:47:34+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
       "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.4163
+      "score": 2.3608
     },
     {
       "title": "You're Going To Want To Watch This DOGE Staffer Try To Define What DEI Is",
@@ -40,8 +152,8 @@
       "image": "https://img.huffingtonpost.com/asset/69b1aa051b0000e89714de6d.png?cache=xlxwAQRkXt&ops=500_281%2Cscalefit_1200_630",
       "published": "2026-03-11T18:31:37+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.1085
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.0533
     },
     {
       "title": "Perplexity’s Personal Computer is a cloud-based AI agent running on Mac mini",
@@ -54,8 +166,8 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/Perplexity-Personal-Computer.webp?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-11T18:24:30+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.105
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 3.05
     },
     {
       "title": "NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI",
@@ -68,9 +180,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-9-150x150.png",
       "published": "2026-03-11T18:19:24+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
       "model_release": true,
-      "score": 9.4725
+      "score": 9.4177
     },
     {
       "title": "WordPress debuts a private workspace that runs in your browser via a new service, my.WordPress.net",
@@ -83,8 +195,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200%2C493",
       "published": "2026-03-11T16:43:59+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.897
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.8445
     },
     {
       "title": "Former NFL Player Reportedly Asked ChatGPT For Help After Allegedly Killing Girlfriend",
@@ -98,7 +210,7 @@
       "published": "2026-03-11T16:30:00+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 2.0505
+      "score": 1.9984
     },
     {
       "title": "A First Amendment right not to use AI for evil?",
@@ -112,7 +224,7 @@
       "published": "2026-03-11T16:15:29+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0438
+      "score": 1.992
     },
     {
       "title": "Rivian spin-out Mind Robotics raises $500M for industrial AI-powered robots",
@@ -125,8 +237,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/rj-scaringe.jpeg?resize=1200%2C900",
       "published": "2026-03-11T16:12:02+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.1822
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.1305
     },
     {
       "title": "Delivery Robots Hit Streets Backed by Niantic’s Pokémon GO-Era Mapping",
@@ -139,8 +251,8 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_je1bk8je1bk8je1b.jpg",
       "published": "2026-03-11T16:07:07+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.04
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9884
     },
     {
       "title": "Manufact raises $6.3M as MCP becomes the ‘USB-C for AI’ powering ChatGPT and Claude apps",
@@ -154,7 +266,7 @@
       "published": "2026-03-11T16:01:00+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 2.0372
+      "score": 1.9857
     },
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -167,9 +279,9 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/nemotron-3-super-1920x1080-1.jpg",
       "published": "2026-03-11T16:00:21+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
       "model_release": true,
-      "score": 9.4769
+      "score": 9.4255
     },
     {
       "title": "U.S. military is using AI to help plan Iran air attacks, sources say, as lawmakers call for oversight",
@@ -182,8 +294,8 @@
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/f9222208eeef42db08bbef721dfa9d88acd124da/_xlarge.jpeg",
       "published": "2026-03-11T15:54:16+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.0341
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9828
     },
     {
       "title": "Code Concepts: A Large-Scale Synthetic Dataset Generated from Programming Concept Seeds",
@@ -196,8 +308,22 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/synthetic-code-concepts.png",
       "published": "2026-03-11T15:50:15+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.3123
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.2611
+    },
+    {
+      "title": "ChatGPT quietly fixed its most annoying habit",
+      "url": "https://www.pcworld.com/article/3085980/chatgpt-quietly-fixed-its-most-annoying-habit.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The questions at the end of ChatGPT's responses used to drive me nuts. Summary created by Smart Answers AI In summary: PCWorld reports that ChatGPT has …",
+      "image": "https://ic-cdn.flipboard.com/pcworld.com/9c168ceb194f3ce9e79603eb2c2bbd7e2331210e/_large.jpeg",
+      "published": "2026-03-11T15:48:02+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9801
     },
     {
       "title": "Meta rolls out new scam detection across WhatsApp, Messenger, and Facebook",
@@ -210,8 +336,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-scam-detections.png",
       "published": "2026-03-11T15:30:43+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.0234
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9727
     },
     {
       "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
@@ -225,7 +351,7 @@
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 3.1548
+      "score": 3.1045
     },
     {
       "title": "Meta’s Moltbook deal points to a future built around AI agents",
@@ -238,8 +364,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.1548
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 3.1045
     },
     {
       "title": "BlackRock is splashing $100 million on training plumbers, electricians, and HVAC technicians as its CEO flags a skilled trade worker shortage",
@@ -252,8 +378,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/be17fbd4e24451ecae3b739645cf97d8384644c4/_xlarge.jpeg",
       "published": "2026-03-11T15:08:57+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.3137
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.2635
     },
     {
       "title": "NVIDIA GTC 2026: Live Updates on What’s Next in AI",
@@ -266,8 +392,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/JL1_0473-scaled.jpg",
       "published": "2026-03-11T15:00:08+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.1497
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.0997
     },
     {
       "title": "Amazon expands a program that lets customers shop from other retailers’ sites",
@@ -280,8 +406,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/shop-direct-.jpeg?resize=1200%2C675",
       "published": "2026-03-11T14:48:30+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.1446
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.0949
     },
     {
       "title": "Pixar's Hoppers YouTube stream is the most delightful thing you'll see today",
@@ -294,8 +420,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/8ddc7a24d4d2827efec55856e47192254a484380/_large.jpeg",
       "published": "2026-03-11T14:41:31+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.0015
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9519
     },
     {
       "title": "Microsoft and retired military chiefs back AI company Anthropic in court fight against Pentagon",
@@ -308,8 +434,8 @@
       "image": "https://ic-cdn.flipboard.com/apnews.com/cd8091e11e2a178382be61d017e6570a7c1a4468/_large.jpeg",
       "published": "2026-03-11T14:13:02+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.989
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9401
     },
     {
       "title": "Canva can now turn a flat AI image into a fully editable design in seconds",
@@ -322,8 +448,8 @@
       "image": "https://ic-cdn.flipboard.com/digitaltrends.com/d07fe6c541342f5df8ea4fee27f324447b69b858/_xlarge.jpeg",
       "published": "2026-03-11T14:01:17+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.984
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9353
     },
     {
       "title": "Canopii looks to succeed where past indoor farms have not",
@@ -336,8 +462,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Canopii.jpg?resize=1200%2C900",
       "published": "2026-03-11T14:00:00+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.1234
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.0748
     },
     {
       "title": "I was interviewed by an AI bot for a job",
@@ -350,8 +476,22 @@
       "image": "https://ic-cdn.flipboard.com/theverge.com/75140f32fbdb4ba2bee85a2b9a335563f150beca/_xlarge.jpeg",
       "published": "2026-03-11T14:00:00+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.9834
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9348
+    },
+    {
+      "title": "Canva May Have Just Cracked One of the Biggest Issues With AI Images",
+      "url": "https://www.cnet.com/tech/services-and-software/canva-ai-image-magic-layers-news",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Canva's newest AI feature is all about giving creators more control over AI, not less. One of the biggest issues with AI image tools is that it's difficult to edit them after they're created. This is especially a hassle for people using AI in their work, who need to perfect small errors and …",
+      "image": "https://ic-cdn.flipboard.com/cnet.com/8b14151bb044f4237b029518c09332afbe0169e0/_xlarge.jpeg",
+      "published": "2026-03-11T13:24:50+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.9205
     },
     {
       "title": "ChatGPT 5.4 Pro Adds Native Desktop Control for Real-Time Work",
@@ -365,7 +505,7 @@
       "published": "2026-03-11T13:23:13+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
       "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.2676
+      "score": 2.2198
     },
     {
       "title": "Ex-NFL Star Asked ChatGPT for Advice After Allegedly Doing the Unthinkable to His Fiancée",
@@ -379,7 +519,7 @@
       "published": "2026-03-11T13:13:53+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 1.9637
+      "score": 1.9161
     },
     {
       "title": "AI performer Tilly Norwood in first music video as Hollywood grapples with evolving technology",
@@ -392,8 +532,8 @@
       "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/03/11/b07ac809-67cf-4cdc-8c38-6cc981336146/thumbnail/1200x630/42ae6cbebb1d26aaa21a4ded418518a3/cbsn-fusion-ai-performer-tilly-norwood-in-first-music-video-as-hollywood-grapples-with-evolving-technology-thumbnail.jpg",
       "published": "2026-03-11T13:09:00+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.6616
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.6141
     },
     {
       "title": "Canva’s new AI tool will break your design process (in a good way)",
@@ -407,161 +547,21 @@
       "published": "2026-03-11T13:00:00+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 2.6578
+      "score": 2.6105
     },
     {
-      "title": "Hustlers are cashing in on China’s OpenClaw AI craze",
-      "url": "https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Feng Qingyang had always hoped to launch his own company, but he never thought this would be how—or that the day would come this fast.&#160; Feng, a 27-year-old software engineer based in Beijing, started tinkering with OpenClaw, a popular new open-source AI tool that can take over a device and autonomously complete tasks for a&#8230;",
-      "image": "https://ic-cdn.flipboard.com/technologyreview.com/ae927b0790416679600da2fd1bb131520dcca9c6/_xlarge.jpeg",
-      "published": "2026-03-11T12:46:21+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.7921
-    },
-    {
-      "title": "‘AI-Sexual’ Couples Are Having Threesomes With Chatbots",
-      "url": "https://www.vice.com/en/article/couples-are-having-threesomes-with-ai",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "I apologize in advance, but there’s a new phrase that’s been floating around out there to describe sexuality. “AI-sexual” is the latest one. The term comes from Joi AI, an AI companion platform that says 55 percent of surveyed Gen Z and millennial AI users consider themselves “AI-sexual,” meaning …",
-      "image": "https://ic-cdn.flipboard.com/vice.com/e7c3277f95ff922c504ed1407ad2f1bdf6497048/_xlarge.jpeg",
-      "published": "2026-03-11T12:42:35+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.9505
-    },
-    {
-      "title": "YouTube on TV becomes insufferable with new unskippable 30-second ads",
-      "url": "https://www.androidauthority.com/youtube-on-tv-unskippable-30-second-ads-3648246",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "YouTube's latest ad format on TVs might be a step too far for some. YouTube has aggressively introduced new ad formats in recent years, while also cracking down on ad blockers and third-party YouTube apps. Unfortunately, the TV experience is getting worse for people who aren’t paying for YouTube …",
-      "image": "https://ic-cdn.flipboard.com/androidauthority.com/7ba5bf1a4ba5471bb91662b885d452df990cbe97/_xlarge.jpeg",
-      "published": "2026-03-11T12:31:53+00:00",
-      "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.9461
-    },
-    {
-      "title": "The Most Disruptive Company in the World",
-      "url": "https://time.com/article/2026/03/11/anthropic-claude-disruptive-company-pentagon",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In a hotel room in Santa Clara, Calif., five members of the AI company Anthropic huddled around a laptop, working urgently. It was February 2025, and they had been at a conference nearby when they received disturbing news: results of a controlled trial had indicated that a soon-to-be-released …",
-      "image": "https://gcp-na-images.contentstack.com/v3/assets/bltea6093859af6183b/bltc82bbbb506af490a/69b0c166eb760aa2626a0de7/Anthropic_Lead-v2.jpg?branch=production",
-      "published": "2026-03-11T12:00:06+00:00",
-      "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.633
-    },
-    {
-      "title": "The best external hard drives: back up and transfer images and video without the fuss",
-      "url": "https://flip.it/SGtQfL",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "These are our favourite options for speed, capacity and value. The best external hard drives are an essential part of any creative's kit. Whether …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/212072cf59efd9d29fa21043b62051d6932ef3c9/_xlarge.jpeg",
-      "published": "2026-03-11T12:00:00+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.933
-    },
-    {
-      "title": "Scientists Are Trying to Train Lab-Grown Brains. The Brains Have Started to Solve Problems.",
-      "url": "https://www.popularmechanics.com/science/health/a70596419/lab-brain-cart-pole-problem",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Scientists trained a brain organoid to solve a well-known engineering task, and its success demonstrates the increasing complexity of lab-grown brains. Here’s what you’ll learn when you read this story: In a new study, scientists successfully trained a brain organoid derived from mouse stem cells to …",
-      "image": "https://ic-cdn.flipboard.com/hearstapps.com/acc7226762b73ecd8425792d358916ff1fd5a0b6/_xlarge.jpeg",
-      "published": "2026-03-11T12:00:00+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.933
-    },
-    {
-      "title": "Designing AI agents to resist prompt injection",
-      "url": "https://openai.com/index/designing-agents-to-resist-prompt-injection",
+      "title": "Rakuten fixes issues twice as fast with Codex",
+      "url": "https://openai.com/index/rakuten",
       "source": "OpenAI News",
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "category": "AI",
-      "summary": "How ChatGPT defends against prompt injection and social engineering by constraining risky actions and protecting sensitive data in agent workflows.",
+      "summary": "Rakuten uses Codex, the coding agent from OpenAI, to ship software faster and safer, reducing MTTR 50%, automating CI/CD reviews, and delivering full-stack builds in weeks.",
       "image": "",
-      "published": "2026-03-11T11:30:00+00:00",
-      "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.8708
-    },
-    {
-      "title": "Is AI replacing the work of skilled radiologists? They give us their thoughts",
-      "url": "https://theconversation.com/is-ai-replacing-the-work-of-skilled-radiologists-they-give-us-their-thoughts-268918",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Since the 2010s, breakthroughs in AI have prompted discussion about their implications for work, including a possible “workless” future. Those …",
-      "image": "https://ic-cdn.flipboard.com/theconversation.com/84a72fcde8604a72dc39bbabc6643e472239cde0/_xlarge.jpeg",
-      "published": "2026-03-11T11:26:47+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.9195
-    },
-    {
-      "title": "Microsoft Takes a Stand Against the Trump Administration",
-      "url": "https://www.nytimes.com/2026/03/11/business/dealbook/microsoft-anthropic-pentagon.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The technology giant’s siding with Anthropic in its fight against the Pentagon stands out in an era when big companies have tended to keep quiet. Andrew here. Is the era of corporate silence during the Trump administration officially over? Microsoft filed a court brief late on Tuesday supporting …",
-      "image": "https://static01.nyt.com/images/2026/03/11/multimedia/11db-nadella-cztf/11db-nadella-cztf-facebookJumbo.jpg",
-      "published": "2026-03-11T11:18:33+00:00",
-      "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.9162
-    },
-    {
-      "title": "Paris startup Lemrock raises €6M to become the commerce layer inside AI agents",
-      "url": "https://thenextweb.com/news/lemrock-raises-6m-agentic-commerce-ai-agents",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Founded just months ago by two repeat Y Combinator founders and a retail veteran, Lemrock is betting that AI agents are becoming the new storefront,  and that brands are nowhere near ready for it. When you ask ChatGPT or Perplexity which running shoes to buy, someone has to make sure the right brands show up, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Startup-Lemrock-raises-E6M-to-fix-agentic-commerce.png",
-      "published": "2026-03-11T11:18:18+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.2161
-    },
-    {
-      "title": "I'm a CMO who thinks AI has brought a long-overdue reckoning for top marketers. Here's how I'm adapting for the future.",
-      "url": "https://www.businessinsider.com/publicis-sapient-cmo-ai-forcing-an-overdue-marketing-reckoning-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "This as-told-to essay is based on a conversation with Teresa Barreira, chief marketing officer of Publicis Sapient, the advertising company's tech arm. It's been edited for length and clarity. The role of the CMO has been under attack for years. And honestly, some of it is very well deserved. Part of …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/ff5243efd26d5cf022d54303ac7ce0f7bd87141b/_xlarge.jpeg",
-      "published": "2026-03-11T11:10:01+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.6128
+      "published": "2026-03-11T13:00:00+00:00",
+      "firstSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 2.5605
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -574,8 +574,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.4889
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.4733
     },
     {
       "title": "Introducing... Life Without",
@@ -588,8 +588,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.1486
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.1471
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -602,8 +602,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 1.1928
+      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "score": 1.1927
     },
     {
       "title": "The Life Scientific: Julia Simner",
