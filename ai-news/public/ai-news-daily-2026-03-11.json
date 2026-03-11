@@ -1,6 +1,6 @@
 {
   "date": "2026-03-11",
-  "updatedAt": "2026-03-11T19:54:44.510832+00:00",
+  "updatedAt": "2026-03-11T23:00:01.559353+00:00",
   "items": [
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -13,9 +13,9 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/nemotron-3-super-1920x1080-1.jpg",
       "published": "2026-03-11T16:00:21+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
       "model_release": true,
-      "score": 9.4769
+      "score": 9.3958
     },
     {
       "title": "NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI",
@@ -28,9 +28,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-9-150x150.png",
       "published": "2026-03-11T18:19:24+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
       "model_release": true,
-      "score": 9.4725
+      "score": 9.386
     },
     {
       "title": "Together AI Brings NVIDIA Nemotron 3 to Developers on Day 0",
@@ -43,9 +43,9 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0f604c8aa89aae2c97599_20260309_NEMOTRON_1200x630.png",
       "published": "2026-03-11T00:00:00+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
       "model_release": true,
-      "score": 8.6527
+      "score": 8.6007
     },
     {
       "title": "EchoPrime &#8211; Cedars-Sinai&#8217;s AI system can read echocardiograms and write the report",
@@ -58,9 +58,9 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Cedars-Sinais-AI-system-can-read-echocardiograms.png",
       "published": "2026-03-11T10:36:04+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
       "model_release": true,
-      "score": 8.2493
+      "score": 8.1795
     },
     {
       "title": "Google AI Introduces Gemini Embedding 2: A Multimodal Embedding Model that Lets Your Bring Text, Images, Video, Audio, and Docs into the Embedding Space",
@@ -73,22 +73,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-12.17.20-AM-1-150x150.png",
       "published": "2026-03-11T07:18:20+00:00",
       "firstSeen": "2026-03-11T07:34:26.933497+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.295
-    },
-    {
-      "title": "From model to agent: Equipping the Responses API with a computer environment",
-      "url": "https://openai.com/index/equip-responses-api-computer-environment",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "How OpenAI built an agent runtime using the Responses API, shell tool, and hosted containers to run secure, scalable agents with files, tools, and state.",
-      "image": "",
-      "published": "2026-03-11T11:00:00+00:00",
-      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.2588
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.2313
     },
     {
       "title": "Samaipata launches €110M fund to back early-stage AI-native startups across Europe",
@@ -101,8 +87,50 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Samaipata-launches-E110M-fund.png",
       "published": "2026-03-11T08:48:44+00:00",
       "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.2581
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.1917
+    },
+    {
+      "title": "From model to agent: Equipping the Responses API with a computer environment",
+      "url": "https://openai.com/index/equip-responses-api-computer-environment",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "How OpenAI built an agent runtime using the Responses API, shell tool, and hosted containers to run secure, scalable agents with files, tools, and state.",
+      "image": "",
+      "published": "2026-03-11T11:00:00+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.1882
+    },
+    {
+      "title": "Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce",
+      "url": "https://www.techrepublic.com/article/news-salesforce-agentforce-contact-center-launch",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Salesforce launches Agentforce Contact Center to unify voice, AI, and CRM data on a single platform, aiming to eliminate fragmented customer support systems.\nThe post Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AI_Chat_Assistant-1x.jpg",
+      "published": "2026-03-11T21:03:40+00:00",
+      "firstSeen": "2026-03-11T23:00:01.559353+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.0923
+    },
+    {
+      "title": "Replit CEO Says Their New AI Agent Can Vibe Code a Startup From Scratch",
+      "url": "https://www.inc.com/ben-sherry/replit-ceo-says-their-new-ai-agent-can-vibe-code-a-startup-from-scratch/91315098",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amjad Masad announced that Replit has raised $400 million in a series D, and also unveiled a powerful new agent. Replit founder and CEO Amjad Masad says the company’s latest AI agent can vibe code an entire company from scratch. Masad, whose company released one of the first commercially available AI …",
+      "image": "https://ic-cdn.flipboard.com/inc.com/a7f5e90644d309064371c86ee20c5bd2710cab2b/_xlarge.webp",
+      "published": "2026-03-11T21:00:15+00:00",
+      "firstSeen": "2026-03-11T23:00:01.559353+00:00",
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.0907
     },
     {
       "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
@@ -116,7 +144,7 @@
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 3.1548
+      "score": 3.0755
     },
     {
       "title": "Meta’s Moltbook deal points to a future built around AI agents",
@@ -129,8 +157,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.1548
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.0755
     },
     {
       "title": "Perplexity’s Personal Computer is a cloud-based AI agent running on Mac mini",
@@ -143,36 +171,8 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/Perplexity-Personal-Computer.webp?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-11T18:24:30+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 3.105
-    },
-    {
-      "title": "WordPress debuts a private workspace that runs in your browser via a new service, my.WordPress.net",
-      "url": "https://techcrunch.com/2026/03/11/wordpress-debuts-a-private-workspace-that-runs-in-your-browser-via-a-new-service-my-wordpress-net",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "WordPress’s new browser-based service lets users create private sites without hosting or signing up, turning the platform into a personal workspace for writing, research, and AI tools.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200%2C493",
-      "published": "2026-03-11T16:43:59+00:00",
-      "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.897
-    },
-    {
-      "title": "Swiss VC Emerald Technology Ventures hits €100M milestone for its Global Water Fund II",
-      "url": "https://thenextweb.com/news/emerald-technology-ventures-raises-e100m-for-water-innovation-fund",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Temasek and the Grundfos Foundation have joined the fund as it passes its latest target, part of a broader push to channel institutional capital into water technology innovation. Water scarcity is not a future problem. It is a present one, already constraining agriculture, industry, and urban planning across multiple continents. What has lagged, historically, is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Emerald-Technology-Ventures-hits-E100M-.png",
-      "published": "2026-03-11T10:05:19+00:00",
-      "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.8873
+      "lastSeen": "2026-03-11T23:00:01.559353+00:00",
+      "score": 3.0183
     }
   ],
   "errors": []
