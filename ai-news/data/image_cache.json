@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T22:55:48.514703+00:00",
+  "updatedAt": "2026-03-11T23:55:55.458549+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -528,6 +528,18 @@
     "https://techcrunch.com/2026/03/11/zendesk-acquires-agentic-customer-service-startup-forethought": {
       "image": "https://techcrunch.com/wp-content/uploads/2019/10/Forethought-DSC04264.jpg?resize=1200,800",
       "checkedAt": "2026-03-11T22:55:48.514703+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/11/how-to-design-a-streaming-decision-agent-with-partial-reasoning-online-replanning-and-reactive-mid-execution-adaptation-in-dynamic-environments": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner234.png",
+      "checkedAt": "2026-03-11T23:55:55.458549+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/ai-actor-tilly-norwood-put-out-the-worst-song-ive-ever-heard": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-3.22.19-PM.png?resize=1200,672",
+      "checkedAt": "2026-03-11T23:55:55.458549+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/fords-new-ai-assistant-will-help-fleet-owners-know-if-seatbelts-are-being-used": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ford-pro-fleet.jpg?resize=1200,675",
+      "checkedAt": "2026-03-11T23:55:55.458549+00:00"
     }
   }
 }
