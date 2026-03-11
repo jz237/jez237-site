@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T03:00:04.654808+00:00",
+  "updatedAt": "2026-03-11T05:04:09.218424+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -420,6 +420,18 @@
     "https://techcrunch.com/2026/03/10/ai-powered-apps-struggle-with-long-term-retention-new-report-shows": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
       "checkedAt": "2026-03-10T21:40:17.801229+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/10/fish-audio-releases-fish-audio-s2-a-new-generation-of-expressive-text-to-speech-tts-with-absurdly-controllable-emotion": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-37-1024x731.png",
+      "checkedAt": "2026-03-11T05:04:09.218424+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/10/how-to-build-a-self-designing-meta-agent-that-automatically-constructs-instantiates-and-refines-task-specific-ai-agents": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-36.png",
+      "checkedAt": "2026-03-11T05:04:09.218424+00:00"
+    },
+    "https://techcrunch.com/2026/03/10/google-gemini-chrome-expands-to-india-canada-new-zealand": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Chrome_Hero.png?resize=1200,677",
+      "checkedAt": "2026-03-11T05:04:09.218424+00:00"
     }
   }
 }

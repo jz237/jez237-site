@@ -1,6 +1,48 @@
 {
-  "updatedAt": "2026-03-11T03:00:04.654808+00:00",
+  "updatedAt": "2026-03-11T05:04:09.218424+00:00",
   "items": [
+    {
+      "title": "Fish Audio Releases Fish Audio S2: A New Generation of Expressive Text-to-Speech (TTS) with Absurdly Controllable Emotion",
+      "url": "https://www.marktechpost.com/2026/03/10/fish-audio-releases-fish-audio-s2-a-new-generation-of-expressive-text-to-speech-tts-with-absurdly-controllable-emotion",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The landscape of Text-to-Speech (TTS) is moving away from modular pipelines toward integrated Large Audio Models (LAMs). Fish Audio’s release of S2-Pro, the flagship model within the Fish Speech ecosystem, represents a shift toward open architectures capable of high-fidelity, multi-speaker synthesis with sub-150ms latency. The release provides a framework for zero-shot voice cloning and granular [&#8230;]\nThe post Fish Audio Releases Fish Audio S2: A New Generation of Expressive Text-to-Speech (TTS) with Absurdly Controllable Emotion appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-37-1024x731.png",
+      "published": "2026-03-11T04:58:33+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.9171
+    },
+    {
+      "title": "How to Build a Self-Designing Meta-Agent That Automatically Constructs, Instantiates, and Refines Task-Specific AI Agents",
+      "url": "https://www.marktechpost.com/2026/03/10/how-to-build-a-self-designing-meta-agent-that-automatically-constructs-instantiates-and-refines-task-specific-ai-agents",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build a Meta-Agent that designs other agents automatically from a simple task description. We implement a system that analyzes the task, selects tools, chooses a memory architecture, configures a planner, and then instantiates a fully working agent runtime. We go beyond static agent templates and instead build a dynamic, self-configuring architecture [&#8230;]\nThe post How to Build a Self-Designing Meta-Agent That Automatically Constructs, Instantiates, and Refines Task-Specific AI Agents appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-36.png",
+      "published": "2026-03-11T04:23:22+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.4994
+    },
+    {
+      "title": "Google brings Gemini in Chrome to India",
+      "url": "https://techcrunch.com/2026/03/10/google-gemini-chrome-expands-to-india-canada-new-zealand",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As part of the rollout, Gemini will support languages including Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Telugu, and Tamil.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Chrome_Hero.png?resize=1200%2C677",
+      "published": "2026-03-11T02:30:00+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.2142
+    },
     {
       "title": "Internal Pentagon memo orders military commanders to remove Anthropic AI technology from key systems",
       "url": "https://www.cbsnews.com/news/pentagon-ai-anthropic-memo-remove-from-key-systems",
@@ -13,7 +55,7 @@
       "published": "2026-03-10T23:08:00+00:00",
       "firstSeen": "2026-03-10T23:55:23.443243+00:00",
       "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 2.0379
+      "score": 1.9828
     },
     {
       "title": "Anthropic Tells Judge Billions at Stake If US Shuns AI Tool",
@@ -27,7 +69,21 @@
       "published": "2026-03-10T22:47:55+00:00",
       "firstSeen": "2026-03-10T23:55:23.443243+00:00",
       "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 2.0288
+      "score": 1.9742
+    },
+    {
+      "title": "10 Hacks Every NotebookLM User Should Know",
+      "url": "https://lifehacker.com/tech/best-notebooklm-hacks",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google's best AI tool is incredibly capable—especially for power users. Google may spend more time promoting its Gemini AI chatbot, but NotebookLM …",
+      "image": "https://ic-cdn.flipboard.com/lifehacker.com/0494c276d0131911c12fb7ef98f8dcbbe64b4b19/_xlarge.jpeg",
+      "published": "2026-03-10T22:30:00+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.9665
     },
     {
       "title": "Why 2026 will be the year of governed cybersecurity AI",
@@ -40,8 +96,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-cybersecurity-nextgen.png",
       "published": "2026-03-10T22:17:24+00:00",
       "firstSeen": "2026-03-10T23:55:23.443243+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.0151
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.9612
     },
     {
       "title": "Clarity as strategy",
@@ -54,8 +110,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-wallpaper.png",
       "published": "2026-03-10T21:32:55+00:00",
       "firstSeen": "2026-03-10T22:59:45.892627+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.9954
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.9426
     },
     {
       "title": "“What Do I Do?”: NFL's Darron Lee Asked ChatGPT How to Cover Up Girlfriend’s Murder, Lawyers Say",
@@ -69,7 +125,7 @@
       "published": "2026-03-10T21:10:00+00:00",
       "firstSeen": "2026-03-10T23:55:23.443243+00:00",
       "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 1.9854
+      "score": 1.9332
     },
     {
       "title": "Nvidia is leveling up game visuals with the new DLSS 4.5 update",
@@ -83,7 +139,7 @@
       "published": "2026-03-10T20:59:04+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
       "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 1.9807
+      "score": 1.9287
     },
     {
       "title": "Monitoring employee AI use? Have an AI policy? The SEC will ask",
@@ -97,7 +153,7 @@
       "published": "2026-03-10T20:52:33+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
       "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 1.9779
+      "score": 1.9261
     },
     {
       "title": "Amazon Admits Extensive AI Use Is Wreaking Havoc on Its Core Business",
@@ -110,8 +166,8 @@
       "image": "https://ic-cdn.flipboard.com/futurism.com/9724fbb75d2ddf9589a62e6bf1548b5e2f9d5714/_xlarge.jpeg",
       "published": "2026-03-10T20:22:37+00:00",
       "firstSeen": "2026-03-10T22:59:45.892627+00:00",
-      "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 2.6651
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.614
     },
     {
       "title": "AI-Generated 'Actor' Tilly Norwood Drops a Music Video Ahead of the Oscars. It Sucks",
@@ -124,8 +180,8 @@
       "image": "https://ic-cdn.flipboard.com/gizmodo.com/3a96843f4023b13c5f924c29c456d1407bf9a9cd/_xlarge.jpeg",
       "published": "2026-03-10T20:20:02+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 1.964
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.913
     },
     {
       "title": "NVIDIA AI Releases Nemotron-Terminal: A Systematic Data Engineering Pipeline for Scaling LLM Terminal Agents",
@@ -138,8 +194,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-10-at-1.14.02-PM-1-150x150.png",
       "published": "2026-03-10T20:15:08+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 3.332
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 3.281
     },
     {
       "title": "Amazon launches its healthcare AI assistant on its website and app",
@@ -152,9 +208,9 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/amazon-health-ai.jpeg?resize=1200%2C675",
       "published": "2026-03-10T20:10:06+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
       "model_release": true,
-      "score": 8.7998
+      "score": 8.749
     },
     {
       "title": "How NVIDIA Builds Open Data for AI",
@@ -167,8 +223,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/open-data-for-ai.png",
       "published": "2026-03-10T19:49:28+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.2312
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.1809
     },
     {
       "title": "Is AI stealing our jobs? A survey of 2,000 IT executives reveals a complicated answer",
@@ -182,7 +238,7 @@
       "published": "2026-03-10T19:18:00+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
       "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 1.9382
+      "score": 1.8886
     },
     {
       "title": "Will AI take your job? This chart in an economic study by Anthropic may give you a hint. But the answer is complicated",
@@ -195,8 +251,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/f8b5d736432f5f6c08c169a389109a8a04a66d18/_xlarge.jpeg",
       "published": "2026-03-10T18:53:25+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 1.9281
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8791
     },
     {
       "title": "NVIDIA is reportedly building an enterprise AI agent platform",
@@ -209,8 +265,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NVIDIA-is-reportedly-building-an-enterprise-AI-agent-platform.png",
       "published": "2026-03-10T18:47:54+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.2259
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.177
     },
     {
       "title": "AI-powered apps can make money, but struggle with long-term retention, new data shows",
@@ -224,7 +280,7 @@
       "published": "2026-03-10T18:42:33+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
       "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 2.0637
+      "score": 2.0149
     },
     {
       "title": "AI-powered apps struggle with long-term retention, new report shows",
@@ -237,8 +293,22 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
       "published": "2026-03-10T18:42:33+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.0637
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.0149
+    },
+    {
+      "title": "Anthropic sues US over blacklisting; White House calls firm \"radical left, woke\"",
+      "url": "https://arstechnica.com/tech-policy/2026/03/anthropic-sues-us-over-blacklisting-white-house-calls-firm-radical-left-woke",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic says it was blacklisted for opposing autonomous weapons, mass surveillance. Anthropic sued the Trump administration yesterday in an attempt …",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/claude-app-1152x648.jpg",
+      "published": "2026-03-10T18:26:54+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.869
     },
     {
       "title": "AI Could Change Homebuying. How Listings and Negotiations Are Already Shifting",
@@ -252,7 +322,7 @@
       "published": "2026-03-10T18:02:14+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
       "lastSeen": "2026-03-10T22:59:45.892627+00:00",
-      "score": 1.9075
+      "score": 1.8597
     },
     {
       "title": "ChatGPT can now create interactive visuals to help you understand math and science concepts",
@@ -265,8 +335,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/b981b12ef9cc32c34d6bc335f5f944440d1547f4/_large.jpeg",
       "published": "2026-03-10T17:51:25+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.0433
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.9956
     },
     {
       "title": "ChatGPT can now generate visuals for math and science lessons",
@@ -279,8 +349,8 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/5490efcc11437ce38d53c3bc30d08360a06aca44/_xlarge.png",
       "published": "2026-03-10T17:15:42+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 1.8893
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8424
     },
     {
       "title": "Amazon wins court order to block Perplexity's AI shopping agent",
@@ -294,7 +364,7 @@
       "published": "2026-03-10T17:12:09+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
       "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 2.1879
+      "score": 2.1411
     },
     {
       "title": "Former NFL player sought AI advice before police found girlfriend dead: report",
@@ -308,7 +378,21 @@
       "published": "2026-03-10T17:10:12+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
       "lastSeen": "2026-03-10T19:55:29.113859+00:00",
-      "score": 1.8871
+      "score": 1.8404
+    },
+    {
+      "title": "ChatGPT's Latest Homework Help Tool Will Show How Math and Science Concepts Work",
+      "url": "https://www.cnet.com/tech/services-and-software/chatgpt-interactive-learning-math-science-news",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI added help for more than 70 different math and science concepts in algebra, physics and geometry. Some of my strongest memories from growing up, while not my fondest, are struggling with my math homework at the kitchen table while my parents fruitlessly tried to help me. OpenAI today hopes …",
+      "image": "https://ic-cdn.flipboard.com/cnet.com/fbc5bebe45b450733222d754ebe07e8023a29236/_xlarge.jpeg",
+      "published": "2026-03-10T17:00:09+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8367
     },
     {
       "title": "ChatGPT will now generate interactive visuals to help you with math and science concepts",
@@ -322,7 +406,7 @@
       "published": "2026-03-10T17:00:00+00:00",
       "firstSeen": "2026-03-10T22:59:45.892627+00:00",
       "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 1.8832
+      "score": 1.8367
     },
     {
       "title": "Why AI’s Next Breakthrough Must Be Rooted In Ethics And Safety",
@@ -336,7 +420,7 @@
       "published": "2026-03-10T16:49:00+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
       "lastSeen": "2026-03-10T21:40:17.801229+00:00",
-      "score": 1.8789
+      "score": 1.8327
     },
     {
       "title": "As Open Models Spark AI Boom, NVIDIA Jetson Brings It to Life at the Edge",
@@ -349,8 +433,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/Jetson_OSS_KV_new_v013-scaled.jpg",
       "published": "2026-03-10T16:43:40+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.0169
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.9707
     },
     {
       "title": "The iconic Moleskine notebook is nearly 50% off right now",
@@ -363,8 +447,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/4c9e507267ac3da10788b81ca6b6eb5191acbe7e/_xlarge.jpeg",
       "published": "2026-03-10T16:43:19+00:00",
       "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 1.8768
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8306
     },
     {
       "title": "Nvidia-Backed Nscale Raises $2B as AI Drives ‘Largest Infrastructure Buildout in Human History’",
@@ -377,8 +461,8 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-2026-03-11T003159.412.png",
       "published": "2026-03-10T16:42:47+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.8766
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8304
     },
     {
       "title": "An AI Agent Blackmailed a Developer. Now What?",
@@ -391,8 +475,8 @@
       "image": "https://ic-cdn.flipboard.com/ieee.org/f54a25b7a2b833c952c764758b07a917a88e9eee/_xlarge.jpeg",
       "published": "2026-03-10T16:08:43+00:00",
       "firstSeen": "2026-03-10T19:55:29.113859+00:00",
-      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
-      "score": 2.1636
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.1182
     },
     {
       "title": "AgentMail raises $6M to build an email service for AI agents",
@@ -405,8 +489,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_3846.jpeg?resize=1200%2C713",
       "published": "2026-03-10T16:00:00+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 3.0004
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.9551
     },
     {
       "title": "Fake Gemini AI Chatbot Promotes ‘Google Coin’ in New Crypto Scam",
@@ -419,8 +503,8 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-03-10T233525.266.png",
       "published": "2026-03-10T15:38:43+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.8524
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8076
     },
     {
       "title": "NVIDIA Virtualizes Game Development With RTX PRO Server",
@@ -433,8 +517,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gdc-rtx-pro-server-1920x1080-1.jpg",
       "published": "2026-03-10T15:30:07+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.2892
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.2446
     },
     {
       "title": "NVIDIA and ComfyUI Streamline Local AI Video Generation for Game Developers and Creators at GDC",
@@ -447,8 +531,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-03-10T15:30:05+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.2892
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.2446
     },
     {
       "title": "AI is getting scary good at finding hidden software bugs - even in decades-old code",
@@ -461,8 +545,8 @@
       "image": "https://ic-cdn.flipboard.com/zdnet.com/5872e063df9dc528d9f9328e1115b8a6524f4fd9/_xlarge.jpeg",
       "published": "2026-03-10T15:28:41+00:00",
       "firstSeen": "2026-03-10T22:59:45.892627+00:00",
-      "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 1.8487
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8041
     },
     {
       "title": "Anthropic sues the US government over its Pentagon blacklist",
@@ -475,92 +559,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Pentagon-labels-Anthropic-a-supply-chain-risk.png",
       "published": "2026-03-10T15:18:54+00:00",
       "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.8451
-    },
-    {
-      "title": "Immigration agents wearing Meta’s AI glasses is a huge red flag. How are they getting away with it?",
-      "url": "https://www.independent.co.uk/news/world/americas/us-politics/immigration-officers-meta-ai-glasses-recording-b2935642.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Immigration agents are wearing personal pairs of Meta AI smart glasses to surveil communities, alarming protesters and civil liberties experts who …",
-      "image": "https://ic-cdn.flipboard.com/independent.co.uk/ac600e3bf50a70e018b7449966d5550fc7ee0e27/_xlarge.jpeg",
-      "published": "2026-03-10T15:09:15+00:00",
-      "firstSeen": "2026-03-10T22:59:45.892627+00:00",
-      "lastSeen": "2026-03-10T23:55:23.443243+00:00",
-      "score": 2.1415
-    },
-    {
-      "title": "Thinking Machines Lab inks massive compute deal with Nvidia",
-      "url": "https://techcrunch.com/2026/03/10/thinking-machines-lab-inks-massive-compute-deal-with-nvidia",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The multi-year deal involves at least a gigawatt of compute power and also includes a strategic investment from Nvidia.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-1730510668.jpg?resize=1200%2C800",
-      "published": "2026-03-10T15:08:39+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.9813
-    },
-    {
-      "title": "Fake Claude Code Spreads Malware to Windows, macOS Users",
-      "url": "https://www.techrepublic.com/article/news-fake-claude-code-install-pages-malware-windows-macos",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Attackers are using fake Claude Code install pages and malicious search ads to spread infostealer malware targeting Windows and macOS systems.\nThe post Fake Claude Code Spreads Malware to Windows, macOS Users appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03102026-fake-claude-code.jpg",
-      "published": "2026-03-10T15:02:46+00:00",
-      "firstSeen": "2026-03-10T19:00:04.202544+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.8392
-    },
-    {
-      "title": "Google gives in to users’ complaints over AI-powered ‘Ask Photos’ search feature",
-      "url": "https://techcrunch.com/2026/03/10/google-gives-in-to-users-complaints-over-ai-powered-ask-photos-search-feature",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The option appears on the Google Photos Search screen and lets users pick which experience they want.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/google-photos-GettyImages-2165351446.jpg?w=1024",
-      "published": "2026-03-10T14:58:29+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.9776
-    },
-    {
-      "title": "Meta has bought Moltbook, the AI agent ‘social network’",
-      "url": "https://thenextweb.com/news/meta-acquires-moltbook-ai-agent-social-network",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Do you remember the name? Moltbook, the vibe-coded platform, famous for an unsecured database that let humans impersonate AI agents, is joining Meta Superintelligence Labs. Moltbook was, in many ways, a product of chaos. Its code was written almost entirely by an AI assistant. Its security was so porous that anyone with basic technical knowledge [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-has-bought-Moltbook.png",
-      "published": "2026-03-10T14:50:19+00:00",
-      "firstSeen": "2026-03-10T15:13:25.916572+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 2.1346
-    },
-    {
-      "title": "‘AI brain fry’ is real — and it’s making workers more exhausted, not more productive, new study finds",
-      "url": "https://fortune.com/2026/03/10/ai-brain-fry-workplace-productivity-bcg-study",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "If you’re one of the early AI adopters, maybe your brain is totally fried. Take Francesco Bonacci, a software engineer and founder of Cua AI, who …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/3b6da11bbcb19d67756bae394043b2556a5c46fa/_xlarge.jpeg",
-      "published": "2026-03-10T14:40:38+00:00",
-      "firstSeen": "2026-03-10T21:40:17.801229+00:00",
-      "lastSeen": "2026-03-10T22:59:45.892627+00:00",
-      "score": 1.8311
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.8007
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -573,8 +573,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.668
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.6414
     },
     {
       "title": "Introducing... Life Without",
@@ -587,8 +587,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.1658
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.1632
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -601,8 +601,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-11T03:00:04.654808+00:00",
-      "score": 1.1945
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 1.1942
     },
     {
       "title": "The Life Scientific: Julia Simner",
@@ -619,11 +619,5 @@
       "score": 1.19
     }
   ],
-  "errors": [
-    {
-      "source": "Flipboard AI",
-      "url": "https://flipboard.com/topic/artificialintelligence.rss",
-      "error": "HTTP Error 502: Bad Gateway"
-    }
-  ]
+  "errors": []
 }

@@ -1,12 +1,49 @@
 {
   "date": "2026-03-11",
-  "updatedAt": "2026-03-11T03:00:04.654808+00:00",
-  "items": [],
-  "errors": [
+  "updatedAt": "2026-03-11T05:04:09.218424+00:00",
+  "items": [
     {
-      "source": "Flipboard AI",
-      "url": "https://flipboard.com/topic/artificialintelligence.rss",
-      "error": "HTTP Error 502: Bad Gateway"
+      "title": "Fish Audio Releases Fish Audio S2: A New Generation of Expressive Text-to-Speech (TTS) with Absurdly Controllable Emotion",
+      "url": "https://www.marktechpost.com/2026/03/10/fish-audio-releases-fish-audio-s2-a-new-generation-of-expressive-text-to-speech-tts-with-absurdly-controllable-emotion",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The landscape of Text-to-Speech (TTS) is moving away from modular pipelines toward integrated Large Audio Models (LAMs). Fish Audio’s release of S2-Pro, the flagship model within the Fish Speech ecosystem, represents a shift toward open architectures capable of high-fidelity, multi-speaker synthesis with sub-150ms latency. The release provides a framework for zero-shot voice cloning and granular [&#8230;]\nThe post Fish Audio Releases Fish Audio S2: A New Generation of Expressive Text-to-Speech (TTS) with Absurdly Controllable Emotion appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-37-1024x731.png",
+      "published": "2026-03-11T04:58:33+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.9171
+    },
+    {
+      "title": "How to Build a Self-Designing Meta-Agent That Automatically Constructs, Instantiates, and Refines Task-Specific AI Agents",
+      "url": "https://www.marktechpost.com/2026/03/10/how-to-build-a-self-designing-meta-agent-that-automatically-constructs-instantiates-and-refines-task-specific-ai-agents",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build a Meta-Agent that designs other agents automatically from a simple task description. We implement a system that analyzes the task, selects tools, chooses a memory architecture, configures a planner, and then instantiates a fully working agent runtime. We go beyond static agent templates and instead build a dynamic, self-configuring architecture [&#8230;]\nThe post How to Build a Self-Designing Meta-Agent That Automatically Constructs, Instantiates, and Refines Task-Specific AI Agents appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-36.png",
+      "published": "2026-03-11T04:23:22+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.4994
+    },
+    {
+      "title": "Google brings Gemini in Chrome to India",
+      "url": "https://techcrunch.com/2026/03/10/google-gemini-chrome-expands-to-india-canada-new-zealand",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As part of the rollout, Gemini will support languages including Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Telugu, and Tamil.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Chrome_Hero.png?resize=1200%2C677",
+      "published": "2026-03-11T02:30:00+00:00",
+      "firstSeen": "2026-03-11T05:04:09.218424+00:00",
+      "lastSeen": "2026-03-11T05:04:09.218424+00:00",
+      "score": 2.2142
     }
-  ]
+  ],
+  "errors": []
 }
