@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T19:54:44.510832+00:00",
+  "updatedAt": "2026-03-11T21:50:19.641054+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -496,6 +496,34 @@
     "https://openai.com/index/designing-agents-to-resist-prompt-injection": {
       "image": "",
       "checkedAt": "2026-03-11T19:54:44.510832+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/lovable-says-it-added-100m-in-revenue-last-month-alone-with-just-146-employees": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200,800",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://www.techrepublic.com/article/news-android-trends-defining-smartphones-2026": {
+      "image": "",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://www.techrepublic.com/article/news-salesforce-agentforce-contact-center-launch": {
+      "image": "",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-agents-security-risks-governance": {
+      "image": "",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-acquires-moltbook-bot-only-social-network": {
+      "image": "",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://openai.com/index/rakuten": {
+      "image": "",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://www.techrepublic.com/article/news-amazon-health-ai-app-site": {
+      "image": "",
+      "checkedAt": "2026-03-11T21:50:19.641054+00:00"
     }
   }
 }
