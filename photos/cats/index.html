@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jez237 — Cat Corner</title>
-  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/styles.css" />
   <style>
     .masonry {
       columns: 3;
@@ -109,9 +109,9 @@
     <nav>
       <div class="brand">jez237-site</div>
       <div class="links">
-        <a href="../index.html">Home</a>
-        <a href="../ai-news/">AI News</a>
-        <a href="./index.html">Cats</a>
+        <a href="../../index.html">Home</a>
+        <a href="../">Photos</a>
+        <a href="./">Cats</a>
       </div>
     </nav>
   </header>
@@ -147,32 +147,32 @@
     let loaded = 0;
 
     const photos = [
-      { src: "../assets/cats/marty-cat-tree.jpg", alt: "Marty on cat tree", caption: "Marty on lookout duty" },
-      { src: "../assets/cats/luca-cosmo.jpg", alt: "Luca and Cosmo together", caption: "Luca & Cosmo" },
-      { src: "../assets/cats/taco-belly.jpg", alt: "Taco relaxing on blanket", caption: "Taco (belly mode)" },
-      { src: "../assets/cats/luca-gaming.jpg", alt: "Luca pawing at game screen", caption: "Luca gaming assistant" },
-      { src: "../assets/cats/taco-portrait.jpg", alt: "Taco portrait", caption: "Taco: professional model" },
-      { src: "../assets/cats/marty-closeup.jpg", alt: "Marty closeup", caption: "Marty's \"we need to talk\" face" },
-      { src: "../assets/cats/luca-napping.jpg", alt: "Luca napping", caption: "Luca: do not disturb" },
-      { src: "../assets/cats/cosmo-sprawl.jpg", alt: "Cosmo sprawled on carpet", caption: "Cosmo vs. the spring toy (spring winning)" },
-      { src: "../assets/cats/luca-toy-hoard.jpg", alt: "Luca guarding toy box", caption: "Luca and the treasure chest of chaos" },
-      { src: "../assets/cats/luca-blanket-burrito.jpg", alt: "Luca wrapped in blanket", caption: "Luca: certified blanket burrito" },
-      { src: "../assets/cats/cosmo-throne.jpg", alt: "Cosmo sitting on ottoman", caption: "Cosmo: the void on his throne" },
-      { src: "../assets/cats/luca-king-of-the-tower.jpg", alt: "Luca on top of scratching post", caption: "Luca: king of the tower (Cosmo plotting below)" },
-      { src: "../assets/cats/taco-cat-tree-loaf.jpg", alt: "Taco loafing on cat tree", caption: "Taco: loaf mode activated, green eyes locked on" },
-      { src: "../assets/cats/luca-cosmo-bunk-beds.jpg", alt: "Luca and Cosmo on cat tree levels", caption: "Luca & Cosmo: bunk bed rules (top bunk picks the show)" },
-      { src: "../assets/cats/luca-lap-nap.jpg", alt: "Luca napping on lap", caption: "Luca: claimed your lap, no refunds" },
-      { src: "../assets/cats/taco-stoop-boss.jpg", alt: "Taco sitting on concrete step", caption: "Taco: the stoop boss sees all" },
-      { src: "../assets/cats/kittens-and-taco-box.jpg", alt: "Luca and Cosmo as kittens in a box with Taco watching", caption: "The origin story: two tiny voids and their bodyguard" },
-      { src: "../assets/cats/luca-zen-master.jpg", alt: "Luca sleeping closeup", caption: "Luca: achieving inner peace (zero thoughts detected)" },
-      { src: "../assets/cats/kitten-hammock-claws.jpg", alt: "Black kitten sleeping in hammock with claws out", caption: "Tiny void, big claws, zero worries" },
-      { src: "../assets/cats/luca-passed-out.jpg", alt: "Luca sleeping closeup on cat tree", caption: "Luca: out cold, whiskers at maximum deploy" },
-      { src: "../assets/cats/luca-cosmo-cuddle-puddle.jpg", alt: "Luca and Cosmo cuddled together on red blanket", caption: "Luca & Cosmo: one brain cell, shared custody" },
-      { src: "../assets/cats/luca-cosmo-synchronized-nap.jpg", alt: "Luca and Cosmo napping side by side", caption: "Luca & Cosmo: synchronized napping, Olympic gold" },
-      { src: "../assets/cats/luca-youtube-critic.jpg", alt: "Luca watching cat videos on YouTube", caption: "Luca: watching his own adoption tape like it's a documentary" },
-      { src: "../assets/cats/luca-youtube-standing.jpg", alt: "Luca standing up reaching at adoption video on screen", caption: "Luca: \"that's me! I REMEMBER THIS!\"" },
-      { src: "../assets/cats/luca-mega-yawn.jpg", alt: "Luca mid-yawn on cat tree", caption: "Luca: summoning the void from within" },
-      { src: "../assets/cats/cosmo-on-dad.jpg", alt: "Cosmo sleeping on Jez's chest", caption: "Cosmo: you're not getting up. Ever." },
+      { src: "images/marty-cat-tree.jpg", alt: "Marty on cat tree", caption: "Marty on lookout duty" },
+      { src: "images/luca-cosmo.jpg", alt: "Luca and Cosmo together", caption: "Luca & Cosmo" },
+      { src: "images/taco-belly.jpg", alt: "Taco relaxing on blanket", caption: "Taco (belly mode)" },
+      { src: "images/luca-gaming.jpg", alt: "Luca pawing at game screen", caption: "Luca gaming assistant" },
+      { src: "images/taco-portrait.jpg", alt: "Taco portrait", caption: "Taco: professional model" },
+      { src: "images/marty-closeup.jpg", alt: "Marty closeup", caption: "Marty's \"we need to talk\" face" },
+      { src: "images/luca-napping.jpg", alt: "Luca napping", caption: "Luca: do not disturb" },
+      { src: "images/cosmo-sprawl.jpg", alt: "Cosmo sprawled on carpet", caption: "Cosmo vs. the spring toy (spring winning)" },
+      { src: "images/luca-toy-hoard.jpg", alt: "Luca guarding toy box", caption: "Luca and the treasure chest of chaos" },
+      { src: "images/luca-blanket-burrito.jpg", alt: "Luca wrapped in blanket", caption: "Luca: certified blanket burrito" },
+      { src: "images/cosmo-throne.jpg", alt: "Cosmo sitting on ottoman", caption: "Cosmo: the void on his throne" },
+      { src: "images/luca-king-of-the-tower.jpg", alt: "Luca on top of scratching post", caption: "Luca: king of the tower (Cosmo plotting below)" },
+      { src: "images/taco-cat-tree-loaf.jpg", alt: "Taco loafing on cat tree", caption: "Taco: loaf mode activated, green eyes locked on" },
+      { src: "images/luca-cosmo-bunk-beds.jpg", alt: "Luca and Cosmo on cat tree levels", caption: "Luca & Cosmo: bunk bed rules (top bunk picks the show)" },
+      { src: "images/luca-lap-nap.jpg", alt: "Luca napping on lap", caption: "Luca: claimed your lap, no refunds" },
+      { src: "images/taco-stoop-boss.jpg", alt: "Taco sitting on concrete step", caption: "Taco: the stoop boss sees all" },
+      { src: "images/kittens-and-taco-box.jpg", alt: "Luca and Cosmo as kittens in a box with Taco watching", caption: "The origin story: two tiny voids and their bodyguard" },
+      { src: "images/luca-zen-master.jpg", alt: "Luca sleeping closeup", caption: "Luca: achieving inner peace (zero thoughts detected)" },
+      { src: "images/kitten-hammock-claws.jpg", alt: "Black kitten sleeping in hammock with claws out", caption: "Tiny void, big claws, zero worries" },
+      { src: "images/luca-passed-out.jpg", alt: "Luca sleeping closeup on cat tree", caption: "Luca: out cold, whiskers at maximum deploy" },
+      { src: "images/luca-cosmo-cuddle-puddle.jpg", alt: "Luca and Cosmo cuddled together on red blanket", caption: "Luca & Cosmo: one brain cell, shared custody" },
+      { src: "images/luca-cosmo-synchronized-nap.jpg", alt: "Luca and Cosmo napping side by side", caption: "Luca & Cosmo: synchronized napping, Olympic gold" },
+      { src: "images/luca-youtube-critic.jpg", alt: "Luca watching cat videos on YouTube", caption: "Luca: watching his own adoption tape like it's a documentary" },
+      { src: "images/luca-youtube-standing.jpg", alt: "Luca standing up reaching at adoption video on screen", caption: "Luca: \"that's me! I REMEMBER THIS!\"" },
+      { src: "images/luca-mega-yawn.jpg", alt: "Luca mid-yawn on cat tree", caption: "Luca: summoning the void from within" },
+      { src: "images/cosmo-on-dad.jpg", alt: "Cosmo sleeping on Jez's chest", caption: "Cosmo: you're not getting up. Ever." },
     ];
 
     const gallery = document.getElementById('gallery');
