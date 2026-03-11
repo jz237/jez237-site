@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T17:00:01.491672+00:00",
+  "updatedAt": "2026-03-11T18:04:29.679665+00:00",
   "items": [
     {
       "title": "WordPress debuts a private workspace that runs in your browser via a new service, my.WordPress.net",
@@ -8,12 +8,26 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "WordPress’s new browser-based service lets users create private sites without hosting or signup, turning the platform into a personal workspace for writing, research, and AI tools.",
+      "summary": "WordPress’s new browser-based service lets users create private sites without hosting or signing up, turning the platform into a personal workspace for writing, research, and AI tools.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200%2C493",
       "published": "2026-03-11T16:43:59+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.9819
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.9498
+    },
+    {
+      "title": "Former NFL Player Reportedly Asked ChatGPT For Help After Allegedly Killing Girlfriend",
+      "url": "https://www.blackenterprise.com/former-nfl-player-chatgpt-killing-girlfriend",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A judge described the alleged killing as \"beyond that necessary to produce death.\" A former NFL player charged for allegedly killing his girlfriend …",
+      "image": "https://blackenterprise-prod.b-cdn.net/wp-content/blogs.dir/1/files/2023/08/iStock-1546223462-scaled-1.jpg",
+      "published": "2026-03-11T16:30:00+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.1029
     },
     {
       "title": "A First Amendment right not to use AI for evil?",
@@ -27,7 +41,7 @@
       "published": "2026-03-11T16:15:29+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.1275
+      "score": 2.0959
     },
     {
       "title": "Rivian spin-out Mind Robotics raises $500M for industrial AI-powered robots",
@@ -40,8 +54,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/rj-scaringe.jpeg?resize=1200%2C900",
       "published": "2026-03-11T16:12:02+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.2658
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.2342
     },
     {
       "title": "Delivery Robots Hit Streets Backed by Niantic’s Pokémon GO-Era Mapping",
@@ -54,8 +68,22 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_je1bk8je1bk8je1b.jpg",
       "published": "2026-03-11T16:07:07+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.1234
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0918
+    },
+    {
+      "title": "Manufact raises $6.3M as MCP becomes the ‘USB-C for AI’ powering ChatGPT and Claude apps",
+      "url": "https://venturebeat.com/infrastructure/manufact-raises-usd6-3m-as-mcp-becomes-the-usb-c-for-ai-powering-chatgpt-and",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For decades, software companies designed their products for a single type of customer: a human being staring at a screen. Every button, menu, and dashboard existed to translate a person’s intention into a machine’s action. But a small startup based in San Francisco and Zurich believes that era is …",
+      "image": "https://images.ctfassets.net/jdtwqhzvc2n1/Sj1afsjJ2MMCfjvWXP6CN/0c19848fe41b4e3d1ca6d9ddcd94c5ae/nuneybits_Vector_art_of_USB-C_plug_transforming_into_cascading__62298a94-828e-4385-ac47-508e83927c72.webp?w=800&q=75",
+      "published": "2026-03-11T16:01:00+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0889
     },
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -68,9 +96,23 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/nemotron-3-super-1920x1080-1.jpg",
       "published": "2026-03-11T16:00:21+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
       "model_release": true,
-      "score": 9.56
+      "score": 9.5286
+    },
+    {
+      "title": "U.S. military is using AI to help plan Iran air attacks, sources say, as lawmakers call for oversight",
+      "url": "https://www.nbcnews.com/tech/tech-news/us-military-using-ai-help-plan-iran-air-attacks-sources-say-lawmakers-rcna262150",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic’s Claude AI systems have become a crucial tool for the military despite the company’s clashes with the Defense Department. As the U.S. military expands its use of AI tools to pinpoint targets for airstrikes in Iran, members of Congress are calling for guardrails and greater oversight of …",
+      "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2025-10/251027-military-zz-7d1f06.jpg",
+      "published": "2026-03-11T15:54:16+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0856
     },
     {
       "title": "Code Concepts: A Large-Scale Synthetic Dataset Generated from Programming Concept Seeds",
@@ -83,8 +125,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/synthetic-code-concepts.png",
       "published": "2026-03-11T15:50:15+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.395
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.3637
     },
     {
       "title": "Meta rolls out new scam detection across WhatsApp, Messenger, and Facebook",
@@ -97,8 +139,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-scam-detections.png",
       "published": "2026-03-11T15:30:43+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.1054
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0744
     },
     {
       "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
@@ -111,8 +153,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 3.2361
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 3.2053
     },
     {
       "title": "BlackRock is splashing $100 million on training plumbers, electricians, and HVAC technicians as its CEO flags a skilled trade worker shortage",
@@ -125,8 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/be17fbd4e24451ecae3b739645cf97d8384644c4/_xlarge.jpeg",
       "published": "2026-03-11T15:08:57+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.3949
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.3641
     },
     {
       "title": "NVIDIA GTC 2026: Live Updates on What’s Next in AI",
@@ -139,8 +181,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/JL1_0473-scaled.jpg",
       "published": "2026-03-11T15:00:08+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.2306
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.2
     },
     {
       "title": "Amazon expands a program that lets customers shop from other retailers’ sites",
@@ -153,8 +195,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/shop-direct-.jpeg?resize=1200%2C675",
       "published": "2026-03-11T14:48:30+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.225
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.1946
     },
     {
       "title": "Pixar's Hoppers YouTube stream is the most delightful thing you'll see today",
@@ -167,8 +209,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/8ddc7a24d4d2827efec55856e47192254a484380/_large.jpeg",
       "published": "2026-03-11T14:41:31+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0817
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0513
     },
     {
       "title": "Microsoft and retired military chiefs back AI company Anthropic in court fight against Pentagon",
@@ -181,8 +223,8 @@
       "image": "https://ic-cdn.flipboard.com/apnews.com/cd8091e11e2a178382be61d017e6570a7c1a4468/_large.jpeg",
       "published": "2026-03-11T14:13:02+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0682
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0382
     },
     {
       "title": "Canva can now turn a flat AI image into a fully editable design in seconds",
@@ -195,8 +237,8 @@
       "image": "https://ic-cdn.flipboard.com/digitaltrends.com/d07fe6c541342f5df8ea4fee27f324447b69b858/_xlarge.jpeg",
       "published": "2026-03-11T14:01:17+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0626
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0329
     },
     {
       "title": "Canopii looks to succeed where past indoor farms have not",
@@ -209,8 +251,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Canopii.jpg?resize=1200%2C900",
       "published": "2026-03-11T14:00:00+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.202
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.1723
     },
     {
       "title": "I was interviewed by an AI bot for a job",
@@ -223,8 +265,22 @@
       "image": "https://ic-cdn.flipboard.com/theverge.com/75140f32fbdb4ba2bee85a2b9a335563f150beca/_xlarge.jpeg",
       "published": "2026-03-11T14:00:00+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.062
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0323
+    },
+    {
+      "title": "Ex-NFL Star Asked ChatGPT for Advice After Allegedly Doing the Unthinkable to His Fiancée",
+      "url": "https://www.theroot.com/ex-nfl-star-asked-chatgpt-for-advice-after-allegedly-do-2000094041",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nowadays, people often look to AI technology for advice about everyday tasks: recipes, vacation planning and other mundane topics. However, for one …",
+      "image": "https://ic-cdn.flipboard.com/theroot.com/3a4504b7e8e526e738a8040798cef27f0a0dd4b3/_large.jpeg",
+      "published": "2026-03-11T13:13:53+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.0115
     },
     {
       "title": "AI performer Tilly Norwood in first music video as Hollywood grapples with evolving technology",
@@ -237,8 +293,22 @@
       "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/03/11/b07ac809-67cf-4cdc-8c38-6cc981336146/thumbnail/1200x630/42ae6cbebb1d26aaa21a4ded418518a3/cbsn-fusion-ai-performer-tilly-norwood-in-first-music-video-as-hollywood-grapples-with-evolving-technology-thumbnail.jpg",
       "published": "2026-03-11T13:09:00+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.7384
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.7094
+    },
+    {
+      "title": "Canva’s new AI tool will break your design process (in a good way)",
+      "url": "https://www.fastcompany.com/91506292/canva-new-magic-layers-ai-tool-will-break-your-design-process",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The newly launched Magic Layers feature dissects flat images into native objects, putting an end to the frustrating era of pixel-locked assets. Canva’s new AI tool, launching today, is going to save time, money, and headaches for so many people. Called Magic Layers, it turns any flat bitmap image …",
+      "image": "https://ic-cdn.flipboard.com/fastcompany.com/fa1868196f7dc9e59b71ee769d7b0d60bd477ebc/_xlarge.webp",
+      "published": "2026-03-11T13:00:00+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.7054
     },
     {
       "title": "Hustlers are cashing in on China’s OpenClaw AI craze",
@@ -251,8 +321,8 @@
       "image": "https://ic-cdn.flipboard.com/technologyreview.com/ae927b0790416679600da2fd1bb131520dcca9c6/_xlarge.jpeg",
       "published": "2026-03-11T12:46:21+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.8681
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.8393
     },
     {
       "title": "Couples Are Having Threesomes With AI",
@@ -265,8 +335,8 @@
       "image": "https://ic-cdn.flipboard.com/vice.com/e7c3277f95ff922c504ed1407ad2f1bdf6497048/_xlarge.jpeg",
       "published": "2026-03-11T12:42:35+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0264
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9977
     },
     {
       "title": "The Most Disruptive Company in the World",
@@ -280,7 +350,7 @@
       "published": "2026-03-11T12:00:06+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.7074
+      "score": 2.6792
     },
     {
       "title": "The best external hard drives: back up and transfer images and video without the fuss",
@@ -293,8 +363,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/212072cf59efd9d29fa21043b62051d6932ef3c9/_xlarge.jpeg",
       "published": "2026-03-11T12:00:00+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0073
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9792
     },
     {
       "title": "Scientists Are Trying to Train Lab-Grown Brains. The Brains Have Started to Solve Problems.",
@@ -307,8 +377,8 @@
       "image": "https://ic-cdn.flipboard.com/hearstapps.com/acc7226762b73ecd8425792d358916ff1fd5a0b6/_xlarge.jpeg",
       "published": "2026-03-11T12:00:00+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.0073
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9792
     },
     {
       "title": "Is AI replacing the work of skilled radiologists? They give us their thoughts",
@@ -321,8 +391,8 @@
       "image": "https://ic-cdn.flipboard.com/theconversation.com/84a72fcde8604a72dc39bbabc6643e472239cde0/_xlarge.jpeg",
       "published": "2026-03-11T11:26:47+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9927
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.965
     },
     {
       "title": "Microsoft Takes a Stand Against the Trump Administration",
@@ -335,8 +405,8 @@
       "image": "https://static01.nyt.com/images/2026/03/11/multimedia/11db-nadella-cztf/11db-nadella-cztf-facebookJumbo.jpg",
       "published": "2026-03-11T11:18:33+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9892
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9615
     },
     {
       "title": "Paris startup Lemrock raises €6M to become the commerce layer inside AI agents",
@@ -349,8 +419,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Startup-Lemrock-raises-E6M-to-fix-agentic-commerce.png",
       "published": "2026-03-11T11:18:18+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.289
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.2614
     },
     {
       "title": "I'm a CMO who thinks AI has brought a long-overdue reckoning for top marketers. Here's how I'm adapting for the future.",
@@ -364,7 +434,35 @@
       "published": "2026-03-11T11:10:01+00:00",
       "firstSeen": "2026-03-11T15:08:09.955763+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.6854
+      "score": 2.6579
+    },
+    {
+      "title": "From model to agent: Equipping the Responses API with a computer environment",
+      "url": "https://openai.com/index/equip-responses-api-computer-environment",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "How OpenAI built an agent runtime using the Responses API, shell tool, and hosted containers to run secure, scalable agents with files, tools, and state.",
+      "image": "",
+      "published": "2026-03-11T11:00:00+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 3.3037
+    },
+    {
+      "title": "Wayfair boosts catalog accuracy and support speed with OpenAI",
+      "url": "https://openai.com/index/wayfair",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Wayfair uses OpenAI models to improve ecommerce support and product catalog accuracy, automating ticket triage and enhancing millions of product attributes at scale.",
+      "image": "",
+      "published": "2026-03-11T11:00:00+00:00",
+      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.3037
     },
     {
       "title": "NVIDIA makes &#8216;significant investment&#8217; in Mira Murati&#8217;s Thinking Machines Lab",
@@ -377,8 +475,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Thinking-Machines-Lab-secures-NVIDIA-investment.png",
       "published": "2026-03-11T10:59:24+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9809
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9535
     },
     {
       "title": "I Asked ChatGPT Which Store Is Better for Savings: Sam’s Club vs. Costco",
@@ -392,7 +490,7 @@
       "published": "2026-03-11T10:56:56+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
       "lastSeen": "2026-03-11T11:49:26.460041+00:00",
-      "score": 1.9798
+      "score": 1.9525
     },
     {
       "title": "EchoPrime &#8211; Cedars-Sinai&#8217;s AI system can read echocardiograms and write the report",
@@ -405,9 +503,9 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Cedars-Sinais-AI-system-can-read-echocardiograms.png",
       "published": "2026-03-11T10:36:04+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
       "model_release": true,
-      "score": 8.3209
+      "score": 8.2938
     },
     {
       "title": "These are the ‘incurable’ diseases that AI has been pioneering treatments for that scientists long thought were impossible",
@@ -421,7 +519,7 @@
       "published": "2026-03-11T10:25:41+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9664
+      "score": 1.9395
     },
     {
       "title": "French insurtech Alan hits €5B valuation",
@@ -434,8 +532,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/French-insurtech-Alan-hits-E5B-valuation.png",
       "published": "2026-03-11T10:18:09+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9633
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9364
     },
     {
       "title": "Swiss VC Emerald Technology Ventures hits €100M milestone for its Global Water Fund II",
@@ -448,8 +546,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Emerald-Technology-Ventures-hits-E100M-.png",
       "published": "2026-03-11T10:05:19+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.9578
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 2.9311
     },
     {
       "title": "Claude just made two of its best features free — here’s how to use Projects and Artifacts",
@@ -462,106 +560,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/883b74ccf23243da7d4a90cf2bb25cbc5429d1c9/_xlarge.jpeg",
       "published": "2026-03-11T10:03:00+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9569
-    },
-    {
-      "title": "Elon Musk’s Grok sparks outrage with vulgar posts about religion and soccer tragedies",
-      "url": "https://www.techradar.com/ai-platforms-assistants/elon-musks-grok-sparks-outrage-with-vulgar-posts-about-religion-and-soccer-tragedies",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "X's Grok AI chatbot is once again under scrutiny after users discovered that a particular style of prompting could push it into producing deeply …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/bbd80b5c41b59438fd54c1bb21f58742904c0487/_xlarge.jpeg",
-      "published": "2026-03-11T09:57:18+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9545
-    },
-    {
-      "title": "Amazon’s Health AI is now open to all US customers",
-      "url": "https://thenextweb.com/news/amazon-health-ai-launches-website-app-one-medical-prime",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Three years after its $3.9 billion bet on One Medical, Amazon is deploying its healthcare AI assistant across its main website and shopping app, in a direct challenge to OpenAI’s ChatGPT Health and Anthropic’s Claude for Healthcare. Amazon has opened its Health AI assistant to all US customers, removing the requirement to be a One [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Amazons-Health-AI-is-now-open-to-all-US-customers.png",
-      "published": "2026-03-11T09:53:05+00:00",
-      "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9527
-    },
-    {
-      "title": "This company wants to pay you $800 to bully AI for a day",
-      "url": "https://www.businessinsider.com/startup-is-offering-800-to-bully-ai-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "If an AI chatbot has ever tested your patience, this job will pay you $800 to unleash your frustration. An AI software company just opened applications for someone's dream job: Professional AI Bully. \"You'll spend a full 8-hour day interacting with leading AI chatbots — and your only job is to be …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/75b57de7bcfb9dad53a69238bed463c10b46e001/_xlarge.jpeg",
-      "published": "2026-03-11T09:35:01+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9452
-    },
-    {
-      "title": "Google's Android boss talks Android 17, sideloading drama, and why he hates phone cases",
-      "url": "https://www.androidauthority.com/google-android-17-sideloading-interview-sameer-samat-3647478",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "At MWC 2026, Android ecosystem president Sameer Samat spoke with Android Authority about the platform's next chapter. Every year, MWC (Mobile World Congress) in Barcelona helps set the tone for the tech industry. It may no longer be the event where the smartphone calendar officially begins — that …",
-      "image": "https://ic-cdn.flipboard.com/androidauthority.com/3b5bd3db20bbc17c15cef1520f44f70b20fd8363/_xlarge.jpeg",
-      "published": "2026-03-11T09:30:18+00:00",
-      "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T10:09:41.112717+00:00",
-      "score": 1.9432
-    },
-    {
-      "title": "Finperks raises $4M to become the API layer for prepaid payments in Europe",
-      "url": "https://thenextweb.com/news/finperks-raises-4m-to-become-the-api-layer-for-prepaid-payments-in-europe",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Berlin startup, founded by the team behind viafintech, is building a single integration that lets banks, fintechs, and HR platforms offer gift cards, cashback, and tax-free employee benefits, without touching the underlying infrastructure themselves. The founders of viafintech, the prepaid payments company acquired by Paysafe in 2021, have returned with a new venture, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Finperks-raises-4M.png",
-      "published": "2026-03-11T09:13:27+00:00",
-      "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.6363
-    },
-    {
-      "title": "William Shatner says he turned a $42 money transfer from Elon Musk into nearly $200,000 for his charity",
-      "url": "https://www.businessinsider.com/william-shatner-interview-elon-musk-x-money-charity-ai-acting-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "William Shatner says he's had a \"tentative relationship\" with Elon Musk over the years. \"Barely reaching the R in relationship,\" he told Business Insider in a recent interview. But last month, he said Musk sent him $42 through X Money, the payments product being tested inside the X app, helping …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/8910edf29439401f0751dabda4e213febf415377/_xlarge.jpeg",
-      "published": "2026-03-11T09:08:01+00:00",
-      "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T10:09:41.112717+00:00",
-      "score": 1.9341
-    },
-    {
-      "title": "Samaipata launches €110M fund to back early-stage AI-native startups across Europe",
-      "url": "https://thenextweb.com/news/vc-samaipata-raises-e70m-new-ai-native-fund",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The pan-European VC firm has held its first close at €70M for Fund III, backed by Germany’s KfW, Spain’s SETT, and a network of family offices, with a mandate to find European companies building on the AI wave. Samaipata, the pan-European venture capital firm founded in Madrid in 2016, has launched its third fund with [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Samaipata-launches-E110M-fund.png",
-      "published": "2026-03-11T08:48:44+00:00",
-      "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 3.3262
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.9302
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -574,8 +574,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.514
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.5045
     },
     {
       "title": "Introducing... Life Without",
@@ -588,8 +588,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.151
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
+      "score": 1.1501
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -602,7 +602,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
       "score": 1.193
     },
     {
