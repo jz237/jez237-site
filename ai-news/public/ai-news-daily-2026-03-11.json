@@ -1,6 +1,6 @@
 {
   "date": "2026-03-11",
-  "updatedAt": "2026-03-11T16:15:17.379823+00:00",
+  "updatedAt": "2026-03-11T15:08:09.955763+00:00",
   "items": [
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -43,9 +43,9 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Cedars-Sinais-AI-system-can-read-echocardiograms.png",
       "published": "2026-03-11T10:36:04+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
       "model_release": true,
-      "score": 8.3401
+      "score": 8.3698
     },
     {
       "title": "Google AI Introduces Gemini Embedding 2: A Multimodal Embedding Model that Lets Your Bring Text, Images, Video, Audio, and Docs into the Embedding Space",
@@ -58,8 +58,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-12.17.20-AM-1-150x150.png",
       "published": "2026-03-11T07:18:20+00:00",
       "firstSeen": "2026-03-11T07:34:26.933497+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 3.3779
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 3.405
     },
     {
       "title": "Samaipata launches €110M fund to back early-stage AI-native startups across Europe",
@@ -72,22 +72,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Samaipata-launches-E110M-fund.png",
       "published": "2026-03-11T08:48:44+00:00",
       "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 3.3446
-    },
-    {
-      "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
-      "url": "https://techcrunch.com/2026/03/11/meta-didnt-buy-moltbook-for-bots-it-bought-into-the-agentic-web",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Meta’s Moltbook acquisition may look odd at first, but the deal could signal how Meta sees AI agents shaping future advertising and commerce on an agentic web.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
-      "published": "2026-03-11T15:11:31+00:00",
-      "firstSeen": "2026-03-11T16:15:17.379823+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 3.258
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 3.3728
     },
     {
       "title": "Swiss VC Emerald Technology Ventures hits €100M milestone for its Global Water Fund II",
@@ -100,8 +86,22 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Emerald-Technology-Ventures-hits-E100M-.png",
       "published": "2026-03-11T10:05:19+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 2.9768
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 3.0061
+    },
+    {
+      "title": "Hustlers are cashing in on China’s OpenClaw AI craze",
+      "url": "https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Feng Qingyang had always hoped to launch his own company, but he never thought this would be how—or that the day would come this fast.&#160; Feng, a 27-year-old software engineer based in Beijing, started tinkering with OpenClaw, a popular new open-source AI tool that can take over a device and autonomously complete tasks for a&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/lobster-pets2a.jpg?resize=1200%2C600",
+      "published": "2026-03-11T12:46:21+00:00",
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.9201
     },
     {
       "title": "AI performer Tilly Norwood in first music video as Hollywood grapples with evolving technology",
@@ -113,23 +113,9 @@
       "summary": "AI-generated artist Tilly Norwood and the company behind her released a new music video speaking directly to her critics. As AI evolves, Hollywood …",
       "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/03/11/b07ac809-67cf-4cdc-8c38-6cc981336146/thumbnail/1200x630/42ae6cbebb1d26aaa21a4ded418518a3/cbsn-fusion-ai-performer-tilly-norwood-in-first-music-video-as-hollywood-grapples-with-evolving-technology-thumbnail.jpg",
       "published": "2026-03-11T13:09:00+00:00",
-      "firstSeen": "2026-03-11T16:15:17.379823+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 2.7591
-    },
-    {
-      "title": "The Most Disruptive Company in the World",
-      "url": "https://time.com/article/2026/03/11/anthropic-claude-disruptive-company-pentagon",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In a hotel room in Santa Clara, Calif., five members of the AI company Anthropic huddled around a laptop, working urgently. It was February 2025, and they had been at a conference nearby when they received disturbing news: results of a controlled trial had indicated that a soon-to-be-released …",
-      "image": "https://gcp-na-images.contentstack.com/v3/assets/bltea6093859af6183b/bltc82bbbb506af490a/69b0c166eb760aa2626a0de7/Anthropic_Lead-v2.jpg?branch=production",
-      "published": "2026-03-11T12:00:06+00:00",
-      "firstSeen": "2026-03-11T16:15:17.379823+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 2.7274
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.791
     },
     {
       "title": "I'm a CMO who thinks AI has brought a long-overdue reckoning for top marketers. Here's how I'm adapting for the future.",
@@ -141,9 +127,9 @@
       "summary": "This as-told-to essay is based on a conversation with Teresa Barreira, chief marketing officer of Publicis Sapient, the advertising company's tech arm. It's been edited for length and clarity. The role of the CMO has been under attack for years. And honestly, some of it is very well deserved. Part of …",
       "image": "https://ic-cdn.flipboard.com/insider.com/ff5243efd26d5cf022d54303ac7ce0f7bd87141b/_xlarge.jpeg",
       "published": "2026-03-11T11:10:01+00:00",
-      "firstSeen": "2026-03-11T16:15:17.379823+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 2.705
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.7352
     },
     {
       "title": "Finperks raises $4M to become the API layer for prepaid payments in Europe",
@@ -156,8 +142,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Finperks-raises-4M.png",
       "published": "2026-03-11T09:13:27+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 2.6549
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.6834
     },
     {
       "title": "Fish Audio Releases Fish Audio S2: A New Generation of Expressive Text-to-Speech (TTS) with Absurdly Controllable Emotion",
@@ -170,8 +156,50 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-37-1024x731.png",
       "published": "2026-03-11T04:58:33+00:00",
       "firstSeen": "2026-03-11T05:04:09.218424+00:00",
-      "lastSeen": "2026-03-11T16:15:17.379823+00:00",
-      "score": 2.6241
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.6495
+    },
+    {
+      "title": "Powering AI: Europe switches on its first microgrid-connected data center",
+      "url": "https://www.cnbc.com/2026/03/11/data-center-microgrid-power-ireland-ai-boom-avk-pure-dc.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Just outside Ireland's capital, Dublin, a data center has become the first in Europe to turn to an independent, so-called \"islanded,\" microgrid to …",
+      "image": "https://ic-cdn.flipboard.com/cnbcfm.com/9bb022626b0912612fdc53dddeba9380a6953b46/_xlarge.jpeg",
+      "published": "2026-03-11T06:00:01+00:00",
+      "firstSeen": "2026-03-11T07:34:26.933497+00:00",
+      "lastSeen": "2026-03-11T10:09:41.112717+00:00",
+      "score": 2.6035
+    },
+    {
+      "title": "Paris startup Lemrock raises €6M to become the commerce layer inside AI agents",
+      "url": "https://thenextweb.com/news/lemrock-raises-6m-agentic-commerce-ai-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Founded just months ago by two repeat Y Combinator founders and a retail veteran, Lemrock is betting that AI agents are becoming the new storefront,  and that brands are nowhere near ready for it. When you ask ChatGPT or Perplexity which running shoes to buy, someone has to make sure the right brands show up, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Startup-Lemrock-raises-E6M-to-fix-agentic-commerce.png",
+      "published": "2026-03-11T11:18:18+00:00",
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.339
+    },
+    {
+      "title": "NVIDIA GTC 2026: Live Updates on What’s Next in AI",
+      "url": "https://blogs.nvidia.com/blog/gtc-2026-news",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Rolling coverage from San Jose, including NVIDIA CEO Jensen Huang’s keynote, news highlights, live demos and on‑the‑ground color through March 20.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/JL1_0473-scaled.jpg",
+      "published": "2026-03-11T15:00:08+00:00",
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T15:08:09.955763+00:00",
+      "score": 2.2859
     }
   ],
   "errors": []
