@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T07:34:26.933497+00:00",
+  "updatedAt": "2026-03-11T10:09:41.112717+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -432,6 +432,14 @@
     "https://techcrunch.com/2026/03/10/google-gemini-chrome-expands-to-india-canada-new-zealand": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Chrome_Hero.png?resize=1200,677",
       "checkedAt": "2026-03-11T05:04:09.218424+00:00"
+    },
+    "https://www.techrepublic.com/article/apac-anthropic-sydney-office-ai-customers": {
+      "image": "",
+      "checkedAt": "2026-03-11T10:09:41.112717+00:00"
+    },
+    "https://www.techrepublic.com/article/singapore-india-ai-hub-asia-enterprise-strategy": {
+      "image": "",
+      "checkedAt": "2026-03-11T10:09:41.112717+00:00"
     }
   }
 }
