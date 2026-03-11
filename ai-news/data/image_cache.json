@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T17:00:01.491672+00:00",
+  "updatedAt": "2026-03-11T18:04:29.679665+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -476,6 +476,14 @@
     "https://www.techrepublic.com/article/news-coco-robots-niantic-mapping": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_je1bk8je1bk8je1b.jpg",
       "checkedAt": "2026-03-11T17:00:01.491672+00:00"
+    },
+    "https://openai.com/index/wayfair": {
+      "image": "",
+      "checkedAt": "2026-03-11T18:04:29.679665+00:00"
+    },
+    "https://openai.com/index/equip-responses-api-computer-environment": {
+      "image": "",
+      "checkedAt": "2026-03-11T18:04:29.679665+00:00"
     }
   }
 }
