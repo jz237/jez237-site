@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T16:21:24.537694+00:00",
+  "updatedAt": "2026-03-11T17:00:01.491672+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -468,6 +468,14 @@
     "https://www.together.ai/blog/nvidia-nemotron-3-super": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0f604c8aa89aae2c97599_20260309_NEMOTRON_1200x630.png",
       "checkedAt": "2026-03-11T16:20:00.326734+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/wordpress-debuts-a-private-workspace-that-runs-in-your-browser-via-a-new-service-my-wordpress-net": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200,493",
+      "checkedAt": "2026-03-11T17:00:01.491672+00:00"
+    },
+    "https://www.techrepublic.com/article/news-coco-robots-niantic-mapping": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_je1bk8je1bk8je1b.jpg",
+      "checkedAt": "2026-03-11T17:00:01.491672+00:00"
     }
   }
 }
