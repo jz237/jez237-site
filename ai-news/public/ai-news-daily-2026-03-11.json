@@ -1,6 +1,6 @@
 {
   "date": "2026-03-11",
-  "updatedAt": "2026-03-11T21:50:19.641054+00:00",
+  "updatedAt": "2026-03-11T22:55:48.514703+00:00",
   "items": [
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -13,9 +13,9 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/nemotron-3-super-1920x1080-1.jpg",
       "published": "2026-03-11T16:00:21+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
       "model_release": true,
-      "score": 9.4255
+      "score": 9.3975
     },
     {
       "title": "NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI",
@@ -28,9 +28,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-9-150x150.png",
       "published": "2026-03-11T18:19:24+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
       "model_release": true,
-      "score": 9.4177
+      "score": 9.3879
     },
     {
       "title": "Together AI Brings NVIDIA Nemotron 3 to Developers on Day 0",
@@ -43,9 +43,9 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0f604c8aa89aae2c97599_20260309_NEMOTRON_1200x630.png",
       "published": "2026-03-11T00:00:00+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
       "model_release": true,
-      "score": 8.6197
+      "score": 8.6018
     },
     {
       "title": "EchoPrime &#8211; Cedars-Sinai&#8217;s AI system can read echocardiograms and write the report",
@@ -58,9 +58,9 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Cedars-Sinais-AI-system-can-read-echocardiograms.png",
       "published": "2026-03-11T10:36:04+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
       "model_release": true,
-      "score": 8.2051
+      "score": 8.181
     },
     {
       "title": "Google AI Introduces Gemini Embedding 2: A Multimodal Embedding Model that Lets Your Bring Text, Images, Video, Audio, and Docs into the Embedding Space",
@@ -73,8 +73,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-12.17.20-AM-1-150x150.png",
       "published": "2026-03-11T07:18:20+00:00",
       "firstSeen": "2026-03-11T07:34:26.933497+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.2546
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.2327
     },
     {
       "title": "Samaipata launches €110M fund to back early-stage AI-native startups across Europe",
@@ -87,8 +87,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Samaipata-launches-E110M-fund.png",
       "published": "2026-03-11T08:48:44+00:00",
       "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.216
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.1932
     },
     {
       "title": "From model to agent: Equipping the Responses API with a computer environment",
@@ -101,8 +101,8 @@
       "image": "",
       "published": "2026-03-11T11:00:00+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.214
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.1897
     },
     {
       "title": "Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce",
@@ -115,8 +115,8 @@
       "image": "",
       "published": "2026-03-11T21:03:40+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.1265
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.0943
     },
     {
       "title": "Replit CEO Says Their New AI Agent Can Vibe Code a Startup From Scratch",
@@ -129,8 +129,8 @@
       "image": "https://ic-cdn.flipboard.com/inc.com/a7f5e90644d309064371c86ee20c5bd2710cab2b/_xlarge.webp",
       "published": "2026-03-11T21:00:15+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.1248
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.0927
     },
     {
       "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
@@ -144,7 +144,7 @@
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 3.1045
+      "score": 3.0772
     },
     {
       "title": "Meta’s Moltbook deal points to a future built around AI agents",
@@ -157,8 +157,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.1045
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.0772
     },
     {
       "title": "Perplexity’s Personal Computer is a cloud-based AI agent running on Mac mini",
@@ -171,8 +171,8 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/Perplexity-Personal-Computer.webp?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-11T18:24:30+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T21:50:19.641054+00:00",
-      "score": 3.05
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 3.0202
     }
   ],
   "errors": []
