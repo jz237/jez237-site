@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T11:49:26.460041+00:00",
+  "updatedAt": "2026-03-11T15:08:09.955763+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -440,6 +440,18 @@
     "https://www.techrepublic.com/article/singapore-india-ai-hub-asia-enterprise-strategy": {
       "image": "",
       "checkedAt": "2026-03-11T10:09:41.112717+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/amazon-expands-a-program-that-lets-customers-shop-from-other-retailers-sites": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/shop-direct-.jpeg?resize=1200,675",
+      "checkedAt": "2026-03-11T15:08:09.955763+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/canopii-looks-to-succeed-where-past-indoor-farms-have-not": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Canopii.jpg?resize=1200,900",
+      "checkedAt": "2026-03-11T15:08:09.955763+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/lobster-pets2a.jpg?resize=1200,600",
+      "checkedAt": "2026-03-11T15:08:09.955763+00:00"
     }
   }
 }
