@@ -127,6 +127,7 @@
 
     <div class="load-more-wrap">
       <button class="load-more-btn" id="load-more">Load more</button>
+      <button class="load-more-btn" id="back-to-top" style="display:none; background:#555;">↑ Back to top</button>
       <div class="photo-count" id="photo-count"></div>
     </div>
 
@@ -211,9 +212,20 @@
       lbImg.src = '';
     });
 
+    const topBtn = document.getElementById('back-to-top');
+
+    // Show back-to-top after first load-more click
+    function showTopBtn() {
+      if (loaded > BATCH_SIZE) topBtn.style.display = 'inline-block';
+    }
+
+    topBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     // Initial load
     loadBatch();
-    btn.addEventListener('click', loadBatch);
+    btn.addEventListener('click', () => { loadBatch(); showTopBtn(); });
   </script>
 </body>
 </html>
