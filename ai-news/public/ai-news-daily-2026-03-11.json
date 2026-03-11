@@ -1,6 +1,6 @@
 {
   "date": "2026-03-11",
-  "updatedAt": "2026-03-11T17:00:01.491672+00:00",
+  "updatedAt": "2026-03-11T20:00:01.886568+00:00",
   "items": [
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -13,12 +13,27 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/nemotron-3-super-1920x1080-1.jpg",
       "published": "2026-03-11T16:00:21+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
       "model_release": true,
-      "score": 9.56
+      "score": 9.4745
     },
     {
-      "title": "NVIDIA Nemotron 3 Super is now available on Together AI",
+      "title": "NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI",
+      "url": "https://www.marktechpost.com/2026/03/11/nvidia-releases-nemotron-3-super-a-120b-parameter-open-source-hybrid-mamba-attention-moe-model-delivering-5x-higher-throughput-for-agentic-ai",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The gap between proprietary frontier models and highly transparent open-source models is closing faster than ever. NVIDIA has officially pulled the curtain back on Nemotron 3 Super, a staggering 120 billion parameter reasoning model engineered specifically for complex multi-agent applications. Released today, Nemotron 3 Super sits perfectly between the lightweight 30 billion parameter Nemotron 3 [&#8230;]\nThe post NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-9-150x150.png",
+      "published": "2026-03-11T18:19:24+00:00",
+      "firstSeen": "2026-03-11T20:00:01.886568+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "model_release": true,
+      "score": 9.4699
+    },
+    {
+      "title": "Together AI Brings NVIDIA Nemotron 3 to Developers on Day 0",
       "url": "https://www.together.ai/blog/nvidia-nemotron-3-super",
       "source": "Together AI Blog",
       "sourceUrl": "https://www.together.ai/blog/rss.xml",
@@ -28,9 +43,9 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b0f604c8aa89aae2c97599_20260309_NEMOTRON_1200x630.png",
       "published": "2026-03-11T00:00:00+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
       "model_release": true,
-      "score": 8.706
+      "score": 8.6511
     },
     {
       "title": "EchoPrime &#8211; Cedars-Sinai&#8217;s AI system can read echocardiograms and write the report",
@@ -43,9 +58,9 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Cedars-Sinais-AI-system-can-read-echocardiograms.png",
       "published": "2026-03-11T10:36:04+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
       "model_release": true,
-      "score": 8.3209
+      "score": 8.2472
     },
     {
       "title": "Google AI Introduces Gemini Embedding 2: A Multimodal Embedding Model that Lets Your Bring Text, Images, Video, Audio, and Docs into the Embedding Space",
@@ -58,8 +73,22 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-12.17.20-AM-1-150x150.png",
       "published": "2026-03-11T07:18:20+00:00",
       "firstSeen": "2026-03-11T07:34:26.933497+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 3.3603
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 3.2931
+    },
+    {
+      "title": "From model to agent: Equipping the Responses API with a computer environment",
+      "url": "https://openai.com/index/equip-responses-api-computer-environment",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "How OpenAI built an agent runtime using the Responses API, shell tool, and hosted containers to run secure, scalable agents with files, tools, and state.",
+      "image": "",
+      "published": "2026-03-11T11:00:00+00:00",
+      "firstSeen": "2026-03-11T20:00:01.886568+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 3.2567
     },
     {
       "title": "Samaipata launches €110M fund to back early-stage AI-native startups across Europe",
@@ -72,8 +101,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Samaipata-launches-E110M-fund.png",
       "published": "2026-03-11T08:48:44+00:00",
       "firstSeen": "2026-03-11T10:09:41.112717+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 3.3262
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 3.2562
     },
     {
       "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
@@ -87,7 +116,35 @@
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 3.2361
+      "score": 3.1525
+    },
+    {
+      "title": "Meta’s Moltbook deal points to a future built around AI agents",
+      "url": "https://techcrunch.com/2026/03/11/metas-moltbook-deal-points-to-a-future-built-around-ai-agents",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Meta’s Moltbook acquisition may look odd at first, but the deal could signal how Meta sees AI agents shaping future advertising and commerce on an agentic web.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
+      "published": "2026-03-11T15:11:31+00:00",
+      "firstSeen": "2026-03-11T20:00:01.886568+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 3.1525
+    },
+    {
+      "title": "Perplexity’s Personal Computer is a cloud-based AI agent running on Mac mini",
+      "url": "https://9to5mac.com/2026/03/11/perplexitys-personal-computer-is-a-cloud-based-ai-agent-running-on-mac-mini",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple’s Mac mini is back in the AI headlines. Last month, Perplexity released its own version of the OpenClaw “personal AI assistant” idea with a feature called Perplexity Computer. Now the company is taking the concept a step further with an implementation it calls Personal Computer. This version …",
+      "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/Perplexity-Personal-Computer.webp?resize=1200%2C628&quality=82&strip=all&ssl=1",
+      "published": "2026-03-11T18:24:30+00:00",
+      "firstSeen": "2026-03-11T20:00:01.886568+00:00",
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 3.1024
     },
     {
       "title": "WordPress debuts a private workspace that runs in your browser via a new service, my.WordPress.net",
@@ -96,12 +153,12 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "WordPress’s new browser-based service lets users create private sites without hosting or signup, turning the platform into a personal workspace for writing, research, and AI tools.",
+      "summary": "WordPress’s new browser-based service lets users create private sites without hosting or signing up, turning the platform into a personal workspace for writing, research, and AI tools.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200%2C493",
       "published": "2026-03-11T16:43:59+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.9819
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 2.8946
     },
     {
       "title": "Swiss VC Emerald Technology Ventures hits €100M milestone for its Global Water Fund II",
@@ -114,64 +171,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Emerald-Technology-Ventures-hits-E100M-.png",
       "published": "2026-03-11T10:05:19+00:00",
       "firstSeen": "2026-03-11T11:49:26.460041+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.9578
-    },
-    {
-      "title": "Hustlers are cashing in on China’s OpenClaw AI craze",
-      "url": "https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Feng Qingyang had always hoped to launch his own company, but he never thought this would be how—or that the day would come this fast.&#160; Feng, a 27-year-old software engineer based in Beijing, started tinkering with OpenClaw, a popular new open-source AI tool that can take over a device and autonomously complete tasks for a&#8230;",
-      "image": "https://ic-cdn.flipboard.com/technologyreview.com/ae927b0790416679600da2fd1bb131520dcca9c6/_xlarge.jpeg",
-      "published": "2026-03-11T12:46:21+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.8681
-    },
-    {
-      "title": "AI performer Tilly Norwood in first music video as Hollywood grapples with evolving technology",
-      "url": "https://www.cbsnews.com/video/ai-performer-tilly-norwood-in-first-music-video-as-hollywood-grapples-with-evolving-technology",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AI-generated artist Tilly Norwood and the company behind her released a new music video speaking directly to her critics. As AI evolves, Hollywood …",
-      "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/03/11/b07ac809-67cf-4cdc-8c38-6cc981336146/thumbnail/1200x630/42ae6cbebb1d26aaa21a4ded418518a3/cbsn-fusion-ai-performer-tilly-norwood-in-first-music-video-as-hollywood-grapples-with-evolving-technology-thumbnail.jpg",
-      "published": "2026-03-11T13:09:00+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.7384
-    },
-    {
-      "title": "The Most Disruptive Company in the World",
-      "url": "https://time.com/article/2026/03/11/anthropic-claude-disruptive-company-pentagon",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In a hotel room in Santa Clara, Calif., five members of the AI company Anthropic huddled around a laptop, working urgently. It was February 2025, and they had been at a conference nearby when they received disturbing news: results of a controlled trial had indicated that a soon-to-be-released …",
-      "image": "https://gcp-na-images.contentstack.com/v3/assets/bltea6093859af6183b/bltc82bbbb506af490a/69b0c166eb760aa2626a0de7/Anthropic_Lead-v2.jpg?branch=production",
-      "published": "2026-03-11T12:00:06+00:00",
-      "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.7074
-    },
-    {
-      "title": "I'm a CMO who thinks AI has brought a long-overdue reckoning for top marketers. Here's how I'm adapting for the future.",
-      "url": "https://www.businessinsider.com/publicis-sapient-cmo-ai-forcing-an-overdue-marketing-reckoning-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "This as-told-to essay is based on a conversation with Teresa Barreira, chief marketing officer of Publicis Sapient, the advertising company's tech arm. It's been edited for length and clarity. The role of the CMO has been under attack for years. And honestly, some of it is very well deserved. Part of …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/ff5243efd26d5cf022d54303ac7ce0f7bd87141b/_xlarge.jpeg",
-      "published": "2026-03-11T11:10:01+00:00",
-      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
-      "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 2.6854
+      "lastSeen": "2026-03-11T20:00:01.886568+00:00",
+      "score": 2.8853
     }
   ],
   "errors": []
