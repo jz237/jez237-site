@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T21:50:19.641054+00:00",
+  "updatedAt": "2026-03-11T22:55:48.514703+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -524,6 +524,10 @@
     "https://www.techrepublic.com/article/news-amazon-health-ai-app-site": {
       "image": "",
       "checkedAt": "2026-03-11T21:50:19.641054+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/zendesk-acquires-agentic-customer-service-startup-forethought": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/10/Forethought-DSC04264.jpg?resize=1200,800",
+      "checkedAt": "2026-03-11T22:55:48.514703+00:00"
     }
   }
 }
