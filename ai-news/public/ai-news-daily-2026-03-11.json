@@ -1,0 +1,12 @@
+{
+  "date": "2026-03-11",
+  "updatedAt": "2026-03-11T03:00:04.654808+00:00",
+  "items": [],
+  "errors": [
+    {
+      "source": "Flipboard AI",
+      "url": "https://flipboard.com/topic/artificialintelligence.rss",
+      "error": "HTTP Error 502: Bad Gateway"
+    }
+  ]
+}
