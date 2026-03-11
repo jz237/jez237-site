@@ -18,8 +18,8 @@
     {
       "name": "Photo Gallery",
       "desc": "Personal photos, edits, and restoration showcases.",
-      "status": "planned",
-      "link": "#photos"
+      "status": "live",
+      "link": "./photos/"
     }
   ],
   "tools": [
@@ -72,10 +72,16 @@
   ],
   "photos": [
     {
-      "name": "Photo Set",
-      "desc": "Curated personal shots and behind-the-scenes moments.",
+      "name": "🐱 Cat Corner",
+      "desc": "Luca, Cosmo, Taco & Marty — 26 photos and counting.",
+      "status": "live",
+      "link": "./photos/cats/"
+    },
+    {
+      "name": "🌿 Garden",
+      "desc": "Small-space growing, seasonal progress, and green experiments.",
       "status": "coming-soon",
-      "link": "#"
+      "link": "./photos/garden/"
     }
   ],
   "homelab": [
@@ -96,34 +102,6 @@
       "desc": "CPU / memory / process tiles for home lab visibility.",
       "status": "planned",
       "link": "#"
-    }
-  ],
-  "garden": [
-    {
-      "name": "Small-space Plant Planner",
-      "desc": "Plan crops by space, season, and sunlight.",
-      "status": "planned",
-      "link": "#"
-    },
-    {
-      "name": "Seasonal Checklist",
-      "desc": "Simple timeline of what to do next in the garden.",
-      "status": "planned",
-      "link": "#"
-    }
-  ],
-  "cats": [
-    {
-      "name": "Luca, Cosmo, Taco & Marty",
-      "desc": "Fresh uploads from your phone, now on the site.",
-      "status": "live",
-      "link": "./cats/"
-    },
-    {
-      "name": "Cat Gallery",
-      "desc": "Dedicated page for cat photos and future uploads.",
-      "status": "live",
-      "link": "./cats/"
     }
   ]
 }

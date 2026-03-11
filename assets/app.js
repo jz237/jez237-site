@@ -62,8 +62,6 @@ function renderSiteContent(data) {
   renderCards('games-list', data.games || []);
   renderCards('photos-list', data.photos || []);
   renderCards('homelab-list', data.homelab || []);
-  renderCards('garden-list', data.garden || []);
-  renderCards('cats-list', data.cats || []);
 }
 
 async function init() {
