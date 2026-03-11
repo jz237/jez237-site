@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T19:54:44.510832+00:00",
+  "updatedAt": "2026-03-11T23:00:01.559353+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -496,6 +496,38 @@
     "https://openai.com/index/designing-agents-to-resist-prompt-injection": {
       "image": "",
       "checkedAt": "2026-03-11T19:54:44.510832+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/zendesk-acquires-agentic-customer-service-startup-forethought": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/10/Forethought-DSC04264.jpg?resize=1200,800",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/lovable-says-it-added-100m-in-revenue-last-month-alone-with-just-146-employees": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200,800",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://www.techrepublic.com/article/news-android-trends-defining-smartphones-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/denny-muller-HfWA-Axq6Ek-unsplash.jpg",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://www.techrepublic.com/article/news-salesforce-agentforce-contact-center-launch": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AI_Chat_Assistant-1x.jpg",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-agents-security-risks-governance": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_428344601.jpg",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-acquires-moltbook-bot-only-social-network": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/meta-acquires-moltbook.jpg",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://openai.com/index/rakuten": {
+      "image": "",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
+    },
+    "https://www.techrepublic.com/article/news-amazon-health-ai-app-site": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/download.jpg",
+      "checkedAt": "2026-03-11T23:00:01.559353+00:00"
     }
   }
 }
