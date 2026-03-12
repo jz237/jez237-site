@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T11:44:55.047869+00:00",
+  "updatedAt": "2026-03-12T15:12:55.906788+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -568,6 +568,26 @@
     "https://techcrunch.com/2026/03/12/google-is-using-old-news-reports-and-ai-to-predict-flash-floods": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-7.14.04-PM.png?resize=1200,757",
       "checkedAt": "2026-03-12T10:09:57.784965+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/wonderful-raises-150m-series-b-at-2b-valuation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/Wonderful-Founders.png?resize=1200,800",
+      "checkedAt": "2026-03-12T15:12:55.906788+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-four-ai-chips": {
+      "image": "",
+      "checkedAt": "2026-03-12T15:12:55.906788+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/12/1133675/pragmatic-by-design-engineering-ai-for-the-real-world": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/02/LTTS-Social-Card-1.png?resize=1200,600",
+      "checkedAt": "2026-03-12T15:12:55.906788+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/google-maps-is-getting-an-ai-ask-maps-feature-and-upgraded-immersive-navigation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200,800",
+      "checkedAt": "2026-03-12T15:12:55.906788+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/10/1134083/building-a-strong-data-infrastructure-for-ai-agent-success": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/SAP-article-iStock-933220212.jpg?resize=1200,600",
+      "checkedAt": "2026-03-12T15:12:55.906788+00:00"
     }
   }
 }
