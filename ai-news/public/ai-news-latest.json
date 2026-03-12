@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T00:23:04.517734+00:00",
+  "updatedAt": "2026-03-11T23:55:55.458549+00:00",
   "items": [
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -11,8 +11,8 @@
       "summary": "A doctor is sitting across a desk from a patient. The doctor is holding a tablet and a pen. Medical charts renderings are in the background.",
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "firstSeen": "2026-03-11T23:55:55.458549+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
       "score": 2.43
     },
     {
@@ -25,51 +25,9 @@
       "summary": "In this tutorial, we build a Streaming Decision Agent that thinks and acts in an online, changing environment while continuously streaming safe, partial reasoning updates. We implement a dynamic grid world with moving obstacles and a shifting goal, then use an online A* planner in a receding-horizon loop to commit to only a few near-term [&#8230;]\nThe post How to Design a Streaming Decision Agent with Partial Reasoning, Online Replanning, and Reactive Mid-Execution Adaptation in Dynamic Environments appeared first on MarkTechPost.",
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner234.png",
       "published": "2026-03-11T23:44:44+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.8006
-    },
-    {
-      "title": "Atlassian says it's laying off 10% of its global workforce and attributes the cut to the 'AI era'",
-      "url": "https://www.businessinsider.com/atlassian-layoff-global-workforce-attributes-it-to-the-ai-era-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Another tech company is making job cuts and attributing them to AI. Atlassian, an Australian-American proprietary software company, said on Wednesday that it is cutting about 1,600 jobs, roughly 10% of its global workforce, as the company restructures to focus on AI and enterprise growth. In a filing …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/9f620fc385b5811bff7cdd6a813d01d3b66c735e/_xlarge.jpeg",
-      "published": "2026-03-11T23:42:45+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.1297
-    },
-    {
-      "title": "'Use a gun': AI chatbots help people plan violence, report says",
-      "url": "https://mashable.com/article/ai-chatbots-help-plan-violence-school-shooting-bombing",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Researchers posing as teens got popular AI assistants to help them map out shootings and bombings. Eight out of 10 popular artificial intelligence chatbots helped researchers posing as teen boys plan violent crimes in over half of responses, according to a new report from the Center for Countering …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/9aebf507a0eb709b3dfb906e024f0682cce42f99/_xlarge.jpeg",
-      "published": "2026-03-11T23:42:23+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.1295
-    },
-    {
-      "title": "AI Chatbots Are Making People All Think the Same, Study Says",
-      "url": "https://www.cnet.com/science/ai-chatbots-are-making-people-all-think-the-same",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A new paper argues that humans are losing varied ways of thinking due to the use of chatbots, and that's concerning. Part of what makes us human is the unique ways we think and solve problems. But using large language models like ChatGPT might be eroding this uniqueness and leading humans to think …",
-      "image": "https://ic-cdn.flipboard.com/cnet.com/86dc546aa7be7a0143bac88629f93bd52a4c0dea/_xlarge.jpeg",
-      "published": "2026-03-11T23:41:03+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.4788
+      "firstSeen": "2026-03-11T23:55:55.458549+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.8143
     },
     {
       "title": "AI ‘actor’ Tilly Norwood put out the worst song I’ve ever heard",
@@ -81,23 +39,9 @@
       "summary": "This song is an AI actor's rallying cry to other AI actors, urging them to keep going despite the naysayers who doubt their humanity. Literally no one can relate to this.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-3.22.19-PM.png?resize=1200%2C672",
       "published": "2026-03-11T23:35:03+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.2658
-    },
-    {
-      "title": "Sorting algorithms",
-      "url": "https://simonwillison.net/2026/Mar/11/sorting-algorithms",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Sorting algorithms\nToday in animated explanations built using Claude: I've always been a fan of animated demonstrations of sorting algorithms so I decided to spin some up on my phone using Claude Artifacts, then added Python's timsort algorithm, then a feature to run them all at once. Here's the full sequence of prompts:\n\nInteractive animated demos of the most common sorting algorithms\n\nThis gave me bubble sort, selection sort, insertion sort, merge sort, quick sort, and heap sort.\n\nAdd timsort, look up details in a clone of python/cpython from GitHub\n\nLet's add Python's Timsort! Regular Claud",
-      "image": "https://static.simonwillison.net/static/2026/sorts-32-colors-lossy.gif",
-      "published": "2026-03-11T22:58:06+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.2476
+      "firstSeen": "2026-03-11T23:55:55.458549+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.2794
     },
     {
       "title": "Ford’s new AI assistant will help fleet owners know if seatbelts are being used",
@@ -109,10 +53,24 @@
       "summary": "Ford Pro AI debuted at Work Truck Week in Indianapolis and is now available to all of its U.S.-based Pro telematics subscribers.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ford-pro-fleet.jpg?resize=1200%2C675",
       "published": "2026-03-11T22:51:39+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "firstSeen": "2026-03-11T23:55:55.458549+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
       "model_release": true,
-      "score": 8.9444
+      "score": 8.9577
+    },
+    {
+      "title": "Big Tech backs Anthropic in fight against Trump administration",
+      "url": "https://www.bbc.com/news/articles/c4g7k7zdd0zo?at_medium=RSS&at_campaign=rss",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A slew of America's biggest tech companies have swung behind Anthropic in its lawsuit against leaders in the Trump Administration. Since Monday, Google, Amazon, Apple and Microsoft have publicly supported Anthropic's legal action to overturn Defense Secretary Pete Hegseth's unprecedented decision to …",
+      "image": "https://ichef.bbci.co.uk/news/480/cpsprodpb/a19c/live/1d200f20-1d9c-11f1-94a7-bf1b298028b4.jpg.webp",
+      "published": "2026-03-11T22:46:44+00:00",
+      "firstSeen": "2026-03-11T23:55:55.458549+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.1153
     },
     {
       "title": "Zendesk acquires agentic customer service startup Forethought",
@@ -125,8 +83,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/10/Forethought-DSC04264.jpg?resize=1200%2C800",
       "published": "2026-03-11T22:41:27+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.5394
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.5527
     },
     {
       "title": "Netflix may have paid $600 million for Ben Affleck’s AI startup",
@@ -139,8 +97,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/eb5e60b4f414ed736008a28b717ef82461c2ecaf/_xlarge.jpeg",
       "published": "2026-03-11T22:00:05+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.2195
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.2326
     },
     {
       "title": "Lovable says it added $100M in revenue last month alone, with just 146 employees",
@@ -153,8 +111,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
       "published": "2026-03-11T21:40:49+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.2104
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.2233
     },
     {
       "title": "14,000 routers are infected by malware that's highly resistant to takedowns",
@@ -167,8 +125,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2019/04/GettyImages-926536690-1152x648.jpg",
       "published": "2026-03-11T21:27:16+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.064
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0768
     },
     {
       "title": "10 Android Trends That Will Define Smartphones in 2026",
@@ -181,8 +139,8 @@
       "image": "",
       "published": "2026-03-11T21:08:59+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.0555
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0682
     },
     {
       "title": "Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce",
@@ -195,8 +153,8 @@
       "image": "",
       "published": "2026-03-11T21:03:40+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 3.053
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 3.0657
     },
     {
       "title": "Dario Amodei’s Oppenheimer Moment",
@@ -209,8 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/d98feda319d37215ddb23d5eecaab2596fd55e5f/_xlarge.jpeg",
       "published": "2026-03-11T21:02:00+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.0522
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0649
     },
     {
       "title": "Replit CEO Says Their New AI Agent Can Vibe Code a Startup From Scratch",
@@ -223,8 +181,8 @@
       "image": "https://ic-cdn.flipboard.com/inc.com/a7f5e90644d309064371c86ee20c5bd2710cab2b/_xlarge.webp",
       "published": "2026-03-11T21:00:15+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 3.0514
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 3.0641
     },
     {
       "title": "‘Agents of Chaos’: New Study Shows AI Agents Can Leak Data, Be Easily Manipulated",
@@ -237,8 +195,8 @@
       "image": "",
       "published": "2026-03-11T20:59:53+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.3512
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.3639
     },
     {
       "title": "Meta Buys AI Social Network Moltbook as Superintelligence Labs Expands",
@@ -251,8 +209,8 @@
       "image": "",
       "published": "2026-03-11T20:54:37+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.3488
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.3614
     },
     {
       "title": "'Rectal garlic insertion for immune support': Medical chatbots confidently give disastrously misguided advice, experts say",
@@ -265,8 +223,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/9MieLUDkhdu3WRjbnqmwQH-1920-80.jpg",
       "published": "2026-03-11T20:29:01+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.037
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0495
     },
     {
       "title": "‘Anthropic’s Claude models are no longer available’: US State Department ditches Claude on the orders of Trump – while Senate approves Gemini, ChatGPT, and CoPilot for use",
@@ -279,8 +237,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/N6EmHQVVkmEHHmq7P3oCec-2560-80.jpg",
       "published": "2026-03-11T19:20:00+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
-      "score": 2.006
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0181
     },
     {
       "title": "Replit snags $9B valuation 6 months after hitting $3B",
@@ -293,8 +251,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200%2C715",
       "published": "2026-03-11T18:52:52+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.1341
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.146
     },
     {
       "title": "Ars Fires Reporter For Accidentally Using Fake AI Quotes",
@@ -308,7 +266,7 @@
       "published": "2026-03-11T18:47:34+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
       "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.2917
+      "score": 2.3037
     },
     {
       "title": "You're Going To Want To Watch This DOGE Staffer Try To Define What DEI Is",
@@ -321,8 +279,8 @@
       "image": "https://img.huffingtonpost.com/asset/69b1aa051b0000e89714de6d.png?cache=xlxwAQRkXt&ops=500_281%2Cscalefit_1200_630",
       "published": "2026-03-11T18:31:37+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
-      "score": 1.9848
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.9966
     },
     {
       "title": "Perplexity’s Personal Computer is a cloud-based AI agent running on Mac mini",
@@ -335,8 +293,8 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/Perplexity-Personal-Computer.webp?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-11T18:24:30+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.9817
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.9935
     },
     {
       "title": "NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI",
@@ -349,9 +307,9 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-9-150x150.png",
       "published": "2026-03-11T18:19:24+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
       "model_release": true,
-      "score": 9.3495
+      "score": 9.3613
     },
     {
       "title": "WordPress debuts a private workspace that runs in your browser via a new service, my.WordPress.net",
@@ -364,8 +322,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200%2C493",
       "published": "2026-03-11T16:43:59+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.7794
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.7906
     },
     {
       "title": "Former NFL Player Reportedly Asked ChatGPT For Help After Allegedly Killing Girlfriend",
@@ -379,7 +337,7 @@
       "published": "2026-03-11T16:30:00+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 1.9336
+      "score": 1.9448
     },
     {
       "title": "A First Amendment right not to use AI for evil?",
@@ -393,7 +351,7 @@
       "published": "2026-03-11T16:15:29+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
       "lastSeen": "2026-03-11T17:00:01.491672+00:00",
-      "score": 1.9277
+      "score": 1.9388
     },
     {
       "title": "Rivian spin-out Mind Robotics raises $500M for industrial AI-powered robots",
@@ -406,22 +364,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/rj-scaringe.jpeg?resize=1200%2C900",
       "published": "2026-03-11T16:12:02+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.0663
-    },
-    {
-      "title": "Google's Gemini Embedding 2 arrives with native multimodal support to cut costs and speed up your enterprise data stack",
-      "url": "https://venturebeat.com/data/googles-gemini-embedding-2-arrives-with-native-multimodal-support-to-cut",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Yesterday amid a flurry of enterprise AI product updates, Google announced arguably its most significant one for enterprise customers: the public preview availability of Gemini Embedding 2, its new embeddings model — a significant evolution in how machines represent and retrieve information across …",
-      "image": "https://images.ctfassets.net/jdtwqhzvc2n1/3vvg9fxNbEhWLukkaKhewr/1f71cde82aba4ca35ea01e53c11b6502/Gemini_Generated_Image_fo30n7fo30n7fo30.png?w=800&q=75",
-      "published": "2026-03-11T16:12:00+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.9263
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0774
     },
     {
       "title": "Delivery Robots Hit Streets Backed by Niantic’s Pokémon GO-Era Mapping",
@@ -434,8 +378,8 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_je1bk8je1bk8je1b.jpg",
       "published": "2026-03-11T16:07:07+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.9243
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.9354
     },
     {
       "title": "Manufact raises $6.3M as MCP becomes the ‘USB-C for AI’ powering ChatGPT and Claude apps",
@@ -449,7 +393,7 @@
       "published": "2026-03-11T16:01:00+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 1.9219
+      "score": 1.9329
     },
     {
       "title": "New NVIDIA Nemotron 3 Super Delivers 5x Higher Throughput for Agentic AI",
@@ -462,9 +406,9 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/nemotron-3-super-1920x1080-1.jpg",
       "published": "2026-03-11T16:00:21+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
       "model_release": true,
-      "score": 9.3616
+      "score": 9.3726
     },
     {
       "title": "U.S. military is using AI to help plan Iran air attacks, sources say, as lawmakers call for oversight",
@@ -477,8 +421,8 @@
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/f9222208eeef42db08bbef721dfa9d88acd124da/_xlarge.jpeg",
       "published": "2026-03-11T15:54:16+00:00",
       "firstSeen": "2026-03-11T18:04:29.679665+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.9191
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.9301
     },
     {
       "title": "Code Concepts: A Large-Scale Synthetic Dataset Generated from Programming Concept Seeds",
@@ -491,8 +435,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/synthetic-code-concepts.png",
       "published": "2026-03-11T15:50:15+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.1975
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.2085
     },
     {
       "title": "ChatGPT quietly fixed its most annoying habit",
@@ -505,8 +449,8 @@
       "image": "https://ic-cdn.flipboard.com/pcworld.com/9c168ceb194f3ce9e79603eb2c2bbd7e2331210e/_large.jpeg",
       "published": "2026-03-11T15:48:02+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.9166
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.9276
     },
     {
       "title": "Meta rolls out new scam detection across WhatsApp, Messenger, and Facebook",
@@ -519,8 +463,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-scam-detections.png",
       "published": "2026-03-11T15:30:43+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.9097
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.9206
     },
     {
       "title": "Meta didn’t buy Moltbook for bots — it bought into the agentic web",
@@ -534,7 +478,7 @@
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T16:20:00.326734+00:00",
       "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 3.0421
+      "score": 3.0529
     },
     {
       "title": "Meta’s Moltbook deal points to a future built around AI agents",
@@ -547,8 +491,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/moltbook-GettyImages-2260137814.jpg?w=1024",
       "published": "2026-03-11T15:11:31+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 3.0421
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 3.0529
     },
     {
       "title": "BlackRock is splashing $100 million on training plumbers, electricians, and HVAC technicians as its CEO flags a skilled trade worker shortage",
@@ -561,8 +505,64 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/be17fbd4e24451ecae3b739645cf97d8384644c4/_xlarge.jpeg",
       "published": "2026-03-11T15:08:57+00:00",
       "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 2.2011
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.2119
+    },
+    {
+      "title": "NVIDIA GTC 2026: Live Updates on What’s Next in AI",
+      "url": "https://blogs.nvidia.com/blog/gtc-2026-news",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Rolling coverage from San Jose, including NVIDIA CEO Jensen Huang’s keynote, news highlights, live demos and on‑the‑ground color through March 20.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/JL1_0473-scaled.jpg",
+      "published": "2026-03-11T15:00:08+00:00",
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0484
+    },
+    {
+      "title": "Amazon expands a program that lets customers shop from other retailers’ sites",
+      "url": "https://techcrunch.com/2026/03/11/amazon-expands-a-program-that-lets-customers-shop-from-other-retailers-sites",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The changes allow more merchants to participate in Amazon's Shop Direct program, which sends Amazon customers to other retailers' websites.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/shop-direct-.jpeg?resize=1200%2C675",
+      "published": "2026-03-11T14:48:30+00:00",
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 2.0437
+    },
+    {
+      "title": "Pixar's Hoppers YouTube stream is the most delightful thing you'll see today",
+      "url": "https://www.creativebloq.com/art/animation/pixars-hoppers-youtube-stream-is-the-most-delightful-thing-youll-see-today",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The 10-hour fake nature documentary is my new zen soundtrack for work. Ambient sounds and live nature streams have become popular on YouTube as people …",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/8ddc7a24d4d2827efec55856e47192254a484380/_large.jpeg",
+      "published": "2026-03-11T14:41:31+00:00",
+      "firstSeen": "2026-03-11T17:00:01.491672+00:00",
+      "lastSeen": "2026-03-11T22:55:48.514703+00:00",
+      "score": 1.901
+    },
+    {
+      "title": "Microsoft and retired military chiefs back AI company Anthropic in court fight against Pentagon",
+      "url": "https://apnews.com/article/trump-anthropic-ai-microsoft-pentagon-c4210e7eddd9ad90161e7fa2da9736e2",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft and a group of retired military leaders are throwing their weight behind Anthropic in asking a federal court to block the Trump administration’s designation of the artificial intelligence company as a supply chain risk. Microsoft, in a legal filing, is challenging Defense Secretary Pete …",
+      "image": "https://ic-cdn.flipboard.com/apnews.com/cd8091e11e2a178382be61d017e6570a7c1a4468/_large.jpeg",
+      "published": "2026-03-11T14:13:02+00:00",
+      "firstSeen": "2026-03-11T15:08:09.955763+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.8898
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -575,8 +575,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.4539
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.4573
     },
     {
       "title": "Introducing... Life Without",
@@ -589,8 +589,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
-      "score": 1.1453
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
+      "score": 1.1456
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -603,7 +603,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "lastSeen": "2026-03-11T23:55:55.458549+00:00",
       "score": 1.1925
     },
     {
