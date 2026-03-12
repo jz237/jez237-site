@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-11T22:55:48.514703+00:00",
+  "updatedAt": "2026-03-12T00:23:04.517734+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -528,6 +528,34 @@
     "https://techcrunch.com/2026/03/11/zendesk-acquires-agentic-customer-service-startup-forethought": {
       "image": "https://techcrunch.com/wp-content/uploads/2019/10/Forethought-DSC04264.jpg?resize=1200,800",
       "checkedAt": "2026-03-11T22:55:48.514703+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/11/how-to-design-a-streaming-decision-agent-with-partial-reasoning-online-replanning-and-reactive-mid-execution-adaptation-in-dynamic-environments": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner234.png",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/ai-actor-tilly-norwood-put-out-the-worst-song-ive-ever-heard": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-3.22.19-PM.png?resize=1200,672",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
+    },
+    "https://techcrunch.com/2026/03/11/fords-new-ai-assistant-will-help-fleet-owners-know-if-seatbelts-are-being-used": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ford-pro-fleet.jpg?resize=1200,675",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/11/john-carmack": {
+      "image": "",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
+    },
+    "https://www.anthropic.com/news/the-anthropic-institute": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Book&amp;backgroundColor=oat",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
+    },
+    "https://simonwillison.net/guides/agentic-engineering-patterns/better-code": {
+      "image": "",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
+    },
+    "https://www.anthropic.com/news/sydney-fourth-office-asia-pacific": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Globe&amp;backgroundColor=sky",
+      "checkedAt": "2026-03-12T00:23:04.517734+00:00"
     }
   }
 }
