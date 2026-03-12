@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T21:46:29.656710+00:00",
+  "updatedAt": "2026-03-12T22:43:27.405342+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -652,6 +652,14 @@
     "https://www.techrepublic.com/article/news-nuro-tests-self-driving-tech-tokyo": {
       "image": "",
       "checkedAt": "2026-03-12T20:50:33.277316+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/sales-automation-startup-rox-ai-hits-1-2b-valuation-sources-say": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/04/GettyImages-1422739420.jpg?resize=1200,702",
+      "checkedAt": "2026-03-12T22:43:27.405342+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/12/1134243/defense-official-military-use-ai-chatbots-targeting-decisions": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/genai-mil2.jpg?resize=1200,600",
+      "checkedAt": "2026-03-12T22:43:27.405342+00:00"
     }
   }
 }
