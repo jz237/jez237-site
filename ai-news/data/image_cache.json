@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T05:08:22.411259+00:00",
+  "updatedAt": "2026-03-12T07:52:05.828809+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -560,6 +560,10 @@
     "https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
       "checkedAt": "2026-03-12T05:08:22.411259+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/9/production-query-plans-without-production-data": {
+      "image": "",
+      "checkedAt": "2026-03-12T07:52:05.828809+00:00"
     }
   }
 }

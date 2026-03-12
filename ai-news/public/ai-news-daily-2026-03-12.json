@@ -1,6 +1,6 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T05:08:22.411259+00:00",
+  "updatedAt": "2026-03-12T07:52:05.828809+00:00",
   "items": [
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -13,8 +13,22 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
       "score": 2.43
+    },
+    {
+      "title": "Meet Perplexity Personal Computer: The Always-On Local AI Agent That Runs 24/7 on Your Mac mini",
+      "url": "https://aitoolsclub.com/meet-perplexity-personal-computer-the-always-on-local-ai-agent-that-runs-24-7-on-your-mac-mini",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "What if your computer could keep working long after you step away from your desk, and we are talking about not just saving a file or finishing a …",
+      "image": "https://ic-cdn.flipboard.com/aitoolsclub.com/b25f630655c3e09b3a108b0cc96db5c83c5724b6/_xlarge.png",
+      "published": "2026-03-12T04:08:56+00:00",
+      "firstSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 2.342
     },
     {
       "title": "How NVIDIA AI-Q Reached \\#1 on DeepResearch Bench I and II",
@@ -27,8 +41,64 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
       "published": "2026-03-12T03:53:34+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 2.3926
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 2.315
+    },
+    {
+      "title": "Is the Nintendo DS Game Boy the ultimate retro gaming mod?",
+      "url": "https://www.creativebloq.com/entertainment/gaming/is-the-nintendo-ds-game-boy-the-ultimate-retro-gaming-mod",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Fans adore the nostalgic design. The best retro gaming handhelds offer a dose of nostalgia combined with more modern tech and storage capacities, but …",
+      "image": "https://cdn.mos.cms.futurecdn.net/w6moQKQiktsW2ZPqovwpRT-1000-80.jpg",
+      "published": "2026-03-12T07:00:00+00:00",
+      "firstSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 2.1238
+    },
+    {
+      "title": "Moz Pro free trial: professional AI SEO tools from $39/month",
+      "url": "https://thenextweb.com/news/moz-pro-free-trial-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "TL;DR Moz Pro now includes AI-powered keyword suggestions, an AI Visibility feature in open beta, and the industry-standard Domain Authority metric, all starting at $39/month on annual billing. A 7-day free trial is available on Standard and Medium plans, and a free Moz Community account gives permanent access to limited versions of Keyword Explorer and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Moz-AI.png",
+      "published": "2026-03-12T06:11:47+00:00",
+      "firstSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 2.1001
+    },
+    {
+      "title": "'I'll do better next time': Artist apologises for controversial New Yorker illustration",
+      "url": "https://www.creativebloq.com/art/illustration/ill-do-better-next-time-artist-apologises-for-controversial-new-yorker-illustration",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The magazine's representation of actor Wunmi Mosaku isn't going down well. The New Yorker is renowned for its illustrations, both inside and outside …",
+      "image": "https://cdn.mos.cms.futurecdn.net/eXxSxwo8UesnGPf55rV2BT-1920-80.jpg",
+      "published": "2026-03-12T06:00:00+00:00",
+      "firstSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 2.0944
+    },
+    {
+      "title": "Vibe coding is being called the greatest unlock for non-techies. These 6 startups are raising billions.",
+      "url": "https://www.businessinsider.com/startups-raising-billions-vibe-coding-boom-cursor-lovable-replit-emergent-2026-3",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The tech world is both in awe of and fearful of vibe coding. On one hand, tech giants are all in on these AI-assisted coding tools. They're touting efficiency gains, listing it as a need-to-have in job descriptions, buying their employees subscriptions, and even investing in vibe-coding startups …",
+      "image": "https://ic-cdn.flipboard.com/insider.com/b3139ee84b3ef44c91753953af636901c17fe9fa/_large.jpeg",
+      "published": "2026-03-12T05:55:19+00:00",
+      "firstSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 2.0921
     },
     {
       "title": "Netflix reportedly buys Ben Affleck’s AI firm for $600m",
@@ -42,7 +112,7 @@
       "published": "2026-03-12T02:38:22+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
       "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 2.0762
+      "score": 2.0013
     },
     {
       "title": "Use This Prompt Engineering Technique to Turn Claude AI Into Your Thinking Partner",
@@ -55,8 +125,8 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--5-.gif",
       "published": "2026-03-12T00:15:43+00:00",
       "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 2.0106
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 1.9405
     },
     {
       "title": "How AI will destroy universities",
@@ -69,8 +139,8 @@
       "image": "https://ic-cdn.flipboard.com/unherd.com/eae10c57f9a4f1e14ef541cac450bf286f2feed2/_large.jpeg",
       "published": "2026-03-12T00:02:01+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 2.0045
+      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "score": 1.9349
     }
   ],
   "errors": []
