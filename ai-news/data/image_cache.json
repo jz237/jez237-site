@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T05:08:22.411259+00:00",
+  "updatedAt": "2026-03-12T17:00:01.408630+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -560,6 +560,54 @@
     "https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
       "checkedAt": "2026-03-12T05:08:22.411259+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/bumble-to-launch-an-ai-dating-assistant-bee": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200,810",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/a-writer-is-suing-grammarly-for-turning-her-and-other-authors-into-ai-editors-without-consent": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1466243153.jpg?resize=1200,705",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/12/les-orchard": {
+      "image": "",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/gumloop-lands-50m-from-benchmark-to-turn-every-employee-into-an-ai-agent-builder": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/9F2166B5-426E-4607-AF98-65A31AD8FDB7IMG_8309.jpeg?resize=1200,802",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/alexa-gets-a-new-adults-only-personality-option-that-curses-but-wont-get-into-nsfw-content": {
+      "image": "",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://www.techrepublic.com/article/powerpresent-ai-lifetime-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tra-03122026-powerpresent-ai.jpg",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/wonderful-raises-150m-series-b-at-2b-valuation": {
+      "image": "",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://www.techrepublic.com/article/news-musk-xai-power-plant-mississippi-ai-data-centers": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-musk-xai-power-plant.jpg",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-four-ai-chips": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-meta-ai-chips.jpg",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/12/1133675/pragmatic-by-design-engineering-ai-for-the-real-world": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/02/LTTS-Social-Card-1.png?resize=1200,600",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/google-is-using-old-news-reports-and-ai-to-predict-flash-floods": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-7.14.04-PM.png?resize=1200,757",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/google-maps-is-getting-an-ai-ask-maps-feature-and-upgraded-immersive-navigation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200,800",
+      "checkedAt": "2026-03-12T17:00:01.408630+00:00"
     }
   }
 }
