@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T15:12:55.906788+00:00",
+  "updatedAt": "2026-03-12T18:34:59.006863+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -588,6 +588,50 @@
     "https://www.technologyreview.com/2026/03/10/1134083/building-a-strong-data-infrastructure-for-ai-agent-success": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/SAP-article-iStock-933220212.jpg?resize=1200,600",
       "checkedAt": "2026-03-12T15:12:55.906788+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/facebook-marketplace-now-lets-meta-ai-respond-to-buyers-messages": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Facebook-Marketplace-Selling-Updates_Header.jpg?resize=1200,675",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://www.techrepublic.com/article/news-claude-excel-powerpoint-integration-anthropic-ai-workflows": {
+      "image": "",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/tinder-tries-to-lure-people-back-to-online-dating-with-irl-events-virtual-speed-dating": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Tinder-revamp2026.png?w=1200",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/atlassian-follows-blocks-footsteps-and-cuts-staff-in-the-name-of-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2147914845.jpg?w=1024",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/bumble-to-launch-an-ai-dating-assistant-bee": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200,810",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/a-writer-is-suing-grammarly-for-turning-her-and-other-authors-into-ai-editors-without-consent": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1466243153.jpg?resize=1200,705",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/12/les-orchard": {
+      "image": "",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/gumloop-lands-50m-from-benchmark-to-turn-every-employee-into-an-ai-agent-builder": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/9F2166B5-426E-4607-AF98-65A31AD8FDB7IMG_8309.jpeg?resize=1200,802",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/alexa-gets-a-new-adults-only-personality-option-that-curses-but-wont-get-into-nsfw-content": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/alexa-plus.jpeg?resize=1200,675",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://www.techrepublic.com/article/powerpresent-ai-lifetime-subscription": {
+      "image": "",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://www.techrepublic.com/article/news-musk-xai-power-plant-mississippi-ai-data-centers": {
+      "image": "",
+      "checkedAt": "2026-03-12T18:34:59.006863+00:00"
     }
   }
 }
