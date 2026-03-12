@@ -1,0 +1,21 @@
+{
+  "date": "2026-03-12",
+  "updatedAt": "2026-03-12T00:23:04.517734+00:00",
+  "items": [
+    {
+      "title": "How AI is helping improve heart health in rural Australia",
+      "url": "https://blog.google/innovation-and-ai/technology/health/google-ai-heart-health-australia",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "A doctor is sitting across a desk from a patient. The doctor is holding a tablet and a pen. Medical charts renderings are in the background.",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
+      "published": "2026-03-12T15:00:00+00:00",
+      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
+      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "score": 2.43
+    }
+  ],
+  "errors": []
+}
