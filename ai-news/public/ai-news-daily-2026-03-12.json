@@ -1,6 +1,6 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T03:00:01.882442+00:00",
+  "updatedAt": "2026-03-12T05:08:22.411259+00:00",
   "items": [
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -13,8 +13,36 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T03:00:01.882442+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
       "score": 2.43
+    },
+    {
+      "title": "How NVIDIA AI-Q Reached \\#1 on DeepResearch Bench I and II",
+      "url": "https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
+      "published": "2026-03-12T03:53:34+00:00",
+      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.3926
+    },
+    {
+      "title": "Netflix reportedly buys Ben Affleck’s AI firm for $600m",
+      "url": "https://www.techinasia.com/news/netflix-reportedly-buys-ben-afflecks-ai-firm-600m",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Netflix announced the acquisition of InterPositive in a deal could be worth up to US$600 million, according to people familiar with the …",
+      "image": "https://ic-cdn.flipboard.com/techinasia.com/0f2bcb5526a31b2f8591f4db15831aa47d1cbee4/_large.jpeg",
+      "published": "2026-03-12T02:38:22+00:00",
+      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.0762
     },
     {
       "title": "Use This Prompt Engineering Technique to Turn Claude AI Into Your Thinking Partner",
@@ -27,8 +55,22 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--5-.gif",
       "published": "2026-03-12T00:15:43+00:00",
       "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T03:00:01.882442+00:00",
-      "score": 2.0694
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.0106
+    },
+    {
+      "title": "How AI will destroy universities",
+      "url": "https://unherd.com/2026/03/how-ai-will-destroy-universities?edition=us",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "If you listen to the prophets of artificial intelligence, a wonderful future begins to take shape: a post-scarcity society where nobody needs to …",
+      "image": "https://ic-cdn.flipboard.com/unherd.com/eae10c57f9a4f1e14ef541cac450bf286f2feed2/_large.jpeg",
+      "published": "2026-03-12T00:02:01+00:00",
+      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.0045
     }
   ],
   "errors": []
