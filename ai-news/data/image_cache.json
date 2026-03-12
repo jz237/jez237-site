@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T19:50:11.955976+00:00",
+  "updatedAt": "2026-03-12T23:00:01.419393+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -644,6 +644,26 @@
     "https://www.anthropic.com/news/claude-partner-network": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=fig",
       "checkedAt": "2026-03-12T19:50:11.955976+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/12/how-to-build-an-autonomous-machine-learning-research-loop-in-google-colab-using-andrej-karpathys-autoresearch-framework-for-hyperparameter-discovery-and-experiment-tracking": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-41-1024x731.png",
+      "checkedAt": "2026-03-12T23:00:01.419393+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/sales-automation-startup-rox-ai-hits-1-2b-valuation-sources-say": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/04/GettyImages-1422739420.jpg?resize=1200,702",
+      "checkedAt": "2026-03-12T23:00:01.419393+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/12/1134243/defense-official-military-use-ai-chatbots-targeting-decisions": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/genai-mil2.jpg?resize=1200,600",
+      "checkedAt": "2026-03-12T23:00:01.419393+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/12/malus": {
+      "image": "",
+      "checkedAt": "2026-03-12T23:00:01.419393+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nuro-tests-self-driving-tech-tokyo": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_dkk0aidkk0aidkk0.jpg",
+      "checkedAt": "2026-03-12T23:00:01.419393+00:00"
     }
   }
 }
