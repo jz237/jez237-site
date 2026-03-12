@@ -1,6 +1,6 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T00:23:04.517734+00:00",
+  "updatedAt": "2026-03-12T03:00:01.882442+00:00",
   "items": [
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -12,9 +12,23 @@
       "summary": "A doctor is sitting across a desk from a patient. The doctor is holding a tablet and a pen. Medical charts renderings are in the background.",
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
-      "firstSeen": "2026-03-12T00:23:04.517734+00:00",
-      "lastSeen": "2026-03-12T00:23:04.517734+00:00",
+      "firstSeen": "2026-03-11T23:55:55.458549+00:00",
+      "lastSeen": "2026-03-12T03:00:01.882442+00:00",
       "score": 2.43
+    },
+    {
+      "title": "Use This Prompt Engineering Technique to Turn Claude AI Into Your Thinking Partner",
+      "url": "https://aitoolsclub.com/use-this-prompt-engineering-technique-to-turn-claude-ai-into-your-thinking-partner",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Artificial intelligence (AI) has long been positioned as a tool for speed; a machine that can answer fast, automate workflow, boost productivity, and …",
+      "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--5-.gif",
+      "published": "2026-03-12T00:15:43+00:00",
+      "firstSeen": "2026-03-12T03:00:01.882442+00:00",
+      "lastSeen": "2026-03-12T03:00:01.882442+00:00",
+      "score": 2.0694
     }
   ],
   "errors": []
