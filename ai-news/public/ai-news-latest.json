@@ -1,6 +1,34 @@
 {
-  "updatedAt": "2026-03-12T21:46:29.656710+00:00",
+  "updatedAt": "2026-03-12T22:43:27.405342+00:00",
   "items": [
+    {
+      "title": "Sales automation startup Rox AI hits $1.2B valuation, sources say",
+      "url": "https://techcrunch.com/2026/03/12/sales-automation-startup-rox-ai-hits-1-2b-valuation-sources-say",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Rox, founded in 2024 by the former chief growth officer of New Relic, offers an AI-native alternative to CRM tools.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/04/GettyImages-1422739420.jpg?resize=1200%2C702",
+      "published": "2026-03-12T22:25:50+00:00",
+      "firstSeen": "2026-03-12T22:43:27.405342+00:00",
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.2811
+    },
+    {
+      "title": "Defense official reveals how AI chatbots could be used for targeting decisions",
+      "url": "https://www.technologyreview.com/2026/03/12/1134243/defense-official-military-use-ai-chatbots-targeting-decisions",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The US military might use generative AI systems to rank lists of targets and make recommendations about which to strike first, which would then be vetted by humans, according to a Defense official with knowledge of the matter. The disclosure about how the military may use AI chatbots comes as the Pentagon faces scrutiny over&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/genai-mil2.jpg?resize=1200%2C600",
+      "published": "2026-03-12T22:23:34+00:00",
+      "firstSeen": "2026-03-12T22:43:27.405342+00:00",
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.2799
+    },
     {
       "title": "Stanford Researchers Release OpenJarvis: A Local-First Framework for Building On-Device Personal AI Agents with Tools, Memory, and Learning",
       "url": "https://www.marktechpost.com/2026/03/12/stanford-researchers-release-openjarvis-a-local-first-framework-for-building-on-device-personal-ai-agents-with-tools-memory-and-learning",
@@ -12,8 +40,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-12-at-2.19.48-PM-1-150x150.png",
       "published": "2026-03-12T21:21:04+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 3.2071
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 3.1788
     },
     {
       "title": "Pixar's Hoppers behind the scenes",
@@ -26,8 +54,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/023514f2154372d9a3a62fe0354fa1f27f5a0436/_xlarge.jpeg",
       "published": "2026-03-12T20:50:08+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1217
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0938
     },
     {
       "title": "iOS 26 added four new features I’ve been using almost every day",
@@ -37,11 +65,11 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Major iPhone updates like iOS 26 typically come with hundreds of new features and changes, but a much smaller subset that become daily go-tos. Here are four new iOS 26 features I’ve found myself using just about every day. #1: Adaptive Toolbar in Notes I love Apple Notes and use it in a wide variety …",
-      "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/07/ios-26-beta-3-new-wallpaper.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+      "image": "https://ic-cdn.flipboard.com/wp.com/128be7986201029b90eec2b71d056475e4b08387/_xlarge.jpeg",
       "published": "2026-03-12T20:43:08+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1182
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0904
     },
     {
       "title": "Iran trolls Trump with AI-generated Lego propaganda video",
@@ -54,8 +82,8 @@
       "image": "https://s.france24.com/media/display/44900588-1e50-11f1-979e-005056bfb2b6/w:1280/p:16x9/capture-37635063369b31ef7b201e9-77449550.jpg",
       "published": "2026-03-12T20:35:23+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1144
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0867
     },
     {
       "title": "MALUS - Clean Room as a Service",
@@ -68,8 +96,8 @@
       "image": "",
       "published": "2026-03-12T20:08:55+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.9414
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.914
     },
     {
       "title": "Nuro Tests Zero-Shot Autonomous Vehicles in Tokyo",
@@ -82,8 +110,8 @@
       "image": "",
       "published": "2026-03-12T19:37:20+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.0862
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0592
     },
     {
       "title": "Translucent raises $27M to help healthcare firms automate financial visibility - SiliconANGLE",
@@ -97,7 +125,7 @@
       "published": "2026-03-12T19:31:50+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
       "lastSeen": "2026-03-12T19:50:11.955976+00:00",
-      "score": 2.0835
+      "score": 2.0566
     },
     {
       "title": "Coding After Coders: The End of Computer Programming as We Know It",
@@ -110,8 +138,8 @@
       "image": "",
       "published": "2026-03-12T19:23:44+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.2196
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.1928
     },
     {
       "title": "A PhD is an apprenticeship in research – we can’t let AI take that away",
@@ -126,7 +154,7 @@
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
       "model_release": true,
-      "score": 8.7751
+      "score": 8.7484
     },
     {
       "title": "Artificial intelligence has brought a new way of war to the Middle East – and it makes crimes harder to hide",
@@ -139,8 +167,8 @@
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/45060e5eaf988bae4b929b2daa896cb46aa6ddda/_xlarge.png",
       "published": "2026-03-12T18:26:47+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.0529
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0268
     },
     {
       "title": "Facebook Marketplace now lets Meta AI respond to buyers’ messages",
@@ -153,8 +181,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Facebook-Marketplace-Selling-Updates_Header.jpg?resize=1200%2C675",
       "published": "2026-03-12T18:20:33+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.19
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.1639
     },
     {
       "title": "Amazon puts humans back in the loop as its retail website crashes from ‘inaccurate advice’ that an AI agent took from an old wiki",
@@ -168,7 +196,7 @@
       "published": "2026-03-12T18:14:03+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
       "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.347
+      "score": 2.321
     },
     {
       "title": "Anthropic’s Claude Now Connects Microsoft Excel, PowerPoint Workflows",
@@ -181,8 +209,8 @@
       "image": "",
       "published": "2026-03-12T18:12:36+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.0463
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0204
     },
     {
       "title": "Tinder tries to lure people back to online dating with IRL events, virtual speed dating",
@@ -195,8 +223,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Tinder-revamp2026.png?w=1200",
       "published": "2026-03-12T18:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1805
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.1547
     },
     {
       "title": "I Watched 6 Hours of DOGE Bro Testimony. Here's What They Had to Say For Themselves",
@@ -209,8 +237,22 @@
       "image": "https://ic-cdn.flipboard.com/404media.co/f9d0ac067c67a751575eaa02354f3c4f9cc9aa09/_xlarge.png",
       "published": "2026-03-12T17:25:13+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.0247
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9993
+    },
+    {
+      "title": "Viral Music Cover Hits 80 Million Streams Before Fans Realize It’s AI",
+      "url": "https://www.marsmag.com/2026/03/12/viral-music-cover-hits-80-million-streams-before-fans-realize-its-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The use of artificial intelligence is quietly reshaping the music people listen to — sometimes without them realizing it.Millions of music listeners …",
+      "image": "https://i0.wp.com/www.marsmag.com/wp-content/uploads/2020/09/seagtead.jpg?fit=440%2C148&ssl=1",
+      "published": "2026-03-12T17:23:00+00:00",
+      "firstSeen": "2026-03-12T22:43:27.405342+00:00",
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.6983
     },
     {
       "title": "Atlassian follows Block’s footsteps and cuts staff in the name of AI",
@@ -223,8 +265,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2147914845.jpg?w=1024",
       "published": "2026-03-12T17:20:19+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1625
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.1372
     },
     {
       "title": "The 1TB M5 MacBook Pro Just Got Its Biggest Discount Ever",
@@ -237,8 +279,8 @@
       "image": "https://ic-cdn.flipboard.com/lifehacker.com/0d69d15999838a19b4a5b0e3438adcb87e3ce5ef/_xlarge.png",
       "published": "2026-03-12T17:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 2.7134
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.6883
     },
     {
       "title": "Bumble to launch an AI dating assistant, ‘Bee’",
@@ -251,8 +293,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200%2C810",
       "published": "2026-03-12T16:52:17+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.8499
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.8249
     },
     {
       "title": "I Asked ChatGPT: Where Can I Retire on $1,500 a Month Without Freezing?",
@@ -265,8 +307,8 @@
       "image": "https://ic-cdn.flipboard.com/gobankingrates.com/07aa43c4990c9fff6b22806b01fa2f9fcd869d59/_xlarge.jpeg",
       "published": "2026-03-12T16:45:06+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.0067
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9818
     },
     {
       "title": "Fourth Circuit Publicly Admonishes Lawyer for \"Citations to Nonexistent Judicial Opinions\"",
@@ -280,7 +322,7 @@
       "published": "2026-03-12T16:44:33+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 2.0065
+      "score": 1.9816
     },
     {
       "title": "A writer is suing Grammarly for turning her and other authors into ‘AI editors’ without consent",
@@ -293,8 +335,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1466243153.jpg?resize=1200%2C705",
       "published": "2026-03-12T16:42:40+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1457
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.1208
     },
     {
       "title": "Amazon Spring Deal Days: The highlight",
@@ -308,7 +350,7 @@
       "published": "2026-03-12T16:33:34+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
       "lastSeen": "2026-03-12T19:50:11.955976+00:00",
-      "score": 2.0016
+      "score": 1.9769
     },
     {
       "title": "Quoting Les Orchard",
@@ -321,8 +363,8 @@
       "image": "",
       "published": "2026-03-12T16:28:07+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1392
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.1145
     },
     {
       "title": "View: An AI jobs crisis we didn’t see coming",
@@ -335,8 +377,8 @@
       "image": "https://ic-cdn.flipboard.com/semafor.com/09b0fcaa993fdf0b874f956a6e233f5384d95df2/_xlarge.jpeg",
       "published": "2026-03-12T16:25:15+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.998
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9733
     },
     {
       "title": "Claude can now generate charts and diagrams",
@@ -350,7 +392,7 @@
       "published": "2026-03-12T16:00:00+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
       "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.987
+      "score": 1.9626
     },
     {
       "title": "Anthropic’s Claude AI can respond with charts, diagrams, and other visuals now",
@@ -363,8 +405,22 @@
       "image": "https://ic-cdn.flipboard.com/theverge.com/7a752edc7a85ad69ad255b0a3124598a1c806b41/_xlarge.jpeg",
       "published": "2026-03-12T16:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.987
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9626
+    },
+    {
+      "title": "Ben Affleck’s AI Startup Reportedly Cost Netflix $600 Million. Here’s What it Actually Promises to Do",
+      "url": "https://nofilmschool.com/what-does-interpositive-do",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "As we covered when it was announced last week, Netflix didn’t wait long after its failed bid for Warner Bros. to make another move. The streaming …",
+      "image": "http://i.ytimg.com/vi/4FBDlAWbOIo/0.jpg",
+      "published": "2026-03-12T15:45:35+00:00",
+      "firstSeen": "2026-03-12T22:43:27.405342+00:00",
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9565
     },
     {
       "title": "Gumloop lands $50M from Benchmark to turn every employee into an AI agent builder",
@@ -377,8 +433,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/9F2166B5-426E-4607-AF98-65A31AD8FDB7IMG_8309.jpeg?resize=1200%2C802",
       "published": "2026-03-12T15:30:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.764
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.74
     },
     {
       "title": "Alexa+ gets a new ‘adults only’ personality option that curses but won’t get into NSFW content",
@@ -391,8 +447,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/alexa-plus.jpeg?resize=1200%2C675",
       "published": "2026-03-12T15:16:16+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1082
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0843
     },
     {
       "title": "This AI Tool Builds Polished Presentations in Seconds",
@@ -405,8 +461,8 @@
       "image": "",
       "published": "2026-03-12T15:15:58+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.9681
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9442
     },
     {
       "title": "Wonderful raises $150M Series B at $2B valuation",
@@ -419,8 +475,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Wonderful-Founders.png?resize=1200%2C800",
       "published": "2026-03-12T15:12:35+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.1066
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.0828
     },
     {
       "title": "Data centres are the new target in modern warfare during Iran war, experts say​",
@@ -434,7 +490,7 @@
       "published": "2026-03-12T15:06:46+00:00",
       "firstSeen": "2026-03-12T11:44:55.047869+00:00",
       "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.9642
+      "score": 1.9404
     },
     {
       "title": "Into the Omniverse: How Industrial AI and Digital Twins Accelerate Design, Engineering and Manufacturing Across Industries",
@@ -447,8 +503,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2027/03/nv-ov-ito-feb-1280x680_credit_r4.png",
       "published": "2026-03-12T15:00:51+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.4017
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.3779
     },
     {
       "title": "Elon Musk’s AI Power Plant Approved in Mississippi, Sparking Community Backlash",
@@ -461,8 +517,8 @@
       "image": "",
       "published": "2026-03-12T15:00:08+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.9614
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9376
     },
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -475,8 +531,8 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 2.2413
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 2.2176
     },
     {
       "title": "Democrats ask Pentagon about Iran school strike and role of AI",
@@ -489,78 +545,22 @@
       "image": "https://ic-cdn.flipboard.com/s-nbcnews.com/f39b811f77f2cf7994690e286935bbd9e35dff28/_xlarge.jpeg",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.9613
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.9376
     },
     {
-      "title": "Sam Altman admits AI is killing the labor-capital balance—and says nobody knows what to do about it",
-      "url": "https://fortune.com/2026/03/12/sam-altman-ai-labor-capital-jobs-nobody-knows",
+      "title": "Testing AI is not like testing software and most companies haven't figured that out yet",
+      "url": "https://www.techradar.com/pro/testing-ai-is-not-like-testing-software-and-most-companies-havent-figured-that-out-yet",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Speaking at the BlackRock Infrastructure Summit, OpenAI CEO Sam Altman tackled the growing public skepticism surrounding artificial intelligence, …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/c7dd157136f98917925e5e7d763216258a9757de/_xlarge.jpeg",
-      "published": "2026-03-12T14:16:43+00:00",
-      "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 2.6432
-    },
-    {
-      "title": "6 signs the sexual tension isn't just your imagination",
-      "url": "https://flip.it/KAOMgZ",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Here are 6 traits that create that intense sexual chemistry we all crave. Plus, more dating advice you don't want to miss.",
-      "image": "https://ic-cdn.flipboard.com/flipboard.com/a380ac06e297cf4f5aa935b5550a3392b15d9058/_xlarge.jpeg",
-      "published": "2026-03-12T14:06:01+00:00",
-      "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.9388
-    },
-    {
-      "title": "Anthropic doesn’t trust the Pentagon, and neither should you",
-      "url": "https://www.theverge.com/podcast/893370/anthropic-pentagon-ai-mass-surveillance-nsa-privacy-spying",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Techdirt’s Mike Masnick on the history of the NSA and mass surveillance in America, and why Anthropic’s fight with the Pentagon should worry us. Today we’re talking about the messy, fast-moving situation at Anthropic, the maker of Claude that now finds itself in a very ugly legal battle with the …",
-      "image": "https://ic-cdn.flipboard.com/theverge.com/a3ddc69ea2b7b90c4d75577b4c9473ccf02b769a/_xlarge.jpeg",
-      "published": "2026-03-12T14:00:00+00:00",
-      "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 1.9363
-    },
-    {
-      "title": "Analysis of Medicare data shows who mental health providers treat over telehealth",
-      "url": "https://www.statnews.com/2026/03/12/medicare-telehealth-rural-mental-health-providers-data",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In today’s edition, important questions about the rapid adoption of health technology. Who is responsible, how is it tested, and who does it …",
-      "image": "https://ic-cdn.flipboard.com/statnews.com/e20a8bffc42dd5ebc3811ccb033950362e7a3a8c/_large.jpeg",
-      "published": "2026-03-12T13:55:14+00:00",
-      "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T18:34:59.006863+00:00",
-      "score": 2.6344
-    },
-    {
-      "title": "Meta’s New AI Chips Reveal a Faster, More Self-Reliant Hardware Strategy",
-      "url": "https://www.techrepublic.com/article/news-meta-four-ai-chips",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Meta unveils four new AI chips as it expands its in-house hardware push, aiming for more control over AI costs, rollout speed, and infrastructure.\nThe post Meta’s New AI Chips Reveal a Faster, More Self-Reliant Hardware Strategy appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-12T13:47:22+00:00",
-      "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.9312
+      "summary": "Last week, I asked ChatGPT for its version number and found myself in a heated argument trying to prove that what I was seeing was real. This wasn't …",
+      "image": "https://cdn.mos.cms.futurecdn.net/pvkgvETjmqkheCK3xtsQx9-1920-80.jpg",
+      "published": "2026-03-12T14:56:02+00:00",
+      "firstSeen": "2026-03-12T22:43:27.405342+00:00",
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.936
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -573,8 +573,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.3357
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.3319
     },
     {
       "title": "Introducing... Life Without",
@@ -587,8 +587,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.1339
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.1336
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -601,8 +601,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 1.1914
+      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
+      "score": 1.1913
     },
     {
       "title": "The Life Scientific: Julia Simner",
