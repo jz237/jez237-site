@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T18:34:59.006863+00:00",
+  "updatedAt": "2026-03-12T19:50:11.955976+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -632,6 +632,18 @@
     "https://www.techrepublic.com/article/news-musk-xai-power-plant-mississippi-ai-data-centers": {
       "image": "",
       "checkedAt": "2026-03-12T18:34:59.006863+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/12/coding-after-coders": {
+      "image": "",
+      "checkedAt": "2026-03-12T19:50:11.955976+00:00"
+    },
+    "https://www.together.ai/blog/build-real-time-voice-agents-on-together-ai": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b221e5208efa44622d9022_20260311_Voice_Agents_C.png",
+      "checkedAt": "2026-03-12T19:50:11.955976+00:00"
+    },
+    "https://www.anthropic.com/news/claude-partner-network": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=fig",
+      "checkedAt": "2026-03-12T19:50:11.955976+00:00"
     }
   }
 }
