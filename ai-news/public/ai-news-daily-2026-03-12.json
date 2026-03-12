@@ -1,6 +1,6 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T07:00:01.648841+00:00",
+  "updatedAt": "2026-03-12T05:08:22.411259+00:00",
   "items": [
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -13,7 +13,7 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
       "score": 2.43
     },
     {
@@ -26,51 +26,23 @@
       "summary": "",
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
       "published": "2026-03-12T03:53:34+00:00",
-      "firstSeen": "2026-03-12T07:00:01.648841+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
-      "score": 2.339
+      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.3926
     },
     {
-      "title": "Data centres are the new target in modern warfare during Iran war, experts say​",
-      "url": "https://www.euronews.com/next/2026/03/12/data-centres-are-the-new-target-in-modern-warfare-during-iran-war-experts-say",
+      "title": "Netflix reportedly buys Ben Affleck’s AI firm for $600m",
+      "url": "https://www.techinasia.com/news/netflix-reportedly-buys-ben-afflecks-ai-firm-600m",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Data centres are the physical buildings that house all the infrastructure required to power banking apps, cloud services, and artificial intelligence …",
-      "image": "https://ic-cdn.flipboard.com/euronews.com/ade2694b0b8175bed19dcf80108dbb60edb66faa/_xlarge.jpeg",
-      "published": "2026-03-12T06:52:18+00:00",
-      "firstSeen": "2026-03-12T07:00:01.648841+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
-      "score": 2.1461
-    },
-    {
-      "title": "'I'll do better next time': Artist apologises for controversial New Yorker illustration",
-      "url": "https://www.creativebloq.com/art/illustration/ill-do-better-next-time-artist-apologises-for-controversial-new-yorker-illustration",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The magazine's representation of actor Wunmi Mosaku isn't going down well. The New Yorker is renowned for its illustrations, both inside and outside …",
-      "image": "https://cdn.mos.cms.futurecdn.net/eXxSxwo8UesnGPf55rV2BT-1920-80.jpg",
-      "published": "2026-03-12T06:00:00+00:00",
-      "firstSeen": "2026-03-12T07:00:01.648841+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
-      "score": 2.1199
-    },
-    {
-      "title": "Vibe coding is being called the greatest unlock for non-techies. These 6 startups are raising billions.",
-      "url": "https://www.businessinsider.com/startups-raising-billions-vibe-coding-boom-cursor-lovable-replit-emergent-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The tech world is both in awe of and fearful of vibe coding. On one hand, tech giants are all in on these AI-assisted coding tools. They're touting efficiency gains, listing it as a need-to-have in job descriptions, buying their employees subscriptions, and even investing in vibe-coding startups …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/b3139ee84b3ef44c91753953af636901c17fe9fa/_large.jpeg",
-      "published": "2026-03-12T05:55:19+00:00",
-      "firstSeen": "2026-03-12T07:00:01.648841+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
-      "score": 2.1175
+      "summary": "Netflix announced the acquisition of InterPositive in a deal could be worth up to US$600 million, according to people familiar with the …",
+      "image": "https://ic-cdn.flipboard.com/techinasia.com/0f2bcb5526a31b2f8591f4db15831aa47d1cbee4/_large.jpeg",
+      "published": "2026-03-12T02:38:22+00:00",
+      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.0762
     },
     {
       "title": "Use This Prompt Engineering Technique to Turn Claude AI Into Your Thinking Partner",
@@ -83,8 +55,8 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--5-.gif",
       "published": "2026-03-12T00:15:43+00:00",
       "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
-      "score": 1.9622
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.0106
     },
     {
       "title": "How AI will destroy universities",
@@ -96,9 +68,9 @@
       "summary": "If you listen to the prophets of artificial intelligence, a wonderful future begins to take shape: a post-scarcity society where nobody needs to …",
       "image": "https://ic-cdn.flipboard.com/unherd.com/eae10c57f9a4f1e14ef541cac450bf286f2feed2/_large.jpeg",
       "published": "2026-03-12T00:02:01+00:00",
-      "firstSeen": "2026-03-12T07:00:01.648841+00:00",
-      "lastSeen": "2026-03-12T07:00:01.648841+00:00",
-      "score": 1.9565
+      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
+      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
+      "score": 2.0045
     }
   ],
   "errors": []
