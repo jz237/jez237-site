@@ -1,7 +1,21 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T15:12:55.906788+00:00",
+  "updatedAt": "2026-03-12T20:00:02.119089+00:00",
   "items": [
+    {
+      "title": "Bumble to launch an AI dating assistant, ‘Bee’",
+      "url": "https://techcrunch.com/2026/03/12/bumble-to-launch-an-ai-dating-assistant-bee",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Bumble's new AI assistant Bee will move the dating app beyond the swipe by matching people based on compatibility and goals.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200%2C810",
+      "published": "2026-03-12T16:52:17+00:00",
+      "firstSeen": "2026-03-12T20:00:02.119089+00:00",
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.8984
+    },
     {
       "title": "Perplexity turns your Mac mini into a 24/7 AI agent",
       "url": "https://thenextweb.com/news/perplexity-personal-computer-enterprise",
@@ -14,7 +28,21 @@
       "published": "2026-03-12T08:51:14+00:00",
       "firstSeen": "2026-03-12T10:09:57.784965+00:00",
       "lastSeen": "2026-03-12T11:44:55.047869+00:00",
-      "score": 2.9718
+      "score": 2.8571
+    },
+    {
+      "title": "Gumloop lands $50M from Benchmark to turn every employee into an AI agent builder",
+      "url": "https://techcrunch.com/2026/03/12/gumloop-lands-50m-from-benchmark-to-turn-every-employee-into-an-ai-agent-builder",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As companies race to adopt AI, Benchmark general partner Everett Randle believes the key to success lies in empowering every worker with AI superpowers, and Gumloop’s intuitive agent builder is an example of the kind of tool that will unlock that potential.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/9F2166B5-426E-4607-AF98-65A31AD8FDB7IMG_8309.jpeg?resize=1200%2C802",
+      "published": "2026-03-12T15:30:00+00:00",
+      "firstSeen": "2026-03-12T20:00:02.119089+00:00",
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.8107
     },
     {
       "title": "Google Maps is getting an AI ‘Ask Maps’ feature and upgraded ‘immersive’ navigation",
@@ -27,8 +55,22 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200%2C800",
       "published": "2026-03-12T12:30:00+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.9101
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.7831
+    },
+    {
+      "title": "Sam Altman admits AI is killing the labor-capital balance—and says nobody knows what to do about it",
+      "url": "https://fortune.com/2026/03/12/sam-altman-ai-labor-capital-jobs-nobody-knows",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Speaking at the BlackRock Infrastructure Summit, OpenAI CEO Sam Altman tackled the growing public skepticism surrounding artificial intelligence, …",
+      "image": "https://ic-cdn.flipboard.com/fortune.com/c7dd157136f98917925e5e7d763216258a9757de/_xlarge.jpeg",
+      "published": "2026-03-12T14:16:43+00:00",
+      "firstSeen": "2026-03-12T20:00:02.119089+00:00",
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.6883
     },
     {
       "title": "NVIDIA invests $2 billion in Nebius",
@@ -41,8 +83,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NVIDIA-invests-2-billion-in-Nebius.png",
       "published": "2026-03-12T11:17:05+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.7362
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.6135
     },
     {
       "title": "Elaia closes its third deep-tech seed fund at €134M",
@@ -55,8 +97,22 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Elaia-closes-its-third-deep-tech-seed-fund-at-E134M.png",
       "published": "2026-03-12T10:01:41+00:00",
       "firstSeen": "2026-03-12T11:44:55.047869+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.7024
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.5838
+    },
+    {
+      "title": "Publishers are finally getting serious about AI scraping",
+      "url": "https://www.fastcompany.com/91504520/publishers-are-finally-getting-serious-about-ai-scraping",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "After years of fragmented pushback, publishers are beginning to organize around a simple goal—making AI companies pay for access. I think the strongest indicator of how normal using AI has become is the language we use as shorthand for it. It’s now extremely common for someone to say they asked …",
+      "image": "https://ic-cdn.flipboard.com/fastcompany.com/ef45fe6a863258b6efbb0f2d324e1ab776889be4/_xlarge.webp",
+      "published": "2026-03-12T09:00:00+00:00",
+      "firstSeen": "2026-03-12T20:00:02.119089+00:00",
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.5604
     },
     {
       "title": "Into the Omniverse: How Industrial AI and Digital Twins Accelerate Design, Engineering and Manufacturing Across Industries",
@@ -69,8 +125,8 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2027/03/nv-ov-ito-feb-1280x680_credit_r4.png",
       "published": "2026-03-12T15:00:51+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.5839
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.4477
     },
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -83,8 +139,22 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.4234
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.2873
+    },
+    {
+      "title": "Coding After Coders: The End of Computer Programming as We Know It",
+      "url": "https://simonwillison.net/2026/Mar/12/coding-after-coders",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Coding After Coders: The End of Computer Programming as We Know It\nEpic piece on AI-assisted development by Clive Thompson for the New York Times Magazine, who spoke to more than 70 software developers from companies like Google, Amazon, Microsoft, Apple, plus other individuals including Anil Dash, Thomas Ptacek, Steve Yegge, and myself.\nI think the piece accurately and clearly captures what's going on in our industry right now in terms appropriate for a wider audience.\nI talked to Clive a few weeks ago. Here's the quote from me that made it into the piece.\n\nGiven A.I.’s penchant to hallucinat",
+      "image": "",
+      "published": "2026-03-12T19:23:44+00:00",
+      "firstSeen": "2026-03-12T20:00:02.119089+00:00",
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.2717
     },
     {
       "title": "Wonderful raises $150M Series B to scale its enterprise AI agents across 30 countries",
@@ -97,78 +167,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Wonderful-raises-150M-Series-B.png",
       "published": "2026-03-12T12:31:46+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.3709
-    },
-    {
-      "title": "Zendesk acquires Forethought in its biggest deal in two decades",
-      "url": "https://thenextweb.com/news/zendesk-acquires-forethought-agentic-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The 2018 Startup Battlefield winner is joining Zendesk as the race to own agentic customer service accelerates When Forethought won the TechCrunch Startup Battlefield competition in 2018, ChatGPT was four years from existing. The company’s pitch, that AI could handle customer service conversations autonomously, was considered ambitious to the point of eccentricity. On Wednesday, Zendesk [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Zendesk-acquires-Forethought.png",
-      "published": "2026-03-12T12:10:28+00:00",
-      "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.3609
-    },
-    {
-      "title": "Wonderful raises $150M Series B at $2B valuation",
-      "url": "https://techcrunch.com/2026/03/12/wonderful-raises-150m-series-b-at-2b-valuation",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The funding round, led by Insight Partners, comes just four months after Wonderful raised a $100 million Series A.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/11/Wonderful-Founders.png?resize=1200%2C800",
-      "published": "2026-03-12T15:12:35+00:00",
-      "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.2898
-    },
-    {
-      "title": "Coding After Coders: The End of Computer Programming as We Know It",
-      "url": "https://www.nytimes.com/2026/03/12/magazine/ai-coding-programming-jobs-claude-chatgpt.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In the era of A.I. agents, many Silicon Valley programmers are now barely programming. Instead, what they’re doing is deeply, deeply weird. Lately, Manu Ebert has been trying to keep his A.I. from humiliating him. I recently visited Ebert, a machine-learning engineer and former neuroscientist, at the …",
-      "image": "https://ic-cdn.flipboard.com/nyt.com/0f00e55fae70d99619ce72bfdfe0547dfd49aa08/_large.jpeg",
-      "published": "2026-03-12T09:01:29+00:00",
-      "firstSeen": "2026-03-12T11:44:55.047869+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.2762
-    },
-    {
-      "title": "GeForce NOW Raises the Game at the Game Developers Conference",
-      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-gdc-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "GeForce NOW is bringing the game to the Game Developers Conference (GDC), running this week in San Francisco. While developers build the future of gaming, GeForce NOW is delivering it to gamers. The latest updates bring smoother performance, easier game discovery and a fresh lineup of blockbuster titles to the cloud. Game discoverability gets a [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/GFN_Thursday-Mar_12.jpg",
-      "published": "2026-03-12T13:00:53+00:00",
-      "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.2248
-    },
-    {
-      "title": "Google is using old news reports and AI to predict flash floods",
-      "url": "https://techcrunch.com/2026/03/12/google-is-using-old-news-reports-and-ai-to-predict-flash-floods",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A new way to solve data scarcity: Turning qualitative reports into quantitative data with an LLM.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-7.14.04-PM.png?resize=1200%2C757",
-      "published": "2026-03-12T13:00:00+00:00",
-      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
-      "lastSeen": "2026-03-12T15:12:55.906788+00:00",
-      "score": 2.2243
+      "lastSeen": "2026-03-12T20:00:02.119089+00:00",
+      "score": 2.2438
     }
   ],
   "errors": []
