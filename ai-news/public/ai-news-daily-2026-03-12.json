@@ -1,7 +1,21 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T07:52:05.828809+00:00",
+  "updatedAt": "2026-03-12T10:09:57.784965+00:00",
   "items": [
+    {
+      "title": "Perplexity turns your Mac mini into a 24/7 AI agent",
+      "url": "https://thenextweb.com/news/perplexity-personal-computer-enterprise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At its first developer conference, held in a former North Beach church, Perplexity unveiled Personal Computer, expanded its cloud agent to enterprise, opened up finance data tools, and staked its identity on a single claim: AI is the computer now. Two weeks after launching Perplexity Computer, a cloud-based AI agent that can orchestrate 20 frontier [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Perplexity-Personal-Computer.png",
+      "published": "2026-03-12T08:51:14+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 3.1106
+    },
     {
       "title": "How AI is helping improve heart health in rural Australia",
       "url": "https://blog.google/innovation-and-ai/technology/health/google-ai-heart-health-australia",
@@ -13,8 +27,22 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
       "score": 2.43
+    },
+    {
+      "title": "Google is using old news reports and AI to predict flash floods",
+      "url": "https://techcrunch.com/2026/03/12/google-is-using-old-news-reports-and-ai-to-predict-flash-floods",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A new way to solve data scarcity: Turning qualitative reports into quantitative data with an LLM.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-7.14.04-PM.png?resize=1200%2C757",
+      "published": "2026-03-12T10:00:00+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.2849
     },
     {
       "title": "Meet Perplexity Personal Computer: The Always-On Local AI Agent That Runs 24/7 on Your Mac mini",
@@ -28,7 +56,7 @@
       "published": "2026-03-12T04:08:56+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
       "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.342
+      "score": 2.2807
     },
     {
       "title": "How NVIDIA AI-Q Reached \\#1 on DeepResearch Bench I and II",
@@ -41,8 +69,36 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
       "published": "2026-03-12T03:53:34+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.315
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.2541
+    },
+    {
+      "title": "Tech giants and ex military leaders support Anthropic's legal challenge against US government",
+      "url": "http://www.euronews.com/next/2026/03/12/tech-giants-and-ex-military-leaders-support-anthropics-legal-challenge-against-us-governme",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Department of War labelled Anthropic a 'supply chain risk,' which means it can exclude them from bidding for contracts and refuse other companies …",
+      "image": "https://ic-cdn.flipboard.com/euronews.com/68eef8d9e31d6b93768cec8566784efbc2c56e73/_xlarge.jpeg",
+      "published": "2026-03-12T09:44:19+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.137
+    },
+    {
+      "title": "AIRMO raises €5M to put methane-sniffing satellites in orbit by 2027",
+      "url": "https://thenextweb.com/news/airmo-seed-funding-methane-monitoring-satellite-2027",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Berlin-based climate-tech startup has developed a micro-LiDAR and SWIR imager small enough to fly on a nanosatellite, and claims it can detect a methane leak the size of a leaking car from orbit. AIRMO, a Berlin and Luxembourg-based startup building space-based greenhouse gas monitoring technology, has closed a €5 million seed round to fund [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AIRMO-raises-E5M.png",
+      "published": "2026-03-12T09:00:12+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.115
     },
     {
       "title": "Is the Nintendo DS Game Boy the ultimate retro gaming mod?",
@@ -56,7 +112,7 @@
       "published": "2026-03-12T07:00:00+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
       "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.1238
+      "score": 2.0574
     },
     {
       "title": "Moz Pro free trial: professional AI SEO tools from $39/month",
@@ -69,8 +125,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Moz-AI.png",
       "published": "2026-03-12T06:11:47+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.1001
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0352
     },
     {
       "title": "'I'll do better next time': Artist apologises for controversial New Yorker illustration",
@@ -83,8 +139,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/eXxSxwo8UesnGPf55rV2BT-1920-80.jpg",
       "published": "2026-03-12T06:00:00+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0944
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0298
     },
     {
       "title": "Vibe coding is being called the greatest unlock for non-techies. These 6 startups are raising billions.",
@@ -98,49 +154,21 @@
       "published": "2026-03-12T05:55:19+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
       "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0921
+      "score": 2.0277
     },
     {
-      "title": "Netflix reportedly buys Ben Affleck’s AI firm for $600m",
-      "url": "https://www.techinasia.com/news/netflix-reportedly-buys-ben-afflecks-ai-firm-600m",
+      "title": "I tested the the 'Potato' prompt on ChatGPT, Claude and Gemini — here’s which AI is the harshest critic",
+      "url": "https://www.tomsguide.com/ai/i-tested-the-the-potato-prompt-on-chatgpt-claude-and-gemini-heres-which-ai-is-the-harshest-critic",
       "source": "Flipboard AI",
       "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Netflix announced the acquisition of InterPositive in a deal could be worth up to US$600 million, according to people familiar with the …",
-      "image": "https://ic-cdn.flipboard.com/techinasia.com/0f2bcb5526a31b2f8591f4db15831aa47d1cbee4/_large.jpeg",
-      "published": "2026-03-12T02:38:22+00:00",
-      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 2.0013
-    },
-    {
-      "title": "Use This Prompt Engineering Technique to Turn Claude AI Into Your Thinking Partner",
-      "url": "https://aitoolsclub.com/use-this-prompt-engineering-technique-to-turn-claude-ai-into-your-thinking-partner",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Artificial intelligence (AI) has long been positioned as a tool for speed; a machine that can answer fast, automate workflow, boost productivity, and …",
-      "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--5-.gif",
-      "published": "2026-03-12T00:15:43+00:00",
-      "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9405
-    },
-    {
-      "title": "How AI will destroy universities",
-      "url": "https://unherd.com/2026/03/how-ai-will-destroy-universities?edition=us",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "If you listen to the prophets of artificial intelligence, a wonderful future begins to take shape: a post-scarcity society where nobody needs to …",
-      "image": "https://ic-cdn.flipboard.com/unherd.com/eae10c57f9a4f1e14ef541cac450bf286f2feed2/_large.jpeg",
-      "published": "2026-03-12T00:02:01+00:00",
-      "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9349
+      "summary": "AI chatbots are designed to be helpful. The problem is they’re often too helpful. Ask most AI tools to evaluate your idea and you’ll usually get …",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/db8defb72fe45aa7ff41615f5ce67c0e63c35134/_xlarge.png",
+      "published": "2026-03-12T05:15:00+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0096
     }
   ],
   "errors": []

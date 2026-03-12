@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T07:52:05.828809+00:00",
+  "updatedAt": "2026-03-12T10:09:57.784965+00:00",
   "items": [
     {
       "title": "How AI is helping improve heart health in rural Australia",
@@ -12,8 +12,64 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AIHealth_v2_2096x1182_02.max-600x600.format-webp.webp",
       "published": "2026-03-12T15:00:00+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
       "score": 2.43
+    },
+    {
+      "title": "Google is using old news reports and AI to predict flash floods",
+      "url": "https://techcrunch.com/2026/03/12/google-is-using-old-news-reports-and-ai-to-predict-flash-floods",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A new way to solve data scarcity: Turning qualitative reports into quantitative data with an LLM.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-7.14.04-PM.png?resize=1200%2C757",
+      "published": "2026-03-12T10:00:00+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.2849
+    },
+    {
+      "title": "Tech giants and ex military leaders support Anthropic's legal challenge against US government",
+      "url": "http://www.euronews.com/next/2026/03/12/tech-giants-and-ex-military-leaders-support-anthropics-legal-challenge-against-us-governme",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Department of War labelled Anthropic a 'supply chain risk,' which means it can exclude them from bidding for contracts and refuse other companies …",
+      "image": "https://ic-cdn.flipboard.com/euronews.com/68eef8d9e31d6b93768cec8566784efbc2c56e73/_xlarge.jpeg",
+      "published": "2026-03-12T09:44:19+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.137
+    },
+    {
+      "title": "AIRMO raises €5M to put methane-sniffing satellites in orbit by 2027",
+      "url": "https://thenextweb.com/news/airmo-seed-funding-methane-monitoring-satellite-2027",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Berlin-based climate-tech startup has developed a micro-LiDAR and SWIR imager small enough to fly on a nanosatellite, and claims it can detect a methane leak the size of a leaking car from orbit. AIRMO, a Berlin and Luxembourg-based startup building space-based greenhouse gas monitoring technology, has closed a €5 million seed round to fund [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AIRMO-raises-E5M.png",
+      "published": "2026-03-12T09:00:12+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.115
+    },
+    {
+      "title": "Perplexity turns your Mac mini into a 24/7 AI agent",
+      "url": "https://thenextweb.com/news/perplexity-personal-computer-enterprise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At its first developer conference, held in a former North Beach church, Perplexity unveiled Personal Computer, expanded its cloud agent to enterprise, opened up finance data tools, and staked its identity on a single claim: AI is the computer now. Two weeks after launching Perplexity Computer, a cloud-based AI agent that can orchestrate 20 frontier [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Perplexity-Personal-Computer.png",
+      "published": "2026-03-12T08:51:14+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 3.1106
     },
     {
       "title": "Is the Nintendo DS Game Boy the ultimate retro gaming mod?",
@@ -27,7 +83,7 @@
       "published": "2026-03-12T07:00:00+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
       "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.1238
+      "score": 2.0574
     },
     {
       "title": "Moz Pro free trial: professional AI SEO tools from $39/month",
@@ -40,8 +96,8 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Moz-AI.png",
       "published": "2026-03-12T06:11:47+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.1001
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0352
     },
     {
       "title": "'I'll do better next time': Artist apologises for controversial New Yorker illustration",
@@ -54,8 +110,8 @@
       "image": "https://cdn.mos.cms.futurecdn.net/eXxSxwo8UesnGPf55rV2BT-1920-80.jpg",
       "published": "2026-03-12T06:00:00+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0944
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0298
     },
     {
       "title": "Vibe coding is being called the greatest unlock for non-techies. These 6 startups are raising billions.",
@@ -69,7 +125,21 @@
       "published": "2026-03-12T05:55:19+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
       "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0921
+      "score": 2.0277
+    },
+    {
+      "title": "I tested the the 'Potato' prompt on ChatGPT, Claude and Gemini — here’s which AI is the harshest critic",
+      "url": "https://www.tomsguide.com/ai/i-tested-the-the-potato-prompt-on-chatgpt-claude-and-gemini-heres-which-ai-is-the-harshest-critic",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI chatbots are designed to be helpful. The problem is they’re often too helpful. Ask most AI tools to evaluate your idea and you’ll usually get …",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/db8defb72fe45aa7ff41615f5ce67c0e63c35134/_xlarge.png",
+      "published": "2026-03-12T05:15:00+00:00",
+      "firstSeen": "2026-03-12T10:09:57.784965+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0096
     },
     {
       "title": "Meet Perplexity Personal Computer: The Always-On Local AI Agent That Runs 24/7 on Your Mac mini",
@@ -83,7 +153,7 @@
       "published": "2026-03-12T04:08:56+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
       "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.342
+      "score": 2.2807
     },
     {
       "title": "How NVIDIA AI-Q Reached \\#1 on DeepResearch Bench I and II",
@@ -96,8 +166,8 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
       "published": "2026-03-12T03:53:34+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.315
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.2541
     },
     {
       "title": "Netflix reportedly buys Ben Affleck’s AI firm for $600m",
@@ -111,7 +181,7 @@
       "published": "2026-03-12T02:38:22+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
       "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 2.0013
+      "score": 1.9425
     },
     {
       "title": "Use This Prompt Engineering Technique to Turn Claude AI Into Your Thinking Partner",
@@ -124,8 +194,8 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--5-.gif",
       "published": "2026-03-12T00:15:43+00:00",
       "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9405
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8854
     },
     {
       "title": "How AI will destroy universities",
@@ -138,8 +208,8 @@
       "image": "https://ic-cdn.flipboard.com/unherd.com/eae10c57f9a4f1e14ef541cac450bf286f2feed2/_large.jpeg",
       "published": "2026-03-12T00:02:01+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9349
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8802
     },
     {
       "title": "How to Design a Streaming Decision Agent with Partial Reasoning, Online Replanning, and Reactive Mid-Execution Adaptation in Dynamic Environments",
@@ -152,8 +222,8 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner234.png",
       "published": "2026-03-11T23:44:44+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.5978
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.5435
     },
     {
       "title": "AI ‘actor’ Tilly Norwood put out the worst song I’ve ever heard",
@@ -166,8 +236,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-11-at-3.22.19-PM.png?resize=1200%2C672",
       "published": "2026-03-11T23:35:03+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0639
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.0099
     },
     {
       "title": "Sorting algorithms",
@@ -180,8 +250,8 @@
       "image": "https://static.simonwillison.net/static/2026/sorts-32-colors-lossy.gif",
       "published": "2026-03-11T22:58:06+00:00",
       "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0491
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.9959
     },
     {
       "title": "California woman founded ‘boring’ $1,900,000,000 AI startup after deciding to bet against ChatGPT",
@@ -194,8 +264,8 @@
       "image": "https://ic-cdn.flipboard.com/supercarblondie.com/f5d19cbfa2c6fa83889d1b50a0c45c8644db4f98/_xlarge.webp",
       "published": "2026-03-11T22:56:08+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9083
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8552
     },
     {
       "title": "Ford’s new AI assistant will help fleet owners know if seatbelts are being used",
@@ -208,9 +278,9 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ford-pro-fleet.jpg?resize=1200%2C675",
       "published": "2026-03-11T22:51:39+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
       "model_release": true,
-      "score": 8.7465
+      "score": 8.6935
     },
     {
       "title": "Big Tech backs Anthropic in fight against Trump administration",
@@ -223,8 +293,8 @@
       "image": "https://ic-cdn.flipboard.com/bbci.co.uk/09572ba3a8a70470c927a7ce50409fa50729b33f/_medium.webp",
       "published": "2026-03-11T22:46:44+00:00",
       "firstSeen": "2026-03-11T23:55:55.458549+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9046
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8517
     },
     {
       "title": "These Smart Glasses Can Translate Any Language Right Before Your Eyes",
@@ -237,8 +307,8 @@
       "image": "https://ic-cdn.flipboard.com/slashgear.com/022037d123125320ba9a3dfe2be17e1d25fc24f5/_xlarge.jpeg",
       "published": "2026-03-11T22:45:00+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9039
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8511
     },
     {
       "title": "Zendesk acquires agentic customer service startup Forethought",
@@ -251,8 +321,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/10/Forethought-DSC04264.jpg?resize=1200%2C800",
       "published": "2026-03-11T22:41:27+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.3425
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.2898
     },
     {
       "title": "Netflix may have paid $600 million for Ben Affleck’s AI startup",
@@ -265,8 +335,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/eb5e60b4f414ed736008a28b717ef82461c2ecaf/_xlarge.jpeg",
       "published": "2026-03-11T22:00:05+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0263
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.9746
     },
     {
       "title": "Lovable says it added $100M in revenue last month alone, with just 146 employees",
@@ -279,8 +349,8 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/b79d189208b729d57a76f47cb0626bddb134b30f/_xlarge.jpeg",
       "published": "2026-03-11T21:40:49+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.0189
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.9676
     },
     {
       "title": "14,000 routers are infected by malware that's highly resistant to takedowns",
@@ -293,8 +363,8 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2019/04/GettyImages-926536690-1152x648.jpg",
       "published": "2026-03-11T21:27:16+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8737
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8228
     },
     {
       "title": "10 Android Trends That Will Define Smartphones in 2026",
@@ -307,8 +377,8 @@
       "image": "",
       "published": "2026-03-11T21:08:59+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8667
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8162
     },
     {
       "title": "Salesforce Aims to End the ‘Frankenstein’ Contact Center With Agentforce",
@@ -321,8 +391,8 @@
       "image": "",
       "published": "2026-03-11T21:03:40+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.8647
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.8144
     },
     {
       "title": "Dario Amodei’s Oppenheimer Moment",
@@ -335,8 +405,8 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/d98feda319d37215ddb23d5eecaab2596fd55e5f/_xlarge.jpeg",
       "published": "2026-03-11T21:02:00+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8641
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8138
     },
     {
       "title": "Replit CEO Says Their New AI Agent Can Vibe Code a Startup From Scratch",
@@ -350,7 +420,7 @@
       "published": "2026-03-11T21:00:15+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
       "lastSeen": "2026-03-11T23:55:55.458549+00:00",
-      "score": 2.8634
+      "score": 2.8132
     },
     {
       "title": "What to expect from tech at SXSW 2026: Creator tools and so much AI",
@@ -363,8 +433,8 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/7ca01f9f5aef0f2075cb712ee64238e0fe5cf6e5/_xlarge.jpeg",
       "published": "2026-03-11T21:00:00+00:00",
       "firstSeen": "2026-03-12T07:52:05.828809+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8634
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8131
     },
     {
       "title": "‘Agents of Chaos’: New Study Shows AI Agents Can Leak Data, Be Easily Manipulated",
@@ -377,8 +447,8 @@
       "image": "",
       "published": "2026-03-11T20:59:53+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.1633
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.113
     },
     {
       "title": "Meta Buys AI Social Network Moltbook as Superintelligence Labs Expands",
@@ -391,8 +461,8 @@
       "image": "",
       "published": "2026-03-11T20:54:37+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.1613
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 2.1112
     },
     {
       "title": "'Rectal garlic insertion for immune support': Medical chatbots confidently give disastrously misguided advice, experts say",
@@ -405,8 +475,8 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/e452ffdcc845d7c655fc2e7130f59f21a6bfb1ff/_xlarge.jpeg",
       "published": "2026-03-11T20:29:01+00:00",
       "firstSeen": "2026-03-11T21:50:19.641054+00:00",
-      "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 1.8518
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.8022
     },
     {
       "title": "Claude Now Integrates More Closely With Microsoft Excel and PowerPoint",
@@ -420,7 +490,7 @@
       "published": "2026-03-11T20:24:48+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
       "lastSeen": "2026-03-12T05:08:22.411259+00:00",
-      "score": 1.8502
+      "score": 1.8007
     },
     {
       "title": "‘Proceed with caution’: Elon Musk offers warning after Amazon reportedly held mandatory meeting to address ‘high blast radius’ AI-related incident",
@@ -433,8 +503,8 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/24fc31947bfee62b7a69e427a04a5d7eb863f0fc/_xlarge.jpeg",
       "published": "2026-03-11T19:49:01+00:00",
       "firstSeen": "2026-03-12T03:00:01.882442+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8371
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.7884
     },
     {
       "title": "Netflix to Pay as Much as $600 Million for Ben Affleck’s AI Firm",
@@ -447,8 +517,8 @@
       "image": "https://ic-cdn.flipboard.com/bwbx.io/1ae619a9f31d4a0c5f5e91c487e301e77b868154/_xlarge.jpeg",
       "published": "2026-03-11T19:40:11+00:00",
       "firstSeen": "2026-03-12T05:08:22.411259+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8338
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.7854
     },
     {
       "title": "‘Anthropic’s Claude models are no longer available’: US State Department ditches Claude on the orders of Trump – while Senate approves Gemini, ChatGPT, and CoPilot for use",
@@ -462,7 +532,7 @@
       "published": "2026-03-11T19:20:00+00:00",
       "firstSeen": "2026-03-11T22:55:48.514703+00:00",
       "lastSeen": "2026-03-11T23:55:55.458549+00:00",
-      "score": 1.8266
+      "score": 1.7785
     },
     {
       "title": "Replit snags $9B valuation 6 months after hitting $3B",
@@ -475,8 +545,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200%2C715",
       "published": "2026-03-11T18:52:52+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.9569
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.9094
     },
     {
       "title": "Ars Fires Reporter For Accidentally Using Fake AI Quotes",
@@ -490,78 +560,7 @@
       "published": "2026-03-11T18:47:34+00:00",
       "firstSeen": "2026-03-11T19:54:44.510832+00:00",
       "lastSeen": "2026-03-11T19:54:44.510832+00:00",
-      "score": 2.115
-    },
-    {
-      "title": "You're Going To Want To Watch This DOGE Staffer Try To Define What DEI Is",
-      "url": "https://www.huffpost.com/entry/doge-dei-deposition-video_n_69b18db7e4b035c83fff66ed",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "DOGE employees used ChatGPT to identify which \"DEI\" grants to eliminate. They did a predictably terrible job. A lawsuit filed last May, after the so-called Department of Government Efficiency terminated more than 1,400 National Endowment for the Humanities grants, has yielded some absolutely wild …",
-      "image": "https://img.huffingtonpost.com/asset/69b1aa051b0000e89714de6d.png?cache=xlxwAQRkXt&ops=500_281%2Cscalefit_1200_630",
-      "published": "2026-03-11T18:31:37+00:00",
-      "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.8094
-    },
-    {
-      "title": "Perplexity’s Personal Computer is a cloud-based AI agent running on Mac mini",
-      "url": "https://9to5mac.com/2026/03/11/perplexitys-personal-computer-is-a-cloud-based-ai-agent-running-on-mac-mini",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple’s Mac mini is back in the AI headlines. Last month, Perplexity released its own version of the OpenClaw “personal AI assistant” idea with a feature called Perplexity Computer. Now the company is taking the concept a step further with an implementation it calls Personal Computer. This version …",
-      "image": "https://ic-cdn.flipboard.com/wp.com/fad8a23e2a8742975c39edb9dd828896e078a915/_xlarge.jpeg",
-      "published": "2026-03-11T18:24:30+00:00",
-      "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.8069
-    },
-    {
-      "title": "NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI",
-      "url": "https://www.marktechpost.com/2026/03/11/nvidia-releases-nemotron-3-super-a-120b-parameter-open-source-hybrid-mamba-attention-moe-model-delivering-5x-higher-throughput-for-agentic-ai",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "The gap between proprietary frontier models and highly transparent open-source models is closing faster than ever. NVIDIA has officially pulled the curtain back on Nemotron 3 Super, a staggering 120 billion parameter reasoning model engineered specifically for complex multi-agent applications. Released today, Nemotron 3 Super sits perfectly between the lightweight 30 billion parameter Nemotron 3 [&#8230;]\nThe post NVIDIA Releases Nemotron 3 Super: A 120B Parameter Open-Source Hybrid Mamba-Attention MoE Model Delivering 5x Higher Throughput for Agentic AI appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-9-150x150.png",
-      "published": "2026-03-11T18:19:24+00:00",
-      "firstSeen": "2026-03-11T19:54:44.510832+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "model_release": true,
-      "score": 9.1751
-    },
-    {
-      "title": "WordPress debuts a private workspace that runs in your browser via a new service, my.WordPress.net",
-      "url": "https://techcrunch.com/2026/03/11/wordpress-debuts-a-private-workspace-that-runs-in-your-browser-via-a-new-service-my-wordpress-net",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "WordPress’s new browser-based service lets users create private sites without hosting or signing up, turning the platform into a personal workspace for writing, research, and AI tools.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/image1-revised.webp?resize=1200%2C493",
-      "published": "2026-03-11T16:43:59+00:00",
-      "firstSeen": "2026-03-11T17:00:01.491672+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 2.6124
-    },
-    {
-      "title": "Former NFL Player Reportedly Asked ChatGPT For Help After Allegedly Killing Girlfriend",
-      "url": "https://www.blackenterprise.com/former-nfl-player-chatgpt-killing-girlfriend",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A judge described the alleged killing as \"beyond that necessary to produce death.\" A former NFL player charged for allegedly killing his girlfriend …",
-      "image": "https://blackenterprise-prod.b-cdn.net/wp-content/blogs.dir/1/files/2023/08/iStock-1546223462-scaled-1.jpg",
-      "published": "2026-03-11T16:30:00+00:00",
-      "firstSeen": "2026-03-11T18:04:29.679665+00:00",
-      "lastSeen": "2026-03-11T18:04:29.679665+00:00",
-      "score": 1.7678
+      "score": 2.0677
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -574,8 +573,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.4044
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.3911
     },
     {
       "title": "Introducing... Life Without",
@@ -588,8 +587,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.1405
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.1393
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -602,8 +601,8 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-12T07:52:05.828809+00:00",
-      "score": 1.192
+      "lastSeen": "2026-03-12T10:09:57.784965+00:00",
+      "score": 1.1919
     },
     {
       "title": "The Life Scientific: Julia Simner",
