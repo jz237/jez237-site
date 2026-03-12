@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T19:50:11.955976+00:00",
+  "updatedAt": "2026-03-12T20:50:33.277316+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -644,6 +644,14 @@
     "https://www.anthropic.com/news/claude-partner-network": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=fig",
       "checkedAt": "2026-03-12T19:50:11.955976+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/12/malus": {
+      "image": "",
+      "checkedAt": "2026-03-12T20:50:33.277316+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nuro-tests-self-driving-tech-tokyo": {
+      "image": "",
+      "checkedAt": "2026-03-12T20:50:33.277316+00:00"
     }
   }
 }
