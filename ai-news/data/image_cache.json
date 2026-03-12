@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T03:00:01.882442+00:00",
+  "updatedAt": "2026-03-12T05:08:22.411259+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -556,6 +556,10 @@
     "https://www.anthropic.com/news/sydney-fourth-office-asia-pacific": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Globe&amp;backgroundColor=sky",
       "checkedAt": "2026-03-12T03:00:01.882442+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/how-nvidia-won-deepresearch-bench.png",
+      "checkedAt": "2026-03-12T05:08:22.411259+00:00"
     }
   }
 }
