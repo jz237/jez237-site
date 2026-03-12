@@ -100,5 +100,23 @@
     "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
     "weight": 0.85,
     "category": "AI"
+  },
+  {
+    "name": "Anthropic News",
+    "url": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+    "weight": 1.0,
+    "category": "AI"
+  },
+  {
+    "name": "VentureBeat AI",
+    "url": "https://venturebeat.com/category/ai/feed/",
+    "weight": 0.85,
+    "category": "AI"
+  },
+  {
+    "name": "Simon Willison",
+    "url": "https://simonwillison.net/atom/everything/",
+    "weight": 0.85,
+    "category": "AI"
   }
 ]
