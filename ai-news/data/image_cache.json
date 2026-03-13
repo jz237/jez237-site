@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T18:00:01.883769+00:00",
+  "updatedAt": "2026-03-13T17:50:56.581189+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -727,11 +727,11 @@
     },
     "https://simonwillison.net/2026/Mar/13/craig-mod": {
       "image": "",
-      "checkedAt": "2026-03-13T18:00:01.883769+00:00"
+      "checkedAt": "2026-03-13T17:50:56.581189+00:00"
     },
     "https://techcrunch.com/2026/03/13/spotify-will-let-you-edit-your-taste-profile-to-control-your-recommendations": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
-      "checkedAt": "2026-03-13T18:00:01.883769+00:00"
+      "checkedAt": "2026-03-13T17:50:56.581189+00:00"
     }
   }
 }
