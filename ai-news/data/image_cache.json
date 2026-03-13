@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T18:59:15.406515+00:00",
+  "updatedAt": "2026-03-13T19:44:28.500579+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -740,6 +740,18 @@
     "https://www.techrepublic.com/article/ai-expansions-cyberthreats-and-industry-shifts-define-this-week-in-tech": {
       "image": "",
       "checkedAt": "2026-03-13T18:59:15.406515+00:00"
+    },
+    "https://techcrunch.com/2026/03/13/the-biggest-ai-stories-of-the-year-so-far": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200,801",
+      "checkedAt": "2026-03-13T19:44:28.500579+00:00"
+    },
+    "https://www.techrepublic.com/article/news-housing-authority-ai-it-team-cloud-modernization": {
+      "image": "",
+      "checkedAt": "2026-03-13T19:44:28.500579+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-assistants-human-originality-study": {
+      "image": "",
+      "checkedAt": "2026-03-13T19:44:28.500579+00:00"
     }
   }
 }
