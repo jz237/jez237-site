@@ -1,6 +1,38 @@
 {
-  "updatedAt": "2026-03-13T15:56:00.809269+00:00",
+  "updatedAt": "2026-03-13T17:00:01.697783+00:00",
   "items": [
+    {
+      "title": "The $32B acquisition that one VC is calling the ‘Deal of the Decade’",
+      "url": "https://techcrunch.com/video/the-32b-acquisition-that-one-vc-is-calling-the-deal-of-the-decade",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "According to Index Ventures Partner Shardul Shah, cybersecurity startup Wiz sits “at the center of three tailwinds: AI, cloud, and security spend.” Those tailwinds powered what just became the largest venture-backed acquisition in history — Google&#8217;s $32 billion deal, finalized after a declined 2024 offer, antitrust review on both sides of the Atlantic, and an [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2161842016.jpg?w=1024",
+      "published": "2026-03-13T16:20:23+00:00",
+      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.27
+    },
+    {
+      "title": "Microsoft launches Copilot Health",
+      "url": "https://thenextweb.com/news/microsoft-launches-copilot-health",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft has launched Copilot Health, a dedicated, secure space within its Copilot AI assistant that aggregates personal health data from wearables, electronic health records, and laboratory results, then applies AI to surface what the company calls a “coherent story” of a user’s health. The product opened its waitlist on 12 March 2026 and is rolling [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-release-Copilot-Health.png",
+      "published": "2026-03-13T15:27:51+00:00",
+      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.104
+    },
     {
       "title": "More Tech Layoffs: Atlassian Slashes 10% of Workforce, Stock Climbs After Announcement",
       "url": "https://www.techrepublic.com/article/news-atlassian-layoffs-ai-investment",
@@ -12,10 +44,10 @@
       "image": "",
       "published": "2026-03-13T15:21:58+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2328
+      "score": 3.2012
     },
     {
       "title": "Sam Altman says AI will eventually be sold like electricity and water — by companies like OpenAI",
@@ -31,7 +63,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1328
+      "score": 5.1012
     },
     {
       "title": "Ramp buys Stockholm fintech Billhop to crack open European market",
@@ -44,10 +76,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ramp-buys-Stockholm-fintech-Billhop.png",
       "published": "2026-03-13T15:19:01+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8313
+      "score": 2.7997
     },
     {
       "title": "Why physical AI is becoming manufacturing’s next advantage",
@@ -60,10 +92,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MIT-Article-Image-1200x675_C.jpg?resize=1200%2C600",
       "published": "2026-03-13T15:16:55+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3703
+      "score": 3.3387
     },
     {
       "title": "Amazon Announces Inference Chips Deal With Cerebras",
@@ -79,7 +111,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.2218
+      "score": 4.1905
     },
     {
       "title": "“I didn't get it at first. Then I visited my friend's studio. The way he was using it opened my eyes”: House icons Alan Braxe and Fred Falke on embracing AI in the studio",
@@ -92,10 +124,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/6UbVhQ6rvT2yPiLjSJ4cLX-2560-80.jpg",
       "published": "2026-03-13T15:00:00+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1218
+      "score": 2.0905
     },
     {
       "title": "The ultimate logo quiz: think you know your 1930s logos?",
@@ -111,7 +143,23 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1218
+      "score": 2.0905
+    },
+    {
+      "title": "Popular Grammar Tool Pulls AI Feature After Backlash for Mimicking Stephen King Among Others",
+      "url": "https://parade.com/books/popular-grammar-tool-pulls-ai-feature-after-backlash-for-mimicking-stephen-king-among-others",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "As artificial intelligence continues to grow, it also continues to gain backlash from musicians, actors, and authors. Just as multiple authors, …",
+      "image": "https://ic-cdn.flipboard.com/parade.com/92778465050614d78981eacf0dc97be040d317f1/_xlarge.jpeg",
+      "published": "2026-03-13T14:23:08+00:00",
+      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0729
     },
     {
       "title": "ChatGPT and Claude are evolving from chatbots into interactive learning tools",
@@ -124,10 +172,10 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/macbook-neo-classroom.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-13T14:21:01+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.8027
+      "score": 16.7719
     },
     {
       "title": "Claude for Office Adds Real-Time Co-Editing in Excel & PowerPoint",
@@ -143,7 +191,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1017
+      "score": 10.071
     },
     {
       "title": "Scammers use AI-generated images of lost dogs to target pet owners",
@@ -156,10 +204,10 @@
       "image": "https://ic-cdn.flipboard.com/popsci.com/19a2e94a27769b0eb799374cab876efa6c4bf73c/_xlarge.jpeg",
       "published": "2026-03-13T14:03:00+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0939
+      "score": 2.0634
     },
     {
       "title": "Peacock expands into AI-driven video, mobile-first live sports, and gaming",
@@ -172,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Peacock-newfeatures2026.png?w=1200",
       "published": "2026-03-13T14:00:00+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2325
+      "score": 2.202
     },
     {
       "title": "Samsung Galaxy S26, Buds4 Launch Worldwide After Record-Breaking Preorders",
@@ -188,10 +236,26 @@
       "image": "",
       "published": "2026-03-13T13:52:54+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9891
+      "score": 4.9587
+    },
+    {
+      "title": "Ex-NFL player charged with murder asked ChatGPT for advice before calling 911: Prosecutors",
+      "url": "https://www.newsnationnow.com/us-news/ex-nfl-charged-with-murder-asked-chatgpt-for-advice",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "CHATTANOOGA, Tenn. (WATE) — Prosecutors began to present evidence against a former NFL player charged with murdering his girlfriend at their …",
+      "image": "https://ic-cdn.flipboard.com/newsnationnow.com/b2b6c4716be517e5da1c5fb5af42891bdf558c0b/_large.png",
+      "published": "2026-03-13T13:45:43+00:00",
+      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 8.0554
     },
     {
       "title": "Apple’s 2026 Product Roadmap: New iPhones, Macs, and Apple Watch Are Coming",
@@ -204,10 +268,10 @@
       "image": "",
       "published": "2026-03-13T13:31:01+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.5786
+      "score": 4.5485
     },
     {
       "title": "Give GIMP The Movie an Oscar",
@@ -220,10 +284,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/fxZZ23p3bNCS5ztN9iqB3h-1000-80.jpg",
       "published": "2026-03-13T13:15:33+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T14:58:56.100483+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0712
+      "score": 2.0414
     },
     {
       "title": "Top 15 setups where MacBook Pro runs the show",
@@ -239,7 +303,7 @@
       "lastSeen": "2026-03-13T14:00:02.117109+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1641
+      "score": 3.1344
     },
     {
       "title": "Inside the Dirty, Dystopian World of AI Data Centers",
@@ -252,10 +316,10 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/c48c6fc2bd167cd6990a4e8deaf914ce8e4f779c/_xlarge.jpeg",
       "published": "2026-03-13T12:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0361
+      "score": 2.0073
     },
     {
       "title": "Controversies of the week",
@@ -268,10 +332,10 @@
       "image": "https://ic-cdn.flipboard.com/flipboard.com/f48eb0a701dd7f825e85446ab95c9e3b83bd50db/_xlarge.jpeg",
       "published": "2026-03-13T11:55:37+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0341
+      "score": 2.0054
     },
     {
       "title": "Dublin fintech Teybridge Capital pledges £600 million for UK SMEs",
@@ -284,10 +348,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Teybridge-Capital-pledges-600-million-for-UK-SMEs.png",
       "published": "2026-03-13T11:32:47+00:00",
       "firstSeen": "2026-03-13T13:00:01.932206+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7238
+      "score": 2.6954
+    },
+    {
+      "title": "DOGE bros exposed: Depositions from Elon Musk’s team reveal ChatGPT process for gutting ‘DEI’ grants",
+      "url": "https://www.independent.co.uk/news/world/americas/us-politics/doge-bros-deposition-musk-chatgpt-dei-grants-b2937603.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Elon Musk’s disciples in his so-called Department of Government Efficiency were embedded across federal agencies with a mandate to fire thousands of …",
+      "image": "https://ic-cdn.flipboard.com/independent.co.uk/ce291e891423898d80721796a9f52f8153e2d81b/_xlarge.jpeg",
+      "published": "2026-03-13T11:07:14+00:00",
+      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 7.9842
     },
     {
       "title": "Anthropic commits $100M to Claude Partner Network",
@@ -300,10 +380,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anthropic-invests-100-million-into-the-Claude-Partner-Network.png",
       "published": "2026-03-13T11:06:03+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9118
+      "score": 13.8837
     },
     {
       "title": "AI is exhausting workers so much, researchers have dubbed the condition ‘AI brain fry’",
@@ -316,10 +396,10 @@
       "image": "https://ic-cdn.flipboard.com/cnn.com/5bddd168860af1b34745c46222400545ddbfdd45/_large.jpeg",
       "published": "2026-03-13T11:00:33+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4094
+      "score": 4.3814
     },
     {
       "title": "Atlassian is cutting 1,600 jobs and replacing its CTO",
@@ -332,10 +412,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Atlassian-is-cutting-1600-jobs-and-replacing-its-CTO.png",
       "published": "2026-03-13T10:48:43+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1041
+      "score": 3.0763
     },
     {
       "title": "TechEx North America 2026 comes to San Jose for your annual enterprise technology intelligence briefing",
@@ -348,10 +428,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TechEx-North-America-2026-comes-to-San-Jose.png",
       "published": "2026-03-13T10:32:15+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9969
+      "score": 1.9692
     },
     {
       "title": "Compare ChatGPT, Gemini, and more side by side with this AI tool",
@@ -367,7 +447,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9828
+      "score": 13.9556
     },
     {
       "title": "Generative AI Won’t Transform Your Business Without These Three Investments",
@@ -383,7 +463,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1263
+      "score": -1.1533
     },
     {
       "title": "Bumble&#8217;s AI assistant Bee will learn what you want from a relationship",
@@ -396,10 +476,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bumbles-AI-assistant-Bee.png",
       "published": "2026-03-13T09:08:24+00:00",
       "firstSeen": "2026-03-13T09:54:36.191137+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1608
+      "score": 4.1342
     },
     {
       "title": "My final goodbye to AI ragebait",
@@ -412,10 +492,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/2f87980f6d990cbda6eebfd1af9dd53fa5688c9e/_xlarge.jpeg",
       "published": "2026-03-13T09:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.4427
+      "score": -0.4692
     },
     {
       "title": "Tropic raises $105M to scale gene-edited bananas",
@@ -428,10 +508,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Tropic-raises-105M-to-scale-gene-edited-bananas.png",
       "published": "2026-03-13T08:37:27+00:00",
       "firstSeen": "2026-03-13T09:54:36.191137+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6479
+      "score": 2.6217
     },
     {
       "title": "Model Context Protocol (MCP) vs. AI Agent Skills: A Deep Dive into Structured Tools and Behavioral Guidance for LLMs",
@@ -444,10 +524,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-14-150x150.png",
       "published": "2026-03-13T08:32:39+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.8159
+      "score": 5.7897
     },
     {
       "title": "Tower raises €5.5m to empower data engineers in the AI era",
@@ -460,10 +540,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Tower-raises-E5.5m-to-empower-data-engineers.png",
       "published": "2026-03-13T08:08:20+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4358
+      "score": 4.41
     },
     {
       "title": "Google AI Introduces ‘Groundsource’: A New Methodology that Uses Gemini Model to Transform Unstructured Global News into Actionable, Historical Data",
@@ -476,10 +556,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-13-at-12.59.53-AM-1-150x150.png",
       "published": "2026-03-13T08:07:25+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6055
+      "score": 12.5796
     },
     {
       "title": "I tried Photoshop’s new AI Assistant. The new Photoshop chatbot feels like an overly enthusiastic intern, but it’s not all bad",
@@ -495,7 +575,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0162
+      "score": 2.991
     },
     {
       "title": "Morgan Stanley warns an AI breakthrough Is coming in 2026 — and most of the world isn’t ready",
@@ -508,10 +588,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/20bfbd79f5048ed70aab4d2eed2a034aa59a3373/_xlarge.jpeg",
       "published": "2026-03-13T07:20:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9162
+      "score": 1.891
     },
     {
       "title": "Billionaire Vinod Khosla says ‘follow your passion’ is bad career advice for kids today—but could be the best in 15 years",
@@ -524,10 +604,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/cd2c4e36a20da180b414fb39041b081ca86ab625/_xlarge.png",
       "published": "2026-03-13T07:04:00+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6099
+      "score": 2.5847
     },
     {
       "title": "Gamers’ Worst Nightmares About AI Are Coming True",
@@ -540,10 +620,10 @@
       "image": "https://ic-cdn.flipboard.com/wired.com/35c0f64e9be2d4cc229750cc3830e31983d60719/_xlarge.jpeg",
       "published": "2026-03-13T07:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6083
+      "score": 2.5832
     },
     {
       "title": "GWM admits plagiarising iconic Land Rover poster",
@@ -556,90 +636,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/e7125aac2346c547e5427a49e4d541f0e04f43a5/_xlarge.jpeg",
       "published": "2026-03-13T07:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9083
-    },
-    {
-      "title": "Scientists built the hardest AI test ever and the results are surprising",
-      "url": "https://www.sciencedaily.com/releases/2026/03/260313002650.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "As AI systems began acing traditional tests, researchers realized those benchmarks were no longer tough enough. In response, nearly 1,000 experts created Humanity’s Last Exam, a massive 2,500-question challenge covering highly specialized topics across many fields. The exam was engineered so that any question solvable by current AI models was removed. Early results show even the most advanced systems still struggle — revealing a surprisingly large gap between AI performance and true expert-level knowledge.",
-      "image": "https://www.sciencedaily.com/images/1920/ai-robot-vs-human-boxing.webp",
-      "published": "2026-03-13T06:08:43+00:00",
-      "firstSeen": "2026-03-13T07:09:53.230843+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.7081
-    },
-    {
-      "title": "ESET PROTECT scored zero false alarms in independent testing. Now it&#8217;s 20% off.",
-      "url": "https://thenextweb.com/news/eset-protect-scored-zero-false-alarms-in-independent-testing-now-its-20-off",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Disclosure: This article contains affiliate links. If you click through and make a purchase, we may earn a commission at no additional cost to you. This helps support our content. All opinions expressed are our own. Here’s a number worth sitting with: 43% of all cyberattacks now target small businesses. Not corporations with dedicated SOC [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/ESET-PROTECT.png",
-      "published": "2026-03-13T05:31:58+00:00",
-      "firstSeen": "2026-03-13T07:09:53.230843+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.874
-    },
-    {
-      "title": "Stop using Claude like ChatGPT — 10 prompts that unlock its real potential",
-      "url": "https://www.tomsguide.com/ai/stop-using-claude-like-chatgpt-10-prompts-that-unlock-its-real-potential",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "If it feels like there’s a new AI model, feature or update every day, you’re not imagining things. Even for someone who covers AI for a living, it …",
-      "image": "https://ic-cdn.flipboard.com/futurecdn.net/741e56e7476c936c9e65cc5dd06a2c9a5c6ad01d/_xlarge.jpeg",
-      "published": "2026-03-13T05:00:00+00:00",
-      "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.8619
-    },
-    {
-      "title": "Before quantum computing arrives, this startup wants enterprises already running on it",
-      "url": "https://techcrunch.com/2026/03/12/before-quantum-computing-arrives-this-startup-wants-enterprises-already-running-on-it",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "After selling his AI startup to AMD for $665 million, Peter Sarlin is back with QuTwo, a new venture building the infrastructure it believes enterprises will need when quantum computing finally arrives.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2174694566.jpg?resize=1200%2C800",
-      "published": "2026-03-13T05:00:00+00:00",
-      "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0019
-    },
-    {
-      "title": "Truecaller now lets you hang up on scammers — on behalf of your family",
-      "url": "https://techcrunch.com/2026/03/12/truecallers-now-lets-you-hang-up-on-scammers-on-behalf-of-your-family",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Caller identity platform Truecaller recently launched a new feature that lets one person become an admin of a family group, get alerts about fraud calls received by other members, and even end a call on their behalf if they suspect a family member might get scammed. The company, which has over 450 million users, first [&#8230;]",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Family-Protection-Hero.jpg?resize=1200%2C675",
-      "published": "2026-03-13T04:30:00+00:00",
-      "firstSeen": "2026-03-13T04:54:07.906404+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6907
+      "score": 1.8832
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.278
+      "score": 1.2754
     },
     {
       "title": "Introducing... Life Without",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2284
+      "score": 2.2282
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T15:56:00.809269+00:00",
+      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1908
