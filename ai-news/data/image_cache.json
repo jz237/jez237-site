@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T11:00:01.958880+00:00",
+  "updatedAt": "2026-03-13T10:54:41.327529+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -694,8 +694,8 @@
       "checkedAt": "2026-03-13T07:09:53.230843+00:00"
     },
     "https://www.aol.com/morgan-stanley-sees-ai-jobs-064200169.html": {
-      "image": "",
-      "checkedAt": "2026-03-13T11:00:01.958880+00:00"
+      "image": "https://s.yimg.com/ny/api/res/1.2/rgrFQkeG6Fp0vaQvlpSJFw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://media.zenfs.com/en/aol_fortune_385/1138b8832ea6d21084a0ac5bb1ed1441",
+      "checkedAt": "2026-03-13T10:54:41.327529+00:00"
     }
   }
 }
