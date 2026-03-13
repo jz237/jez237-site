@@ -1,6 +1,6 @@
 {
   "date": "2026-03-13",
-  "updatedAt": "2026-03-13T21:47:15.909524+00:00",
+  "updatedAt": "2026-03-13T22:43:09.338442+00:00",
   "items": [
     {
       "title": "1M context is now generally available for Opus 4.6 and Sonnet 4.6",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-03-13T18:29:13+00:00",
       "firstSeen": "2026-03-13T18:59:15.406515+00:00",
-      "lastSeen": "2026-03-13T21:47:15.909524+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.6936
+      "score": 22.668
     },
     {
       "title": "ChatGPT and Claude are evolving from chatbots into interactive learning tools",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-03-13T20:51:36.360177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.6447
+      "score": 16.6218
     },
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -49,7 +49,23 @@
       "lastSeen": "2026-03-13T20:00:01.414145+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4718
+      "score": 16.4559
+    },
+    {
+      "title": "6 Savvy Ways To Get Better At Using ChatGPT, Claude, & Gemini",
+      "url": "https://www.bustle.com/life/how-to-get-better-at-chatgpt-claude-gemini-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "One of America’s richest self-made women shares tips for getting more comfortable. With a net worth of over $400 million, Emma Grede is one of …",
+      "image": "https://ic-cdn.flipboard.com/bustle.com/a878fad2ce9255e301078b1a3e4532ad584db5c7/_xlarge.jpeg",
+      "published": "2026-03-13T21:46:02+00:00",
+      "firstSeen": "2026-03-13T22:43:09.338442+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 16.1213
     },
     {
       "title": "Compare ChatGPT, Gemini, and more side by side with this AI tool",
@@ -65,7 +81,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8428
+      "score": 13.8226
     },
     {
       "title": "Anthropic commits $100M to Claude Partner Network",
@@ -78,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anthropic-invests-100-million-into-the-Claude-Partner-Network.png",
       "published": "2026-03-13T11:06:03+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T21:47:15.909524+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.7675
+      "score": 13.7466
     },
     {
       "title": "Stop using Claude like ChatGPT — 10 prompts that unlock its real potential",
@@ -94,10 +110,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/741e56e7476c936c9e65cc5dd06a2c9a5c6ad01d/_xlarge.jpeg",
       "published": "2026-03-13T05:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T21:47:15.909524+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.74
+      "score": 13.7224
     },
     {
       "title": "Are You a Visual Learner? Claude Can Now Explain Things With Charts, Diagrams",
@@ -110,10 +126,10 @@
       "image": "https://ic-cdn.flipboard.com/pcmag.com/2858666e3b0784a2d1ca8444c700d616b714b6c2/_xlarge.png",
       "published": "2026-03-13T14:04:24+00:00",
       "firstSeen": "2026-03-13T17:50:56.581189+00:00",
-      "lastSeen": "2026-03-13T21:47:15.909524+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.3378
+      "score": 13.3151
     },
     {
       "title": "Google AI Introduces ‘Groundsource’: A New Methodology that Uses Gemini Model to Transform Unstructured Global News into Actionable, Historical Data",
@@ -126,10 +142,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-13-at-12.59.53-AM-1-150x150.png",
       "published": "2026-03-13T08:07:25+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T21:47:15.909524+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4726
+      "score": 12.4534
     },
     {
       "title": "Claude for Office Adds Real-Time Co-Editing in Excel & PowerPoint",
@@ -145,7 +161,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9438
+      "score": 9.921
     },
     {
       "title": "Former DOGE staffers testify that they used ChatGPT to cancel LGBTQ+ grants",
@@ -161,7 +177,7 @@
       "lastSeen": "2026-03-13T20:51:36.360177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0057
+      "score": 8.9839
     },
     {
       "title": "Microsoft launches Copilot Health",
@@ -174,26 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-release-Copilot-Health.png",
       "published": "2026-03-13T15:27:51+00:00",
       "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T21:47:15.909524+00:00",
+      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9728
-    },
-    {
-      "title": "Ex-NFL player charged with murder asked ChatGPT for advice before calling 911: Prosecutors",
-      "url": "https://www.newsnationnow.com/us-news/ex-nfl-charged-with-murder-asked-chatgpt-for-advice",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "CHATTANOOGA, Tenn. (WATE) — Prosecutors began to present evidence against a former NFL player charged with murdering his girlfriend at their …",
-      "image": "https://ic-cdn.flipboard.com/newsnationnow.com/b2b6c4716be517e5da1c5fb5af42891bdf558c0b/_large.png",
-      "published": "2026-03-13T13:45:43+00:00",
-      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 7.9302
+      "score": 8.9492
     }
   ],
   "errors": []
