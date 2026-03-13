@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T20:00:01.414145+00:00",
+  "updatedAt": "2026-03-13T19:44:28.500579+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -741,25 +741,17 @@
       "image": "",
       "checkedAt": "2026-03-13T18:59:15.406515+00:00"
     },
-    "https://huggingface.co/blog/nvidia/nemo-retriever-agentic-retrieval": {
-      "image": "https://cdn-uploads.huggingface.co/production/uploads/6172d79a6c2ff4e51d0ea593/Qflw9K3iqWZf269xwE-CP.png",
-      "checkedAt": "2026-03-13T20:00:01.414145+00:00"
-    },
-    "https://techcrunch.com/2026/03/13/steven-spielberg-says-hes-never-used-ai-in-any-of-his-films": {
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/steven-spielberg-GettyImages-2260428164.jpg?w=1024",
-      "checkedAt": "2026-03-13T20:00:01.414145+00:00"
-    },
     "https://techcrunch.com/2026/03/13/the-biggest-ai-stories-of-the-year-so-far": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200,801",
-      "checkedAt": "2026-03-13T20:00:01.414145+00:00"
+      "checkedAt": "2026-03-13T19:44:28.500579+00:00"
     },
     "https://www.techrepublic.com/article/news-housing-authority-ai-it-team-cloud-modernization": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/abstract-side-portrait-of-handsome-businessman-wit-2026-01-11-08-47-44-utc-1.jpg",
-      "checkedAt": "2026-03-13T20:00:01.414145+00:00"
+      "image": "",
+      "checkedAt": "2026-03-13T19:44:28.500579+00:00"
     },
     "https://www.techrepublic.com/article/news-ai-assistants-human-originality-study": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_i47imii47imii47i.jpg",
-      "checkedAt": "2026-03-13T20:00:01.414145+00:00"
+      "image": "",
+      "checkedAt": "2026-03-13T19:44:28.500579+00:00"
     }
   }
 }
