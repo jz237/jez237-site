@@ -1,6 +1,6 @@
 {
   "date": "2026-03-13",
-  "updatedAt": "2026-03-13T08:00:01.821097+00:00",
+  "updatedAt": "2026-03-13T07:54:59.078554+00:00",
   "items": [
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -13,10 +13,10 @@
       "image": "https://d.techtimes.com/en/full/463304/claude-visuals.png",
       "published": "2026-03-13T01:15:11+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.762
+      "score": 16.7641
     },
     {
       "title": "Stop using Claude like ChatGPT — 10 prompts that unlock its real potential",
@@ -29,10 +29,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/741e56e7476c936c9e65cc5dd06a2c9a5c6ad01d/_xlarge.jpeg",
       "published": "2026-03-13T05:00:00+00:00",
       "firstSeen": "2026-03-13T06:00:01.944335+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.062
+      "score": 14.0644
     },
     {
       "title": "I tried Claude's new interactive visuals feature — and it’s one of the most fun AI tricks I’ve seen",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4073
+      "score": 10.4096
     },
     {
       "title": "Shopify/liquid: Performance: 53% faster parse+render, 61% fewer allocations",
@@ -61,10 +61,10 @@
       "image": "https://static.simonwillison.net/static/2026/tobi-contribs.jpg",
       "published": "2026-03-13T03:44:34+00:00",
       "firstSeen": "2026-03-13T04:00:01.520358+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9673
+      "score": 7.9696
     },
     {
       "title": "Viral hit 'Your AI Slop Bores Me' is more than a joke",
@@ -76,11 +76,11 @@
       "summary": "Ready to LARP as an LLM? Four years after the ChatGPT revolution began, it's fair to say the humans are getting a little restless. AI's infinite slop machine cannot go on unchallenged; it's time for creatives to fight back. That much is clear from anyone who's joined the cult known as Your AI Slop …",
       "image": "https://ic-cdn.flipboard.com/mashable.com/2142c31f5d6812744d6d3a26720a0e13bc596946/_xlarge.jpeg",
       "published": "2026-03-13T00:45:07+00:00",
-      "firstSeen": "2026-03-13T07:00:02.001334+00:00",
-      "lastSeen": "2026-03-13T07:00:02.001334+00:00",
+      "firstSeen": "2026-03-13T07:09:53.230843+00:00",
+      "lastSeen": "2026-03-13T07:09:53.230843+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.9494
+      "score": 5.9515
     },
     {
       "title": "Build an Agent That Thinks Like a Data Scientist: How We Hit #1 on DABStep with Reusable Tool Generation",
@@ -93,10 +93,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place.png",
       "published": "2026-03-13T01:02:47+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9368
+      "score": 4.9389
     },
     {
       "title": "Scientists built the hardest AI test ever and the results are surprising",
@@ -108,11 +108,27 @@
       "summary": "As AI systems began acing traditional tests, researchers realized those benchmarks were no longer tough enough. In response, nearly 1,000 experts created Humanity’s Last Exam, a massive 2,500-question challenge covering highly specialized topics across many fields. The exam was engineered so that any question solvable by current AI models was removed. Early results show even the most advanced systems still struggle — revealing a surprisingly large gap between AI performance and true expert-level knowledge.",
       "image": "https://www.sciencedaily.com/images/1920/ai-robot-vs-human-boxing.webp",
       "published": "2026-03-13T06:08:43+00:00",
-      "firstSeen": "2026-03-13T08:00:01.821097+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "firstSeen": "2026-03-13T07:09:53.230843+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9147
+      "score": 3.9172
+    },
+    {
+      "title": "The 10-80-10 rule Steve Jobs used to run Apple is now the smartest way to manage AI at work",
+      "url": "https://supercarblondie.com/10-80-10-rule-steve-jobs-used-smart-way-manage-ai",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The 10-80-10 rule, which was favored by Apple founder Steve Jobs, could come in very useful when it comes to using AI at work. The late CEO has a …",
+      "image": "https://ic-cdn.flipboard.com/supercarblondie.com/5488579da68708ae15e77b3caef511068bba0a95/_xlarge.webp",
+      "published": "2026-03-13T03:33:25+00:00",
+      "firstSeen": "2026-03-13T07:54:59.078554+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1245
     },
     {
       "title": "Truecaller now lets you hang up on scammers — on behalf of your family",
@@ -125,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Family-Protection-Hero.jpg?resize=1200%2C675",
       "published": "2026-03-13T04:30:00+00:00",
       "firstSeen": "2026-03-13T04:54:07.906404+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8881
+      "score": 2.8904
     },
     {
       "title": "Using the simple ‘3-prompt rule’ on ChatGPT will immediately guarantee you better results",
@@ -141,10 +157,10 @@
       "image": "https://ic-cdn.flipboard.com/supercarblondie.com/6bfdf05f0a236d800b7ddf4aecec4625c527288f/_xlarge.webp",
       "published": "2026-03-13T01:15:58+00:00",
       "firstSeen": "2026-03-13T02:23:46.456183+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.7623
+      "score": 2.7645
     },
     {
       "title": "GWR admits plagiarising iconic Land Rover poster",
@@ -156,11 +172,11 @@
       "summary": "“There can be no justification.\" The best print ads are designed to make the viewer double-take, be it through striking imagery or clever visual puns. …",
       "image": "https://cdn.mos.cms.futurecdn.net/Nn3KmmXUtfGJnXHDXbzEwM-1920-80.jpg",
       "published": "2026-03-13T07:00:00+00:00",
-      "firstSeen": "2026-03-13T08:00:01.821097+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "firstSeen": "2026-03-13T07:54:59.078554+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1198
+      "score": 2.1224
     },
     {
       "title": "ESET PROTECT scored zero false alarms in independent testing. Now it&#8217;s 20% off.",
@@ -172,11 +188,11 @@
       "summary": "Disclosure: This article contains affiliate links. If you click through and make a purchase, we may earn a commission at no additional cost to you. This helps support our content. All opinions expressed are our own. Here’s a number worth sitting with: 43% of all cyberattacks now target small businesses. Not corporations with dedicated SOC [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/ESET-PROTECT.png",
       "published": "2026-03-13T05:31:58+00:00",
-      "firstSeen": "2026-03-13T07:00:02.001334+00:00",
-      "lastSeen": "2026-03-13T08:00:01.821097+00:00",
+      "firstSeen": "2026-03-13T07:09:53.230843+00:00",
+      "lastSeen": "2026-03-13T07:54:59.078554+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0771
+      "score": 2.0795
     }
   ],
   "errors": []
