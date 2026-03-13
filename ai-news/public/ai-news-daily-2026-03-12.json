@@ -1,6 +1,6 @@
 {
   "date": "2026-03-12",
-  "updatedAt": "2026-03-12T22:43:27.405342+00:00",
+  "updatedAt": "2026-03-12T23:39:07.047049+00:00",
   "items": [
     {
       "title": "A PhD is an apprenticeship in research – we can’t let AI take that away",
@@ -15,7 +15,7 @@
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
       "model_release": true,
-      "score": 8.7484
+      "score": 8.723
     },
     {
       "title": "Stanford Researchers Release OpenJarvis: A Local-First Framework for Building On-Device Personal AI Agents with Tools, Memory, and Learning",
@@ -28,8 +28,22 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-12-at-2.19.48-PM-1-150x150.png",
       "published": "2026-03-12T21:21:04+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 3.1788
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 3.1519
+    },
+    {
+      "title": "Perplexity’s Personal Computer is a Mac mini running an AI OS",
+      "url": "https://www.macworld.com/article/3086893/perplexitys-personal-computer-is-a-mac-mini-running-an-ai-os.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Macs are quietly becoming the AI agent PC of choice. Summary created by Smart Answers AI In summary: Perplexity launched ‘Personal Computer,’ an AI …",
+      "image": "https://ic-cdn.flipboard.com/macworld.com/da0fdbbaebf92196a3e0c4ec3ca94af05fb438d8/_large.jpeg",
+      "published": "2026-03-12T13:56:16+00:00",
+      "firstSeen": "2026-03-12T23:39:07.047049+00:00",
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 2.8899
     },
     {
       "title": "MALUS - Clean Room as a Service",
@@ -42,8 +56,8 @@
       "image": "",
       "published": "2026-03-12T20:08:55+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.914
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 2.888
     },
     {
       "title": "Bumble to launch an AI dating assistant, ‘Bee’",
@@ -56,8 +70,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200%2C810",
       "published": "2026-03-12T16:52:17+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.8249
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 2.8012
     },
     {
       "title": "Perplexity turns your Mac mini into a 24/7 AI agent",
@@ -71,7 +85,7 @@
       "published": "2026-03-12T08:51:14+00:00",
       "firstSeen": "2026-03-12T10:09:57.784965+00:00",
       "lastSeen": "2026-03-12T11:44:55.047869+00:00",
-      "score": 2.7983
+      "score": 2.7792
     },
     {
       "title": "Gumloop lands $50M from Benchmark to turn every employee into an AI agent builder",
@@ -84,8 +98,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/9F2166B5-426E-4607-AF98-65A31AD8FDB7IMG_8309.jpeg?resize=1200%2C802",
       "published": "2026-03-12T15:30:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.74
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 2.7171
     },
     {
       "title": "Google Maps is getting an AI ‘Ask Maps’ feature and upgraded ‘immersive’ navigation",
@@ -98,8 +112,8 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200%2C800",
       "published": "2026-03-12T12:30:00+00:00",
       "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.718
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 2.697
     },
     {
       "title": "Viral Music Cover Hits 80 Million Streams Before Fans Realize It’s AI",
@@ -113,7 +127,7 @@
       "published": "2026-03-12T17:23:00+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
       "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.6983
+      "score": 2.6742
     },
     {
       "title": "The 1TB M5 MacBook Pro Just Got Its Biggest Discount Ever",
@@ -126,8 +140,8 @@
       "image": "https://ic-cdn.flipboard.com/lifehacker.com/0d69d15999838a19b4a5b0e3438adcb87e3ce5ef/_xlarge.png",
       "published": "2026-03-12T17:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.6883
+      "lastSeen": "2026-03-12T23:39:07.047049+00:00",
+      "score": 2.6644
     },
     {
       "title": "Sam Altman admits AI is killing the labor-capital balance—and says nobody knows what to do about it",
@@ -141,7 +155,7 @@
       "published": "2026-03-12T14:16:43+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 2.62
+      "score": 2.5978
     },
     {
       "title": "Analysis of Medicare data shows who mental health providers treat over telehealth",
@@ -155,21 +169,7 @@
       "published": "2026-03-12T13:55:14+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
       "lastSeen": "2026-03-12T18:34:59.006863+00:00",
-      "score": 2.6114
-    },
-    {
-      "title": "NVIDIA invests $2 billion in Nebius",
-      "url": "https://thenextweb.com/news/nvidia-invests-2-billion-in-nebius",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "NVIDIA has agreed to invest $2 billion in Nebius Group, the Amsterdam-based AI cloud company that emerged from the wreckage of Yandex after Russia’s invasion of Ukraine, in a deal that pairs a substantial capital injection with a deep technical partnership aimed at deploying more than 5 gigawatts of NVIDIA-powered compute capacity by the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NVIDIA-invests-2-billion-in-Nebius.png",
-      "published": "2026-03-12T11:17:05+00:00",
-      "firstSeen": "2026-03-12T15:12:55.906788+00:00",
-      "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.5506
+      "score": 2.5895
     }
   ],
   "errors": []
