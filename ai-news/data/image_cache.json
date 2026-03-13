@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T20:51:36.360177+00:00",
+  "updatedAt": "2026-03-13T21:47:15.909524+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -760,6 +760,10 @@
     "https://techcrunch.com/2026/03/13/steven-spielberg-says-hes-never-used-ai-in-any-of-his-films": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/steven-spielberg-GettyImages-2260428164.jpg?w=1024",
       "checkedAt": "2026-03-13T20:51:36.360177+00:00"
+    },
+    "https://techcrunch.com/2026/03/13/nyne-founded-by-a-father-son-duo-gives-ai-agents-the-human-context-theyre-missing": {
+      "image": "",
+      "checkedAt": "2026-03-13T21:47:15.909524+00:00"
     }
   }
 }
