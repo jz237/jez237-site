@@ -1,6 +1,22 @@
 {
-  "updatedAt": "2026-03-13T04:00:01.520358+00:00",
+  "updatedAt": "2026-03-13T04:54:07.906404+00:00",
   "items": [
+    {
+      "title": "Truecaller now lets you hang up on scammers — on behalf of your family",
+      "url": "https://techcrunch.com/2026/03/12/truecallers-now-lets-you-hang-up-on-scammers-on-behalf-of-your-family",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Caller identity platform Truecaller recently launched a new feature that lets one person become an admin of a family group, get alerts about fraud calls received by other members, and even end a call on their behalf if they suspect a family member might get scammed. The company, which has over 450 million users, first [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Family-Protection-Hero.jpg?resize=1200%2C675",
+      "published": "2026-03-13T04:30:00+00:00",
+      "firstSeen": "2026-03-13T04:54:07.906404+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9778
+    },
     {
       "title": "Shopify/liquid: Performance: 53% faster parse+render, 61% fewer allocations",
       "url": "https://simonwillison.net/2026/Mar/13/liquid",
@@ -8,14 +24,14 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Shopify/liquid: Performance: 53% faster parse+render, 61% fewer allocations\nPR from Shopify CEO Tobias Lütke against Liquid, Shopify's open source Ruby template engine that was somewhat inspired by Django when Tobi first created it back in 2005.\nTobi found dozens of new performance micro-optimizations using  a variant of autoresearch, Andrej Karpathy's new system for having a coding agent running hundreds of semi-autonomous experiments to find new effective techniques for training nanochat.\nTobi's implementation started two days ago with this autoresearch.md prompt file and an autoresearch.sh ",
+      "summary": "Shopify/liquid: Performance: 53% faster parse+render, 61% fewer allocations\nPR from Shopify CEO Tobias Lütke against Liquid, Shopify's open source Ruby template engine that was somewhat inspired by Django when Tobi first created it back in 2005.\nTobi found dozens of new performance micro-optimizations using a variant of autoresearch, Andrej Karpathy's new system for having a coding agent run hundreds of semi-autonomous experiments to find new effective techniques for training nanochat.\nTobi's implementation started two days ago with this autoresearch.md prompt file and an autoresearch.sh scrip",
       "image": "https://static.simonwillison.net/static/2026/tobi-contribs.jpg",
       "published": "2026-03-13T03:44:34+00:00",
       "firstSeen": "2026-03-13T04:00:01.520358+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0822
+      "score": 8.0551
     },
     {
       "title": "I tried Claude's new interactive visuals feature — and it’s one of the most fun AI tricks I’ve seen",
@@ -25,13 +41,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Claude's run of new and expanded features continued this week with a new beta feature that lets you create interactive visuals, including charts and …",
-      "image": "https://cdn.mos.cms.futurecdn.net/oNkZTQTPQPTXWBTxQqmTtY-2000-80.jpg",
+      "image": "https://ic-cdn.flipboard.com/futurecdn.net/a2acd315c5d4a92d839437ded7b8da7d8cdc4f44/_xlarge.jpeg",
       "published": "2026-03-13T03:00:00+00:00",
       "firstSeen": "2026-03-13T04:00:01.520358+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5199
+      "score": 10.4934
     },
     {
       "title": "Using the simple ‘3-prompt rule’ on ChatGPT will immediately guarantee you better results",
@@ -44,10 +60,10 @@
       "image": "https://ic-cdn.flipboard.com/supercarblondie.com/6bfdf05f0a236d800b7ddf4aecec4625c527288f/_xlarge.webp",
       "published": "2026-03-13T01:15:58+00:00",
       "firstSeen": "2026-03-13T02:23:46.456183+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.8695
+      "score": 2.8443
     },
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -61,7 +77,7 @@
       "published": "2026-03-13T01:15:11+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
       "lastSeen": "2026-03-13T02:17:26.151798+00:00",
-      "score": 16.8692,
+      "score": 16.844,
       "editorial_allow": true,
       "editorial_reason": "major_product_news"
     },
@@ -76,10 +92,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place.png",
       "published": "2026-03-13T01:02:47+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0433
+      "score": 5.0183
     },
     {
       "title": "How to watch Jensen Huang’s Nvidia GTC 2026 keynote",
@@ -92,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761844.jpg?resize=1200%2C846",
       "published": "2026-03-12T23:25:39+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8588
+      "score": 3.8348
     },
     {
       "title": "How to Build an Autonomous Machine Learning Research Loop in Google Colab Using Andrej Karpathy’s AutoResearch Framework for Hyperparameter Discovery and Experiment Tracking",
@@ -108,10 +124,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-41-1024x731.png",
       "published": "2026-03-12T22:46:41+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.6715
+      "score": 1.6479
     },
     {
       "title": "Sales automation startup Rox AI hits $1.2B valuation, sources say",
@@ -124,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/04/GettyImages-1422739420.jpg?resize=1200%2C702",
       "published": "2026-03-12T22:25:50+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1323
+      "score": 2.109
     },
     {
       "title": "A defense official reveals how AI chatbots could be used for targeting decisions",
@@ -140,10 +156,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/genai-mil2.jpg?resize=1200%2C600",
       "published": "2026-03-12T22:23:34+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1313
+      "score": 2.108
     },
     {
       "title": "The who, what, and why of the attack that has shut down Stryker's Windows network",
@@ -156,10 +172,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/01/data-wiper-malware-1152x648.jpg",
       "published": "2026-03-12T22:18:11+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.989
+      "score": 1.9658
     },
     {
       "title": "Former DOGE staffer says ChatGPT helped feds cancel grants mentioning ‘LGBTQ+’",
@@ -172,10 +188,10 @@
       "image": "https://ic-cdn.flipboard.com/advocate.com/42bb799fbde7d90219efcd12402178b204883b62/_xlarge.jpeg",
       "published": "2026-03-12T22:07:00+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.7841
+      "score": 2.761
     },
     {
       "title": "Ex-DOGE staffer raises eyebrows with 'arrogant' deposition: 'Oh look, a felony'",
@@ -191,7 +207,7 @@
       "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9726
+      "score": 1.9497
     },
     {
       "title": "Stanford Researchers Release OpenJarvis: A Local-First Framework for Building On-Device Personal AI Agents with Tools, Memory, and Learning",
@@ -204,10 +220,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-12-at-2.19.48-PM-1-150x150.png",
       "published": "2026-03-12T21:21:04+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 8.2345
+      "score": 8.2119
     },
     {
       "title": "Pixar's Hoppers behind the scenes",
@@ -220,10 +236,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/023514f2154372d9a3a62fe0354fa1f27f5a0436/_xlarge.jpeg",
       "published": "2026-03-12T20:50:08+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9515
+      "score": 1.9292
     },
     {
       "title": "iOS 26 added four new features I’ve been using almost every day",
@@ -236,10 +252,10 @@
       "image": "https://ic-cdn.flipboard.com/wp.com/128be7986201029b90eec2b71d056475e4b08387/_xlarge.jpeg",
       "published": "2026-03-12T20:43:08+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0486
+      "score": 3.0263
     },
     {
       "title": "Iran trolls Trump with AI-generated Lego propaganda video",
@@ -249,13 +265,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "The war in Iran is not only being fought on the battlefield, it is also playing out online. Iran’s state media recently took a leaf about of the White House's own social media playbook: mocking Donald Trump and Benjamin Netanyahu with an AI-generated propaganda ideo styled like a LEGO animation. The …",
-      "image": "https://s.france24.com/media/display/44900588-1e50-11f1-979e-005056bfb2b6/w:1280/p:16x9/capture-37635063369b31ef7b201e9-77449550.jpg",
+      "image": "https://ic-cdn.flipboard.com/france24.com/96e92c8dfa5e2113716435b2dd97fdd778005ab5/_xlarge.jpeg",
       "published": "2026-03-12T20:35:23+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9453
+      "score": 1.9232
     },
     {
       "title": "Assuming AI Will Become Conscious Is Dangerous, Scientists Say. It’s Also Dead Wrong.",
@@ -268,10 +284,10 @@
       "image": "https://ic-cdn.flipboard.com/hearstapps.com/fa10a0e679048e6e2a81bebbe1704663f5b60cb8/_xlarge.jpeg",
       "published": "2026-03-12T20:33:39+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9446
+      "score": 1.9225
     },
     {
       "title": "Agents need vector search more than RAG ever did",
@@ -287,7 +303,7 @@
       "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.8442
+      "score": 0.8221
     },
     {
       "title": "Sam Altman faced 'serious questions' in meeting with lawmakers about OpenAI's defense work",
@@ -300,10 +316,10 @@
       "image": "https://image.cnbcfm.com/api/v1/image/108276820-1773254804461-gettyimages-2265991721-0d6a8214_gmhkj3wc.jpeg?v=1773254873&w=1920&h=1080",
       "published": "2026-03-12T20:14:30+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 2.3367
+      "score": 2.3148
     },
     {
       "title": "MALUS - Clean Room as a Service",
@@ -316,10 +332,10 @@
       "image": "",
       "published": "2026-03-12T20:08:55+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7744
+      "score": 2.7526
     },
     {
       "title": "Nuro Tests Zero-Shot Autonomous Vehicles in Tokyo",
@@ -332,10 +348,10 @@
       "image": "",
       "published": "2026-03-12T19:37:20+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0216
+      "score": 3.0
     },
     {
       "title": "Translucent raises $27M to help healthcare firms automate financial visibility - SiliconANGLE",
@@ -349,7 +365,7 @@
       "published": "2026-03-12T19:31:50+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
       "lastSeen": "2026-03-12T19:50:11.955976+00:00",
-      "score": 1.9194,
+      "score": 1.8979,
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority"
     },
@@ -364,10 +380,10 @@
       "image": "",
       "published": "2026-03-12T19:23:44+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_commentary",
-      "score": 5.5561
+      "score": 5.5347
     },
     {
       "title": "A PhD is an apprenticeship in research – we can’t let AI take that away",
@@ -382,7 +398,7 @@
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
       "model_release": true,
-      "score": 22.4123,
+      "score": 22.391,
       "editorial_allow": true,
       "editorial_reason": "model_release"
     },
@@ -397,10 +413,10 @@
       "image": "https://ic-cdn.flipboard.com/gizmodo.com/62680fe9811b85c4e17bb1f6f6734ffc0653f1f9/_xlarge.jpeg",
       "published": "2026-03-12T18:50:11+00:00",
       "firstSeen": "2026-03-13T04:00:01.520358+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9028
+      "score": 1.8817
     },
     {
       "title": "Artificial intelligence has brought a new way of war to the Middle East – and it makes crimes harder to hide",
@@ -416,7 +432,7 @@
       "lastSeen": "2026-03-13T04:00:01.520358+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8936
+      "score": 1.8727
     },
     {
       "title": "Facebook Marketplace now lets Meta AI respond to buyers’ messages",
@@ -429,10 +445,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Facebook-Marketplace-Selling-Updates_Header.jpg?resize=1200%2C675",
       "published": "2026-03-12T18:20:33+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0312
+      "score": 5.0104
+    },
+    {
+      "title": "Old intelligence and AI? Behind the deadly attack on an Iranian girls’ school that left 175 dead",
+      "url": "https://www.independent.co.uk/news/world/americas/us-politics/iran-school-attack-ai-investigation-b2937456.html",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Dozens of Iranian children were beginning their school week inside a two-story building in Minab when what appears to be a U.S.-fired missile struck …",
+      "image": "https://ic-cdn.flipboard.com/independent.co.uk/d313d122fd359d81edcd4b0890eed5a6d6efc4cf/_xlarge.jpeg",
+      "published": "2026-03-12T18:15:03+00:00",
+      "firstSeen": "2026-03-13T04:54:07.906404+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9683
     },
     {
       "title": "Amazon puts humans back in the loop as its retail website crashes from ‘inaccurate advice’ that an AI agent took from an old wiki",
@@ -446,7 +478,7 @@
       "published": "2026-03-12T18:14:03+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
       "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 4.5886,
+      "score": 4.5679,
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate"
     },
@@ -461,10 +493,10 @@
       "image": "",
       "published": "2026-03-12T18:12:36+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9881
+      "score": 11.9673
     },
     {
       "title": "Tinder tries to lure people back to online dating with IRL events, virtual speed dating",
@@ -477,10 +509,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Tinder-revamp2026.png?w=1200",
       "published": "2026-03-12T18:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0232
+      "score": 2.0026
     },
     {
       "title": "I Watched 6 Hours of DOGE Bro Testimony. Here's What They Had to Say For Themselves",
@@ -493,10 +525,10 @@
       "image": "https://ic-cdn.flipboard.com/404media.co/f9d0ac067c67a751575eaa02354f3c4f9cc9aa09/_xlarge.png",
       "published": "2026-03-12T17:25:13+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8699
+      "score": 1.8496
     },
     {
       "title": "Viral Music Cover Hits 80 Million Streams Before Fans Realize It’s AI",
@@ -510,7 +542,7 @@
       "published": "2026-03-12T17:23:00+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
       "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.5691,
+      "score": 2.5488,
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority"
     },
@@ -525,10 +557,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2147914845.jpg?w=1024",
       "published": "2026-03-12T17:20:19+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.008
+      "score": 1.9878
     },
     {
       "title": "The 1TB M5 MacBook Pro Just Got Its Biggest Discount Ever",
@@ -541,10 +573,10 @@
       "image": "https://ic-cdn.flipboard.com/lifehacker.com/0d69d15999838a19b4a5b0e3438adcb87e3ce5ef/_xlarge.png",
       "published": "2026-03-12T17:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6604
+      "score": 3.6403
     },
     {
       "title": "Bumble to launch an AI dating assistant, ‘Bee’",
@@ -558,7 +590,7 @@
       "published": "2026-03-12T16:52:17+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
       "lastSeen": "2026-03-12T23:39:07.047049+00:00",
-      "score": 4.8975,
+      "score": 4.8775,
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate"
     },
@@ -573,10 +605,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200%2C810",
       "published": "2026-03-12T16:52:17+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8975
+      "score": 4.8775
     },
     {
       "title": "What Was Grammarly Thinking?",
@@ -589,10 +621,10 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/397a6086f38de1d713826637169b52905efe7fa7/_xlarge.jpeg",
       "published": "2026-03-12T16:45:48+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8551
+      "score": 1.8352
     },
     {
       "title": "I Asked ChatGPT: Where Can I Retire on $1,500 a Month Without Freezing?",
@@ -605,42 +637,10 @@
       "image": "https://ic-cdn.flipboard.com/gobankingrates.com/07aa43c4990c9fff6b22806b01fa2f9fcd869d59/_xlarge.jpeg",
       "published": "2026-03-12T16:45:06+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6548
-    },
-    {
-      "title": "Fourth Circuit Publicly Admonishes Lawyer for \"Citations to Nonexistent Judicial Opinions\"",
-      "url": "https://reason.com/volokh/2026/03/12/fourth-circuit-publicly-admonishes-lawyer-for-citations-to-nonexistent-judicial-opinions",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "From yesterday's decision in In re Nwaubani, from the Fourth Circuit (Judges Marvin Quattlebaum, Allison Rushing, and DeAndrea Gist Benjamin): This …",
-      "image": "https://d2eehagpk5cl65.cloudfront.net/img/q60/uploads/2026/03/InreNwaubani.jpg",
-      "published": "2026-03-12T16:44:33+00:00",
-      "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 1.8546,
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority"
-    },
-    {
-      "title": "A writer is suing Grammarly for turning her and other authors into ‘AI editors’ without consent",
-      "url": "https://techcrunch.com/2026/03/12/a-writer-is-suing-grammarly-for-turning-her-and-other-authors-into-ai-editors-without-consent",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Journalist Julia Angwin is leading a class action lawsuit against Grammarly for violating her privacy and publicity rights.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1466243153.jpg?resize=1200%2C705",
-      "published": "2026-03-12T16:42:40+00:00",
-      "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9939
+      "score": 2.6349
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3126
+      "score": 1.3095
     },
     {
       "title": "Introducing... Life Without",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2317
+      "score": 2.2314
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T04:00:01.520358+00:00",
+      "lastSeen": "2026-03-13T04:54:07.906404+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1912
+      "score": 1.1911
     },
     {
       "title": "The Life Scientific: Julia Simner",
