@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T09:54:36.191137+00:00",
+  "updatedAt": "2026-03-13T11:00:01.958880+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -692,6 +692,10 @@
     "https://www.sciencedaily.com/releases/2026/03/260313002650.htm": {
       "image": "https://www.sciencedaily.com/images/1920/ai-robot-vs-human-boxing.webp",
       "checkedAt": "2026-03-13T07:09:53.230843+00:00"
+    },
+    "https://www.aol.com/morgan-stanley-sees-ai-jobs-064200169.html": {
+      "image": "",
+      "checkedAt": "2026-03-13T11:00:01.958880+00:00"
     }
   }
 }
