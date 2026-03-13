@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T14:00:02.117109+00:00",
+  "updatedAt": "2026-03-13T15:00:01.939537+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -700,6 +700,18 @@
     "https://techcrunch.com/2026/03/12/before-quantum-computing-arrives-this-startup-wants-enterprises-already-running-on-it": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2174694566.jpg?resize=1200,800",
       "checkedAt": "2026-03-13T14:00:02.117109+00:00"
+    },
+    "https://techcrunch.com/2026/03/13/peacock-expands-into-ai-driven-video-mobile-first-live-sports-and-gaming": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Peacock-newfeatures2026.png?w=1200",
+      "checkedAt": "2026-03-13T15:00:01.939537+00:00"
+    },
+    "https://www.techrepublic.com/article/news-samsung-galaxy-s26-buds4-global-launch": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-03-13T214122.658.png",
+      "checkedAt": "2026-03-13T15:00:01.939537+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-2026-product-roadmap-march-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-2026-03-13T212726.063-1024x572.png",
+      "checkedAt": "2026-03-13T15:00:01.939537+00:00"
     }
   }
 }
