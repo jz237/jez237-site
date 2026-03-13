@@ -1,7 +1,24 @@
 {
   "date": "2026-03-13",
-  "updatedAt": "2026-03-13T17:50:56.581189+00:00",
+  "updatedAt": "2026-03-13T19:00:01.656919+00:00",
   "items": [
+    {
+      "title": "1M context is now generally available for Opus 4.6 and Sonnet 4.6",
+      "url": "https://simonwillison.net/2026/Mar/13/1m-context",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "1M context is now generally available for Opus 4.6 and Sonnet 4.6\nHere's what surprised me:\n\nStandard pricing now applies across the full 1M window for both models, with no long-context premium.\n\nOpenAI and Gemini both charge more for prompts where the token count goes above a certain point - 200,000 for Gemini 3.1 Pro and 272,000 for GPT-5.4.\n\n\n    Tags: ai, generative-ai, llms, anthropic, claude, llm-pricing, long-context",
+      "image": "",
+      "published": "2026-03-13T18:29:13+00:00",
+      "firstSeen": "2026-03-13T19:00:01.656919+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 22.7744
+    },
     {
       "title": "ChatGPT and Claude are evolving from chatbots into interactive learning tools",
       "url": "https://9to5mac.com/2026/03/13/chatgpt-and-claude-are-evolving-from-chatbots-into-interactive-learning-tools",
@@ -13,10 +30,10 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/macbook-neo-classroom.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-13T14:21:01+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.7481
+      "score": 16.7167
     },
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -29,10 +46,10 @@
       "image": "https://d.techtimes.com/en/full/463304/claude-visuals.png",
       "published": "2026-03-13T01:15:11+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.5437
+      "score": 16.5219
     },
     {
       "title": "Compare ChatGPT, Gemini, and more side by side with this AI tool",
@@ -48,7 +65,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9345
+      "score": 13.9067
     },
     {
       "title": "Anthropic commits $100M to Claude Partner Network",
@@ -61,10 +78,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anthropic-invests-100-million-into-the-Claude-Partner-Network.png",
       "published": "2026-03-13T11:06:03+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.862
+      "score": 13.8333
     },
     {
       "title": "Stop using Claude like ChatGPT — 10 prompts that unlock its real potential",
@@ -77,10 +94,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/741e56e7476c936c9e65cc5dd06a2c9a5c6ad01d/_xlarge.jpeg",
       "published": "2026-03-13T05:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8198
+      "score": 13.7956
     },
     {
       "title": "Are You a Visual Learner? Claude Can Now Explain Things With Charts, Diagrams",
@@ -93,10 +110,10 @@
       "image": "https://ic-cdn.flipboard.com/pcmag.com/2858666e3b0784a2d1ca8444c700d616b714b6c2/_xlarge.png",
       "published": "2026-03-13T14:04:24+00:00",
       "firstSeen": "2026-03-13T17:50:56.581189+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.4405
+      "score": 13.4093
     },
     {
       "title": "Google AI Introduces ‘Groundsource’: A New Methodology that Uses Gemini Model to Transform Unstructured Global News into Actionable, Historical Data",
@@ -109,10 +126,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-13-at-12.59.53-AM-1-150x150.png",
       "published": "2026-03-13T08:07:25+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5596
+      "score": 12.5332
     },
     {
       "title": "Claude for Office Adds Real-Time Co-Editing in Excel & PowerPoint",
@@ -128,7 +145,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0472
+      "score": 10.0158
     },
     {
       "title": "Microsoft launches Copilot Health",
@@ -141,10 +158,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-release-Copilot-Health.png",
       "published": "2026-03-13T15:27:51+00:00",
       "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0795
+      "score": 9.0471
     },
     {
       "title": "Ex-NFL player charged with murder asked ChatGPT for advice before calling 911: Prosecutors",
@@ -160,7 +177,7 @@
       "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 8.0319
+      "score": 8.001
     },
     {
       "title": "DOGE bros exposed: Depositions from Elon Musk’s team reveal ChatGPT process for gutting ‘DEI’ grants",
@@ -173,26 +190,10 @@
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/ce291e891423898d80721796a9f52f8153e2d81b/_xlarge.jpeg",
       "published": "2026-03-13T11:07:14+00:00",
       "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
+      "lastSeen": "2026-03-13T19:00:01.656919+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.9625
-    },
-    {
-      "title": "Shopify/liquid: Performance: 53% faster parse+render, 61% fewer allocations",
-      "url": "https://simonwillison.net/2026/Mar/13/liquid",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Shopify/liquid: Performance: 53% faster parse+render, 61% fewer allocations\nPR from Shopify CEO Tobias Lütke against Liquid, Shopify's open source Ruby template engine that was somewhat inspired by Django when Tobi first created it back in 2005.\nTobi found dozens of new performance micro-optimizations using a variant of autoresearch, Andrej Karpathy's new system for having a coding agent run hundreds of semi-autonomous experiments to find new effective techniques for training nanochat.\nTobi's implementation started two days ago with this autoresearch.md prompt file and an autoresearch.sh scrip",
-      "image": "https://static.simonwillison.net/static/2026/tobi-contribs.jpg",
-      "published": "2026-03-13T03:44:34+00:00",
-      "firstSeen": "2026-03-13T04:00:01.520358+00:00",
-      "lastSeen": "2026-03-13T17:50:56.581189+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.7334
+      "score": 7.9338
     }
   ],
   "errors": []
