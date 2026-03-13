@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T16:56:17.291212+00:00",
+  "updatedAt": "2026-03-13T18:00:01.883769+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -724,6 +724,14 @@
     "https://techcrunch.com/video/the-32b-acquisition-that-one-vc-is-calling-the-deal-of-the-decade": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2161842016.jpg?w=1024",
       "checkedAt": "2026-03-13T16:56:17.291212+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/13/craig-mod": {
+      "image": "",
+      "checkedAt": "2026-03-13T18:00:01.883769+00:00"
+    },
+    "https://techcrunch.com/2026/03/13/spotify-will-let-you-edit-your-taste-profile-to-control-your-recommendations": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
+      "checkedAt": "2026-03-13T18:00:01.883769+00:00"
     }
   }
 }
