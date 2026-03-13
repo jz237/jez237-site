@@ -1,6 +1,6 @@
 {
   "date": "2026-03-13",
-  "updatedAt": "2026-03-13T22:43:09.338442+00:00",
+  "updatedAt": "2026-03-13T23:41:00.288770+00:00",
   "items": [
     {
       "title": "1M context is now generally available for Opus 4.6 and Sonnet 4.6",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-03-13T18:29:13+00:00",
       "firstSeen": "2026-03-13T18:59:15.406515+00:00",
-      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
+      "lastSeen": "2026-03-13T23:41:00.288770+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.668
+      "score": 22.6421
     },
     {
       "title": "ChatGPT and Claude are evolving from chatbots into interactive learning tools",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-03-13T20:51:36.360177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.6218
+      "score": 16.5988
     },
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -49,7 +49,7 @@
       "lastSeen": "2026-03-13T20:00:01.414145+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4559
+      "score": 16.4399
     },
     {
       "title": "6 Savvy Ways To Get Better At Using ChatGPT, Claude, & Gemini",
@@ -62,10 +62,26 @@
       "image": "https://ic-cdn.flipboard.com/bustle.com/a878fad2ce9255e301078b1a3e4532ad584db5c7/_xlarge.jpeg",
       "published": "2026-03-13T21:46:02+00:00",
       "firstSeen": "2026-03-13T22:43:09.338442+00:00",
-      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
+      "lastSeen": "2026-03-13T23:41:00.288770+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.1213
+      "score": 16.093
+    },
+    {
+      "title": "Google DeepMind Introduces Aletheia: The AI Agent Moving from Math Competitions to Fully Autonomous Professional Research Discoveries",
+      "url": "https://www.marktechpost.com/2026/03/13/google-deepmind-introduces-aletheia-the-ai-agent-moving-from-math-competitions-to-fully-autonomous-professional-research-discoveries",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Google DeepMind team has introduced Aletheia, a specialized AI agent designed to bridge the gap between competition-level math and professional research. While models achieved gold-medal standards at the 2025 International Mathematical Olympiad (IMO), research requires navigating vast literature and constructing long-horizon proofs. Aletheia solves this by iteratively generating, verifying, and revising solutions in natural language. [&#8230;]\nThe post Google DeepMind Introduces Aletheia: The AI Agent Moving from Math Competitions to Fully Autonomous Professional Research Discoveries appeared ",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/02/Screenshot-2026-02-12-at-11.03.13-PM-1-150x150.png",
+      "published": "2026-03-13T23:05:53+00:00",
+      "firstSeen": "2026-03-13T23:41:00.288770+00:00",
+      "lastSeen": "2026-03-13T23:41:00.288770+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 15.1023
     },
     {
       "title": "Compare ChatGPT, Gemini, and more side by side with this AI tool",
@@ -81,7 +97,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8226
+      "score": 13.8022
     },
     {
       "title": "Anthropic commits $100M to Claude Partner Network",
@@ -94,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anthropic-invests-100-million-into-the-Claude-Partner-Network.png",
       "published": "2026-03-13T11:06:03+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
+      "lastSeen": "2026-03-13T23:41:00.288770+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.7466
+      "score": 13.7255
     },
     {
       "title": "Stop using Claude like ChatGPT — 10 prompts that unlock its real potential",
@@ -110,10 +126,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/741e56e7476c936c9e65cc5dd06a2c9a5c6ad01d/_xlarge.jpeg",
       "published": "2026-03-13T05:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
+      "lastSeen": "2026-03-13T23:41:00.288770+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.7224
+      "score": 13.7046
     },
     {
       "title": "Are You a Visual Learner? Claude Can Now Explain Things With Charts, Diagrams",
@@ -129,7 +145,7 @@
       "lastSeen": "2026-03-13T22:43:09.338442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.3151
+      "score": 13.2923
     },
     {
       "title": "Google AI Introduces ‘Groundsource’: A New Methodology that Uses Gemini Model to Transform Unstructured Global News into Actionable, Historical Data",
@@ -142,10 +158,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-13-at-12.59.53-AM-1-150x150.png",
       "published": "2026-03-13T08:07:25+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
+      "lastSeen": "2026-03-13T23:41:00.288770+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4534
+      "score": 12.434
     },
     {
       "title": "Claude for Office Adds Real-Time Co-Editing in Excel & PowerPoint",
@@ -161,7 +177,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.921
+      "score": 9.898
     },
     {
       "title": "Former DOGE staffers testify that they used ChatGPT to cancel LGBTQ+ grants",
@@ -177,23 +193,7 @@
       "lastSeen": "2026-03-13T20:51:36.360177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9839
-    },
-    {
-      "title": "Microsoft launches Copilot Health",
-      "url": "https://thenextweb.com/news/microsoft-launches-copilot-health",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft has launched Copilot Health, a dedicated, secure space within its Copilot AI assistant that aggregates personal health data from wearables, electronic health records, and laboratory results, then applies AI to surface what the company calls a “coherent story” of a user’s health. The product opened its waitlist on 12 March 2026 and is rolling [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-release-Copilot-Health.png",
-      "published": "2026-03-13T15:27:51+00:00",
-      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T22:43:09.338442+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.9492
+      "score": 8.9618
     }
   ],
   "errors": []
