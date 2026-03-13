@@ -30,6 +30,45 @@ KEYWORDS = {
     "infra": ["inference", "training", "gpu", "optimization", "agent", "tool use", "reasoning"],
 }
 
+# Editorial preference layer: prioritize the kinds of stories Jez actually wants to see.
+EDITORIAL_PRIORITY = {
+    "big_names": [
+        "claude", "anthropic", "chatgpt", "openai", "gpt-5", "gpt 5",
+        "gemini", "google deepmind", "deepmind", "grok", "xai", "alexa+", "alexa plus",
+        "copilot", "mistral", "deepseek", "llama", "meta ai"
+    ],
+    "capabilities": [
+        "can now", "now creates", "now generate", "create visuals", "charts and diagrams",
+        "interactive visuals", "image generation", "generate images", "video generation",
+        "voice mode", "vision", "multimodal", "agent", "tool use", "coding",
+        "code generation", "reasoning", "memory", "search", "browser"
+    ],
+    "product_impact": [
+        "available now", "available today", "rolling out", "launches", "announces",
+        "for everyone", "public beta", "generally available", "in chatgpt", "in claude",
+        "in gemini", "for alexa+", "assistant", "app"
+    ],
+    "hard_boost": [
+        "claude can now", "chatgpt can now", "gemini can now", "grok can now",
+        "alexa+", "alexa plus", "chatgpt", "claude", "gemini", "grok",
+        "openai announces", "anthropic announces", "google announces", "xai announces"
+    ],
+    "hard_downrank": [
+        "framework", "toolkit", "sdk", "library", "engineering blog", "how we built",
+        "vector search", "rag", "retrieval", "agent toolkit", "developer toolkit"
+    ],
+    "fluff_downrank": [
+        "i asked chatgpt", "chatgpt helped", "helped feds", "where can i retire",
+        "better results", "life hack", "prompt rule", "staffer says", "lawmakers",
+        "faced serious questions", "privacy nightmare"
+    ],
+    "downrank": [
+        "framework", "library", "toolkit", "sdk", "how we built", "engineering blog",
+        "vector search", "rag", "retrieval", "inference optimization",
+        "training optimization", "gpu optimization", "survey"
+    ],
+}
+
 # Strong signals that an item is specifically about a NEW AI model release.
 # Must be specific enough to avoid false positives (e.g. generic "release notes").
 MODEL_RELEASE_SIGNALS = [
@@ -294,6 +333,55 @@ def flag_model_release(item):
     return matched
 
 
+def editorial_gate(item):
+    """Lightweight editorial classifier for what belongs in #news.
+    Returns (allow: bool, reason: str)."""
+    title = (item.get("title") or "").lower()
+    summary = (item.get("summary") or "").lower()
+    text_blob = f"{title} {summary}"
+
+    # Always keep real model releases in the mix.
+    if item.get("model_release"):
+        return True, "model_release"
+
+    big_name_hits = sum(1 for w in EDITORIAL_PRIORITY["big_names"] if w in text_blob)
+    capability_hits = sum(1 for w in EDITORIAL_PRIORITY["capabilities"] if w in text_blob)
+    impact_hits = sum(1 for w in EDITORIAL_PRIORITY["product_impact"] if w in text_blob)
+    hard_boost_hits = sum(1 for w in EDITORIAL_PRIORITY["hard_boost"] if w in text_blob)
+    hard_downrank_hits = sum(1 for w in EDITORIAL_PRIORITY["hard_downrank"] if w in text_blob)
+    fluff_hits = sum(1 for w in EDITORIAL_PRIORITY["fluff_downrank"] if w in text_blob)
+
+    # Strong product/platform/capability news should pass.
+    if hard_boost_hits >= 1 and (capability_hits >= 1 or impact_hits >= 1 or big_name_hits >= 2):
+        return True, "major_product_news"
+
+    # Important big-company AI platform stories.
+    if big_name_hits >= 2 and (capability_hits >= 1 or impact_hits >= 1):
+        return True, "big_name_with_impact"
+
+    # Commentary we still want sometimes.
+    if "coding after coders" in text_blob:
+        return True, "editorial_commentary"
+
+    # Obvious framework/toolkit/plumbing posts should stay out unless they are model releases.
+    if hard_downrank_hits >= 1 and hard_boost_hits == 0:
+        return False, "framework_or_plumbing"
+
+    # Generic fluff stays out.
+    if fluff_hits >= 1 and hard_boost_hits == 0:
+        return False, "fluff"
+
+    # Narrow consumer/enterprise AI feature stories need stronger signals.
+    if big_name_hits == 0 and capability_hits == 0 and impact_hits < 2:
+        return False, "low_editorial_priority"
+
+    # Otherwise allow if it has enough real-news shape.
+    if (big_name_hits + capability_hits + impact_hits) >= 3:
+        return True, "editorial_score_pass"
+
+    return False, "did_not_clear_gate"
+
+
 def score_item(item, now):
     title = (item.get("title") or "").lower()
     summary = (item.get("summary") or "").lower()
@@ -309,15 +397,50 @@ def score_item(item, now):
         else:
             keyword_score += hits * 0.3
 
-    # Strong boost for confirmed AI model releases
+    editorial_score = 0.0
+
+    # Strongly prefer major AI products / brands Jez cares about.
+    big_name_hits = sum(1 for w in EDITORIAL_PRIORITY["big_names"] if w in text_blob)
+    editorial_score += min(big_name_hits, 3) * 2.0
+
+    # Prefer real capability jumps and end-user visible improvements.
+    capability_hits = sum(1 for w in EDITORIAL_PRIORITY["capabilities"] if w in text_blob)
+    editorial_score += min(capability_hits, 3) * 1.4
+
+    # Prefer launches / rollouts / broadly relevant product impact.
+    impact_hits = sum(1 for w in EDITORIAL_PRIORITY["product_impact"] if w in text_blob)
+    editorial_score += min(impact_hits, 3) * 1.1
+
+    # Hard boost for the exact kind of major assistant/product stories Jez prefers.
+    hard_boost_hits = sum(1 for w in EDITORIAL_PRIORITY["hard_boost"] if w in text_blob)
+    editorial_score += min(hard_boost_hits, 2) * 2.0
+
+    # Downrank generic framework/plumbing posts more aggressively.
+    hard_downrank_hits = sum(1 for w in EDITORIAL_PRIORITY["hard_downrank"] if w in text_blob)
+    editorial_score -= min(hard_downrank_hits, 2) * 2.2
+
+    # Downrank generic consumer/political fluff that merely mentions big AI names.
+    fluff_hits = sum(1 for w in EDITORIAL_PRIORITY["fluff_downrank"] if w in text_blob)
+    editorial_score -= min(fluff_hits, 2) * 2.6
+
+    # Downrank generic research/infra filler unless something else makes it important.
+    downrank_hits = sum(1 for w in EDITORIAL_PRIORITY["downrank"] if w in text_blob)
+    editorial_score -= min(downrank_hits, 3) * 0.9
+
+    # Strong boost for confirmed AI model releases — preserve these in the mix.
     if item.get("model_release"):
         keyword_score += 6.0
+        editorial_score += 2.3
+
+    # Extra title bias: if a major product/capability signal is in the title, that's usually what Jez wants.
+    title_priority_hits = sum(1 for w in (EDITORIAL_PRIORITY["big_names"] + EDITORIAL_PRIORITY["capabilities"] + EDITORIAL_PRIORITY["hard_boost"]) if w in title)
+    editorial_score += min(title_priority_hits, 4) * 1.0
 
     published = item.get("published_dt") or now
     hours_old = max(0.0, (now - published).total_seconds() / 3600.0)
     recency = math.exp(-hours_old / 36.0)  # half-ish life ~25h
 
-    return round((item.get("sourceWeight", 0.7) * 1.4) + keyword_score + (recency * 1.1), 4)
+    return round((item.get("sourceWeight", 0.7) * 1.4) + keyword_score + editorial_score + (recency * 1.1), 4)
 
 
 def main():
@@ -417,6 +540,9 @@ def main():
     # Flag model releases (must run before scoring so boost is applied)
     for it in all_items:
         flag_model_release(it)
+        allow, reason = editorial_gate(it)
+        it["editorial_allow"] = allow
+        it["editorial_reason"] = reason
 
     # Score and sort
     for it in all_items:
