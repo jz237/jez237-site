@@ -1,6 +1,6 @@
 {
   "date": "2026-03-13",
-  "updatedAt": "2026-03-13T19:44:28.500579+00:00",
+  "updatedAt": "2026-03-13T21:00:01.448997+00:00",
   "items": [
     {
       "title": "1M context is now generally available for Opus 4.6 and Sonnet 4.6",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-03-13T18:29:13+00:00",
       "firstSeen": "2026-03-13T18:59:15.406515+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.7523
+      "score": 22.7158
     },
     {
       "title": "ChatGPT and Claude are evolving from chatbots into interactive learning tools",
@@ -30,10 +30,10 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/macbook-neo-classroom.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-13T14:21:01+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.697
+      "score": 16.6645
     },
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -49,7 +49,7 @@
       "lastSeen": "2026-03-13T20:00:01.414145+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.5082
+      "score": 16.4856
     },
     {
       "title": "Compare ChatGPT, Gemini, and more side by side with this AI tool",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8892
+      "score": 13.8604
     },
     {
       "title": "Anthropic commits $100M to Claude Partner Network",
@@ -78,10 +78,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anthropic-invests-100-million-into-the-Claude-Partner-Network.png",
       "published": "2026-03-13T11:06:03+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8153
+      "score": 13.7855
     },
     {
       "title": "Stop using Claude like ChatGPT — 10 prompts that unlock its real potential",
@@ -94,10 +94,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/741e56e7476c936c9e65cc5dd06a2c9a5c6ad01d/_xlarge.jpeg",
       "published": "2026-03-13T05:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.7804
+      "score": 13.7553
     },
     {
       "title": "Are You a Visual Learner? Claude Can Now Explain Things With Charts, Diagrams",
@@ -110,10 +110,10 @@
       "image": "https://ic-cdn.flipboard.com/pcmag.com/2858666e3b0784a2d1ca8444c700d616b714b6c2/_xlarge.png",
       "published": "2026-03-13T14:04:24+00:00",
       "firstSeen": "2026-03-13T17:50:56.581189+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.3898
+      "score": 13.3575
     },
     {
       "title": "Google AI Introduces ‘Groundsource’: A New Methodology that Uses Gemini Model to Transform Unstructured Global News into Actionable, Historical Data",
@@ -126,10 +126,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-13-at-12.59.53-AM-1-150x150.png",
       "published": "2026-03-13T08:07:25+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5166
+      "score": 12.4892
     },
     {
       "title": "Claude for Office Adds Real-Time Co-Editing in Excel & PowerPoint",
@@ -145,7 +145,23 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9961
+      "score": 9.9636
+    },
+    {
+      "title": "Former DOGE staffers testify that they used ChatGPT to cancel LGBTQ+ grants",
+      "url": "https://www.thepinknews.com/2026/03/13/former-doge-staffers-testify-that-they-used-chatgpt-to-cancel-lgbtq-grants",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Staffers of Elon Musk’s now-defunct Department of Government Efficiency (DOGE) have alleged that AI assistant ChatGPT’s was used to cancel grants …",
+      "image": "https://ic-cdn.flipboard.com/thepinknews.com/2a89305059872da53ddd37d6a7bc70e5e71c92aa/_xlarge.jpeg",
+      "published": "2026-03-13T12:44:54+00:00",
+      "firstSeen": "2026-03-13T21:00:01.448997+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.0247
     },
     {
       "title": "Microsoft launches Copilot Health",
@@ -158,10 +174,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-release-Copilot-Health.png",
       "published": "2026-03-13T15:27:51+00:00",
       "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
+      "lastSeen": "2026-03-13T21:00:01.448997+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0268
+      "score": 8.9932
     },
     {
       "title": "Ex-NFL player charged with murder asked ChatGPT for advice before calling 911: Prosecutors",
@@ -177,23 +193,7 @@
       "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.9817
-    },
-    {
-      "title": "DOGE bros exposed: Depositions from Elon Musk’s team reveal ChatGPT process for gutting ‘DEI’ grants",
-      "url": "https://www.independent.co.uk/news/world/americas/us-politics/doge-bros-deposition-musk-chatgpt-dei-grants-b2937603.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Elon Musk’s disciples in his so-called Department of Government Efficiency were embedded across federal agencies with a mandate to fire thousands of …",
-      "image": "https://ic-cdn.flipboard.com/independent.co.uk/ce291e891423898d80721796a9f52f8153e2d81b/_xlarge.jpeg",
-      "published": "2026-03-13T11:07:14+00:00",
-      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
-      "lastSeen": "2026-03-13T19:44:28.500579+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 7.9158
+      "score": 7.9496
     }
   ],
   "errors": []
