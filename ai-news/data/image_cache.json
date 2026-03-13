@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T02:00:01.588259+00:00",
+  "updatedAt": "2026-03-12T23:39:07.047049+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -661,25 +661,13 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/genai-mil2.jpg?resize=1200,600",
       "checkedAt": "2026-03-12T22:43:27.405342+00:00"
     },
-    "https://huggingface.co/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place": {
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place.png",
-      "checkedAt": "2026-03-13T02:00:01.588259+00:00"
-    },
     "https://techcrunch.com/2026/03/12/how-to-watch-jensen-huangs-nvidia-gtc-2026-keynote": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761844.jpg?resize=1200,846",
-      "checkedAt": "2026-03-13T02:00:01.588259+00:00"
+      "checkedAt": "2026-03-12T23:39:07.047049+00:00"
     },
     "https://www.marktechpost.com/2026/03/12/how-to-build-an-autonomous-machine-learning-research-loop-in-google-colab-using-andrej-karpathys-autoresearch-framework-for-hyperparameter-discovery-and-experiment-tracking": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-41-1024x731.png",
-      "checkedAt": "2026-03-13T02:00:01.588259+00:00"
-    },
-    "https://techcrunch.com/2026/03/12/bumble-introduces-an-ai-dating-assistant-bee": {
-      "image": "",
-      "checkedAt": "2026-03-13T02:00:01.588259+00:00"
-    },
-    "https://techcrunch.com/2026/03/12/alexa-gets-a-new-adults-only-personality-option-that-curses-but-wont-do-nsfw-content": {
-      "image": "https://techcrunch.com/wp-content/uploads/2025/02/alexa-plus.jpeg?resize=1200,675",
-      "checkedAt": "2026-03-13T02:00:01.588259+00:00"
+      "checkedAt": "2026-03-12T23:39:07.047049+00:00"
     }
   }
 }
