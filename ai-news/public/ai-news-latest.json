@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T17:00:01.697783+00:00",
+  "updatedAt": "2026-03-13T16:56:17.291212+00:00",
   "items": [
     {
       "title": "The $32B acquisition that one VC is calling the ‘Deal of the Decade’",
@@ -11,11 +11,11 @@
       "summary": "According to Index Ventures Partner Shardul Shah, cybersecurity startup Wiz sits “at the center of three tailwinds: AI, cloud, and security spend.” Those tailwinds powered what just became the largest venture-backed acquisition in history — Google&#8217;s $32 billion deal, finalized after a declined 2024 offer, antitrust review on both sides of the Atlantic, and an [&#8230;]",
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2161842016.jpg?w=1024",
       "published": "2026-03-13T16:20:23+00:00",
-      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.27
+      "score": 2.2719
     },
     {
       "title": "Microsoft launches Copilot Health",
@@ -27,11 +27,11 @@
       "summary": "Microsoft has launched Copilot Health, a dedicated, secure space within its Copilot AI assistant that aggregates personal health data from wearables, electronic health records, and laboratory results, then applies AI to surface what the company calls a “coherent story” of a user’s health. The product opened its waitlist on 12 March 2026 and is rolling [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-release-Copilot-Health.png",
       "published": "2026-03-13T15:27:51+00:00",
-      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.104
+      "score": 9.1059
     },
     {
       "title": "More Tech Layoffs: Atlassian Slashes 10% of Workforce, Stock Climbs After Announcement",
@@ -44,10 +44,10 @@
       "image": "",
       "published": "2026-03-13T15:21:58+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2012
+      "score": 3.203
     },
     {
       "title": "Sam Altman says AI will eventually be sold like electricity and water — by companies like OpenAI",
@@ -63,7 +63,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1012
+      "score": 5.103
     },
     {
       "title": "Ramp buys Stockholm fintech Billhop to crack open European market",
@@ -76,10 +76,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ramp-buys-Stockholm-fintech-Billhop.png",
       "published": "2026-03-13T15:19:01+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7997
+      "score": 2.8016
     },
     {
       "title": "Why physical AI is becoming manufacturing’s next advantage",
@@ -92,10 +92,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MIT-Article-Image-1200x675_C.jpg?resize=1200%2C600",
       "published": "2026-03-13T15:16:55+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3387
+      "score": 3.3405
     },
     {
       "title": "Amazon Announces Inference Chips Deal With Cerebras",
@@ -111,7 +111,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1905
+      "score": 4.1923
     },
     {
       "title": "“I didn't get it at first. Then I visited my friend's studio. The way he was using it opened my eyes”: House icons Alan Braxe and Fred Falke on embracing AI in the studio",
@@ -124,10 +124,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/6UbVhQ6rvT2yPiLjSJ4cLX-2560-80.jpg",
       "published": "2026-03-13T15:00:00+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0905
+      "score": 2.0923
     },
     {
       "title": "The ultimate logo quiz: think you know your 1930s logos?",
@@ -143,7 +143,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0905
+      "score": 2.0923
     },
     {
       "title": "Popular Grammar Tool Pulls AI Feature After Backlash for Mimicking Stephen King Among Others",
@@ -155,11 +155,11 @@
       "summary": "As artificial intelligence continues to grow, it also continues to gain backlash from musicians, actors, and authors. Just as multiple authors, …",
       "image": "https://ic-cdn.flipboard.com/parade.com/92778465050614d78981eacf0dc97be040d317f1/_xlarge.jpeg",
       "published": "2026-03-13T14:23:08+00:00",
-      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0729
+      "score": 2.0747
     },
     {
       "title": "ChatGPT and Claude are evolving from chatbots into interactive learning tools",
@@ -172,10 +172,10 @@
       "image": "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2026/03/macbook-neo-classroom.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
       "published": "2026-03-13T14:21:01+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.7719
+      "score": 16.7737
     },
     {
       "title": "Claude for Office Adds Real-Time Co-Editing in Excel & PowerPoint",
@@ -191,7 +191,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.071
+      "score": 10.0727
     },
     {
       "title": "Scammers use AI-generated images of lost dogs to target pet owners",
@@ -204,10 +204,10 @@
       "image": "https://ic-cdn.flipboard.com/popsci.com/19a2e94a27769b0eb799374cab876efa6c4bf73c/_xlarge.jpeg",
       "published": "2026-03-13T14:03:00+00:00",
       "firstSeen": "2026-03-13T15:56:00.809269+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0634
+      "score": 2.0652
     },
     {
       "title": "Peacock expands into AI-driven video, mobile-first live sports, and gaming",
@@ -220,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Peacock-newfeatures2026.png?w=1200",
       "published": "2026-03-13T14:00:00+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.2038
     },
     {
       "title": "Samsung Galaxy S26, Buds4 Launch Worldwide After Record-Breaking Preorders",
@@ -236,10 +236,10 @@
       "image": "",
       "published": "2026-03-13T13:52:54+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9587
+      "score": 4.9605
     },
     {
       "title": "Ex-NFL player charged with murder asked ChatGPT for advice before calling 911: Prosecutors",
@@ -251,11 +251,11 @@
       "summary": "CHATTANOOGA, Tenn. (WATE) — Prosecutors began to present evidence against a former NFL player charged with murdering his girlfriend at their …",
       "image": "https://ic-cdn.flipboard.com/newsnationnow.com/b2b6c4716be517e5da1c5fb5af42891bdf558c0b/_large.png",
       "published": "2026-03-13T13:45:43+00:00",
-      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 8.0554
+      "score": 8.0571
     },
     {
       "title": "Apple’s 2026 Product Roadmap: New iPhones, Macs, and Apple Watch Are Coming",
@@ -268,10 +268,10 @@
       "image": "",
       "published": "2026-03-13T13:31:01+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.5485
+      "score": 4.5503
     },
     {
       "title": "Give GIMP The Movie an Oscar",
@@ -284,10 +284,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/fxZZ23p3bNCS5ztN9iqB3h-1000-80.jpg",
       "published": "2026-03-13T13:15:33+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0414
+      "score": 2.0431
     },
     {
       "title": "Top 15 setups where MacBook Pro runs the show",
@@ -303,7 +303,7 @@
       "lastSeen": "2026-03-13T14:00:02.117109+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1344
+      "score": 3.1362
     },
     {
       "title": "Inside the Dirty, Dystopian World of AI Data Centers",
@@ -316,10 +316,10 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/c48c6fc2bd167cd6990a4e8deaf914ce8e4f779c/_xlarge.jpeg",
       "published": "2026-03-13T12:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0073
+      "score": 2.009
     },
     {
       "title": "Controversies of the week",
@@ -332,10 +332,10 @@
       "image": "https://ic-cdn.flipboard.com/flipboard.com/f48eb0a701dd7f825e85446ab95c9e3b83bd50db/_xlarge.jpeg",
       "published": "2026-03-13T11:55:37+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0054
+      "score": 2.0071
     },
     {
       "title": "Dublin fintech Teybridge Capital pledges £600 million for UK SMEs",
@@ -348,10 +348,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Teybridge-Capital-pledges-600-million-for-UK-SMEs.png",
       "published": "2026-03-13T11:32:47+00:00",
       "firstSeen": "2026-03-13T13:00:01.932206+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6954
+      "score": 2.697
     },
     {
       "title": "DOGE bros exposed: Depositions from Elon Musk’s team reveal ChatGPT process for gutting ‘DEI’ grants",
@@ -363,11 +363,11 @@
       "summary": "Elon Musk’s disciples in his so-called Department of Government Efficiency were embedded across federal agencies with a mandate to fire thousands of …",
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/ce291e891423898d80721796a9f52f8153e2d81b/_xlarge.jpeg",
       "published": "2026-03-13T11:07:14+00:00",
-      "firstSeen": "2026-03-13T17:00:01.697783+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "firstSeen": "2026-03-13T16:56:17.291212+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.9842
+      "score": 7.9859
     },
     {
       "title": "Anthropic commits $100M to Claude Partner Network",
@@ -380,10 +380,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Anthropic-invests-100-million-into-the-Claude-Partner-Network.png",
       "published": "2026-03-13T11:06:03+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8837
+      "score": 13.8853
     },
     {
       "title": "AI is exhausting workers so much, researchers have dubbed the condition ‘AI brain fry’",
@@ -396,10 +396,10 @@
       "image": "https://ic-cdn.flipboard.com/cnn.com/5bddd168860af1b34745c46222400545ddbfdd45/_large.jpeg",
       "published": "2026-03-13T11:00:33+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3814
+      "score": 4.383
     },
     {
       "title": "Atlassian is cutting 1,600 jobs and replacing its CTO",
@@ -412,10 +412,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Atlassian-is-cutting-1600-jobs-and-replacing-its-CTO.png",
       "published": "2026-03-13T10:48:43+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0763
+      "score": 3.0779
     },
     {
       "title": "TechEx North America 2026 comes to San Jose for your annual enterprise technology intelligence briefing",
@@ -428,10 +428,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TechEx-North-America-2026-comes-to-San-Jose.png",
       "published": "2026-03-13T10:32:15+00:00",
       "firstSeen": "2026-03-13T11:43:18.889126+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9692
+      "score": 1.9708
     },
     {
       "title": "Compare ChatGPT, Gemini, and more side by side with this AI tool",
@@ -447,7 +447,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9556
+      "score": 13.9572
     },
     {
       "title": "Generative AI Won’t Transform Your Business Without These Three Investments",
@@ -463,7 +463,7 @@
       "lastSeen": "2026-03-13T14:58:56.100483+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1533
+      "score": -1.1517
     },
     {
       "title": "Bumble&#8217;s AI assistant Bee will learn what you want from a relationship",
@@ -476,10 +476,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bumbles-AI-assistant-Bee.png",
       "published": "2026-03-13T09:08:24+00:00",
       "firstSeen": "2026-03-13T09:54:36.191137+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1342
+      "score": 4.1358
     },
     {
       "title": "My final goodbye to AI ragebait",
@@ -492,10 +492,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/2f87980f6d990cbda6eebfd1af9dd53fa5688c9e/_xlarge.jpeg",
       "published": "2026-03-13T09:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.4692
+      "score": -0.4677
     },
     {
       "title": "Tropic raises $105M to scale gene-edited bananas",
@@ -508,10 +508,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Tropic-raises-105M-to-scale-gene-edited-bananas.png",
       "published": "2026-03-13T08:37:27+00:00",
       "firstSeen": "2026-03-13T09:54:36.191137+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6217
+      "score": 2.6232
     },
     {
       "title": "Model Context Protocol (MCP) vs. AI Agent Skills: A Deep Dive into Structured Tools and Behavioral Guidance for LLMs",
@@ -524,10 +524,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-14-150x150.png",
       "published": "2026-03-13T08:32:39+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.7897
+      "score": 5.7912
     },
     {
       "title": "Tower raises €5.5m to empower data engineers in the AI era",
@@ -540,10 +540,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Tower-raises-E5.5m-to-empower-data-engineers.png",
       "published": "2026-03-13T08:08:20+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.41
+      "score": 4.4115
     },
     {
       "title": "Google AI Introduces ‘Groundsource’: A New Methodology that Uses Gemini Model to Transform Unstructured Global News into Actionable, Historical Data",
@@ -556,10 +556,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-13-at-12.59.53-AM-1-150x150.png",
       "published": "2026-03-13T08:07:25+00:00",
       "firstSeen": "2026-03-13T08:56:45.508636+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5796
+      "score": 12.5811
     },
     {
       "title": "I tried Photoshop’s new AI Assistant. The new Photoshop chatbot feels like an overly enthusiastic intern, but it’s not all bad",
@@ -575,7 +575,7 @@
       "lastSeen": "2026-03-13T15:56:00.809269+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.991
+      "score": 2.9924
     },
     {
       "title": "Morgan Stanley warns an AI breakthrough Is coming in 2026 — and most of the world isn’t ready",
@@ -588,10 +588,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/20bfbd79f5048ed70aab4d2eed2a034aa59a3373/_xlarge.jpeg",
       "published": "2026-03-13T07:20:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.891
+      "score": 1.8924
     },
     {
       "title": "Billionaire Vinod Khosla says ‘follow your passion’ is bad career advice for kids today—but could be the best in 15 years",
@@ -604,10 +604,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/cd2c4e36a20da180b414fb39041b081ca86ab625/_xlarge.png",
       "published": "2026-03-13T07:04:00+00:00",
       "firstSeen": "2026-03-13T14:58:56.100483+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5847
+      "score": 2.5862
     },
     {
       "title": "Gamers’ Worst Nightmares About AI Are Coming True",
@@ -620,10 +620,10 @@
       "image": "https://ic-cdn.flipboard.com/wired.com/35c0f64e9be2d4cc229750cc3830e31983d60719/_xlarge.jpeg",
       "published": "2026-03-13T07:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5832
+      "score": 2.5846
     },
     {
       "title": "GWM admits plagiarising iconic Land Rover poster",
@@ -636,10 +636,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/e7125aac2346c547e5427a49e4d541f0e04f43a5/_xlarge.jpeg",
       "published": "2026-03-13T07:00:00+00:00",
       "firstSeen": "2026-03-13T14:00:02.117109+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8832
+      "score": 1.8846
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2754
+      "score": 1.2756
     },
     {
       "title": "Introducing... Life Without",
@@ -668,7 +668,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.2282
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T17:00:01.697783+00:00",
+      "lastSeen": "2026-03-13T16:56:17.291212+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1908
