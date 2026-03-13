@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T21:00:01.448997+00:00",
+  "updatedAt": "2026-03-13T20:51:36.360177+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -755,11 +755,11 @@
     },
     "https://huggingface.co/blog/nvidia/nemo-retriever-agentic-retrieval": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6172d79a6c2ff4e51d0ea593/Qflw9K3iqWZf269xwE-CP.png",
-      "checkedAt": "2026-03-13T21:00:01.448997+00:00"
+      "checkedAt": "2026-03-13T20:51:36.360177+00:00"
     },
     "https://techcrunch.com/2026/03/13/steven-spielberg-says-hes-never-used-ai-in-any-of-his-films": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/steven-spielberg-GettyImages-2260428164.jpg?w=1024",
-      "checkedAt": "2026-03-13T21:00:01.448997+00:00"
+      "checkedAt": "2026-03-13T20:51:36.360177+00:00"
     }
   }
 }
