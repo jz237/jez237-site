@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T16:00:01.426657+00:00",
+  "updatedAt": "2026-03-13T15:56:00.809269+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -714,12 +714,12 @@
       "checkedAt": "2026-03-13T14:58:56.100483+00:00"
     },
     "https://www.techrepublic.com/article/news-atlassian-layoffs-ai-investment": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03132026-news-atlassian-layoffs-ai-investment.jpg",
-      "checkedAt": "2026-03-13T16:00:01.426657+00:00"
+      "image": "",
+      "checkedAt": "2026-03-13T15:56:00.809269+00:00"
     },
     "https://www.technologyreview.com/2026/03/13/1134184/why-physical-ai-is-becoming-manufacturings-next-advantage": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MIT-Article-Image-1200x675_C.jpg?resize=1200,600",
-      "checkedAt": "2026-03-13T16:00:01.426657+00:00"
+      "checkedAt": "2026-03-13T15:56:00.809269+00:00"
     }
   }
 }
