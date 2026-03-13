@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T13:22:30.095570+00:00",
+  "updatedAt": "2026-03-13T14:00:02.117109+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -696,6 +696,10 @@
     "https://www.aol.com/morgan-stanley-sees-ai-jobs-064200169.html": {
       "image": "https://s.yimg.com/ny/api/res/1.2/rgrFQkeG6Fp0vaQvlpSJFw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://media.zenfs.com/en/aol_fortune_385/1138b8832ea6d21084a0ac5bb1ed1441",
       "checkedAt": "2026-03-13T10:54:41.327529+00:00"
+    },
+    "https://techcrunch.com/2026/03/12/before-quantum-computing-arrives-this-startup-wants-enterprises-already-running-on-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2174694566.jpg?resize=1200,800",
+      "checkedAt": "2026-03-13T14:00:02.117109+00:00"
     }
   }
 }
