@@ -1,6 +1,6 @@
 {
   "date": "2026-03-13",
-  "updatedAt": "2026-03-13T02:30:17.671199+00:00",
+  "updatedAt": "2026-03-13T02:50:44.826438+00:00",
   "items": [
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -14,7 +14,7 @@
       "published": "2026-03-13T01:15:11+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
       "lastSeen": "2026-03-13T02:17:26.151798+00:00",
-      "score": 16.9124,
+      "score": 16.9024,
       "editorial_allow": true,
       "editorial_reason": "major_product_news"
     },
@@ -29,10 +29,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place.png",
       "published": "2026-03-13T01:02:47+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0863
+      "score": 5.0764
     },
     {
       "title": "Using the simple ‘3-prompt rule’ on ChatGPT will immediately guarantee you better results",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-03-13T02:29:02.640163+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9128
+      "score": 2.9028
     }
   ],
   "errors": []
