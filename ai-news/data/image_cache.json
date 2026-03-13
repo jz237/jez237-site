@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T06:01:34.797567+00:00",
+  "updatedAt": "2026-03-13T07:09:53.230843+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -688,6 +688,10 @@
     "https://techcrunch.com/2026/03/12/truecallers-now-lets-you-hang-up-on-scammers-on-behalf-of-your-family": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Family-Protection-Hero.jpg?resize=1200,675",
       "checkedAt": "2026-03-13T04:54:07.906404+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/03/260313002650.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/ai-robot-vs-human-boxing.webp",
+      "checkedAt": "2026-03-13T07:09:53.230843+00:00"
     }
   }
 }
