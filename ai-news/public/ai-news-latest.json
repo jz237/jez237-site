@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-13T02:30:17.671199+00:00",
+  "updatedAt": "2026-03-13T02:50:44.826438+00:00",
   "items": [
     {
       "title": "Using the simple ‘3-prompt rule’ on ChatGPT will immediately guarantee you better results",
@@ -15,7 +15,7 @@
       "lastSeen": "2026-03-13T02:29:02.640163+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9128
+      "score": 2.9028
     },
     {
       "title": "Anthropic's Claude Can Now Whip Up Charts, Interactive Visuals for Step-by-Step Tutorials",
@@ -29,7 +29,7 @@
       "published": "2026-03-13T01:15:11+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
       "lastSeen": "2026-03-13T02:17:26.151798+00:00",
-      "score": 16.9124,
+      "score": 16.9024,
       "editorial_allow": true,
       "editorial_reason": "major_product_news"
     },
@@ -44,10 +44,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place.png",
       "published": "2026-03-13T01:02:47+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0863
+      "score": 5.0764
     },
     {
       "title": "How to watch Jensen Huang’s Nvidia GTC 2026 keynote",
@@ -60,10 +60,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761844.jpg?resize=1200%2C846",
       "published": "2026-03-12T23:25:39+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8999
+      "score": 3.8904
     },
     {
       "title": "How to Build an Autonomous Machine Learning Research Loop in Google Colab Using Andrej Karpathy’s AutoResearch Framework for Hyperparameter Discovery and Experiment Tracking",
@@ -76,10 +76,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-41-1024x731.png",
       "published": "2026-03-12T22:46:41+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.7118
+      "score": 1.7025
     },
     {
       "title": "Sales automation startup Rox AI hits $1.2B valuation, sources say",
@@ -92,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/04/GettyImages-1422739420.jpg?resize=1200%2C702",
       "published": "2026-03-12T22:25:50+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1723
+      "score": 2.163
     },
     {
       "title": "A defense official reveals how AI chatbots could be used for targeting decisions",
@@ -108,10 +108,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/genai-mil2.jpg?resize=1200%2C600",
       "published": "2026-03-12T22:23:34+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1713
+      "score": 2.162
     },
     {
       "title": "The who, what, and why of the attack that has shut down Stryker's Windows network",
@@ -124,10 +124,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/01/data-wiper-malware-1152x648.jpg",
       "published": "2026-03-12T22:18:11+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0288
+      "score": 2.0196
     },
     {
       "title": "Former DOGE staffer says ChatGPT helped feds cancel grants mentioning ‘LGBTQ+’",
@@ -140,10 +140,10 @@
       "image": "https://ic-cdn.flipboard.com/advocate.com/42bb799fbde7d90219efcd12402178b204883b62/_xlarge.jpeg",
       "published": "2026-03-12T22:07:00+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.8238
+      "score": 2.8146
     },
     {
       "title": "Ex-DOGE staffer raises eyebrows with 'arrogant' deposition: 'Oh look, a felony'",
@@ -156,10 +156,10 @@
       "image": "https://ic-cdn.flipboard.com/rawstory.com/b1fb4cfeb3f743c12e89732a81da013d8eee6a92/_xlarge.jpeg",
       "published": "2026-03-12T21:40:03+00:00",
       "firstSeen": "2026-03-13T02:21:21.589365+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0117
+      "score": 2.0026
     },
     {
       "title": "Stanford Researchers Release OpenJarvis: A Local-First Framework for Building On-Device Personal AI Agents with Tools, Memory, and Learning",
@@ -172,10 +172,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-12-at-2.19.48-PM-1-150x150.png",
       "published": "2026-03-12T21:21:04+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 8.2733
+      "score": 8.2643
     },
     {
       "title": "Pixar's Hoppers behind the scenes",
@@ -191,7 +191,7 @@
       "lastSeen": "2026-03-13T02:30:17.671199+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9897
+      "score": 1.9809
     },
     {
       "title": "iOS 26 added four new features I’ve been using almost every day",
@@ -204,10 +204,10 @@
       "image": "https://ic-cdn.flipboard.com/wp.com/128be7986201029b90eec2b71d056475e4b08387/_xlarge.jpeg",
       "published": "2026-03-12T20:43:08+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0867
+      "score": 3.0779
     },
     {
       "title": "Iran trolls Trump with AI-generated Lego propaganda video",
@@ -220,10 +220,10 @@
       "image": "https://s.france24.com/media/display/44900588-1e50-11f1-979e-005056bfb2b6/w:1280/p:16x9/capture-37635063369b31ef7b201e9-77449550.jpg",
       "published": "2026-03-12T20:35:23+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9833
+      "score": 1.9745
     },
     {
       "title": "Assuming AI Will Become Conscious Is Dangerous, Scientists Say. It’s Also Dead Wrong.",
@@ -239,7 +239,7 @@
       "lastSeen": "2026-03-13T02:30:17.671199+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9826
+      "score": 1.9738
     },
     {
       "title": "Agents need vector search more than RAG ever did",
@@ -252,10 +252,10 @@
       "image": "https://images.ctfassets.net/jdtwqhzvc2n1/7q54xhTd6uiHg9CMDlVgP6/9618912e55a038ce9ba83b51343cde9b/agentic-vector-database-smk1.jpg?w=800&q=75",
       "published": "2026-03-12T20:32:33+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.8821
+      "score": 0.8733
     },
     {
       "title": "Sam Altman faced 'serious questions' in meeting with lawmakers about OpenAI's defense work",
@@ -268,10 +268,10 @@
       "image": "https://image.cnbcfm.com/api/v1/image/108276820-1773254804461-gettyimages-2265991721-0d6a8214_gmhkj3wc.jpeg?v=1773254873&w=1920&h=1080",
       "published": "2026-03-12T20:14:30+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 2.3743
+      "score": 2.3656
     },
     {
       "title": "MALUS - Clean Room as a Service",
@@ -284,10 +284,10 @@
       "image": "",
       "published": "2026-03-12T20:08:55+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.812
+      "score": 2.8033
     },
     {
       "title": "Nuro Tests Zero-Shot Autonomous Vehicles in Tokyo",
@@ -300,10 +300,10 @@
       "image": "",
       "published": "2026-03-12T19:37:20+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0586
+      "score": 3.05
     },
     {
       "title": "Translucent raises $27M to help healthcare firms automate financial visibility - SiliconANGLE",
@@ -317,7 +317,7 @@
       "published": "2026-03-12T19:31:50+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
       "lastSeen": "2026-03-12T19:50:11.955976+00:00",
-      "score": 1.9563,
+      "score": 1.9477,
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority"
     },
@@ -332,10 +332,10 @@
       "image": "",
       "published": "2026-03-12T19:23:44+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_commentary",
-      "score": 5.5929
+      "score": 5.5844
     },
     {
       "title": "A PhD is an apprenticeship in research – we can’t let AI take that away",
@@ -350,7 +350,7 @@
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
       "model_release": true,
-      "score": 22.4489,
+      "score": 22.4404,
       "editorial_allow": true,
       "editorial_reason": "model_release"
     },
@@ -365,10 +365,10 @@
       "image": "https://ic-cdn.flipboard.com/independent.co.uk/45060e5eaf988bae4b929b2daa896cb46aa6ddda/_xlarge.png",
       "published": "2026-03-12T18:26:47+00:00",
       "firstSeen": "2026-03-12T19:50:11.955976+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9294
+      "score": 1.9211
     },
     {
       "title": "Facebook Marketplace now lets Meta AI respond to buyers’ messages",
@@ -381,10 +381,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Facebook-Marketplace-Selling-Updates_Header.jpg?resize=1200%2C675",
       "published": "2026-03-12T18:20:33+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0668
+      "score": 5.0586
     },
     {
       "title": "Amazon puts humans back in the loop as its retail website crashes from ‘inaccurate advice’ that an AI agent took from an old wiki",
@@ -398,7 +398,7 @@
       "published": "2026-03-12T18:14:03+00:00",
       "firstSeen": "2026-03-12T21:46:29.656710+00:00",
       "lastSeen": "2026-03-12T21:46:29.656710+00:00",
-      "score": 4.6242,
+      "score": 4.616,
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate"
     },
@@ -413,10 +413,10 @@
       "image": "",
       "published": "2026-03-12T18:12:36+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0236
+      "score": 12.0154
     },
     {
       "title": "Tinder tries to lure people back to online dating with IRL events, virtual speed dating",
@@ -429,10 +429,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Tinder-revamp2026.png?w=1200",
       "published": "2026-03-12T18:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0585
+      "score": 2.0504
     },
     {
       "title": "I Watched 6 Hours of DOGE Bro Testimony. Here's What They Had to Say For Themselves",
@@ -445,10 +445,10 @@
       "image": "https://ic-cdn.flipboard.com/404media.co/f9d0ac067c67a751575eaa02354f3c4f9cc9aa09/_xlarge.png",
       "published": "2026-03-12T17:25:13+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9047
+      "score": 1.8966
     },
     {
       "title": "Viral Music Cover Hits 80 Million Streams Before Fans Realize It’s AI",
@@ -462,7 +462,7 @@
       "published": "2026-03-12T17:23:00+00:00",
       "firstSeen": "2026-03-12T22:43:27.405342+00:00",
       "lastSeen": "2026-03-12T22:43:27.405342+00:00",
-      "score": 2.6038,
+      "score": 2.5957,
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority"
     },
@@ -477,10 +477,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2147914845.jpg?w=1024",
       "published": "2026-03-12T17:20:19+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0427
+      "score": 2.0347
     },
     {
       "title": "The 1TB M5 MacBook Pro Just Got Its Biggest Discount Ever",
@@ -493,10 +493,10 @@
       "image": "https://ic-cdn.flipboard.com/lifehacker.com/0d69d15999838a19b4a5b0e3438adcb87e3ce5ef/_xlarge.png",
       "published": "2026-03-12T17:00:00+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6947
+      "score": 3.6868
     },
     {
       "title": "Bumble to launch an AI dating assistant, ‘Bee’",
@@ -510,7 +510,7 @@
       "published": "2026-03-12T16:52:17+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
       "lastSeen": "2026-03-12T23:39:07.047049+00:00",
-      "score": 4.9317,
+      "score": 4.9238,
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate"
     },
@@ -525,10 +525,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/04/Bumble-new-logo.jpg?resize=1200%2C810",
       "published": "2026-03-12T16:52:17+00:00",
       "firstSeen": "2026-03-13T02:17:26.151798+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9317
+      "score": 4.9238
     },
     {
       "title": "What Was Grammarly Thinking?",
@@ -541,10 +541,10 @@
       "image": "https://ic-cdn.flipboard.com/theatlantic.com/397a6086f38de1d713826637169b52905efe7fa7/_xlarge.jpeg",
       "published": "2026-03-12T16:45:48+00:00",
       "firstSeen": "2026-03-12T23:39:07.047049+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8892
+      "score": 1.8813
     },
     {
       "title": "I Asked ChatGPT: Where Can I Retire on $1,500 a Month Without Freezing?",
@@ -557,10 +557,10 @@
       "image": "https://ic-cdn.flipboard.com/gobankingrates.com/07aa43c4990c9fff6b22806b01fa2f9fcd869d59/_xlarge.jpeg",
       "published": "2026-03-12T16:45:06+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6889
+      "score": 2.681
     },
     {
       "title": "Fourth Circuit Publicly Admonishes Lawyer for \"Citations to Nonexistent Judicial Opinions\"",
@@ -574,7 +574,7 @@
       "published": "2026-03-12T16:44:33+00:00",
       "firstSeen": "2026-03-12T20:50:33.277316+00:00",
       "lastSeen": "2026-03-12T20:50:33.277316+00:00",
-      "score": 1.8887,
+      "score": 1.8808,
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority"
     },
@@ -589,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1466243153.jpg?resize=1200%2C705",
       "published": "2026-03-12T16:42:40+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.028
+      "score": 2.0201
     },
     {
       "title": "Amazon Spring Deal Days: The highlight",
@@ -608,7 +608,7 @@
       "lastSeen": "2026-03-13T02:30:17.671199+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9845
+      "score": 2.9766
     },
     {
       "title": "Quoting Les Orchard",
@@ -621,10 +621,10 @@
       "image": "",
       "published": "2026-03-12T16:28:07+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5224
+      "score": 4.5145
     },
     {
       "title": "View: An AI jobs crisis we didn’t see coming",
@@ -637,10 +637,10 @@
       "image": "https://ic-cdn.flipboard.com/semafor.com/09b0fcaa993fdf0b874f956a6e233f5384d95df2/_xlarge.jpeg",
       "published": "2026-03-12T16:25:15+00:00",
       "firstSeen": "2026-03-12T18:34:59.006863+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2187
+      "score": -1.2266
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3178
+      "score": 1.3166
     },
     {
       "title": "Introducing... Life Without",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2322
+      "score": 2.2321
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-13T02:30:17.671199+00:00",
+      "lastSeen": "2026-03-13T02:50:44.826438+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1912
