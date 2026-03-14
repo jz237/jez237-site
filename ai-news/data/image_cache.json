@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T07:48:09.056854+00:00",
+  "updatedAt": "2026-03-14T08:51:03.839542+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -772,6 +772,10 @@
     "https://techcrunch.com/2026/03/13/lawyer-behind-ai-psychosis-cases-warns-of-mass-casualty-risks": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-509750426.jpg?resize=1200,800",
       "checkedAt": "2026-03-14T01:00:01.348522+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/14/garry-tan-releases-gstack-an-open-source-claude-code-system-for-planning-code-review-qa-and-shipping": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-43.png",
+      "checkedAt": "2026-03-14T08:51:03.839542+00:00"
     }
   }
 }
