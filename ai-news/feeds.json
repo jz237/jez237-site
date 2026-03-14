@@ -47,12 +47,7 @@
     "weight": 0.8,
     "category": "AI"
   },
-  {
-    "name": "Flipboard AI",
-    "url": "https://flipboard.com/topic/artificialintelligence.rss",
-    "weight": 0.75,
-    "category": "AI"
-  },
+
   {
     "name": "TechRepublic AI",
     "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
