@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T15:39:33.766320+00:00",
+  "updatedAt": "2026-03-14T16:47:38.703449+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -780,6 +780,10 @@
     "https://techcrunch.com/2026/03/14/how-to-use-the-new-chatgpt-app-integrations-including-doordash-spotify-uber-and-others": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "checkedAt": "2026-03-14T13:13:44.722462+00:00"
+    },
+    "https://techcrunch.com/2026/03/14/meta-reportedly-considering-layoffs-that-could-affect-20-of-the-company": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200,800",
+      "checkedAt": "2026-03-14T16:47:38.703449+00:00"
     }
   }
 }
