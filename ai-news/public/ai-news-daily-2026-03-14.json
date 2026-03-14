@@ -1,6 +1,6 @@
 {
   "date": "2026-03-14",
-  "updatedAt": "2026-03-14T07:48:09.056854+00:00",
+  "updatedAt": "2026-03-14T09:00:01.751973+00:00",
   "items": [
     {
       "title": "I Compared ChatGPT vs Claude Interactive Visuals: Here is the Clear Winner",
@@ -13,10 +13,10 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--2--1.gif",
       "published": "2026-03-14T02:32:21+00:00",
       "firstSeen": "2026-03-14T07:00:01.725978+00:00",
-      "lastSeen": "2026-03-14T07:48:09.056854+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.9004
+      "score": 17.8693
     },
     {
       "title": "Most people quit ChatGPT before discovering these 7 powerful features",
@@ -29,10 +29,26 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/ab37a2d06d59f1c54f6e13d09481eaa589339bee/_xlarge.jpeg",
       "published": "2026-03-14T04:45:00+00:00",
       "firstSeen": "2026-03-14T07:00:01.725978+00:00",
-      "lastSeen": "2026-03-14T07:48:09.056854+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0606
+      "score": 14.0275
+    },
+    {
+      "title": "Garry Tan Releases gstack: An Open-Source Claude Code System for Planning, Code Review, QA, and Shipping",
+      "url": "https://www.marktechpost.com/2026/03/14/garry-tan-releases-gstack-an-open-source-claude-code-system-for-planning-code-review-qa-and-shipping",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "What if AI-assisted coding became more reliable by separating product planning, engineering review, release, and QA into distinct operating modes? That is the idea behind Garry Tan’s gstack, an open-source toolkit that packages Claude Code into 8 opinionated workflow skills backed by a persistent browser runtime. The tookit describes itself as &#8216;Eight opinionated workflow skills [&#8230;]\nThe post Garry Tan Releases gstack: An Open-Source Claude Code System for Planning, Code Review, QA, and Shipping appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-43.png",
+      "published": "2026-03-14T08:44:43+00:00",
+      "firstSeen": "2026-03-14T09:00:01.751973+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.7122
     },
     {
       "title": "‘Not built right the first time’ — Musk’s xAI is starting over again, again",
@@ -45,10 +61,42 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/9c2f64817800078f521e8c9893949a795eeda956/_xlarge.jpeg",
       "published": "2026-03-14T00:12:22+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T07:48:09.056854+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 6.4807
+      "score": 6.4516
+    },
+    {
+      "title": "Staff complain that xAI is flailing because of constant upheaval",
+      "url": "https://arstechnica.com/ai/2026/03/staff-complain-that-xai-is-flailing-because-of-constant-upheaval",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Staff complain that the constant upheaval is destroying morale. Elon Musk has ordered another round of job cuts at xAI after growing frustrated with …",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/11/getty-musk-1152x648.jpg",
+      "published": "2026-03-14T07:14:53+00:00",
+      "firstSeen": "2026-03-14T09:00:01.751973+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0977
+    },
+    {
+      "title": "Who Is Devendra Chaplot? Elon Musk Welcomes This IITian At xAI’s Superintelligence Team With A Tweet",
+      "url": "https://in.mashable.com/tech/107068/who-is-devendra-chaplot-elon-musk-welcomes-this-iitian-at-xais-superintelligence-team-with-a-tweet",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Devendra Singh Chaplot joined Elon Musk’s xAI squad that is building “superintelligence.” For the unversed, the AI firm has been merged with Elon Musk’s aerospace venture SpaceX. Chaplot, an IIT Bombay alum, took to X/Twitter and remarked on his new career milestone: I'm joining SpaceX and xAI, …",
+      "image": "https://ic-cdn.flipboard.com/mashable.com/7a23900e8abe792f6035cdf757863860d79d7f99/_xlarge.jpeg",
+      "published": "2026-03-14T06:12:24+00:00",
+      "firstSeen": "2026-03-14T09:00:01.751973+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0679
     },
     {
       "title": "Lawyer behind AI psychosis cases warns of mass casualty risks",
@@ -61,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-509750426.jpg?resize=1200%2C800",
       "published": "2026-03-14T00:01:02+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T07:48:09.056854+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0761
+      "score": 2.0471
     },
     {
       "title": "Musk Makes Humiliating Confession About Hitler-Praising Chatbot",
@@ -80,7 +128,7 @@
       "lastSeen": "2026-03-14T02:49:23.142107+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9781
+      "score": 1.9477
     },
     {
       "title": "ElevenLabs restored Eric Dane’s voice with AI. Now they’re offering 1 million voices for free.",
@@ -93,10 +141,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/3119b8c11e00feb3cf579de1d878a60e3c65497d/_xlarge.jpeg",
       "published": "2026-03-14T00:11:55+00:00",
       "firstSeen": "2026-03-14T02:00:01.937880+00:00",
-      "lastSeen": "2026-03-14T07:48:09.056854+00:00",
+      "lastSeen": "2026-03-14T09:00:01.751973+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9406
+      "score": 1.9114
     },
     {
       "title": "US Withdraws Draft Rule That Called for Global AI Chip Permits",
@@ -112,7 +160,7 @@
       "lastSeen": "2026-03-14T01:00:01.348522+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9362
+      "score": 1.9072
     }
   ],
   "errors": []
