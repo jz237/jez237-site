@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T19:37:35.252423+00:00",
+  "updatedAt": "2026-03-14T21:00:01.450458+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -792,6 +792,10 @@
     "https://simonwillison.net/2026/Mar/14/pragmatic-summit": {
       "image": "https://img.youtube.com/vi/owmJyKVu5f8/maxresdefault.jpg",
       "checkedAt": "2026-03-14T18:56:19.189437+00:00"
+    },
+    "https://techcrunch.com/2026/03/14/us-army-announces-contract-with-anduril-worth-up-to-20b": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2152503982-e.jpg?resize=1200,800",
+      "checkedAt": "2026-03-14T21:00:01.450458+00:00"
     }
   }
 }
