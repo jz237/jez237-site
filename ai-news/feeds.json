@@ -103,6 +103,18 @@
     "category": "AI"
   },
   {
+    "name": "The Verge AI",
+    "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+    "weight": 0.9,
+    "category": "AI"
+  },
+  {
+    "name": "Wired AI",
+    "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+    "weight": 0.85,
+    "category": "AI"
+  },
+  {
     "name": "VentureBeat AI",
     "url": "https://venturebeat.com/category/ai/feed/",
     "weight": 0.85,
