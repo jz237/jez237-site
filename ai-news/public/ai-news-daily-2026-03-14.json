@@ -1,6 +1,6 @@
 {
   "date": "2026-03-14",
-  "updatedAt": "2026-03-14T15:39:33.766320+00:00",
+  "updatedAt": "2026-03-14T16:47:38.703449+00:00",
   "items": [
     {
       "title": "I Compared ChatGPT vs Claude Interactive Visuals: Here is the Clear Winner",
@@ -13,10 +13,10 @@
       "image": "https://aitoolsclub.com/content/images/2026/03/ChatGPT-in-Excel-03--2--1.gif",
       "published": "2026-03-14T02:32:21+00:00",
       "firstSeen": "2026-03-14T07:00:01.725978+00:00",
-      "lastSeen": "2026-03-14T13:13:44.722462+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.714
+      "score": 17.6903
     },
     {
       "title": "Most people quit ChatGPT before discovering these 7 powerful features",
@@ -29,10 +29,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/ed8ef90da55b286757a98b6cc2865185cf121d6b/_xlarge.jpeg",
       "published": "2026-03-14T04:45:00+00:00",
       "firstSeen": "2026-03-14T07:00:01.725978+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8624
+      "score": 13.8372
     },
     {
       "title": "How to use the new ChatGPT app integrations, including DoorDash, Spotify, Uber, and others",
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-03-14T13:00:00+00:00",
       "firstSeen": "2026-03-14T13:13:44.722462+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4117
+      "score": 10.38
     },
     {
       "title": "Here's How To Delete Your Personal Data From ChatGPT (And Why You Should)",
@@ -59,12 +59,12 @@
       "category": "AI",
       "summary": "OpenAI has a Privacy Portal that lets you freely remove your personal data, download a copy, and even request permanent account deletion. So if …",
       "image": "https://ic-cdn.flipboard.com/bgr.com/fcb3c06289008bf1dc7c616a4c4adb02189a3aac/_xlarge.jpeg",
-      "published": "2026-03-14T13:17:56+00:00",
+      "published": "2026-03-14T13:17:11+00:00",
       "firstSeen": "2026-03-14T14:45:18.743640+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0802
+      "score": 10.0479
     },
     {
       "title": "Garry Tan Releases gstack: An Open-Source Claude Code System for Planning, Code Review, QA, and Shipping",
@@ -77,10 +77,10 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ab495ee2d3c02a92668215b600a360853f7caf5b/_xlarge.png",
       "published": "2026-03-14T08:44:43+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.5278
+      "score": 9.4996
     },
     {
       "title": "I stopped watching YouTube the old way after trying this Gemini feature",
@@ -93,10 +93,10 @@
       "image": "https://ic-cdn.flipboard.com/anpoimages.com/e4c53ad18dd016a1c49fa8d324c8116ce4ae8169/_xlarge.png",
       "published": "2026-03-14T12:30:10+00:00",
       "firstSeen": "2026-03-14T13:13:44.722462+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 8.0577
+      "score": 8.0264
     },
     {
       "title": "Google&#8217;s biggest Maps update in a decade puts Gemini in the passenger seat",
@@ -109,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Maps-launches-Ask-Maps.png",
       "published": "2026-03-14T09:55:07+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.9879
+      "score": 7.9588
     },
     {
       "title": "Elon Musk is tearing xAI down to build it back up. Again.",
@@ -125,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-lawmakers-deal-to-ban-AI-non-consensual-intimate-deepfakes-1.png",
       "published": "2026-03-14T10:09:29+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.4441
+      "score": 7.4148
     },
     {
       "title": "‘Not built right the first time’ — Musk’s xAI is starting over again, again",
@@ -141,10 +141,26 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/9c2f64817800078f521e8c9893949a795eeda956/_xlarge.jpeg",
       "published": "2026-03-14T00:12:22+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 6.3061
+      "score": 6.2839
+    },
+    {
+      "title": "Journalist issues warning after revealing disturbing flaw in ChatGPT and Google AI: 'It's so easy a child could do it'",
+      "url": "https://www.thecooldown.com/green-tech/ai-misinformation-vulnerability-investigation-flaw",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For anyone who relies on artificial intelligence for information, a BBC Future report revealed just how fragile some of the most widely used AI …",
+      "image": "https://ic-cdn.flipboard.com/thecooldown.com/a633ac10de7398bc115fe145d791f9c7254eaa28/_large.jpeg",
+      "published": "2026-03-14T13:00:00+00:00",
+      "firstSeen": "2026-03-14T16:47:38.703449+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 6.04
     },
     {
       "title": "Rise of model context protocol in the agentic era",
@@ -157,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rise-of-model-context-protocol-in-the-agentic-era.png",
       "published": "2026-03-14T10:25:28+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4011
+      "score": 5.3716
     },
     {
       "title": "Staff complain that xAI is flailing because of constant upheaval",
@@ -173,26 +189,10 @@
       "image": "https://ic-cdn.flipboard.com/arstechnica.net/0ed5cc198cdc52ccdbe96c99209d72a404913608/_xlarge.jpeg",
       "published": "2026-03-14T07:14:53+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
+      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9208
-    },
-    {
-      "title": "Who Is Devendra Chaplot? Elon Musk Welcomes This IITian At xAI’s Superintelligence Team With A Tweet",
-      "url": "https://in.mashable.com/tech/107068/who-is-devendra-chaplot-elon-musk-welcomes-this-iitian-at-xais-superintelligence-team-with-a-tweet",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Devendra Singh Chaplot joined Elon Musk’s xAI squad that is building “superintelligence.” For the unversed, the AI firm has been merged with Elon Musk’s aerospace venture SpaceX. Chaplot, an IIT Bombay alum, took to X/Twitter and remarked on his new career milestone: I'm joining SpaceX and xAI, …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/7a23900e8abe792f6035cdf757863860d79d7f99/_xlarge.jpeg",
-      "published": "2026-03-14T06:12:10+00:00",
-      "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T15:39:33.766320+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8959
+      "score": 4.8938
     }
   ],
   "errors": []
