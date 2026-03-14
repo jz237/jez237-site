@@ -552,7 +552,7 @@ def main():
 
     # Override editorial gate for high-scoring items
     for it in all_items:
-        if it["score"] >= 5.0 and not it.get("editorial_allow"):
+        if it["score"] >= 5.5 and not it.get("editorial_allow"):
             it["editorial_allow"] = True
             it["editorial_reason"] = "high_score_override"
 
