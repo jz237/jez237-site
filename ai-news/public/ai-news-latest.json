@@ -1,6 +1,38 @@
 {
-  "updatedAt": "2026-03-14T18:00:02.080159+00:00",
+  "updatedAt": "2026-03-14T18:56:19.189437+00:00",
   "items": [
+    {
+      "title": "Quoting Jannis Leidel",
+      "url": "https://simonwillison.net/2026/Mar/14/jannis-leidel",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "GitHub’s slopocalypse – the flood of AI-generated spam PRs and issues – has made Jazzband’s model of open membership and shared push access untenable.\nJazzband was designed for a world where the worst case was someone accidentally merging the wrong PR. In a world where only 1 in 10 AI-generated PRs meets project standards, where curl had to shut down its bug bounty because confirmation rates dropped below 5%, and where GitHub’s own response was a kill switch to disable pull requests entirely – an organization that gives push access to everyone who joins simply can’t operate safely anymore.\n&md",
+      "image": "",
+      "published": "2026-03-14T18:41:25+00:00",
+      "firstSeen": "2026-03-14T18:56:19.189437+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2824
+    },
+    {
+      "title": "My fireside chat about agentic engineering at the Pragmatic Summit",
+      "url": "https://simonwillison.net/2026/Mar/14/pragmatic-summit",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I was a speaker last month at the Pragmatic Summit in San Francisco, where I participated in a fireside chat session about agentic engineering hosted by Eric Lui from Statsig.\n\nThe video is available on YouTube. Here are my highlights from the conversation.\n\n \n\nStages of AI adoption\n\nWe started by talking about the different phases a software developer goes through in adopting AI coding tools.\n\n02:45\n\nI feel like there are different stages of AI adoption as a programmer. You start off with you've got ChatGPT and you ask it questions and occasionally it helps you out. And then the big step is w",
+      "image": "https://img.youtube.com/vi/owmJyKVu5f8/maxresdefault.jpg",
+      "published": "2026-03-14T18:19:38+00:00",
+      "firstSeen": "2026-03-14T18:56:19.189437+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.2715
+    },
     {
       "title": "Zach Braff’s AI Relationship Denial Is Raising a Lot of Questions Already Answered by the Denial",
       "url": "https://gizmodo.com/zach-braffs-ai-relationship-denial-is-raising-a-lot-of-questions-already-answered-by-his-denial-2000733708",
@@ -12,10 +44,10 @@
       "image": "https://ic-cdn.flipboard.com/gizmodo.com/bf1792b5957b97183ec5b04a30bb92f9b3d7d8e9/_xlarge.jpeg",
       "published": "2026-03-14T16:47:30+00:00",
       "firstSeen": "2026-03-14T17:40:52.542732+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1137
+      "score": 2.0863
     },
     {
       "title": "Meta reportedly considering layoffs that could affect 20% of the company",
@@ -25,13 +57,45 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "These layoffs could help Facebook's parent company offset its aggressive spending on AI infrastructure, as well as AI-related acquisitions and hiring.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200%2C800",
+      "image": "https://ic-cdn.flipboard.com/techcrunch.com/eac2a92c8c751a85c6564fef63f0a01c61838949/_xlarge.jpeg",
       "published": "2026-03-14T16:28:42+00:00",
       "firstSeen": "2026-03-14T16:47:38.703449+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2445
+      "score": 2.2173
+    },
+    {
+      "title": "Meta is reportedly planning to cut up to 20 percent of its staff in upcoming layoffs",
+      "url": "https://www.engadget.com/big-tech/meta-is-reportedly-planning-to-cut-up-to-20-percent-of-its-staff-in-upcoming-layoffs-160812304.html?src=rss",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta could be preparing for one of the largest layoffs in its history, according to a Reuters report. The tech giant is planning to cut about 20 percent of its workforce, according to the outlet's sources. According to the report, neither a date nor the exact number of layoffs has been finalized yet. …",
+      "image": "https://s.yimg.com/ny/api/res/1.2/xnZYMtcUoj8DwKAYKhcxJQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD02NzU-/https://s.yimg.com/os/creatr-uploaded-images/2026-03/627ba8a0-1fbc-11f1-a7ff-4d7a63f4a256",
+      "published": "2026-03-14T16:08:13+00:00",
+      "firstSeen": "2026-03-14T18:56:19.189437+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0676
+    },
+    {
+      "title": "The RAM crisis could completely change the way your games are made",
+      "url": "https://www.polygon.com/ram-crisis-gdc-2026-analysis",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "There were a lot of reasons for developers to be stressed out at this year's Game Developers Conference. Layoffs at EA the day the event started put job insecurity in the air, generative AI's presence at the show sparked existential dread, and the inescapable anxiety of world politics made it hard …",
+      "image": "https://static0.polygonimages.com/wordpress/wp-content/uploads/2026/03/crimson-desert-obilisks.jpg?w=1600&h=900&fit=crop",
+      "published": "2026-03-14T16:00:17+00:00",
+      "firstSeen": "2026-03-14T18:56:19.189437+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0639
     },
     {
       "title": "The futurist who helped define tech trend reports just killed them (literally)",
@@ -44,10 +108,10 @@
       "image": "https://ic-cdn.flipboard.com/fastcompany.com/2b321f980304122fb09c9486c7b7ff572950d5b3/_xlarge.webp",
       "published": "2026-03-14T15:29:52+00:00",
       "firstSeen": "2026-03-14T16:47:38.703449+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0761
+      "score": 2.0497
     },
     {
       "title": "AI-ontwikkelaars zijn mogelijk niet gecharmeerd van crypto, maar stablecoins zijn volgens insiders in de cryptowereld de sleutel tot agentic finance",
@@ -63,7 +127,7 @@
       "lastSeen": "2026-03-14T15:39:33.766320+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7343
+      "score": 4.709
     },
     {
       "title": "New Tennessee Titans logo draws unexpected car brand comparisons",
@@ -76,10 +140,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/Tv4TjwDwdSNgXJ59ZGqXJA-1920-80.jpg",
       "published": "2026-03-14T14:00:00+00:00",
       "firstSeen": "2026-03-14T14:45:18.743640+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0343
+      "score": 2.009
     },
     {
       "title": "This Unreal Engine 5 game brings Ancient Egyptian art to life",
@@ -95,7 +159,7 @@
       "lastSeen": "2026-03-14T14:45:18.743640+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0343
+      "score": 2.009
     },
     {
       "title": "Here's How To Delete Your Personal Data From ChatGPT (And Why You Should)",
@@ -108,10 +172,10 @@
       "image": "https://ic-cdn.flipboard.com/bgr.com/fcb3c06289008bf1dc7c616a4c4adb02189a3aac/_xlarge.jpeg",
       "published": "2026-03-14T13:17:00+00:00",
       "firstSeen": "2026-03-14T14:45:18.743640+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0149
+      "score": 9.9901
     },
     {
       "title": "How to use the new ChatGPT app integrations, including DoorDash, Spotify, Uber, and others",
@@ -124,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-03-14T13:00:00+00:00",
       "firstSeen": "2026-03-14T13:13:44.722462+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3473
+      "score": 10.3227
     },
     {
       "title": "Journalist issues warning after revealing disturbing flaw in ChatGPT and Google AI: 'It's so easy a child could do it'",
@@ -140,10 +204,10 @@
       "image": "https://ic-cdn.flipboard.com/thecooldown.com/a633ac10de7398bc115fe145d791f9c7254eaa28/_large.jpeg",
       "published": "2026-03-14T13:00:00+00:00",
       "firstSeen": "2026-03-14T16:47:38.703449+00:00",
-      "lastSeen": "2026-03-14T17:40:52.542732+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.0073
+      "score": 5.9827
     },
     {
       "title": "Snickers new custom font is deliciously nutty",
@@ -159,7 +223,7 @@
       "lastSeen": "2026-03-14T14:45:18.743640+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0073
+      "score": 1.9827
     },
     {
       "title": "I stopped watching YouTube the old way after trying this Gemini feature",
@@ -172,10 +236,10 @@
       "image": "https://ic-cdn.flipboard.com/anpoimages.com/e4c53ad18dd016a1c49fa8d324c8116ce4ae8169/_xlarge.png",
       "published": "2026-03-14T12:30:10+00:00",
       "firstSeen": "2026-03-14T13:13:44.722462+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.9942
+      "score": 7.9699
     },
     {
       "title": "Start a new hobby this spring",
@@ -188,10 +252,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/JAzVkBH39b4GvuBWaHnBWj-2560-80.jpg",
       "published": "2026-03-14T12:00:04+00:00",
       "firstSeen": "2026-03-14T13:00:02.026184+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9811
+      "score": 1.9572
     },
     {
       "title": "The 2026 farm bill quietly hands big tech control over American farmland. Here’s the fine print",
@@ -204,10 +268,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/b52ad4ea59f0ca12d8e37e4c5b6e5bd902cf8aec/_xlarge.png",
       "published": "2026-03-14T11:30:00+00:00",
       "firstSeen": "2026-03-14T16:47:38.703449+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3683
+      "score": 3.3447
     },
     {
       "title": "Spotify lets you edit your own algorithm with new Taste Profile feature",
@@ -220,10 +284,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Spotify-launches-Taste-Profile-editor.png",
       "published": "2026-03-14T10:48:08+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9506
+      "score": 1.9275
     },
     {
       "title": "Professors Say AI Is Destroying Their Students’ Ability to Think",
@@ -236,10 +300,10 @@
       "image": "https://ic-cdn.flipboard.com/futurism.com/7b039c6bf6df5a5ecd7315345cb17c7058c78c45/_xlarge.jpeg",
       "published": "2026-03-14T10:45:00+00:00",
       "firstSeen": "2026-03-14T15:39:33.766320+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9493
+      "score": 1.9262
     },
     {
       "title": "Rise of model context protocol in the agentic era",
@@ -252,10 +316,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rise-of-model-context-protocol-in-the-agentic-era.png",
       "published": "2026-03-14T10:25:28+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3412
+      "score": 5.3183
     },
     {
       "title": "Elon Musk is tearing xAI down to build it back up. Again.",
@@ -268,10 +332,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-lawmakers-deal-to-ban-AI-non-consensual-intimate-deepfakes-1.png",
       "published": "2026-03-14T10:09:29+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.3847
+      "score": 7.3619
     },
     {
       "title": "I tested the Elegoo Centauri Carbon 2, and now I want to print everything in multicolour glory!",
@@ -284,10 +348,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/982e7f3d1a80ecb359453ea5b21f7e338cf667f3/_xlarge.jpeg",
       "published": "2026-03-14T10:00:00+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9308
+      "score": 1.9081
     },
     {
       "title": "Google&#8217;s biggest Maps update in a decade puts Gemini in the passenger seat",
@@ -300,10 +364,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Maps-launches-Ask-Maps.png",
       "published": "2026-03-14T09:55:07+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.9288
+      "score": 7.9062
     },
     {
       "title": "Uber founder Travis Kalanick launches robotics company Atoms",
@@ -316,10 +380,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Travis-Kalanick-launches-robotics-company-Atoms.png",
       "published": "2026-03-14T09:13:18+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.712
+      "score": 3.6898
     },
     {
       "title": "I spent 17 hours at a legal conference. These were the 2 questions haunting lawyers about AI.",
@@ -332,10 +396,10 @@
       "image": "https://ic-cdn.flipboard.com/insider.com/3f15f338f00728ed3bea77e107a6c1f71d3fb5b1/_xlarge.jpeg",
       "published": "2026-03-14T09:00:02+00:00",
       "firstSeen": "2026-03-14T13:00:02.026184+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0067
+      "score": 2.9846
     },
     {
       "title": "This typographer is inspired by circuit boards, a weathered stone and brick lettering",
@@ -348,10 +412,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/LJjW5HecSBgxrkHdfqvj6S-2210-80.jpg",
       "published": "2026-03-14T09:00:00+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9067
+      "score": 1.8846
     },
     {
       "title": "This $160,000 red-light chamber left my whole body buzzing",
@@ -364,10 +428,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/086b7bdad88eafc26516a08719c97dc678ff0508/_xlarge.jpeg",
       "published": "2026-03-14T09:00:00+00:00",
       "firstSeen": "2026-03-14T13:00:02.026184+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9067
+      "score": 1.8846
     },
     {
       "title": "Garry Tan Releases gstack: An Open-Source Claude Code System for Planning, Code Review, QA, and Shipping",
@@ -380,10 +444,10 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ab495ee2d3c02a92668215b600a360853f7caf5b/_xlarge.png",
       "published": "2026-03-14T08:44:43+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4706
+      "score": 9.4487
     },
     {
       "title": "I can't believe how good the MacBook Neo looks and feels",
@@ -396,10 +460,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/725031029b28e44d8e87ccb000bae32b427563c4/_xlarge.jpeg",
       "published": "2026-03-14T08:25:39+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6932
+      "score": 3.6715
     },
     {
       "title": "America’s math and reading scores tanked after schools ditched textbooks for screens—and AI could worsen the brain rot",
@@ -412,10 +476,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/01009670ae386ea1f1a3435e58ec67cfdcfc4548/_xlarge.jpeg",
       "published": "2026-03-14T08:25:00+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8929
+      "score": 1.8712
     },
     {
       "title": "Staff complain that xAI is flailing because of constant upheaval",
@@ -428,10 +492,10 @@
       "image": "https://ic-cdn.flipboard.com/arstechnica.net/0ed5cc198cdc52ccdbe96c99209d72a404913608/_xlarge.jpeg",
       "published": "2026-03-14T07:14:53+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.866
+      "score": 4.845
     },
     {
       "title": "Who Is Devendra Chaplot? Elon Musk Welcomes This IITian At xAI’s Superintelligence Team With A Tweet",
@@ -444,10 +508,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/7a23900e8abe792f6035cdf757863860d79d7f99/_xlarge.jpeg",
       "published": "2026-03-14T06:12:10+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8426
+      "score": 4.8222
     },
     {
       "title": "How AI will reshape work: Anthropic identifies the most exposed jobs",
@@ -463,7 +527,7 @@
       "lastSeen": "2026-03-14T18:00:02.080159+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8383
+      "score": 4.818
     },
     {
       "title": "How AI will reshape work: Anthropic identifies the most exposed jobs",
@@ -479,7 +543,7 @@
       "lastSeen": "2026-03-14T15:39:33.766320+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8383
+      "score": 4.818
     },
     {
       "title": "Most people quit ChatGPT before discovering these 7 powerful features",
@@ -490,12 +554,12 @@
       "category": "AI",
       "summary": "A surprising number of people are switching AI chatbots right now. Some are moving to Claude. Others are trying Gemini or smaller niche tools. But …",
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/ed8ef90da55b286757a98b6cc2865185cf121d6b/_xlarge.jpeg",
-      "published": "2026-03-14T04:45:00+00:00",
+      "published": "2026-03-14T04:36:52+00:00",
       "firstSeen": "2026-03-14T07:00:01.725978+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8113
+      "score": 13.7889
     },
     {
       "title": "AI Humanizers Make Chatbot Mental Health Advice Seem More Convincing But It’s A Sneaky Ploy",
@@ -508,10 +572,10 @@
       "image": "https://ic-cdn.flipboard.com/forbes.com/40cc313814447598ec1a83cbd38e223b831974a0/_large.jpeg",
       "published": "2026-03-14T03:15:00+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8802
+      "score": 2.8614
     },
     {
       "title": "I Compared ChatGPT vs Claude Interactive Visuals: Here is the Clear Winner",
@@ -527,7 +591,7 @@
       "lastSeen": "2026-03-14T16:47:38.703449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.6659
+      "score": 17.6475
     },
     {
       "title": "Musk Makes Humiliating Confession About Hitler-Praising Chatbot",
@@ -543,7 +607,7 @@
       "lastSeen": "2026-03-14T02:49:23.142107+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7491
+      "score": 1.7312
     },
     {
       "title": "‘Not built right the first time’ — Musk’s xAI is starting over again, again",
@@ -556,10 +620,10 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/9c2f64817800078f521e8c9893949a795eeda956/_xlarge.jpeg",
       "published": "2026-03-14T00:12:22+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 6.261
+      "score": 6.2437
     },
     {
       "title": "ElevenLabs restored Eric Dane’s voice with AI. Now they’re offering 1 million voices for free.",
@@ -572,74 +636,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/3119b8c11e00feb3cf579de1d878a60e3c65497d/_xlarge.jpeg",
       "published": "2026-03-14T00:11:55+00:00",
       "firstSeen": "2026-03-14T02:00:01.937880+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7209
-    },
-    {
-      "title": "US Withdraws Draft Rule That Called for Global AI Chip Permits",
-      "url": "https://www.bloomberg.com/news/articles/2026-03-14/us-withdraws-draft-rule-that-called-for-global-ai-chip-permits",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The US Commerce Department has pulled a draft regulation that would have restricted exports of artificial intelligence chips to anywhere in the world …",
-      "image": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/i.Tb8Xx53i4s/v0/1200x800.jpg",
-      "published": "2026-03-14T00:01:16+00:00",
-      "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T01:00:01.348522+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7176
-    },
-    {
-      "title": "Lawyer behind AI psychosis cases warns of mass casualty risks",
-      "url": "https://techcrunch.com/2026/03/13/lawyer-behind-ai-psychosis-cases-warns-of-mass-casualty-risks",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AI chatbots have been linked to suicides for years. Now one lawyer says they are showing up in mass casualty cases too, and the technology is moving faster than the safeguards.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-509750426.jpg?resize=1200%2C800",
-      "published": "2026-03-14T00:01:02+00:00",
-      "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8575
-    },
-    {
-      "title": "Palantir CEO Alex Karp says there was ‘never a sense’ AI products would be used for domestic surveillance in Anthropic-DoD feud",
-      "url": "https://fortune.com/2026/03/13/palantir-ceo-alex-karp-interview-anthropic-pentagon-never-a-sense-ai-used-for-domestic-surveillance",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Right in the middle of the ongoing feud between the Silicon Valley AI company Anthropic and the U.S. Department of Defense over whether the military …",
-      "image": "https://ic-cdn.flipboard.com/fortune.com/4f2e042d6e40d8a4cee40b048d739ac2a84aafa7/_xlarge.jpeg",
-      "published": "2026-03-13T23:47:07+00:00",
-      "firstSeen": "2026-03-14T02:00:01.937880+00:00",
-      "lastSeen": "2026-03-14T16:47:38.703449+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7132
-    },
-    {
-      "title": "After DOGE Deposition Videos Go Viral, Judge Orders Them Taken Down",
-      "url": "https://www.nytimes.com/2026/03/13/nyregion/doge-depositions-musk-lawsuit.html",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The videos had been posted on YouTube by groups who were suing to restore grants cut by Elon Musk’s Department of Government Efficiency. A Manhattan judge on Friday ordered that video depositions of two former employees of Elon Musk’s Department of Government Efficiency be removed from the internet, …",
-      "image": "https://static01.nyt.com/images/2026/03/13/multimedia/13met-doge-01-lpvz/13met-doge-01-lpvz-facebookJumbo.jpg",
-      "published": "2026-03-13T23:20:31+00:00",
-      "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T01:00:01.348522+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7051
+      "score": 1.7036
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2327
+      "score": 1.2316
     },
     {
       "title": "Introducing... Life Without",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2241
+      "score": 2.224
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-14T18:00:02.080159+00:00",
+      "lastSeen": "2026-03-14T18:56:19.189437+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1904
