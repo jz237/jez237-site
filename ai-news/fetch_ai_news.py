@@ -344,6 +344,8 @@ def editorial_gate(item):
     if item.get("model_release"):
         return True, "model_release"
 
+
+
     big_name_hits = sum(1 for w in EDITORIAL_PRIORITY["big_names"] if w in text_blob)
     capability_hits = sum(1 for w in EDITORIAL_PRIORITY["capabilities"] if w in text_blob)
     impact_hits = sum(1 for w in EDITORIAL_PRIORITY["product_impact"] if w in text_blob)
@@ -547,6 +549,12 @@ def main():
     # Score and sort
     for it in all_items:
         it["score"] = score_item(it, now)
+
+    # Override editorial gate for high-scoring items
+    for it in all_items:
+        if it["score"] >= 5.0 and not it.get("editorial_allow"):
+            it["editorial_allow"] = True
+            it["editorial_reason"] = "high_score_override"
 
     all_items.sort(key=lambda x: (x["published_dt"], x["score"]), reverse=True)
     all_items = all_items[:MAX_STORE_ITEMS]
