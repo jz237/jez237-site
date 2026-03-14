@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T21:55:07.512811+00:00",
+  "updatedAt": "2026-03-14T21:56:53.752085+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -824,6 +824,14 @@
     "https://www.theverge.com/tech/893262/google-maps-gemini-ai-ask-maps-immersive-navigation": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK270_GOOGLE_MAPS_D.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-14T21:55:07.512811+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/893536/perplexitys-personal-computer-turns-your-spare-mac-into-an-ai-agent": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/2lFbEKLJQ88PaaoZZTWuGV5rQY.avif?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-03-14T21:56:46.528948+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/893451/grammarly-ai-lawsuit-julia-angwin": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-1244428289.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.491678610079%2C100%2C79.016642779841&amp;w=1200",
+      "checkedAt": "2026-03-14T21:56:46.528948+00:00"
     }
   }
 }
