@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T18:00:02.080159+00:00",
+  "updatedAt": "2026-03-14T18:56:19.189437+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -784,6 +784,14 @@
     "https://techcrunch.com/2026/03/14/meta-reportedly-considering-layoffs-that-could-affect-20-of-the-company": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200,800",
       "checkedAt": "2026-03-14T16:47:38.703449+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/14/jannis-leidel": {
+      "image": "",
+      "checkedAt": "2026-03-14T18:56:19.189437+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/14/pragmatic-summit": {
+      "image": "https://img.youtube.com/vi/owmJyKVu5f8/maxresdefault.jpg",
+      "checkedAt": "2026-03-14T18:56:19.189437+00:00"
     }
   }
 }
