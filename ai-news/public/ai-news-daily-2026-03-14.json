@@ -1,6 +1,6 @@
 {
   "date": "2026-03-14",
-  "updatedAt": "2026-03-14T22:00:01.607732+00:00",
+  "updatedAt": "2026-03-14T22:43:36.871916+00:00",
   "items": [
     {
       "title": "How to use the new ChatGPT app integrations, including DoorDash, Spotify, Uber, and others",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-03-14T13:00:00+00:00",
       "firstSeen": "2026-03-14T13:13:44.722462+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2467
+      "score": 10.2296
     },
     {
       "title": "Garry Tan Releases gstack: An Open-Source Claude Code System for Planning, Code Review, QA, and Shipping",
@@ -29,10 +29,10 @@
       "image": "https://ic-cdn.flipboard.com/marktechpost.com/ab495ee2d3c02a92668215b600a360853f7caf5b/_xlarge.png",
       "published": "2026-03-14T08:44:43+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3812
+      "score": 9.366
     },
     {
       "title": "Google&#8217;s biggest Maps update in a decade puts Gemini in the passenger seat",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Maps-launches-Ask-Maps.png",
       "published": "2026-03-14T09:55:07+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8364
+      "score": 7.8207
     },
     {
       "title": "Elon Musk is tearing xAI down to build it back up. Again.",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-lawmakers-deal-to-ban-AI-non-consensual-intimate-deepfakes-1.png",
       "published": "2026-03-14T10:09:29+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2916
+      "score": 7.2758
     },
     {
       "title": "My fireside chat about agentic engineering at the Pragmatic Summit",
@@ -77,10 +77,10 @@
       "image": "https://img.youtube.com/vi/owmJyKVu5f8/maxresdefault.jpg",
       "published": "2026-03-14T18:19:38+00:00",
       "firstSeen": "2026-03-14T18:56:19.189437+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1833
+      "score": 7.1635
     },
     {
       "title": "‘Not built right the first time’ — Musk’s xAI is starting over again, again",
@@ -93,10 +93,10 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/9c2f64817800078f521e8c9893949a795eeda956/_xlarge.jpeg",
       "published": "2026-03-14T00:12:22+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1904
+      "score": 6.1784
     },
     {
       "title": "Rise of model context protocol in the agentic era",
@@ -109,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rise-of-model-context-protocol-in-the-agentic-era.png",
       "published": "2026-03-14T10:25:28+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.2475
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2316
     },
     {
       "title": "US Army announces contract with Anduril worth up to $20B",
@@ -125,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2152503982-e.jpg?resize=1200%2C800",
       "published": "2026-03-14T20:47:47+00:00",
       "firstSeen": "2026-03-14T21:38:52.742085+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0538
+      "score": 4.0326
     },
     {
       "title": "Uber founder Travis Kalanick launches robotics company Atoms",
@@ -141,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Travis-Kalanick-launches-robotics-company-Atoms.png",
       "published": "2026-03-14T09:13:18+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6213
+      "score": 3.6059
     },
     {
       "title": "Quoting Jannis Leidel",
@@ -157,10 +157,10 @@
       "image": "",
       "published": "2026-03-14T18:41:25+00:00",
       "firstSeen": "2026-03-14T18:56:19.189437+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1934
+      "score": 2.1733
     },
     {
       "title": "Meta reportedly considering layoffs that could affect 20% of the company",
@@ -173,10 +173,10 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/eac2a92c8c751a85c6564fef63f0a01c61838949/_xlarge.jpeg",
       "published": "2026-03-14T16:28:42+00:00",
       "firstSeen": "2026-03-14T16:47:38.703449+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1336
+      "score": 2.1147
     },
     {
       "title": "Spotify lets you edit your own algorithm with new Taste Profile feature",
@@ -189,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Spotify-launches-Taste-Profile-editor.png",
       "published": "2026-03-14T10:48:08+00:00",
       "firstSeen": "2026-03-14T11:35:57.369642+00:00",
-      "lastSeen": "2026-03-14T22:00:01.607732+00:00",
+      "lastSeen": "2026-03-14T22:43:36.871916+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8559
+      "score": 1.8398
     }
   ],
   "errors": []
