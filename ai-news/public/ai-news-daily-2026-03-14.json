@@ -1,6 +1,6 @@
 {
   "date": "2026-03-14",
-  "updatedAt": "2026-03-14T05:00:01.135799+00:00",
+  "updatedAt": "2026-03-14T04:51:00.246747+00:00",
   "items": [
     {
       "title": "‘Not built right the first time’ — Musk’s xAI is starting over again, again",
@@ -13,10 +13,10 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/9c2f64817800078f521e8c9893949a795eeda956/_xlarge.jpeg",
       "published": "2026-03-14T00:12:22+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T05:00:01.135799+00:00",
+      "lastSeen": "2026-03-14T04:51:00.246747+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 6.5528
+      "score": 6.5569
     },
     {
       "title": "Lawyer behind AI psychosis cases warns of mass casualty risks",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-509750426.jpg?resize=1200%2C800",
       "published": "2026-03-14T00:01:02+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T05:00:01.135799+00:00",
+      "lastSeen": "2026-03-14T04:51:00.246747+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1478
+      "score": 2.1518
     },
     {
       "title": "Musk Makes Humiliating Confession About Hitler-Praising Chatbot",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-03-14T02:49:23.142107+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0532
+      "score": 2.0574
     },
     {
       "title": "ElevenLabs restored Eric Dane’s voice with AI. Now they’re offering 1 million voices for free.",
@@ -61,10 +61,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/3119b8c11e00feb3cf579de1d878a60e3c65497d/_xlarge.jpeg",
       "published": "2026-03-14T00:11:55+00:00",
       "firstSeen": "2026-03-14T02:00:01.937880+00:00",
-      "lastSeen": "2026-03-14T05:00:01.135799+00:00",
+      "lastSeen": "2026-03-14T04:51:00.246747+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0126
+      "score": 2.0167
     },
     {
       "title": "US Withdraws Draft Rule That Called for Global AI Chip Permits",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-03-14T01:00:01.348522+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0079
+      "score": 2.0119
     }
   ],
   "errors": []
