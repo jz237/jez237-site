@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T21:38:52.742085+00:00",
+  "updatedAt": "2026-03-14T21:55:07.512811+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -796,6 +796,34 @@
     "https://techcrunch.com/2026/03/14/us-army-announces-contract-with-anduril-worth-up-to-20b": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2152503982-e.jpg?resize=1200,800",
       "checkedAt": "2026-03-14T21:00:01.450458+00:00"
+    },
+    "https://www.theverge.com/games/894799/microsoft-gaming-copilot-ai-xbox-consoles": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25676324/twarren_xboxseriesxwhite__6_.JPG?quality=90&amp;strip=all&amp;crop=0%2C10.467829490999%2C100%2C79.064341018002&amp;w=1200",
+      "checkedAt": "2026-03-14T21:51:22.141333+00:00"
+    },
+    "https://www.theverge.com/tech/893907/facebook-marketplace-ai-auto-reply-listings": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK040_VRG_Illo_N_Barclay_2_facebook.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-14T21:51:22.141333+00:00"
+    },
+    "https://www.theverge.com/tech/893820/gemini-task-automation-samsung-s26-google-pixel-10": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/dsc03087_processed.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-03-14T21:51:22.141333+00:00"
+    },
+    "https://www.theverge.com/podcast/893370/anthropic-pentagon-ai-mass-surveillance-nsa-privacy-spying": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_0312_Site_v2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-14T21:51:22.141333+00:00"
+    },
+    "https://www.theverge.com/streaming/893538/ai-model-netflix-interpositive-ben-affleck": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2247850099.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.756336666495%2C100%2C78.487326667009&amp;w=1200",
+      "checkedAt": "2026-03-14T21:55:07.512811+00:00"
+    },
+    "https://www.theverge.com/tech/893594/microsoft-copilot-health-launch": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK259_MICROSOFT_COPILOT_3__B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-14T21:55:07.512811+00:00"
+    },
+    "https://www.theverge.com/tech/893262/google-maps-gemini-ai-ask-maps-immersive-navigation": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK270_GOOGLE_MAPS_D.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-14T21:55:07.512811+00:00"
     }
   }
 }
