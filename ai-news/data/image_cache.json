@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T19:00:01.527802+00:00",
+  "updatedAt": "2026-03-14T18:56:19.189437+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -787,11 +787,11 @@
     },
     "https://simonwillison.net/2026/Mar/14/jannis-leidel": {
       "image": "",
-      "checkedAt": "2026-03-14T19:00:01.527802+00:00"
+      "checkedAt": "2026-03-14T18:56:19.189437+00:00"
     },
     "https://simonwillison.net/2026/Mar/14/pragmatic-summit": {
       "image": "https://img.youtube.com/vi/owmJyKVu5f8/maxresdefault.jpg",
-      "checkedAt": "2026-03-14T19:00:01.527802+00:00"
+      "checkedAt": "2026-03-14T18:56:19.189437+00:00"
     }
   }
 }
