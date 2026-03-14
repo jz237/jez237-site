@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T12:00:01.787356+00:00",
+  "updatedAt": "2026-03-14T11:35:57.369642+00:00",
   "items": [
     {
       "title": "Spotify lets you edit your own algorithm with new Taste Profile feature",
@@ -11,11 +11,11 @@
       "summary": "The feature, announced at SXSW by co-CEO Gustav Söderström, lets Premium listeners see and shape the data model powering their recommendations, starting with a beta rollout in New Zealand For a decade, Spotify’s recommendation engine has worked largely in silence. It watched what you played, noted what you skipped, inferred meaning from the time of [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Spotify-launches-Taste-Profile-editor.png",
       "published": "2026-03-14T10:48:08+00:00",
-      "firstSeen": "2026-03-14T12:00:01.787356+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "firstSeen": "2026-03-14T11:35:57.369642+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.114
+      "score": 2.1259
     },
     {
       "title": "Rise of model context protocol in the agentic era",
@@ -27,11 +27,11 @@
       "summary": "We have all heard about model context protocol (MCP) in the context of artificial intelligence. In this article, we will dive into what MCP is and why it is becoming more important by the day. When APIs are already available then why do we need MCP? Although we have seen a large rise in popularity [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rise-of-model-context-protocol-in-the-agentic-era.png",
       "published": "2026-03-14T10:25:28+00:00",
-      "firstSeen": "2026-03-14T12:00:01.787356+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "firstSeen": "2026-03-14T11:35:57.369642+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.5029
+      "score": 5.5147
     },
     {
       "title": "Elon Musk is tearing xAI down to build it back up. Again.",
@@ -44,10 +44,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-lawmakers-deal-to-ban-AI-non-consensual-intimate-deepfakes-1.png",
       "published": "2026-03-14T10:09:29+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.5451
+      "score": 7.5568
     },
     {
       "title": "I tested the Elegoo Centauri Carbon 2, and now I want to print everything in multicolour glory!",
@@ -59,11 +59,11 @@
       "summary": "Four colour 3D printing is easy and now affordable. The rate of development in the 3D printing space hasn’t slowed much over the last few years, with …",
       "image": "https://cdn.mos.cms.futurecdn.net/PJdQpexfJwSpkuxEMdQZrh-1600-80.jpg",
       "published": "2026-03-14T10:00:00+00:00",
-      "firstSeen": "2026-03-14T12:00:01.787356+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "firstSeen": "2026-03-14T11:35:57.369642+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0905
+      "score": 2.1022
     },
     {
       "title": "Google&#8217;s biggest Maps update in a decade puts Gemini in the passenger seat",
@@ -76,10 +76,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Google-Maps-launches-Ask-Maps.png",
       "published": "2026-03-14T09:55:07+00:00",
       "firstSeen": "2026-03-14T10:45:13.008839+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 8.0882
+      "score": 8.0998
     },
     {
       "title": "Uber founder Travis Kalanick launches robotics company Atoms",
@@ -92,26 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Travis-Kalanick-launches-robotics-company-Atoms.png",
       "published": "2026-03-14T09:13:18+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8683
-    },
-    {
-      "title": "I spent 17 hours at a legal conference. These were the two questions haunting lawyers about AI.",
-      "url": "https://www.businessinsider.com/inside-legalweek-2026-ai-adoption-lawyers-law-firms-2026-3",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "At Legalweek this week, lawyers got a mix of shmooze, swag, and one topic on repeat: artificial intelligence. It headlined nearly every panel and powered every booth pitch. Still, the question I heard most — in hallways, at happy hours, even from the people selling the tools — was disarmingly …",
-      "image": "https://ic-cdn.flipboard.com/insider.com/3f15f338f00728ed3bea77e107a6c1f71d3fb5b1/_xlarge.jpeg",
-      "published": "2026-03-14T09:00:02+00:00",
-      "firstSeen": "2026-03-14T12:00:01.787356+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1621
+      "score": 3.8797
     },
     {
       "title": "This typographer is inspired by circuit boards, a weathered stone and brick lettering",
@@ -124,26 +108,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/LJjW5HecSBgxrkHdfqvj6S-2210-80.jpg",
       "published": "2026-03-14T09:00:00+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.062
-    },
-    {
-      "title": "This $160,000 red-light chamber left my whole body buzzing",
-      "url": "https://mashable.com/article/ammortal-chamber-hands-on-sxsw-2026",
-      "source": "Flipboard AI",
-      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Step inside the high-tech 'tanning bed from the future.' There are a lot of emerging technologies at SXSW — AI voice restoration, robotaxis, XR experiences. But there's only one Ammortal Chamber — a $160,000 red light bed with \"absolute state of the art\" restoration and rejuvenation technology. Not …",
-      "image": "https://ic-cdn.flipboard.com/mashable.com/086b7bdad88eafc26516a08719c97dc678ff0508/_xlarge.jpeg",
-      "published": "2026-03-14T09:00:00+00:00",
-      "firstSeen": "2026-03-14T12:00:01.787356+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.062
+      "score": 2.0734
     },
     {
       "title": "Garry Tan Releases gstack: An Open-Source Claude Code System for Planning, Code Review, QA, and Shipping",
@@ -156,10 +124,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-43.png",
       "published": "2026-03-14T08:44:43+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.6249
+      "score": 9.6362
     },
     {
       "title": "I can't believe how good the MacBook Neo looks and feels",
@@ -172,10 +140,10 @@
       "image": "https://cdn.mos.cms.futurecdn.net/7xgypkhE5xkjxGoJhxKQR5-1860-80.jpg",
       "published": "2026-03-14T08:25:39+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8461
+      "score": 3.8572
     },
     {
       "title": "America’s math and reading scores tanked after schools ditched textbooks for screens—and AI could worsen the brain rot",
@@ -187,11 +155,11 @@
       "summary": "At the turn of the century, educational technology initiatives put laptop keyboards at the fingertips of U.S. schoolchildren. Now, 25 years later, …",
       "image": "https://ic-cdn.flipboard.com/fortune.com/01009670ae386ea1f1a3435e58ec67cfdcfc4548/_xlarge.jpeg",
       "published": "2026-03-14T08:25:00+00:00",
-      "firstSeen": "2026-03-14T12:00:01.787356+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "firstSeen": "2026-03-14T11:35:57.369642+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0458
+      "score": 2.0569
     },
     {
       "title": "Staff complain that xAI is flailing because of constant upheaval",
@@ -204,10 +172,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/11/getty-musk-1152x648.jpg",
       "published": "2026-03-14T07:14:53+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.014
+      "score": 5.0248
     },
     {
       "title": "Who Is Devendra Chaplot? Elon Musk Welcomes This IITian At xAI’s Superintelligence Team With A Tweet",
@@ -220,10 +188,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/7a23900e8abe792f6035cdf757863860d79d7f99/_xlarge.jpeg",
       "published": "2026-03-14T06:12:05+00:00",
       "firstSeen": "2026-03-14T08:51:03.839542+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9863
+      "score": 4.9968
     },
     {
       "title": "How AI will reshape work: Anthropic identifies the most exposed jobs",
@@ -236,10 +204,10 @@
       "image": "https://ic-cdn.flipboard.com/euronews.com/ef2d7bc886904c0cad7edee1adca0104617800e3/_xlarge.jpeg",
       "published": "2026-03-14T06:00:21+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9813
+      "score": 4.9917
     },
     {
       "title": "Most people quit ChatGPT before discovering these 7 powerful features",
@@ -252,10 +220,10 @@
       "image": "https://ic-cdn.flipboard.com/futurecdn.net/ed8ef90da55b286757a98b6cc2865185cf121d6b/_xlarge.jpeg",
       "published": "2026-03-14T04:45:00+00:00",
       "firstSeen": "2026-03-14T07:00:01.725978+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.9493
+      "score": 13.9594
     },
     {
       "title": "AI Humanizers Make Chatbot Mental Health Advice Seem More Convincing But It’s A Sneaky Ploy",
@@ -268,10 +236,10 @@
       "image": "https://ic-cdn.flipboard.com/forbes.com/40cc313814447598ec1a83cbd38e223b831974a0/_large.jpeg",
       "published": "2026-03-14T03:15:00+00:00",
       "firstSeen": "2026-03-14T09:47:46.069920+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0126
+      "score": 3.0223
     },
     {
       "title": "I Compared ChatGPT vs Claude Interactive Visuals: Here is the Clear Winner",
@@ -287,7 +255,7 @@
       "lastSeen": "2026-03-14T12:00:01.787356+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.7958
+      "score": 17.8053
     },
     {
       "title": "Musk Makes Humiliating Confession About Hitler-Praising Chatbot",
@@ -303,7 +271,7 @@
       "lastSeen": "2026-03-14T02:49:23.142107+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8759
+      "score": 1.8852
     },
     {
       "title": "‘Not built right the first time’ — Musk’s xAI is starting over again, again",
@@ -316,10 +284,10 @@
       "image": "https://ic-cdn.flipboard.com/techcrunch.com/9c2f64817800078f521e8c9893949a795eeda956/_xlarge.jpeg",
       "published": "2026-03-14T00:12:22+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 6.3827
+      "score": 6.3916
     },
     {
       "title": "ElevenLabs restored Eric Dane’s voice with AI. Now they’re offering 1 million voices for free.",
@@ -332,10 +300,10 @@
       "image": "https://ic-cdn.flipboard.com/mashable.com/3119b8c11e00feb3cf579de1d878a60e3c65497d/_xlarge.jpeg",
       "published": "2026-03-14T00:11:55+00:00",
       "firstSeen": "2026-03-14T02:00:01.937880+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8425
+      "score": 1.8514
     },
     {
       "title": "US Withdraws Draft Rule That Called for Global AI Chip Permits",
@@ -351,7 +319,7 @@
       "lastSeen": "2026-03-14T01:00:01.348522+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8386
+      "score": 1.8475
     },
     {
       "title": "Lawyer behind AI psychosis cases warns of mass casualty risks",
@@ -364,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-509750426.jpg?resize=1200%2C800",
       "published": "2026-03-14T00:01:02+00:00",
       "firstSeen": "2026-03-14T01:00:01.348522+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9786
+      "score": 1.9874
     },
     {
       "title": "Palantir CEO Alex Karp says there was ‘never a sense’ AI products would be used for domestic surveillance in Anthropic-DoD feud",
@@ -380,10 +348,10 @@
       "image": "https://ic-cdn.flipboard.com/fortune.com/4f2e042d6e40d8a4cee40b048d739ac2a84aafa7/_xlarge.jpeg",
       "published": "2026-03-13T23:47:07+00:00",
       "firstSeen": "2026-03-14T02:00:01.937880+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8335
+      "score": 4.8423
     },
     {
       "title": "After DOGE Deposition Videos Go Viral, Judge Orders Them Taken Down",
@@ -399,7 +367,7 @@
       "lastSeen": "2026-03-14T01:00:01.348522+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8239
+      "score": 1.8326
     },
     {
       "title": "Google DeepMind Introduces Aletheia: The AI Agent Moving from Math Competitions to Fully Autonomous Professional Research Discoveries",
@@ -412,10 +380,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/02/Screenshot-2026-02-12-at-11.03.13-PM-1-150x150.png",
       "published": "2026-03-13T23:05:53+00:00",
       "firstSeen": "2026-03-13T23:41:00.288770+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.7887
+      "score": 14.7973
     },
     {
       "title": "6 Savvy Ways To Get Better At Using ChatGPT, Claude, & Gemini",
@@ -428,10 +396,10 @@
       "image": "https://ic-cdn.flipboard.com/bustle.com/a878fad2ce9255e301078b1a3e4532ad584db5c7/_xlarge.jpeg",
       "published": "2026-03-13T21:46:02+00:00",
       "firstSeen": "2026-03-13T22:43:09.338442+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.7908
+      "score": 15.7991
     },
     {
       "title": "Nyne, founded by a father-son duo, gives AI agents the human context they’re missing",
@@ -444,10 +412,10 @@
       "image": "",
       "published": "2026-03-13T21:37:01+00:00",
       "firstSeen": "2026-03-13T21:47:15.909524+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6277
+      "score": 4.636
     },
     {
       "title": "Steven Spielberg Explains Why He Hasn't Used AI in Filmmaking",
@@ -463,7 +431,7 @@
       "lastSeen": "2026-03-13T21:47:15.909524+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7798
+      "score": 1.788
     },
     {
       "title": "Lawsuit Alleges DOGE Cancelled $349,000 HVAC Grant to Museum after ChatGPT Flagged It As DEI",
@@ -479,7 +447,7 @@
       "lastSeen": "2026-03-14T09:47:46.069920+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.7699
+      "score": 7.7779
     },
     {
       "title": "Elon Musk Orders Sweeping Layoffs as xAI Fails to Catch Up",
@@ -492,10 +460,10 @@
       "image": "https://ic-cdn.flipboard.com/futurism.com/6d6bdfa34b6b37f8839b0d956820f85114d4ec35/_xlarge.jpeg",
       "published": "2026-03-13T20:28:05+00:00",
       "firstSeen": "2026-03-14T02:49:23.142107+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7645
+      "score": 4.7725
     },
     {
       "title": "Supply-chain attack using invisible code hits GitHub and other repositories",
@@ -508,10 +476,10 @@
       "image": "https://ic-cdn.flipboard.com/arstechnica.net/f80a2c0a2bbc43afca92be4280741404d88b9575/_xlarge.jpeg",
       "published": "2026-03-13T20:18:08+00:00",
       "firstSeen": "2026-03-13T20:51:36.360177+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1612
+      "score": 3.1692
     },
     {
       "title": "The Iran war is going to drive up the cost of data centers—and maybe shut down some projects",
@@ -527,7 +495,7 @@
       "lastSeen": "2026-03-13T20:51:36.360177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7602
+      "score": 1.7682
     },
     {
       "title": "Musk Says xAI Must Be Rebuilt as Co-Founders Exit",
@@ -543,7 +511,7 @@
       "lastSeen": "2026-03-13T23:41:00.288770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7576
+      "score": 4.7655
     },
     {
       "title": "Beyond Semantic Similarity: Introducing NVIDIA NeMo Retriever’s Generalizable Agentic Retrieval Pipeline",
@@ -556,10 +524,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6172d79a6c2ff4e51d0ea593/Qflw9K3iqWZf269xwE-CP.png",
       "published": "2026-03-13T20:00:00+00:00",
       "firstSeen": "2026-03-13T20:51:36.360177+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.6353
+      "score": 1.6432
     },
     {
       "title": "Steven Spielberg says he’s ‘never used AI’ in any of his films",
@@ -572,10 +540,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/steven-spielberg-GettyImages-2260428164.jpg?w=1024",
       "published": "2026-03-13T19:47:58+00:00",
       "firstSeen": "2026-03-13T20:51:36.360177+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8914
+      "score": 1.8992
     },
     {
       "title": "The biggest AI stories of the year (so far)",
@@ -588,10 +556,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-03-13T19:38:11+00:00",
       "firstSeen": "2026-03-13T19:44:28.500579+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8882
+      "score": 1.896
     },
     {
       "title": "DOGE Bros Used ChatGPT To Gut DEI, But Couldn't Define It",
@@ -604,10 +572,10 @@
       "image": "https://ic-cdn.flipboard.com/newsone.com/985641140b14c0856271e573fddf4faac80535be/_xlarge.jpeg",
       "published": "2026-03-13T19:07:00+00:00",
       "firstSeen": "2026-03-14T02:49:23.142107+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 7.7382
+      "score": 7.7459
     },
     {
       "title": "10 Proven Prompt Engineering Techniques to Improve Your AI Outputs",
@@ -623,7 +591,7 @@
       "lastSeen": "2026-03-14T09:47:46.069920+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7368
+      "score": 1.7445
     },
     {
       "title": "What IT Leaders Can Learn From a Housing Authority’s AI Transformation",
@@ -636,10 +604,43 @@
       "image": "",
       "published": "2026-03-13T18:55:45+00:00",
       "firstSeen": "2026-03-13T19:44:28.500579+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8346
+      "score": 2.8423
+    },
+    {
+      "title": "1M context is now generally available for Opus 4.6 and Sonnet 4.6",
+      "url": "https://simonwillison.net/2026/Mar/13/1m-context",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "1M context is now generally available for Opus 4.6 and Sonnet 4.6\nHere's what surprised me:\n\nStandard pricing now applies across the full 1M window for both models, with no long-context premium.\n\nOpenAI and Gemini both charge more for prompts where the token count goes above a certain point - 200,000 for Gemini 3.1 Pro and 272,000 for GPT-5.4.\n\n\n    Tags: ai, generative-ai, llms, anthropic, claude, llm-pricing, long-context",
+      "image": "",
+      "published": "2026-03-13T18:29:13+00:00",
+      "firstSeen": "2026-03-13T18:59:15.406515+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 22.3738
+    },
+    {
+      "title": "Elon Musk Is Dipping Into the Rejected Candidates Pile After Admitting xAI 'Was Not Built Right'",
+      "url": "https://gizmodo.com/elon-musk-is-dipping-into-the-rejected-candidates-pile-after-admitting-xai-was-not-built-right-2000733366",
+      "source": "Flipboard AI",
+      "sourceUrl": "https://flipboard.com/topic/artificialintelligence.rss",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "We're all trying to find the guy who did this. Just a few weeks after using his company SpaceX to acquire his AI company xAI, Elon Musk admitted that …",
+      "image": "https://ic-cdn.flipboard.com/gizmodo.com/23da4777c6ae88ad15c6bc11e40518e6657c1801/_xlarge.jpeg",
+      "published": "2026-03-13T18:10:47+00:00",
+      "firstSeen": "2026-03-13T18:59:15.406515+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.728
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -652,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2404
+      "score": 1.241
     },
     {
       "title": "Introducing... Life Without",
@@ -668,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2248
+      "score": 2.2249
     },
     {
       "title": "The Life Scientific: Pierre Friedlingstein",
@@ -684,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-14T12:00:01.787356+00:00",
+      "lastSeen": "2026-03-14T11:35:57.369642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1905
