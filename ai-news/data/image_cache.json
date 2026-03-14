@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-14T13:00:02.026184+00:00",
+  "updatedAt": "2026-03-14T13:13:44.722462+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -776,6 +776,10 @@
     "https://www.marktechpost.com/2026/03/14/garry-tan-releases-gstack-an-open-source-claude-code-system-for-planning-code-review-qa-and-shipping": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-43.png",
       "checkedAt": "2026-03-14T08:51:03.839542+00:00"
+    },
+    "https://techcrunch.com/2026/03/14/how-to-use-the-new-chatgpt-app-integrations-including-doordash-spotify-uber-and-others": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "checkedAt": "2026-03-14T13:13:44.722462+00:00"
     }
   }
 }
