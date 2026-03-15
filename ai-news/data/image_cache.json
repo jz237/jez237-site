@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T14:47:37.928199+00:00",
+  "updatedAt": "2026-03-15T16:00:01.226020+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -844,6 +844,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/893931/ai-companies-handshake-improv-actors-training-data": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268402_AI_companies_want_to_harvest_improv_actors_skills_to_train_large_AI_models_on_human_emotion_and_tone_CVirginia.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-15T14:47:37.928199+00:00"
+    },
+    "https://techcrunch.com/2026/03/15/wiz-investor-unpacks-googles-32b-acquisition": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2161842016.jpg?w=1024",
+      "checkedAt": "2026-03-15T16:00:01.226020+00:00"
     }
   }
 }
