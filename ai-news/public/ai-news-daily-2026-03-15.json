@@ -1,6 +1,23 @@
 {
   "date": "2026-03-15",
-  "updatedAt": "2026-03-15T01:00:01.578243+00:00",
-  "items": [],
+  "updatedAt": "2026-03-15T02:00:01.516572+00:00",
+  "items": [
+    {
+      "title": "How to Build Type-Safe, Schema-Constrained, and Function-Driven LLM Pipelines Using Outlines and Pydantic",
+      "url": "https://www.marktechpost.com/2026/03/14/how-to-build-type-safe-schema-constrained-and-function-driven-llm-pipelines-using-outlines-and-pydantic",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build a workflow using Outlines to generate structured and type-safe outputs from language models. We work with typed constraints like Literal, int, and bool, and design prompt templates using outlines.Template, and enforce strict schema validation with Pydantic models. We also implement robust JSON recovery and a function-calling style that generates validated [&#8230;]\nThe post How to Build Type-Safe, Schema-Constrained, and Function-Driven LLM Pipelines Using Outlines and Pydantic appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-5.png",
+      "published": "2026-03-15T01:33:18+00:00",
+      "firstSeen": "2026-03-15T02:00:01.516572+00:00",
+      "lastSeen": "2026-03-15T02:00:01.516572+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3065
+    }
+  ],
   "errors": []
 }
