@@ -1,6 +1,6 @@
 {
   "date": "2026-03-15",
-  "updatedAt": "2026-03-15T16:00:01.226020+00:00",
+  "updatedAt": "2026-03-15T15:41:53.801998+00:00",
   "items": [
     {
       "title": "Zhipu AI Introduces GLM-OCR: A 0.9B Multimodal OCR Model for Document Parsing and Key Information Extraction (KIE)",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-15-at-12.57.34-AM-1-150x150.png",
       "published": "2026-03-15T08:08:01+00:00",
       "firstSeen": "2026-03-15T08:52:43.943247+00:00",
-      "lastSeen": "2026-03-15T16:00:01.226020+00:00",
+      "lastSeen": "2026-03-15T15:41:53.801998+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9041
+      "score": 7.9115
     },
     {
       "title": "LangChain Releases Deep Agents: A Structured Runtime for Planning, Memory, and Context Isolation in Multi-Step AI Agents",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-45.png",
       "published": "2026-03-15T09:07:48+00:00",
       "firstSeen": "2026-03-15T10:00:01.699433+00:00",
-      "lastSeen": "2026-03-15T16:00:01.226020+00:00",
+      "lastSeen": "2026-03-15T15:41:53.801998+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8289
+      "score": 5.8365
     },
     {
       "title": "How to Build Type-Safe, Schema-Constrained, and Function-Driven LLM Pipelines Using Outlines and Pydantic",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-5.png",
       "published": "2026-03-15T01:33:18+00:00",
       "firstSeen": "2026-03-15T02:00:01.516572+00:00",
-      "lastSeen": "2026-03-15T16:00:01.226020+00:00",
+      "lastSeen": "2026-03-15T15:41:53.801998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9564
+      "score": 2.9626
     },
     {
       "title": "Recap: Europe&#8217;s top 10 funding rounds this week (9 -15 March)",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Europes-biggest-funding-rounds.png",
       "published": "2026-03-15T13:02:21+00:00",
       "firstSeen": "2026-03-15T14:00:01.297768+00:00",
-      "lastSeen": "2026-03-15T16:00:01.226020+00:00",
+      "lastSeen": "2026-03-15T15:41:53.801998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7631
+      "score": 2.7717
     },
     {
       "title": "AI companies want to harvest improv actors’ skills to train AI on human emotion",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268402_AI_companies_want_to_harvest_improv_actors_skills_to_train_large_AI_models_on_human_emotion_and_tone_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-15T14:00:00+00:00",
       "firstSeen": "2026-03-15T14:47:37.928199+00:00",
-      "lastSeen": "2026-03-15T16:00:01.226020+00:00",
+      "lastSeen": "2026-03-15T15:41:53.801998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005
+      "score": 2.3093
     },
     {
       "title": "Wiz investor unpacks Google’s $32B acquisition",
@@ -92,11 +92,11 @@
       "summary": "Shardul Shah of Index Ventures walks us through Google's biggest acquisition ever.",
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2161842016.jpg?w=1024",
       "published": "2026-03-15T15:30:33+00:00",
-      "firstSeen": "2026-03-15T16:00:01.226020+00:00",
-      "lastSeen": "2026-03-15T16:00:01.226020+00:00",
+      "firstSeen": "2026-03-15T15:41:53.801998+00:00",
+      "lastSeen": "2026-03-15T15:41:53.801998+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2751
+      "score": 2.2842
     }
   ],
   "errors": []
