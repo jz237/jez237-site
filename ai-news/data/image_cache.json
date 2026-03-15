@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T20:45:00.618344+00:00",
+  "updatedAt": "2026-03-15T21:40:07.081112+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -856,6 +856,10 @@
     "https://www.marktechpost.com/2026/03/15/meet-openviking-an-open-source-context-database-that-brings-filesystem-based-memory-and-retrieval-to-ai-agent-systems-like-openclaw": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-46-1024x731.png",
       "checkedAt": "2026-03-15T18:57:33.104694+00:00"
+    },
+    "https://techcrunch.com/2026/03/15/bytedance-reportedly-pauses-global-launch-of-its-seedance-2-0-video-generator": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/08/GettyImages-1162754481.jpg?resize=1200,801",
+      "checkedAt": "2026-03-15T21:40:07.081112+00:00"
     }
   }
 }
