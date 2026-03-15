@@ -1,6 +1,6 @@
 {
   "date": "2026-03-15",
-  "updatedAt": "2026-03-15T08:52:43.943247+00:00",
+  "updatedAt": "2026-03-15T09:48:04.302071+00:00",
   "items": [
     {
       "title": "Zhipu AI Introduces GLM-OCR: A 0.9B Multimodal OCR Model for Document Parsing and Key Information Extraction (KIE)",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-03-15T08:52:43.943247+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0975
+      "score": 8.0702
     },
     {
       "title": "How to Build Type-Safe, Schema-Constrained, and Function-Driven LLM Pipelines Using Outlines and Pydantic",
@@ -32,8 +32,14 @@
       "lastSeen": "2026-03-15T08:52:43.943247+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1175
+      "score": 3.0948
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
