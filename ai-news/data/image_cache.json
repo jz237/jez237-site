@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T23:00:01.990660+00:00",
+  "updatedAt": "2026-03-15T22:45:49.206055+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -863,11 +863,11 @@
     },
     "https://simonwillison.net/guides/agentic-engineering-patterns/what-is-agentic-engineering": {
       "image": "",
-      "checkedAt": "2026-03-15T23:00:01.990660+00:00"
+      "checkedAt": "2026-03-15T22:45:49.206055+00:00"
     },
     "https://www.marktechpost.com/2026/03/15/a-coding-implementation-to-design-an-enterprise-ai-governance-system-using-openclaw-gateway-policy-engines-approval-workflows-and-auditable-agent-execution": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-47.png",
-      "checkedAt": "2026-03-15T23:00:01.990660+00:00"
+      "checkedAt": "2026-03-15T22:45:49.206055+00:00"
     }
   }
 }
