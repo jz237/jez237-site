@@ -1,6 +1,6 @@
 {
   "date": "2026-03-15",
-  "updatedAt": "2026-03-15T03:00:01.258091+00:00",
+  "updatedAt": "2026-03-15T04:00:01.794706+00:00",
   "items": [
     {
       "title": "How to Build Type-Safe, Schema-Constrained, and Function-Driven LLM Pipelines Using Outlines and Pydantic",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-5.png",
       "published": "2026-03-15T01:33:18+00:00",
       "firstSeen": "2026-03-15T02:00:01.516572+00:00",
-      "lastSeen": "2026-03-15T03:00:01.258091+00:00",
+      "lastSeen": "2026-03-15T04:00:01.794706+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2767
+      "score": 3.2478
     }
   ],
   "errors": []
