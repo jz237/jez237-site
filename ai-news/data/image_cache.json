@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T08:52:43.943247+00:00",
+  "updatedAt": "2026-03-15T10:00:01.699433+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -836,6 +836,10 @@
     "https://www.marktechpost.com/2026/03/14/how-to-build-type-safe-schema-constrained-and-function-driven-llm-pipelines-using-outlines-and-pydantic": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-5.png",
       "checkedAt": "2026-03-15T02:00:01.516572+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/15/langchain-releases-deep-agents-a-structured-runtime-for-planning-memory-and-context-isolation-in-multi-step-ai-agents": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-45.png",
+      "checkedAt": "2026-03-15T10:00:01.699433+00:00"
     }
   }
 }
