@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T13:00:01.516440+00:00",
+  "updatedAt": "2026-03-16T13:51:58.375292+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -892,6 +892,18 @@
     "https://www.techrepublic.com/article/news-truecaller-family-protection-phone-scams": {
       "image": "https://assets.techrepublic.com/uploads/2024/10/tr_20241021-australia-new-scam-prevention-laws.jpg",
       "checkedAt": "2026-03-16T13:00:01.516440+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/16/1133979/nurturing-agentic-ai-beyond-the-toddler-stage": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MITTRI-Intel-iStock-2241096601.jpg?resize=1200,600",
+      "checkedAt": "2026-03-16T13:51:58.375292+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/894587/fly-brain-computer-upload": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-13-at-17.18.37.png?quality=90&amp;strip=all&amp;crop=0,11.266793642117,100,77.466412715766",
+      "checkedAt": "2026-03-16T13:51:58.375292+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-gtc-2026-live-updates": {
+      "image": "",
+      "checkedAt": "2026-03-16T13:51:58.375292+00:00"
     }
   }
 }
