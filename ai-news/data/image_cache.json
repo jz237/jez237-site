@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T21:52:48.382497+00:00",
+  "updatedAt": "2026-03-16T23:00:01.238652+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1008,6 +1008,18 @@
     "https://www.together.ai/blog/together-ai-at-nvidia-gtc-2026": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b83a0d79830bb1f27bc4f3_IMG_2577.png",
       "checkedAt": "2026-03-16T21:52:48.382497+00:00"
+    },
+    "https://techcrunch.com/2026/03/16/nvidias-version-of-openclaw-could-solve-its-biggest-problem-security": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-getty.jpg?resize=1200,781",
+      "checkedAt": "2026-03-16T23:00:01.238652+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/physical-ai-for-healthcare-robotics": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/physical-ai-for-healthcare-robotics.png",
+      "checkedAt": "2026-03-16T23:00:01.238652+00:00"
+    },
+    "https://www.theverge.com/news/895472/nvidia-dlss5-generative-ai-pc-graphics": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/grokashcroft.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.752036702561%2C100%2C78.495926594877&amp;w=1200",
+      "checkedAt": "2026-03-16T23:00:01.238652+00:00"
     }
   }
 }
