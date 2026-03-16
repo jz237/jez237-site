@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T11:55:12.746974+00:00",
+  "updatedAt": "2026-03-16T13:00:01.516440+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -888,6 +888,10 @@
     "https://www.technologyreview.com/2026/03/16/1134287/securing-digital-assets-against-future-threats": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/1R8A6235.jpg?resize=1200,600",
       "checkedAt": "2026-03-16T11:55:12.746974+00:00"
+    },
+    "https://www.techrepublic.com/article/news-truecaller-family-protection-phone-scams": {
+      "image": "https://assets.techrepublic.com/uploads/2024/10/tr_20241021-australia-new-scam-prevention-laws.jpg",
+      "checkedAt": "2026-03-16T13:00:01.516440+00:00"
     }
   }
 }
