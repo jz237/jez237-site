@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T13:51:58.375292+00:00",
+  "updatedAt": "2026-03-16T15:00:01.420584+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -904,6 +904,14 @@
     "https://www.techrepublic.com/article/news-nvidia-gtc-2026-live-updates": {
       "image": "",
       "checkedAt": "2026-03-16T13:51:58.375292+00:00"
+    },
+    "https://techcrunch.com/2026/03/16/nvidia-gtc-how-to-watch-jensen-huang-2026-keynote": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761844.jpg?resize=1200,846",
+      "checkedAt": "2026-03-16T15:00:01.420584+00:00"
+    },
+    "https://simonwillison.net/guides/agentic-engineering-patterns/how-coding-agents-work": {
+      "image": "",
+      "checkedAt": "2026-03-16T15:00:01.420584+00:00"
     }
   }
 }
