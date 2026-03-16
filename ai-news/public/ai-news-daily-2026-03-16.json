@@ -1,6 +1,6 @@
 {
   "date": "2026-03-16",
-  "updatedAt": "2026-03-16T19:00:01.872308+00:00",
+  "updatedAt": "2026-03-16T20:00:01.345138+00:00",
   "items": [
     {
       "title": "How coding agents work",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-03-16T14:01:41+00:00",
       "firstSeen": "2026-03-16T15:00:01.420584+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 26.6481
+      "score": 26.6218
     },
     {
       "title": "Encyclopedia Britannica and Merriam-Webster sue OpenAI, claiming ChatGPT cannibalises nearly 100,000 of their articles",
@@ -30,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI.png",
       "published": "2026-03-16T14:54:40+00:00",
       "firstSeen": "2026-03-16T17:00:01.118568+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3319
+      "score": 11.305
     },
     {
       "title": "Encyclopedia Britannica is suing OpenAI for allegedly ‘memorizing’ its content with ChatGPT",
@@ -46,10 +46,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-141320386.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-03-16T17:04:06+00:00",
       "firstSeen": "2026-03-16T17:15:48.119646+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3025
+      "score": 11.274
+    },
+    {
+      "title": "Elon Musk’s xAI faces child porn lawsuit from minors Grok allegedly undressed",
+      "url": "https://techcrunch.com/2026/03/16/elon-musks-xai-faces-child-porn-lawsuit-from-minors-grok-allegedly-undressed",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The three plaintiffs are seeking to represent anyone who had real images of them as a minor altered into sexual content by Grok.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200%2C800",
+      "published": "2026-03-16T19:18:44+00:00",
+      "firstSeen": "2026-03-16T19:54:28.599006+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2692
     },
     {
       "title": "OpenAI&#8217;s adult mode will reportedly be smutty, not pornographic",
@@ -62,10 +78,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25313355/STK464_PORN_ADULT_CONTENT_2A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-03-16T11:18:20+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2483
+      "score": 11.224
     },
     {
       "title": "Where OpenAI’s technology could show up in Iran",
@@ -78,10 +94,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/open-ai-dow.jpg?resize=1200%2C600",
       "published": "2026-03-16T17:06:21+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3336
+      "score": 6.305
     },
     {
       "title": "Moonshot AI Releases 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏 𝑹𝒆𝒔𝒊𝒅𝒖𝒂𝒍𝒔 to Replace Fixed Residual Mixing with Depth-Wise Attention for Better Scaling in Transformers",
@@ -94,10 +110,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-15-at-11.45.00-PM-1-150x150.png",
       "published": "2026-03-16T06:48:39+00:00",
       "firstSeen": "2026-03-16T07:00:01.634462+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.104
+      "score": 6.0826
     },
     {
       "title": "The dictionary sues OpenAI",
@@ -110,10 +126,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/01/GettyImages-161933989_0ebda8.jpg?resize=1200%2C750",
       "published": "2026-03-16T17:38:34+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5493
+      "score": 5.5203
     },
     {
       "title": "How to watch Jensen Huang’s Nvidia GTC 2026 keynote — and what to expect",
@@ -126,10 +142,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761844.jpg?resize=1200%2C846",
       "published": "2026-03-16T17:51:46+00:00",
       "firstSeen": "2026-03-16T15:00:01.420584+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4558
+      "score": 5.4266
     },
     {
       "title": "IBM AI Releases Granite 4.0 1B Speech as a Compact Multilingual Speech Model for Edge AI and Translation Pipelines",
@@ -142,10 +158,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-48.png",
       "published": "2026-03-16T04:57:26+00:00",
       "firstSeen": "2026-03-16T05:00:01.598152+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4147
+      "score": 5.3943
     },
     {
       "title": "Nurturing agentic AI beyond the toddler stage",
@@ -158,10 +174,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MITTRI-Intel-iStock-2241096601.jpg?resize=1200%2C600",
       "published": "2026-03-16T13:00:00+00:00",
       "firstSeen": "2026-03-16T13:51:58.375292+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1711
+      "score": 5.1456
     },
     {
       "title": "WhiteBridge AI raises $3M seed round",
@@ -174,26 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/WhiteBridge-AI-raises-3M-seed-round.png",
       "published": "2026-03-16T10:31:53+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T20:00:01.345138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0194
-    },
-    {
-      "title": "Chrome Is Finally Coming to ARM64 Linux Devices in 2026",
-      "url": "https://www.techrepublic.com/article/news-google-chrome-arm64-linux-support-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google says Chrome will launch for ARM64 Linux in Q2 2026, bringing native support, Chrome sync, and easier installs on Nvidia DGX Spark.\nThe post Chrome Is Finally Coming to ARM64 Linux Devices in 2026 appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/rubaitul-azad-kfuSP6TgnbQ-unsplash-1.jpg",
-      "published": "2026-03-16T17:49:19+00:00",
-      "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.9146
+      "score": 3.9956
     }
   ],
   "errors": []
