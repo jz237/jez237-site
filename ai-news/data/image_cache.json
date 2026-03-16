@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T05:55:07.070090+00:00",
+  "updatedAt": "2026-03-16T07:00:01.634462+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -876,6 +876,10 @@
     "https://www.marktechpost.com/2026/03/15/ibm-ai-releases-granite-4-0-1b-speech-as-a-compact-multilingual-speech-model-for-edge-ai-and-translation-pipelines": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-48.png",
       "checkedAt": "2026-03-16T05:00:01.598152+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/03/260315004355.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/lightbulb-creativity-explosion.webp",
+      "checkedAt": "2026-03-16T07:00:01.634462+00:00"
     }
   }
 }
