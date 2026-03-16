@@ -1,6 +1,38 @@
 {
-  "updatedAt": "2026-03-16T19:00:01.872308+00:00",
+  "updatedAt": "2026-03-16T19:18:57.453745+00:00",
   "items": [
+    {
+      "title": "Elon Musk’s xAI faces child porn lawsuit from minors Grok allegedly undressed",
+      "url": "https://techcrunch.com/2026/03/16/elon-musks-xai-faces-child-porn-lawsuit-from-minors-grok-allegedly-undressed",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The three plaintiffs are seeking to represent anyone who had real images of them as a minors altered into sexual content by Grok.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200%2C800",
+      "published": "2026-03-16T19:18:44+00:00",
+      "firstSeen": "2026-03-16T19:18:57.453745+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2899
+    },
+    {
+      "title": "Nvidia’s DLSS 5 uses generative AI to boost photo-realism in video games, with ambitions beyond gaming",
+      "url": "https://techcrunch.com/2026/03/16/nvidias-dlss-5-uses-generative-ai-to-boost-photo-realism-in-video-games-with-ambitions-beyond-gaming",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Nvidia’s new DLSS 5 uses generative AI and structured graphics data to make video games more realistic. CEO Jensen Huang says the approach could eventually spread to other industries.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/nvidia-gtc-2025-glss-5.png?resize=1200%2C671",
+      "published": "2026-03-16T19:12:19+00:00",
+      "firstSeen": "2026-03-16T19:18:57.453745+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3866
+    },
     {
       "title": "Google Simplifies Pixel 10 Pro’s 100x Zoom Branding With New Name",
       "url": "https://www.techrepublic.com/article/google-pixel-10-pro-pro-zoom-name-change",
@@ -12,10 +44,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-11.jpg",
       "published": "2026-03-16T17:59:58+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2198
+      "score": 3.2105
     },
     {
       "title": "How to watch Jensen Huang’s Nvidia GTC 2026 keynote — and what to expect",
@@ -28,10 +60,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761844.jpg?resize=1200%2C846",
       "published": "2026-03-16T17:51:46+00:00",
       "firstSeen": "2026-03-16T15:00:01.420584+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4558
+      "score": 5.4465
     },
     {
       "title": "Chrome Is Finally Coming to ARM64 Linux Devices in 2026",
@@ -44,10 +76,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/rubaitul-azad-kfuSP6TgnbQ-unsplash-1.jpg",
       "published": "2026-03-16T17:49:19+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9146
+      "score": 3.9053
     },
     {
       "title": "Another deep tech chip startup becomes a unicorn: Frore hits $1.64B",
@@ -60,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-1158546750-e1738235238998.jpg?resize=1200%2C801",
       "published": "2026-03-16T17:47:32+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2537
+      "score": 2.2444
     },
     {
       "title": "Fuse raises $25M  to disrupt aging loan origination systems used by US credit unions",
@@ -76,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/fuse.png?resize=1200%2C675",
       "published": "2026-03-16T17:43:27+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2517
+      "score": 2.2424
     },
     {
       "title": "The dictionary sues OpenAI",
@@ -92,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/01/GettyImages-161933989_0ebda8.jpg?resize=1200%2C750",
       "published": "2026-03-16T17:38:34+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5493
+      "score": 5.54
     },
     {
       "title": "Where OpenAI’s technology could show up in Iran",
@@ -108,10 +140,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/open-ai-dow.jpg?resize=1200%2C600",
       "published": "2026-03-16T17:06:21+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3336
+      "score": 6.3245
     },
     {
       "title": "Encyclopedia Britannica is suing OpenAI for allegedly ‘memorizing’ its content with ChatGPT",
@@ -124,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-141320386.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-03-16T17:04:06+00:00",
       "firstSeen": "2026-03-16T17:15:48.119646+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3025
+      "score": 11.2934
     },
     {
       "title": "Yahoo CEO Jim Lanzone on reviving the web&#8217;s homepage",
@@ -140,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD-20260316-Lanzone.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-16T15:00:00+00:00",
       "firstSeen": "2026-03-16T15:16:35.787161+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6443
+      "score": 3.6357
     },
     {
       "title": "Encyclopedia Britannica and Merriam-Webster sue OpenAI, claiming ChatGPT cannibalises nearly 100,000 of their articles",
@@ -156,10 +188,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI.png",
       "published": "2026-03-16T14:54:40+00:00",
       "firstSeen": "2026-03-16T17:00:01.118568+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3319
+      "score": 11.3233
     },
     {
       "title": "How coding agents work",
@@ -172,11 +204,11 @@
       "image": "",
       "published": "2026-03-16T14:01:41+00:00",
       "firstSeen": "2026-03-16T15:00:01.420584+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 26.6481
+      "score": 26.6397
     },
     {
       "title": "Oxford Medical Simulation secures £5M growth financing",
@@ -189,10 +221,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Oxford-Medical-Simulation-secures-5M-growth-financing.png",
       "published": "2026-03-16T13:16:45+00:00",
       "firstSeen": "2026-03-16T13:51:58.375292+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6884
+      "score": 2.6802
     },
     {
       "title": "Nurturing agentic AI beyond the toddler stage",
@@ -205,10 +237,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MITTRI-Intel-iStock-2241096601.jpg?resize=1200%2C600",
       "published": "2026-03-16T13:00:00+00:00",
       "firstSeen": "2026-03-16T13:51:58.375292+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1711
+      "score": 5.163
     },
     {
       "title": "This is not a fly uploaded to a computer",
@@ -221,10 +253,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-13-at-17.18.37.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.266793642117%2C100%2C77.466412715766",
       "published": "2026-03-16T12:49:07+00:00",
       "firstSeen": "2026-03-16T13:51:58.375292+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1864
+      "score": 2.1784
     },
     {
       "title": "Nvidia GTC 2026 Live Blog: Jensen Huang’s Keynote, Hardware Reveals, and More AI News",
@@ -237,10 +269,10 @@
       "image": "",
       "published": "2026-03-16T12:42:42+00:00",
       "firstSeen": "2026-03-16T13:51:58.375292+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0737
+      "score": 3.0656
     },
     {
       "title": "Meta commits up to $27 billion to Nebius in one of the largest AI infrastructure deals on record",
@@ -253,10 +285,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Meta-commits-up-to-27-billion-to-Nebius-.png",
       "published": "2026-03-16T12:41:44+00:00",
       "firstSeen": "2026-03-16T13:51:58.375292+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9733
+      "score": 1.9652
     },
     {
       "title": "Truecaller Gives Families a Way to Stop Scam Calls Remotely",
@@ -269,10 +301,10 @@
       "image": "https://assets.techrepublic.com/uploads/2024/10/tr_20241021-australia-new-scam-prevention-laws.jpg",
       "published": "2026-03-16T12:03:40+00:00",
       "firstSeen": "2026-03-16T13:00:01.516440+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0571
+      "score": 3.0492
     },
     {
       "title": "OpenAI&#8217;s adult mode will reportedly be smutty, not pornographic",
@@ -285,10 +317,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25313355/STK464_PORN_ADULT_CONTENT_2A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-03-16T11:18:20+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2483
+      "score": 11.2406
     },
     {
       "title": "Most marketing agencies are held together by duct tape. GoHighLevel wants to fix that.",
@@ -301,10 +333,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TNW-GoHighlevel-deal.png",
       "published": "2026-03-16T11:18:13+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1617
+      "score": -1.1695
     },
     {
       "title": "Securing digital assets against future threats",
@@ -317,10 +349,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/1R8A6235.jpg?resize=1200%2C600",
       "published": "2026-03-16T11:00:00+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0708
+      "score": 2.0631
     },
     {
       "title": "Italian AI startup Alomana raises €4M to bring autonomous workflows to the enterprise",
@@ -336,7 +368,7 @@
       "lastSeen": "2026-03-16T13:00:01.516440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6259
+      "score": 2.6182
     },
     {
       "title": "WhiteBridge AI raises $3M seed round",
@@ -349,10 +381,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/WhiteBridge-AI-raises-3M-seed-round.png",
       "published": "2026-03-16T10:31:53+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0194
+      "score": 4.0118
     },
     {
       "title": "Models Are Applying to Be the Face of AI Scams",
@@ -365,10 +397,10 @@
       "image": "https://media.wired.com/photos/699f5d34a7cb1833c2431617/master/pass/Models-Applying-to-Be-Face-of-AI-Scams-Security-115921890.jpg",
       "published": "2026-03-16T09:00:00+00:00",
       "firstSeen": "2026-03-16T09:11:34.828738+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1232
+      "score": 3.1159
     },
     {
       "title": "NVIDIA GTC 2026 opens today",
@@ -381,10 +413,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NVIDIA-GTC-2026.png",
       "published": "2026-03-16T08:42:21+00:00",
       "firstSeen": "2026-03-16T10:15:09.693731+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5764
+      "score": 3.5692
     },
     {
       "title": "Moonshot AI Releases 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏 𝑹𝒆𝒔𝒊𝒅𝒖𝒂𝒍𝒔 to Replace Fixed Residual Mixing with Depth-Wise Attention for Better Scaling in Transformers",
@@ -397,10 +429,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-15-at-11.45.00-PM-1-150x150.png",
       "published": "2026-03-16T06:48:39+00:00",
       "firstSeen": "2026-03-16T07:00:01.634462+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.104
+      "score": 6.0972
     },
     {
       "title": "IBM AI Releases Granite 4.0 1B Speech as a Compact Multilingual Speech Model for Edge AI and Translation Pipelines",
@@ -413,10 +445,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-48.png",
       "published": "2026-03-16T04:57:26+00:00",
       "firstSeen": "2026-03-16T05:00:01.598152+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4147
+      "score": 5.4082
     },
     {
       "title": "Scientists discover AI can make humans more creative",
@@ -429,10 +461,10 @@
       "image": "https://www.sciencedaily.com/images/1920/lightbulb-creativity-explosion.webp",
       "published": "2026-03-16T00:59:26+00:00",
       "firstSeen": "2026-03-16T07:00:01.634462+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 0.587
+      "score": 0.5812
     },
     {
       "title": "Google, Accel India accelerator chooses 5 startups and none are ‘AI wrappers’",
@@ -445,10 +477,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/Copy-of-Prayank-Swaroop.jpg?resize=1200%2C800",
       "published": "2026-03-16T00:30:00+00:00",
       "firstSeen": "2026-03-16T01:00:01.809048+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.948
+      "score": 2.9422
     },
     {
       "title": "Why Codex Security Doesn’t Include a SAST Report",
@@ -461,10 +493,10 @@
       "image": "",
       "published": "2026-03-16T00:00:00+00:00",
       "firstSeen": "2026-03-16T17:15:48.119646+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7489
+      "score": 3.7432
     },
     {
       "title": "What is agentic engineering?",
@@ -477,11 +509,11 @@
       "image": "",
       "published": "2026-03-15T22:41:57+00:00",
       "firstSeen": "2026-03-15T22:45:49.206055+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 25.6159
+      "score": 25.6104
     },
     {
       "title": "A Coding Implementation to Design an Enterprise AI Governance System Using OpenClaw Gateway Policy Engines, Approval Workflows and Auditable Agent Execution",
@@ -494,10 +526,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-47.png",
       "published": "2026-03-15T22:12:45+00:00",
       "firstSeen": "2026-03-15T22:45:49.206055+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3375
+      "score": 9.3321
     },
     {
       "title": "ByteDance reportedly pauses global launch of its Seedance 2.0 video generator",
@@ -510,10 +542,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/08/GettyImages-1162754481.jpg?resize=1200%2C801",
       "published": "2026-03-15T21:01:51+00:00",
       "firstSeen": "2026-03-15T21:40:07.081112+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4875
+      "score": 2.4823
     },
     {
       "title": "Lawyer behind AI psychosis cases warns of mass casualty risks",
@@ -526,10 +558,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-509750426.jpg?resize=1200%2C800",
       "published": "2026-03-15T18:49:32+00:00",
       "firstSeen": "2026-03-15T18:57:33.104694+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.752
+      "score": 1.7471
     },
     {
       "title": "Meet OpenViking: An Open-Source Context Database that Brings Filesystem-Based Memory and Retrieval to AI Agent Systems like OpenClaw",
@@ -542,10 +574,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-46-1024x731.png",
       "published": "2026-03-15T18:49:21+00:00",
       "firstSeen": "2026-03-15T18:57:33.104694+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.782
+      "score": 4.7771
     },
     {
       "title": "Google, Microsoft, Amazon, and Others Unite Under New Anti-Scam Pact",
@@ -558,10 +590,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_eg622peg622peg62.jpg",
       "published": "2026-03-15T17:10:55+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6869
+      "score": 4.6823
     },
     {
       "title": "Wiz investor unpacks Google’s $32B acquisition",
@@ -574,10 +606,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2161842016.jpg?w=1024",
       "published": "2026-03-15T15:30:33+00:00",
       "firstSeen": "2026-03-15T15:41:53.801998+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7026
+      "score": 1.6981
     },
     {
       "title": "AI companies want to harvest improv actors’ skills to train AI on human emotion",
@@ -590,10 +622,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268402_AI_companies_want_to_harvest_improv_actors_skills_to_train_large_AI_models_on_human_emotion_and_tone_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-15T14:00:00+00:00",
       "firstSeen": "2026-03-15T14:47:37.928199+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7515
+      "score": 1.7472
     },
     {
       "title": "Recap: Europe&#8217;s top 10 funding rounds this week (9 -15 March)",
@@ -606,42 +638,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Europes-biggest-funding-rounds.png",
       "published": "2026-03-15T13:02:21+00:00",
       "firstSeen": "2026-03-15T14:00:01.297768+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2286
-    },
-    {
-      "title": "LangChain Releases Deep Agents: A Structured Runtime for Planning, Memory, and Context Isolation in Multi-Step AI Agents",
-      "url": "https://www.marktechpost.com/2026/03/15/langchain-releases-deep-agents-a-structured-runtime-for-planning-memory-and-context-isolation-in-multi-step-ai-agents",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Most LLM agents work well for short tool-calling loops but start to break down when the task becomes multi-step, stateful, and artifact-heavy. LangChain’s Deep Agents is designed for that gap. The project is described by LangChain as an &#8216;agent harness&#8216;: a standalone library built on top of LangChain’s agent building blocks and powered by the [&#8230;]\nThe post LangChain Releases Deep Agents: A Structured Runtime for Planning, Memory, and Context Isolation in Multi-Step AI Agents appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-45.png",
-      "published": "2026-03-15T09:07:48+00:00",
-      "firstSeen": "2026-03-15T10:00:01.699433+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 5.3493
-    },
-    {
-      "title": "Zhipu AI Introduces GLM-OCR: A 0.9B Multimodal OCR Model for Document Parsing and Key Information Extraction (KIE)",
-      "url": "https://www.marktechpost.com/2026/03/15/zhipu-ai-introduces-glm-ocr-a-0-9b-multimodal-ocr-model-for-document-parsing-and-key-information-extraction-kie",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Why Document OCR Still Remains a Hard Engineering Problem? What does it take to make OCR useful for real documents instead of clean demo images? And can a compact multimodal model handle parsing, tables, formulas, and structured extraction without turning inference into a resource bonfire? That is the problem targeted by GLM-OCR, introduced by researchers [&#8230;]\nThe post Zhipu AI Introduces GLM-OCR: A 0.9B Multimodal OCR Model for Document Parsing and Key Information Extraction (KIE) appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-15-at-12.57.34-AM-1-150x150.png",
-      "published": "2026-03-15T08:08:01+00:00",
-      "firstSeen": "2026-03-15T08:52:43.943247+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.4376
+      "score": 2.2244
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2009
+      "score": 1.2008
     },
     {
       "title": "Introducing... Life Without",
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.221
@@ -686,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-02T21:00:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-16T19:00:01.872308+00:00",
+      "lastSeen": "2026-03-16T19:18:57.453745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901
