@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T03:31:57.346298+00:00",
+  "updatedAt": "2026-03-16T05:00:01.598152+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -872,6 +872,10 @@
     "https://techcrunch.com/2026/03/15/google-and-accel-cut-through-wrappers-in-4000-ai-startup-pitches-to-pick-five-tied-to-india": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/Copy-of-Prayank-Swaroop.jpg?resize=1200,800",
       "checkedAt": "2026-03-16T01:00:01.809048+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/15/ibm-ai-releases-granite-4-0-1b-speech-as-a-compact-multilingual-speech-model-for-edge-ai-and-translation-pipelines": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-48.png",
+      "checkedAt": "2026-03-16T05:00:01.598152+00:00"
     }
   }
 }
