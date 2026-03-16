@@ -1,6 +1,6 @@
 {
   "date": "2026-03-16",
-  "updatedAt": "2026-03-16T09:11:34.828738+00:00",
+  "updatedAt": "2026-03-16T11:00:01.288753+00:00",
   "items": [
     {
       "title": "Moonshot AI Releases 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏 𝑹𝒆𝒔𝒊𝒅𝒖𝒂𝒍𝒔 to Replace Fixed Residual Mixing with Depth-Wise Attention for Better Scaling in Transformers",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-15-at-11.45.00-PM-1-150x150.png",
       "published": "2026-03-16T06:48:39+00:00",
       "firstSeen": "2026-03-16T07:00:01.634462+00:00",
-      "lastSeen": "2026-03-16T09:11:34.828738+00:00",
+      "lastSeen": "2026-03-16T11:00:01.288753+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3496
+      "score": 6.2992
     },
     {
       "title": "IBM AI Releases Granite 4.0 1B Speech as a Compact Multilingual Speech Model for Edge AI and Translation Pipelines",
@@ -29,10 +29,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-48.png",
       "published": "2026-03-16T04:57:26+00:00",
       "firstSeen": "2026-03-16T05:00:01.598152+00:00",
-      "lastSeen": "2026-03-16T09:11:34.828738+00:00",
+      "lastSeen": "2026-03-16T11:00:01.288753+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6479
+      "score": 5.6
+    },
+    {
+      "title": "NVIDIA GTC 2026 opens today",
+      "url": "https://thenextweb.com/news/nvidia-gtc-2026-opens-today",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "NVIDIA’s GTC 2026 opens in San Jose today with 30,000 attendees, a keynote at the SAP Center, and announcements that could reshape the next two years of AI infrastructure, from Vera Rubin deep-dives to an enterprise agent platform and a gigawatt deal with Mira Murati’s startup.  San Jose goes green every March. The city’s convention [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NVIDIA-GTC-2026.png",
+      "published": "2026-03-16T08:42:21+00:00",
+      "firstSeen": "2026-03-16T11:00:01.288753+00:00",
+      "lastSeen": "2026-03-16T11:00:01.288753+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.7821
     },
     {
       "title": "‘100 Video Calls Per Day’: Models Are Applying to Be the Face of AI Scams",
@@ -45,10 +61,10 @@
       "image": "https://media.wired.com/photos/699f5d34a7cb1833c2431617/master/pass/Models-Applying-to-Be-Face-of-AI-Scams-Security-115921890.jpg",
       "published": "2026-03-16T09:00:00+00:00",
       "firstSeen": "2026-03-16T09:11:34.828738+00:00",
-      "lastSeen": "2026-03-16T09:11:34.828738+00:00",
+      "lastSeen": "2026-03-16T11:00:01.288753+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3841
+      "score": 3.3305
     },
     {
       "title": "Google, Accel India accelerator chooses 5 startups and none are ‘AI wrappers’",
@@ -61,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/03/Copy-of-Prayank-Swaroop.jpg?resize=1200%2C800",
       "published": "2026-03-16T00:30:00+00:00",
       "firstSeen": "2026-03-16T01:00:01.809048+00:00",
-      "lastSeen": "2026-03-16T09:11:34.828738+00:00",
+      "lastSeen": "2026-03-16T11:00:01.288753+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.154
+      "score": 3.1117
     },
     {
       "title": "Scientists discover AI can make humans more creative",
@@ -77,10 +93,10 @@
       "image": "https://www.sciencedaily.com/images/1920/lightbulb-creativity-explosion.webp",
       "published": "2026-03-16T00:59:26+00:00",
       "firstSeen": "2026-03-16T07:00:01.634462+00:00",
-      "lastSeen": "2026-03-16T09:11:34.828738+00:00",
+      "lastSeen": "2026-03-16T11:00:01.288753+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 0.7959
+      "score": 0.753
     }
   ],
   "errors": []
