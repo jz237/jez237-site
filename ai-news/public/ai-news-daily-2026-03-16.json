@@ -1,6 +1,23 @@
 {
   "date": "2026-03-16",
-  "updatedAt": "2026-03-16T00:00:01.743510+00:00",
-  "items": [],
+  "updatedAt": "2026-03-16T01:00:01.809048+00:00",
+  "items": [
+    {
+      "title": "Google, Accel India accelerator choses 5 startups and none are ‘AI wrappers’",
+      "url": "https://techcrunch.com/2026/03/15/google-and-accel-cut-through-wrappers-in-4000-ai-startup-pitches-to-pick-five-tied-to-india",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google and Accel say about 70% of AI startup pitches tied to India were \"wrappers\" as they reviewed more than 4,000 applications for their Atoms cohort.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/Copy-of-Prayank-Swaroop.jpg?resize=1200%2C800",
+      "published": "2026-03-16T00:30:00+00:00",
+      "firstSeen": "2026-03-16T01:00:01.809048+00:00",
+      "lastSeen": "2026-03-16T01:00:01.809048+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3748
+    }
+  ],
   "errors": []
 }
