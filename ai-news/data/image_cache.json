@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T15:00:01.420584+00:00",
+  "updatedAt": "2026-03-16T16:00:01.466816+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -912,6 +912,10 @@
     "https://simonwillison.net/guides/agentic-engineering-patterns/how-coding-agents-work": {
       "image": "",
       "checkedAt": "2026-03-16T15:00:01.420584+00:00"
+    },
+    "https://www.theverge.com/podcast/895221/yahoo-jim-lanzone-scout-ai-sports-finance-open-web": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD-20260316-Lanzone.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-16T16:00:01.466816+00:00"
     }
   }
 }
