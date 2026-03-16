@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T23:41:24.202985+00:00",
+  "updatedAt": "2026-03-16T01:00:01.809048+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -868,6 +868,10 @@
     "https://www.marktechpost.com/2026/03/15/a-coding-implementation-to-design-an-enterprise-ai-governance-system-using-openclaw-gateway-policy-engines-approval-workflows-and-auditable-agent-execution": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-47.png",
       "checkedAt": "2026-03-15T22:45:49.206055+00:00"
+    },
+    "https://techcrunch.com/2026/03/15/google-and-accel-cut-through-wrappers-in-4000-ai-startup-pitches-to-pick-five-tied-to-india": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/Copy-of-Prayank-Swaroop.jpg?resize=1200,800",
+      "checkedAt": "2026-03-16T01:00:01.809048+00:00"
     }
   }
 }
