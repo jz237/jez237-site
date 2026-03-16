@@ -1,6 +1,6 @@
 {
   "date": "2026-03-16",
-  "updatedAt": "2026-03-16T22:49:28.178272+00:00",
+  "updatedAt": "2026-03-16T23:41:01.108787+00:00",
   "items": [
     {
       "title": "How coding agents work",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-03-16T14:01:41+00:00",
       "firstSeen": "2026-03-16T15:00:01.420584+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 26.5515
+      "score": 26.5312
     },
     {
       "title": "Mistral AI Releases Mistral Small 4: A 119B-Parameter MoE Model that Unifies Instruct, Reasoning, and Multimodal Workloads",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-16-at-3.39.09-PM-1-150x150.png",
       "published": "2026-03-16T22:48:59+00:00",
       "firstSeen": "2026-03-16T22:49:28.178272+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.1198
+      "score": 21.0938
     },
     {
       "title": "Coding agents for data analysis",
@@ -47,10 +47,10 @@
       "image": "https://static.simonwillison.net/static/2026/tree-sql-map.jpg",
       "published": "2026-03-16T20:12:32+00:00",
       "firstSeen": "2026-03-16T20:55:27.294405+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.0129
+      "score": 17.9888
     },
     {
       "title": "Teens sue Elon Musk’s xAI over Grok’s AI-generated CSAM",
@@ -63,10 +63,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STK262_GROK_B_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-16T21:44:11+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3272
+      "score": 11.3021
     },
     {
       "title": "Encyclopedia Britannica and Merriam-Webster sue OpenAI, claiming ChatGPT cannibalises nearly 100,000 of their articles",
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI.png",
       "published": "2026-03-16T14:54:40+00:00",
       "firstSeen": "2026-03-16T17:00:01.118568+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2329
+      "score": 11.2121
     },
     {
       "title": "Encyclopedia Britannica is suing OpenAI for allegedly ‘memorizing’ its content with ChatGPT",
@@ -95,10 +95,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-141320386.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-03-16T17:04:06+00:00",
       "firstSeen": "2026-03-16T17:15:48.119646+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1975
+      "score": 11.1754
     },
     {
       "title": "Elon Musk’s xAI faces child porn lawsuit from minors Grok allegedly undressed",
@@ -111,10 +111,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200%2C800",
       "published": "2026-03-16T19:18:44+00:00",
       "firstSeen": "2026-03-16T19:18:57.453745+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1877
+      "score": 11.1642
     },
     {
       "title": "OpenAI&#8217;s adult mode will reportedly be smutty, not pornographic",
@@ -127,10 +127,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25313355/STK464_PORN_ADULT_CONTENT_2A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-03-16T11:18:20+00:00",
       "firstSeen": "2026-03-16T11:55:12.746974+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1588
+      "score": 11.1399
+    },
+    {
+      "title": "Use subagents and custom agents in Codex",
+      "url": "https://simonwillison.net/2026/Mar/16/codex-subagents",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Use subagents and custom agents in Codex\nSubagents were announced in general availability today for OpenAI Codex, after several weeks of preview behind a feature flag.\nThey're very similar to the Claude Code implementation, with default subagents for \"explorer\", \"worker\" and \"default\". It's unclear to me what the difference between \"worker\" and \"default\" is but based on their CSV example I think \"worker\" is intended for running large numbers of small tasks in parallel.\nCodex also lets you define custom agents as TOML files in ~/.codex/agents/. These can have custom instructions and be assigned",
+      "image": "",
+      "published": "2026-03-16T23:03:56+00:00",
+      "firstSeen": "2026-03-16T23:41:01.108787+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.9713
     },
     {
       "title": "Quoting A member of Anthropic’s alignment-science team",
@@ -143,10 +159,10 @@
       "image": "",
       "published": "2026-03-16T21:38:55+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2547
+      "score": 9.2295
     },
     {
       "title": "Warren presses Pentagon over decision to grant xAI access to classified networks",
@@ -159,10 +175,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2265791303.jpg?w=1024",
       "published": "2026-03-16T20:58:36+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.235
+      "score": 9.2103
     },
     {
       "title": "Where OpenAI’s technology could show up in Iran",
@@ -175,26 +191,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/open-ai-dow.jpg?resize=1200%2C600",
       "published": "2026-03-16T17:06:21+00:00",
       "firstSeen": "2026-03-16T19:00:01.872308+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
+      "lastSeen": "2026-03-16T23:41:01.108787+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2284
-    },
-    {
-      "title": "Moonshot AI Releases 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏 𝑹𝒆𝒔𝒊𝒅𝒖𝒂𝒍𝒔 to Replace Fixed Residual Mixing with Depth-Wise Attention for Better Scaling in Transformers",
-      "url": "https://www.marktechpost.com/2026/03/15/moonshot-ai-releases-%f0%9d%91%a8%f0%9d%92%95%f0%9d%92%95%f0%9d%92%86%f0%9d%92%8f%f0%9d%92%95%f0%9d%92%8a%f0%9d%92%90%f0%9d%92%8f-%f0%9d%91%b9%f0%9d%92%86%f0%9d%92%94%f0%9d%92%8a%f0%9d%92%85",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Residual connections are one of the least questioned parts of modern Transformer design. In PreNorm architectures, each layer adds its output back into a running hidden state, which keeps optimization stable and allows deep models to train. Moonshot AI researchers argue that this standard mechanism also introduces a structural problem: all prior layer outputs are [&#8230;]\nThe post Moonshot AI Releases 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏 𝑹𝒆𝒔𝒊𝒅𝒖𝒂𝒍𝒔 to Replace Fixed Residual Mixing with Depth-Wise Attention for Better Scaling in Transformers appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-15-at-11.45.00-PM-1-150x150.png",
-      "published": "2026-03-16T06:48:39+00:00",
-      "firstSeen": "2026-03-16T07:00:01.634462+00:00",
-      "lastSeen": "2026-03-16T22:49:28.178272+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.025
+      "score": 6.2063
     }
   ],
   "errors": []
