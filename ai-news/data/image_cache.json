@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T10:15:09.693731+00:00",
+  "updatedAt": "2026-03-16T11:55:12.746974+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -880,6 +880,14 @@
     "https://www.sciencedaily.com/releases/2026/03/260315004355.htm": {
       "image": "https://www.sciencedaily.com/images/1920/lightbulb-creativity-explosion.webp",
       "checkedAt": "2026-03-16T07:00:01.634462+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/895130/openai-chatgpt-adult-mode-text-smut-written-erotica": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25313355/STK464_PORN_ADULT_CONTENT_2A.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-03-16T11:55:12.746974+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/16/1134287/securing-digital-assets-against-future-threats": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/1R8A6235.jpg?resize=1200,600",
+      "checkedAt": "2026-03-16T11:55:12.746974+00:00"
     }
   }
 }
