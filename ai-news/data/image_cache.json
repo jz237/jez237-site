@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T19:18:37.835055+00:00",
+  "updatedAt": "2026-03-17T20:54:39.002975+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1124,6 +1124,10 @@
     "https://www.techrepublic.com/article/news-openclaw-shadow-ai-agents-enterprise-security-risks": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/OpenClaw.jpg",
       "checkedAt": "2026-03-17T20:00:02.001342+00:00"
+    },
+    "https://openai.com/index/equipping-workers-with-insights-about-compensation": {
+      "image": "",
+      "checkedAt": "2026-03-17T20:54:39.002975+00:00"
     }
   }
 }
