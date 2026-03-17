@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T22:00:01.299558+00:00",
+  "updatedAt": "2026-03-17T21:52:39.850902+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1129,13 +1129,9 @@
       "image": "",
       "checkedAt": "2026-03-17T20:54:39.002975+00:00"
     },
-    "https://simonwillison.net/2026/Mar/17/ken-jin": {
-      "image": "",
-      "checkedAt": "2026-03-17T22:00:01.299558+00:00"
-    },
     "https://techcrunch.com/2026/03/17/mistral-forge-nvidia-gtc-build-your-own-ai-enterprise": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200,800",
-      "checkedAt": "2026-03-17T22:00:01.299558+00:00"
+      "checkedAt": "2026-03-17T21:52:39.850902+00:00"
     }
   }
 }
