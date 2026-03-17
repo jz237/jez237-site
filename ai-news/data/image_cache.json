@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T11:53:01.868942+00:00",
+  "updatedAt": "2026-03-17T13:00:01.757236+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1032,6 +1032,14 @@
     "https://techcrunch.com/2026/03/16/picsart-now-allows-creators-to-hire-ai-assistants-through-agent-marketplace": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "checkedAt": "2026-03-17T05:00:01.938057+00:00"
+    },
+    "https://huggingface.co/blog/Hcompany/holotron-12b": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/682c3e22650f6bbe33bb9d94/ZrDLn6Wer5-TM_okKVmZ2.png",
+      "checkedAt": "2026-03-17T13:00:01.757236+00:00"
+    },
+    "https://simonwillison.net/guides/agentic-engineering-patterns/subagents": {
+      "image": "",
+      "checkedAt": "2026-03-17T13:00:01.757236+00:00"
     }
   }
 }
