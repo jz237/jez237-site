@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T13:48:59.243618+00:00",
+  "updatedAt": "2026-03-17T15:00:01.656917+00:00",
   "items": [
     {
       "title": "Subagents",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-03-17T12:32:28+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7017
+      "score": 6.6674
     },
     {
       "title": "Picsart now allows creators to ‘hire’ AI assistants through agent marketplace",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "published": "2026-03-17T04:01:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5279
+      "score": 6.5008
     },
     {
       "title": "Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-1.37.10-AM-1-150x150.png",
       "published": "2026-03-17T08:37:33+00:00",
       "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2723
+      "score": 6.2415
     },
     {
       "title": "5 Key Takeaways from Jensen Huang’s GTC Keynote: The Rise of the AI ‘Token Factory’",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-03-17T13:02:54+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2268
+      "score": 5.1919
     },
     {
       "title": "Holotron-12B - High Throughput Computer Use Agent",
@@ -77,10 +77,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/682c3e22650f6bbe33bb9d94/ZrDLn6Wer5-TM_okKVmZ2.png",
       "published": "2026-03-17T12:33:39+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0923
+      "score": 5.0579
     },
     {
       "title": "GTC Spotlights NVIDIA RTX PCs and DGX Sparks Running Latest Open Models and AI Agents Locally",
@@ -93,10 +93,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-2.jpg",
       "published": "2026-03-17T13:00:46+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9657
+      "score": 4.9309
     },
     {
       "title": "Gamma adds AI image generation tools in bid to take on Canva and Adobe",
@@ -109,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Imagine-1.jpeg?resize=1200%2C669",
       "published": "2026-03-17T13:00:00+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6653
+      "score": 4.6305
     },
     {
       "title": "Nvidia turns OpenClaw into an enterprise platform with NemoClaw",
@@ -125,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NemoClaw-NVIDIA.png",
       "published": "2026-03-17T07:24:04+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3704
+      "score": 4.3407
     },
     {
       "title": "Universal Robots and Scale AI launch the UR AI Trainer",
@@ -144,7 +144,23 @@
       "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3627
+      "score": 4.3332
+    },
+    {
+      "title": "Former scaleup operators launch Operator Circle VC to back Europe&#8217;s next decacorn",
+      "url": "https://thenextweb.com/news/operator-circle-vc-europe-scaleup-executives-decacorn",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Dozens of executives from European tech scaleups have backed a new venture firm built on the thesis that people who have scaled billion-dollar companies know which founders can do it again. For years, the criticism of European venture capital has been structural: too few firms willing to write large cheques, and too little operational experience [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Operator-Circle-launches-to-back-Europes-next-decacorn.png",
+      "published": "2026-03-17T14:32:58+00:00",
+      "firstSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.5363
     },
     {
       "title": "How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels",
@@ -157,10 +173,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
       "published": "2026-03-17T04:42:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3739
+      "score": 3.3463
     },
     {
       "title": "Snap Decisions: How Open Libraries for Accelerated Data Processing Boost A/B Testing for Snapchat",
@@ -173,26 +189,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-promo-snap-corp-gtc26-1920x1080-5043163.png",
       "published": "2026-03-17T13:00:23+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3655
-    },
-    {
-      "title": "Sears Exposed AI Chatbot Phone Calls and Text Chats to Anyone on the Web",
-      "url": "https://www.wired.com/story/sears-exposed-ai-chatbot-phone-calls-and-text-chats-to-anyone-on-the-web",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Customer conversations with chatbots can include contact information and personal details that make it easier for scammers to launch phishing attacks and commit fraud.",
-      "image": "https://media.wired.com/photos/69b868c66b808f7f94b9eeb5/master/pass/security_searsleak_Getty.jpg",
-      "published": "2026-03-17T10:00:00+00:00",
-      "firstSeen": "2026-03-17T10:06:03.799332+00:00",
-      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8794
+      "score": 3.3307
     }
   ],
   "errors": []
