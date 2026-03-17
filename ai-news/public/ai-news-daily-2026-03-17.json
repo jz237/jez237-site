@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T14:00:02.076320+00:00",
+  "updatedAt": "2026-03-17T13:48:59.243618+00:00",
   "items": [
     {
       "title": "Subagents",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-03-17T12:32:28+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6963
+      "score": 6.7017
     },
     {
       "title": "Picsart now allows creators to ‘hire’ AI assistants through agent marketplace",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "published": "2026-03-17T04:01:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5236
+      "score": 6.5279
     },
     {
       "title": "Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-1.37.10-AM-1-150x150.png",
       "published": "2026-03-17T08:37:33+00:00",
       "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2674
+      "score": 6.2723
     },
     {
       "title": "5 Key Takeaways from Jensen Huang’s GTC Keynote: The Rise of the AI ‘Token Factory’",
@@ -58,13 +58,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Jensen Huang’s GTC 2026 keynote framed data centers as AI factories, where inference, agentic AI, and physical AI reshape business strategy.\nThe post 5 Key Takeaways from Jensen Huang’s GTC Keynote: The Rise of the AI ‘Token Factory’ appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03172026-nvidia-gtc-jensen-huang.jpg",
+      "image": "",
       "published": "2026-03-17T13:02:54+00:00",
-      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "firstSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2213
+      "score": 5.2268
     },
     {
       "title": "Holotron-12B - High Throughput Computer Use Agent",
@@ -77,10 +77,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/682c3e22650f6bbe33bb9d94/ZrDLn6Wer5-TM_okKVmZ2.png",
       "published": "2026-03-17T12:33:39+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0869
+      "score": 5.0923
     },
     {
       "title": "GTC Spotlights NVIDIA RTX PCs and DGX Sparks Running Latest Open Models and AI Agents Locally",
@@ -92,11 +92,11 @@
       "summary": "The paradigm of consumer computing has revolved around the concept of a personal device — from PCs to smartphones and tablets. Now, generative AI — particularly OpenClaw — has introduced a new category: agent computers. These devices, like the NVIDIA DGX Spark desktop AI supercomputer or dedicated NVIDIA RTX PCs, are ideal for running personal [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-2.jpg",
       "published": "2026-03-17T13:00:46+00:00",
-      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "firstSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9602
+      "score": 4.9657
     },
     {
       "title": "Gamma adds AI image generation tools in bid to take on Canva and Adobe",
@@ -108,11 +108,11 @@
       "summary": "The company's new product, called Gamma Imagine, will let users employ text prompts to create brand-specific assets like interactive charts and visualizations, marketing collateral, social graphics, and infographics.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Imagine-1.jpeg?resize=1200%2C669",
       "published": "2026-03-17T13:00:00+00:00",
-      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "firstSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6598
+      "score": 4.6653
     },
     {
       "title": "Nvidia turns OpenClaw into an enterprise platform with NemoClaw",
@@ -125,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NemoClaw-NVIDIA.png",
       "published": "2026-03-17T07:24:04+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3658
+      "score": 4.3704
     },
     {
       "title": "Universal Robots and Scale AI launch the UR AI Trainer",
@@ -141,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Universal-Robots-and-Scale-AI-launch-the-UR-AI-Trainer.png",
       "published": "2026-03-17T07:05:50+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3581
+      "score": 4.3627
     },
     {
       "title": "How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels",
@@ -157,10 +157,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
       "published": "2026-03-17T04:42:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3696
+      "score": 3.3739
     },
     {
       "title": "Snap Decisions: How Open Libraries for Accelerated Data Processing Boost A/B Testing for Snapchat",
@@ -172,11 +172,11 @@
       "summary": "The features on social media apps like Snapchat evolve nearly as fast as what’s trending. To keep pace, its parent company Snap has adopted open data processing libraries from NVIDIA on Google Cloud services to boost development.  Every new feature rolled out to Snapchat’s more than 940 million monthly active users goes through a set [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-promo-snap-corp-gtc26-1920x1080-5043163.png",
       "published": "2026-03-17T13:00:23+00:00",
-      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "firstSeen": "2026-03-17T13:48:59.243618+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.36
+      "score": 3.3655
     },
     {
       "title": "Sears Exposed AI Chatbot Phone Calls and Text Chats to Anyone on the Web",
@@ -189,10 +189,10 @@
       "image": "https://media.wired.com/photos/69b868c66b808f7f94b9eeb5/master/pass/security_searsleak_Getty.jpg",
       "published": "2026-03-17T10:00:00+00:00",
       "firstSeen": "2026-03-17T10:06:03.799332+00:00",
-      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8743
+      "score": 2.8794
     }
   ],
   "errors": []
