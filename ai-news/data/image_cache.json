@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T22:50:19.117819+00:00",
+  "updatedAt": "2026-03-17T23:45:43.682995+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1144,6 +1144,10 @@
     "https://simonwillison.net/2026/Mar/17/ken-jin": {
       "image": "",
       "checkedAt": "2026-03-17T22:50:19.117819+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/nemotron-3-nano-4b": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-nano-4b.png",
+      "checkedAt": "2026-03-17T23:45:43.682995+00:00"
     }
   }
 }
