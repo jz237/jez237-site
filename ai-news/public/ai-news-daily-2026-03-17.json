@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T13:00:01.757236+00:00",
+  "updatedAt": "2026-03-17T14:00:02.076320+00:00",
   "items": [
     {
       "title": "Subagents",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-03-17T12:32:28+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7261
+      "score": 6.6963
     },
     {
       "title": "Picsart now allows creators to ‘hire’ AI assistants through agent marketplace",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "published": "2026-03-17T04:01:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5471
+      "score": 6.5236
     },
     {
       "title": "Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models",
@@ -45,10 +45,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-1.37.10-AM-1-150x150.png",
       "published": "2026-03-17T08:37:33+00:00",
       "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2941
+      "score": 6.2674
+    },
+    {
+      "title": "5 Key Takeaways from Jensen Huang’s GTC Keynote: The Rise of the AI ‘Token Factory’",
+      "url": "https://www.techrepublic.com/article/news-nvidia-gtc-jensen-huang-ai-token-factory-takeaways",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Jensen Huang’s GTC 2026 keynote framed data centers as AI factories, where inference, agentic AI, and physical AI reshape business strategy.\nThe post 5 Key Takeaways from Jensen Huang’s GTC Keynote: The Rise of the AI ‘Token Factory’ appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03172026-nvidia-gtc-jensen-huang.jpg",
+      "published": "2026-03-17T13:02:54+00:00",
+      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2213
     },
     {
       "title": "Holotron-12B - High Throughput Computer Use Agent",
@@ -61,10 +77,42 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/682c3e22650f6bbe33bb9d94/ZrDLn6Wer5-TM_okKVmZ2.png",
       "published": "2026-03-17T12:33:39+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1166
+      "score": 5.0869
+    },
+    {
+      "title": "GTC Spotlights NVIDIA RTX PCs and DGX Sparks Running Latest Open Models and AI Agents Locally",
+      "url": "https://blogs.nvidia.com/blog/rtx-ai-garage-gtc-2026-nemoclaw",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The paradigm of consumer computing has revolved around the concept of a personal device — from PCs to smartphones and tablets. Now, generative AI — particularly OpenClaw — has introduced a new category: agent computers. These devices, like the NVIDIA DGX Spark desktop AI supercomputer or dedicated NVIDIA RTX PCs, are ideal for running personal [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-2.jpg",
+      "published": "2026-03-17T13:00:46+00:00",
+      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9602
+    },
+    {
+      "title": "Gamma adds AI image generation tools in bid to take on Canva and Adobe",
+      "url": "https://techcrunch.com/2026/03/17/gamma-adds-ai-image-generation-tools-in-bid-to-take-on-canva-and-adobe",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company's new product, called Gamma Imagine, will let users employ text prompts to create brand-specific assets like interactive charts and visualizations, marketing collateral, social graphics, and infographics.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Imagine-1.jpeg?resize=1200%2C669",
+      "published": "2026-03-17T13:00:00+00:00",
+      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6598
     },
     {
       "title": "Nvidia turns OpenClaw into an enterprise platform with NemoClaw",
@@ -77,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NemoClaw-NVIDIA.png",
       "published": "2026-03-17T07:24:04+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3915
+      "score": 4.3658
     },
     {
       "title": "Universal Robots and Scale AI launch the UR AI Trainer",
@@ -93,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Universal-Robots-and-Scale-AI-launch-the-UR-AI-Trainer.png",
       "published": "2026-03-17T07:05:50+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3836
+      "score": 4.3581
     },
     {
       "title": "How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels",
@@ -109,10 +157,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
       "published": "2026-03-17T04:42:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3935
+      "score": 3.3696
+    },
+    {
+      "title": "Snap Decisions: How Open Libraries for Accelerated Data Processing Boost A/B Testing for Snapchat",
+      "url": "https://blogs.nvidia.com/blog/snap-accelerated-data-processing",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The features on social media apps like Snapchat evolve nearly as fast as what’s trending. To keep pace, its parent company Snap has adopted open data processing libraries from NVIDIA on Google Cloud services to boost development.  Every new feature rolled out to Snapchat’s more than 940 million monthly active users goes through a set [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-promo-snap-corp-gtc26-1920x1080-5043163.png",
+      "published": "2026-03-17T13:00:23+00:00",
+      "firstSeen": "2026-03-17T14:00:02.076320+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.36
     },
     {
       "title": "Sears Exposed AI Chatbot Phone Calls and Text Chats to Anyone on the Web",
@@ -125,74 +189,10 @@
       "image": "https://media.wired.com/photos/69b868c66b808f7f94b9eeb5/master/pass/security_searsleak_Getty.jpg",
       "published": "2026-03-17T10:00:00+00:00",
       "firstSeen": "2026-03-17T10:06:03.799332+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
+      "lastSeen": "2026-03-17T14:00:02.076320+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.902
-    },
-    {
-      "title": "Partech closes its first impact fund at €300M to back Europe&#8217;s next generation of industrial and climate tech scaleups",
-      "url": "https://thenextweb.com/news/partech-impact-fund-300m-europe-climate-industrial-tech",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Paris-based VC is targeting 15 B2B companies with revenues above €10M in clean manufacturing, sustainable agriculture, green construction, and digital health, with carry tied to impact performance for the first time. Europe has no shortage of early-stage climate tech funding. What it has historically lacked is the growth capital to take companies that have [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Partech-closes-its-first-impact-fund-at-E300M-.png",
-      "published": "2026-03-17T12:15:30+00:00",
-      "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8276
-    },
-    {
-      "title": "eYou raises €300K pre-seed to build a European social media platform with real-time fact-checking baked in",
-      "url": "https://thenextweb.com/news/eyou-social-media-pre-seed-european-fact-checking",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Founded by two French serial entrepreneurs who have spent decades in Romania, the platform aims to be a trust-by-design alternative to X and Facebook, with a public launch set for May 2026. A new social media platform that embeds real-time fact-checking directly into the user experience has raised €300,000 in pre-seed funding from Fil Rouge [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/eYou-raises-E300K-pre-seed.png",
-      "published": "2026-03-17T07:55:03+00:00",
-      "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7052
-    },
-    {
-      "title": "Nscale signs 1.35GW Microsoft LOI for a West Virginia AI campus built around NVIDIA&#8217;s Vera Rubin GPUs",
-      "url": "https://thenextweb.com/news/nscale-west-virginia-monarch-microsoft-vera-rubin",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Announced at GTC 2026, the deal covers around 430,000 next-generation NVIDIA GPUs, is backed by a Caterpillar natural gas power deal, and is built on a site described as the US’s first state-certified AI microgrid, with an 8GW potential footprint. Nscale has signed a letter of intent with Microsoft to provide 1.35 gigawatts of AI [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nscale-signs-1.35GW-Microsoft-LOI-.png",
-      "published": "2026-03-17T06:54:51+00:00",
-      "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2789
-    },
-    {
-      "title": "How Invisalign Became the World’s Biggest User of 3D Printers",
-      "url": "https://www.wired.com/story/how-invisalign-became-the-worlds-biggest-3d-printing-company",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Joe Hogan, Align Technology’s plastics-nerd CEO, says you shouldn’t eat with your aligners and that you don’t need to wear your retainers every night.",
-      "image": "https://media.wired.com/photos/69a6021b9601628729405650/master/pass/CEO%20Joe%20Hogan.jpg",
-      "published": "2026-03-17T11:00:00+00:00",
-      "firstSeen": "2026-03-17T11:53:01.868942+00:00",
-      "lastSeen": "2026-03-17T13:00:01.757236+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.8743
     }
   ],
   "errors": []
