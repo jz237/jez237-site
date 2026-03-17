@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T13:00:01.757236+00:00",
+  "updatedAt": "2026-03-17T13:48:59.243618+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1040,6 +1040,18 @@
     "https://simonwillison.net/guides/agentic-engineering-patterns/subagents": {
       "image": "",
       "checkedAt": "2026-03-17T13:00:01.757236+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-gtc-jensen-huang-ai-token-factory-takeaways": {
+      "image": "",
+      "checkedAt": "2026-03-17T13:48:59.243618+00:00"
+    },
+    "https://techcrunch.com/2026/03/17/gamma-adds-ai-image-generation-tools-in-bid-to-take-on-canva-and-adobe": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Imagine-1.jpeg?resize=1200,669",
+      "checkedAt": "2026-03-17T13:48:59.243618+00:00"
+    },
+    "https://techcrunch.com/2026/03/17/niv-ai-exits-stealth-to-wring-more-power-performance-out-of-gpus": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Niv-AI-Founding-Team.jpeg?resize=1200,800",
+      "checkedAt": "2026-03-17T13:48:59.243618+00:00"
     }
   }
 }
