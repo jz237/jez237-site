@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T07:18:55.377614+00:00",
+  "updatedAt": "2026-03-17T09:00:01.362654+00:00",
   "items": [
     {
       "title": "Picsart now allows creators to ‘hire’ AI assistants through agent marketplace",
@@ -13,10 +13,58 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "published": "2026-03-17T04:01:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T07:18:55.377614+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6937
+      "score": 6.6478
+    },
+    {
+      "title": "Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models",
+      "url": "https://www.marktechpost.com/2026/03/17/google-ai-releases-waxal-a-multilingual-african-speech-dataset-for-training-automatic-speech-recognition-and-text-to-speech-models",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Speech technology still has a data distribution problem. Automatic Speech Recognition (ASR) and Text-to-Speech (TTS) systems have improved rapidly for high-resource languages, but many African languages remain poorly represented in open corpora. A team of researchers from Google and other collaborators introduce WAXAL, an open multilingual speech dataset for African languages covering 24 languages, with [&#8230;]\nThe post Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-1.37.10-AM-1-150x150.png",
+      "published": "2026-03-17T08:37:33+00:00",
+      "firstSeen": "2026-03-17T09:00:01.362654+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.4086
+    },
+    {
+      "title": "Nvidia turns OpenClaw into an enterprise platform with NemoClaw",
+      "url": "https://thenextweb.com/news/nvidia-nemoclaw-openclaw-enterprise-security",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A single command now installs security, privacy guardrails, and local AI models on the world’s fastest-growing open-source agent platform. OpenClaw launched on 25 January 2026. Austrian developer Peter Steinberger says he built the first version in roughly an hour. Within weeks it had become one of the fastest-growing open-source repositories in GitHub history, an AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NemoClaw-NVIDIA.png",
+      "published": "2026-03-17T07:24:04+00:00",
+      "firstSeen": "2026-03-17T08:00:01.872985+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5022
+    },
+    {
+      "title": "Universal Robots and Scale AI launch the UR AI Trainer",
+      "url": "https://thenextweb.com/news/universal-robots-and-scale-ai-launch-the-ur-ai-trainer",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Revealed at GTC 2026, the leader-follower imitation learning platform captures force, motion, and visual data directly on production hardware, closing the gap between AI research labs and factory floors. Universal Robots has launched the UR AI Trainer, a hardware-software system built in collaboration with Scale AI that allows operators to generate high-fidelity robot training data [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Universal-Robots-and-Scale-AI-launch-the-UR-AI-Trainer.png",
+      "published": "2026-03-17T07:05:50+00:00",
+      "firstSeen": "2026-03-17T08:00:01.872985+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.4934
     },
     {
       "title": "How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels",
@@ -29,10 +77,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
       "published": "2026-03-17T04:42:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T07:18:55.377614+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5429
+      "score": 3.4961
+    },
+    {
+      "title": "eYou raises €300K pre-seed to build a European social media platform with real-time fact-checking baked in",
+      "url": "https://thenextweb.com/news/eyou-social-media-pre-seed-european-fact-checking",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Founded by two French serial entrepreneurs who have spent decades in Romania, the platform aims to be a trust-by-design alternative to X and Facebook, with a public launch set for May 2026. A new social media platform that embeds real-time fact-checking directly into the user experience has raised €300,000 in pre-seed funding from Fil Rouge [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/eYou-raises-E300K-pre-seed.png",
+      "published": "2026-03-17T07:55:03+00:00",
+      "firstSeen": "2026-03-17T09:00:01.362654+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8174
+    },
+    {
+      "title": "Nscale signs 1.35GW Microsoft LOI for a West Virginia AI campus built around NVIDIA&#8217;s Vera Rubin GPUs",
+      "url": "https://thenextweb.com/news/nscale-west-virginia-monarch-microsoft-vera-rubin",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Announced at GTC 2026, the deal covers around 430,000 next-generation NVIDIA GPUs, is backed by a Caterpillar natural gas power deal, and is built on a site described as the US’s first state-certified AI microgrid, with an 8GW potential footprint. Nscale has signed a letter of intent with Microsoft to provide 1.35 gigawatts of AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nscale-signs-1.35GW-Microsoft-LOI-.png",
+      "published": "2026-03-17T06:54:51+00:00",
+      "firstSeen": "2026-03-17T08:00:01.872985+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3881
     },
     {
       "title": "Restaurant tech startup Choice closes $7.1M Series A",
@@ -45,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Restaurant-tech-startup-Choice-closes-7.1M-Series-A.png",
       "published": "2026-03-17T06:31:03+00:00",
       "firstSeen": "2026-03-17T07:00:01.310240+00:00",
-      "lastSeen": "2026-03-17T07:18:55.377614+00:00",
+      "lastSeen": "2026-03-17T09:00:01.362654+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9741
+      "score": -1.0233
     }
   ],
   "errors": []
