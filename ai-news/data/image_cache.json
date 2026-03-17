@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T04:00:02.019734+00:00",
+  "updatedAt": "2026-03-17T05:00:01.938057+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1024,6 +1024,14 @@
     "https://simonwillison.net/2026/Mar/16/codex-subagents": {
       "image": "",
       "checkedAt": "2026-03-16T23:41:01.108787+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/16/how-to-build-high-performance-gpu-accelerated-simulations-and-differentiable-physics-workflows-using-nvidia-warp-kernels": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
+      "checkedAt": "2026-03-17T05:00:01.938057+00:00"
+    },
+    "https://techcrunch.com/2026/03/16/picsart-now-allows-creators-to-hire-ai-assistants-through-agent-marketplace": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
+      "checkedAt": "2026-03-17T05:00:01.938057+00:00"
     }
   }
 }
