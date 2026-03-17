@@ -1,7 +1,23 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T15:00:01.656917+00:00",
+  "updatedAt": "2026-03-17T16:00:01.981346+00:00",
   "items": [
+    {
+      "title": "World launches tool to verify humans behind AI shopping agents",
+      "url": "https://techcrunch.com/2026/03/17/world-launches-tool-to-verify-humans-behind-ai-shopping-agents",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As AI agents take the reins for online shoppers, Sam Altman's unconventional startup is looking to expand its verification offerings to support agentic commerce.",
+      "image": "",
+      "published": "2026-03-17T15:00:00+00:00",
+      "firstSeen": "2026-03-17T16:00:01.981346+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.7598
+    },
     {
       "title": "Subagents",
       "url": "https://simonwillison.net/guides/agentic-engineering-patterns/subagents",
@@ -13,10 +29,10 @@
       "image": "",
       "published": "2026-03-17T12:32:28+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6674
+      "score": 6.6392
     },
     {
       "title": "Picsart now allows creators to ‘hire’ AI assistants through agent marketplace",
@@ -29,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "published": "2026-03-17T04:01:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5008
+      "score": 6.4785
     },
     {
       "title": "Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models",
@@ -45,10 +61,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-1.37.10-AM-1-150x150.png",
       "published": "2026-03-17T08:37:33+00:00",
       "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2415
+      "score": 6.2162
+    },
+    {
+      "title": "OpenAI expands government footprint with AWS deal, report says",
+      "url": "https://techcrunch.com/2026/03/17/openai-expands-government-footprint-with-aws-deal",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "OpenAI has reportedly signed a partnership with AWS to sell its AI systems to the U.S. government for classified and unclassified work, marking an expansion beyond its Pentagon deal last month.",
+      "image": "",
+      "published": "2026-03-17T15:37:03+00:00",
+      "firstSeen": "2026-03-17T16:00:01.981346+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2784
     },
     {
       "title": "5 Key Takeaways from Jensen Huang’s GTC Keynote: The Rise of the AI ‘Token Factory’",
@@ -61,10 +93,10 @@
       "image": "",
       "published": "2026-03-17T13:02:54+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1919
+      "score": 5.1634
     },
     {
       "title": "Holotron-12B - High Throughput Computer Use Agent",
@@ -77,10 +109,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/682c3e22650f6bbe33bb9d94/ZrDLn6Wer5-TM_okKVmZ2.png",
       "published": "2026-03-17T12:33:39+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0579
+      "score": 5.0298
     },
     {
       "title": "GTC Spotlights NVIDIA RTX PCs and DGX Sparks Running Latest Open Models and AI Agents Locally",
@@ -93,10 +125,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc-2026-nv-blog-1280x680-2.jpg",
       "published": "2026-03-17T13:00:46+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9309
+      "score": 4.9024
     },
     {
       "title": "Gamma adds AI image generation tools in bid to take on Canva and Adobe",
@@ -109,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Imagine-1.jpeg?resize=1200%2C669",
       "published": "2026-03-17T13:00:00+00:00",
       "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6305
+      "score": 4.602
     },
     {
       "title": "Nvidia turns OpenClaw into an enterprise platform with NemoClaw",
@@ -125,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NemoClaw-NVIDIA.png",
       "published": "2026-03-17T07:24:04+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3407
+      "score": 4.3163
     },
     {
       "title": "Universal Robots and Scale AI launch the UR AI Trainer",
@@ -144,7 +176,7 @@
       "lastSeen": "2026-03-17T13:48:59.243618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3332
+      "score": 4.309
     },
     {
       "title": "Former scaleup operators launch Operator Circle VC to back Europe&#8217;s next decacorn",
@@ -157,42 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Operator-Circle-launches-to-back-Europes-next-decacorn.png",
       "published": "2026-03-17T14:32:58+00:00",
       "firstSeen": "2026-03-17T15:00:01.656917+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
+      "lastSeen": "2026-03-17T16:00:01.981346+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5363
-    },
-    {
-      "title": "How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels",
-      "url": "https://www.marktechpost.com/2026/03/16/how-to-build-high-performance-gpu-accelerated-simulations-and-differentiable-physics-workflows-using-nvidia-warp-kernels",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we explore how to use NVIDIA Warp to build high-performance GPU and CPU simulations directly from Python. We begin by setting up a Colab-compatible environment and initializing Warp so that our kernels can run on either CUDA GPUs or CPUs, depending on availability. We then implement several custom Warp kernels that demonstrate [&#8230;]\nThe post How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
-      "published": "2026-03-17T04:42:00+00:00",
-      "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3463
-    },
-    {
-      "title": "Snap Decisions: How Open Libraries for Accelerated Data Processing Boost A/B Testing for Snapchat",
-      "url": "https://blogs.nvidia.com/blog/snap-accelerated-data-processing",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The features on social media apps like Snapchat evolve nearly as fast as what’s trending. To keep pace, its parent company Snap has adopted open data processing libraries from NVIDIA on Google Cloud services to boost development.  Every new feature rolled out to Snapchat’s more than 940 million monthly active users goes through a set [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-promo-snap-corp-gtc26-1920x1080-5043163.png",
-      "published": "2026-03-17T13:00:23+00:00",
-      "firstSeen": "2026-03-17T13:48:59.243618+00:00",
-      "lastSeen": "2026-03-17T15:00:01.656917+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3307
+      "score": 3.5065
     }
   ],
   "errors": []
