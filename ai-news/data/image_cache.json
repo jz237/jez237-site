@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-16T22:49:28.178272+00:00",
+  "updatedAt": "2026-03-17T00:00:02.090520+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1020,6 +1020,10 @@
     "https://www.theverge.com/news/895472/nvidia-dlss5-generative-ai-pc-graphics": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/grokashcroft.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.752036702561%2C100%2C78.495926594877&amp;w=1200",
       "checkedAt": "2026-03-16T22:49:28.178272+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/16/codex-subagents": {
+      "image": "",
+      "checkedAt": "2026-03-17T00:00:02.090520+00:00"
     }
   }
 }
