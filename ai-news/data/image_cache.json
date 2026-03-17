@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T21:52:39.850902+00:00",
+  "updatedAt": "2026-03-17T23:00:01.725159+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1132,6 +1132,18 @@
     "https://techcrunch.com/2026/03/17/mistral-forge-nvidia-gtc-build-your-own-ai-enterprise": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200,800",
       "checkedAt": "2026-03-17T21:52:39.850902+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/17/unsloth-ai-releases-studio-a-local-no-code-interface-for-high-performance-llm-fine-tuning-with-70-less-vram-usage": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-6.png",
+      "checkedAt": "2026-03-17T23:00:01.725159+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/17/1134351/the-pentagon-is-planning-for-ai-companies-to-train-on-classified-data-defense-official-says": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/classified-data.jpg?resize=1200,600",
+      "checkedAt": "2026-03-17T23:00:01.725159+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/17/ken-jin": {
+      "image": "",
+      "checkedAt": "2026-03-17T23:00:01.725159+00:00"
     }
   }
 }
