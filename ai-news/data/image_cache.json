@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T17:00:01.162032+00:00",
+  "updatedAt": "2026-03-17T17:15:57.494144+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1096,6 +1096,10 @@
     "https://www.together.ai/blog/mamba-3": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b7a26c1981b395c1cb68d1_20260311_Mamba3_1200x630%20(1).jpg",
       "checkedAt": "2026-03-17T17:00:01.162032+00:00"
+    },
+    "https://openai.com/index/introducing-gpt-5-4-mini-and-nano": {
+      "image": "",
+      "checkedAt": "2026-03-17T17:15:57.494144+00:00"
     }
   }
 }
