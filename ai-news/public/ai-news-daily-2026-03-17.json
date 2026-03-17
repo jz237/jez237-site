@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T12:00:01.962548+00:00",
+  "updatedAt": "2026-03-17T11:53:01.868942+00:00",
   "items": [
     {
       "title": "Picsart now allows creators to ‘hire’ AI assistants through agent marketplace",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Agents-Hero-Image.png?w=1200",
       "published": "2026-03-17T04:01:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5712
+      "score": 6.5741
     },
     {
       "title": "Google AI Releases WAXAL: A Multilingual African Speech Dataset for Training Automatic Speech Recognition and Text-to-Speech Models",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-1.37.10-AM-1-150x150.png",
       "published": "2026-03-17T08:37:33+00:00",
       "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3216
+      "score": 6.3248
     },
     {
       "title": "Nvidia turns OpenClaw into an enterprise platform with NemoClaw",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/NemoClaw-NVIDIA.png",
       "published": "2026-03-17T07:24:04+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4181
+      "score": 4.4212
     },
     {
       "title": "Universal Robots and Scale AI launch the UR AI Trainer",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Universal-Robots-and-Scale-AI-launch-the-UR-AI-Trainer.png",
       "published": "2026-03-17T07:05:50+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4099
+      "score": 4.413
     },
     {
       "title": "How to Build High-Performance GPU-Accelerated Simulations and Differentiable Physics Workflows Using NVIDIA Warp Kernels",
@@ -77,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-51.png",
       "published": "2026-03-17T04:42:00+00:00",
       "firstSeen": "2026-03-17T05:00:01.938057+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4181
+      "score": 3.421
     },
     {
       "title": "Sears Exposed AI Chatbot Phone Calls and Text Chats to Anyone on the Web",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/69b868c66b808f7f94b9eeb5/master/pass/security_searsleak_Getty.jpg",
       "published": "2026-03-17T10:00:00+00:00",
       "firstSeen": "2026-03-17T10:06:03.799332+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9305
+      "score": 2.9339
     },
     {
       "title": "eYou raises €300K pre-seed to build a European social media platform with real-time fact-checking baked in",
@@ -109,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/eYou-raises-E300K-pre-seed.png",
       "published": "2026-03-17T07:55:03+00:00",
       "firstSeen": "2026-03-17T09:00:01.362654+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7321
+      "score": 2.7352
     },
     {
       "title": "Nscale signs 1.35GW Microsoft LOI for a West Virginia AI campus built around NVIDIA&#8217;s Vera Rubin GPUs",
@@ -125,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nscale-signs-1.35GW-Microsoft-LOI-.png",
       "published": "2026-03-17T06:54:51+00:00",
       "firstSeen": "2026-03-17T08:00:01.872985+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3051
+      "score": 2.3082
     },
     {
       "title": "How Invisalign Became the World’s Biggest User of 3D Printers",
@@ -140,11 +140,11 @@
       "summary": "Joe Hogan, Align Technology’s plastics-nerd CEO, says you shouldn’t eat with your aligners and that you don’t need to wear your retainers every night.",
       "image": "https://media.wired.com/photos/69a6021b9601628729405650/master/pass/CEO%20Joe%20Hogan.jpg",
       "published": "2026-03-17T11:00:00+00:00",
-      "firstSeen": "2026-03-17T12:00:01.962548+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "firstSeen": "2026-03-17T11:53:01.868942+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2598
+      "score": 2.2633
     },
     {
       "title": "Gecko Robotics lands $71M Navy deal to send wall-climbing robots inside warships",
@@ -156,11 +156,11 @@
       "summary": "The Pittsburgh startup’s AI platform will create digital twins of Pacific Fleet vessels, starting with 18 ships, as the Navy races to fix a maintenance crisis costing up to $20 billion a year. Roughly 40% of the United States Navy’s fleet is unavailable at any given time. Ships are queued in dry dock. Maintenance cycles [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Gecko-Robotics-lands-71M-Navy-deal.png",
       "published": "2026-03-17T11:27:14+00:00",
-      "firstSeen": "2026-03-17T12:00:01.962548+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "firstSeen": "2026-03-17T11:53:01.868942+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1334
+      "score": 2.1369
     },
     {
       "title": "Restaurant tech startup Choice closes $7.1M Series A",
@@ -173,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Restaurant-tech-startup-Choice-closes-7.1M-Series-A.png",
       "published": "2026-03-17T06:31:03+00:00",
       "firstSeen": "2026-03-17T07:00:01.310240+00:00",
-      "lastSeen": "2026-03-17T12:00:01.962548+00:00",
+      "lastSeen": "2026-03-17T11:53:01.868942+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1054
+      "score": -1.1023
     }
   ],
   "errors": []
