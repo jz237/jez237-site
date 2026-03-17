@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T15:00:01.656917+00:00",
+  "updatedAt": "2026-03-17T15:15:07.608323+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1052,6 +1052,10 @@
     "https://techcrunch.com/2026/03/17/niv-ai-exits-stealth-to-wring-more-power-performance-out-of-gpus": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Niv-AI-Founding-Team.jpeg?resize=1200,800",
       "checkedAt": "2026-03-17T13:48:59.243618+00:00"
+    },
+    "https://techcrunch.com/2026/03/17/world-launches-tool-to-verify-humans-behind-ai-shopping-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/06/GettyImages-2139240522.jpg?w=1024",
+      "checkedAt": "2026-03-17T15:15:07.608323+00:00"
     }
   }
 }
