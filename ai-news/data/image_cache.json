@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T18:00:01.741489+00:00",
+  "updatedAt": "2026-03-17T17:15:57.494144+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1097,13 +1097,9 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69b7a26c1981b395c1cb68d1_20260311_Mamba3_1200x630%20(1).jpg",
       "checkedAt": "2026-03-17T17:00:01.162032+00:00"
     },
-    "https://techcrunch.com/2026/03/17/buzzfeed-ai-slop-apps-sxsw-bf-island-conjure": {
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/SXSW-buzzfeed-3.jpg?resize=1200,969",
-      "checkedAt": "2026-03-17T18:00:01.741489+00:00"
-    },
     "https://openai.com/index/introducing-gpt-5-4-mini-and-nano": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/6EnJZAuVLIIArGkpgWz9Mh/92ab6109d7f17ca20ebc70e830294c66/5.4_Mini_Nano_Hero___SEO.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-03-17T18:00:01.741489+00:00"
+      "image": "",
+      "checkedAt": "2026-03-17T17:15:57.494144+00:00"
     }
   }
 }
