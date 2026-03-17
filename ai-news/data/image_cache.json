@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T17:15:57.494144+00:00",
+  "updatedAt": "2026-03-17T19:00:01.323495+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1100,6 +1100,22 @@
     "https://openai.com/index/introducing-gpt-5-4-mini-and-nano": {
       "image": "",
       "checkedAt": "2026-03-17T17:15:57.494144+00:00"
+    },
+    "https://www.techrepublic.com/article/news-bytedance-delays-seedance-2-global-launch": {
+      "image": "https://assets.techrepublic.com/uploads/2024/10/tra_20241015-videoproc-lifetime-family-license.jpg",
+      "checkedAt": "2026-03-17T19:00:01.323495+00:00"
+    },
+    "https://techcrunch.com/2026/03/17/the-pentagon-is-developing-alternatives-to-anthropic-report-says": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-1601911146.jpg?resize=1200,800",
+      "checkedAt": "2026-03-17T19:00:01.323495+00:00"
+    },
+    "https://www.theverge.com/entertainment/896213/nvidia-dlss-5-ai-faces-motion-smoothing": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-17-at-1.29.30%E2%80%AFPM.png?quality=90&amp;strip=all&amp;crop=0%2C3.5437993279675%2C100%2C92.912401344065&amp;w=1200",
+      "checkedAt": "2026-03-17T19:00:01.323495+00:00"
+    },
+    "https://techcrunch.com/2026/03/17/buzzfeed-ai-slop-apps-sxsw-bf-island-conjure": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/SXSW-buzzfeed-3.jpg?resize=1200,969",
+      "checkedAt": "2026-03-17T19:00:01.323495+00:00"
     }
   }
 }
