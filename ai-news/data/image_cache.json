@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T15:00:01.465873+00:00",
+  "updatedAt": "2026-03-18T16:00:01.632798+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1164,6 +1164,26 @@
     "https://www.theverge.com/games/896518/nvidia-dlss-5-ai-3d-rendering": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/screencapture-nvidia-en-us-geforce-news-dlss5-breakthrough-in-visual-fidelity-for-games-nvidia-dlss-5-resident-evil-requiem-geforce-rtx-comparison-screenshot-001-2026-03-17-20_21_56.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
       "checkedAt": "2026-03-18T13:51:11.195918+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/sequen-snags-16m-to-bring-tiktok-style-personalization-tech-to-any-consumer-company": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/sequen-logo.jpg?w=744",
+      "checkedAt": "2026-03-18T16:00:01.632798+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/microsoft-hires-the-team-of-sequioa-backed-ai-collaboration-platform-cove": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/cove-team-joins-microsoft.webp?resize=1200,900",
+      "checkedAt": "2026-03-18T16:00:01.632798+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-space-ai-chips-orbital-data-centers": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-space-ai-chips-orbital-data-centers.jpg",
+      "checkedAt": "2026-03-18T16:00:01.632798+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-personal-intelligence-us-expansion": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-google-personal-intelligence-us-expansion.jpg",
+      "checkedAt": "2026-03-18T16:00:01.632798+00:00"
+    },
+    "https://techcrunch.com/podcast/the-phd-students-who-became-the-judges-of-the-ai-industry": {
+      "image": "",
+      "checkedAt": "2026-03-18T16:00:01.632798+00:00"
     }
   }
 }
