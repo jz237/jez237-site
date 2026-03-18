@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T19:16:39.097229+00:00",
+  "updatedAt": "2026-03-18T20:54:02.953935+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1228,6 +1228,14 @@
     "https://openai.com/index/japan-teen-safety-blueprint": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/7azghKvcTTwCO0cBFRf8yw/47c1807d65e36a654561ec2829f67cbe/japan-teen-safety-blueprint-seo.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-03-18T19:00:01.764145+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/nothing-ceo-carl-pei-says-smartphone-apps-will-disappear-as-ai-agents-take-their-place": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Carl-Pei-Nothing.jpg?resize=1200,675",
+      "checkedAt": "2026-03-18T20:54:02.953935+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/nvidia-networking-division-building-a-multibillion-dollar-behemoth-to-rival-its-chips-business": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2183848584.jpg?resize=1200,800",
+      "checkedAt": "2026-03-18T20:54:02.953935+00:00"
     }
   }
 }
