@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "updatedAt": "2026-03-17T22:50:19.117819+00:00",
+  "updatedAt": "2026-03-17T23:45:43.682995+00:00",
   "items": [
     {
       "title": "GPT-5.4 mini and GPT-5.4 nano, which can describe 76,000 photos for $52",
@@ -13,11 +13,11 @@
       "image": "https://static.simonwillison.net/static/2026/IMG_2324.jpeg",
       "published": "2026-03-17T19:39:17+00:00",
       "firstSeen": "2026-03-17T20:00:02.001342+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.2469
+      "score": 22.2214
     },
     {
       "title": "Introducing GPT-5.4 mini and nano",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-03-17T10:00:00+00:00",
       "firstSeen": "2026-03-17T17:15:57.494144+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.27
+      "score": 19.2505
     },
     {
       "title": "Why Garry Tan’s Claude Code setup has gotten so much love, and hate",
@@ -47,10 +47,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/garry-tan-sxsw-getty.jpg?resize=1200%2C801",
       "published": "2026-03-17T20:50:04+00:00",
       "firstSeen": "2026-03-17T21:00:01.405081+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.2304
+      "score": 14.2041
     },
     {
       "title": "Now everyone in the US is getting Google&#8217;s personalized Gemini AI",
@@ -63,10 +63,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/google-gemini-ai-personal-intelligence-tire-suggestion-demo.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.0977312390925%2C100%2C93.804537521815&amp%3Bw=1200",
       "published": "2026-03-17T16:33:41+00:00",
       "firstSeen": "2026-03-17T17:00:01.162032+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.284
+      "score": 9.2606
     },
     {
       "title": "Mistral bets on ‘build-your-own AI’ as it takes on OpenAI, Anthropic in the enterprise",
@@ -79,10 +79,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200%2C800",
       "published": "2026-03-17T21:00:00+00:00",
       "firstSeen": "2026-03-17T21:52:39.850902+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.2352
+      "score": 9.2088
     },
     {
       "title": "The future of code is exciting and terrifying",
@@ -95,10 +95,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/VRG_VST_0317_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-17T15:16:47+00:00",
       "firstSeen": "2026-03-17T17:00:01.162032+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9517
+      "score": 8.9291
     },
     {
       "title": "Researchers Uncover New Phishing Risk Hidden Inside Microsoft Copilot",
@@ -111,10 +111,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_802819410.jpeg",
       "published": "2026-03-17T19:40:34+00:00",
       "firstSeen": "2026-03-17T20:00:02.001342+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5575
+      "score": 8.532
     },
     {
       "title": "The Pentagon is planning for AI companies to train on classified data, defense official says",
@@ -127,10 +127,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/classified-data.jpg?resize=1200%2C600",
       "published": "2026-03-17T22:30:46+00:00",
       "firstSeen": "2026-03-17T22:50:19.117819+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.2801
+      "score": 8.2525
     },
     {
       "title": "Equipping workers with insights about compensation",
@@ -143,10 +143,10 @@
       "image": "",
       "published": "2026-03-17T00:00:00+00:00",
       "firstSeen": "2026-03-17T20:54:39.002975+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3833
+      "score": 7.3685
     },
     {
       "title": "Microsoft appoints a new Copilot boss after AI leadership shake-up",
@@ -159,10 +159,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/07/STK259_MICROSOFT_COPILOT_2__C.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-17T15:17:27+00:00",
       "firstSeen": "2026-03-17T17:00:01.162032+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.3519
+      "score": 7.3294
     },
     {
       "title": "World launches tool to verify humans behind AI shopping agents",
@@ -175,10 +175,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/06/GettyImages-2139240522.jpg?w=1024",
       "published": "2026-03-17T15:00:00+00:00",
       "firstSeen": "2026-03-17T15:15:07.608323+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5748
+      "score": 6.5524
     },
     {
       "title": "Subagents",
@@ -191,10 +191,10 @@
       "image": "",
       "published": "2026-03-17T12:32:28+00:00",
       "firstSeen": "2026-03-17T13:00:01.757236+00:00",
-      "lastSeen": "2026-03-17T22:50:19.117819+00:00",
+      "lastSeen": "2026-03-17T23:45:43.682995+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4664
+      "score": 6.4454
     }
   ],
   "errors": []
