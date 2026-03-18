@@ -1,6 +1,6 @@
 {
   "date": "2026-03-18",
-  "updatedAt": "2026-03-18T10:09:23.531406+00:00",
+  "updatedAt": "2026-03-18T11:08:33.266948+00:00",
   "items": [
     {
       "title": "Justice Department Says Anthropic Can’t Be Trusted With Warfighting Systems",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/69b9b3b8a5694fbea42e1cf8/master/pass/buisness_DOD_Anthropic_GettyImages-2265262796.jpg",
       "published": "2026-03-18T00:51:14+00:00",
       "firstSeen": "2026-03-18T01:00:01.226542+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0395
+      "score": 9.0166
     },
     {
       "title": "ServiceNow Research Introduces EnterpriseOps-Gym: A High-Fidelity Benchmark Designed to Evaluate Agentic Planning in Realistic Enterprise Settings",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-12.00.24-AM-1-150x150.png",
       "published": "2026-03-18T07:08:46+00:00",
       "firstSeen": "2026-03-18T07:16:16.798591+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2818
+      "score": 8.2544
     },
     {
       "title": "Meta&#8217;s Manus AI agent arrives on your desktop to take on OpenClaw",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Metas-Manus-AI-agent-arrives-on-your-desktop.png",
       "published": "2026-03-18T09:00:07+00:00",
       "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3153
+      "score": 7.2865
     },
     {
       "title": "NVIDIA AI Open-Sources ‘OpenShell’: A Secure Runtime Environment for Autonomous AI Agents",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-1.42.53-AM-1-150x150.png",
       "published": "2026-03-18T08:42:37+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6767
+      "score": 6.6481
     },
     {
       "title": "Mastercard buys stablecoin firm BVNK for up to $1.8bn",
@@ -77,10 +77,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mastercard-buys-stablecoin-firm-BVNK-for-up-to-1.8bn.png",
       "published": "2026-03-18T08:46:09+00:00",
       "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2084
+      "score": 3.1798
     },
     {
       "title": "Finnish startup Elea &#038; Lili raises €2.5M to replace the plastic",
@@ -93,10 +93,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Elea-Lili-raises-E2.5M-.png",
       "published": "2026-03-18T08:31:06+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2011
+      "score": 3.1727
+    },
+    {
+      "title": "AI-powered robot learns how to harvest tomatoes more efficiently",
+      "url": "https://www.sciencedaily.com/releases/2026/03/260317064512.htm",
+      "source": "ScienceDaily AI",
+      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "A new tomato-picking robot is learning to think before it acts. Instead of simply identifying ripe fruit, it predicts how easy each tomato will be to harvest and adjusts its approach accordingly. This smarter strategy boosted success rates to 81%, with the robot even switching angles when needed. The breakthrough could pave the way for farms where robots and humans work side by side.",
+      "image": "https://www.sciencedaily.com/images/1920/ai-robot-harvesting-tomatoes.webp",
+      "published": "2026-03-18T04:26:44+00:00",
+      "firstSeen": "2026-03-18T11:08:33.266948+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1333
     },
     {
       "title": "Ofiniti raises $6.8M to push its maritime fuel software into global shipping hubs",
@@ -109,10 +125,42 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ofiniti-raises-6.8M.png",
       "published": "2026-03-18T07:55:56+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T10:09:23.531406+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4341
+      "score": 2.4062
+    },
+    {
+      "title": "Rivia raises €13M to bring agentic AI to clinical trials",
+      "url": "https://thenextweb.com/news/rivia-13m-agentic-ai-clinical-trials",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Zurich-based startup, which previously raised €3M to unify fragmented trial data, has secured a larger round to build AI agents that actively manage the complex operational layer of running a clinical trial. Clinical trials are, by almost any measure, one of the most information-intensive processes in modern medicine, and one of the least efficiently [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rivia-raises-E13M-.png",
+      "published": "2026-03-18T09:40:09+00:00",
+      "firstSeen": "2026-03-18T11:00:01.428269+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.7059
+    },
+    {
+      "title": "Nvidia DLSS 5 Backlash: Gamers Rage Over AI Filter",
+      "url": "https://www.techrepublic.com/article/news-nvidia-dlss-5-backlash",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nvidia’s DLSS 5 reveal is drawing backlash from gamers who say its generative AI changes go beyond enhancement and start rewriting game art.\nThe post Nvidia DLSS 5 Backlash: Gamers Rage Over AI Filter appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/photo-1716967318503-05b7064afa41-3.jpeg-3.jpeg",
+      "published": "2026-03-18T09:56:53+00:00",
+      "firstSeen": "2026-03-18T11:00:01.428269+00:00",
+      "lastSeen": "2026-03-18T11:08:33.266948+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.1141
     }
   ],
   "errors": []
