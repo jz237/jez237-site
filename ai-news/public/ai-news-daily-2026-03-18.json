@@ -1,6 +1,6 @@
 {
   "date": "2026-03-18",
-  "updatedAt": "2026-03-18T18:00:01.824716+00:00",
+  "updatedAt": "2026-03-18T17:15:53.523938+00:00",
   "items": [
     {
       "title": "Nvidia Launches Space-Ready AI Platforms For Orbital Data Centers",
@@ -13,11 +13,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-space-ai-chips-orbital-data-centers.jpg",
       "published": "2026-03-18T15:21:30+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.0722
+      "score": 15.0933
     },
     {
       "title": "Google Expands Personal Intelligence Across Gemini, Chrome in the US",
@@ -30,10 +30,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-google-personal-intelligence-us-expansion.jpg",
       "published": "2026-03-18T15:01:02+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5625
+      "score": 10.5834
     },
     {
       "title": "Justice Department Says Anthropic Can’t Be Trusted With Warfighting Systems",
@@ -46,10 +46,10 @@
       "image": "https://media.wired.com/photos/69b9b3b8a5694fbea42e1cf8/master/pass/buisness_DOD_Anthropic_GettyImages-2265262796.jpg",
       "published": "2026-03-18T00:51:14+00:00",
       "firstSeen": "2026-03-18T01:00:01.226542+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8732
+      "score": 8.8873
     },
     {
       "title": "The Gemini-powered features in Google Workspace that are worth using",
@@ -62,10 +62,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-2198713751.jpg?w=1024",
       "published": "2026-03-18T16:43:18+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2516
+      "score": 8.2735
     },
     {
       "title": "ServiceNow Research Introduces EnterpriseOps-Gym: A High-Fidelity Benchmark Designed to Evaluate Agentic Planning in Realistic Enterprise Settings",
@@ -78,26 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-12.00.24-AM-1-150x150.png",
       "published": "2026-03-18T07:08:46+00:00",
       "firstSeen": "2026-03-18T07:16:16.798591+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0837
-    },
-    {
-      "title": "Together AI expands fine-tuning service with tool calling, reasoning, and vision support",
-      "url": "https://www.together.ai/blog/fine-tuning-update",
-      "source": "Together AI Blog",
-      "sourceUrl": "https://www.together.ai/blog/rss.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Together AI expands fine-tuning with native support for tool call, reasoning, and vision-language models, plus 100B+ model training, up to 6× higher throughput, and job cost and ETA estimates.",
-      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69bae3b9f0e08c7f1ff1173b_20260309_FC_1200x630.png",
-      "published": "2026-03-18T00:00:00+00:00",
-      "firstSeen": "2026-03-18T18:00:01.824716+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.1872
+      "score": 8.1005
     },
     {
       "title": "Meta&#8217;s Manus AI agent arrives on your desktop to take on OpenClaw",
@@ -110,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Metas-Manus-AI-agent-arrives-on-your-desktop.png",
       "published": "2026-03-18T09:00:07+00:00",
       "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1067
+      "score": 7.1244
     },
     {
       "title": "Multiply raises $9.5M to build AI agents that keep B2B ad campaigns from going stale",
@@ -126,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Multiply-raises-9.5m.png",
       "published": "2026-03-18T13:02:29+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5084
+      "score": 6.5282
     },
     {
       "title": "NVIDIA AI Open-Sources ‘OpenShell’: A Secure Runtime Environment for Autonomous AI Agents",
@@ -142,10 +126,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-1.42.53-AM-1-150x150.png",
       "published": "2026-03-18T08:42:37+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4698
+      "score": 6.4873
     },
     {
       "title": "The leaderboard “you can’t game,” funded by the companies it ranks",
@@ -158,10 +142,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2154525596.jpg?resize=1200%2C771",
       "published": "2026-03-18T16:30:00+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4451
+      "score": 5.4669
     },
     {
       "title": "The PhD students who became the judges of the AI industry",
@@ -174,10 +158,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-03-18T15:00:00+00:00",
       "firstSeen": "2026-03-18T15:22:22.182045+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.402
+      "score": 5.4229
     },
     {
       "title": "DOD says Anthropic’s ‘red lines’ make it an ‘unacceptable risk to national security’",
@@ -190,10 +174,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264385089.jpg?w=1024",
       "published": "2026-03-18T13:40:43+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T18:00:01.824716+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1656
+      "score": 5.1857
+    },
+    {
+      "title": "German biotech Kupando raises €10M more to take its innate immunity drug into the clinic",
+      "url": "https://thenextweb.com/news/kupando-series-a-kup101-phase-1b-innate-immunity",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "An extension to the company’s Series A brings total funding to €23 million and clears the path for the first human trial of KUP101, a dual TLR agonist targeting solid tumours and drug-resistant infections. Most immunotherapy research in oncology has concentrated on the adaptive immune system, the learned, antibody-generating machinery that checkpoint inhibitors like pembrolizumab [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Kupando-raises-E10M.png",
+      "published": "2026-03-18T12:47:01+00:00",
+      "firstSeen": "2026-03-18T13:51:11.195918+00:00",
+      "lastSeen": "2026-03-18T17:15:53.523938+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.4213
     }
   ],
   "errors": []
