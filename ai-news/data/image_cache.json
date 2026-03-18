@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T17:00:01.477074+00:00",
+  "updatedAt": "2026-03-18T18:00:01.824716+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1200,6 +1200,22 @@
     "https://www.techrepublic.com/article/news-google-personal-intelligence-us-expansion": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-google-personal-intelligence-us-expansion.jpg",
       "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/patreon-ceo-calls-ai-companies-fair-use-argument-bogus-says-creators-should-be-paid": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/jack-conte-sxsw.jpg?resize=1200,663",
+      "checkedAt": "2026-03-18T18:00:01.824716+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/18/snowflake-cortex-ai": {
+      "image": "",
+      "checkedAt": "2026-03-18T18:00:01.824716+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/rebel-audio-is-a-new-ai-podcasting-tool-aimed-at-first-time-creators": {
+      "image": "https://techcrunch.com/wp-content/uploads/2021/12/GettyImages-1297183927.jpg?resize=1200,800",
+      "checkedAt": "2026-03-18T18:00:01.824716+00:00"
+    },
+    "https://www.together.ai/blog/fine-tuning-update": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69bae3b9f0e08c7f1ff1173b_20260309_FC_1200x630.png",
+      "checkedAt": "2026-03-18T18:00:01.824716+00:00"
     }
   }
 }
