@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T09:05:18.542660+00:00",
+  "updatedAt": "2026-03-18T11:00:01.428269+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1148,6 +1148,10 @@
     "https://huggingface.co/blog/nvidia/nemotron-3-nano-4b": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-nano-4b.png",
       "checkedAt": "2026-03-17T23:45:43.682995+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-dlss-5-backlash": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/photo-1716967318503-05b7064afa41-3.jpeg-3.jpeg",
+      "checkedAt": "2026-03-18T11:00:01.428269+00:00"
     }
   }
 }
