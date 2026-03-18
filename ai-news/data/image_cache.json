@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T13:00:01.530452+00:00",
+  "updatedAt": "2026-03-18T14:00:01.314201+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1156,6 +1156,14 @@
     "https://www.sciencedaily.com/releases/2026/03/260317064512.htm": {
       "image": "https://www.sciencedaily.com/images/1920/ai-robot-harvesting-tomatoes.webp",
       "checkedAt": "2026-03-18T11:08:33.266948+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/dod-says-anthropics-red-lines-make-it-an-unacceptable-risk-to-national-security": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264385089.jpg?w=1024",
+      "checkedAt": "2026-03-18T14:00:01.314201+00:00"
+    },
+    "https://www.theverge.com/games/896518/nvidia-dlss-5-ai-3d-rendering": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/screencapture-nvidia-en-us-geforce-news-dlss5-breakthrough-in-visual-fidelity-for-games-nvidia-dlss-5-resident-evil-requiem-geforce-rtx-comparison-screenshot-001-2026-03-17-20_21_56.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-03-18T14:00:01.314201+00:00"
     }
   }
 }
