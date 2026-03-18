@@ -1,6 +1,6 @@
 {
   "date": "2026-03-18",
-  "updatedAt": "2026-03-18T15:22:22.182045+00:00",
+  "updatedAt": "2026-03-18T17:00:01.477074+00:00",
   "items": [
     {
       "title": "Nvidia Launches Space-Ready AI Platforms For Orbital Data Centers",
@@ -12,12 +12,12 @@
       "summary": "Nvidia announces AI chip for space-based data centers at the annual GTC 2026 AI conference.\nThe post Nvidia Launches Space-Ready AI Platforms For Orbital Data Centers appeared first on TechRepublic.",
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-space-ai-chips-orbital-data-centers.jpg",
       "published": "2026-03-18T15:21:30+00:00",
-      "firstSeen": "2026-03-18T16:00:01.632798+00:00",
-      "lastSeen": "2026-03-18T16:00:01.632798+00:00",
+      "firstSeen": "2026-03-18T17:00:01.477074+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1306
+      "score": 15.101
     },
     {
       "title": "Google Expands Personal Intelligence Across Gemini, Chrome in the US",
@@ -29,11 +29,11 @@
       "summary": "Google is expanding Personal Intelligence in the US across Search, Gemini, and Chrome, bringing more tailored AI help across its consumer apps\nThe post Google Expands Personal Intelligence Across Gemini, Chrome in the US appeared first on TechRepublic.",
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-google-personal-intelligence-us-expansion.jpg",
       "published": "2026-03-18T15:01:02+00:00",
-      "firstSeen": "2026-03-18T16:00:01.632798+00:00",
-      "lastSeen": "2026-03-18T16:00:01.632798+00:00",
+      "firstSeen": "2026-03-18T17:00:01.477074+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6204
+      "score": 10.591
     },
     {
       "title": "Justice Department Says Anthropic Can’t Be Trusted With Warfighting Systems",
@@ -46,10 +46,26 @@
       "image": "https://media.wired.com/photos/69b9b3b8a5694fbea42e1cf8/master/pass/buisness_DOD_Anthropic_GettyImages-2265262796.jpg",
       "published": "2026-03-18T00:51:14+00:00",
       "firstSeen": "2026-03-18T01:00:01.226542+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9249
+      "score": 8.8924
+    },
+    {
+      "title": "The Gemini-powered features in Google Workspace that are worth using",
+      "url": "https://techcrunch.com/2026/03/18/the-gemini-powered-features-in-google-workspace-that-are-worth-using",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "From summarizing emails, drafting content, organizing data, and tracking meetings, here are all the best Gemini features in Google Workspace.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-2198713751.jpg?w=1024",
+      "published": "2026-03-18T16:43:18+00:00",
+      "firstSeen": "2026-03-18T17:00:01.477074+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2815
     },
     {
       "title": "ServiceNow Research Introduces EnterpriseOps-Gym: A High-Fidelity Benchmark Designed to Evaluate Agentic Planning in Realistic Enterprise Settings",
@@ -62,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-12.00.24-AM-1-150x150.png",
       "published": "2026-03-18T07:08:46+00:00",
       "firstSeen": "2026-03-18T07:16:16.798591+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1453
+      "score": 8.1066
     },
     {
       "title": "Meta&#8217;s Manus AI agent arrives on your desktop to take on OpenClaw",
@@ -78,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Metas-Manus-AI-agent-arrives-on-your-desktop.png",
       "published": "2026-03-18T09:00:07+00:00",
       "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1716
+      "score": 7.1308
     },
     {
       "title": "Multiply raises $9.5M to build AI agents that keep B2B ad campaigns from going stale",
@@ -94,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Multiply-raises-9.5m.png",
       "published": "2026-03-18T13:02:29+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.581
+      "score": 6.5354
     },
     {
       "title": "NVIDIA AI Open-Sources ‘OpenShell’: A Secure Runtime Environment for Autonomous AI Agents",
@@ -110,10 +126,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-1.42.53-AM-1-150x150.png",
       "published": "2026-03-18T08:42:37+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5341
+      "score": 6.4937
+    },
+    {
+      "title": "The leaderboard “you can’t game,” funded by the companies it ranks",
+      "url": "https://techcrunch.com/video/the-leaderboard-you-cant-game-funded-by-the-companies-it-ranks",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Artificial intelligence&#160;models are multiplying fast, and competition is stiff. With so many players crowding the space, which one will be the best&#160;— and who decides that?&#160;Arena, formerly LM Arena, has&#160;emerged&#160;as the de facto public leaderboard for frontier LLMs, influencing funding, launches, and PR cycles. In just seven months, the startup went from a&#160;UC&#160;Berkeley PhD research [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2154525596.jpg?resize=1200%2C771",
+      "published": "2026-03-18T16:30:00+00:00",
+      "firstSeen": "2026-03-18T17:00:01.477074+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4748
     },
     {
       "title": "The PhD students who became the judges of the AI industry",
@@ -126,10 +158,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-03-18T15:00:00+00:00",
       "firstSeen": "2026-03-18T15:22:22.182045+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4787
+      "score": 5.4305
     },
     {
       "title": "DOD says Anthropic’s ‘red lines’ make it an ‘unacceptable risk to national security’",
@@ -142,10 +174,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264385089.jpg?w=1024",
       "published": "2026-03-18T13:40:43+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2394
+      "score": 5.193
     },
     {
       "title": "German biotech Kupando raises €10M more to take its innate immunity drug into the clinic",
@@ -158,74 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Kupando-raises-E10M.png",
       "published": "2026-03-18T12:47:01+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
+      "lastSeen": "2026-03-18T17:00:01.477074+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4737
-    },
-    {
-      "title": "DLSS 5: Has Nvidia&#8217;s AI graphics technology gone too far?",
-      "url": "https://www.theverge.com/games/896518/nvidia-dlss-5-ai-3d-rendering",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Nvidia has revealed a new “3D guided neural rendering model” called DLSS 5 that can change a game’s lighting and materials in real-time, and… many gamers aren’t happy. From DLSS 5 memes to complaints about how it’s “yassified” Resident Evil Requiem characters in demos, the first impression has not been a good one, no matter [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/screencapture-nvidia-en-us-geforce-news-dlss5-breakthrough-in-visual-fidelity-for-games-nvidia-dlss-5-resident-evil-requiem-geforce-rtx-comparison-screenshot-001-2026-03-17-20_21_56.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
-      "published": "2026-03-18T12:30:00+00:00",
-      "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3756
-    },
-    {
-      "title": "Mastercard buys stablecoin firm BVNK for up to $1.8bn",
-      "url": "https://thenextweb.com/news/mastercard-bvnk-18bn-stablecoin-acquisition",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "For most of its fifty-year history, Mastercard has been, in essence, a message-passing network. A transaction happens; Mastercard’s rails carry the authorisation signal between issuer and acquirer in milliseconds; settlement follows on a separate, slower track. The system is extraordinarily reliable and extraordinarily profitable. It is also, increasingly, a system designed for a world that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mastercard-buys-stablecoin-firm-BVNK-for-up-to-1.8bn.png",
-      "published": "2026-03-18T08:46:09+00:00",
-      "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0656
-    },
-    {
-      "title": "Finnish startup Elea &#038; Lili raises €2.5M to replace the plastic",
-      "url": "https://thenextweb.com/news/elea-lili-25m-seed-cellulose",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Polyacrylate is the synthetic crystal at the heart of every modern disposable nappy, is derived from petroleum, and it does not break down. It persists for centuries, leaching microplastics into soil and groundwater as it degrades. The hygiene industry has long regarded it as an engineering necessity: nothing else absorbs as fast, as much, or [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Elea-Lili-raises-E2.5M-.png",
-      "published": "2026-03-18T08:31:06+00:00",
-      "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0593
-    },
-    {
-      "title": "AI-powered robot learns how to harvest tomatoes more efficiently",
-      "url": "https://www.sciencedaily.com/releases/2026/03/260317064512.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "A new tomato-picking robot is learning to think before it acts. Instead of simply identifying ripe fruit, it predicts how easy each tomato will be to harvest and adjusts its approach accordingly. This smarter strategy boosted success rates to 81%, with the robot even switching angles when needed. The breakthrough could pave the way for farms where robots and humans work side by side.",
-      "image": "https://www.sciencedaily.com/images/1920/ai-robot-harvesting-tomatoes.webp",
-      "published": "2026-03-18T04:26:44+00:00",
-      "firstSeen": "2026-03-18T11:08:33.266948+00:00",
-      "lastSeen": "2026-03-18T15:22:22.182045+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.032
+      "score": 3.4284
     }
   ],
   "errors": []

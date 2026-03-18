@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T15:22:22.182045+00:00",
+  "updatedAt": "2026-03-18T17:00:01.477074+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1168,6 +1168,38 @@
     "https://techcrunch.com/podcast/the-phd-students-who-became-the-judges-of-the-ai-industry": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200,801",
       "checkedAt": "2026-03-18T15:22:22.182045+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/the-gemini-powered-features-in-google-workspace-that-are-worth-using": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-2198713751.jpg?w=1024",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://techcrunch.com/video/the-leaderboard-you-cant-game-funded-by-the-companies-it-ranks": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2154525596.jpg?resize=1200,771",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-ai-data-center-south-korea-china-open-source": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-ai-data.jpg",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/this-startup-wants-to-make-enterprise-software-look-more-like-a-prompt": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-11.09.22-AM.png?resize=1200,759",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/sequen-snags-16m-to-bring-tiktok-style-personalization-tech-to-any-consumer-company": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/sequen-logo.jpg?w=744",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/microsoft-hires-the-team-of-sequioa-backed-ai-collaboration-platform-cove": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/cove-team-joins-microsoft.webp?resize=1200,900",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-space-ai-chips-orbital-data-centers": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-space-ai-chips-orbital-data-centers.jpg",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-personal-intelligence-us-expansion": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-google-personal-intelligence-us-expansion.jpg",
+      "checkedAt": "2026-03-18T17:00:01.477074+00:00"
     }
   }
 }
