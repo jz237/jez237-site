@@ -1,6 +1,6 @@
 {
   "date": "2026-03-18",
-  "updatedAt": "2026-03-18T09:00:01.555817+00:00",
+  "updatedAt": "2026-03-18T09:05:18.542660+00:00",
   "items": [
     {
       "title": "Justice Department Says Anthropic Can’t Be Trusted With Warfighting Systems",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/69b9b3b8a5694fbea42e1cf8/master/pass/buisness_DOD_Anthropic_GettyImages-2265262796.jpg",
       "published": "2026-03-18T00:51:14+00:00",
       "firstSeen": "2026-03-18T01:00:01.226542+00:00",
-      "lastSeen": "2026-03-18T09:00:01.555817+00:00",
+      "lastSeen": "2026-03-18T09:05:18.542660+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0672
+      "score": 9.0651
     },
     {
       "title": "ServiceNow Research Introduces EnterpriseOps-Gym: A High-Fidelity Benchmark Designed to Evaluate Agentic Planning in Realistic Enterprise Settings",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-12.00.24-AM-1-150x150.png",
       "published": "2026-03-18T07:08:46+00:00",
       "firstSeen": "2026-03-18T07:16:16.798591+00:00",
-      "lastSeen": "2026-03-18T09:00:01.555817+00:00",
+      "lastSeen": "2026-03-18T09:05:18.542660+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3148
+      "score": 8.3122
     },
     {
       "title": "NVIDIA AI Open-Sources ‘OpenShell’: A Secure Runtime Environment for Autonomous AI Agents",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-1.42.53-AM-1-150x150.png",
       "published": "2026-03-18T08:42:37+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T09:00:01.555817+00:00",
+      "lastSeen": "2026-03-18T09:05:18.542660+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7112
+      "score": 6.7085
     },
     {
       "title": "Finnish startup Elea &#038; Lili raises €2.5M to replace the plastic",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Elea-Lili-raises-E2.5M-.png",
       "published": "2026-03-18T08:31:06+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T09:00:01.555817+00:00",
+      "lastSeen": "2026-03-18T09:05:18.542660+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2354
+      "score": 3.2327
     },
     {
       "title": "Ofiniti raises $6.8M to push its maritime fuel software into global shipping hubs",
@@ -77,10 +77,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ofiniti-raises-6.8M.png",
       "published": "2026-03-18T07:55:56+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T09:00:01.555817+00:00",
+      "lastSeen": "2026-03-18T09:05:18.542660+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4678
+      "score": 2.4652
     }
   ],
   "errors": []
