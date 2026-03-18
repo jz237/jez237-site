@@ -1,8 +1,40 @@
 {
-  "updatedAt": "2026-03-18T19:16:39.097229+00:00",
+  "updatedAt": "2026-03-18T21:00:01.345874+00:00",
   "items": [
     {
-      "title": "Dvid Sacks’s big Iran warning gets big time ignored",
+      "title": "Nothing CEO Carl Pei says smartphone apps will disappear as AI agents take their place",
+      "url": "https://techcrunch.com/2026/03/18/nothing-ceo-carl-pei-says-smartphone-apps-will-disappear-as-ai-agents-take-their-place",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Nothing CEO Carl Pei says AI agents will eventually replace apps, shifting smartphones toward systems that understand intent and act on a user's behalf.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Carl-Pei-Nothing.jpg?resize=1200%2C675",
+      "published": "2026-03-18T20:30:52+00:00",
+      "firstSeen": "2026-03-18T21:00:01.345874+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.0753
+    },
+    {
+      "title": "Nvidia is quietly building a multibillion-dollar behemoth to rival its chips business",
+      "url": "https://techcrunch.com/2026/03/18/nvidia-networking-division-building-a-multibillion-dollar-behemoth-to-rival-its-chips-business",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Nvidia's networking business raked in $11 billion last quarter despite getting significantly less fanfare than chips and gaming.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2183848584.jpg?resize=1200%2C800",
+      "published": "2026-03-18T20:01:19+00:00",
+      "firstSeen": "2026-03-18T21:00:01.345874+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2605
+    },
+    {
+      "title": "David Sacks’ big Iran warning gets big time ignored",
       "url": "https://www.theverge.com/column/896949/regulator-david-sacks-iran-polymarket",
       "source": "The Verge AI",
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
@@ -12,10 +44,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2203279318.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.737892056687%2C100%2C78.524215886627&amp%3Bw=1200",
       "published": "2026-03-18T18:44:21+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3437
+      "score": 2.293
     },
     {
       "title": "Baidu Qianfan Team Releases Qianfan-OCR: A 4B-Parameter Unified Document Intelligence Model",
@@ -28,10 +60,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-11.40.01-AM-1-150x150.png",
       "published": "2026-03-18T18:41:33+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4023
+      "score": 5.3517
     },
     {
       "title": "ChatGPT did not cure a dog’s cancer",
@@ -44,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK155_OPEN_AI_CVirginia__C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-18T18:14:39+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7289
+      "score": 5.6789
     },
     {
       "title": "Facebook will pay TikTok and YouTube creators up to $3,000 a month to post Reels on its platform",
@@ -60,10 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Creator-Fast-Track.png",
       "published": "2026-03-18T18:05:16+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1142
+      "score": 2.0645
     },
     {
       "title": "Why Walmart and OpenAI Are Shaking Up Their Agentic Shopping Deal",
@@ -76,10 +108,10 @@
       "image": "https://media.wired.com/photos/69b9c55f4318d2003e7286fe/master/pass/business_walmart_openai_shopping_chatbot.jpg",
       "published": "2026-03-18T18:01:18+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.9523
+      "score": 15.9026
     },
     {
       "title": "Patreon CEO calls AI companies’ fair use argument ‘bogus,’ says creators should be paid",
@@ -92,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jack-conte-sxsw-1.jpg?resize=1200%2C800",
       "published": "2026-03-18T17:54:31+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.549
+      "score": 2.4995
     },
     {
       "title": "Snowflake Cortex AI Escapes Sandbox and Executes Malware",
@@ -108,10 +140,10 @@
       "image": "",
       "published": "2026-03-18T17:43:49+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0437
+      "score": 4.9945
     },
     {
       "title": "Federal cyber experts called Microsoft's cloud a \"pile of shit,\" approved it anyway",
@@ -124,10 +156,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/09/microsoft-logo-1024x648.jpg",
       "published": "2026-03-18T17:36:40+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2002
+      "score": 3.1512
     },
     {
       "title": "Rebel Audio is a new AI podcasting tool aimed at first-time creators",
@@ -140,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2021/12/GettyImages-1297183927.jpg?resize=1200%2C800",
       "published": "2026-03-18T17:15:00+00:00",
       "firstSeen": "2026-03-18T17:15:53.523938+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2298
+      "score": 2.1812
     },
     {
       "title": "The Gemini-powered features in Google Workspace that are worth using",
@@ -156,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-2198713751.jpg?w=1024",
       "published": "2026-03-18T16:43:18+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2146
+      "score": 8.1667
     },
     {
       "title": "The leaderboard “you can’t game,” funded by the companies it ranks",
@@ -172,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2154525596.jpg?resize=1200%2C771",
       "published": "2026-03-18T16:30:00+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4083
+      "score": 5.3607
     },
     {
       "title": "Nvidia-Backed Startup Plans Billion-Dollar AI Fortress in South Korea",
@@ -188,10 +220,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-ai-data.jpg",
       "published": "2026-03-18T16:27:17+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.167
+      "score": 3.1195
     },
     {
       "title": "This startup wants to make enterprise software look more like a prompt",
@@ -204,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-17-at-11.09.22-AM.png?resize=1200%2C759",
       "published": "2026-03-18T16:00:00+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1943
+      "score": 2.1473
     },
     {
       "title": "Sequen snags $16M to bring TikTok-style personalization tech to any consumer company",
@@ -220,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/sequen-logo.jpg?w=744",
       "published": "2026-03-18T15:58:50+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1937
+      "score": 2.1468
     },
     {
       "title": "GlobalComix raises $13M, acquires INKR, and appoints new CEO to build the infrastructure for global comics distribution",
@@ -236,10 +268,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/GlobalComix.png",
       "published": "2026-03-18T15:48:08+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0488
+      "score": 0.0021
     },
     {
       "title": "Microsoft hires the team of Sequoia-backed AI collaboration platform, Cove",
@@ -252,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/cove-team-joins-microsoft.webp?resize=1200%2C900",
       "published": "2026-03-18T15:33:49+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1822
+      "score": 2.1358
     },
     {
       "title": "Nvidia Launches Space-Ready AI Platforms For Orbital Data Centers",
@@ -268,11 +300,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-nvidia-space-ai-chips-orbital-data-centers.jpg",
       "published": "2026-03-18T15:21:30+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.0365
+      "score": 14.9904
     },
     {
       "title": "Google Expands Personal Intelligence Across Gemini, Chrome in the US",
@@ -285,10 +317,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03182026-google-personal-intelligence-us-expansion.jpg",
       "published": "2026-03-18T15:01:02+00:00",
       "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5272
+      "score": 10.4816
     },
     {
       "title": "The PhD students who became the judges of the AI industry",
@@ -301,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
       "published": "2026-03-18T15:00:00+00:00",
       "firstSeen": "2026-03-18T15:22:22.182045+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3668
+      "score": 5.3211
     },
     {
       "title": "Homaio raises €3.6M to bring carbon allowance investing to retail",
@@ -317,10 +349,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Homaio-raises-E3.6M.png",
       "published": "2026-03-18T14:02:33+00:00",
       "firstSeen": "2026-03-18T15:00:01.465873+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7011
+      "score": 2.6567
     },
     {
       "title": "DOD says Anthropic’s ‘red lines’ make it an ‘unacceptable risk to national security’",
@@ -333,10 +365,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264385089.jpg?w=1024",
       "published": "2026-03-18T13:40:43+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1316
+      "score": 5.0876
     },
     {
       "title": "Multiply raises $9.5M to build AI agents that keep B2B ad campaigns from going stale",
@@ -349,10 +381,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Multiply-raises-9.5m.png",
       "published": "2026-03-18T13:02:29+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.475
+      "score": 6.4318
     },
     {
       "title": "From Simulation to Production: How to Build Robots With AI",
@@ -365,10 +397,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gtc26-models-and-frameworks-1920x1080-1.gif",
       "published": "2026-03-18T13:00:13+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9859
+      "score": -1.0291
     },
     {
       "title": "German biotech Kupando raises €10M more to take its innate immunity drug into the clinic",
@@ -381,10 +413,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Kupando-raises-E10M.png",
       "published": "2026-03-18T12:47:01+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3684
+      "score": 3.3255
     },
     {
       "title": "DLSS 5: Has Nvidia&#8217;s AI graphics technology gone too far?",
@@ -397,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/screencapture-nvidia-en-us-geforce-news-dlss5-breakthrough-in-visual-fidelity-for-games-nvidia-dlss-5-resident-evil-requiem-geforce-rtx-comparison-screenshot-001-2026-03-17-20_21_56.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-03-18T12:30:00+00:00",
       "firstSeen": "2026-03-18T13:51:11.195918+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2712
+      "score": 3.2287
     },
     {
       "title": "Nvidia DLSS 5 Backlash: Gamers Rage Over AI Filter",
@@ -413,10 +445,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/photo-1716967318503-05b7064afa41-3.jpeg-3.jpeg",
       "published": "2026-03-18T09:56:53+00:00",
       "firstSeen": "2026-03-18T11:00:01.428269+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.1011
+      "score": -0.1408
     },
     {
       "title": "Rivia raises €13M to bring agentic AI to clinical trials",
@@ -429,10 +461,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rivia-raises-E13M-.png",
       "published": "2026-03-18T09:40:09+00:00",
       "firstSeen": "2026-03-18T11:00:01.428269+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.4923
+      "score": 1.453
     },
     {
       "title": "Meta&#8217;s Manus AI agent arrives on your desktop to take on OpenClaw",
@@ -445,10 +477,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Metas-Manus-AI-agent-arrives-on-your-desktop.png",
       "published": "2026-03-18T09:00:07+00:00",
       "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0769
+      "score": 7.0382
     },
     {
       "title": "Mastercard buys stablecoin firm BVNK for up to $1.8bn",
@@ -461,10 +493,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mastercard-buys-stablecoin-firm-BVNK-for-up-to-1.8bn.png",
       "published": "2026-03-18T08:46:09+00:00",
       "firstSeen": "2026-03-18T10:00:02.064567+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9715
+      "score": 2.9331
     },
     {
       "title": "NVIDIA AI Open-Sources ‘OpenShell’: A Secure Runtime Environment for Autonomous AI Agents",
@@ -477,10 +509,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-1.42.53-AM-1-150x150.png",
       "published": "2026-03-18T08:42:37+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4402
+      "score": 6.4019
     },
     {
       "title": "Finnish startup Elea &#038; Lili raises €2.5M to replace the plastic",
@@ -493,10 +525,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Elea-Lili-raises-E2.5M-.png",
       "published": "2026-03-18T08:31:06+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9658
+      "score": 2.9277
     },
     {
       "title": "Ofiniti raises $6.8M to push its maritime fuel software into global shipping hubs",
@@ -509,10 +541,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ofiniti-raises-6.8M.png",
       "published": "2026-03-18T07:55:56+00:00",
       "firstSeen": "2026-03-18T09:00:01.555817+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2026
+      "score": 2.1651
     },
     {
       "title": "ServiceNow Research Introduces EnterpriseOps-Gym: A High-Fidelity Benchmark Designed to Evaluate Agentic Planning in Realistic Enterprise Settings",
@@ -525,10 +557,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-12.00.24-AM-1-150x150.png",
       "published": "2026-03-18T07:08:46+00:00",
       "firstSeen": "2026-03-18T07:16:16.798591+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0553
+      "score": 8.0186
     },
     {
       "title": "AI-powered robot learns how to harvest tomatoes more efficiently",
@@ -541,10 +573,10 @@
       "image": "https://www.sciencedaily.com/images/1920/ai-robot-harvesting-tomatoes.webp",
       "published": "2026-03-18T04:26:44+00:00",
       "firstSeen": "2026-03-18T11:08:33.266948+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9486
+      "score": 2.9145
     },
     {
       "title": "Justice Department Says Anthropic Can’t Be Trusted With Warfighting Systems",
@@ -557,10 +589,10 @@
       "image": "https://media.wired.com/photos/69b9b3b8a5694fbea42e1cf8/master/pass/buisness_DOD_Anthropic_GettyImages-2265262796.jpg",
       "published": "2026-03-18T00:51:14+00:00",
       "firstSeen": "2026-03-18T01:00:01.226542+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8494
+      "score": 8.8186
     },
     {
       "title": "Together AI expands fine-tuning service with tool calling, reasoning, and vision support",
@@ -573,10 +605,10 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69bae3b9f0e08c7f1ff1173b_20260309_FC_1200x630.png",
       "published": "2026-03-18T00:00:00+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1639
+      "score": 7.1338
     },
     {
       "title": "Nemotron 3 Nano 4B: A Compact Hybrid Model for Efficient Local AI",
@@ -589,10 +621,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-nano-4b.png",
       "published": "2026-03-17T23:17:07+00:00",
       "firstSeen": "2026-03-17T23:45:43.682995+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9613
+      "score": 1.9318
     },
     {
       "title": "AWS names 12 European AI startups mapping oceans, diagnosing leukaemia, and predicting airstrikes",
@@ -608,39 +640,7 @@
       "lastSeen": "2026-03-18T17:15:53.523938+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7768
-    },
-    {
-      "title": "Unsloth AI Releases Unsloth Studio: A Local No-Code Interface For High-Performance LLM Fine-Tuning With 70% Less VRAM Usage",
-      "url": "https://www.marktechpost.com/2026/03/17/unsloth-ai-releases-studio-a-local-no-code-interface-for-high-performance-llm-fine-tuning-with-70-less-vram-usage",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "The transition from a raw dataset to a fine-tuned Large Language Model (LLM) traditionally involves significant infrastructure overhead, including CUDA environment management and high VRAM requirements. Unsloth AI, known for its high-performance training library, has released Unsloth Studio to address these friction points. The Studio is an open-source, no-code local interface designed to streamline the [&#8230;]\nThe post Unsloth AI Releases Unsloth Studio: A Local No-Code Interface For High-Performance LLM Fine-Tuning With 70% Less VRAM Usage appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-6.png",
-      "published": "2026-03-17T22:32:48+00:00",
-      "firstSeen": "2026-03-17T22:50:19.117819+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.7384
-    },
-    {
-      "title": "The Pentagon is planning for AI companies to train on classified data, defense official says",
-      "url": "https://www.technologyreview.com/2026/03/17/1134351/the-pentagon-is-planning-for-ai-companies-to-train-on-classified-data-defense-official-says",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The Pentagon is discussing plans to set up secure environments for generative AI companies to train military-specific versions of their models on classified data, MIT Technology Review has learned.&#160; AI models like Anthropic’s Claude are already used to answer questions in classified settings; applications include analyzing targets in Iran. But allowing models to train on&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/classified-data.jpg?resize=1200%2C600",
-      "published": "2026-03-17T22:30:46+00:00",
-      "firstSeen": "2026-03-17T22:50:19.117819+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.9079
+      "score": 2.7475
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.2058
+      "score": -0.22
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1928
+      "score": 1.1927
     },
     {
       "title": "Introducing... Life Without",
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-18T19:16:39.097229+00:00",
+      "lastSeen": "2026-03-18T21:00:01.345874+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.2203
