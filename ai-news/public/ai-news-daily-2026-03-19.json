@@ -1,6 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T09:59:04.108452+00:00",
+  "updatedAt": "2026-03-19T11:00:01.483143+00:00",
   "items": [
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.731
+      "score": 10.702
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7054
+      "score": 8.678
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8082
+      "score": 5.7815
     },
     {
       "title": "Parallel raises €20M to deploy AI agents for hospital administrative work across Europe",
@@ -61,10 +61,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Parallel-raises-E20M.png",
       "published": "2026-03-19T09:07:28+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.174
+      "score": 5.1441
+    },
+    {
+      "title": "The Fight to Hold AI Companies Accountable for Children’s Deaths",
+      "url": "https://www.wired.com/story/how-ai-chatbots-drove-families-to-the-brink-and-the-lawyer-fighting-back",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "After a series of suicides allegedly linked to AI chatbots, one lawyer is trying to hold companies like OpenAI accountable.",
+      "image": "https://media.wired.com/photos/699503a3222c28198015e17e/master/pass/LMG-FOR-WIRED-Business-FINAL-SELECTS-7.jpg",
+      "published": "2026-03-19T10:00:00+00:00",
+      "firstSeen": "2026-03-19T11:00:01.483143+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2599
     },
     {
       "title": "eternal.ag raises €8M to put autonomous harvesting robots into greenhouses",
@@ -77,10 +93,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Eternal.ag-raises-E8M.png",
       "published": "2026-03-19T09:26:17+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2334
+      "score": 3.2033
+    },
+    {
+      "title": "Alpine Eagle is scaling counter-drone production as Europe races to close its air-defence gap",
+      "url": "https://thenextweb.com/news/alpine-eagle-counter-drone-production-scaling-europe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Munich startup’s airborne Sentinel system has been tested in Ukraine and alongside US and UK forces, now it’s planning a 2,000-square-metre production facility and quadrupling its headcount. The cost asymmetry that defines modern drone warfare is by now well documented. In April 2024, Iran launched roughly 300 drones and missiles at Israel. Defenders intercepted [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Alpine-Eagle-is-scaling-counter-drone-production.png",
+      "published": "2026-03-19T09:58:26+00:00",
+      "firstSeen": "2026-03-19T11:00:01.483143+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8191
     },
     {
       "title": "A Coding Guide to Implement Advanced Differential Equation Solvers, Stochastic Simulations, and Neural Ordinary Differential Equations Using Diffrax and JAX",
@@ -93,10 +125,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-58-1024x731.png",
       "published": "2026-03-19T08:11:01+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.5663
+      "score": 2.5372
     },
     {
       "title": "Reson8 raises €5M pre-seed funding to scale Europe’s first customisable speech AI",
@@ -109,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Reson8-raises-E5m-to-build-Europe-first-speech-AI.png",
       "published": "2026-03-19T05:00:43+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T11:00:01.483143+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0081
+      "score": 1.9814
     }
   ],
   "errors": []
