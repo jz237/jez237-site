@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T10:59:35.101177+00:00",
+  "updatedAt": "2026-03-19T12:00:01.144039+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1260,6 +1260,10 @@
     "https://techcrunch.com/2026/03/19/multiverse-computing-pushes-its-compressed-ai-models-into-the-mainstream": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200,800",
       "checkedAt": "2026-03-19T08:59:37.199570+00:00"
+    },
+    "https://www.techrepublic.com/article/best-ai-art-generators": {
+      "image": "https://assets.techrepublic.com/uploads/2024/11/tr_20241105-best-ai-art-generators.jpg",
+      "checkedAt": "2026-03-19T12:00:01.144039+00:00"
     }
   }
 }
