@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T23:40:29.013224+00:00",
+  "updatedAt": "2026-03-19T01:00:01.409388+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1240,6 +1240,14 @@
     "https://techcrunch.com/2026/03/18/sam-altmans-thank-you-to-coders-draws-the-memes": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200,800",
       "checkedAt": "2026-03-18T23:40:29.013224+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/18/llm-in-a-flash": {
+      "image": "",
+      "checkedAt": "2026-03-19T01:00:01.409388+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/meta-is-having-trouble-with-rogue-ai-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
+      "checkedAt": "2026-03-19T01:00:01.409388+00:00"
     }
   }
 }
