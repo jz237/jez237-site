@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T13:40:31.671179+00:00",
+  "updatedAt": "2026-03-19T15:00:01.449763+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1284,6 +1284,14 @@
     "https://openai.com/index/openai-to-acquire-astral": {
       "image": "",
       "checkedAt": "2026-03-19T13:40:31.671179+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/speed-bench": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/668e7a379ab7631fcd434ee7/XacU6olgSSgQvlkrw0gMo.png",
+      "checkedAt": "2026-03-19T15:00:01.449763+00:00"
+    },
+    "https://www.techrepublic.com/article/news-xiaomi-hunter-alpha-ai-model-deepseek-speculation": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03192026-xiaomi-hunter-alpha-ai-model.jpg",
+      "checkedAt": "2026-03-19T15:00:01.449763+00:00"
     }
   }
 }
