@@ -1,6 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T17:00:01.885270+00:00",
+  "updatedAt": "2026-03-19T16:05:38.971914+00:00",
   "items": [
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.5467
+      "score": 10.5685
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5309
+      "score": 8.5516
     },
     {
       "title": "Put the power of AI directly in your browser with BrowserCoPilot",
@@ -45,10 +45,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/Copy-of-Untitled-Design-40.png",
       "published": "2026-03-19T12:30:34+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.521
+      "score": 8.5457
     },
     {
       "title": "Amazon brings Alexa+ to the UK",
@@ -61,26 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Alexa-UK.jpeg?resize=1200%2C675",
       "published": "2026-03-19T12:27:24+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1596
-    },
-    {
-      "title": "ChatGPT’s ‘Adult Mode’ Could Spark a New Era of Intimate Surveillance",
-      "url": "https://www.wired.com/story/chatgpt-adult-mode-new-era-of-intimate-surveillance",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "OpenAI plans to allow sexting with ChatGPT. A human-AI interaction expert warns of a privacy nightmare.",
-      "image": "https://media.wired.com/photos/69bc088492c0fea2c0434768/master/pass/GettyImages-2220923493.jpg",
-      "published": "2026-03-19T16:06:49+00:00",
-      "firstSeen": "2026-03-19T17:00:01.885270+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 7.6632
+      "score": 8.1843
     },
     {
       "title": "Adobe’s AI image generator can now be trained on your own art",
@@ -93,26 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Firefly-Custom-Models-Hero-Image.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C5.1234106207928%2C100%2C89.753178758414&amp%3Bw=1200",
       "published": "2026-03-19T13:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4443
-    },
-    {
-      "title": "Thoughts on OpenAI acquiring Astral and uv/ruff/ty",
-      "url": "https://simonwillison.net/2026/Mar/19/openai-acquiring-astral",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The big news this morning: Astral to join OpenAI (on the Astral blog) and OpenAI to acquire Astral (the OpenAI announcement). Astral are the company behind uv, ruff, and ty - three increasingly load-bearing open source projects in the Python ecosystem. I have thoughts!\nThe official line from OpenAI and Astral\nThe Astral team will become part of the Codex team at OpenAI.\nCharlie Marsh has this to say:\n\nOpen source is at the heart of that impact and the heart of that story; it sits at the center of everything we do. In line with our philosophy and OpenAI's own announcement, OpenAI will continue ",
-      "image": "https://imgs.xkcd.com/comics/python_environment.png",
-      "published": "2026-03-19T16:45:15+00:00",
-      "firstSeen": "2026-03-19T17:00:01.885270+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9825
+      "score": 6.4694
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -125,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6385
+      "score": 5.6586
     },
     {
       "title": "The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store",
@@ -138,13 +106,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Apple pushes back on vibe coding apps like Replit and Vibecode over App Store rules, raising questions about how AI-built apps fit within platform guidelines.\nThe post The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2024/01/app-store-logo-jan-24-v2-hero.jpeg",
+      "image": "",
       "published": "2026-03-19T15:40:02+00:00",
-      "firstSeen": "2026-03-19T17:00:01.885270+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "firstSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.61
+      "score": 5.637
     },
     {
       "title": "Xiaomi Unmasks Mystery AI Model Behind DeepSeek Buzz",
@@ -157,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03192026-xiaomi-hunter-alpha-ai-model.jpg",
       "published": "2026-03-19T13:13:49+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.4406
+      "score": 5.4659
     },
     {
       "title": "Signal’s Creator Is Helping Encrypt Meta AI",
@@ -173,10 +141,10 @@
       "image": "https://media.wired.com/photos/69baacb648cfa1aefb918759/master/pass/GettyImages-2263125077.jpg",
       "published": "2026-03-19T14:09:51+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2067
+      "score": 5.2326
     },
     {
       "title": "DoorDash launches a new ‘Tasks’ app that pays couriers to submit videos to train AI",
@@ -185,14 +153,46 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Delivery couriers will be able to earn money by completing activities like filming everyday tasks or recording themselves speaking in another language.",
-      "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200%2C800",
-      "published": "2026-03-19T16:14:00+00:00",
-      "firstSeen": "2026-03-19T17:00:01.885270+00:00",
-      "lastSeen": "2026-03-19T17:00:01.885270+00:00",
+      "summary": "",
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/668e7a379ab7631fcd434ee7/XacU6olgSSgQvlkrw0gMo.png",
+      "published": "2026-03-19T14:04:54+00:00",
+      "firstSeen": "2026-03-19T15:00:01.449763+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1668
+      "score": 5.1202
+    },
+    {
+      "title": "OpenAI to acquire Astral",
+      "url": "https://openai.com/index/openai-to-acquire-astral",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Accelerates Codex growth to power the next generation of Python developer tools",
+      "image": "",
+      "published": "2026-03-19T00:00:00+00:00",
+      "firstSeen": "2026-03-19T13:40:31.671179+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1035
+    },
+    {
+      "title": "Parallel raises €20M to deploy AI agents for hospital administrative work across Europe",
+      "url": "https://thenextweb.com/news/parallel-hospital-ai-agents-20m-index-ventures",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Every patient discharge in a European hospital triggers a paperwork cascade. Clinical information from the stay must be converted into standardised codes, the ICD classifications and procedure codes that determine what a hospital gets paid. Someone has to navigate the legacy software, pull the right records, select the right codes, and enter them correctly. In [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Parallel-raises-E20M.png",
+      "published": "2026-03-19T09:07:28+00:00",
+      "firstSeen": "2026-03-19T09:59:04.108452+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0064
     }
   ],
   "errors": []
