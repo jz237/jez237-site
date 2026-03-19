@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-18T22:47:16.411392+00:00",
+  "updatedAt": "2026-03-19T00:00:01.537982+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1236,6 +1236,14 @@
     "https://techcrunch.com/2026/03/18/nvidia-networking-division-building-a-multibillion-dollar-behemoth-to-rival-its-chips-business": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2183848584.jpg?resize=1200,800",
       "checkedAt": "2026-03-18T20:54:02.953935+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/meta-is-having-trouble-with-rogue-ai-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
+      "checkedAt": "2026-03-19T00:00:01.537982+00:00"
+    },
+    "https://techcrunch.com/2026/03/18/sam-altmans-thank-you-to-coders-draws-the-memes": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200,800",
+      "checkedAt": "2026-03-19T00:00:01.537982+00:00"
     }
   }
 }
