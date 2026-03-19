@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T17:00:01.885270+00:00",
+  "updatedAt": "2026-03-19T16:05:38.971914+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1297,13 +1297,9 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200,800",
       "checkedAt": "2026-03-19T15:03:55.074819+00:00"
     },
-    "https://techcrunch.com/2026/03/19/doordash-launches-a-new-tasks-app-that-pays-couriers-to-submit-videos-to-train-ai": {
-      "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200,800",
-      "checkedAt": "2026-03-19T17:00:01.885270+00:00"
-    },
     "https://www.techrepublic.com/article/news-apple-vibe-coding-app-store-rules": {
-      "image": "https://assets.techrepublic.com/uploads/2024/01/app-store-logo-jan-24-v2-hero.jpeg",
-      "checkedAt": "2026-03-19T17:00:01.885270+00:00"
+      "image": "",
+      "checkedAt": "2026-03-19T16:05:38.971914+00:00"
     }
   }
 }
