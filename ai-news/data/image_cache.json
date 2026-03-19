@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T22:46:57.224872+00:00",
+  "updatedAt": "2026-03-19T23:42:19.316108+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1336,6 +1336,10 @@
     "https://techcrunch.com/2026/03/19/jeff-bezos-reportedly-wants-100-billion-to-buy-and-transform-old-manufacturing-firms-with-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2020/01/GettyImages-184123956.jpg?resize=1200,800",
       "checkedAt": "2026-03-19T22:46:57.224872+00:00"
+    },
+    "https://www.techrepublic.com/article/microsofts-jeff-hollan-on-what-makes-an-ai-agent-enterprise-ready": {
+      "image": "",
+      "checkedAt": "2026-03-19T23:42:19.316108+00:00"
     }
   }
 }
