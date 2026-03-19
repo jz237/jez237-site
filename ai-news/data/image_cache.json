@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T15:00:01.449763+00:00",
+  "updatedAt": "2026-03-19T15:03:55.074819+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1292,6 +1292,10 @@
     "https://www.techrepublic.com/article/news-xiaomi-hunter-alpha-ai-model-deepseek-speculation": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03192026-xiaomi-hunter-alpha-ai-model.jpg",
       "checkedAt": "2026-03-19T15:00:01.449763+00:00"
+    },
+    "https://techcrunch.com/2026/03/19/techcrunch-startup-battlefield-200-nominations-are-still-open": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200,800",
+      "checkedAt": "2026-03-19T15:03:55.074819+00:00"
     }
   }
 }
