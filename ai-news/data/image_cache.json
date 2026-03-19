@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T18:00:01.742993+00:00",
+  "updatedAt": "2026-03-19T17:11:52.798253+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1301,25 +1301,13 @@
       "image": "",
       "checkedAt": "2026-03-19T16:05:38.971914+00:00"
     },
-    "https://techcrunch.com/2026/03/19/meta-rolls-out-new-ai-content-enforcement-systems-while-reducing-reliance-on-third-party-vendors": {
-      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2194278734.jpg?w=1024",
-      "checkedAt": "2026-03-19T18:00:01.742993+00:00"
-    },
-    "https://www.techrepublic.com/article/news-nvidia-gtc-2026-open-models-open-agents-shift": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-14.jpg",
-      "checkedAt": "2026-03-19T18:00:01.742993+00:00"
-    },
-    "https://www.techrepublic.com/article/news-att-launches-ai-powered-app": {
-      "image": "https://assets.techrepublic.com/uploads/2025/12/Woman-on-Phone-1-Adobe.jpeg",
-      "checkedAt": "2026-03-19T18:00:01.742993+00:00"
-    },
     "https://techcrunch.com/2026/03/19/doordash-launches-a-new-tasks-app-that-pays-couriers-to-submit-videos-to-train-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200,800",
-      "checkedAt": "2026-03-19T18:00:01.742993+00:00"
+      "checkedAt": "2026-03-19T17:11:52.798253+00:00"
     },
     "https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/6QiOsDAtMDSQDtyJdqygZ3/e00d303b22fcbefb76ebb13ed003f6b9/OAI_Monitoring_internal_deployments_for_loss_of_control_risks_SEO_16x9.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-03-19T18:00:01.742993+00:00"
+      "image": "",
+      "checkedAt": "2026-03-19T17:11:52.798253+00:00"
     }
   }
 }
