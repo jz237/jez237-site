@@ -1,6 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T15:03:55.074819+00:00",
+  "updatedAt": "2026-03-19T16:05:38.971914+00:00",
   "items": [
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.594
+      "score": 10.5685
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5757
+      "score": 8.5516
     },
     {
       "title": "Put the power of AI directly in your browser with BrowserCoPilot",
@@ -45,10 +45,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/Copy-of-Untitled-Design-40.png",
       "published": "2026-03-19T12:30:34+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5746
+      "score": 8.5457
     },
     {
       "title": "Amazon brings Alexa+ to the UK",
@@ -61,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Alexa-UK.jpeg?resize=1200%2C675",
       "published": "2026-03-19T12:27:24+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2131
+      "score": 8.1843
     },
     {
       "title": "Adobe’s AI image generator can now be trained on your own art",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Firefly-Custom-Models-Hero-Image.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C5.1234106207928%2C100%2C89.753178758414&amp%3Bw=1200",
       "published": "2026-03-19T13:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4987
+      "score": 6.4694
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -93,10 +93,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.682
+      "score": 5.6586
+    },
+    {
+      "title": "The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store",
+      "url": "https://www.techrepublic.com/article/news-apple-vibe-coding-app-store-rules",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple pushes back on vibe coding apps like Replit and Vibecode over App Store rules, raising questions about how AI-built apps fit within platform guidelines.\nThe post The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-19T15:40:02+00:00",
+      "firstSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.637
     },
     {
       "title": "Xiaomi Unmasks Mystery AI Model Behind DeepSeek Buzz",
@@ -109,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03192026-xiaomi-hunter-alpha-ai-model.jpg",
       "published": "2026-03-19T13:13:49+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.4953
+      "score": 5.4659
     },
     {
       "title": "Signal’s Creator Is Helping Encrypt Meta AI",
@@ -125,10 +141,10 @@
       "image": "https://media.wired.com/photos/69baacb648cfa1aefb918759/master/pass/GettyImages-2263125077.jpg",
       "published": "2026-03-19T14:09:51+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2628
+      "score": 5.2326
     },
     {
       "title": "**Introducing SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding**",
@@ -141,10 +157,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/668e7a379ab7631fcd434ee7/XacU6olgSSgQvlkrw0gMo.png",
       "published": "2026-03-19T14:04:54+00:00",
       "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1504
+      "score": 5.1202
     },
     {
       "title": "OpenAI to acquire Astral",
@@ -157,10 +173,10 @@
       "image": "",
       "published": "2026-03-19T00:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1239
+      "score": 5.1035
     },
     {
       "title": "Parallel raises €20M to deploy AI agents for hospital administrative work across Europe",
@@ -173,26 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Parallel-raises-E20M.png",
       "published": "2026-03-19T09:07:28+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
+      "lastSeen": "2026-03-19T16:05:38.971914+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0327
-    },
-    {
-      "title": "Austrian startup TACEO launches a network that runs sensitive computation without seeing the underlying data",
-      "url": "https://thenextweb.com/news/taceo-network-launch-private-computation-world-id",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The TACEO Network, already live inside World ID’s biometric verification system for more than 18 million users, lets organisations share digital infrastructure without sharing sensitive data. When Sam Altman’s World needs to verify that a new user’s iris hasn’t already been registered, it faces a peculiar problem. The computation has to happen on encrypted data, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TACEO-launches-its-private-execution-network.png",
-      "published": "2026-03-19T14:00:25+00:00",
-      "firstSeen": "2026-03-19T15:00:01.449763+00:00",
-      "lastSeen": "2026-03-19T15:03:55.074819+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0181
+      "score": 5.0064
     }
   ],
   "errors": []
