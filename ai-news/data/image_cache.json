@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T07:12:18.349310+00:00",
+  "updatedAt": "2026-03-19T08:59:37.199570+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1252,6 +1252,14 @@
     "https://www.marktechpost.com/2026/03/18/meet-mamba-3-a-new-state-space-model-frontier-with-2x-smaller-states-and-enhanced-mimo-decoding-hardware-efficiency": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "checkedAt": "2026-03-19T07:00:02.000654+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/19/a-coding-guide-to-implement-advanced-differential-equation-solvers-stochastic-simulations-and-neural-ordinary-differential-equations-using-diffrax-and-jax": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-58-1024x731.png",
+      "checkedAt": "2026-03-19T08:59:37.199570+00:00"
+    },
+    "https://techcrunch.com/2026/03/19/multiverse-computing-pushes-its-compressed-ai-models-into-the-mainstream": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200,800",
+      "checkedAt": "2026-03-19T08:59:37.199570+00:00"
     }
   }
 }
