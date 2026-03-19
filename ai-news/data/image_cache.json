@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-19T05:36:16.827542+00:00",
+  "updatedAt": "2026-03-19T07:00:02.000654+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1248,6 +1248,10 @@
     "https://techcrunch.com/2026/03/18/meta-is-having-trouble-with-rogue-ai-agents": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
       "checkedAt": "2026-03-19T01:00:01.409388+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/18/meet-mamba-3-a-new-state-space-model-frontier-with-2x-smaller-states-and-enhanced-mimo-decoding-hardware-efficiency": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
+      "checkedAt": "2026-03-19T07:00:02.000654+00:00"
     }
   }
 }
