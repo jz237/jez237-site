@@ -1,6 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T18:00:01.742993+00:00",
+  "updatedAt": "2026-03-19T17:11:52.798253+00:00",
   "items": [
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.5232
+      "score": 10.542
     },
     {
       "title": "How we monitor internal coding agents for misalignment",
@@ -26,13 +26,13 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "How OpenAI uses chain-of-thought monitoring to study misalignment in internal coding agents—analyzing real-world deployments to detect risks and strengthen AI safety safeguards.",
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/6QiOsDAtMDSQDtyJdqygZ3/e00d303b22fcbefb76ebb13ed003f6b9/OAI_Monitoring_internal_deployments_for_loss_of_control_risks_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "image": "",
       "published": "2026-03-19T10:00:00+00:00",
-      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "firstSeen": "2026-03-19T17:11:52.798253+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3808
+      "score": 9.4007
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5087
+      "score": 8.5265
     },
     {
       "title": "Put the power of AI directly in your browser with BrowserCoPilot",
@@ -61,26 +61,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/Copy-of-Untitled-Design-40.png",
       "published": "2026-03-19T12:30:34+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.4944
-    },
-    {
-      "title": "Google Shakes Up Its Browser Agent Team Amid OpenClaw Craze",
-      "url": "https://www.wired.com/story/google-shakes-up-project-mariner-team-web-browsing-agents",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As Silicon Valley obsesses over a new wave of AI coding agents, Google and other AI labs are shifting their bets.",
-      "image": "https://media.wired.com/photos/69bc33bda714aba9de7defdf/master/pass/Model-Behavior-Google-Project-Mariner-Business.jpg",
-      "published": "2026-03-19T06:00:00+00:00",
-      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.4782
+      "score": 8.5157
     },
     {
       "title": "Amazon brings Alexa+ to the UK",
@@ -93,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Alexa-UK.jpeg?resize=1200%2C675",
       "published": "2026-03-19T12:27:24+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.133
+      "score": 8.1543
     },
     {
       "title": "ChatGPT’s ‘Adult Mode’ Could Spark a New Era of Intimate Surveillance",
@@ -108,11 +92,11 @@
       "summary": "OpenAI plans to allow sexting with ChatGPT. A human-AI interaction expert warns of a privacy nightmare.",
       "image": "https://media.wired.com/photos/69bc088492c0fea2c0434768/master/pass/GettyImages-2220923493.jpg",
       "published": "2026-03-19T16:06:49+00:00",
-      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "firstSeen": "2026-03-19T17:11:52.798253+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6338
+      "score": 7.6574
     },
     {
       "title": "Adobe’s AI image generator can now be trained on your own art",
@@ -125,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Firefly-Custom-Models-Hero-Image.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C5.1234106207928%2C100%2C89.753178758414&amp%3Bw=1200",
       "published": "2026-03-19T13:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4173
+      "score": 6.4389
     },
     {
       "title": "Thoughts on OpenAI acquiring Astral and uv/ruff/ty",
@@ -140,43 +124,11 @@
       "summary": "The big news this morning: Astral to join OpenAI (on the Astral blog) and OpenAI to acquire Astral (the OpenAI announcement). Astral are the company behind uv, ruff, and ty - three increasingly load-bearing open source projects in the Python ecosystem. I have thoughts!\nThe official line from OpenAI and Astral\nThe Astral team will become part of the Codex team at OpenAI.\nCharlie Marsh has this to say:\n\nOpen source is at the heart of that impact and the heart of that story; it sits at the center of everything we do. In line with our philosophy and OpenAI's own announcement, OpenAI will continue ",
       "image": "https://imgs.xkcd.com/comics/python_environment.png",
       "published": "2026-03-19T16:45:15+00:00",
-      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "firstSeen": "2026-03-19T17:11:52.798253+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9526
-    },
-    {
-      "title": "AI analytics agents need guardrails, not more model size",
-      "url": "https://thenextweb.com/news/ai-analytics-agents-need-guardrails-not-more-model-size",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Picture a VP of finance at a large retailer. She asks the company’s new AI analytics agent a simple question: “What was our revenue last quarter?” The answer comes back in seconds. Confident. Clean. Wrong. That exact scenario happens more frequently than many organizations would care to admit. AtScale, which enables organizations to deploy governed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/growtika-nGoCBxiaRO0-unsplash.jpg",
-      "published": "2026-03-19T17:33:09+00:00",
-      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9364
-    },
-    {
-      "title": "Nvidia’s Open Model Super Panel Made a Strong Case for Open Agents",
-      "url": "https://www.techrepublic.com/article/news-nvidia-gtc-2026-open-models-open-agents-shift",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "At GTC 2026, Jensen Huang, Aravind Srinivas, Harrison Chase, Mira Murati, and Michael Truell made a compelling case that the future of AI belongs to open agent systems, not just open models.\nThe post Nvidia’s Open Model Super Panel Made a Strong Case for Open Agents appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-14.jpg",
-      "published": "2026-03-19T17:13:05+00:00",
-      "firstSeen": "2026-03-19T18:00:01.742993+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9264
+      "score": 5.9765
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -189,10 +141,58 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T18:00:01.742993+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6169
+      "score": 5.6342
+    },
+    {
+      "title": "The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store",
+      "url": "https://www.techrepublic.com/article/news-apple-vibe-coding-app-store-rules",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple pushes back on vibe coding apps like Replit and Vibecode over App Store rules, raising questions about how AI-built apps fit within platform guidelines.\nThe post The Hidden Problem With ‘Vibe Coding’ Apps on Apple’s App Store appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-19T15:40:02+00:00",
+      "firstSeen": "2026-03-19T16:05:38.971914+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6042
+    },
+    {
+      "title": "Xiaomi Unmasks Mystery AI Model Behind DeepSeek Buzz",
+      "url": "https://www.techrepublic.com/article/news-xiaomi-hunter-alpha-ai-model-deepseek-speculation",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Learn more about how AI agents are reshaping enterprise workflows in TechRepublic’s latest generative AI coverage.\nThe post Xiaomi Unmasks Mystery AI Model Behind DeepSeek Buzz appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03192026-xiaomi-hunter-alpha-ai-model.jpg",
+      "published": "2026-03-19T13:13:49+00:00",
+      "firstSeen": "2026-03-19T15:00:01.449763+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 5.4352
+    },
+    {
+      "title": "Signal’s Creator Is Helping Encrypt Meta AI",
+      "url": "https://www.wired.com/story/signals-creator-is-helping-encrypt-meta-ai",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Moxie Marlinspike says the technology powering his encrypted AI chatbot, Confer, will be integrated into Meta AI. The move could help protect the AI conversations of millions of people.",
+      "image": "https://media.wired.com/photos/69baacb648cfa1aefb918759/master/pass/GettyImages-2263125077.jpg",
+      "published": "2026-03-19T14:09:51+00:00",
+      "firstSeen": "2026-03-19T15:00:01.449763+00:00",
+      "lastSeen": "2026-03-19T17:11:52.798253+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2011
     }
   ],
   "errors": []
