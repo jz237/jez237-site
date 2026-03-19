@@ -1,39 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T06:00:01.695745+00:00",
-  "items": [
-    {
-      "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
-      "url": "https://thenextweb.com/news/ringtime-seed-round-blue-collar-recruitment-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Recruiters spend hours a day calling, leaving voicemails, and asking the same questions. Ringtime automates the whole thing, and has already found a second home in real estate. There is a well-worn frustration in blue-collar recruitment. A warehouse operative applies on Monday, hears nothing by Tuesday, and has accepted a job somewhere else by Wednesday. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
-      "published": "2026-03-19T05:00:54+00:00",
-      "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T06:00:01.695745+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9203
-    },
-    {
-      "title": "Reson8 raises €5M pre-seed funding to scale Europe’s first customisable speech AI",
-      "url": "https://thenextweb.com/news/reson8-raises-e5m-to-build-europe-first-speech-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amsterdam-based Reson8 has raised €5M in pre-seed funding to challenge US-centric speech platforms by building a high-precision, industry-specific speech recognition platform tailored for European languages. Reson8, a hyper-customised speech AI startup that ensures real-life, accurate, industry-specific language recognition, has raised pre-seed funding to scale its infrastructure and expand its speech models across more than 20 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Reson8-raises-E5m-to-build-Europe-first-speech-AI.png",
-      "published": "2026-03-19T05:00:43+00:00",
-      "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T06:00:01.695745+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1202
-    }
-  ],
+  "updatedAt": "2026-03-19T05:36:16.827542+00:00",
+  "items": [],
   "errors": []
 }
