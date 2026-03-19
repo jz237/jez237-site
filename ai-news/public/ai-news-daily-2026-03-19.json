@@ -1,6 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T18:02:25.855807+00:00",
+  "updatedAt": "2026-03-19T19:12:24.475807+00:00",
   "items": [
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.5223
+      "score": 10.4957
     },
     {
       "title": "How we monitor internal coding agents for misalignment",
@@ -29,10 +29,26 @@
       "image": "",
       "published": "2026-03-19T10:00:00+00:00",
       "firstSeen": "2026-03-19T17:11:52.798253+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3798
+      "score": 9.3518
+    },
+    {
+      "title": "Google Shakes Up Its Browser Agent Team Amid OpenClaw Craze",
+      "url": "https://www.wired.com/story/google-shakes-up-project-mariner-team-web-browsing-agents",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As Silicon Valley obsesses over a new wave of AI coding agents, Google and other AI labs are shifting their bets.",
+      "image": "https://media.wired.com/photos/69bc33bda714aba9de7defdf/master/pass/Model-Behavior-Google-Project-Mariner-Business.jpg",
+      "published": "2026-03-19T18:00:00+00:00",
+      "firstSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.7537
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -45,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5078
+      "score": 8.4827
     },
     {
       "title": "Put the power of AI directly in your browser with BrowserCoPilot",
@@ -61,26 +77,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/Copy-of-Untitled-Design-40.png",
       "published": "2026-03-19T12:30:34+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.4933
-    },
-    {
-      "title": "Google Shakes Up Its Browser Agent Team Amid OpenClaw Craze",
-      "url": "https://www.wired.com/story/google-shakes-up-project-mariner-team-web-browsing-agents",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As Silicon Valley obsesses over a new wave of AI coding agents, Google and other AI labs are shifting their bets.",
-      "image": "https://media.wired.com/photos/69bc33bda714aba9de7defdf/master/pass/Model-Behavior-Google-Project-Mariner-Business.jpg",
-      "published": "2026-03-19T06:00:00+00:00",
-      "firstSeen": "2026-03-19T18:02:25.855807+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.4773
+      "score": 8.4633
     },
     {
       "title": "Amazon brings Alexa+ to the UK",
@@ -93,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Alexa-UK.jpeg?resize=1200%2C675",
       "published": "2026-03-19T12:27:24+00:00",
       "firstSeen": "2026-03-19T13:00:01.664933+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.132
+      "score": 8.1019
     },
     {
       "title": "ChatGPT’s ‘Adult Mode’ Could Spark a New Era of Intimate Surveillance",
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/69bc088492c0fea2c0434768/master/pass/GettyImages-2220923493.jpg",
       "published": "2026-03-19T16:06:49+00:00",
       "firstSeen": "2026-03-19T17:11:52.798253+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6327
+      "score": 7.5994
     },
     {
       "title": "Adobe’s AI image generator can now be trained on your own art",
@@ -125,10 +125,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Firefly-Custom-Models-Hero-Image.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C5.1234106207928%2C100%2C89.753178758414&amp%3Bw=1200",
       "published": "2026-03-19T13:00:00+00:00",
       "firstSeen": "2026-03-19T13:40:31.671179+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4163
+      "score": 6.3858
     },
     {
       "title": "Thoughts on OpenAI acquiring Astral and uv/ruff/ty",
@@ -141,10 +141,10 @@
       "image": "https://imgs.xkcd.com/comics/python_environment.png",
       "published": "2026-03-19T16:45:15+00:00",
       "firstSeen": "2026-03-19T17:11:52.798253+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9514
+      "score": 5.9176
     },
     {
       "title": "AI analytics agents need guardrails, not more model size",
@@ -157,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/growtika-nGoCBxiaRO0-unsplash.jpg",
       "published": "2026-03-19T17:33:09+00:00",
       "firstSeen": "2026-03-19T18:02:25.855807+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9352
+      "score": 5.9006
     },
     {
       "title": "Nvidia’s Open Model Super Panel Made a Strong Case for Open Agents",
@@ -173,10 +173,10 @@
       "image": "",
       "published": "2026-03-19T17:13:05+00:00",
       "firstSeen": "2026-03-19T18:02:25.855807+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9252
+      "score": 5.8909
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -189,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T18:02:25.855807+00:00",
+      "lastSeen": "2026-03-19T19:12:24.475807+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.616
+      "score": 5.5916
     }
   ],
   "errors": []
