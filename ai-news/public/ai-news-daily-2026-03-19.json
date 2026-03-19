@@ -1,6 +1,6 @@
 {
   "date": "2026-03-19",
-  "updatedAt": "2026-03-19T10:59:35.101177+00:00",
+  "updatedAt": "2026-03-19T11:48:23.859387+00:00",
   "items": [
     {
       "title": "Multiverse Computing pushes its compressed AI models into the mainstream",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2219202029.jpg?resize=1200%2C800",
       "published": "2026-03-19T08:00:00+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.7022
+      "score": 10.6796
     },
     {
       "title": "Meet Mamba-3: A New State Space Model Frontier with 2x Smaller States and Enhanced MIMO Decoding Hardware Efficiency",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-57-1024x731.png",
       "published": "2026-03-19T06:01:22+00:00",
       "firstSeen": "2026-03-19T07:00:02.000654+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.6781
+      "score": 8.6567
     },
     {
       "title": "Ringtime raises €1.8M to send AI agents after blue-collar candidates",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AI-startup-Ringtime-raises-E1.8M-for-voice-agents.png",
       "published": "2026-03-19T05:00:54+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7817
+      "score": 5.7609
     },
     {
       "title": "Parallel raises €20M to deploy AI agents for hospital administrative work across Europe",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Parallel-raises-E20M.png",
       "published": "2026-03-19T09:07:28+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1444
+      "score": 5.121
     },
     {
       "title": "The Fight to Hold AI Companies Accountable for Children’s Deaths",
@@ -77,10 +77,10 @@
       "image": "https://media.wired.com/photos/699503a3222c28198015e17e/master/pass/LMG-FOR-WIRED-Business-FINAL-SELECTS-7.jpg",
       "published": "2026-03-19T10:00:00+00:00",
       "firstSeen": "2026-03-19T10:59:35.101177+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2601
+      "score": 4.2362
     },
     {
       "title": "eternal.ag raises €8M to put autonomous harvesting robots into greenhouses",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Eternal.ag-raises-E8M.png",
       "published": "2026-03-19T09:26:17+00:00",
       "firstSeen": "2026-03-19T09:59:04.108452+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2035
+      "score": 3.18
     },
     {
       "title": "Alpine Eagle is scaling counter-drone production as Europe races to close its air-defence gap",
@@ -109,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Alpine-Eagle-is-scaling-counter-drone-production.png",
       "published": "2026-03-19T09:58:26+00:00",
       "firstSeen": "2026-03-19T10:59:35.101177+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8193
+      "score": 2.7954
     },
     {
       "title": "A Coding Guide to Implement Advanced Differential Equation Solvers, Stochastic Simulations, and Neural Ordinary Differential Equations Using Diffrax and JAX",
@@ -125,10 +125,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-58-1024x731.png",
       "published": "2026-03-19T08:11:01+00:00",
       "firstSeen": "2026-03-19T08:59:37.199570+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.5374
+      "score": 2.5147
     },
     {
       "title": "Reson8 raises €5M pre-seed funding to scale Europe’s first customisable speech AI",
@@ -141,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Reson8-raises-E5m-to-build-Europe-first-speech-AI.png",
       "published": "2026-03-19T05:00:43+00:00",
       "firstSeen": "2026-03-19T06:00:01.695745+00:00",
-      "lastSeen": "2026-03-19T10:59:35.101177+00:00",
+      "lastSeen": "2026-03-19T11:48:23.859387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9816
+      "score": 1.9608
     }
   ],
   "errors": []
