@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T10:55:25.108393+00:00",
+  "updatedAt": "2026-03-20T11:44:17.888710+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1348,6 +1348,10 @@
     "https://www.marktechpost.com/2026/03/19/llamaindex-releases-liteparse-a-cli-and-typescript-native-library-for-spatial-pdf-parsing-in-ai-agent-workflows": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-2-2.png",
       "checkedAt": "2026-03-20T07:00:01.341290+00:00"
+    },
+    "https://techcrunch.com/2026/03/20/ai-notetaker-hardware-devices-pins-pendants-record-transcribe": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/12/Plaud-Note-Pro.jpg?resize=1200,675",
+      "checkedAt": "2026-03-20T11:44:17.888710+00:00"
     }
   }
 }
