@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T19:04:42.609363+00:00",
+  "updatedAt": "2026-03-20T19:47:30.248302+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1404,6 +1404,10 @@
     "https://www.marktechpost.com/2026/03/20/a-coding-implementation-showcasing-clawteams-multi-agent-swarm-orchestration-with-openai-function-calling": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-60-1024x731.png",
       "checkedAt": "2026-03-20T19:00:01.838792+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/domain-specific-embedding-finetune": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/domain-specific-embedding-finetune.png",
+      "checkedAt": "2026-03-20T19:47:30.248302+00:00"
     }
   }
 }
