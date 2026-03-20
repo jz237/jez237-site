@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T16:59:33.481907+00:00",
+  "updatedAt": "2026-03-20T17:51:21.679818+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1384,6 +1384,18 @@
     "https://techcrunch.com/2026/03/20/trumps-ai-framework-targets-state-laws-shifts-child-safety-burden-to-parents": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2203859648.jpg?w=1024",
       "checkedAt": "2026-03-20T16:59:33.481907+00:00"
+    },
+    "https://www.techrepublic.com/article/news-crypto-com-layoffs-ai-shift": {
+      "image": "",
+      "checkedAt": "2026-03-20T17:51:21.679818+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/nemotron-3-content-safety": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-content-safety.png",
+      "checkedAt": "2026-03-20T17:51:21.679818+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-gtc-2026-recap": {
+      "image": "",
+      "checkedAt": "2026-03-20T17:51:21.679818+00:00"
     }
   }
 }
