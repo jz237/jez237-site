@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T11:44:17.888710+00:00",
+  "updatedAt": "2026-03-20T13:00:01.379317+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1352,6 +1352,14 @@
     "https://techcrunch.com/2026/03/20/ai-notetaker-hardware-devices-pins-pendants-record-transcribe": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/Plaud-Note-Pro.jpg?resize=1200,675",
       "checkedAt": "2026-03-20T11:44:17.888710+00:00"
+    },
+    "https://techcrunch.com/2026/03/20/the-best-ai-investment-might-be-in-energy-tech": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-1316185179.jpeg?resize=1200,800",
+      "checkedAt": "2026-03-20T13:00:01.379317+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/20/1134438/openai-is-throwing-everything-into-building-a-fully-automated-researcher": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/research-assistant3c.jpg?resize=1200,600",
+      "checkedAt": "2026-03-20T13:00:01.379317+00:00"
     }
   }
 }
