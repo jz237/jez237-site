@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T06:00:01.981895+00:00",
+  "updatedAt": "2026-03-20T07:00:01.341290+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1344,6 +1344,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/897778/openai-chatgpt-codex-atlas-browser-superapp": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462044/STK155_OPEN_AI_CVirginia_2_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-20T01:00:01.744837+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/19/llamaindex-releases-liteparse-a-cli-and-typescript-native-library-for-spatial-pdf-parsing-in-ai-agent-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-2-2.png",
+      "checkedAt": "2026-03-20T07:00:01.341290+00:00"
     }
   }
 }
