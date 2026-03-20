@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T19:47:30.248302+00:00",
+  "updatedAt": "2026-03-20T20:48:54.130565+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1408,6 +1408,18 @@
     "https://huggingface.co/blog/nvidia/domain-specific-embedding-finetune": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/domain-specific-embedding-finetune.png",
       "checkedAt": "2026-03-20T19:47:30.248302+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/20/cursor-on-kimi": {
+      "image": "",
+      "checkedAt": "2026-03-20T20:48:54.130565+00:00"
+    },
+    "https://techcrunch.com/video/what-happened-at-nvidia-gtc-nemoclaw-robot-olaf-and-a-1-trillion-bet": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266464474.jpg?resize=1200,774",
+      "checkedAt": "2026-03-20T20:48:54.130565+00:00"
+    },
+    "https://techcrunch.com/podcast/nvidia-has-an-openclaw-strategy-do-you": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-clawbot-gtc-getty.jpg?resize=1200,790",
+      "checkedAt": "2026-03-20T20:48:54.130565+00:00"
     }
   }
 }
