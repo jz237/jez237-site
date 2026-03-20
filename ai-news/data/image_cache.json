@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T20:48:54.130565+00:00",
+  "updatedAt": "2026-03-20T21:43:02.865537+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1420,6 +1420,18 @@
     "https://techcrunch.com/podcast/nvidia-has-an-openclaw-strategy-do-you": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-clawbot-gtc-getty.jpg?resize=1200,790",
       "checkedAt": "2026-03-20T20:48:54.130565+00:00"
+    },
+    "https://techcrunch.com/2026/03/20/microsoft-rolls-back-some-of-its-copilot-ai-bloat-on-windows": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/06/moshed-windows-11.jpg?resize=1200,752",
+      "checkedAt": "2026-03-20T21:43:02.865537+00:00"
+    },
+    "https://www.techrepublic.com/article/news-humanoid-robots-enterprise-it-infrastructure-challenges": {
+      "image": "",
+      "checkedAt": "2026-03-20T21:43:02.865537+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-factories-security-flaws-and-workforce-shifts-define-this-week-in-tech": {
+      "image": "",
+      "checkedAt": "2026-03-20T21:43:02.865537+00:00"
     }
   }
 }
