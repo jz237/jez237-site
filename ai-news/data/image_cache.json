@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T15:56:21.787016+00:00",
+  "updatedAt": "2026-03-20T17:00:02.101282+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1376,6 +1376,14 @@
     "https://huggingface.co/blog/ibm-granite/granite-libraries": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-libraries.png",
       "checkedAt": "2026-03-20T14:59:17.095918+00:00"
+    },
+    "https://techcrunch.com/2026/03/20/wordpress-com-now-lets-ai-agents-write-and-publish-posts-and-more": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/09/wordpress-v1.jpg?resize=1200,675",
+      "checkedAt": "2026-03-20T17:00:02.101282+00:00"
+    },
+    "https://techcrunch.com/2026/03/20/trumps-ai-framework-targets-state-laws-shifts-child-safety-burden-to-parents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2203859648.jpg?w=1024",
+      "checkedAt": "2026-03-20T17:00:02.101282+00:00"
     }
   }
 }
