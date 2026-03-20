@@ -1,6 +1,6 @@
 {
   "date": "2026-03-20",
-  "updatedAt": "2026-03-20T17:00:02.101282+00:00",
+  "updatedAt": "2026-03-20T16:59:33.481907+00:00",
   "items": [
     {
       "title": "OpenAI is planning a desktop ‘superapp’",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462044/STK155_OPEN_AI_CVirginia_2_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-20T00:09:38+00:00",
       "firstSeen": "2026-03-20T01:00:01.744837+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.849
+      "score": 12.8492
     },
     {
       "title": "OpenAI is throwing everything into building a fully automated researcher",
@@ -29,10 +29,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/research-assistant3c.jpg?resize=1200%2C600",
       "published": "2026-03-20T11:57:16+00:00",
       "firstSeen": "2026-03-20T13:00:01.379317+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2461
+      "score": 9.2463
     },
     {
       "title": "Perplexity has launched Perplexity Health",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Perplexity-has-launched-Perplexity-Health.png",
       "published": "2026-03-20T09:31:42+00:00",
       "firstSeen": "2026-03-20T09:56:41.681404+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2438
+      "score": 8.244
     },
     {
       "title": "Starling launches an AI banking assistant that actually does things",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Starling-launches-an-AI-banking-assistant.png",
       "published": "2026-03-20T13:57:23+00:00",
       "firstSeen": "2026-03-20T14:59:17.095918+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.7608
+      "score": 7.761
     },
     {
       "title": "WordPress.com now lets AI agents write and publish posts, and more",
@@ -76,11 +76,11 @@
       "summary": "New AI agents on WordPress.com could lower barriers to publishing while increasing machine-generated content across the web.",
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/wordpress-v1.jpg?resize=1200%2C675",
       "published": "2026-03-20T16:43:09+00:00",
-      "firstSeen": "2026-03-20T17:00:02.101282+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "firstSeen": "2026-03-20T16:59:33.481907+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9814
+      "score": 4.9817
     },
     {
       "title": "My AI Agent ‘Cofounder’ Conquered LinkedIn. Then It Got Banned",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/69bc8173510953e5189ef6c0/master/pass/linkedin_ai_agent_company.jpg",
       "published": "2026-03-20T10:00:00+00:00",
       "firstSeen": "2026-03-20T10:55:25.108393+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7956
+      "score": 4.7958
     },
     {
       "title": "Google Search is now using AI to replace headlines",
@@ -109,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/10455389/mdoying_180117_2249_0206stills.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-20T14:30:00+00:00",
       "firstSeen": "2026-03-20T14:59:17.095918+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6862
+      "score": 4.6864
     },
     {
       "title": "I Learned More Than I Thought I Would From Using Food-Tracking Apps",
@@ -125,10 +125,10 @@
       "image": "https://media.wired.com/photos/69bc9c35f05d6225e8611bc6/master/pass/AI-Powered-Food-Tracking-Apps-Told-Me-What-to-Eat-Gear.jpg",
       "published": "2026-03-20T10:30:00+00:00",
       "firstSeen": "2026-03-20T10:55:25.108393+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6083
+      "score": 4.6085
     },
     {
       "title": "Amazon is making an Alexa phone",
@@ -141,10 +141,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/acastro_STK103__03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-20T13:42:51+00:00",
       "firstSeen": "2026-03-20T14:00:01.640586+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.064
+      "score": 4.0643
     },
     {
       "title": "BBLeap raises €5M to bring plant-level precision spraying to arable farms globally",
@@ -157,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/BBLeap.png",
       "published": "2026-03-20T11:24:10+00:00",
       "firstSeen": "2026-03-20T11:44:17.888710+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7916
+      "score": 3.7918
     },
     {
       "title": "At Palantir’s Developer Conference, AI Is Built to Win Wars",
@@ -173,10 +173,10 @@
       "image": "https://media.wired.com/photos/69bc605080392585c27a64b6/master/pass/Backchannel-Inside-Mind-of-Palantir-Business-2249768392.jpg",
       "published": "2026-03-20T15:00:00+00:00",
       "firstSeen": "2026-03-20T15:56:21.787016+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6305
+      "score": 3.6308
     },
     {
       "title": "The best AI investment might be in energy tech",
@@ -189,10 +189,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-1316185179.jpeg?resize=1200%2C800",
       "published": "2026-03-20T12:00:00+00:00",
       "firstSeen": "2026-03-20T13:00:01.379317+00:00",
-      "lastSeen": "2026-03-20T17:00:02.101282+00:00",
+      "lastSeen": "2026-03-20T16:59:33.481907+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2473
+      "score": 3.2476
     }
   ],
   "errors": []
