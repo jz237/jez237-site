@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T17:51:21.679818+00:00",
+  "updatedAt": "2026-03-20T19:00:01.838792+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1396,6 +1396,14 @@
     "https://www.techrepublic.com/article/news-nvidia-gtc-2026-recap": {
       "image": "",
       "checkedAt": "2026-03-20T17:51:21.679818+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/898055/trump-new-ai-policy-framework": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK470_AI_LAW_CVIRGINIA_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-20T19:00:01.838792+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/20/a-coding-implementation-showcasing-clawteams-multi-agent-swarm-orchestration-with-openai-function-calling": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-60-1024x731.png",
+      "checkedAt": "2026-03-20T19:00:01.838792+00:00"
     }
   }
 }
