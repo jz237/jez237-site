@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T18:00:01.350546+00:00",
+  "updatedAt": "2026-03-20T17:51:21.679818+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1386,16 +1386,16 @@
       "checkedAt": "2026-03-20T16:59:33.481907+00:00"
     },
     "https://www.techrepublic.com/article/news-crypto-com-layoffs-ai-shift": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_325027079.jpg",
-      "checkedAt": "2026-03-20T18:00:01.350546+00:00"
+      "image": "",
+      "checkedAt": "2026-03-20T17:51:21.679818+00:00"
     },
     "https://huggingface.co/blog/nvidia/nemotron-3-content-safety": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-3-content-safety.png",
-      "checkedAt": "2026-03-20T18:00:01.350546+00:00"
+      "checkedAt": "2026-03-20T17:51:21.679818+00:00"
     },
     "https://www.techrepublic.com/article/news-nvidia-gtc-2026-recap": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/GTC-2026-press-release-1.jpg",
-      "checkedAt": "2026-03-20T18:00:01.350546+00:00"
+      "image": "",
+      "checkedAt": "2026-03-20T17:51:21.679818+00:00"
     }
   }
 }
