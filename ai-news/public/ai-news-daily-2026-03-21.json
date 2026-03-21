@@ -1,6 +1,6 @@
 {
   "date": "2026-03-21",
-  "updatedAt": "2026-03-21T23:00:01.794197+00:00",
+  "updatedAt": "2026-03-21T22:40:34.278881+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Build an Uncertainty-Aware LLM System with Confidence Estimation, Self-Evaluation, and Automatic Web Research",
@@ -12,11 +12,11 @@
       "summary": "In this tutorial, we build an uncertainty-aware large language model system that not only generates answers but also estimates the confidence in those answers. We implement a three-stage reasoning pipeline in which the model first produces an answer along with a self-reported confidence score and a justification. We then introduce a self-evaluation step that allows [&#8230;]\nThe post A Coding Implementation to Build an Uncertainty-Aware LLM System with Confidence Estimation, Self-Evaluation, and Automatic Web Research appeared first on MarkTechPost.",
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-62.png",
       "published": "2026-03-21T21:39:10+00:00",
-      "firstSeen": "2026-03-21T23:00:01.794197+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "firstSeen": "2026-03-21T22:40:34.278881+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.1296
+      "score": 10.1392
     },
     {
       "title": "Gemini task automation is slow, clunky, and super impressive",
@@ -29,10 +29,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/dsc03087_processed.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-03-21T11:30:00+00:00",
       "firstSeen": "2026-03-21T13:00:01.243815+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1592
+      "score": 9.1664
     },
     {
       "title": "Using Git with coding agents",
@@ -44,11 +44,11 @@
       "summary": "Agentic Engineering Patterns &gt;\n    Git is a key tool for working with coding agents. Keeping code in version control lets us record how that code changes over time and investigate and reverse any mistakes. All of the coding agents are fluent in using Git's features, both basic and advanced.\nThis fluency means we can be more ambitious about how we use Git ourselves. We don't need to  memorize how to do things with Git, but staying aware of what's possible means we can take advantage of the full suite of Git's abilities.\nGit essentials\nEach Git project lives in a repository - a folder on disk",
       "image": "",
       "published": "2026-03-21T22:08:24+00:00",
-      "firstSeen": "2026-03-21T23:00:01.794197+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "firstSeen": "2026-03-21T22:40:34.278881+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.364
+      "score": 7.3737
     },
     {
       "title": "The gen AI Kool-Aid tastes like eugenics",
@@ -61,10 +61,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/ai-label.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-21T14:00:00+00:00",
       "firstSeen": "2026-03-21T14:42:31.043319+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8167
+      "score": 4.8244
     },
     {
       "title": "New court filing reveals Pentagon told Anthropic the two sides were nearly aligned — a week after Trump declared the relationship kaput",
@@ -77,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261514463.jpg?w=1024",
       "published": "2026-03-21T01:40:28+00:00",
       "firstSeen": "2026-03-21T02:00:01.415591+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7983
+      "score": 4.8038
     },
     {
       "title": "Anthropic Denies It Could Sabotage AI Tools During War",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/69bdd83054a6d8f67d317f75/master/pass/Anthropic-Denies-It-Could-Sabotage-AI-Tools-In-Middle-of-War-Business.jpg",
       "published": "2026-03-21T00:03:20+00:00",
       "firstSeen": "2026-03-21T01:00:01.252602+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7716
+      "score": 4.7768
     },
     {
       "title": "I Tried DoorDash’s Tasks App and Saw the Bleak Future of AI Gig Work",
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/69bde0470f77792197014e68/master/pass/gear_doordash_task_app_gig.jpg",
       "published": "2026-03-21T11:00:00+00:00",
       "firstSeen": "2026-03-21T11:34:00.871460+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0782
+      "score": 3.0853
     },
     {
       "title": "Post-Training in 2026: GRPO, DAPO, RLVR & Beyond",
@@ -123,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-21T23:00:06.428838+00:00",
+      "published": "2026-03-21T22:40:41.749205+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
@@ -141,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/49688202642_09fd5ccc38_k.jpg?resize=1200%2C800",
       "published": "2026-03-21T19:30:27+00:00",
       "firstSeen": "2026-03-21T19:34:44.959577+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1883
+      "score": 2.1973
     },
     {
       "title": "Delve accused of misleading customers with ‘fake compliance’",
@@ -157,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_1542.jpeg?w=1170",
       "published": "2026-03-21T17:00:05+00:00",
       "firstSeen": "2026-03-21T17:37:45.294183+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1212
+      "score": 2.1296
     },
     {
       "title": "Why Wall Street wasn’t won over by Nvidia’s big conference",
@@ -173,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-2026-getty.jpg?resize=1200%2C800",
       "published": "2026-03-21T16:28:00+00:00",
       "firstSeen": "2026-03-21T16:46:08.222544+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1074
+      "score": 2.1157
     },
     {
       "title": "Cyberattack on a Car Breathalyzer Firm Leaves Drivers Stuck",
@@ -189,10 +189,10 @@
       "image": "https://media.wired.com/photos/69bd936664f16d66cf6343e0/master/pass/Security-Roundup-Hacked-Breathalyzer-Security-523525124.jpg",
       "published": "2026-03-21T10:30:00+00:00",
       "firstSeen": "2026-03-21T10:44:23.098521+00:00",
-      "lastSeen": "2026-03-21T23:00:01.794197+00:00",
+      "lastSeen": "2026-03-21T22:40:34.278881+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9673
+      "score": 1.9743
     }
   ],
   "errors": []

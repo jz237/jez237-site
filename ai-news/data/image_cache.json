@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-21T23:00:01.794197+00:00",
+  "updatedAt": "2026-03-21T22:40:34.278881+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1467,7 +1467,7 @@
     },
     "https://simonwillison.net/guides/agentic-engineering-patterns/using-git-with-coding-agents": {
       "image": "",
-      "checkedAt": "2026-03-21T23:00:01.794197+00:00"
+      "checkedAt": "2026-03-21T22:40:34.278881+00:00"
     }
   }
 }
