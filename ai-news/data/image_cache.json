@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T22:46:25.822469+00:00",
+  "updatedAt": "2026-03-21T00:00:01.995031+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1432,6 +1432,10 @@
     "https://www.techrepublic.com/article/ai-factories-security-flaws-and-workforce-shifts-define-this-week-in-tech": {
       "image": "",
       "checkedAt": "2026-03-20T21:43:02.865537+00:00"
+    },
+    "https://llm-stats.com/ai-news": {
+      "image": "https://llm-stats.com/og/main.png",
+      "checkedAt": "2026-03-21T00:00:01.995031+00:00"
     }
   }
 }
