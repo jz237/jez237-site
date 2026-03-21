@@ -445,6 +445,45 @@ def score_item(item, now):
     return round((item.get("sourceWeight", 0.7) * 1.4) + keyword_score + editorial_score + (recency * 1.1), 4)
 
 
+def scrape_llm_stats_news(page_url, source_name, weight):
+    """Scrape AI news items from llm-stats.com/ai-news (Next.js SSR page)."""
+    import re
+    items = []
+    try:
+        html = fetch_url(page_url).decode("utf-8", errors="ignore")
+        # Extract headlines from SSR text content (between > and <, 30+ chars, starts uppercase)
+        headlines = re.findall(r'(?<=>)([A-Z][^<]{30,300})(?=<)', html)
+        seen_titles = set()
+        skip_phrases = ["your daily source", "subscribe", "join our newsletter",
+                        "no spam", "privacy policy", "terms of service",
+                        "the ai benchmarking", "toggle theme", "llm stats"]
+        for headline in headlines:
+            h = headline.strip()
+            h = h.replace("&quot;", '"').replace("&#x27;", "'").replace("&amp;", "&")
+            h_lower = h.lower()
+            if any(skip in h_lower for skip in skip_phrases):
+                continue
+            if h in seen_titles:
+                continue
+            if len(h) < 35:
+                continue
+            seen_titles.add(h)
+            # Use the llm-stats page as URL since individual items may not have stable links
+            items.append({
+                "title": h,
+                "url": f"{page_url}#{hash(h) & 0xffffffff:08x}",
+                "published": now_utc(),
+                "summary": "",
+                "image": "",
+                "source": source_name,
+                "sourceUrl": page_url,
+                "sourceWeight": weight,
+            })
+    except Exception as e:
+        print(f"[scrape_llm_stats_news] Error: {e}")
+    return items[:30]
+
+
 def main():
     ensure_dirs()
     now = now_utc()
@@ -468,11 +507,15 @@ def main():
         url = feed.get("url")
         weight = float(feed.get("weight", 0.7))
         category = feed.get("category", "AI")
+        scrape_type = feed.get("type", "rss")
         if not name or not url:
             continue
         try:
-            body = fetch_url(url)
-            items = parse_feed_xml(body, name, url, weight)
+            if scrape_type == "llm-stats-news":
+                items = scrape_llm_stats_news(url, name, weight)
+            else:
+                body = fetch_url(url)
+                items = parse_feed_xml(body, name, url, weight)
             for item in items:
                 item["category"] = category
             fetched.extend(items)
