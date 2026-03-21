@@ -1,6 +1,6 @@
 {
   "date": "2026-03-21",
-  "updatedAt": "2026-03-21T10:44:23.098521+00:00",
+  "updatedAt": "2026-03-21T11:34:00.871460+00:00",
   "items": [
     {
       "title": "New court filing reveals Pentagon told Anthropic the two sides were nearly aligned — a week after Trump declared the relationship kaput",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261514463.jpg?w=1024",
       "published": "2026-03-21T01:40:28+00:00",
       "firstSeen": "2026-03-21T02:00:01.415591+00:00",
-      "lastSeen": "2026-03-21T10:44:23.098521+00:00",
+      "lastSeen": "2026-03-21T11:34:00.871460+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0451
+      "score": 5.0257
     },
     {
       "title": "Anthropic Denies It Could Sabotage AI Tools During War",
@@ -29,10 +29,26 @@
       "image": "https://media.wired.com/photos/69bdd83054a6d8f67d317f75/master/pass/Anthropic-Denies-It-Could-Sabotage-AI-Tools-In-Middle-of-War-Business.jpg",
       "published": "2026-03-21T00:03:20+00:00",
       "firstSeen": "2026-03-21T01:00:01.252602+00:00",
-      "lastSeen": "2026-03-21T10:44:23.098521+00:00",
+      "lastSeen": "2026-03-21T11:34:00.871460+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0075
+      "score": 4.989
+    },
+    {
+      "title": "I Tried DoorDash’s Tasks App and Saw the Bleak Future of AI Gig Work",
+      "url": "https://www.wired.com/story/i-tried-doordashs-tasks-app-and-saw-the-bleak-future-of-ai-gig-work",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I recorded videos of myself doing laundry, scrambling eggs, and walking around the park in DoorDash’s new Tasks app, where gig workers are paid to train AI.",
+      "image": "https://media.wired.com/photos/69bde0470f77792197014e68/master/pass/gear_doordash_task_app_gig.jpg",
+      "published": "2026-03-21T11:00:00+00:00",
+      "firstSeen": "2026-03-21T11:34:00.871460+00:00",
+      "lastSeen": "2026-03-21T11:34:00.871460+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3728
     },
     {
       "title": "Post-Training in 2026: GRPO, DAPO, RLVR & Beyond",
@@ -43,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-21T10:44:27.407462+00:00",
+      "published": "2026-03-21T11:34:12.924394+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-21T10:44:23.098521+00:00",
+      "lastSeen": "2026-03-21T11:34:00.871460+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
@@ -61,10 +77,10 @@
       "image": "https://media.wired.com/photos/69bd936664f16d66cf6343e0/master/pass/Security-Roundup-Hacked-Breathalyzer-Security-523525124.jpg",
       "published": "2026-03-21T10:30:00+00:00",
       "firstSeen": "2026-03-21T10:44:23.098521+00:00",
-      "lastSeen": "2026-03-21T10:44:23.098521+00:00",
+      "lastSeen": "2026-03-21T11:34:00.871460+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2827
+      "score": 2.2579
     },
     {
       "title": "'Jury Duty Presents: Company Retreat' Almost Makes Corporate Culture Seem Fun",
@@ -77,10 +93,10 @@
       "image": "https://media.wired.com/photos/69bc59fc89c1dde02548b3cf/master/pass/Jury-Duty-2-Culture-TCDJUDU_ZU012.jpg",
       "published": "2026-03-21T10:00:00+00:00",
       "firstSeen": "2026-03-21T10:44:23.098521+00:00",
-      "lastSeen": "2026-03-21T10:44:23.098521+00:00",
+      "lastSeen": "2026-03-21T11:34:00.871460+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2676
+      "score": 2.2431
     }
   ],
   "errors": []
