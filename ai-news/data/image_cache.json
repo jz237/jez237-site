@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-21T21:36:35.766258+00:00",
+  "updatedAt": "2026-03-21T23:00:01.794197+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1464,6 +1464,10 @@
     "https://www.marktechpost.com/2026/03/21/a-coding-implementation-to-build-an-uncertainty-aware-llm-system-with-confidence-estimation-self-evaluation-and-automatic-web-research": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-62.png",
       "checkedAt": "2026-03-21T22:00:01.599793+00:00"
+    },
+    "https://simonwillison.net/guides/agentic-engineering-patterns/using-git-with-coding-agents": {
+      "image": "",
+      "checkedAt": "2026-03-21T23:00:01.794197+00:00"
     }
   }
 }
