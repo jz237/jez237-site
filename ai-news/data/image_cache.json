@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-21T20:40:41.317465+00:00",
+  "updatedAt": "2026-03-21T22:00:01.599793+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1460,6 +1460,10 @@
     "https://techcrunch.com/2026/03/21/publisher-pulls-horror-novel-shy-girl-over-ai-concerns": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/49688202642_09fd5ccc38_k.jpg?resize=1200,800",
       "checkedAt": "2026-03-21T19:34:44.959577+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/21/a-coding-implementation-to-build-an-uncertainty-aware-llm-system-with-confidence-estimation-self-evaluation-and-automatic-web-research": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-62.png",
+      "checkedAt": "2026-03-21T22:00:01.599793+00:00"
     }
   }
 }
