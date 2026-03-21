@@ -47,7 +47,6 @@
     "weight": 0.8,
     "category": "AI"
   },
-
   {
     "name": "TechRepublic AI",
     "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
@@ -125,5 +124,12 @@
     "url": "https://simonwillison.net/atom/everything/",
     "weight": 0.85,
     "category": "AI"
+  },
+  {
+    "name": "LLM Stats AI News",
+    "url": "https://llm-stats.com/ai-news",
+    "weight": 0.9,
+    "category": "AI",
+    "type": "llm-stats-news"
   }
 ]
