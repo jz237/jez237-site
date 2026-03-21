@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-21T16:46:08.222544+00:00",
+  "updatedAt": "2026-03-21T17:37:45.294183+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1452,6 +1452,10 @@
     "https://techcrunch.com/2026/03/21/why-wall-street-wasnt-won-over-by-nvidias-big-conference": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-2026-getty.jpg?resize=1200,800",
       "checkedAt": "2026-03-21T16:46:08.222544+00:00"
+    },
+    "https://techcrunch.com/2026/03/21/delve-accused-of-misleading-customers-with-fake-compliance": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_1542.jpeg?w=1170",
+      "checkedAt": "2026-03-21T17:37:45.294183+00:00"
     }
   }
 }
