@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-21T13:51:35.100980+00:00",
+  "updatedAt": "2026-03-21T15:00:01.769885+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1444,6 +1444,10 @@
     "https://www.theverge.com/tech/898282/gemini-task-automation-uber-doordash-hands-on": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/dsc03087_processed.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
       "checkedAt": "2026-03-21T12:00:01.951866+00:00"
+    },
+    "https://www.theverge.com/entertainment/897923/ghost-in-the-machine-valerie-veatch-interview": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/ai-label.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-21T15:00:01.769885+00:00"
     }
   }
 }
