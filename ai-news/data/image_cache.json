@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T16:46:24.804507+00:00",
+  "updatedAt": "2026-03-22T17:37:52.672524+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1500,6 +1500,10 @@
     "https://techcrunch.com/2026/03/22/elon-musk-unveils-chip-manufacturing-plans-for-spacex-and-tesla": {
       "image": "",
       "checkedAt": "2026-03-22T17:00:01.488617+00:00"
+    },
+    "https://www.theverge.com/games/898771/crimson-desert-dev-apologizes-ai-art": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/found-this-ai-painting-v0-otfba7ufh8qg1.webp?quality=90&amp;strip=all&amp;crop=0,3.4229797217454,100,93.154040556509",
+      "checkedAt": "2026-03-22T17:37:52.672524+00:00"
     }
   }
 }
