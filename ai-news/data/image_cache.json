@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T23:00:02.089215+00:00",
+  "updatedAt": "2026-03-22T22:43:18.802239+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1519,7 +1519,7 @@
     },
     "https://www.marktechpost.com/2026/03/22/implementing-deep-q-learning-dqn-from-scratch-using-rlax-jax-haiku-and-optax-to-train-a-cartpole-reinforcement-learning-agent": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/a-computer-screen-displays-lines-of-code_NhN2MwzWQFWMqrzgiAFmCg_EvqUXia9RxG2ByrMbsZCGA_cover_hd.png",
-      "checkedAt": "2026-03-22T23:00:02.089215+00:00"
+      "checkedAt": "2026-03-22T22:43:18.802239+00:00"
     }
   }
 }
