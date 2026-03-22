@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T17:37:52.672524+00:00",
+  "updatedAt": "2026-03-22T19:00:01.474299+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1504,6 +1504,10 @@
     "https://www.theverge.com/games/898771/crimson-desert-dev-apologizes-ai-art": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/found-this-ai-painting-v0-otfba7ufh8qg1.webp?quality=90&amp;strip=all&amp;crop=0,3.4229797217454,100,93.154040556509",
       "checkedAt": "2026-03-22T17:37:52.672524+00:00"
+    },
+    "https://techcrunch.com/2026/03/22/cursor-admits-its-new-coding-model-was-built-on-top-of-moonshot-ais-kimi": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/opengraph-image.png?w=1200",
+      "checkedAt": "2026-03-22T19:00:01.474299+00:00"
     }
   }
 }
