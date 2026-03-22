@@ -1,6 +1,6 @@
 {
   "date": "2026-03-22",
-  "updatedAt": "2026-03-22T03:19:10.766055+00:00",
+  "updatedAt": "2026-03-22T05:00:01.564736+00:00",
   "items": [
     {
       "title": "Post-Training in 2026: GRPO, DAPO, RLVR & Beyond",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-22T03:19:15.690989+00:00",
+      "published": "2026-03-22T05:00:10.066524+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-22T03:19:10.766055+00:00",
+      "lastSeen": "2026-03-22T05:00:01.564736+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
+    },
+    {
+      "title": "A Coding Implementation for Building and Analyzing Crystal Structures Using Pymatgen for Symmetry Analysis, Phase Diagrams, Surface Generation, and Materials Project Integration",
+      "url": "https://www.marktechpost.com/2026/03/21/a-coding-implementation-for-building-and-analyzing-crystal-structures-using-pymatgen-for-symmetry-analysis-phase-diagrams-surface-generation-and-materials-project-integration",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we explore the capabilities of the pymatgen library for computational materials science using Python. We begin by constructing crystal structures such as silicon, sodium chloride, and a LiFePO₄-like material, and then investigate their lattice properties, densities, and compositions. Also, we analyze symmetry using space-group detection, examine atomic coordination environments, and apply oxidation-state [&#8230;]\nThe post A Coding Implementation for Building and Analyzing Crystal Structures Using Pymatgen for Symmetry Analysis, Phase Diagrams, Surface Generation, and Materia",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-63.png",
+      "published": "2026-03-22T04:46:37+00:00",
+      "firstSeen": "2026-03-22T05:00:01.564736+00:00",
+      "lastSeen": "2026-03-22T05:00:01.564736+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 2.6132
     }
   ],
   "errors": []
