@@ -1,6 +1,6 @@
 {
   "date": "2026-03-22",
-  "updatedAt": "2026-03-22T06:00:01.337675+00:00",
+  "updatedAt": "2026-03-22T05:31:18.602564+00:00",
   "items": [
     {
       "title": "Post-Training in 2026: GRPO, DAPO, RLVR & Beyond",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-22T06:00:07.027055+00:00",
+      "published": "2026-03-22T05:31:22.898189+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-22T06:00:01.337675+00:00",
+      "lastSeen": "2026-03-22T05:31:18.602564+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-63.png",
       "published": "2026-03-22T04:46:37+00:00",
       "firstSeen": "2026-03-22T05:00:01.564736+00:00",
-      "lastSeen": "2026-03-22T06:00:01.337675+00:00",
+      "lastSeen": "2026-03-22T05:31:18.602564+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.5832
+      "score": 2.5975
     }
   ],
   "errors": []
