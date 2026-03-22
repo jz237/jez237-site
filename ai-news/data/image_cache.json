@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T03:19:10.766055+00:00",
+  "updatedAt": "2026-03-22T05:00:01.564736+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1472,6 +1472,10 @@
     "https://simonwillison.net/2026/Mar/21/profiling-hacker-news-users": {
       "image": "",
       "checkedAt": "2026-03-22T01:00:01.640191+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/21/a-coding-implementation-for-building-and-analyzing-crystal-structures-using-pymatgen-for-symmetry-analysis-phase-diagrams-surface-generation-and-materials-project-integration": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-63.png",
+      "checkedAt": "2026-03-22T05:00:01.564736+00:00"
     }
   }
 }
