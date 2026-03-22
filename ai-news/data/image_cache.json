@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T11:34:36.833502+00:00",
+  "updatedAt": "2026-03-22T13:00:01.119443+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1480,6 +1480,14 @@
     "https://techcrunch.com/2026/03/21/are-ai-tokens-the-new-signing-bonus-or-just-a-cost-of-doing-business": {
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1151746484.jpg?resize=1200,800",
       "checkedAt": "2026-03-22T07:00:01.822675+00:00"
+    },
+    "https://techcrunch.com/2026/03/22/an-exclusive-tour-of-amazons-trainium-lab-the-chip-thats-won-over-anthropic-openai-even-apple": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ASW-Chip_tour-servers.jpg?resize=1200,900",
+      "checkedAt": "2026-03-22T13:00:01.119443+00:00"
+    },
+    "https://www.theverge.com/games/897982/gdc-2026-ai-game-developer-conference": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/55146110863_3ec9504855_o.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.757510848913%2C100%2C78.484978302174&amp;w=1200",
+      "checkedAt": "2026-03-22T13:00:01.119443+00:00"
     }
   }
 }
