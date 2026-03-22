@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T18:54:11.727316+00:00",
+  "updatedAt": "2026-03-22T20:00:01.892453+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1508,6 +1508,10 @@
     "https://techcrunch.com/2026/03/22/cursor-admits-its-new-coding-model-was-built-on-top-of-moonshot-ais-kimi": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/opengraph-image.png?w=1200",
       "checkedAt": "2026-03-22T18:54:11.727316+00:00"
+    },
+    "https://techcrunch.com/2026/03/22/do-you-want-to-build-a-robot-snowman": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266475966.jpg?w=1024",
+      "checkedAt": "2026-03-22T20:00:01.892453+00:00"
     }
   }
 }
