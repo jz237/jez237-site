@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-22T22:00:01.190193+00:00",
+  "updatedAt": "2026-03-22T21:37:35.681089+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1513,13 +1513,9 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266475966.jpg?w=1024",
       "checkedAt": "2026-03-22T20:00:01.892453+00:00"
     },
-    "https://www.marktechpost.com/2026/03/22/implementing-deep-q-learning-dqn-from-scratch-using-rlax-jax-haiku-and-optax-to-train-a-cartpole-reinforcement-learning-agent": {
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/a-computer-screen-displays-lines-of-code_NhN2MwzWQFWMqrzgiAFmCg_EvqUXia9RxG2ByrMbsZCGA_cover_hd.png",
-      "checkedAt": "2026-03-22T22:00:01.190193+00:00"
-    },
     "https://www.marktechpost.com/2026/03/22/meet-gitagent-the-docker-for-ai-agents-that-is-finally-solving-the-fragmentation-between-langchain-autogen-and-claude-code": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-64.png",
-      "checkedAt": "2026-03-22T22:00:01.190193+00:00"
+      "checkedAt": "2026-03-22T21:37:35.681089+00:00"
     }
   }
 }
