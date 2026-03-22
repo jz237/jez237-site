@@ -1,6 +1,6 @@
 {
   "date": "2026-03-22",
-  "updatedAt": "2026-03-22T17:00:01.488617+00:00",
+  "updatedAt": "2026-03-22T16:46:24.804507+00:00",
   "items": [
     {
       "title": "An exclusive tour of Amazon’s Trainium lab, the chip that’s won over Anthropic, OpenAI, even Apple",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ASW-Chip_tour-servers.jpg?resize=1200%2C900",
       "published": "2026-03-22T12:00:00+00:00",
       "firstSeen": "2026-03-22T13:00:01.119443+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.2473
+      "score": 9.2534
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-22T17:00:15.537865+00:00",
+      "published": "2026-03-22T16:46:38.799406+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Europe-funding-week-16-22.png",
       "published": "2026-03-22T11:56:19+00:00",
       "firstSeen": "2026-03-22T13:00:01.119443+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4057
+      "score": 4.4118
     },
     {
       "title": "A Coding Implementation for Building and Analyzing Crystal Structures Using Pymatgen for Symmetry Analysis, Phase Diagrams, Surface Generation, and Materials Project Integration",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-63.png",
       "published": "2026-03-22T04:46:37+00:00",
       "firstSeen": "2026-03-22T05:00:01.564736+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.3033
+      "score": 2.3083
     },
     {
       "title": "Musk says he’s building Terafab chip plant in Austin, Texas",
@@ -77,26 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STK171_VRG_Illo_15_Normand_ElonMusk_15.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-22T14:06:48+00:00",
       "firstSeen": "2026-03-22T14:44:17.579130+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2752
-    },
-    {
-      "title": "Elon Musk unveils chip manufacturing plans for SpaceX and Tesla",
-      "url": "https://techcrunch.com/2026/03/22/elon-musk-unveils-chip-manufacturing-plans-for-spacex-and-tesla",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Elon Musk recently outlined ambitious plans for a chip-building collaboration Tesla and SpaceX — but he has a history of overpromising.",
-      "image": "",
-      "published": "2026-03-22T16:20:00+00:00",
-      "firstSeen": "2026-03-22T17:00:01.488617+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2698
+      "score": 2.2816
     },
     {
       "title": "Delve accused of misleading customers with ‘fake compliance’",
@@ -109,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_1542.jpeg?w=1170",
       "published": "2026-03-22T14:43:51+00:00",
       "firstSeen": "2026-03-22T14:44:17.579130+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2228
+      "score": 2.2293
     },
     {
       "title": "AI was everywhere at gaming’s big developer conference — except the games",
@@ -125,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/55146110863_3ec9504855_o.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.757510848913%2C100%2C78.484978302174&amp%3Bw=1200",
       "published": "2026-03-22T12:00:00+00:00",
       "firstSeen": "2026-03-22T13:00:01.119443+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2173
+      "score": 2.2234
     },
     {
       "title": "Are AI tokens the new signing bonus or just a cost of doing business?",
@@ -141,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1151746484.jpg?resize=1200%2C800",
       "published": "2026-03-22T06:20:43+00:00",
       "firstSeen": "2026-03-22T07:00:01.822675+00:00",
-      "lastSeen": "2026-03-22T17:00:01.488617+00:00",
+      "lastSeen": "2026-03-22T16:46:24.804507+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0082
+      "score": 2.0134
     }
   ],
   "errors": []
