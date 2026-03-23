@@ -1,6 +1,6 @@
 {
   "date": "2026-03-23",
-  "updatedAt": "2026-03-23T20:52:32.513980+00:00",
+  "updatedAt": "2026-03-23T22:00:01.597363+00:00",
   "items": [
     {
       "title": "Idomoo launches Strata &#8211; the first AI foundation model for layered video",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Idomoo-launches-Strata.png",
       "published": "2026-03-23T13:13:22+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.0393
+      "score": 12.012
     },
     {
       "title": "How Autonomous AI Agents Become Secure by Design With NVIDIA OpenShell",
@@ -30,10 +30,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-visual-nemoclaw-opie-r2-scaled.png",
       "published": "2026-03-23T15:00:03+00:00",
       "firstSeen": "2026-03-23T15:13:14.113638+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.6244
+      "score": 7.5956
     },
     {
       "title": "Starlette 1.0 skill",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-03-23T00:05:00+00:00",
       "firstSeen": "2026-03-23T03:00:01.576563+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2074
+      "score": 7.1884
     },
     {
       "title": "How to Design a Production-Ready AI Agent That Automates Google Colab Workflows Using Colab-MCP, MCP Tools, FastMCP, and Kernel Execution",
@@ -62,10 +62,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-66-1024x731.png",
       "published": "2026-03-23T18:33:06+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6512
+      "score": 6.6195
     },
     {
       "title": "Bernie Sanders’ AI ‘gotcha’ video flops, but the memes are great",
@@ -78,10 +78,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/bernie-and-claude.jpeg?w=1143",
       "published": "2026-03-23T20:15:59+00:00",
       "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2715
+      "score": 6.2383
     },
     {
       "title": "Musk Unites Tesla, SpaceX, xAI for Texas Chip Plant",
@@ -94,10 +94,10 @@
       "image": "",
       "published": "2026-03-23T18:01:08+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1661
+      "score": 6.1348
     },
     {
       "title": "Elizabeth Warren calls Pentagon’s decision to bar Anthropic ‘retaliation’",
@@ -110,10 +110,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-03-23T15:22:57+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1343
+      "score": 5.1053
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks with OpenAI",
@@ -129,7 +129,7 @@
       "lastSeen": "2026-03-23T18:01:07.275109+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1259
+      "score": 5.0971
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks to sell power to OpenAI",
@@ -142,10 +142,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200%2C800",
       "published": "2026-03-23T15:03:36+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1259
+      "score": 5.0971
     },
     {
       "title": "OpenAI is in talks to buy fusion energy from Helion",
@@ -158,10 +158,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
       "published": "2026-03-23T15:27:54+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9965
+      "score": 4.9674
     },
     {
       "title": "IRONSCALES brings AI email agents and threat intelligence series to RSAC 2026",
@@ -174,10 +174,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ironscales-rsac-conference.png",
       "published": "2026-03-23T18:41:32+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7853
+      "score": 4.7534
     },
     {
       "title": "Adzuna buys the jobs verticals of Trovit and Mitula",
@@ -190,10 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Adzuna-buys-the-jobs-verticals-of-Trovit-and-Mitula.png",
       "published": "2026-03-23T14:48:57+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T22:00:01.597363+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7796
+      "score": 4.751
     }
   ],
   "errors": []
