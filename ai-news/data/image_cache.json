@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T14:00:01.603321+00:00",
+  "updatedAt": "2026-03-23T13:45:28.801782+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -178,8 +178,8 @@
       "checkedAt": "2026-03-09T08:02:41.333391+00:00"
     },
     "https://www.techrepublic.com/article/microsoft-visual-studio-professional-2026": {
-      "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
-      "checkedAt": "2026-03-23T14:00:01.603321+00:00"
+      "image": "",
+      "checkedAt": "2026-03-23T13:45:28.801782+00:00"
     },
     "https://www.techrepublic.com/article/news-apple-homepad-launch-timeline": {
       "image": "",
@@ -1555,7 +1555,7 @@
     },
     "https://www.theverge.com/podcast/898715/superhuman-grammarly-expert-review-shishir-mehrotra-interview-ai-impersonation": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD-Shishir-Mehotra.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
-      "checkedAt": "2026-03-23T14:00:01.603321+00:00"
+      "checkedAt": "2026-03-23T13:45:28.801782+00:00"
     }
   }
 }
