@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T09:00:01.194927+00:00",
+  "updatedAt": "2026-03-23T09:11:09.250673+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1548,6 +1548,10 @@
     "https://simonwillison.net/2026/Mar/20/sqlite-tags-benchmark": {
       "image": "",
       "checkedAt": "2026-03-23T03:00:01.576563+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_AIfarming3.jpg?resize=1200,600",
+      "checkedAt": "2026-03-23T09:11:09.250673+00:00"
     }
   }
 }
