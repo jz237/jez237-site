@@ -1,6 +1,6 @@
 {
   "date": "2026-03-23",
-  "updatedAt": "2026-03-23T16:00:01.420047+00:00",
+  "updatedAt": "2026-03-23T15:13:14.113638+00:00",
   "items": [
     {
       "title": "Idomoo launches Strata &#8211; the first AI foundation model for layered video",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Idomoo-launches-Strata.png",
       "published": "2026-03-23T13:13:22+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.1683
+      "score": 12.1906
     },
     {
       "title": "How Autonomous AI Agents Become Secure by Design With NVIDIA OpenShell",
@@ -29,11 +29,11 @@
       "summary": "Autonomous agents mark a new inflection point in AI. Systems are no longer limited to generating responses or reasoning through tasks. They can take action: Agents can read files, use tools, write and run code, and execute workflows across enterprise systems, all while expanding their own capabilities.  Application-layer risk grows exponentially when agents continuously improve [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-visual-nemoclaw-opie-r2-scaled.png",
       "published": "2026-03-23T15:00:03+00:00",
-      "firstSeen": "2026-03-23T16:00:01.420047+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "firstSeen": "2026-03-23T15:13:14.113638+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.7599
+      "score": 7.7833
     },
     {
       "title": "Starlette 1.0 skill",
@@ -46,26 +46,10 @@
       "image": "",
       "published": "2026-03-23T00:05:00+00:00",
       "firstSeen": "2026-03-23T03:00:01.576563+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2969
-    },
-    {
-      "title": "Elizabeth Warren calls Pentagon’s decision to bar Anthropic ‘retaliation’",
-      "url": "https://techcrunch.com/2026/03/23/elizabeth-warren-anthropic-pentagon-defense-supply-chain-risk-retaliation",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "In a letter to Defense Secretary Pete Hegseth, Senator Elizabeth Warren (D-MA) equated the DoD's decision to label Anthropic a \"supply chain risk\" as retaliation, arguing that the Pentagon could simply have terminated its contract with the AI lab.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
-      "published": "2026-03-23T15:22:57+00:00",
-      "firstSeen": "2026-03-23T16:00:01.420047+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2713
+      "score": 7.3124
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks with OpenAI",
@@ -77,27 +61,11 @@
       "summary": "Helion is reportedly negotiating a deal that would see it sell 12.5% of its power output to OpenAI.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200%2C800",
       "published": "2026-03-23T15:03:36+00:00",
-      "firstSeen": "2026-03-23T16:00:01.420047+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "firstSeen": "2026-03-23T15:13:14.113638+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2616
-    },
-    {
-      "title": "OpenAI is in talks to buy fusion energy from Helion",
-      "url": "https://thenextweb.com/news/openai-is-in-talks-to-buy-fusion-energy-from-helion",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Axios reports that OpenAI could secure 5 gigawatts of electricity from Helion Energy by 2030, scaling to 50 gigawatts by 2035. Altman has stepped down as Helion’s board chair and recused himself from the deal talks, an echo of the same move he made at nuclear startup Oklo last year. OpenAI is in advanced talks [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
-      "published": "2026-03-23T15:27:54+00:00",
-      "firstSeen": "2026-03-23T16:00:01.420047+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1338
+      "score": 5.2851
     },
     {
       "title": "Adzuna buys the jobs verticals of Trovit and Mitula",
@@ -110,10 +78,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Adzuna-buys-the-jobs-verticals-of-Trovit-and-Mitula.png",
       "published": "2026-03-23T14:48:57+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9144
+      "score": 4.9377
     },
     {
       "title": "Meta&#8217;s CEO is developing a personal AI assistant to handle executive duties",
@@ -126,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mark-Zuckerberg.png",
       "published": "2026-03-23T14:26:55+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9036
+      "score": 4.9267
     },
     {
       "title": "Google’s AI Is Rewriting Headlines — and Publishers Are Taking Notice",
@@ -139,13 +107,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Google Search is rewriting headlines with AI, raising concerns about accuracy, trust, and publisher control.\nThe post Google’s AI Is Rewriting Headlines — and Publishers Are Taking Notice appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/shutter-speed-0uMU42uRw28-unsplash-1.jpg",
+      "image": "",
       "published": "2026-03-23T14:24:32+00:00",
-      "firstSeen": "2026-03-23T16:00:01.420047+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "firstSeen": "2026-03-23T15:13:14.113638+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6024
+      "score": 4.6255
     },
     {
       "title": "The Bay Area’s animal welfare movement wants to recruit AI",
@@ -158,10 +126,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_AIfarming3.jpg?resize=1200%2C600",
       "published": "2026-03-23T09:00:00+00:00",
       "firstSeen": "2026-03-23T09:11:09.250673+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5956
+      "score": 4.6154
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 90% Off Right Now",
@@ -174,10 +142,10 @@
       "image": "",
       "published": "2026-03-23T13:00:40+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5624
+      "score": 4.5845
     },
     {
       "title": "Creating with Sora Safely",
@@ -186,14 +154,46 @@
       "sourceUrl": "https://openai.com/news/rss.xml",
       "sourceWeight": 1.0,
       "category": "AI",
-      "summary": "To address the novel safety challenges posed by a state-of-the-art video model as well as a new social creation platform, we’ve built Sora 2 and the Sora app with safety at the foundation. Our approach is anchored in concrete protections.",
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/5ZBXQ6hhDc5zt8htDwq6z5/649000b7f37a9fd33a562f3bfe82cb21/16_x_9____2_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
-      "published": "2026-03-23T00:00:00+00:00",
-      "firstSeen": "2026-03-23T16:00:01.420047+00:00",
-      "lastSeen": "2026-03-23T16:00:01.420047+00:00",
+      "summary": "Last month I added a feature I call beats to this blog, pulling in some of my other content from external sources and including it on the homepage, search and various archive pages on the site.\nOn any given day these frequently outnumber my regular posts. They were looking a little bit thin and were lacking any form of explanation beyond a link, so I've added the ability to annotate them with a \"note\" which now shows up as part of their display.\nHere's what that looks like for the content I published yesterday:\n\nI've also updated the /atom/everything/ Atom feed to include any beats that I've a",
+      "image": "https://static.simonwillison.net/static/2026/beats-notes.jpg",
+      "published": "2026-03-23T02:13:13+00:00",
+      "firstSeen": "2026-03-23T03:00:01.576563+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.3566
+    },
+    {
+      "title": "Air defence startup Egide raises €8M seed to take on Europe&#8217;s sky protection gap",
+      "url": "https://thenextweb.com/news/egide-air-defence-startup-8m-seed-round-europe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A new entrant into the crowded but urgent European air defence startup space has closed its first significant round, as capital chases the continent’s most pressing military capability shortfall. The phrase ‘air defence gap’ has become one of the defining anxieties of European security policy in the years since Russia’s full-scale invasion of Ukraine. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Air-defence-startup-Egide.png",
+      "published": "2026-03-23T10:49:44+00:00",
+      "firstSeen": "2026-03-23T11:00:02.104629+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5553
+      "score": 2.7237
+    },
+    {
+      "title": "360 Capital raises €85M for deeptech fund backed by European defence prime",
+      "url": "https://thenextweb.com/news/360-capital-85m-deeptech-fund-european-defence",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Paris-Milan VC’s new vehicle is the latest sign that European investors are hardwiring defence into their deeptech strategy. There is a version of this story that could have been told three years ago and would have raised eyebrows in polite European venture circles: a deeptech fund, backed by a major defence prime, raising tens [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/360-Capital-raises-E85M-.png",
+      "published": "2026-03-23T10:28:29+00:00",
+      "firstSeen": "2026-03-23T11:00:02.104629+00:00",
+      "lastSeen": "2026-03-23T15:13:14.113638+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.7141
     }
   ],
   "errors": []
