@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T18:01:07.275109+00:00",
+  "updatedAt": "2026-03-23T20:00:01.173394+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1592,6 +1592,38 @@
     "https://techcrunch.com/2026/03/23/apple-wwdc-june-8-12-ai-advancements-siri-developers-conference": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "checkedAt": "2026-03-23T18:01:07.275109+00:00"
+    },
+    "https://www.theverge.com/tech/898992/google-pixel-10-ads-moving-on-stalker-lying-beach-view-100-zoom": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/chrome_Apdz9O6Gdb.jpg?quality=90&amp;strip=all&amp;crop=0%2C11.287927994804%2C100%2C77.729143829578&amp;w=1200",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/899086/jensen-huang-nvidia-agi": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25835739/STKP210_JENSEN_HUANG_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/23/david-abram": {
+      "image": "",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/23/how-to-design-a-production-ready-ai-agent-that-automates-google-colab-workflows-using-colab-mcp-mcp-tools-fastmcp-and-kernel-execution": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-66-1024x731.png",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/vibe-coding-startup-lovable-is-on-the-hunt-for-acquisitions": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200,800",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://www.techrepublic.com/article/news-musk-tesla-spacex-xai-texas-chip-project": {
+      "image": "https://assets.techrepublic.com/uploads/2025/05/1elonmusk.jpg",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/sam-altman-openai-fusion-energy-board-helion": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200,800",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-windows-update-control-march-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_339612434.jpeg",
+      "checkedAt": "2026-03-23T20:00:01.173394+00:00"
     }
   }
 }
