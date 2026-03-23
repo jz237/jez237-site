@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T23:00:02.099800+00:00",
+  "updatedAt": "2026-03-23T22:50:29.927776+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1642,8 +1642,8 @@
       "checkedAt": "2026-03-23T21:49:24.906231+00:00"
     },
     "https://www.techrepublic.com/article/news-ai-energy-demand-power-grid-crisis": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/ai-plant.jpg",
-      "checkedAt": "2026-03-23T23:00:02.099800+00:00"
+      "image": "",
+      "checkedAt": "2026-03-23T22:50:29.927776+00:00"
     }
   }
 }
