@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T17:00:02.007223+00:00",
+  "updatedAt": "2026-03-23T18:00:01.201933+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1584,6 +1584,10 @@
     "https://openai.com/index/creating-with-sora-safely": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5ZBXQ6hhDc5zt8htDwq6z5/649000b7f37a9fd33a562f3bfe82cb21/16_x_9____2_.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-03-23T17:00:02.007223+00:00"
+    },
+    "https://www.techrepublic.com/article/news-perplexity-health-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2023/02/tr2323-healthcare-data-migration.jpeg",
+      "checkedAt": "2026-03-23T18:00:01.201933+00:00"
     }
   }
 }
