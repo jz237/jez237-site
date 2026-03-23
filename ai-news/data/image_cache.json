@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T13:00:01.393684+00:00",
+  "updatedAt": "2026-03-23T13:45:28.801782+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -179,7 +179,7 @@
     },
     "https://www.techrepublic.com/article/microsoft-visual-studio-professional-2026": {
       "image": "",
-      "checkedAt": "2026-03-09T15:14:49.205159+00:00"
+      "checkedAt": "2026-03-23T13:45:28.801782+00:00"
     },
     "https://www.techrepublic.com/article/news-apple-homepad-launch-timeline": {
       "image": "",
@@ -1552,6 +1552,10 @@
     "https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_AIfarming3.jpg?resize=1200,600",
       "checkedAt": "2026-03-23T09:11:09.250673+00:00"
+    },
+    "https://www.theverge.com/podcast/898715/superhuman-grammarly-expert-review-shishir-mehrotra-interview-ai-impersonation": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD-Shishir-Mehotra.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
+      "checkedAt": "2026-03-23T13:45:28.801782+00:00"
     }
   }
 }
