@@ -1,6 +1,6 @@
 {
   "date": "2026-03-23",
-  "updatedAt": "2026-03-23T22:50:29.927776+00:00",
+  "updatedAt": "2026-03-23T23:46:04.971212+00:00",
   "items": [
     {
       "title": "Idomoo launches Strata &#8211; the first AI foundation model for layered video",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Idomoo-launches-Strata.png",
       "published": "2026-03-23T13:13:22+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9921
+      "score": 11.9707
     },
     {
       "title": "How Autonomous AI Agents Become Secure by Design With NVIDIA OpenShell",
@@ -30,10 +30,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-visual-nemoclaw-opie-r2-scaled.png",
       "published": "2026-03-23T15:00:03+00:00",
       "firstSeen": "2026-03-23T15:13:14.113638+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.5747
+      "score": 7.5522
     },
     {
       "title": "Starlette 1.0 skill",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-03-23T00:05:00+00:00",
       "firstSeen": "2026-03-23T03:00:01.576563+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1746
+      "score": 7.1597
     },
     {
       "title": "How to Design a Production-Ready AI Agent That Automates Google Colab Workflows Using Colab-MCP, MCP Tools, FastMCP, and Kernel Execution",
@@ -62,10 +62,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-66-1024x731.png",
       "published": "2026-03-23T18:33:06+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5964
+      "score": 6.5716
+    },
+    {
+      "title": "Quoting Neurotica",
+      "url": "https://simonwillison.net/2026/Mar/23/neurotica",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "slop is something that takes more human effort to consume than it took to produce. When my coworker sends me raw Gemini output he’s not expressing his freedom to create, he’s disrespecting the value of my time\n&mdash; Neurotica, @schwarzgerat.bsky.social\n\n    Tags: ai-ethics, slop, generative-ai, ai, llms",
+      "image": "",
+      "published": "2026-03-23T23:31:45+00:00",
+      "firstSeen": "2026-03-23T23:46:04.971212+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2827
     },
     {
       "title": "Bernie Sanders’ AI ‘gotcha’ video flops, but the memes are great",
@@ -78,10 +94,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/bernie-and-claude.jpeg?w=1143",
       "published": "2026-03-23T20:15:59+00:00",
       "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2141
+      "score": 6.188
     },
     {
       "title": "Musk Unites Tesla, SpaceX, xAI for Texas Chip Plant",
@@ -94,10 +110,42 @@
       "image": "",
       "published": "2026-03-23T18:01:08+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1121
+      "score": 6.0876
+    },
+    {
+      "title": "GeoChallenge: A Multi-Answer Multiple-Choice Benchmark for Geometric Reasoning with Diagrams",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-03-23T23:46:09.988543+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.41
+    },
+    {
+      "title": "datasette-files 0.1a2",
+      "url": "https://simonwillison.net/2026/Mar/23/datasette-files",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-files 0.1a2\n    The most interesting alpha of datasette-files yet, a new plugin which adds the ability to upload files directly into a Datasette instance. Here are the release notes in full:\n\n\nColumns are now configured using the new column_types system from Datasette 1.0a26. #8\nNew file_actions plugin hook, plus ability to import an uploaded CSV/TSV file to a table. #10\nUI for uploading multiple files at once via the new documented JSON upload API. #11\nThumbnails are now generated for image files and stored in an internal datasette_files_thumbnails table. #13\n\n\n    \n       ",
+      "image": "",
+      "published": "2026-03-23T23:06:38+00:00",
+      "firstSeen": "2026-03-23T23:46:04.971212+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0701
     },
     {
       "title": "Elizabeth Warren calls Pentagon’s decision to bar Anthropic ‘retaliation’",
@@ -110,10 +158,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-03-23T15:22:57+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0841
+      "score": 5.0614
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks with OpenAI",
@@ -129,7 +177,7 @@
       "lastSeen": "2026-03-23T18:01:07.275109+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0762
+      "score": 5.0537
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks to sell power to OpenAI",
@@ -142,58 +190,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200%2C800",
       "published": "2026-03-23T15:03:36+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
+      "lastSeen": "2026-03-23T23:46:04.971212+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0762
-    },
-    {
-      "title": "OpenAI is in talks to buy fusion energy from Helion",
-      "url": "https://thenextweb.com/news/openai-is-in-talks-to-buy-fusion-energy-from-helion",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Axios reports that OpenAI could secure 5 gigawatts of electricity from Helion Energy by 2030, scaling to 50 gigawatts by 2035. Altman has stepped down as Helion’s board chair and recused himself from the deal talks, an echo of the same move he made at nuclear startup Oklo last year. OpenAI is in advanced talks [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
-      "published": "2026-03-23T15:27:54+00:00",
-      "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9462
-    },
-    {
-      "title": "IRONSCALES brings AI email agents and threat intelligence series to RSAC 2026",
-      "url": "https://thenextweb.com/news/ironscales-ai-email-agents-rsac-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The inbox has long been the softest entry point in enterprise security. As phishing campaigns grow more convincing, more personalised, and increasingly powered by generative AI, the tools designed to stop them have been locked in a reactive cycle: wait for the attack, analyse it, respond. IRONSCALES, the Atlanta-based email security vendor, is betting that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ironscales-rsac-conference.png",
-      "published": "2026-03-23T18:41:32+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7302
-    },
-    {
-      "title": "Adzuna buys the jobs verticals of Trovit and Mitula",
-      "url": "https://thenextweb.com/news/adzuna-buys-the-jobs-verticals-of-trovit-and-mitula",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The UK job search engine has acquired the employment divisions of two multi-vertical classifieds aggregators from Lifull Connect, bolstering its presence in Spain, Italy, and Latin America as its Japanese parent offloads non-real-estate assets. Adzuna has acquired the jobs verticals of Trovit and Mitula from Lifull Connect, the digital classifieds group controlled by the Japanese [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Adzuna-buys-the-jobs-verticals-of-Trovit-and-Mitula.png",
-      "published": "2026-03-23T14:48:57+00:00",
-      "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T22:50:29.927776+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7302
+      "score": 5.0537
     }
   ],
   "errors": []
