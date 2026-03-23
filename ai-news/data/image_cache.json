@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T15:13:14.113638+00:00",
+  "updatedAt": "2026-03-23T17:00:02.007223+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1564,6 +1564,26 @@
     "https://www.techrepublic.com/article/news-google-search-rewriting-headlines-ai": {
       "image": "",
       "checkedAt": "2026-03-23T15:13:14.113638+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_algo_AIdelusions.jpg?resize=1200,600",
+      "checkedAt": "2026-03-23T17:00:02.007223+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/littlebird-raises-11m-to-capture-context-from-your-computer-so-you-can-query-your-data": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/routines.jpeg?resize=1200,675",
+      "checkedAt": "2026-03-23T17:00:02.007223+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/startup-gimlet-labs-is-solving-the-ai-inference-bottleneck-in-a-surprisingly-elegant-way": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Gimlet_Labs_CEO_Zain_Asgar2.jpg?resize=1200,747",
+      "checkedAt": "2026-03-23T17:00:02.007223+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/elizabeth-warren-anthropic-pentagon-defense-supply-chain-risk-retaliation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
+      "checkedAt": "2026-03-23T17:00:02.007223+00:00"
+    },
+    "https://openai.com/index/creating-with-sora-safely": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5ZBXQ6hhDc5zt8htDwq6z5/649000b7f37a9fd33a562f3bfe82cb21/16_x_9____2_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-03-23T17:00:02.007223+00:00"
     }
   }
 }
