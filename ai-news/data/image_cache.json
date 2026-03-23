@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T17:06:49.478999+00:00",
+  "updatedAt": "2026-03-23T18:01:07.275109+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1588,6 +1588,10 @@
     "https://www.techrepublic.com/article/news-perplexity-health-ai": {
       "image": "https://assets.techrepublic.com/uploads/2023/02/tr2323-healthcare-data-migration.jpeg",
       "checkedAt": "2026-03-23T18:00:01.201933+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/apple-wwdc-june-8-12-ai-advancements-siri-developers-conference": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
+      "checkedAt": "2026-03-23T18:01:07.275109+00:00"
     }
   }
 }
