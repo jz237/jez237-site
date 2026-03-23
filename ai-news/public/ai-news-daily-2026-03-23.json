@@ -1,6 +1,6 @@
 {
   "date": "2026-03-23",
-  "updatedAt": "2026-03-23T01:00:01.414158+00:00",
+  "updatedAt": "2026-03-23T02:00:02.017479+00:00",
   "items": [
     {
       "title": "Post-Training in 2026: GRPO, DAPO, RLVR & Beyond",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-23T01:00:16.858649+00:00",
+      "published": "2026-03-23T02:00:09.298875+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-23T01:00:01.414158+00:00",
+      "lastSeen": "2026-03-23T02:00:02.017479+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
@@ -29,10 +29,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK414_AI_CVIRGINIA_I__0001_11.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-23T00:01:00+00:00",
       "firstSeen": "2026-03-23T01:00:01.414158+00:00",
-      "lastSeen": "2026-03-23T01:00:01.414158+00:00",
+      "lastSeen": "2026-03-23T02:00:02.017479+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3303
+      "score": 2.301
+    },
+    {
+      "title": "How BM25 and RAG Retrieve Information Differently?",
+      "url": "https://www.marktechpost.com/2026/03/22/how-bm25-and-rag-retrieve-information-differently",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "When you type a query into a search engine, something has to decide which documents are actually relevant — and how to rank them. BM25 (Best Matching 25), the algorithm powering search engines like Elasticsearch and Lucene, has been the dominant answer to that question for decades.&#160; It scores documents by looking at three things: [&#8230;]\nThe post How BM25 and RAG Retrieve Information Differently? appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-41-150x150.png",
+      "published": "2026-03-23T01:33:41+00:00",
+      "firstSeen": "2026-03-23T02:00:02.017479+00:00",
+      "lastSeen": "2026-03-23T02:00:02.017479+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.6067
     }
   ],
   "errors": []
