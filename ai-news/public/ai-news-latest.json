@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T21:00:01.583397+00:00",
+  "updatedAt": "2026-03-23T20:52:32.513980+00:00",
   "items": [
     {
       "title": "Suyash Maniyar, Deepali Singh, Rohith Reddy",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-23T21:00:07.211293+00:00",
+      "published": "2026-03-23T20:52:37.645862+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -27,27 +27,11 @@
       "summary": "Sen. Bernie Sanders thinks he's tricked Claude into revealing the AI industry's secrets, but he really just exposed how agreeable chatbots can become.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/bernie-and-claude.jpeg?w=1143",
       "published": "2026-03-23T20:15:59+00:00",
-      "firstSeen": "2026-03-23T21:00:01.583397+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2678
-    },
-    {
-      "title": "JAAQ raises $17M to embed clinically governed mental health content inside the digital tools people already use",
-      "url": "https://thenextweb.com/news/jaaq-17m-series-a-mental-health-platform",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The London-based platform, which already covers 1.5 million eligible lives across enterprise and healthcare deployments, is using the Series A to accelerate US market entry and deepen its clinical infrastructure, with a new CEO who sold his last company to Adobe. JAAQ, the London-based digital health engagement platform, has raised $17 million in a Series [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/JAAQ-raises-17M.png",
-      "published": "2026-03-23T20:08:53+00:00",
-      "firstSeen": "2026-03-23T21:00:01.583397+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1243
+      "score": 6.2715
     },
     {
       "title": "Credo Ventures closes $88M fifth fund to stay the first cheque for CEE’s most ambitious founders",
@@ -59,11 +43,11 @@
       "summary": "The Prague and Krakow firm, whose earliest bets include UiPath and ElevenLabs, is doubling down on pre-seed in Central and Eastern Europe and its global diaspora, with a six-partner team and a $1–5M typical cheque. Credo Ventures has closed Credo Stage 5, an $88 million fund raised in a single closing, continuing the Prague and [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Credo-Ventures-closes-88M.png",
       "published": "2026-03-23T19:51:13+00:00",
-      "firstSeen": "2026-03-23T21:00:01.583397+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9845
+      "score": -0.9808
     },
     {
       "title": "Google’s new Pixel 10 ads made me go ‘Wait, WHAT are they trying to sell?’",
@@ -76,10 +60,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/chrome_Apdz9O6Gdb.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.287927994804%2C100%2C77.729143829578&amp%3Bw=1200",
       "published": "2026-03-23T19:49:11+00:00",
       "firstSeen": "2026-03-23T19:54:53.163855+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4245
+      "score": 3.4282
     },
     {
       "title": "Nvidia CEO Jensen Huang says &#8216;I think we&#8217;ve achieved AGI&#8217;",
@@ -92,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25835739/STKP210_JENSEN_HUANG_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-23T19:42:33+00:00",
       "firstSeen": "2026-03-23T19:54:53.163855+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3212
+      "score": 2.3249
     },
     {
       "title": "Inside the AI Warehouse: How Otto Group Is Teaching Robots to Work Together",
@@ -105,13 +89,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Otto Group uses Nvidia Omniverse and AI to coordinate warehouse robots, boosting efficiency and redefining logistics with digital twins and automation.\nThe post Inside the AI Warehouse: How Otto Group Is Teaching Robots to Work Together appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/the-robot-put-his-finger-to-the-head-2026-01-07-01-49-21-utc-1.jpg",
+      "image": "",
       "published": "2026-03-23T19:40:18+00:00",
-      "firstSeen": "2026-03-23T21:00:01.583397+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2101
+      "score": 3.2138
     },
     {
       "title": "Amazon Reportedly Building AI Smartphone to Revive Alexa Ecosystem",
@@ -121,13 +105,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Amazon is reportedly working on building an AI-native smartphone, codenamed ‘Transformer,’ several years after its Fire Phone flopped.\nThe post Amazon Reportedly Building AI Smartphone to Revive Alexa Ecosystem appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/amazon-phone.jpg",
+      "image": "",
       "published": "2026-03-23T19:28:41+00:00",
-      "firstSeen": "2026-03-23T21:00:01.583397+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2045
+      "score": 3.2081
     },
     {
       "title": "Quoting David Abram",
@@ -140,10 +124,10 @@
       "image": "",
       "published": "2026-03-23T18:56:18+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2288
+      "score": 2.2324
     },
     {
       "title": "IRONSCALES brings AI email agents and threat intelligence series to RSAC 2026",
@@ -156,10 +140,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ironscales-rsac-conference.png",
       "published": "2026-03-23T18:41:32+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7817
+      "score": 4.7853
     },
     {
       "title": "How to Design a Production-Ready AI Agent That Automates Google Colab Workflows Using Colab-MCP, MCP Tools, FastMCP, and Kernel Execution",
@@ -172,10 +156,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-66-1024x731.png",
       "published": "2026-03-23T18:33:06+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6477
+      "score": 6.6512
     },
     {
       "title": "Vibe-coding startup Lovable is on the hunt for acquisitions",
@@ -188,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
       "published": "2026-03-23T18:22:04+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6124
+      "score": 4.616
     },
     {
       "title": "Musk Unites Tesla, SpaceX, xAI for Texas Chip Plant",
@@ -204,10 +188,10 @@
       "image": "",
       "published": "2026-03-23T18:01:08+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1626
+      "score": 6.1661
     },
     {
       "title": "Apple sets June date for WWDC 2026, teasing ‘AI advancements’",
@@ -220,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-03-23T18:00:45+00:00",
       "firstSeen": "2026-03-23T18:01:07.275109+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3024
+      "score": 3.3059
     },
     {
       "title": "Perplexity Health Connects Medical Records and Wearables in New AI Push",
@@ -236,10 +220,10 @@
       "image": "https://assets.techrepublic.com/uploads/2023/02/tr2323-healthcare-data-migration.jpeg",
       "published": "2026-03-23T16:49:40+00:00",
       "firstSeen": "2026-03-23T18:00:01.201933+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1296
+      "score": 3.133
     },
     {
       "title": "The hardest question to answer about AI-fueled delusions",
@@ -252,10 +236,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_algo_AIdelusions.jpg?resize=1200%2C600",
       "published": "2026-03-23T16:31:20+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2613
+      "score": 3.2647
     },
     {
       "title": "The passwordless future is years away. Here is what businesses should do now",
@@ -268,10 +252,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Passpack-article.png",
       "published": "2026-03-23T16:22:22+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1173
+      "score": 3.1207
     },
     {
       "title": "Startup Gimlet Labs is solving the AI inference bottleneck in a surprisingly elegant way",
@@ -284,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Gimlet_Labs_CEO_Zain_Asgar2.jpg?resize=1200%2C747",
       "published": "2026-03-23T16:00:00+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4473
+      "score": 2.4507
     },
     {
       "title": "Littlebird raises $11M for its AI-assisted ‘recall’ tool that reads your computer screen",
@@ -300,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/routines.jpeg?resize=1200%2C675",
       "published": "2026-03-23T16:00:00+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1507
     },
     {
       "title": "OpenAI is in talks to buy fusion energy from Helion",
@@ -316,10 +300,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
       "published": "2026-03-23T15:27:54+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9932
+      "score": 4.9965
     },
     {
       "title": "Elizabeth Warren calls Pentagon’s decision to bar Anthropic ‘retaliation’",
@@ -332,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-03-23T15:22:57+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1311
+      "score": 5.1343
     },
     {
       "title": "Munich startup Interloom raised $16.5M",
@@ -348,10 +332,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Interloom-raises-16.5M-.png",
       "published": "2026-03-23T15:10:35+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9857
+      "score": 1.9889
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks with OpenAI",
@@ -367,7 +351,7 @@
       "lastSeen": "2026-03-23T18:01:07.275109+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1227
+      "score": 5.1259
     },
     {
       "title": "Sam Altman-backed fusion startup Helion in talks to sell power to OpenAI",
@@ -380,10 +364,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200%2C800",
       "published": "2026-03-23T15:03:36+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1227
+      "score": 5.1259
     },
     {
       "title": "How Autonomous AI Agents Become Secure by Design With NVIDIA OpenShell",
@@ -396,10 +380,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/agentic-ai-visual-nemoclaw-opie-r2-scaled.png",
       "published": "2026-03-23T15:00:03+00:00",
       "firstSeen": "2026-03-23T15:13:14.113638+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.6211
+      "score": 7.6244
     },
     {
       "title": "Adzuna buys the jobs verticals of Trovit and Mitula",
@@ -412,10 +396,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Adzuna-buys-the-jobs-verticals-of-Trovit-and-Mitula.png",
       "published": "2026-03-23T14:48:57+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7764
+      "score": 4.7796
     },
     {
       "title": "Meta&#8217;s CEO is developing a personal AI assistant to handle executive duties",
@@ -428,10 +412,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mark-Zuckerberg.png",
       "published": "2026-03-23T14:26:55+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.767
+      "score": 4.7701
     },
     {
       "title": "Google’s AI Is Rewriting Headlines — and Publishers Are Taking Notice",
@@ -444,10 +428,10 @@
       "image": "",
       "published": "2026-03-23T14:24:32+00:00",
       "firstSeen": "2026-03-23T15:13:14.113638+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.466
+      "score": 4.4691
     },
     {
       "title": "Confronting the CEO of the AI company that impersonated me",
@@ -460,10 +444,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD-Shishir-Mehotra.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-23T13:30:00+00:00",
       "firstSeen": "2026-03-23T13:45:28.801782+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1531
+      "score": 2.1562
     },
     {
       "title": "Idomoo launches Strata &#8211; the first AI foundation model for layered video",
@@ -476,11 +460,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Idomoo-launches-Strata.png",
       "published": "2026-03-23T13:13:22+00:00",
       "firstSeen": "2026-03-23T15:00:02.046969+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.0363
+      "score": 12.0393
     },
     {
       "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 90% Off Right Now",
@@ -493,10 +477,10 @@
       "image": "",
       "published": "2026-03-23T13:00:40+00:00",
       "firstSeen": "2026-03-09T15:14:49.205159+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4311
+      "score": 4.4341
     },
     {
       "title": "Air defence startup Egide raises €8M seed to take on Europe&#8217;s sky protection gap",
@@ -509,10 +493,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Air-defence-startup-Egide.png",
       "published": "2026-03-23T10:49:44+00:00",
       "firstSeen": "2026-03-23T11:00:02.104629+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5793
+      "score": 2.5821
     },
     {
       "title": "360 Capital raises €85M for deeptech fund backed by European defence prime",
@@ -525,10 +509,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/360-Capital-raises-E85M-.png",
       "published": "2026-03-23T10:28:29+00:00",
       "firstSeen": "2026-03-23T11:00:02.104629+00:00",
-      "lastSeen": "2026-03-23T19:54:53.163855+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5711
+      "score": 2.574
     },
     {
       "title": "Meet the Gods of AI Warfare",
@@ -541,10 +525,10 @@
       "image": "https://media.wired.com/photos/69bda9155b7879007eb95904/master/pass/Big-Story-Pentagon-Embraced-AI-Warfare.jpg",
       "published": "2026-03-23T10:00:00+00:00",
       "firstSeen": "2026-03-23T10:13:53.810466+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0004
+      "score": 2.0032
     },
     {
       "title": "Air Street Capital&#8217;s $232m fund is now Europe&#8217;s biggest solo GP raise",
@@ -560,7 +544,7 @@
       "lastSeen": "2026-03-23T19:54:53.163855+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5559
+      "score": 2.5587
     },
     {
       "title": "The Bay Area’s animal welfare movement wants to recruit AI",
@@ -573,10 +557,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_AIfarming3.jpg?resize=1200%2C600",
       "published": "2026-03-23T09:00:00+00:00",
       "firstSeen": "2026-03-23T09:11:09.250673+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4782
+      "score": 4.4809
     },
     {
       "title": "The AI Race Is Pressuring Utilities to Squeeze More From Europe’s Power Grids",
@@ -589,10 +573,10 @@
       "image": "https://media.wired.com/photos/69bda22b3c74bb28e577eb8a/master/pass/business_ai_data_center_power_grid.jpg",
       "published": "2026-03-23T09:00:00+00:00",
       "firstSeen": "2026-03-23T09:11:09.250673+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9782
+      "score": 1.9809
     },
     {
       "title": "Beats now have notes",
@@ -605,10 +589,10 @@
       "image": "https://static.simonwillison.net/static/2026/beats-notes.jpg",
       "published": "2026-03-23T02:13:13+00:00",
       "firstSeen": "2026-03-23T03:00:01.576563+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2429
+      "score": 3.2451
     },
     {
       "title": "How BM25 and RAG Retrieve Information Differently?",
@@ -621,10 +605,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-41-150x150.png",
       "published": "2026-03-23T01:33:41+00:00",
       "firstSeen": "2026-03-23T02:00:02.017479+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.161
+      "score": 1.1633
     },
     {
       "title": "Starlette 1.0 skill",
@@ -637,10 +621,26 @@
       "image": "",
       "published": "2026-03-23T00:05:00+00:00",
       "firstSeen": "2026-03-23T03:00:01.576563+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2053
+      "score": 7.2074
+    },
+    {
+      "title": "AI influencer awards season is upon us",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/898781/ai-personality-of-the-year-influencer-contest",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "First came the AI beauty pageant. Then the AI music contests. Now, there is an award for AI Personality of the Year - perhaps the inevitable next step for the AI influencer economy as it fights for legitimacy amid an onslaught of AI slop and grifters and transforms from quirky novelty into a serious and [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK414_AI_CVIRGINIA_I__0001_11.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-03-23T00:01:00+00:00",
+      "firstSeen": "2026-03-23T01:00:01.414158+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.8762
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-23T21:00:01.583397+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.4997
+      "score": -0.4996
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-09T21:00:00+00:00",
       "firstSeen": "2026-03-10T12:01:07.759785+00:00",
-      "lastSeen": "2026-03-23T19:54:53.163855+00:00",
+      "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1901
