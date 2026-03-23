@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T21:49:24.906231+00:00",
+  "updatedAt": "2026-03-23T22:50:29.927776+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1640,6 +1640,10 @@
     "http://www.bbc.co.uk/programmes/w3ct6sxh": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "checkedAt": "2026-03-23T21:49:24.906231+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-energy-demand-power-grid-crisis": {
+      "image": "",
+      "checkedAt": "2026-03-23T22:50:29.927776+00:00"
     }
   }
 }
