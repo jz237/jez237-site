@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-03-24T10:06:54.838768+00:00",
+  "updatedAt": "2026-03-24T11:00:02.076580+00:00",
   "items": [
     {
-      "title": "GeoChallenge: A Multi-Answer Multiple-Choice Benchmark for Geometric Reasoning with Diagrams",
+      "title": "Suyash Maniyar, Deepali Singh, Rohith Reddy",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-24T10:07:00.104031+00:00",
+      "published": "2026-03-24T11:00:09.778124+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Chris Hayes Has Some Advice for Keeping Up With the News",
+      "url": "https://www.wired.com/story/the-big-interview-podcast-chris-hayes",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The host of MS Now’s All In, knows how hard it is to stay current. But he also knows where you should focus your attention—and it starts with a sober view of AI.",
+      "image": "https://media.wired.com/photos/69c1b2b856888c87f24c925c/master/pass/Big-Interview-UV-Solo-Chris-Hayes-Business-2210889473.jpg",
+      "published": "2026-03-24T10:30:00+00:00",
+      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
+    },
+    {
+      "title": "Accumulus Technologies launches live integration layer between pharma systems and national drug regulators",
+      "url": "https://thenextweb.com/news/accumulus-technologies-connector-pharma",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The startup, spun out of nonprofit Accumulus Synergy last August, has built a network connecting pharmaceutical and biotech companies to regulators across more than 70 countries. The new Connector makes that network accessible without leaving the systems companies already use. Getting a drug approved in multiple countries simultaneously requires filing the same information with dozens [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Accumulus-Connector.png",
+      "published": "2026-03-24T10:21:11+00:00",
+      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
+      "score": 5.0304
+    },
+    {
+      "title": "EU broadcasters urge tighter rules on Big Tech’s control for Smart TV",
+      "url": "https://thenextweb.com/news/eu-broadcasters-urge-tighter-rules-on-big-techs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Association of Commercial Television and Video on Demand Services in Europe  (ACT) released a statement on Monday, urging the European Commission to designate smart TV operating systems and virtual assistant platforms as ‘gatekeepers’ under the EU’s Digital Markets Act (DMA). The call would expand regulatory measures against the growing market power of Big Tech’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-broadcasters.png",
+      "published": "2026-03-24T10:07:31+00:00",
+      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3236
     },
     {
       "title": "Your Body Is Betraying Your Right to Privacy",
@@ -28,10 +76,10 @@
       "image": "https://media.wired.com/photos/69c1aa958d470e1446eb5d44/master/pass/Book-Excerpt-Your-Body-Is-Betraying-Your-Right-to-Privacy-Security.jpg",
       "published": "2026-03-24T10:00:00+00:00",
       "firstSeen": "2026-03-24T10:06:54.838768+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6865
+      "score": 3.6598
     },
     {
       "title": "IBM Cloud, Nutanix, SUSE, and OVHcloud have all independently chosen Traefik as their Ingress NGINX replacement",
@@ -44,10 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Traefik-Becomes-the-De-Facto-Standard-for-Kubernetes-Networking.png",
       "published": "2026-03-24T09:45:38+00:00",
       "firstSeen": "2026-03-24T10:00:01.160839+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8392
+      "score": 2.8128
     },
     {
       "title": "Foreverland raises €6M to scale its cocoa-free chocolate ingredient across Europe",
@@ -60,10 +108,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Foreverland-raises-E6M.png",
       "published": "2026-03-24T08:47:41+00:00",
       "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1104
+      "score": 2.0846
     },
     {
       "title": "Startup Dash0 hits unicorn status with $110M Series B",
@@ -76,10 +124,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Dash0-hits-unicorn-status.png",
       "published": "2026-03-24T08:27:58+00:00",
       "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5007
+      "score": 4.4752
     },
     {
       "title": "Foodtech Swish closes $38M Series B at $139M valuation",
@@ -92,10 +140,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Foodtech-Swish-Founders.png",
       "published": "2026-03-24T08:18:28+00:00",
       "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0961
+      "score": 2.0707
     },
     {
       "title": "Advancing Open Source AI, NVIDIA Donates Dynamic Resource Allocation Driver for GPUs to Kubernetes Community",
@@ -108,10 +156,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/kubecon-1920x1080-1.jpg",
       "published": "2026-03-24T08:00:12+00:00",
       "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 5.0273
+      "score": 5.0021
     },
     {
       "title": "10 Best Business Email Providers for Small Businesses in 2026",
@@ -124,10 +172,10 @@
       "image": "https://assets.techrepublic.com/uploads/2024/07/AdobeStock_488920698.jpg",
       "published": "2026-03-24T07:00:47+00:00",
       "firstSeen": "2026-03-24T10:00:01.160839+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1592
+      "score": 3.1347
     },
     {
       "title": "Yann LeCun’s New LeWorldModel (LeWM) Research Targets JEPA Collapse in Pixel-Based Predictive World Modeling",
@@ -140,10 +188,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-1.png",
       "published": "2026-03-24T05:53:58+00:00",
       "firstSeen": "2026-03-24T06:11:40.166819+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.4984
+      "score": 4.4747
     },
     {
       "title": "Streaming experts",
@@ -156,10 +204,10 @@
       "image": "",
       "published": "2026-03-24T05:09:03+00:00",
       "firstSeen": "2026-03-24T06:11:40.166819+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1483
+      "score": 2.125
     },
     {
       "title": "A New Framework for Evaluating Voice Agents (EVA)",
@@ -172,10 +220,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/eva.png",
       "published": "2026-03-24T02:01:52+00:00",
       "firstSeen": "2026-03-24T03:00:01.323856+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.8088
+      "score": 1.7874
     },
     {
       "title": "Meta AI’s New Hyperagents Don’t Just Solve Tasks—They Rewrite the Rules of How They Learn",
@@ -188,10 +236,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-23-at-6.33.58-PM-1-150x150.png",
       "published": "2026-03-24T01:42:07+00:00",
       "firstSeen": "2026-03-24T02:00:01.797915+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6908
+      "score": 5.6696
     },
     {
       "title": "Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images",
@@ -204,10 +252,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-8.png",
       "published": "2026-03-24T00:44:12+00:00",
       "firstSeen": "2026-03-24T01:00:01.743476+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2677
+      "score": 7.2471
     },
     {
       "title": "Quoting Neurotica",
@@ -220,10 +268,10 @@
       "image": "",
       "published": "2026-03-23T23:31:45+00:00",
       "firstSeen": "2026-03-23T23:46:04.971212+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0098
+      "score": 5.9898
     },
     {
       "title": "datasette-files 0.1a2",
@@ -236,10 +284,10 @@
       "image": "",
       "published": "2026-03-23T23:06:38+00:00",
       "firstSeen": "2026-03-23T23:46:04.971212+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8003
+      "score": 4.7806
     },
     {
       "title": "Air Street becomes one of the largest solo VCs in Europe with $232M fund",
@@ -252,10 +300,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/06/GettyImages-138341302.jpg?resize=1200%2C771",
       "published": "2026-03-23T22:36:39+00:00",
       "firstSeen": "2026-03-23T23:46:04.971212+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6891
+      "score": 2.6697
     },
     {
       "title": "AI’s Power Crisis Is Closer Than You Might Think",
@@ -268,10 +316,10 @@
       "image": "",
       "published": "2026-03-23T21:42:31+00:00",
       "firstSeen": "2026-03-23T22:50:29.927776+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9293
+      "score": 2.9104
     },
     {
       "title": "Bernie Sanders’ AI ‘gotcha’ video flops, but the memes are great",
@@ -284,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/bernie-and-claude.jpeg?w=1143",
       "published": "2026-03-23T20:15:59+00:00",
       "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9387
+      "score": 5.9205
     },
     {
       "title": "JAAQ raises $17M to embed clinically governed mental health content inside the digital tools people already use",
@@ -300,10 +348,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/JAAQ-raises-17M.png",
       "published": "2026-03-23T20:08:53+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7963
+      "score": 1.7781
     },
     {
       "title": "Credo Ventures closes $88M fifth fund to stay the first cheque for CEE’s most ambitious founders",
@@ -316,10 +364,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Credo-Ventures-closes-88M.png",
       "published": "2026-03-23T19:51:13+00:00",
       "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.3098
+      "score": -1.3278
     },
     {
       "title": "Google’s new Pixel 10 ads made me go ‘Wait, WHAT are they trying to sell?’",
@@ -332,10 +380,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/chrome_Apdz9O6Gdb.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.287927994804%2C100%2C77.729143829578&amp%3Bw=1200",
       "published": "2026-03-23T19:49:11+00:00",
       "firstSeen": "2026-03-23T19:54:53.163855+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0995
+      "score": 3.0815
     },
     {
       "title": "Nvidia CEO Jensen Huang says &#8216;I think we&#8217;ve achieved AGI&#8217;",
@@ -348,10 +396,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25835739/STKP210_JENSEN_HUANG_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-23T19:42:33+00:00",
       "firstSeen": "2026-03-23T19:54:53.163855+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9972
+      "score": 1.9793
     },
     {
       "title": "Inside the AI Warehouse: How Otto Group Is Teaching Robots to Work Together",
@@ -364,10 +412,10 @@
       "image": "",
       "published": "2026-03-23T19:40:18+00:00",
       "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8865
+      "score": 2.8686
     },
     {
       "title": "Amazon Reportedly Building AI Smartphone to Revive Alexa Ecosystem",
@@ -380,10 +428,10 @@
       "image": "",
       "published": "2026-03-23T19:28:41+00:00",
       "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8825
+      "score": 2.8647
     },
     {
       "title": "Quoting David Abram",
@@ -396,10 +444,10 @@
       "image": "",
       "published": "2026-03-23T18:56:18+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9116
+      "score": 1.8941
     },
     {
       "title": "IRONSCALES brings AI email agents and threat intelligence series to RSAC 2026",
@@ -412,10 +460,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ironscales-rsac-conference.png",
       "published": "2026-03-23T18:41:32+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4667
+      "score": 4.4493
     },
     {
       "title": "How to Design a Production-Ready AI Agent That Automates Google Colab Workflows Using Colab-MCP, MCP Tools, FastMCP, and Kernel Execution",
@@ -428,10 +476,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-66-1024x731.png",
       "published": "2026-03-23T18:33:06+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3339
+      "score": 6.3166
     },
     {
       "title": "Vibe-coding startup Lovable is on the hunt for acquisitions",
@@ -444,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
       "published": "2026-03-23T18:22:04+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3003
+      "score": 4.283
     },
     {
       "title": "Musk Unites Tesla, SpaceX, xAI for Texas Chip Plant",
@@ -460,10 +508,10 @@
       "image": "",
       "published": "2026-03-23T18:01:08+00:00",
       "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8534
+      "score": 5.8363
     },
     {
       "title": "Apple sets June date for WWDC 2026, teasing ‘AI advancements’",
@@ -476,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
       "published": "2026-03-23T18:00:45+00:00",
       "firstSeen": "2026-03-23T18:01:07.275109+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9933
+      "score": 2.9762
     },
     {
       "title": "Perplexity Health Connects Medical Records and Wearables in New AI Push",
@@ -492,10 +540,10 @@
       "image": "https://assets.techrepublic.com/uploads/2023/02/tr2323-healthcare-data-migration.jpeg",
       "published": "2026-03-23T16:49:40+00:00",
       "firstSeen": "2026-03-23T18:00:01.201933+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8305
+      "score": 2.814
     },
     {
       "title": "The hardest question to answer about AI-fueled delusions",
@@ -508,10 +556,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_algo_AIdelusions.jpg?resize=1200%2C600",
       "published": "2026-03-23T16:31:20+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9648
+      "score": 2.9484
     },
     {
       "title": "The passwordless future is years away. Here is what businesses should do now",
@@ -524,10 +572,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Passpack-article.png",
       "published": "2026-03-23T16:22:22+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.822
+      "score": 2.8056
     },
     {
       "title": "Startup Gimlet Labs is solving the AI inference bottleneck in a surprisingly elegant way",
@@ -540,10 +588,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Gimlet_Labs_CEO_Zain_Asgar2.jpg?resize=1200%2C747",
       "published": "2026-03-23T16:00:00+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1551
+      "score": 2.1389
     },
     {
       "title": "Littlebird raises $11M for its AI-assisted ‘recall’ tool that reads your computer screen",
@@ -556,10 +604,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/routines.jpeg?resize=1200%2C675",
       "published": "2026-03-23T16:00:00+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8551
+      "score": 1.8389
     },
     {
       "title": "OpenAI is in talks to buy fusion energy from Helion",
@@ -575,7 +623,7 @@
       "lastSeen": "2026-03-24T10:06:54.838768+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7052
+      "score": 4.6893
     },
     {
       "title": "Elizabeth Warren calls Pentagon’s decision to bar Anthropic ‘retaliation’",
@@ -588,58 +636,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-03-23T15:22:57+00:00",
       "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8437
-    },
-    {
-      "title": "Munich startup Interloom raised $16.5M",
-      "url": "https://thenextweb.com/news/interloom-16-5m-seed-dn-capital-enterprise",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Munich startup is building what it calls a ‘context graph’, a continuously updated map of how operational decisions actually get made inside an enterprise, drawn from millions of real cases rather than documentation that may never have been written. There is a particular friction point in every enterprise AI deployment, and anyone who has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Interloom-raises-16.5M-.png",
-      "published": "2026-03-23T15:10:35+00:00",
-      "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7
-    },
-    {
-      "title": "Sam Altman-backed fusion startup Helion in talks with OpenAI",
-      "url": "https://techcrunch.com/2026/03/23/sam-altman-backed-fusion-startup-helion-in-talks-with-openai",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Helion is reportedly negotiating a deal that would see it sell 12.5% of its power output to OpenAI.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200%2C800",
-      "published": "2026-03-23T15:03:36+00:00",
-      "firstSeen": "2026-03-23T15:13:14.113638+00:00",
-      "lastSeen": "2026-03-23T18:01:07.275109+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8379
-    },
-    {
-      "title": "Sam Altman-backed fusion startup Helion in talks to sell power to OpenAI",
-      "url": "https://techcrunch.com/2026/03/23/sam-altman-openai-fusion-energy-board-helion",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "OpenAI CEO Sam Altman is stepping down as board chair of Helion. His departure comes as reports that the two companies are negotiating a deal that would see Helion sell 12.5% of its power output to OpenAI.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/Helion-Polaris-D-T.jpeg?resize=1200%2C800",
-      "published": "2026-03-23T15:03:36+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8379
+      "score": 4.8279
     },
     {
       "title": "Superbugs: Resistance Rising Part 1",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6541
+      "score": 2.6356
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-24T10:06:54.838768+00:00",
+      "lastSeen": "2026-03-24T11:00:02.076580+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.5028
+      "score": -0.503
     },
     {
       "title": "The Life Scientific: Tony Juniper",
