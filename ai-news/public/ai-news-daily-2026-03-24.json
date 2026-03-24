@@ -1,6 +1,10 @@
 {
   "date": "2026-03-24",
+<<<<<<< Updated upstream
   "updatedAt": "2026-03-24T13:48:16.722446+00:00",
+=======
+  "updatedAt": "2026-03-24T14:00:01.752071+00:00",
+>>>>>>> Stashed changes
   "items": [
     {
       "title": "Agile Robots becomes the latest robotics company to partner with Google DeepMind",
@@ -13,11 +17,19 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/Google-DeepMind.jpg?w=1024",
       "published": "2026-03-24T12:05:00+00:00",
       "firstSeen": "2026-03-24T13:00:01.414665+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
       "score": 17.9386
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.933
+>>>>>>> Stashed changes
     },
     {
       "title": "Anthropic’s Claude Code and Cowork can control your computer",
@@ -29,11 +41,19 @@
       "summary": "Anthropic has updated Claude to perform tasks in its Code and Cowork AI tools autonomously by using your computer for you. The new feature can be used to automatically open files, use web browsers and apps, and run dev tools \"with no setup required,\" even when you're away from your computer, according to Anthropic's announcement. [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Anthropic-Claude-Code-Cowork-computer-control.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T13:32:23+00:00",
+<<<<<<< Updated upstream
       "firstSeen": "2026-03-24T13:48:16.722446+00:00",
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 13.8519
+=======
+      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.846
+>>>>>>> Stashed changes
     },
     {
       "title": "Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images",
@@ -46,10 +66,33 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-8.png",
       "published": "2026-03-24T00:44:12+00:00",
       "firstSeen": "2026-03-24T01:00:01.743476+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
       "score": 7.1851
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.181
+    },
+    {
+      "title": "Zalos raises $3.6M to automate finance workflows",
+      "url": "https://thenextweb.com/news/zalos-raises-3-6m-to-automate-finance-workflows",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The YC Fall 2025 startup, founded by a former Agicap GM and a former Apple Pay engineer, converts screen recordings of finance workflows directly into computer agents, no API integration required. 14 Peaks led the round, with Cohen Circle and 20VC participating. The CFO’s software stack is both the problem and the constraint. Enterprise finance [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Zalos-founders.png",
+      "published": "2026-03-24T13:55:57+00:00",
+      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6479
+>>>>>>> Stashed changes
     },
     {
       "title": "Meta AI’s New Hyperagents Don’t Just Solve Tasks—They Rewrite the Rules of How They Learn",
@@ -62,10 +105,33 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-23-at-6.33.58-PM-1-150x150.png",
       "published": "2026-03-24T01:42:07+00:00",
       "firstSeen": "2026-03-24T02:00:01.797915+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.6059
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6017
+    },
+    {
+      "title": "GeoChallenge: A Multi-Answer Multiple-Choice Benchmark for Geometric Reasoning with Diagrams",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-03-24T14:00:10.289946+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.41
+>>>>>>> Stashed changes
     },
     {
       "title": "EU broadcasters urge tighter rules on Big Tech’s control for Smart TV",
@@ -78,10 +144,17 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-broadcasters.png",
       "published": "2026-03-24T10:07:31+00:00",
       "firstSeen": "2026-03-24T11:00:02.076580+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.2431
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2377
+>>>>>>> Stashed changes
     },
     {
       "title": "Accumulus Technologies launches live integration layer between pharma systems and national drug regulators",
@@ -94,10 +167,17 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Accumulus-Connector.png",
       "published": "2026-03-24T10:21:11+00:00",
       "firstSeen": "2026-03-24T11:00:02.076580+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.9494
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.944
+>>>>>>> Stashed changes
     },
     {
       "title": "Advancing Open Source AI, NVIDIA Donates Dynamic Resource Allocation Driver for GPUs to Kubernetes Community",
@@ -110,10 +190,17 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/kubecon-1920x1080-1.jpg",
       "published": "2026-03-24T08:00:12+00:00",
       "firstSeen": "2026-03-24T09:00:01.216198+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 4.9263
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.9212
+>>>>>>> Stashed changes
     },
     {
       "title": "Yann LeCun’s New LeWorldModel (LeWM) Research Targets JEPA Collapse in Pixel-Based Predictive World Modeling",
@@ -126,10 +213,17 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-1.png",
       "published": "2026-03-24T05:53:58+00:00",
       "firstSeen": "2026-03-24T06:11:40.166819+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": 4.4031
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.3983
+>>>>>>> Stashed changes
     },
     {
       "title": "Startup Dash0 hits unicorn status with $110M Series B",
@@ -142,10 +236,17 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Dash0-hits-unicorn-status.png",
       "published": "2026-03-24T08:27:58+00:00",
       "firstSeen": "2026-03-24T09:00:01.216198+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.3984
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3933
+>>>>>>> Stashed changes
     },
     {
       "title": "Your Body Is Betraying Your Right to Privacy",
@@ -158,6 +259,7 @@
       "image": "https://media.wired.com/photos/69c1aa958d470e1446eb5d44/master/pass/Book-Excerpt-Your-Body-Is-Betraying-Your-Right-to-Privacy-Security.jpg",
       "published": "2026-03-24T10:00:00+00:00",
       "firstSeen": "2026-03-24T10:06:54.838768+00:00",
+<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
@@ -194,6 +296,12 @@
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.7331
+=======
+      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5743
+>>>>>>> Stashed changes
     }
   ],
   "errors": []
