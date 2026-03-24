@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-24T05:00:01.794430+00:00",
+  "updatedAt": "2026-03-24T06:00:01.442970+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1664,6 +1664,14 @@
     "https://huggingface.co/blog/ServiceNow-AI/eva": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/eva.png",
       "checkedAt": "2026-03-24T03:00:01.323856+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/23/yann-lecuns-new-leworldmodel-lewm-research-targets-jepa-collapse-in-pixel-based-predictive-world-modeling": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-1.png",
+      "checkedAt": "2026-03-24T06:00:01.442970+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/24/streaming-experts": {
+      "image": "",
+      "checkedAt": "2026-03-24T06:00:01.442970+00:00"
     }
   }
 }
