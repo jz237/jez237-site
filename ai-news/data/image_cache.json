@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-24T09:06:30.953571+00:00",
+  "updatedAt": "2026-03-24T10:00:01.160839+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1672,6 +1672,10 @@
     "https://simonwillison.net/2026/Mar/24/streaming-experts": {
       "image": "",
       "checkedAt": "2026-03-24T06:00:01.442970+00:00"
+    },
+    "https://www.techrepublic.com/article/best-business-email-providers": {
+      "image": "https://assets.techrepublic.com/uploads/2024/07/AdobeStock_488920698.jpg",
+      "checkedAt": "2026-03-24T10:00:01.160839+00:00"
     }
   }
 }
