@@ -1,9 +1,9 @@
 {
   "date": "2026-03-24",
-  "updatedAt": "2026-03-24T00:00:01.219946+00:00",
+  "updatedAt": "2026-03-24T01:00:01.743476+00:00",
   "items": [
     {
-      "title": "GeoChallenge: A Multi-Answer Multiple-Choice Benchmark for Geometric Reasoning with Diagrams",
+      "title": "A comprehensive study of LLM-based argument classification: from Llama through DeepSeek to GPT-5.2",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +11,29 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-24T00:00:07.974254+00:00",
+      "published": "2026-03-24T01:00:23.542937+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-24T00:00:01.219946+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
+      "lastSeen": "2026-03-24T01:00:01.743476+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 19.66
+    },
+    {
+      "title": "Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images",
+      "url": "https://www.marktechpost.com/2026/03/23/luma-labs-launches-uni-1-the-autoregressive-transformer-model-that-reasons-through-intentions-before-generating-images",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In the field of generative AI media, the industry is transitioning from purely probabilistic pixel synthesis toward models capable of structural reasoning. Luma Labs has just released Uni-1, a foundational image model designed to address the &#8216;intent gap&#8221; inherent in standard diffusion pipelines. By implementing a reasoning phase prior to generation, Uni-1 shifts the workflow [&#8230;]\nThe post Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-8.png",
+      "published": "2026-03-24T00:44:12+00:00",
+      "firstSeen": "2026-03-24T01:00:01.743476+00:00",
+      "lastSeen": "2026-03-24T01:00:01.743476+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.512
     }
   ],
   "errors": []
