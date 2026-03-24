@@ -1,12 +1,8 @@
 {
-<<<<<<< Updated upstream
-  "updatedAt": "2026-03-24T13:48:16.722446+00:00",
-=======
-  "updatedAt": "2026-03-24T14:00:01.752071+00:00",
->>>>>>> Stashed changes
+  "updatedAt": "2026-03-24T22:15:00.072076+00:00",
   "items": [
     {
-      "title": "GeoChallenge: A Multi-Answer Multiple-Choice Benchmark for Geometric Reasoning with Diagrams",
+      "title": "Multi-Agent Debate with Memory Masking",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -14,18 +10,477 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-<<<<<<< Updated upstream
-      "published": "2026-03-24T13:48:24.076255+00:00",
+      "published": "2026-03-24T22:15:07.583241+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-=======
-      "published": "2026-03-24T14:00:10.289946+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
->>>>>>> Stashed changes
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.46
+    },
+    {
+      "title": "Paged Attention in Large Language Models LLMs",
+      "url": "https://www.marktechpost.com/2026/03/24/paged-attention-in-large-language-models-llms",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "When running LLMs at scale, the real limitation is GPU memory rather than compute, mainly because each request requires a KV cache to store token-level data. In traditional setups, a large fixed memory block is reserved per request based on the maximum sequence length, which leads to significant unused space and limits concurrency. Paged Attention [&#8230;]\nThe post Paged Attention in Large Language Models LLMs appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-46-150x150.png",
+      "published": "2026-03-24T21:45:49+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
+      "score": 5.0052
+    },
+    {
+      "title": "A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence",
+      "url": "https://www.marktechpost.com/2026/03/24/a-coding-implementation-to-design-self-evolving-skill-engine-with-openspace-for-skill-learning-token-efficiency-and-collective-intelligence",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we explore OpenSpace, a self-evolving skill engine developed by HKUDS that makes AI agents smarter, more cost-efficient, and capable of learning from every task they perform. We walk through the complete lifecycle of OpenSpace: from installing and configuring an OpenAI model, to executing cold-start tasks where no prior skills exist, watching the [&#8230;]\nThe post A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-3.png",
+      "published": "2026-03-24T21:31:11+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.3979
+    },
+    {
+      "title": "Package Managers Need to Cool Down",
+      "url": "https://simonwillison.net/2026/Mar/24/package-managers-need-to-cool-down",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Package Managers Need to Cool Down\nToday's LiteLLM supply chain attack inspired me to revisit the idea of dependency cooldowns, the practice of only installing updated dependencies once they've been out in the wild for a few days to give the community a chance to spot if they've been subverted in some way.\nThis recent piece (March 4th) piece by Andrew Nesbitt reviews the current state of dependency cooldown mechanisms across different packaging tools. It's surprisingly well supported! There's been a flurry of activity across major packaging tools, including:\n\npnpm 10.16 (September 2025) — mini",
+      "image": "",
+      "published": "2026-03-24T21:11:38+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2582
+    },
+    {
+      "title": "OpenAI just gave up on Sora and its billion-dollar Disney deal",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/899850/openai-sora-ai-chatgpt",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "On Tuesday afternoon, OpenAI announced \"We're saying goodbye to Sora,\" the video generation tool that it launched at the end of 2024, and centered in a massive licensing deal with Disney only a few months ago. The Wall Street Journal reported the move earlier, saying that OpenAI boss Sam Altman had informed staff that both [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/ai-label-1.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.28438353380685%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-03-24T21:08:10+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.4265
+    },
+    {
+      "title": "Anthropic hands Claude Code more control, but keeps it on a leash",
+      "url": "https://techcrunch.com/2026/03/24/anthropic-hands-claude-code-more-control-but-keeps-it-on-a-leash",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic’s new auto mode for Claude Code lets AI execute tasks with fewer approvals, reflecting a broader shift toward more autonomous tools that balance speed with safety through built-in safeguards.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
+      "published": "2026-03-24T21:00:30+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.3527
+    },
+    {
+      "title": "Spotify tests new tool to stop AI slop from being attributed to real artists",
+      "url": "https://techcrunch.com/2026/03/24/spotify-tests-new-tool-to-stop-ai-slop-from-being-attributed-to-real-artists",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The idea behind the new tool is to give artists more control over which tracks are associated with their name on Spotify.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
+      "published": "2026-03-24T20:56:25+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2507
+    },
+    {
+      "title": "Arm’s first CPU ever will plug into Meta’s AI datacenters later this year",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/899823/arm-agi-cpu-meta",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "After decades of only licensing its chip designs for others to use, UK-based Arm revealed the first chip it's producing on its own, and the first customer. Dubbed the Arm AGI CPU, it's another chip designed for inference, or running the cloud processing for AI tools like AI agents that can continue to spawn more [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/20260216_VISION25_ExplodedTight_Chip-01-16x9_16bit_v2-1200x675-1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282",
+      "published": "2026-03-24T20:43:14+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3142
+    },
+    {
+      "title": "Databricks bought two startups to underpin its new AI security product",
+      "url": "https://techcrunch.com/2026/03/24/databricks-buys-two-startups-lakewatch-antimatter-siftd-ai-security",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "With an overflowing war chest from its recent $5 billion raise, Databricks is buying startups and looking for more. It acquired Antimatter and SiftD.ai.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1177951659.jpg?resize=1200%2C800",
+      "published": "2026-03-24T20:40:56+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2431
+    },
+    {
+      "title": "Quoting Christopher Mims",
+      "url": "https://simonwillison.net/2026/Mar/24/christopher-mims",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I really think \"give AI total control of my computer and therefore my entire life\" is going to look so foolish in retrospect that everyone who went for this is going to look as dumb as Jimmy Fallon holding up a picture of his Bored Ape\n&mdash; Christopher Mims, Technology columnist at The Wall Street Journal\n\n    Tags: ai, security",
+      "image": "",
+      "published": "2026-03-24T20:35:52+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2407
+    },
+    {
+      "title": "OpenAI open-sources teen safety policies for developers amid mounting lawsuits over ChatGPT deaths",
+      "url": "https://thenextweb.com/news/openai-open-source-teen-safety-policies-developers",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI has spent the past year fielding lawsuits from the families of young people who died after extended interactions with ChatGPT. Now it is trying to give the developers who build on top of its models the tools to avoid creating the same problem. The company announced on Tuesday that it is releasing a set [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/openai-open-source-teen-safety-policies-developers.png",
+      "published": "2026-03-24T19:55:11+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.0811
+    },
+    {
+      "title": "Arm is releasing the first in-house chip in its 35-year history",
+      "url": "https://techcrunch.com/2026/03/24/arm-is-releasing-its-first-in-house-chip-in-its-35-year-history",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Arm is producing its own CPU for the first time. It developed the CPU with Meta, which is also the chip's first customer.",
+      "image": "https://techcrunch.com/wp-content/uploads/2018/08/GettyImages-576856756.jpg?resize=1200%2C840",
+      "published": "2026-03-24T19:48:54+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2181
+    },
+    {
+      "title": "BlueConic joins Databricks Marketplace to bring real-time marketing decisions to the lakehouse",
+      "url": "https://thenextweb.com/news/blueconic-databricks-marketplace-real-time-decisioning",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Enterprises have spent years and considerable fortunes building data lakehouses, training models, and unifying customer records inside platforms like Databricks. The harder problem, it turns out, is not building the intelligence but deploying it, getting a prediction out of a data warehouse and into a marketing decision before the moment passes. BlueConic, the Boston-based customer [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/blueconic-databricks-marketplace-real-time-decisioning.png",
+      "published": "2026-03-24T19:33:32+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3708
+    },
+    {
+      "title": "OpenAI’s plans to make ChatGPT more like Amazon aren’t going so well",
+      "url": "https://techcrunch.com/2026/03/24/openais-plans-to-make-chatgpt-more-like-amazon-arent-going-so-well",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "OpenAI says it's moving away from Instant Checkout, which allowed users to buy items directly through the ChatGPT interface.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-9.15.10-AM.png?resize=1200%2C675",
+      "published": "2026-03-24T19:27:56+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2081
+    },
+    {
+      "title": "Google TV’s new Gemini features keep fans updated on sports teams and more",
+      "url": "https://techcrunch.com/2026/03/24/google-tv-new-gemini-features-keep-fans-updated-on-sports-teams-deep-dives-visual-answers",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Three Gemini-powered features are coming to your Google TV. This includes visual responses, deep dives, and sports briefs.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-tv.webp?resize=1200%2C675",
+      "published": "2026-03-24T19:12:11+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2007
+    },
+    {
+      "title": "Halter raises $220M at $2 billion valuation as virtual fencing for cattle goes global",
+      "url": "https://thenextweb.com/news/halter-series-e-virtual-fencing-cattle",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A cow wearing a GPS collar doesn’t sound like a $2 billion idea. But for the ranchers who have strung virtual fences across 60,000 miles of American pastureland in under two years, it apparently is. Halter, the New Zealand-born agtech company, announced on Monday that it has raised $220 million in Series E funding at [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Craig-Piggott-CEO-and-Founder-Halter.png",
+      "published": "2026-03-24T19:02:44+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1563
+    },
+    {
+      "title": "This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B",
+      "url": "https://www.marktechpost.com/2026/03/24/this-ai-paper-introduces-tinylora-a-13-parameter-fine-tuning-method-that-reaches-91-8-percent-gsm8k-on-qwen2-5-7b",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Researchers from FAIR at Meta, Cornell University, and Carnegie Mellon University have demonstrated that large language models (LLMs) can learn to reason using a remarkably small number of trained parameters. The research team introduces TinyLoRA, a parameterization that can scale down to a single trainable parameter under extreme sharing settings. Using this method on a [&#8230;]\nThe post This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2.png",
+      "published": "2026-03-24T18:49:40+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 13.9702
+    },
+    {
+      "title": "OpenAI adds open source tools to help developers build for teen safety",
+      "url": "https://techcrunch.com/2026/03/24/openai-adds-open-source-tools-to-help-developers-build-for-teen-safety",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Rather than working from scratch to figure out how to make AI safer for teens, developers can use these policies to fortify what they build.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "published": "2026-03-24T18:41:34+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8865
+    },
+    {
+      "title": "Talat’s AI meeting notes stay on your machine, not in the cloud",
+      "url": "https://techcrunch.com/2026/03/24/talats-ai-meeting-notes-stay-on-your-machine-not-in-the-cloud",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The subscription-free AI meeting notes app is a local-first twist on notetaking tools like Granola.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/talat-app-at-2.11.22-PM.jpg?w=1086",
+      "published": "2026-03-24T18:41:33+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2865
+    },
+    {
+      "title": "Energy Vault acquires 175 MW battery project in Texas as it bets on AI-driven power demand",
+      "url": "https://thenextweb.com/news/energy-vault-mcmurtre-battery-texas-acquisition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In the sprawl north of Dallas, where data centres are multiplying and the Texas grid groans under record demand, Energy Vault has placed a new bet on battery storage, and on the idea that the companies powering AI’s insatiable appetite for electricity will need far more of it, far faster. The California-based energy storage company [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/energy-vault-mcmurtre-battery-texas-acquisitionpng.png",
+      "published": "2026-03-24T18:36:53+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.0443
+    },
+    {
+      "title": "BNESIM on the evolving role of AI in travel eSIM as connectivity adapts to accelerating innovation cycles",
+      "url": "https://thenextweb.com/news/bnesim-ai-travel-esim-connectivity",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "BNESIM, a global connectivity provider specializing in travel eSIM and digital communications, acknowledges the far-reaching influence artificial intelligence is having across industries. Operating in a space defined by constant movement, both in terms of people and technology, the company approaches this shift intentionally to evolve in parallel with it. “We believe that meaningful progress comes [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/bnesim-ai-travel-esim.png",
+      "published": "2026-03-24T17:20:38+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1099
+    },
+    {
+      "title": "Doss raises $55M for AI inventory management that plugs into ERP",
+      "url": "https://techcrunch.com/2026/03/24/doss-raises-55m-for-ai-inventory-management-that-plugs-into-erp",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Doss's AI-powered inventory management system integrates with existing ERP systems. The Series B round was co-led by Madrona and Premji Invest.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Doss-Founder-Photo.jpg?resize=1200%2C800",
+      "published": "2026-03-24T17:18:29+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1489
+    },
+    {
+      "title": "ChatGPT and Gemini are fighting to be the AI bot that sells you stuff",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/899677/openai-google-gemini-ai-shopping-features",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "The AI-powered shopping rivalry is heating up as Google and OpenAI launch new features to help you buy things while interacting with their chatbots. Now, Google is teaming up with Gap Inc to allow its Gemini AI assistant to purchase clothes on your behalf from any of its stores, which include Gap, Old Navy, Banana [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362057/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-03-24T17:13:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 18.0165
+    },
+    {
+      "title": "Arm Is Now Making Its Own Chips",
+      "url": "https://www.wired.com/story/chip-design-firm-arm-is-making-its-own-ai-cpu",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The chip design firm says Meta, OpenAI, Cerebras, and Cloudflare are among the first customers of its new artificial intelligence hardware.",
+      "image": "https://media.wired.com/photos/69c1dcea9b0c01414434424c/master/pass/Chip-Design-Firm-Arm-Making-Own-AI-CPU-Business-2250850574.jpg",
+      "published": "2026-03-24T17:00:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1407
+    },
+    {
+      "title": "Apple Announces WWDC 2026: What to Expect From iOS 27, Siri Revamp",
+      "url": "https://www.techrepublic.com/article/news-apple-wwdc-2026-ios-27-siri-ai-updates",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple announces WWDC 2026, with iOS 27, major Siri AI upgrades, and a renewed focus on bug fixes and performance improvements across devices.\nThe post Apple Announces WWDC 2026: What to Expect From iOS 27, Siri Revamp appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03242026-apple-wwdc-2026.jpg",
+      "published": "2026-03-24T16:43:19+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8934
+    },
+    {
+      "title": "Tencent Brings OpenClaw AI Agents to 1B WeChat Users",
+      "url": "https://www.techrepublic.com/article/news-tencent-openclaw-ai-agents-wechat-1b-users",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tencent integrates OpenClaw AI agents into WeChat, bringing autonomous assistants to 1 billion users and raising new security and governance concerns.\nThe post Tencent Brings OpenClaw AI Agents to 1B WeChat Users appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03242026-tencent-openclaw-ai-agents-wechat.jpg",
+      "published": "2026-03-24T16:27:09+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.8864
+    },
+    {
+      "title": "Meet the former Apple designer building a new AI interface at Hark",
+      "url": "https://techcrunch.com/2026/03/24/meet-the-former-apple-designer-building-a-new-ai-interface-at-hark",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company said it would design models, hardware, and interfaces in tandem to deliver a \"seamless end-to-end personal intelligence product.\"",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-6.20.59-AM.png?w=939",
+      "published": "2026-03-24T16:00:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2147
+    },
+    {
+      "title": "Tony Siu on building AI-enabled developer communities through servitude leadership and human connection",
+      "url": "https://thenextweb.com/news/developer-communities-ai-tech-leadership",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tony Siu, founder of Coffee &amp; Code Philadelphia and an AI engineer and community builder, aims to advance a model of ecosystem development that blends human connection with the thoughtful use of AI. His approach reflects a community-first, servitude-leadership philosophy where participation, shared learning, and developer advocacy evolve alongside scalable systems, offering insight into how [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Coffee-Code-Philadelphia.png",
+      "published": "2026-03-24T15:26:01+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0603
+    },
+    {
+      "title": "Malicious litellm_init.pth in litellm 1.82.8 — credential stealer",
+      "url": "https://simonwillison.net/2026/Mar/24/malicious-litellm",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Malicious litellm_init.pth in litellm 1.82.8 — credential stealer\nThe LiteLLM v1.82.8 package published to PyPI was compromised with a particularly nasty credential stealer hidden in base64 in a litellm_init.pth file, which means installing the package is enough to trigger it even without running import litellm.\n(1.82.7 had the exploit as well but it was in the proxy/proxy_server.py file so the package had to be imported for it to take effect.)\nThis issue has a very detailed description of what the credential stealer does. There's more information about the timeline of the exploit over here.\nP",
+      "image": "",
+      "published": "2026-03-24T15:07:31+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0925
+    },
+    {
+      "title": "Pagaya just proved Wall Street will buy AI-underwritten auto loans twice",
+      "url": "https://thenextweb.com/news/pagaya-auto-resecuritization-ai-lending-450-million",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Three years ago, institutional investors took a leap of faith when they purchased bonds backed by auto loans that an algorithm had selected. Now Pagaya Technologies is asking them to do it again, with the very same loans. The Israeli-founded, New York-headquartered fintech announced on Monday that it has closed a $450 million auto resecuritization [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/pagaya-auto-resecuritization.png",
+      "published": "2026-03-24T14:28:49+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.9365
     },
     {
       "title": "Zalos raises $3.6M to automate finance workflows",
@@ -37,11 +492,11 @@
       "summary": "The YC Fall 2025 startup, founded by a former Agicap GM and a former Apple Pay engineer, converts screen recordings of finance workflows directly into computer agents, no API integration required. 14 Peaks led the round, with Cohen Circle and 20VC participating. The CFO’s software stack is both the problem and the constraint. Enterprise finance [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Zalos-founders.png",
       "published": "2026-03-24T13:55:57+00:00",
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6479
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4231
     },
     {
       "title": "NeuReality taps former Google AI director to steer its inference operating system into the market",
@@ -53,11 +508,11 @@
       "summary": "When Jensen Huang told 30,000 attendees at GTC last week that the future data centre is a “token factory,” he was describing a world that a small Israeli startup has been quietly building toward for months. NeuReality, the Caesarea-based company behind the NR-NEXUS inference operating system, has appointed Shalini Agarwal, a product management director at [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/neureality-google-advisor-Shalini-Agarwal-nr-nexus-inference.png",
       "published": "2026-03-24T13:45:25+00:00",
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5426
+      "score": 3.3188
     },
     {
       "title": "Zevero raises $7M as sustainability reporting shifts from annual obligation to continuous data infrastructure",
@@ -69,27 +524,11 @@
       "summary": "The London-based carbon management platform, which has doubled its customer base and grown ARR 400% year-on-year, now has $14M in total funding and is pushing into Asia-Pacific and continental Europe,  backed by Spiral Capital, Gazelle Capital, and Deep 30. For most companies, carbon reporting has been an annual exercise: gather data, produce a number, file [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Zevero.png",
       "published": "2026-03-24T13:33:11+00:00",
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8364
-    },
-    {
-      "title": "Anthropic’s Claude Code and Cowork can control your computer",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/899430/anthropic-claude-code-cowork-ai-control-computer",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Anthropic has updated Claude to perform tasks in its Code and Cowork AI tools autonomously by using your computer for you. The new feature can be used to automatically open files, use web browsers and apps, and run dev tools \"with no setup required,\" even when you're away from your computer, according to Anthropic's announcement. [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Anthropic-Claude-Code-Cowork-computer-control.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-03-24T13:32:23+00:00",
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.846
+      "score": 2.6139
     },
     {
       "title": "Anthropic’s Claude Code and Cowork can control your computer",
@@ -102,32 +541,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Anthropic-Claude-Code-Cowork-computer-control.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T13:32:23+00:00",
       "firstSeen": "2026-03-24T13:48:16.722446+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8519
+      "score": 13.6236
     },
     {
-      "title": "Mirage raises $75M to continue building models for its AI video editing app Captions",
+      "title": "Mirage raises $75M to continue building models for its AI video-editing app Captions",
       "url": "https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Mirage, the maker of video editing app Captions, has raised $75 million in growth financing from General Catalyst's Customer Value Fund (CVF).",
+      "summary": "Mirage, the maker of video-editing app Captions, has raised $75 million in growth financing from General Catalyst's Customer Value Fund (CVF).",
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Mirage-background.png?w=1200",
       "published": "2026-03-24T13:00:00+00:00",
       "firstSeen": "2026-03-24T13:00:01.414665+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.2657
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.2599
+      "score": 0.0408
     },
     {
       "title": "Self-propagating malware poisons open source software and wipes Iran-based machines",
@@ -139,12 +572,11 @@
       "summary": "Development houses: It's time to check your networks for infections.",
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/05/malware-threat-1000x648.jpg",
       "published": "2026-03-24T12:38:09+00:00",
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8091
->>>>>>> Stashed changes
+      "score": 2.5922
     },
     {
       "title": "Agile Robots becomes the latest robotics company to partner with Google DeepMind",
@@ -157,19 +589,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/Google-DeepMind.jpg?w=1024",
       "published": "2026-03-24T12:05:00+00:00",
       "firstSeen": "2026-03-24T13:00:01.414665+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9386
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 17.933
->>>>>>> Stashed changes
+      "score": 17.7194
     },
     {
       "title": "Lace raises $40M to replace chip-making light with helium atoms",
@@ -182,17 +606,27 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Lace-Lithography.png",
       "published": "2026-03-24T11:02:37+00:00",
       "firstSeen": "2026-03-24T13:00:01.414665+00:00",
-<<<<<<< Updated upstream
       "lastSeen": "2026-03-24T13:48:16.722446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0688
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0633
->>>>>>> Stashed changes
+      "score": 1.8558
+    },
+    {
+      "title": "Helping developers build safer AI experiences for teens",
+      "url": "https://openai.com/index/teen-safety-policies-gpt-oss-safeguard",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "OpenAI releases prompt-based teen safety policies for developers using gpt-oss-safeguard, helping moderate age-specific risks in AI systems.",
+      "image": "",
+      "published": "2026-03-24T11:00:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 13.2048
     },
     {
       "title": "Chris Hayes Has Some Advice for Keeping Up With the News",
@@ -205,762 +639,10 @@
       "image": "https://media.wired.com/photos/69c1b2b856888c87f24c925c/master/pass/Big-Interview-UV-Solo-Chris-Hayes-Business-2210889473.jpg",
       "published": "2026-03-24T10:30:00+00:00",
       "firstSeen": "2026-03-24T11:00:02.076580+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1935
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1881
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Accumulus Technologies launches live integration layer between pharma systems and national drug regulators",
-      "url": "https://thenextweb.com/news/accumulus-technologies-connector-pharma",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The startup, spun out of nonprofit Accumulus Synergy last August, has built a network connecting pharmaceutical and biotech companies to regulators across more than 70 countries. The new Connector makes that network accessible without leaving the systems companies already use. Getting a drug approved in multiple countries simultaneously requires filing the same information with dozens [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Accumulus-Connector.png",
-      "published": "2026-03-24T10:21:11+00:00",
-      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9494
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.944
->>>>>>> Stashed changes
-    },
-    {
-      "title": "EU broadcasters urge tighter rules on Big Tech’s control for Smart TV",
-      "url": "https://thenextweb.com/news/eu-broadcasters-urge-tighter-rules-on-big-techs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Association of Commercial Television and Video on Demand Services in Europe  (ACT) released a statement on Monday, urging the European Commission to designate smart TV operating systems and virtual assistant platforms as ‘gatekeepers’ under the EU’s Digital Markets Act (DMA). The call would expand regulatory measures against the growing market power of Big Tech’s [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-broadcasters.png",
-      "published": "2026-03-24T10:07:31+00:00",
-      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2431
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2377
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Your Body Is Betraying Your Right to Privacy",
-      "url": "https://www.wired.com/story/book-excerpt-your-data-will-be-used-against-you-andrew-guthrie-ferguson",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Attachment to smart devices and biometric surveillance leaves Americans more vulnerable to police searches than ever. Left unchecked it will only get worse.",
-      "image": "https://media.wired.com/photos/69c1aa958d470e1446eb5d44/master/pass/Book-Excerpt-Your-Body-Is-Betraying-Your-Right-to-Privacy-Security.jpg",
-      "published": "2026-03-24T10:00:00+00:00",
-      "firstSeen": "2026-03-24T10:06:54.838768+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.5797
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.5743
->>>>>>> Stashed changes
-    },
-    {
-      "title": "IBM Cloud, Nutanix, SUSE, and OVHcloud have all independently chosen Traefik as their Ingress NGINX replacement",
-      "url": "https://thenextweb.com/news/traefik-kubernetes-ingress-nginx-replacement-ibm",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Kubernetes community retired Ingress NGINX this month after years of under-resourcing. The migration scramble it triggered is now consolidating around one open source beneficiary, and Traefik Labs announced that convergence at KubeCon today. For years, the kubernetes/ingress-nginx project ran on borrowed time. Maintained largely by one or two volunteers working evenings and weekends, it [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Traefik-Becomes-the-De-Facto-Standard-for-Kubernetes-Networking.png",
-      "published": "2026-03-24T09:45:38+00:00",
-      "firstSeen": "2026-03-24T10:00:01.160839+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7331
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7278
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Foreverland raises €6M to scale its cocoa-free chocolate ingredient across Europe",
-      "url": "https://thenextweb.com/news/foreverland-6m-choruba-cocoa-free-chocolate",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Italian foodtech, which makes Choruba from Mediterranean carob and has already signed four European confectionery partnerships, now has €9.4M in total funding to push commercial expansion and develop an organic product line. Foreverland, the Italian startup making a carob-based alternative to chocolate, has raised €6 million in a new funding round, bringing its total [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Foreverland-raises-E6M.png",
-      "published": "2026-03-24T08:47:41+00:00",
-      "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0071
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0019
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Startup Dash0 hits unicorn status with $110M Series B",
-      "url": "https://thenextweb.com/news/dash0-110m-series-b-observability-unicorn",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The OpenTelemetry-native platform founded by the team behind Instana has grown to 600 customers in under two years. Its Series B, led by Balderton, with Accel, Cherry, and Deutsche Telekom’s T.Capital, will fund Agent0, an AI layer that doesn’t just surface production problems but fixes them. Observability has always had an uncomfortable gap at its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Dash0-hits-unicorn-status.png",
-      "published": "2026-03-24T08:27:58+00:00",
-      "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3984
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3933
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Foodtech Swish closes $38M Series B at $139M valuation",
-      "url": "https://thenextweb.com/news/swish-38m-series-b-india-food-delivery",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Bengaluru’s Swish has now raised $54M in 18 months, values itself at $139M, and is betting that owning the kitchen, the technology, and the last mile is the only way to make ultra-fast food delivery work at scale. The timing is pointed. In the months before Swish announced its $38 million Series B, three of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Foodtech-Swish-Founders.png",
-      "published": "2026-03-24T08:18:28+00:00",
-      "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9942
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9891
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Advancing Open Source AI, NVIDIA Donates Dynamic Resource Allocation Driver for GPUs to Kubernetes Community",
-      "url": "https://blogs.nvidia.com/blog/nvidia-at-kubecon-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Artificial intelligence has rapidly emerged as one of the most critical workloads in modern computing. For the vast majority of enterprises, this workload runs on Kubernetes, an open source platform that automates the deployment, scaling and management of containerized applications. To help the global developer community manage high-performance AI infrastructure with greater transparency and efficiency, [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/kubecon-1920x1080-1.jpg",
-      "published": "2026-03-24T08:00:12+00:00",
-      "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.9263
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.9212
->>>>>>> Stashed changes
-    },
-    {
-      "title": "10 Best Business Email Providers for Small Businesses in 2026",
-      "url": "https://www.techrepublic.com/article/best-business-email-providers",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Looking for the best business email provider? Compare top options like Google Workspace, Microsoft 365, and Zoho Mail to choose the right one.\nThe post 10 Best Business Email Providers for Small Businesses in 2026 appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2024/07/AdobeStock_488920698.jpg",
-      "published": "2026-03-24T07:00:47+00:00",
-      "firstSeen": "2026-03-24T10:00:01.160839+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0609
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0559
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Yann LeCun’s New LeWorldModel (LeWM) Research Targets JEPA Collapse in Pixel-Based Predictive World Modeling",
-      "url": "https://www.marktechpost.com/2026/03/23/yann-lecuns-new-leworldmodel-lewm-research-targets-jepa-collapse-in-pixel-based-predictive-world-modeling",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "World Models (WMs) are a central framework for developing agents that reason and plan in a compact latent space. However, training these models directly from pixel data often leads to &#8216;representation collapse,&#8217; where the model produces redundant embeddings to trivially satisfy prediction objectives. Current approaches attempt to prevent this by relying on complex heuristics: they [&#8230;]\nThe post Yann LeCun’s New LeWorldModel (LeWM) Research Targets JEPA Collapse in Pixel-Based Predictive World Modeling appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-1.png",
-      "published": "2026-03-24T05:53:58+00:00",
-      "firstSeen": "2026-03-24T06:11:40.166819+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.4031
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.3983
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Streaming experts",
-      "url": "https://simonwillison.net/2026/Mar/24/streaming-experts",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "I wrote about Dan Woods' experiments with streaming experts the other day, the trick where you run larger Mixture-of-Experts models on hardware that doesn't have enough RAM to fit the entire model by instead streaming the necessary expert weights from SSD for each token that you process.\nFive days ago Dan was running Qwen3.5-397B-A17B in 48GB of RAM. Today @seikixtc reported running the colossal Kimi K2.5 - a 1 trillion parameter model with 32B active weights at any one time, in 96GB of RAM on an M2 Max MacBook Pro.\nAnd @anemll showed that same Qwen3.5-397B-A17B model running on an iPhone, alb",
-      "image": "",
-      "published": "2026-03-24T05:09:03+00:00",
-      "firstSeen": "2026-03-24T06:11:40.166819+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.055
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0503
->>>>>>> Stashed changes
-    },
-    {
-      "title": "A New Framework for Evaluating Voice Agents (EVA)",
-      "url": "https://huggingface.co/blog/ServiceNow-AI/eva",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/eva.png",
-      "published": "2026-03-24T02:01:52+00:00",
-      "firstSeen": "2026-03-24T03:00:01.323856+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.7232
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.7189
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Meta AI’s New Hyperagents Don’t Just Solve Tasks—They Rewrite the Rules of How They Learn",
-      "url": "https://www.marktechpost.com/2026/03/23/meta-ais-new-hyperagents-dont-just-solve-tasks-they-rewrite-the-rules-of-how-they-learn",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "The dream of recursive self-improvement in AI—where a system doesn’t just get better at a task, but gets better at learning—has long been the &#8216;holy grail&#8217; of the field. While theoretical models like the Gödel Machine have existed for decades, they remained largely impractical in real-world settings. That changed with the Darwin Gödel Machine (DGM), [&#8230;]\nThe post Meta AI’s New Hyperagents Don’t Just Solve Tasks—They Rewrite the Rules of How They Learn appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-23-at-6.33.58-PM-1-150x150.png",
-      "published": "2026-03-24T01:42:07+00:00",
-      "firstSeen": "2026-03-24T02:00:01.797915+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6059
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6017
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images",
-      "url": "https://www.marktechpost.com/2026/03/23/luma-labs-launches-uni-1-the-autoregressive-transformer-model-that-reasons-through-intentions-before-generating-images",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In the field of generative AI media, the industry is transitioning from purely probabilistic pixel synthesis toward models capable of structural reasoning. Luma Labs has just released Uni-1, a foundational image model designed to address the &#8216;intent gap&#8221; inherent in standard diffusion pipelines. By implementing a reasoning phase prior to generation, Uni-1 shifts the workflow [&#8230;]\nThe post Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-8.png",
-      "published": "2026-03-24T00:44:12+00:00",
-      "firstSeen": "2026-03-24T01:00:01.743476+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.1851
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.181
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Quoting Neurotica",
-      "url": "https://simonwillison.net/2026/Mar/23/neurotica",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "slop is something that takes more human effort to consume than it took to produce. When my coworker sends me raw Gemini output he’s not expressing his freedom to create, he’s disrespecting the value of my time\n&mdash; Neurotica, @schwarzgerat.bsky.social\n\n    Tags: ai-ethics, slop, generative-ai, ai, llms",
-      "image": "",
-      "published": "2026-03-23T23:31:45+00:00",
-      "firstSeen": "2026-03-23T23:46:04.971212+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9299
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9259
->>>>>>> Stashed changes
-    },
-    {
-      "title": "datasette-files 0.1a2",
-      "url": "https://simonwillison.net/2026/Mar/23/datasette-files",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: datasette-files 0.1a2\n    The most interesting alpha of datasette-files yet, a new plugin which adds the ability to upload files directly into a Datasette instance. Here are the release notes in full:\n\n\nColumns are now configured using the new column_types system from Datasette 1.0a26. #8\nNew file_actions plugin hook, plus ability to import an uploaded CSV/TSV file to a table. #10\nUI for uploading multiple files at once via the new documented JSON upload API. #11\nThumbnails are now generated for image files and stored in an internal datasette_files_thumbnails table. #13\n\n\n    \n       ",
-      "image": "",
-      "published": "2026-03-23T23:06:38+00:00",
-      "firstSeen": "2026-03-23T23:46:04.971212+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7214
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7174
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Air Street becomes one of the largest solo VCs in Europe with $232M fund",
-      "url": "https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "London’s Air Street Capital has raised a large Fund III with eyes locked on backing early-stage European and North American AI companies.",
-      "image": "https://techcrunch.com/wp-content/uploads/2023/06/GettyImages-138341302.jpg?resize=1200%2C771",
-      "published": "2026-03-23T22:36:39+00:00",
-      "firstSeen": "2026-03-23T23:46:04.971212+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6113
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6074
->>>>>>> Stashed changes
-    },
-    {
-      "title": "AI’s Power Crisis Is Closer Than You Might Think",
-      "url": "https://www.techrepublic.com/article/news-ai-energy-demand-power-grid-crisis",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AI growth is accelerating, but energy limits may slow it down as data center demand strains power grids and raises concerns across the tech industry.\nThe post AI’s Power Crisis Is Closer Than You Might Think appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-23T21:42:31+00:00",
-      "firstSeen": "2026-03-23T22:50:29.927776+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8534
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8496
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Bernie Sanders’ AI ‘gotcha’ video flops, but the memes are great",
-      "url": "https://techcrunch.com/2026/03/23/bernie-sanders-ai-gotcha-video-flops-but-the-memes-are-great",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Sen. Bernie Sanders thinks he's tricked Claude into revealing the AI industry's secrets, but he really just exposed how agreeable chatbots can become.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/bernie-and-claude.jpeg?w=1143",
-      "published": "2026-03-23T20:15:59+00:00",
-      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8658
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8621
->>>>>>> Stashed changes
-    },
-    {
-      "title": "JAAQ raises $17M to embed clinically governed mental health content inside the digital tools people already use",
-      "url": "https://thenextweb.com/news/jaaq-17m-series-a-mental-health-platform",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The London-based platform, which already covers 1.5 million eligible lives across enterprise and healthcare deployments, is using the Series A to accelerate US market entry and deepen its clinical infrastructure, with a new CEO who sold his last company to Adobe. JAAQ, the London-based digital health engagement platform, has raised $17 million in a Series [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/JAAQ-raises-17M.png",
-      "published": "2026-03-23T20:08:53+00:00",
-      "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-<<<<<<< Updated upstream
-      "score": 1.7236
-=======
-      "score": 1.7199
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Credo Ventures closes $88M fifth fund to stay the first cheque for CEE’s most ambitious founders",
-      "url": "https://thenextweb.com/news/credo-ventures-88m-fund",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Prague and Krakow firm, whose earliest bets include UiPath and ElevenLabs, is doubling down on pre-seed in Central and Eastern Europe and its global diaspora, with a six-partner team and a $1–5M typical cheque. Credo Ventures has closed Credo Stage 5, an $88 million fund raised in a single closing, continuing the Prague and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Credo-Ventures-closes-88M.png",
-      "published": "2026-03-23T19:51:13+00:00",
-      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-<<<<<<< Updated upstream
-      "score": -1.3819
-=======
-      "score": -1.3855
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Google’s new Pixel 10 ads made me go ‘Wait, WHAT are they trying to sell?’",
-      "url": "https://www.theverge.com/tech/898992/google-pixel-10-ads-moving-on-stalker-lying-beach-view-100-zoom",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Ever watch a TV ad and wonder, \"How did this get approved?\" Today, Google has not one but two new ad spots for its six-month-old Pixel 10 phones, and… let's just say they may not come across as intended. First, there's \"With 100x Zoom,\" an ad that appears to suggest that if a vacation rental [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/chrome_Apdz9O6Gdb.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.287927994804%2C100%2C77.729143829578&amp%3Bw=1200",
-      "published": "2026-03-23T19:49:11+00:00",
-      "firstSeen": "2026-03-23T19:54:53.163855+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0275
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0238
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Nvidia CEO Jensen Huang says &#8216;I think we&#8217;ve achieved AGI&#8217;",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/899086/jensen-huang-nvidia-agi",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "On a Monday episode of the Lex Fridman podcast, Nvidia CEO Jensen Huang made a hot-button statement: \"I think we've achieved AGI.\" AGI, or artificial general intelligence, is a vaguely defined term that has incited a lot of discussion by tech CEOs, tech workers, and the general public in recent years, as it typically denotes [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25835739/STKP210_JENSEN_HUANG_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-03-23T19:42:33+00:00",
-      "firstSeen": "2026-03-23T19:54:53.163855+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9254
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9218
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Inside the AI Warehouse: How Otto Group Is Teaching Robots to Work Together",
-      "url": "https://www.techrepublic.com/article/news-otto-group-ai-warehouse-robotics",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Otto Group uses Nvidia Omniverse and AI to coordinate warehouse robots, boosting efficiency and redefining logistics with digital twins and automation.\nThe post Inside the AI Warehouse: How Otto Group Is Teaching Robots to Work Together appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-23T19:40:18+00:00",
-      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8147
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8111
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Amazon Reportedly Building AI Smartphone to Revive Alexa Ecosystem",
-      "url": "https://www.techrepublic.com/article/news-amazon-ai-smartphone-transformer-alexa",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Amazon is reportedly working on building an AI-native smartphone, codenamed ‘Transformer,’ several years after its Fire Phone flopped.\nThe post Amazon Reportedly Building AI Smartphone to Revive Alexa Ecosystem appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-23T19:28:41+00:00",
-      "firstSeen": "2026-03-23T20:52:32.513980+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8112
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8076
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Quoting David Abram",
-      "url": "https://simonwillison.net/2026/Mar/23/david-abram",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "I have been doing this for years, and the hardest parts of the job were never about typing out code. I have always struggled most with understanding systems, debugging things that made no sense, designing architectures that wouldn't collapse under heavy load, and making decisions that would save months of pain later.\nNone of these problems can be solved LLMs. They can suggest code, help with boilerplate, sometimes can act as a sounding board. But they don't understand the system, they don't carry context in their \"minds\", and they certianly don't know why a decision is right or wrong.\nAnd the ",
-      "image": "",
-      "published": "2026-03-23T18:56:18+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8413
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8378
->>>>>>> Stashed changes
-    },
-    {
-      "title": "IRONSCALES brings AI email agents and threat intelligence series to RSAC 2026",
-      "url": "https://thenextweb.com/news/ironscales-ai-email-agents-rsac-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The inbox has long been the softest entry point in enterprise security. As phishing campaigns grow more convincing, more personalised, and increasingly powered by generative AI, the tools designed to stop them have been locked in a reactive cycle: wait for the attack, analyse it, respond. IRONSCALES, the Atlanta-based email security vendor, is betting that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Ironscales-rsac-conference.png",
-      "published": "2026-03-23T18:41:32+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-<<<<<<< Updated upstream
-      "score": 4.3969
-=======
-      "score": 4.3934
->>>>>>> Stashed changes
-    },
-    {
-      "title": "How to Design a Production-Ready AI Agent That Automates Google Colab Workflows Using Colab-MCP, MCP Tools, FastMCP, and Kernel Execution",
-      "url": "https://www.marktechpost.com/2026/03/23/how-to-design-a-production-ready-ai-agent-that-automates-google-colab-workflows-using-colab-mcp-mcp-tools-fastmcp-and-kernel-execution",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build an advanced, hands-on tutorial around Google&#8217;s newly released colab-mcp, an open-source MCP (Model Context Protocol) server that lets any AI agent programmatically control Google Colab notebooks and runtimes. Across five self-contained snippets, we go from first principles to production-ready patterns. We start by constructing a minimal MCP tool registry from [&#8230;]\nThe post How to Design a Production-Ready AI Agent That Automates Google Colab Workflows Using Colab-MCP, MCP Tools, FastMCP, and Kernel Execution appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-66-1024x731.png",
-      "published": "2026-03-23T18:33:06+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.2644
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.2609
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Vibe-coding startup Lovable is on the hunt for acquisitions",
-      "url": "https://techcrunch.com/2026/03/23/vibe-coding-startup-lovable-is-on-the-hunt-for-acquisitions",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Lovable's founder said the fast-growing vibe-coding startup is looking for startups and teams to join its company.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2245627953.jpg?resize=1200%2C800",
-      "published": "2026-03-23T18:22:04+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.2311
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.2276
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Musk Unites Tesla, SpaceX, xAI for Texas Chip Plant",
-      "url": "https://www.techrepublic.com/article/news-musk-tesla-spacex-xai-texas-chip-project",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Musk’s Terafab plan ties Tesla, SpaceX, and xAI to a new Texas chip push, but the biggest factory may not end up in Austin.\nThe post Musk Unites Tesla, SpaceX, xAI for Texas Chip Plant appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-23T18:01:08+00:00",
-      "firstSeen": "2026-03-23T19:10:56.652904+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.7849
-    },
-    {
-      "title": "Apple sets June date for WWDC 2026, teasing ‘AI advancements’",
-      "url": "https://techcrunch.com/2026/03/23/apple-wwdc-june-8-12-ai-advancements-siri-developers-conference",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Apple will host its next Worldwide Developers Conference the week of June 8. The company is expected to announce major updates to Siri with advanced AI capabilities.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Apple-WWDC26-event-branding_big.jpg.large_.jpg?w=980",
-      "published": "2026-03-23T18:00:45+00:00",
-      "firstSeen": "2026-03-23T18:01:07.275109+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9248
-    },
-    {
-      "title": "Perplexity Health Connects Medical Records and Wearables in New AI Push",
-      "url": "https://www.techrepublic.com/article/news-perplexity-health-ai",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Perplexity is moving deeper into health AI with a tool that connects your records, labs, and wearables in one place.\nThe post Perplexity Health Connects Medical Records and Wearables in New AI Push appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2023/02/tr2323-healthcare-data-migration.jpeg",
-      "published": "2026-03-23T16:49:40+00:00",
-      "firstSeen": "2026-03-23T18:00:01.201933+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7642
-    },
-    {
-      "title": "The hardest question to answer about AI-fueled delusions",
-      "url": "https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. I was originally going to write this week’s newsletter about AI and Iran, particularly the news we broke last Tuesday that the Pentagon is making plans for AI companies to train on&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260320_algo_AIdelusions.jpg?resize=1200%2C600",
-      "published": "2026-03-23T16:31:20+00:00",
-      "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.899
-    },
-    {
-      "title": "The passwordless future is years away. Here is what businesses should do now",
-      "url": "https://thenextweb.com/news/passwordless-future-years-away-business-password-management-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Every year since roughly 2018, the cybersecurity industry has declared that passwords are dying. Passkeys, biometrics, and FIDO2 hardware tokens would replace them. The promise was elegant: no more breached vaults, no more credential stuffing, no more sticky notes on monitors. It has not happened. Not at scale, anyway. A March 2026 report from HYPR, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Passpack-article.png",
-      "published": "2026-03-23T16:22:22+00:00",
-      "firstSeen": "2026-03-23T17:00:02.007223+00:00",
-      "lastSeen": "2026-03-24T11:54:45.597520+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7565
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.7815
->>>>>>> Stashed changes
+      "score": 1.9837
     },
     {
       "title": "Superbugs: Resistance Rising Part 1",
@@ -973,17 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5797
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.576
->>>>>>> Stashed changes
+      "score": 2.4355
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -996,14 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
->>>>>>> Stashed changes
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.5035
+      "score": -0.5049
     },
     {
       "title": "The Life Scientific: Tony Juniper",
@@ -1019,7 +690,7 @@
       "lastSeen": "2026-03-23T20:52:32.513980+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1901
+      "score": 1.19
     },
     {
       "title": "Introducing... Life Without",

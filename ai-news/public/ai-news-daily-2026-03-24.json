@@ -1,11 +1,23 @@
 {
   "date": "2026-03-24",
-<<<<<<< Updated upstream
-  "updatedAt": "2026-03-24T13:48:16.722446+00:00",
-=======
-  "updatedAt": "2026-03-24T14:00:01.752071+00:00",
->>>>>>> Stashed changes
+  "updatedAt": "2026-03-24T22:15:00.072076+00:00",
   "items": [
+    {
+      "title": "ChatGPT and Gemini are fighting to be the AI bot that sells you stuff",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/899677/openai-google-gemini-ai-shopping-features",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "The AI-powered shopping rivalry is heating up as Google and OpenAI launch new features to help you buy things while interacting with their chatbots. Now, Google is teaming up with Gap Inc to allow its Gemini AI assistant to purchase clothes on your behalf from any of its stores, which include Gap, Old Navy, Banana [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362057/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-03-24T17:13:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 18.0165
+    },
     {
       "title": "Agile Robots becomes the latest robotics company to partner with Google DeepMind",
       "url": "https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind",
@@ -17,19 +29,28 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/Google-DeepMind.jpg?w=1024",
       "published": "2026-03-24T12:05:00+00:00",
       "firstSeen": "2026-03-24T13:00:01.414665+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9386
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "score": 17.7194
+    },
+    {
+      "title": "This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B",
+      "url": "https://www.marktechpost.com/2026/03/24/this-ai-paper-introduces-tinylora-a-13-parameter-fine-tuning-method-that-reaches-91-8-percent-gsm8k-on-qwen2-5-7b",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Researchers from FAIR at Meta, Cornell University, and Carnegie Mellon University have demonstrated that large language models (LLMs) can learn to reason using a remarkably small number of trained parameters. The research team introduces TinyLoRA, a parameterization that can scale down to a single trainable parameter under extreme sharing settings. Using this method on a [&#8230;]\nThe post This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2.png",
+      "published": "2026-03-24T18:49:40+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.933
->>>>>>> Stashed changes
+      "score": 13.9702
     },
     {
       "title": "Anthropic’s Claude Code and Cowork can control your computer",
@@ -41,83 +62,127 @@
       "summary": "Anthropic has updated Claude to perform tasks in its Code and Cowork AI tools autonomously by using your computer for you. The new feature can be used to automatically open files, use web browsers and apps, and run dev tools \"with no setup required,\" even when you're away from your computer, according to Anthropic's announcement. [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Anthropic-Claude-Code-Cowork-computer-control.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T13:32:23+00:00",
-<<<<<<< Updated upstream
       "firstSeen": "2026-03-24T13:48:16.722446+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8519
-=======
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.846
->>>>>>> Stashed changes
+      "score": 13.6236
     },
     {
-      "title": "Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images",
-      "url": "https://www.marktechpost.com/2026/03/23/luma-labs-launches-uni-1-the-autoregressive-transformer-model-that-reasons-through-intentions-before-generating-images",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
+      "title": "Helping developers build safer AI experiences for teens",
+      "url": "https://openai.com/index/teen-safety-policies-gpt-oss-safeguard",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
       "category": "AI",
-      "summary": "In the field of generative AI media, the industry is transitioning from purely probabilistic pixel synthesis toward models capable of structural reasoning. Luma Labs has just released Uni-1, a foundational image model designed to address the &#8216;intent gap&#8221; inherent in standard diffusion pipelines. By implementing a reasoning phase prior to generation, Uni-1 shifts the workflow [&#8230;]\nThe post Luma Labs Launches Uni-1: The Autoregressive Transformer Model that Reasons through Intentions Before Generating Images appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-banner23-1-8.png",
-      "published": "2026-03-24T00:44:12+00:00",
-      "firstSeen": "2026-03-24T01:00:01.743476+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "summary": "OpenAI releases prompt-based teen safety policies for developers using gpt-oss-safeguard, helping moderate age-specific risks in AI systems.",
+      "image": "",
+      "published": "2026-03-24T11:00:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "model_release": true,
       "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.1851
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.181
+      "editorial_reason": "model_release",
+      "score": 13.2048
     },
     {
-      "title": "Zalos raises $3.6M to automate finance workflows",
-      "url": "https://thenextweb.com/news/zalos-raises-3-6m-to-automate-finance-workflows",
+      "title": "Anthropic hands Claude Code more control, but keeps it on a leash",
+      "url": "https://techcrunch.com/2026/03/24/anthropic-hands-claude-code-more-control-but-keeps-it-on-a-leash",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic’s new auto mode for Claude Code lets AI execute tasks with fewer approvals, reflecting a broader shift toward more autonomous tools that balance speed with safety through built-in safeguards.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
+      "published": "2026-03-24T21:00:30+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.3527
+    },
+    {
+      "title": "Powering product discovery in ChatGPT",
+      "url": "https://openai.com/index/powering-product-discovery-in-chatgpt",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "ChatGPT introduces richer, visually immersive shopping powered by the Agentic Commerce Protocol, enabling product discovery, side-by-side comparisons, and merchant integration.",
+      "image": "",
+      "published": "2026-03-24T09:00:00+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.6613
+    },
+    {
+      "title": "OpenAI’s plans to make ChatGPT more like Amazon aren’t going so well",
+      "url": "https://techcrunch.com/2026/03/24/openais-plans-to-make-chatgpt-more-like-amazon-arent-going-so-well",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "OpenAI says it's moving away from Instant Checkout, which allowed users to buy items directly through the ChatGPT interface.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-9.15.10-AM.png?resize=1200%2C675",
+      "published": "2026-03-24T19:27:56+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2081
+    },
+    {
+      "title": "OpenAI open-sources teen safety policies for developers amid mounting lawsuits over ChatGPT deaths",
+      "url": "https://thenextweb.com/news/openai-open-source-teen-safety-policies-developers",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The YC Fall 2025 startup, founded by a former Agicap GM and a former Apple Pay engineer, converts screen recordings of finance workflows directly into computer agents, no API integration required. 14 Peaks led the round, with Cohen Circle and 20VC participating. The CFO’s software stack is both the problem and the constraint. Enterprise finance [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Zalos-founders.png",
-      "published": "2026-03-24T13:55:57+00:00",
-      "firstSeen": "2026-03-24T14:00:01.752071+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
+      "summary": "OpenAI has spent the past year fielding lawsuits from the families of young people who died after extended interactions with ChatGPT. Now it is trying to give the developers who build on top of its models the tools to avoid creating the same problem. The company announced on Tuesday that it is releasing a set [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/openai-open-source-teen-safety-policies-developers.png",
+      "published": "2026-03-24T19:55:11+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6479
->>>>>>> Stashed changes
+      "editorial_reason": "major_product_news",
+      "score": 11.0811
     },
     {
-      "title": "Meta AI’s New Hyperagents Don’t Just Solve Tasks—They Rewrite the Rules of How They Learn",
-      "url": "https://www.marktechpost.com/2026/03/23/meta-ais-new-hyperagents-dont-just-solve-tasks-they-rewrite-the-rules-of-how-they-learn",
+      "title": "A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence",
+      "url": "https://www.marktechpost.com/2026/03/24/a-coding-implementation-to-design-self-evolving-skill-engine-with-openspace-for-skill-learning-token-efficiency-and-collective-intelligence",
       "source": "MarkTechPost",
       "sourceUrl": "https://www.marktechpost.com/feed/",
       "sourceWeight": 0.8,
       "category": "AI",
-      "summary": "The dream of recursive self-improvement in AI—where a system doesn’t just get better at a task, but gets better at learning—has long been the &#8216;holy grail&#8217; of the field. While theoretical models like the Gödel Machine have existed for decades, they remained largely impractical in real-world settings. That changed with the Darwin Gödel Machine (DGM), [&#8230;]\nThe post Meta AI’s New Hyperagents Don’t Just Solve Tasks—They Rewrite the Rules of How They Learn appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-23-at-6.33.58-PM-1-150x150.png",
-      "published": "2026-03-24T01:42:07+00:00",
-      "firstSeen": "2026-03-24T02:00:01.797915+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
+      "summary": "In this tutorial, we explore OpenSpace, a self-evolving skill engine developed by HKUDS that makes AI agents smarter, more cost-efficient, and capable of learning from every task they perform. We walk through the complete lifecycle of OpenSpace: from installing and configuring an OpenAI model, to executing cold-start tasks where no prior skills exist, watching the [&#8230;]\nThe post A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-3.png",
+      "published": "2026-03-24T21:31:11+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6059
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6017
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.3979
     },
     {
-      "title": "GeoChallenge: A Multi-Answer Multiple-Choice Benchmark for Geometric Reasoning with Diagrams",
+      "title": "Google TV’s new Gemini features keep fans updated on sports teams and more",
+      "url": "https://techcrunch.com/2026/03/24/google-tv-new-gemini-features-keep-fans-updated-on-sports-teams-deep-dives-visual-answers",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Three Gemini-powered features are coming to your Google TV. This includes visual responses, deep dives, and sports briefs.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-tv.webp?resize=1200%2C675",
+      "published": "2026-03-24T19:12:11+00:00",
+      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2007
+    },
+    {
+      "title": "Multi-Agent Debate with Memory Masking",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -125,183 +190,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-24T14:00:10.289946+00:00",
+      "published": "2026-03-24T22:15:07.583241+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
->>>>>>> Stashed changes
-    },
-    {
-      "title": "EU broadcasters urge tighter rules on Big Tech’s control for Smart TV",
-      "url": "https://thenextweb.com/news/eu-broadcasters-urge-tighter-rules-on-big-techs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Association of Commercial Television and Video on Demand Services in Europe  (ACT) released a statement on Monday, urging the European Commission to designate smart TV operating systems and virtual assistant platforms as ‘gatekeepers’ under the EU’s Digital Markets Act (DMA). The call would expand regulatory measures against the growing market power of Big Tech’s [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-broadcasters.png",
-      "published": "2026-03-24T10:07:31+00:00",
-      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2431
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2377
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Accumulus Technologies launches live integration layer between pharma systems and national drug regulators",
-      "url": "https://thenextweb.com/news/accumulus-technologies-connector-pharma",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The startup, spun out of nonprofit Accumulus Synergy last August, has built a network connecting pharmaceutical and biotech companies to regulators across more than 70 countries. The new Connector makes that network accessible without leaving the systems companies already use. Getting a drug approved in multiple countries simultaneously requires filing the same information with dozens [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Accumulus-Connector.png",
-      "published": "2026-03-24T10:21:11+00:00",
-      "firstSeen": "2026-03-24T11:00:02.076580+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9494
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.944
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Advancing Open Source AI, NVIDIA Donates Dynamic Resource Allocation Driver for GPUs to Kubernetes Community",
-      "url": "https://blogs.nvidia.com/blog/nvidia-at-kubecon-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Artificial intelligence has rapidly emerged as one of the most critical workloads in modern computing. For the vast majority of enterprises, this workload runs on Kubernetes, an open source platform that automates the deployment, scaling and management of containerized applications. To help the global developer community manage high-performance AI infrastructure with greater transparency and efficiency, [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/kubecon-1920x1080-1.jpg",
-      "published": "2026-03-24T08:00:12+00:00",
-      "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.9263
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.9212
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Yann LeCun’s New LeWorldModel (LeWM) Research Targets JEPA Collapse in Pixel-Based Predictive World Modeling",
-      "url": "https://www.marktechpost.com/2026/03/23/yann-lecuns-new-leworldmodel-lewm-research-targets-jepa-collapse-in-pixel-based-predictive-world-modeling",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "World Models (WMs) are a central framework for developing agents that reason and plan in a compact latent space. However, training these models directly from pixel data often leads to &#8216;representation collapse,&#8217; where the model produces redundant embeddings to trivially satisfy prediction objectives. Current approaches attempt to prevent this by relying on complex heuristics: they [&#8230;]\nThe post Yann LeCun’s New LeWorldModel (LeWM) Research Targets JEPA Collapse in Pixel-Based Predictive World Modeling appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-1.png",
-      "published": "2026-03-24T05:53:58+00:00",
-      "firstSeen": "2026-03-24T06:11:40.166819+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.4031
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.3983
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Startup Dash0 hits unicorn status with $110M Series B",
-      "url": "https://thenextweb.com/news/dash0-110m-series-b-observability-unicorn",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The OpenTelemetry-native platform founded by the team behind Instana has grown to 600 customers in under two years. Its Series B, led by Balderton, with Accel, Cherry, and Deutsche Telekom’s T.Capital, will fund Agent0, an AI layer that doesn’t just surface production problems but fixes them. Observability has always had an uncomfortable gap at its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Dash0-hits-unicorn-status.png",
-      "published": "2026-03-24T08:27:58+00:00",
-      "firstSeen": "2026-03-24T09:00:01.216198+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3984
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3933
->>>>>>> Stashed changes
-    },
-    {
-      "title": "Your Body Is Betraying Your Right to Privacy",
-      "url": "https://www.wired.com/story/book-excerpt-your-data-will-be-used-against-you-andrew-guthrie-ferguson",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Attachment to smart devices and biometric surveillance leaves Americans more vulnerable to police searches than ever. Left unchecked it will only get worse.",
-      "image": "https://media.wired.com/photos/69c1aa958d470e1446eb5d44/master/pass/Book-Excerpt-Your-Body-Is-Betraying-Your-Right-to-Privacy-Security.jpg",
-      "published": "2026-03-24T10:00:00+00:00",
-      "firstSeen": "2026-03-24T10:06:54.838768+00:00",
-<<<<<<< Updated upstream
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.5797
-    },
-    {
-      "title": "10 Best Business Email Providers for Small Businesses in 2026",
-      "url": "https://www.techrepublic.com/article/best-business-email-providers",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Looking for the best business email provider? Compare top options like Google Workspace, Microsoft 365, and Zoho Mail to choose the right one.\nThe post 10 Best Business Email Providers for Small Businesses in 2026 appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2024/07/AdobeStock_488920698.jpg",
-      "published": "2026-03-24T07:00:47+00:00",
-      "firstSeen": "2026-03-24T10:00:01.160839+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0609
-    },
-    {
-      "title": "IBM Cloud, Nutanix, SUSE, and OVHcloud have all independently chosen Traefik as their Ingress NGINX replacement",
-      "url": "https://thenextweb.com/news/traefik-kubernetes-ingress-nginx-replacement-ibm",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Kubernetes community retired Ingress NGINX this month after years of under-resourcing. The migration scramble it triggered is now consolidating around one open source beneficiary, and Traefik Labs announced that convergence at KubeCon today. For years, the kubernetes/ingress-nginx project ran on borrowed time. Maintained largely by one or two volunteers working evenings and weekends, it [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Traefik-Becomes-the-De-Facto-Standard-for-Kubernetes-Networking.png",
-      "published": "2026-03-24T09:45:38+00:00",
-      "firstSeen": "2026-03-24T10:00:01.160839+00:00",
-      "lastSeen": "2026-03-24T13:48:16.722446+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7331
-=======
-      "lastSeen": "2026-03-24T14:00:01.752071+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.5743
->>>>>>> Stashed changes
+      "lastSeen": "2026-03-24T22:15:00.072076+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.46
     }
   ],
   "errors": []

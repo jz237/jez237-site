@@ -1,9 +1,5 @@
 {
-<<<<<<< Updated upstream
-  "updatedAt": "2026-03-24T13:48:16.722446+00:00",
-=======
-  "updatedAt": "2026-03-24T14:00:01.752071+00:00",
->>>>>>> Stashed changes
+  "updatedAt": "2026-03-24T22:15:00.072076+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1691,11 +1687,87 @@
     },
     "https://www.theverge.com/ai-artificial-intelligence/899430/anthropic-claude-code-cowork-ai-control-computer": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Anthropic-Claude-Code-Cowork-computer-control.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
-<<<<<<< Updated upstream
       "checkedAt": "2026-03-24T13:48:16.722446+00:00"
-=======
-      "checkedAt": "2026-03-24T14:00:01.752071+00:00"
->>>>>>> Stashed changes
+    },
+    "https://www.marktechpost.com/2026/03/24/a-coding-implementation-to-design-self-evolving-skill-engine-with-openspace-for-skill-learning-token-efficiency-and-collective-intelligence": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-3.png",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/24/package-managers-need-to-cool-down": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/899850/openai-sora-ai-chatgpt": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/ai-label-1.png?quality=90&amp;strip=all&amp;crop=0%2C0.28438353380685%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/anthropic-hands-claude-code-more-control-but-keeps-it-on-a-leash": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200,800",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/spotify-tests-new-tool-to-stop-ai-slop-from-being-attributed-to-real-artists": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/899823/arm-agi-cpu-meta": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/20260216_VISION25_ExplodedTight_Chip-01-16x9_16bit_v2-1200x675-1.jpg?quality=90&amp;strip=all&amp;crop=0,3.4613147178592,100,93.077370564282",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/databricks-buys-two-startups-lakewatch-antimatter-siftd-ai-security": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1177951659.jpg?resize=1200,800",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/24/christopher-mims": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/arm-is-releasing-its-first-in-house-chip-in-its-35-year-history": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/08/GettyImages-576856756.jpg?resize=1200,840",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/openais-plans-to-make-chatgpt-more-like-amazon-arent-going-so-well": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-9.15.10-AM.png?resize=1200,675",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/google-tv-new-gemini-features-keep-fans-updated-on-sports-teams-deep-dives-visual-answers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-tv.webp?resize=1200,675",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/24/this-ai-paper-introduces-tinylora-a-13-parameter-fine-tuning-method-that-reaches-91-8-percent-gsm8k-on-qwen2-5-7b": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2.png",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/openai-adds-open-source-tools-to-help-developers-build-for-teen-safety": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/talats-ai-meeting-notes-stay-on-your-machine-not-in-the-cloud": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/talat-app-at-2.11.22-PM.jpg?w=1086",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/doss-raises-55m-for-ai-inventory-management-that-plugs-into-erp": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Doss-Founder-Photo.jpg?resize=1200,800",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/899677/openai-google-gemini-ai-shopping-features": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362057/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-wwdc-2026-ios-27-siri-ai-updates": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03242026-apple-wwdc-2026.jpg",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://www.techrepublic.com/article/news-tencent-openclaw-ai-agents-wechat-1b-users": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03242026-tencent-openclaw-ai-agents-wechat.jpg",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/meet-the-former-apple-designer-building-a-new-ai-interface-at-hark": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-6.20.59-AM.png?w=939",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/24/malicious-litellm": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:15:00.072076+00:00"
     }
   }
 }
