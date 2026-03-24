@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plex Media Server — jez237</title>
+  <meta name="description" content="Live Plex server status — streams, recently added, and library stats.">
+  <meta name="robots" content="noindex">
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #0b0f14;
+  --panel: #121923;
+  --panel-2: #17212f;
+  --text: #e8edf3;
+  --muted: #97a4b5;
+  --accent: #4f8cff;
+  --border: #223044;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --movie-color: #818cf8;
+  --episode-color: #34d399;
+  --music-color: #f472b6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Layout ── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+/* ── Header ── */
+.site-header {
+  background: linear-gradient(180deg, #0d1520 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-nav a {
+  color: var(--muted);
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.site-nav a:hover { color: var(--text); text-decoration: none; }
+
+.header-title-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.header-icon { font-size: 2rem; line-height: 1; }
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.stream-badge {
+  background: linear-gradient(135deg, #1a3a5c, #0d2035);
+  border: 1px solid #2a5888;
+  color: var(--accent);
+  padding: 0.2rem 0.65rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stream-badge .live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.header-timestamp {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-left: auto;
+}
+
+/* ── Sections ── */
+.section {
+  margin-top: 2.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-sub {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Active Streams ── */
+.streams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+.stream-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.stream-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.stream-card.paused { opacity: 0.75; }
+
+.stream-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), #818cf8);
+}
+.stream-card.paused::before {
+  background: var(--muted);
+}
+
+.stream-card-inner {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+}
+
+.stream-thumb {
+  width: 56px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--panel-2);
+}
+
+.stream-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+}
+
+.stream-info { flex: 1; min-width: 0; }
+
+.stream-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.35rem;
+}
+
+.stream-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stream-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge-direct { background: #1a3a1a; color: var(--success); border: 1px solid #2a5a2a; }
+.badge-transcode { background: #3a2a1a; color: var(--warning); border: 1px solid #5a3a1a; }
+.badge-quality { background: var(--panel-2); color: var(--muted); border: 1px solid var(--border); }
+.badge-state { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+.badge-movie { background: #1e1b4b; color: var(--movie-color); border: 1px solid #312e81; }
+.badge-episode { background: #064e3b; color: var(--episode-color); border: 1px solid #065f46; }
+.badge-music { background: #500724; color: var(--music-color); border: 1px solid #831843; }
+.badge-season { background: #1e3a5f; color: #7dd3fc; border: 1px solid #1d4ed8; }
+.badge-other { background: var(--panel-2); color: var(--muted); border: 1px solid var(--border); }
+
+.stream-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--panel-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #818cf8);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.stream-time { font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+.stream-pulse {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pulse-active {
+  background: var(--success);
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+.pulse-paused {
+  background: var(--muted);
+}
+
+/* ── Recently Added ── */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.media-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.media-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(79, 140, 255, 0.15);
+}
+
+.media-poster-wrap {
+  position: relative;
+  aspect-ratio: 2/3;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+
+.media-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+
+.media-poster-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.media-type-badge {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.media-card-body {
+  padding: 0.5rem 0.6rem 0.6rem;
+}
+
+.media-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.2rem;
+}
+
+.media-year { font-size: 0.72rem; color: var(--muted); }
+.media-ep { font-size: 0.7rem; color: var(--muted); margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Library Stats ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.stat-count { font-size: 2rem; font-weight: 700; color: var(--accent); letter-spacing: -0.03em; }
+.stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; font-weight: 500; }
+.stat-extra { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; opacity: 0.75; }
+
+/* ── Leaderboards ── */
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.leaderboard-section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+
+.leaderboard-row:last-child { border-bottom: none; }
+
+.lb-rank { font-size: 1.1rem; flex-shrink: 0; }
+.lb-title { flex: 1; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-count { font-size: 0.75rem; color: var(--accent); font-weight: 600; flex-shrink: 0; }
+.lb-dur { font-size: 0.7rem; color: var(--muted); flex-shrink: 0; }
+
+/* ── Empty states ── */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+
+.empty-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+/* ── Footer ── */
+.site-footer {
+  margin-top: 4rem;
+  padding: 2rem 0 1rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ── Animations ── */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+  70% { box-shadow: 0 0 0 7px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .header-title { font-size: 1.2rem; }
+  .media-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .streams-grid { grid-template-columns: 1fr; }
+  .leaderboard-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-nav"><a href="../">← jez237</a></div>
+    <div class="header-title-group">
+      <span class="header-icon">🎬</span>
+      <span class="header-title">Plex Media Server</span>
+      <span class="stream-badge">
+        <span class="live-dot"></span>
+        0 streams live
+      </span>
+    </div>
+    <div class="header-timestamp">Updated Mar 24, 2026 at 08:45 UTC</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <section class="section">
+    <h2 class="section-title">▶ Active Streams</h2>
+    <div class="empty-state"><span class="empty-icon">📺</span><p>No active streams</p></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">✨ Recently Added</h2>
+    <div class="media-grid">
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43181%2Fthumb%2F1773692096&amp;width=200&amp;height=300&amp;fallback=poster" alt="The Best of Times" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">The Best of Times</div>
+    <div class="media-year">1986</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43082%2Fthumb%2F1772201001&amp;width=200&amp;height=300&amp;fallback=poster" alt="Season 24" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-season">Season</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Season 24</div>
+    
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43162%2Fthumb%2F1773412755&amp;width=200&amp;height=300&amp;fallback=poster" alt="Season 1" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-season">Season</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Season 1</div>
+    
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43160%2Fthumb%2F1773817049&amp;width=200&amp;height=300&amp;fallback=poster" alt="Star Trek: Starfleet Academy" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Star Trek: Starfleet Academy</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S01E10: Rubincon</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43156%2Fthumb%2F1773817051&amp;width=200&amp;height=300&amp;fallback=poster" alt="Good Luck, Have Fun, Don't Die" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Good Luck, Have Fun, Don't Die</div>
+    <div class="media-year">2026</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43142%2Fthumb%2F1773906056&amp;width=200&amp;height=300&amp;fallback=poster" alt="War Machine" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">War Machine</div>
+    <div class="media-year">2026</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43141%2Fthumb%2F1774083075&amp;width=200&amp;height=300&amp;fallback=poster" alt="Cold Storage" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Cold Storage</div>
+    <div class="media-year">2026</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43139%2Fthumb%2F1773731394&amp;width=200&amp;height=300&amp;fallback=poster" alt="Star Trek: Starfleet Academy" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Star Trek: Starfleet Academy</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S01E09: 300th Night</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43138%2Fthumb%2F1772726650&amp;width=200&amp;height=300&amp;fallback=poster" alt="Wild Butterfly" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Wild Butterfly</div>
+    <div class="media-year">2019</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43137%2Fthumb%2F1772679783&amp;width=200&amp;height=300&amp;fallback=poster" alt="The UnXplained" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">The UnXplained</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S08E06: Mighty Kingdoms Unearthed</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43136%2Fthumb%2F1773198126&amp;width=200&amp;height=300&amp;fallback=poster" alt="Family Guy" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Family Guy</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S24E05: Dear Francis</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43135%2Fthumb%2F1774252622&amp;width=200&amp;height=300&amp;fallback=poster" alt="Whistle" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Whistle</div>
+    <div class="media-year">2026</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43134%2Fthumb%2F1774335267&amp;width=200&amp;height=300&amp;fallback=poster" alt="The Rip" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">The Rip</div>
+    <div class="media-year">2026</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43118%2Fthumb%2F1772262177&amp;width=200&amp;height=300&amp;fallback=poster" alt="Zootopia 2" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Zootopia 2</div>
+    <div class="media-year">2025</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43117%2Fthumb%2F1773994931&amp;width=200&amp;height=300&amp;fallback=poster" alt="Family Guy" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Family Guy</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S24E02: Pumpkin Spice Girls</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43116%2Fthumb%2F1773731394&amp;width=200&amp;height=300&amp;fallback=poster" alt="Star Trek: Starfleet Academy" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Star Trek: Starfleet Academy</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S01E08: The Life of the Stars</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43107%2Fthumb%2F1774335267&amp;width=200&amp;height=300&amp;fallback=poster" alt="Shelter" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Shelter</div>
+    <div class="media-year">2026</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43098%2Fthumb%2F1772953594&amp;width=200&amp;height=300&amp;fallback=poster" alt="The Video Craze" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">The Video Craze</div>
+    <div class="media-year">2013</div>
+    
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43087%2Fthumb%2F1773731394&amp;width=200&amp;height=300&amp;fallback=poster" alt="Star Trek: Starfleet Academy" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-episode">Episode</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Star Trek: Starfleet Academy</div>
+    <div class="media-year">2026</div>
+    <div class="media-ep">S01E07: Ko'Zeine</div>
+  </div>
+</div>
+<div class="media-card">
+  <div class="media-poster-wrap">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F43085%2Fthumb%2F1774252621&amp;width=200&amp;height=300&amp;fallback=poster" alt="Beam Me Up, Sulu" class="media-poster" loading="lazy">
+    <span class="media-type-badge badge-movie">Movie</span>
+  </div>
+  <div class="media-card-body">
+    <div class="media-title">Beam Me Up, Sulu</div>
+    <div class="media-year">2025</div>
+    
+  </div>
+</div></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">📚 Library Stats</h2>
+    <div class="stat-grid">
+<div class="stat-card">
+  <div class="stat-icon">🎬</div>
+  <div class="stat-count">167</div>
+  <div class="stat-label">4K Movies</div>
+  
+</div>
+<div class="stat-card">
+  <div class="stat-icon">🎬</div>
+  <div class="stat-count">237</div>
+  <div class="stat-label">Animation</div>
+  
+</div>
+<div class="stat-card">
+  <div class="stat-icon">🎬</div>
+  <div class="stat-count">689</div>
+  <div class="stat-label">Documentaries</div>
+  
+</div>
+<div class="stat-card">
+  <div class="stat-icon">🎬</div>
+  <div class="stat-count">91</div>
+  <div class="stat-label">Extras</div>
+  
+</div>
+<div class="stat-card">
+  <div class="stat-icon">🎬</div>
+  <div class="stat-count">2,737</div>
+  <div class="stat-label">Movies</div>
+  
+</div>
+<div class="stat-card">
+  <div class="stat-icon">🎬</div>
+  <div class="stat-count">121</div>
+  <div class="stat-label">Music Videos</div>
+  
+</div>
+<div class="stat-card">
+  <div class="stat-icon">📺</div>
+  <div class="stat-count">170</div>
+  <div class="stat-label">TV Series</div>
+  <div class="stat-extra">695 seasons · 11254 episodes</div>
+</div>
+<div class="stat-card">
+  <div class="stat-icon">🎵</div>
+  <div class="stat-count">57</div>
+  <div class="stat-label">Music</div>
+  <div class="stat-extra">4137 tracks</div>
+</div></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">🏆 Top Stats (Last 30 Days)</h2>
+    <div class="leaderboard-grid">
+<div class="leaderboard-section">
+  <h3 class="section-sub">🎬 Top Movies</h3>
+  
+<div class="leaderboard-row">
+  <span class="lb-rank">🥇</span>
+  <span class="lb-title">Tron: Ares</span>
+  <span class="lb-count">2 plays</span>
+  <span class="lb-dur">2h 08m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥈</span>
+  <span class="lb-title">Rush: R40 Live</span>
+  <span class="lb-count">1 plays</span>
+  <span class="lb-dur">6m 04s</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥉</span>
+  <span class="lb-title">Bob Lazar: Area 51 &amp; Flying Saucers</span>
+  <span class="lb-count">1 plays</span>
+  <span class="lb-dur">6m 04s</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">4️⃣</span>
+  <span class="lb-title">Songs from Tsongas: Yes 35th Anniversary Concert</span>
+  <span class="lb-count">1 plays</span>
+  <span class="lb-dur">33m 06s</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">5️⃣</span>
+  <span class="lb-title">Shelter</span>
+  <span class="lb-count">1 plays</span>
+  <span class="lb-dur">1h 15m</span>
+</div>
+</div>
+<div class="leaderboard-section">
+  <h3 class="section-sub">📺 Top TV Shows</h3>
+  
+<div class="leaderboard-row">
+  <span class="lb-rank">🥇</span>
+  <span class="lb-title">ABC World News Tonight With David Muir</span>
+  <span class="lb-count">7 plays</span>
+  <span class="lb-dur">3h 56m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥈</span>
+  <span class="lb-title">Wheel of Fortune</span>
+  <span class="lb-count">5 plays</span>
+  <span class="lb-dur">1h 58m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥉</span>
+  <span class="lb-title">Action News 6PM</span>
+  <span class="lb-count">4 plays</span>
+  <span class="lb-dur">48m 23s</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">4️⃣</span>
+  <span class="lb-title">Good Morning America</span>
+  <span class="lb-count">2 plays</span>
+  <span class="lb-dur">2h 52m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">5️⃣</span>
+  <span class="lb-title">Action News Weekend 7AM</span>
+  <span class="lb-count">2 plays</span>
+  <span class="lb-dur">1h 55m</span>
+</div>
+</div>
+<div class="leaderboard-section">
+  <h3 class="section-sub">👥 Top Users</h3>
+  
+<div class="leaderboard-row">
+  <span class="lb-rank">🥇</span>
+  <span class="lb-title">Wheel of Fortune - Hawaiian Vacation</span>
+  <span class="lb-count">36 plays</span>
+  <span class="lb-dur">21h 07m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥈</span>
+  <span class="lb-title">The Running Man</span>
+  <span class="lb-count">5 plays</span>
+  <span class="lb-dur">6h 28m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥉</span>
+  <span class="lb-title">Rush: R40 Live</span>
+  <span class="lb-count">2 plays</span>
+  <span class="lb-dur">39m 10s</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">4️⃣</span>
+  <span class="lb-title">Shelter</span>
+  <span class="lb-count">1 plays</span>
+  <span class="lb-dur">1h 15m</span>
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">5️⃣</span>
+  <span class="lb-title">The Three Stooges - Men in Black</span>
+  <span class="lb-count">1 plays</span>
+  <span class="lb-dur">17m 55s</span>
+</div>
+</div>
+<div class="leaderboard-section">
+  <h3 class="section-sub">🔥 Popular Movies</h3>
+  
+<div class="leaderboard-row">
+  <span class="lb-rank">🥇</span>
+  <span class="lb-title">Tron: Ares</span>
+  <span class="lb-count">2 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥈</span>
+  <span class="lb-title">Rush: R40 Live</span>
+  <span class="lb-count">1 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥉</span>
+  <span class="lb-title">Bob Lazar: Area 51 &amp; Flying Saucers</span>
+  <span class="lb-count">1 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">4️⃣</span>
+  <span class="lb-title">Songs from Tsongas: Yes 35th Anniversary Concert</span>
+  <span class="lb-count">1 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">5️⃣</span>
+  <span class="lb-title">Shelter</span>
+  <span class="lb-count">1 plays</span>
+  
+</div>
+</div>
+<div class="leaderboard-section">
+  <h3 class="section-sub">🔥 Popular TV</h3>
+  
+<div class="leaderboard-row">
+  <span class="lb-rank">🥇</span>
+  <span class="lb-title">ABC World News Tonight With David Muir</span>
+  <span class="lb-count">7 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥈</span>
+  <span class="lb-title">Wheel of Fortune</span>
+  <span class="lb-count">5 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">🥉</span>
+  <span class="lb-title">Action News 6PM</span>
+  <span class="lb-count">4 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">4️⃣</span>
+  <span class="lb-title">Good Morning America</span>
+  <span class="lb-count">2 plays</span>
+  
+</div>
+<div class="leaderboard-row">
+  <span class="lb-rank">5️⃣</span>
+  <span class="lb-title">Action News Weekend 7AM</span>
+  <span class="lb-count">2 plays</span>
+  
+</div>
+</div></div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <p>Updated every 15 minutes · <a href="../">← Back to jez237.github.io</a></p>
+</footer>
+
+</body>
+</html>
