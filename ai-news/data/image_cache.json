@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-24T11:54:45.597520+00:00",
+  "updatedAt": "2026-03-24T13:00:01.414665+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1676,6 +1676,14 @@
     "https://www.techrepublic.com/article/best-business-email-providers": {
       "image": "https://assets.techrepublic.com/uploads/2024/07/AdobeStock_488920698.jpg",
       "checkedAt": "2026-03-24T10:00:01.160839+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Mirage-background.png?w=1200",
+      "checkedAt": "2026-03-24T13:00:01.414665+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/05/Google-DeepMind.jpg?w=1024",
+      "checkedAt": "2026-03-24T13:00:01.414665+00:00"
     }
   }
 }
