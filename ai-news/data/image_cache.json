@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T22:50:29.927776+00:00",
+  "updatedAt": "2026-03-24T00:00:01.219946+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1644,6 +1644,18 @@
     "https://www.techrepublic.com/article/news-ai-energy-demand-power-grid-crisis": {
       "image": "",
       "checkedAt": "2026-03-23T22:50:29.927776+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/23/neurotica": {
+      "image": "",
+      "checkedAt": "2026-03-24T00:00:01.219946+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/23/datasette-files": {
+      "image": "",
+      "checkedAt": "2026-03-24T00:00:01.219946+00:00"
+    },
+    "https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/06/GettyImages-138341302.jpg?resize=1200,771",
+      "checkedAt": "2026-03-24T00:00:01.219946+00:00"
     }
   }
 }
