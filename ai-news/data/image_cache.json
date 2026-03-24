@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-24T22:15:00.072076+00:00",
+  "updatedAt": "2026-03-24T22:48:24.977999+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1768,6 +1768,26 @@
     "https://simonwillison.net/2026/Mar/24/malicious-litellm": {
       "image": "",
       "checkedAt": "2026-03-24T22:15:00.072076+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/kentucky-woman-rejects-26-million-offer-to-turn-her-farm-into-a-data-center": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800",
+      "checkedAt": "2026-03-24T22:48:24.977999+00:00"
+    },
+    "https://openai.com/index/teen-safety-policies-gpt-oss-safeguard": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:48:24.977999+00:00"
+    },
+    "https://openai.com/index/powering-product-discovery-in-chatgpt": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:48:24.977999+00:00"
+    },
+    "https://openai.com/index/update-on-the-openai-foundation": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:48:24.977999+00:00"
+    },
+    "https://www.techrepublic.com/article/news-alibaba-ai-chip-agentic-ai": {
+      "image": "",
+      "checkedAt": "2026-03-24T22:48:24.977999+00:00"
     }
   }
 }
