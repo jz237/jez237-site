@@ -1,6 +1,6 @@
 {
   "date": "2026-03-24",
-  "updatedAt": "2026-03-24T22:48:24.977999+00:00",
+  "updatedAt": "2026-03-24T23:00:01.631449+00:00",
   "items": [
     {
       "title": "ChatGPT and Gemini are fighting to be the AI bot that sells you stuff",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362057/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T17:13:00+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.0018
+      "score": 17.9967
     },
     {
       "title": "Agile Robots becomes the latest robotics company to partner with Google DeepMind",
@@ -29,11 +29,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/Google-DeepMind.jpg?w=1024",
       "published": "2026-03-24T12:05:00+00:00",
       "firstSeen": "2026-03-24T13:00:01.414665+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7066
+      "score": 17.7023
     },
     {
       "title": "This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B",
@@ -46,11 +46,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2.png",
       "published": "2026-03-24T18:49:40+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.9549
+      "score": 13.9496
     },
     {
       "title": "Anthropic’s Claude Code and Cowork can control your computer",
@@ -63,10 +63,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Anthropic-Claude-Code-Cowork-computer-control.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T13:32:23+00:00",
       "firstSeen": "2026-03-24T13:48:16.722446+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.6103
+      "score": 13.6058
     },
     {
       "title": "Helping developers build safer AI experiences for teens",
@@ -76,14 +76,14 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "OpenAI releases prompt-based teen safety policies for developers using gpt-oss-safeguard, helping moderate age-specific risks in AI systems.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/7vlGVflhNZ61C1qlgDB6fZ/f3825d17562a63dffcf5bd0ac0522520/SEO_card.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-24T11:00:00+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.1924
+      "score": 13.1882
     },
     {
       "title": "Anthropic hands Claude Code more control, but keeps it on a leash",
@@ -96,10 +96,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-03-24T21:00:30+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3364
+      "score": 12.3308
     },
     {
       "title": "Powering product discovery in ChatGPT",
@@ -109,13 +109,13 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "ChatGPT introduces richer, visually immersive shopping powered by the Agentic Commerce Protocol, enabling product discovery, side-by-side comparisons, and merchant integration.",
-      "image": "",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/54zHAGljzaGUAL8FNoSXAV/a2dda4a62fccf740c4717bf1afac17eb/Shopping-SEO-1200x630.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-03-24T09:00:00+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6496
+      "score": 11.6456
     },
     {
       "title": "OpenAI’s plans to make ChatGPT more like Amazon aren’t going so well",
@@ -128,10 +128,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-9.15.10-AM.png?resize=1200%2C675",
       "published": "2026-03-24T19:27:56+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1925
+      "score": 11.1871
     },
     {
       "title": "OpenAI open-sources teen safety policies for developers amid mounting lawsuits over ChatGPT deaths",
@@ -144,10 +144,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/openai-open-source-teen-safety-policies-developers.png",
       "published": "2026-03-24T19:55:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0652
+      "score": 11.0598
     },
     {
       "title": "A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence",
@@ -160,10 +160,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-3.png",
       "published": "2026-03-24T21:31:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3814
+      "score": 9.3757
     },
     {
       "title": "Pentagon’s ‘Attempt to Cripple’ Anthropic Is Troubling, Judge Says",
@@ -175,11 +175,11 @@
       "summary": "During a hearing Tuesday, a district court judge questioned the Department of Defense’s motivations for labeling the Claude AI developer a supply-chain risk.",
       "image": "https://media.wired.com/photos/69c30bf9dc53bcd949e45335/master/pass/Pentagon-Attempt-to-Cripple-Anthropic-Troublesome-Business-2268179185.jpg",
       "published": "2026-03-24T22:13:17+00:00",
-      "firstSeen": "2026-03-24T22:48:24.977999+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "firstSeen": "2026-03-24T23:00:01.631449+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2723
+      "score": 9.2665
     },
     {
       "title": "Google TV’s new Gemini features keep fans updated on sports teams and more",
@@ -192,10 +192,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-tv.webp?resize=1200%2C675",
       "published": "2026-03-24T19:12:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-24T22:48:24.977999+00:00",
+      "lastSeen": "2026-03-24T23:00:01.631449+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1852
+      "score": 8.1799
     }
   ],
   "errors": []
