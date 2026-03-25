@@ -1,6 +1,6 @@
 {
   "date": "2026-03-25",
-  "updatedAt": "2026-03-25T02:00:01.628798+00:00",
+  "updatedAt": "2026-03-25T03:00:01.697695+00:00",
   "items": [
     {
       "title": "With $3.5B in fresh capital, Kleiner Perkins is going all in on AI",
@@ -13,13 +13,13 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/GettyImages-1058015746.jpg?resize=1200%2C800",
       "published": "2026-03-25T00:47:20+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T02:00:01.628798+00:00",
+      "lastSeen": "2026-03-25T03:00:01.697695+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9536
+      "score": 2.9245
     },
     {
-      "title": "Jiayun Wu, Peixu Hou, Shan Qu, Peng Zhang, Ning Gu, Tun Lu",
+      "title": "Jiaqi Yuan, Jialu Wang, Zihan Wang, Qingyun Sun, Ruijie Wang, Jianxin Li",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,12 +27,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-25T01:00:08.019569+00:00",
+      "published": "2026-03-25T03:00:06.936520+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-25T01:00:01.574077+00:00",
+      "lastSeen": "2026-03-25T03:00:01.697695+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3299
+      "score": 2.36
     }
   ],
   "errors": []
