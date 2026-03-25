@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T00:00:02.004516+00:00",
+  "updatedAt": "2026-03-25T01:00:01.574077+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1792,6 +1792,14 @@
     "https://techcrunch.com/2026/03/24/openais-sora-was-the-creepiest-app-on-your-phone-now-its-shutting-down": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages2238161095.jpg?w=1024",
       "checkedAt": "2026-03-25T00:00:02.004516+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/with-3-5b-in-fresh-capital-kleiner-perkins-is-going-all-in-on-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/05/GettyImages-1058015746.jpg?resize=1200,800",
+      "checkedAt": "2026-03-25T01:00:01.574077+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/24/auto-mode-for-claude-code": {
+      "image": "",
+      "checkedAt": "2026-03-25T01:00:01.574077+00:00"
     }
   }
 }
