@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T11:04:19.467645+00:00",
+  "updatedAt": "2026-03-25T11:53:37.540325+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1816,6 +1816,10 @@
     "https://techcrunch.com/2026/03/25/lucid-bots-raises-20m-to-keep-up-with-demand-for-its-window-washing-drones": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Lucid-Bots.png?resize=1200,800",
       "checkedAt": "2026-03-25T11:04:19.467645+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/900201/anthropic-claude-code-auto-mode": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK269_ANTHROPIC_2_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-25T11:53:37.540325+00:00"
     }
   }
 }
