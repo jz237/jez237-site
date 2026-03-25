@@ -1,6 +1,6 @@
 {
   "date": "2026-03-25",
-  "updatedAt": "2026-03-25T07:00:01.142437+00:00",
+  "updatedAt": "2026-03-25T07:16:42.604177+00:00",
   "items": [
     {
       "title": "Efficient Embedding-based Synthetic Data Generation for Complex Reasoning Tasks",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-25T07:00:17.162290+00:00",
+      "published": "2026-03-25T07:16:47.774036+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-25T07:00:01.142437+00:00",
+      "lastSeen": "2026-03-25T07:16:42.604177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Google Introduces TurboQuant: A New Compression Algorithm that Reduces LLM Key-Value Cache Memory by 6x and Delivers Up to 8x Speedup, All with Zero Accuracy Loss",
+      "url": "https://www.marktechpost.com/2026/03/25/google-introduces-turboquant-a-new-compression-algorithm-that-reduces-llm-key-value-cache-memory-by-6x-and-delivers-up-to-8x-speedup-all-with-zero-accuracy-loss",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The scaling of Large Language Models (LLMs) is increasingly constrained by memory communication overhead between High-Bandwidth Memory (HBM) and SRAM. Specifically, the Key-Value (KV) cache size scales with both model dimensions and context length, creating a significant bottleneck for long-context inference. Google research team has proposed TurboQuant, a data-oblivious quantization framework designed to achieve near-optimal [&#8230;]\nThe post Google Introduces TurboQuant: A New Compression Algorithm that Reduces LLM Key-Value Cache Memory by 6x and Delivers Up to 8x Speedup, All with Zero Ac",
+      "image": "https://www.marktechpost.com/www.marktechpost.com/41f40e5d-9f22-4710-ae55-76aa655f4c89",
+      "published": "2026-03-25T07:11:35+00:00",
+      "firstSeen": "2026-03-25T07:16:42.604177+00:00",
+      "lastSeen": "2026-03-25T07:16:42.604177+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 3.9174
     },
     {
       "title": "With $3.5B in fresh capital, Kleiner Perkins is going all in on AI",
@@ -29,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/GettyImages-1058015746.jpg?resize=1200%2C800",
       "published": "2026-03-25T00:47:20+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T07:00:01.142437+00:00",
+      "lastSeen": "2026-03-25T07:16:42.604177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8157
+      "score": 2.8086
     }
   ],
   "errors": []
