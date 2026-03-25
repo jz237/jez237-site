@@ -468,10 +468,10 @@ a:hover { text-decoration: underline; }
       <span class="header-title">Plex Media Server</span>
       <span class="stream-badge">
         <span class="live-dot"></span>
-        0 streams live
+        1 streams live
       </span>
     </div>
-    <div class="header-timestamp">Updated Mar 25, 2026 at 14:30 UTC</div>
+    <div class="header-timestamp">Updated Mar 25, 2026 at 14:45 UTC</div>
   </div>
 </header>
 
@@ -479,7 +479,30 @@ a:hover { text-decoration: underline; }
 
   <section class="section">
     <h2 class="section-title">▶ Active Streams</h2>
-    <div class="empty-state"><span class="empty-icon">📺</span><p>No active streams</p></div>
+    <div class="streams-grid">
+<div class="stream-card ">
+  <div class="stream-card-inner">
+    <img src="http://192.168.1.191:8181/api/v2?apikey=1a1c7e88e42f4840994d808f53af8e90&amp;cmd=pms_image_proxy&amp;img=%2Flibrary%2Fmetadata%2F14393%2Fthumb%2F1673594908&amp;width=80&amp;height=120&amp;fallback=poster" alt="" class="stream-thumb" loading="lazy">
+    <div class="stream-info">
+      <div class="stream-title">Benjamin Franklin (2022) - An American (1775-1790)</div>
+      <div class="stream-meta">
+        <span class="stream-user">👤 jrbaud2</span>
+        <span class="stream-device">📱 SHIELD Android TV</span>
+      </div>
+      <div class="stream-badges">
+        <span class="badge badge-direct">Direct Play</span>
+        <span class="badge badge-quality">720</span>
+        <span class="badge badge-state">▶ Playing</span>
+      </div>
+      <div class="stream-progress-row">
+        <span class="stream-time">10m 11s</span>
+        <div class="progress-bar"><div class="progress-fill" style="width:9%"></div></div>
+        <span class="stream-time">1h 54m</span>
+      </div>
+    </div>
+  </div>
+  <div class="stream-pulse pulse-active"></div>
+</div></div>
   </section>
 
   <section class="section">
