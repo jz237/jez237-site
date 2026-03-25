@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T19:10:15.277626+00:00",
+  "updatedAt": "2026-03-25T19:53:14.088989+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1896,6 +1896,14 @@
     "https://techcrunch.com/2026/03/25/harvey-confirms-11b-valuation-sequoia-triples-down": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Screenshot-2025-11-14-at-11.50.31-AM.png?resize=1200,863",
       "checkedAt": "2026-03-25T19:00:01.646651+00:00"
+    },
+    "https://www.techrepublic.com/article/news-agentic-ai-governance-rsac-2026-insights": {
+      "image": "",
+      "checkedAt": "2026-03-25T19:53:14.088989+00:00"
+    },
+    "https://www.techrepublic.com/article/news-rsa-conference-2026-ai-cybersecurity-soc-governance": {
+      "image": "",
+      "checkedAt": "2026-03-25T19:53:14.088989+00:00"
     }
   }
 }
