@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T11:00:01.452082+00:00",
+  "updatedAt": "2026-03-25T11:04:19.467645+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1812,6 +1812,10 @@
     "https://www.techrepublic.com/article/meta-new-mexico-verdict": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-meta-ai-scam-detection.jpg",
       "checkedAt": "2026-03-25T10:00:01.999107+00:00"
+    },
+    "https://techcrunch.com/2026/03/25/lucid-bots-raises-20m-to-keep-up-with-demand-for-its-window-washing-drones": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Lucid-Bots.png?resize=1200,800",
+      "checkedAt": "2026-03-25T11:04:19.467645+00:00"
     }
   }
 }
