@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T08:00:01.502377+00:00",
+  "updatedAt": "2026-03-25T09:00:01.738315+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1800,6 +1800,10 @@
     "https://simonwillison.net/2026/Mar/24/auto-mode-for-claude-code": {
       "image": "",
       "checkedAt": "2026-03-25T01:00:01.574077+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/25/nvidia-ai-introduces-pivotrl-a-new-ai-framework-achieving-high-agentic-accuracy-with-4x-fewer-rollout-turns-efficiently": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-6.png",
+      "checkedAt": "2026-03-25T09:00:01.738315+00:00"
     }
   }
 }
