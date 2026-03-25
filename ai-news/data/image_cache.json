@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T17:00:01.375206+00:00",
+  "updatedAt": "2026-03-25T17:16:28.113028+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1872,6 +1872,18 @@
     "https://www.techrepublic.com/article/news-apple-new-siri-chatgpt-like-features": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-2026-03-25T233411.786.png",
       "checkedAt": "2026-03-25T17:00:01.375206+00:00"
+    },
+    "https://techcrunch.com/2026/03/25/bernie-sanders-and-aoc-propose-a-ban-on-data-center-construction": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/08/GettyImages-688308688.jpg?resize=1200,800",
+      "checkedAt": "2026-03-25T17:16:28.113028+00:00"
+    },
+    "https://openai.com/index/our-approach-to-the-model-spec": {
+      "image": "",
+      "checkedAt": "2026-03-25T17:16:28.113028+00:00"
+    },
+    "https://openai.com/index/safety-bug-bounty": {
+      "image": "",
+      "checkedAt": "2026-03-25T17:16:28.113028+00:00"
     }
   }
 }
