@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-24T23:44:37.519727+00:00",
+  "updatedAt": "2026-03-25T00:00:02.004516+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1788,6 +1788,10 @@
     "https://www.techrepublic.com/article/news-alibaba-ai-chip-agentic-ai": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_v893tsv893tsv893.jpg",
       "checkedAt": "2026-03-24T23:00:01.631449+00:00"
+    },
+    "https://techcrunch.com/2026/03/24/openais-sora-was-the-creepiest-app-on-your-phone-now-its-shutting-down": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages2238161095.jpg?w=1024",
+      "checkedAt": "2026-03-25T00:00:02.004516+00:00"
     }
   }
 }
