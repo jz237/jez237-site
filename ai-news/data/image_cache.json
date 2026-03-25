@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T22:00:01.295824+00:00",
+  "updatedAt": "2026-03-25T21:52:26.403503+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1919,19 +1919,19 @@
     },
     "https://simonwillison.net/2026/Mar/25/thoughts-on-slowing-the-fuck-down": {
       "image": "",
-      "checkedAt": "2026-03-25T22:00:01.295824+00:00"
+      "checkedAt": "2026-03-25T21:52:26.403503+00:00"
     },
     "https://techcrunch.com/2026/03/25/the-ai-skills-gap-is-here-says-ai-company-and-power-users-are-pulling-ahead": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_0605.jpeg?resize=1200,900",
-      "checkedAt": "2026-03-25T22:00:01.295824+00:00"
+      "checkedAt": "2026-03-25T21:52:26.403503+00:00"
     },
     "https://simonwillison.net/2026/Mar/25/datasette-llm": {
       "image": "",
-      "checkedAt": "2026-03-25T22:00:01.295824+00:00"
+      "checkedAt": "2026-03-25T21:52:26.403503+00:00"
     },
     "https://www.theverge.com/tech/900946/meta-layoffs-hundreds-employees": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25546023/STK043_META_CVIRGINIA_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
-      "checkedAt": "2026-03-25T22:00:01.295824+00:00"
+      "checkedAt": "2026-03-25T21:52:26.403503+00:00"
     }
   }
 }
