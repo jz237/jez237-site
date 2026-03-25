@@ -1,7 +1,23 @@
 {
   "date": "2026-03-25",
-  "updatedAt": "2026-03-25T03:16:22.736165+00:00",
+  "updatedAt": "2026-03-25T04:00:01.886095+00:00",
   "items": [
+    {
+      "title": "TIPS: Turn-Level Information-Potential Reward Shaping for Search-Augmented LLMs",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-03-25T04:00:11.703277+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-03-25T04:00:01.886095+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.46
+    },
     {
       "title": "With $3.5B in fresh capital, Kleiner Perkins is going all in on AI",
       "url": "https://techcrunch.com/2026/03/24/with-3-5b-in-fresh-capital-kleiner-perkins-is-going-all-in-on-ai",
@@ -13,26 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/GettyImages-1058015746.jpg?resize=1200%2C800",
       "published": "2026-03-25T00:47:20+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T03:16:22.736165+00:00",
+      "lastSeen": "2026-03-25T04:00:01.886095+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9167
-    },
-    {
-      "title": "Jiaqi Yuan, Jialu Wang, Zihan Wang, Qingyun Sun, Ruijie Wang, Jianxin Li",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-25T03:16:27.530040+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-25T03:16:22.736165+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.8961
     }
   ],
   "errors": []
