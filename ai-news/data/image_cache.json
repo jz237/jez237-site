@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T19:53:14.088989+00:00",
+  "updatedAt": "2026-03-25T20:00:02.067351+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1898,12 +1898,12 @@
       "checkedAt": "2026-03-25T19:00:01.646651+00:00"
     },
     "https://www.techrepublic.com/article/news-agentic-ai-governance-rsac-2026-insights": {
-      "image": "",
-      "checkedAt": "2026-03-25T19:53:14.088989+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2026/03/grainy-noise-gradient-background-seamlessly-transi-2026-01-08-22-47-46-utc.jpg",
+      "checkedAt": "2026-03-25T20:00:02.067351+00:00"
     },
     "https://www.techrepublic.com/article/news-rsa-conference-2026-ai-cybersecurity-soc-governance": {
-      "image": "",
-      "checkedAt": "2026-03-25T19:53:14.088989+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_392803403.jpg",
+      "checkedAt": "2026-03-25T20:00:02.067351+00:00"
     }
   }
 }
