@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-03-25T11:04:19.467645+00:00",
+  "updatedAt": "2026-03-25T12:00:01.312056+00:00",
   "items": [
     {
-      "title": "Janaka Chathuranga Brahmanage, Akshat Kumar",
+      "title": "TIPS: Turn-Level Information-Potential Reward Shaping for Search-Augmented LLMs",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-25T11:04:23.933605+00:00",
+      "published": "2026-03-25T12:00:06.120239+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.46
+    },
+    {
+      "title": "Agentic commerce runs on truth and context",
+      "url": "https://www.technologyreview.com/2026/03/25/1134516/agentic-commerce-runs-on-truth-and-context",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Imagine telling a digital agent, “Use my points and book a family trip to Italy. Keep it within budget, pick hotels we’ve liked before, and handle the details.” Instead of returning a list of links, the agent assembles an itinerary and executes the purchase. That shift, from assistance to execution, is what makes agentic AI&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/Reltio-iStock-1148409221.jpg?resize=1200%2C600",
+      "published": "2026-03-25T11:48:13+00:00",
+      "firstSeen": "2026-03-25T12:00:01.312056+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.984
+    },
+    {
+      "title": "Anthropic’s Claude Code gets ‘safer’ auto mode",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/900201/anthropic-claude-code-auto-mode",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Anthropic has launched an \"auto mode\" for Claude Code, a new tool that lets AI make permissions-level decisions on users' behalf. The company says the feature offers vibe coders a safer alternative between constant handholding or giving the model dangerous levels of autonomy. Claude Code is capable of acting independently on users' behalf, a useful [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK269_ANTHROPIC_2_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-03-25T11:39:46+00:00",
+      "firstSeen": "2026-03-25T12:00:01.312056+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.0497
     },
     {
       "title": "Lucid Bots raises $20M to keep up with demand for its window-washing drones",
@@ -28,10 +60,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Lucid-Bots.png?resize=1200%2C800",
       "published": "2026-03-25T11:00:00+00:00",
       "firstSeen": "2026-03-25T11:04:19.467645+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2878
+      "score": 2.2599
+    },
+    {
+      "title": "Blowing Off Steam: How Power-Flexible AI Factories Can Stabilize the Global Energy Grid",
+      "url": "https://blogs.nvidia.com/blog/power-flexible-ai-factories-energy-grid",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "At the half-time whistle of the UEFA EURO 2020 round of 16 football match between England and Germany, millions of viewers stepped away from their screens in the U.K. to do the same thing at the same time — turn on their kettles. National Grid, which provides electricity for England and Wales, saw a demand [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/02/Copy-of-Blog-1280x680.pptx-2.jpg",
+      "published": "2026-03-25T11:00:00+00:00",
+      "firstSeen": "2026-03-25T12:00:01.312056+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
     },
     {
       "title": "Arm’s CEO Insists the Market Needs His New CPU. It Could Piss Everyone Off",
@@ -44,10 +92,10 @@
       "image": "https://media.wired.com/photos/69c2ef3f0355f9e1ff2fd1e1/master/pass/JC_WIRED_ARM_4316_flat.jpg",
       "published": "2026-03-25T10:00:00+00:00",
       "firstSeen": "2026-03-25T10:06:14.878786+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2577
+      "score": 2.2305
     },
     {
       "title": "Galtea raises $3.2M to help enterprises test AI agents",
@@ -60,10 +108,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Galtea.png",
       "published": "2026-03-25T09:39:52+00:00",
       "firstSeen": "2026-03-25T10:06:14.878786+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8078
+      "score": 4.7809
     },
     {
       "title": "Openreach expands collaboration with Google Cloud AI to plan its full-fibre rollout",
@@ -76,10 +124,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Openreach.png",
       "published": "2026-03-25T09:21:35+00:00",
       "firstSeen": "2026-03-25T10:06:14.878786+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0989
+      "score": 6.0722
     },
     {
       "title": "The AI Hype Index: AI goes to war",
@@ -92,10 +140,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MA26-Thumb2.jpg?resize=1200%2C600",
       "published": "2026-03-25T09:00:00+00:00",
       "firstSeen": "2026-03-25T10:00:01.999107+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.2285
+      "score": 12.202
     },
     {
       "title": "Epoch Biodesign closes $12M to prove its nylon recycling enzymes can work at scale",
@@ -108,10 +156,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Epoch-Biodesign.png",
       "published": "2026-03-25T08:51:47+00:00",
       "firstSeen": "2026-03-25T09:05:49.853177+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0845
+      "score": 2.0582
     },
     {
       "title": "Meta Hit With $375 Million Verdict in New Mexico Child Safety Case",
@@ -124,10 +172,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-meta-ai-scam-detection.jpg",
       "published": "2026-03-25T08:50:43+00:00",
       "firstSeen": "2026-03-25T10:00:01.999107+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.184
+      "score": 3.1577
     },
     {
       "title": "NVIDIA AI Introduces PivotRL: A New AI Framework Achieving High Agentic Accuracy With 4x Fewer Rollout Turns Efficiently",
@@ -140,10 +188,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-6.png",
       "published": "2026-03-25T08:39:23+00:00",
       "firstSeen": "2026-03-25T09:00:01.738315+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.4486
+      "score": 4.4224
     },
     {
       "title": "Amazon acquires Fauna Robotics and its approachable humanoid Sprout",
@@ -156,10 +204,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Fauna-Robotics.png",
       "published": "2026-03-25T08:32:19+00:00",
       "firstSeen": "2026-03-25T09:05:49.853177+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2752
+      "score": 5.2492
     },
     {
       "title": "The OpenAI Foundation plans to spend at least $1 billion this year",
@@ -172,10 +220,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI-Foundation.png",
       "published": "2026-03-25T08:01:21+00:00",
       "firstSeen": "2026-03-25T09:05:49.853177+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0607
+      "score": 5.0349
     },
     {
       "title": "This team password manager costs $1.50/user and just added the features businesses actually need",
@@ -188,10 +236,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Passpack-Deal.png",
       "published": "2026-03-25T07:23:30+00:00",
       "firstSeen": "2026-03-25T09:00:01.738315+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0431
+      "score": 2.0178
     },
     {
       "title": "Google Introduces TurboQuant: A New Compression Algorithm that Reduces LLM Key-Value Cache Memory by 6x and Delivers Up to 8x Speedup, All with Zero Accuracy Loss",
@@ -204,10 +252,10 @@
       "image": "https://www.marktechpost.com/www.marktechpost.com/41f40e5d-9f22-4710-ae55-76aa655f4c89",
       "published": "2026-03-25T07:11:35+00:00",
       "firstSeen": "2026-03-25T07:16:42.604177+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.8076
+      "score": 3.7825
     },
     {
       "title": "With $3.5B in fresh capital, Kleiner Perkins is going all in on AI",
@@ -220,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/GettyImages-1058015746.jpg?resize=1200%2C800",
       "published": "2026-03-25T00:47:20+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7167
+      "score": 2.6956
     },
     {
       "title": "OpenAI’s Sora was the creepiest app on your phone — now it’s shutting down",
@@ -236,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages2238161095.jpg?w=1024",
       "published": "2026-03-24T23:57:55+00:00",
       "firstSeen": "2026-03-25T00:00:02.004516+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.098
+      "score": 6.0774
     },
     {
       "title": "Auto mode for Claude Code",
@@ -252,11 +300,11 @@
       "image": "",
       "published": "2026-03-24T23:57:33+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.4978
+      "score": 18.4773
     },
     {
       "title": "Kentucky woman rejects $26M offer to turn her farm into a data center",
@@ -269,10 +317,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200%2C800",
       "published": "2026-03-24T22:22:57+00:00",
       "firstSeen": "2026-03-24T23:00:01.631449+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9632
+      "score": 1.9435
     },
     {
       "title": "Pentagon’s ‘Attempt to Cripple’ Anthropic Is Troubling, Judge Says",
@@ -285,10 +333,10 @@
       "image": "https://media.wired.com/photos/69c30bf9dc53bcd949e45335/master/pass/Pentagon-Attempt-to-Cripple-Anthropic-Troublesome-Business-2268179185.jpg",
       "published": "2026-03-24T22:13:17+00:00",
       "firstSeen": "2026-03-24T23:00:01.631449+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9598
+      "score": 8.9402
     },
     {
       "title": "Paged Attention in Large Language Models LLMs",
@@ -301,10 +349,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-46-150x150.png",
       "published": "2026-03-24T21:45:49+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6801
+      "score": 4.6607
     },
     {
       "title": "A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence",
@@ -317,10 +365,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-3.png",
       "published": "2026-03-24T21:31:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0749
+      "score": 9.0557
     },
     {
       "title": "Package Managers Need to Cool Down",
@@ -333,10 +381,10 @@
       "image": "",
       "published": "2026-03-24T21:11:38+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9381
+      "score": 1.9191
     },
     {
       "title": "OpenAI just gave up on Sora and its billion-dollar Disney deal",
@@ -349,10 +397,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/ai-label-1.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.28438353380685%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T21:08:10+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1069
+      "score": 7.0879
     },
     {
       "title": "Anthropic hands Claude Code more control, but keeps it on a leash",
@@ -365,10 +413,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-03-24T21:00:30+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0343
+      "score": 12.0153
     },
     {
       "title": "Spotify tests new tool to stop AI slop from being attributed to real artists",
@@ -381,10 +429,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
       "published": "2026-03-24T20:56:25+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9329
+      "score": 1.914
     },
     {
       "title": "Arm’s first CPU ever will plug into Meta’s AI data centers later this year",
@@ -397,10 +445,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/20260216_VISION25_ExplodedTight_Chip-01-16x9_16bit_v2-1200x675-1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282",
       "published": "2026-03-24T20:43:14+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9983
+      "score": 3.9796
     },
     {
       "title": "Databricks bought two startups to underpin its new AI security product",
@@ -413,10 +461,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1177951659.jpg?resize=1200%2C800",
       "published": "2026-03-24T20:40:56+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9276
+      "score": 1.9088
     },
     {
       "title": "Quoting Christopher Mims",
@@ -429,10 +477,10 @@
       "image": "",
       "published": "2026-03-24T20:35:52+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9258
+      "score": 1.9071
     },
     {
       "title": "OpenAI open-sources teen safety policies for developers amid mounting lawsuits over ChatGPT deaths",
@@ -445,10 +493,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI-1.png",
       "published": "2026-03-24T19:55:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7721
+      "score": 10.7537
     },
     {
       "title": "Arm is releasing the first in-house chip in its 35-year history",
@@ -461,10 +509,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/08/GettyImages-576856756.jpg?resize=1200%2C840",
       "published": "2026-03-24T19:48:54+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.91
+      "score": 1.8917
     },
     {
       "title": "BlueConic joins Databricks Marketplace to bring real-time marketing decisions to the lakehouse",
@@ -477,10 +525,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/blueconic.png",
       "published": "2026-03-24T19:33:32+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0649
+      "score": 2.0467
     },
     {
       "title": "OpenAI’s plans to make ChatGPT more like Amazon aren’t going so well",
@@ -493,10 +541,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-9.15.10-AM.png?resize=1200%2C675",
       "published": "2026-03-24T19:27:56+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.903
+      "score": 10.8849
     },
     {
       "title": "Google TV’s new Gemini features keep fans updated on sports teams and more",
@@ -509,10 +557,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-tv.webp?resize=1200%2C675",
       "published": "2026-03-24T19:12:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8979
+      "score": 7.8798
     },
     {
       "title": "Halter raises $220M at $2 billion valuation as virtual fencing for cattle goes global",
@@ -525,10 +573,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Craig-Piggott-CEO-and-Founder-Halter.png",
       "published": "2026-03-24T19:02:44+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8548
+      "score": 2.8368
     },
     {
       "title": "This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B",
@@ -541,11 +589,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2.png",
       "published": "2026-03-24T18:49:40+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.6705
+      "score": 13.6527
     },
     {
       "title": "OpenAI adds open source tools to help developers build for teen safety",
@@ -558,10 +606,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-03-24T18:41:34+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5879
+      "score": 5.5701
     },
     {
       "title": "Talat’s AI meeting notes stay on your machine, not in the cloud",
@@ -574,10 +622,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/talat-app-at-2.11.22-PM.jpg?w=1086",
       "published": "2026-03-24T18:41:33+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9879
+      "score": 2.9701
     },
     {
       "title": "Energy Vault acquires 175 MW battery project in Texas as it bets on AI-driven power demand",
@@ -590,58 +638,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/energy-vault-mcmurtre-battery-texas-acquisitionpng.png",
       "published": "2026-03-24T18:36:53+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.2536
-    },
-    {
-      "title": "BNESIM on the evolving role of AI in travel eSIM as connectivity adapts to accelerating innovation cycles",
-      "url": "https://thenextweb.com/news/bnesim-ai-travel-esim-connectivity",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "BNESIM, a global connectivity provider specializing in travel eSIM and digital communications, acknowledges the far-reaching influence artificial intelligence is having across industries. Operating in a space defined by constant movement, both in terms of people and technology, the company approaches this shift intentionally to evolve in parallel with it. “We believe that meaningful progress comes [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/bnesim-ai-travel-esim.png",
-      "published": "2026-03-24T17:20:38+00:00",
-      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T10:00:01.999107+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8222
-    },
-    {
-      "title": "Doss raises $55M for AI inventory management that plugs into ERP",
-      "url": "https://techcrunch.com/2026/03/24/doss-raises-55m-for-ai-inventory-management-that-plugs-into-erp",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Doss's AI-powered inventory management system integrates with existing ERP systems. The Series B round was co-led by Madrona and Premji Invest.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Doss-Founder-Photo.jpg?resize=1200%2C800",
-      "published": "2026-03-24T17:18:29+00:00",
-      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8616
-    },
-    {
-      "title": "ChatGPT and Gemini are fighting to be the AI bot that sells you stuff",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/899677/openai-google-gemini-ai-shopping-features",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "The AI-powered shopping rivalry is heating up as Google and OpenAI launch new features to help you buy things while interacting with their chatbots. Now, Google is teaming up with Gap Inc to allow its Gemini AI assistant to purchase clothes on your behalf from any of its stores, which include Gap, Old Navy, Banana [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362057/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-03-24T17:13:00+00:00",
-      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 17.7299
+      "score": -0.2713
     },
     {
       "title": "Superbugs: Resistance Rising Part 1",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.272
+      "score": 2.2623
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-25T11:04:19.467645+00:00",
+      "lastSeen": "2026-03-25T12:00:01.312056+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.5064
+      "score": -0.5065
     },
     {
       "title": "The Life Scientific: Tony Juniper",
