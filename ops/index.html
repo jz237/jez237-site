@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ops Center | Jez237</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050810;
+      --bg-gradient: linear-gradient(135deg, #050810 0%, #0a1020 50%, #0d0818 100%);
+      --panel: rgba(18, 25, 40, 0.7);
+      --panel-solid: #121928;
+      --panel-hover: rgba(25, 35, 55, 0.8);
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text: #e8edf3;
+      --text-dim: #8892a2;
+      --muted: #5a6478;
+      --accent: #4f8cff;
+      --accent-glow: rgba(79, 140, 255, 0.4);
+      --success: #22c55e;
+      --success-glow: rgba(34, 197, 94, 0.4);
+      --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.4);
+      --error: #ef4444;
+      --error-glow: rgba(239, 68, 68, 0.4);
+      --border: rgba(255, 255, 255, 0.06);
+      --ring-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79, 140, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 140, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5, 8, 16, 0.8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* Main container */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Title section */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-title h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 10px var(--success-glow);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.9); }
+    }
+
+    /* Tabs */
+    .tabs-container {
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 6px;
+      display: inline-flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: var(--glass);
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(79, 140, 255, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+      color: var(--text);
+      box-shadow: 0 0 20px rgba(79, 140, 255, 0.1);
+    }
+
+    .tab-icon {
+      font-size: 16px;
+    }
+
+    /* Panels */
+    .panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .last-updated {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .refresh-spinner {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .cards-grid-3 {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    /* Glass card */
+    .glass-card {
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s;
+    }
+
+    .glass-card:hover {
+      background: var(--panel-hover);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* System gauges */
+    .gauge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .gauge-card {
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .gauge-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .gauge-ring {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+
+    .gauge-ring svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: var(--ring-bg);
+      stroke-width: 10;
+    }
+
+    .gauge-progress {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.8s ease, stroke 0.3s;
+    }
+
+    .gauge-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-percent {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .gauge-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .gauge-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .gauge-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* System info cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .info-card {
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .info-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* Agent cards */
+    .agent-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .agent-avatar {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .agent-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .agent-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .status-badge.online {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-badge.offline {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-badge.unknown {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status-badge.online .status-dot {
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .agent-meta {
+      font-size: 12px;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .agent-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Crons table */
+    .table-container {
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .crons-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .crons-table th {
+      text-align: left;
+      padding: 14px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .crons-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .crons-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .crons-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .cron-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .cron-status.success {
+      background: rgba(34, 197, 94, 0.15);
+    }
+
+    .cron-status.error {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .cron-status.pending {
+      background: rgba(245, 158, 11, 0.15);
+    }
+
+    /* Stock cards */
+    .stock-card {
+      text-align: center;
+    }
+
+    .stock-ticker {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .stock-price {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stock-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .stock-change.positive {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success);
+    }
+
+    .stock-change.negative {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+    }
+
+    .stock-change.neutral {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-dim);
+    }
+
+    /* News cards */
+    .news-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .news-headline {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .news-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .news-source {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Plex cards */
+    .plex-now-playing {
+      background: linear-gradient(135deg, rgba(229, 160, 13, 0.1) 0%, rgba(79, 140, 255, 0.1) 100%);
+      border: 1px solid rgba(229, 160, 13, 0.3);
+    }
+
+    .plex-card {
+      display: flex;
+      gap: 16px;
+    }
+
+    .plex-thumb {
+      width: 80px;
+      height: 80px;
+      background: var(--glass);
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      overflow: hidden;
+    }
+
+    .plex-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .plex-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .plex-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .plex-type {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .plex-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(229, 160, 13, 0.15);
+      color: #e5a00d;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* Unavailable state */
+    .unavailable {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+    }
+
+    .unavailable-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .unavailable-text {
+      font-size: 14px;
+    }
+
+    /* Skeleton loading */
+    .skeleton {
+      background: linear-gradient(90deg, var(--glass) 25%, rgba(255,255,255,0.08) 50%, var(--glass) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tabs-container {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+      }
+
+      .tab-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .gauge-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      .crons-table {
+        min-width: 600px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 16px;
+      }
+
+      .gauge-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gauge-ring {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon">O</div>
+        <span>jez237 / ops</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../games/">Games</a>
+        <a href="../photos/">Photos</a>
+        <a href="../ai-news/">AI News</a>
+        <a href="../plex/">Plex</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="page-title">
+        <h1>Ops Center</h1>
+        <div class="live-indicator">
+          <div class="live-dot"></div>
+          Live
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+      <button class="tab-btn active" data-tab="system">
+        <span class="tab-icon">&#128187;</span>
+        System
+      </button>
+      <button class="tab-btn" data-tab="agents">
+        <span class="tab-icon">&#129302;</span>
+        Agents
+      </button>
+      <button class="tab-btn" data-tab="crons">
+        <span class="tab-icon">&#128337;</span>
+        Crons
+      </button>
+      <button class="tab-btn" data-tab="stockbot">
+        <span class="tab-icon">&#128200;</span>
+        StockBot
+      </button>
+      <button class="tab-btn" data-tab="newsbot">
+        <span class="tab-icon">&#128240;</span>
+        NewsBot
+      </button>
+      <button class="tab-btn" data-tab="plex">
+        <span class="tab-icon">&#127916;</span>
+        Plex
+      </button>
+    </div>
+
+    <!-- System Panel -->
+    <div id="panel-system" class="panel active">
+      <div class="panel-header">
+        <div class="panel-title">System Resources</div>
+        <div class="last-updated" id="system-updated">
+          <span class="refresh-spinner"></span>
+          <span>Updating...</span>
+        </div>
+      </div>
+      <div class="gauge-grid" id="system-gauges">
+        <!-- CPU -->
+        <div class="gauge-card">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+              <circle class="gauge-progress" id="cpu-ring" cx="60" cy="60" r="50"
+                stroke="var(--accent)" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="gauge-value">
+              <span class="gauge-percent" id="cpu-value">--</span>
+              <span class="gauge-label">%</span>
+            </div>
+          </div>
+          <div class="gauge-title">CPU</div>
+          <div class="gauge-subtitle" id="cpu-cores">-- cores</div>
+        </div>
+        <!-- RAM -->
+        <div class="gauge-card">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+              <circle class="gauge-progress" id="ram-ring" cx="60" cy="60" r="50"
+                stroke="var(--success)" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="gauge-value">
+              <span class="gauge-percent" id="ram-value">--</span>
+              <span class="gauge-label">%</span>
+            </div>
+          </div>
+          <div class="gauge-title">Memory</div>
+          <div class="gauge-subtitle" id="ram-total">-- GB</div>
+        </div>
+        <!-- Disk -->
+        <div class="gauge-card">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+              <circle class="gauge-progress" id="disk-ring" cx="60" cy="60" r="50"
+                stroke="var(--warning)" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="gauge-value">
+              <span class="gauge-percent" id="disk-value">--</span>
+              <span class="gauge-label">%</span>
+            </div>
+          </div>
+          <div class="gauge-title">Disk</div>
+          <div class="gauge-subtitle" id="disk-total">-- GB</div>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">Hostname</div>
+          <div class="info-value" id="hostname">--</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Uptime</div>
+          <div class="info-value" id="uptime">--</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Load Average</div>
+          <div class="info-value" id="load">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agents Panel -->
+    <div id="panel-agents" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Active Agents</div>
+        <div class="last-updated" id="agents-updated">
+          <span class="refresh-spinner"></span>
+          <span>Updating...</span>
+        </div>
+      </div>
+      <div class="cards-grid" id="agents-grid">
+        <!-- Agent cards injected here -->
+      </div>
+    </div>
+
+    <!-- Crons Panel -->
+    <div id="panel-crons" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Scheduled Jobs</div>
+        <div class="last-updated" id="crons-updated">
+          <span class="refresh-spinner"></span>
+          <span>Updating...</span>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="crons-table">
+          <thead>
+            <tr>
+              <th>Job</th>
+              <th>Schedule</th>
+              <th>Last Run</th>
+              <th>Status</th>
+              <th>Next Run</th>
+            </tr>
+          </thead>
+          <tbody id="crons-body">
+            <!-- Cron rows injected here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- StockBot Panel -->
+    <div id="panel-stockbot" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Stock Prices</div>
+        <div class="last-updated" id="stocks-updated">
+          <span class="refresh-spinner"></span>
+          <span>Updating...</span>
+        </div>
+      </div>
+      <div class="cards-grid cards-grid-3" id="stocks-grid">
+        <!-- Stock cards injected here -->
+      </div>
+    </div>
+
+    <!-- NewsBot Panel -->
+    <div id="panel-newsbot" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">AI Headlines</div>
+        <div class="last-updated" id="news-updated">
+          <span class="refresh-spinner"></span>
+          <span>Updating...</span>
+        </div>
+      </div>
+      <div class="cards-grid" id="news-grid">
+        <!-- News cards injected here -->
+      </div>
+    </div>
+
+    <!-- Plex Panel -->
+    <div id="panel-plex" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Plex Media</div>
+        <div class="last-updated" id="plex-updated">
+          <span class="refresh-spinner"></span>
+          <span>Updating...</span>
+        </div>
+      </div>
+      <div class="cards-grid" id="plex-grid">
+        <!-- Plex cards injected here -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Ops Center Controller
+    (function() {
+      'use strict';
+
+      const API_BASE = '/api/ops';
+      const REFRESH_SYSTEM = 10000;  // 10s
+      const REFRESH_OTHER = 60000;   // 60s
+
+      // Agent emoji map
+      const AGENT_EMOJIS = {
+        'Claw': '🦀',
+        'GameMaker': '🎮',
+        'NewsBot': '📰',
+        'Sentinel': '🛡️',
+        'StockBot': '📈',
+        'Vinyl': '🎵'
+      };
+
+      // Stock tickers to display
+      const TICKERS = ['ARM', 'AVGO', 'CRWV', 'GOOG', 'INTC', 'META', 'MSFT', 'NVDA', 'QCOM', 'VRT', 'AMZN', 'TSM', 'PLTR'];
+
+      // Tab switching
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const panels = document.querySelectorAll('.panel');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.dataset.tab;
+
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          panels.forEach(p => p.classList.remove('active'));
+          document.getElementById(`panel-${tab}`).classList.add('active');
+        });
+      });
+
+      // Utility: format timestamp
+      function formatTime(ts) {
+        if (!ts) return '--';
+        const d = new Date(ts);
+        return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      function formatDate(ts) {
+        if (!ts) return '--';
+        const d = new Date(ts);
+        const now = new Date();
+        if (d.toDateString() === now.toDateString()) {
+          return `Today ${formatTime(ts)}`;
+        }
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + formatTime(ts);
+      }
+
+      // Utility: update timestamp display
+      function updateTimestamp(elementId) {
+        const el = document.getElementById(elementId);
+        if (el) {
+          el.innerHTML = `Updated ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+        }
+      }
+
+      // Utility: show unavailable state
+      function showUnavailable(containerId, message = 'Data unavailable') {
+        const container = document.getElementById(containerId);
+        if (container) {
+          container.innerHTML = `
+            <div class="unavailable">
+              <div class="unavailable-icon">&#128683;</div>
+              <div class="unavailable-text">${message}</div>
+            </div>
+          `;
+        }
+      }
+
+      // Update gauge ring
+      function updateGauge(ringId, valueId, percent, color) {
+        const ring = document.getElementById(ringId);
+        const value = document.getElementById(valueId);
+        if (ring && value) {
+          const circumference = 314; // 2 * PI * 50
+          const offset = circumference - (percent / 100) * circumference;
+          ring.style.strokeDashoffset = offset;
+
+          // Color based on threshold
+          let strokeColor = color || 'var(--accent)';
+          if (percent > 90) strokeColor = 'var(--error)';
+          else if (percent > 70) strokeColor = 'var(--warning)';
+          ring.style.stroke = strokeColor;
+
+          value.textContent = Math.round(percent);
+        }
+      }
+
+      // Fetch with error handling
+      async function fetchData(endpoint) {
+        try {
+          const response = await fetch(`${API_BASE}${endpoint}`);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return await response.json();
+        } catch (err) {
+          console.warn(`Failed to fetch ${endpoint}:`, err.message);
+          return null;
+        }
+      }
+
+      // ============= System =============
+      async function loadSystem() {
+        const data = await fetchData('/system');
+
+        if (!data) {
+          updateGauge('cpu-ring', 'cpu-value', 0);
+          updateGauge('ram-ring', 'ram-value', 0);
+          updateGauge('disk-ring', 'disk-value', 0);
+          document.getElementById('hostname').textContent = 'Unavailable';
+          document.getElementById('uptime').textContent = '--';
+          document.getElementById('load').textContent = '--';
+          updateTimestamp('system-updated');
+          return;
+        }
+
+        updateGauge('cpu-ring', 'cpu-value', data.cpu || 0, 'var(--accent)');
+        updateGauge('ram-ring', 'ram-value', data.ram || 0, 'var(--success)');
+        updateGauge('disk-ring', 'disk-value', data.disk || 0, 'var(--warning)');
+
+        document.getElementById('cpu-cores').textContent = data.cores ? `${data.cores} cores` : '-- cores';
+        document.getElementById('ram-total').textContent = data.ramTotal ? `${data.ramTotal} GB` : '-- GB';
+        document.getElementById('disk-total').textContent = data.diskTotal ? `${data.diskTotal} GB` : '-- GB';
+        document.getElementById('hostname').textContent = data.hostname || '--';
+        document.getElementById('uptime').textContent = data.uptime || '--';
+        document.getElementById('load').textContent = data.load || '--';
+
+        updateTimestamp('system-updated');
+      }
+
+      // ============= Agents =============
+      async function loadAgents() {
+        const data = await fetchData('/agents');
+        const grid = document.getElementById('agents-grid');
+
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          showUnavailable('agents-grid', 'No agents data available');
+          updateTimestamp('agents-updated');
+          return;
+        }
+
+        grid.innerHTML = data.map(agent => {
+          const emoji = AGENT_EMOJIS[agent.name] || '🤖';
+          const statusClass = agent.status === 'online' ? 'online' :
+                              agent.status === 'offline' ? 'offline' : 'unknown';
+          return `
+            <div class="glass-card agent-card">
+              <div class="agent-avatar">${emoji}</div>
+              <div class="agent-info">
+                <div class="agent-header">
+                  <span class="agent-name">${agent.name}</span>
+                  <span class="status-badge ${statusClass}">
+                    <span class="status-dot"></span>
+                    ${agent.status || 'unknown'}
+                  </span>
+                </div>
+                <div class="agent-meta">
+                  <span>&#128337; ${formatDate(agent.lastActivity)}</span>
+                  <span>&#129504; ${agent.model || 'Unknown model'}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        updateTimestamp('agents-updated');
+      }
+
+      // ============= Crons =============
+      async function loadCrons() {
+        const data = await fetchData('/crons');
+        const tbody = document.getElementById('crons-body');
+
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align: center; color: var(--muted); padding: 32px;">
+                No scheduled jobs available
+              </td>
+            </tr>
+          `;
+          updateTimestamp('crons-updated');
+          return;
+        }
+
+        tbody.innerHTML = data.map(job => {
+          let statusIcon = '&#9203;'; // pending
+          let statusClass = 'pending';
+          if (job.lastStatus === 'success') {
+            statusIcon = '&#9989;';
+            statusClass = 'success';
+          } else if (job.lastStatus === 'error') {
+            statusIcon = '&#10060;';
+            statusClass = 'error';
+          }
+
+          return `
+            <tr>
+              <td><strong>${job.name || '--'}</strong></td>
+              <td>${job.schedule || '--'}</td>
+              <td>${formatDate(job.lastRun)}</td>
+              <td><span class="cron-status ${statusClass}">${statusIcon}</span></td>
+              <td>${formatDate(job.nextRun)}</td>
+            </tr>
+          `;
+        }).join('');
+
+        updateTimestamp('crons-updated');
+      }
+
+      // ============= Stocks =============
+      async function loadStocks() {
+        const data = await fetchData('/stocks');
+        const grid = document.getElementById('stocks-grid');
+
+        if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
+          showUnavailable('stocks-grid', 'Stock data unavailable');
+          updateTimestamp('stocks-updated');
+          return;
+        }
+
+        grid.innerHTML = TICKERS.map(ticker => {
+          const stock = data[ticker];
+          if (!stock) {
+            return `
+              <div class="glass-card stock-card">
+                <div class="stock-ticker">${ticker}</div>
+                <div class="stock-price">--</div>
+                <div class="stock-change neutral">N/A</div>
+              </div>
+            `;
+          }
+
+          const change = stock.change || 0;
+          const changeClass = change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral';
+          const arrow = change > 0 ? '&#9650;' : change < 0 ? '&#9660;' : '';
+          const changeText = change > 0 ? `+${change.toFixed(2)}%` : `${change.toFixed(2)}%`;
+
+          return `
+            <div class="glass-card stock-card">
+              <div class="stock-ticker">${ticker}</div>
+              <div class="stock-price">$${stock.price ? stock.price.toFixed(2) : '--'}</div>
+              <div class="stock-change ${changeClass}">${arrow} ${changeText}</div>
+            </div>
+          `;
+        }).join('');
+
+        updateTimestamp('stocks-updated');
+      }
+
+      // ============= News =============
+      async function loadNews() {
+        const data = await fetchData('/news');
+        const grid = document.getElementById('news-grid');
+
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          showUnavailable('news-grid', 'No news available');
+          updateTimestamp('news-updated');
+          return;
+        }
+
+        grid.innerHTML = data.slice(0, 10).map(item => `
+          <div class="glass-card news-card">
+            <div class="news-headline">${item.headline || item.title || 'Untitled'}</div>
+            <div class="news-meta">
+              <span class="news-source">${item.source || 'Unknown'}</span>
+              <span>${formatDate(item.timestamp || item.posted)}</span>
+            </div>
+          </div>
+        `).join('');
+
+        updateTimestamp('news-updated');
+      }
+
+      // ============= Plex =============
+      async function loadPlex() {
+        const data = await fetchData('/plex');
+        const grid = document.getElementById('plex-grid');
+
+        if (!data) {
+          showUnavailable('plex-grid', 'Plex data unavailable');
+          updateTimestamp('plex-updated');
+          return;
+        }
+
+        let html = '';
+
+        // Now Playing
+        if (data.nowPlaying) {
+          const np = data.nowPlaying;
+          html += `
+            <div class="glass-card plex-card plex-now-playing">
+              <div class="plex-thumb">
+                ${np.thumb ? `<img src="${np.thumb}" alt="">` : '&#127916;'}
+              </div>
+              <div class="plex-info">
+                <div class="plex-title">${np.title || 'Unknown'}</div>
+                <div class="plex-type">${np.type || 'Media'}</div>
+                <div class="plex-label">&#9654; Now Playing</div>
+              </div>
+            </div>
+          `;
+        }
+
+        // Recently Added
+        if (data.recentlyAdded && Array.isArray(data.recentlyAdded)) {
+          data.recentlyAdded.slice(0, 5).forEach(item => {
+            html += `
+              <div class="glass-card plex-card">
+                <div class="plex-thumb">
+                  ${item.thumb ? `<img src="${item.thumb}" alt="">` : '&#127902;'}
+                </div>
+                <div class="plex-info">
+                  <div class="plex-title">${item.title || 'Unknown'}</div>
+                  <div class="plex-type">${item.type || 'Media'}</div>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        if (!html) {
+          showUnavailable('plex-grid', 'No Plex media found');
+        } else {
+          grid.innerHTML = html;
+        }
+
+        updateTimestamp('plex-updated');
+      }
+
+      // Initial load
+      loadSystem();
+      loadAgents();
+      loadCrons();
+      loadStocks();
+      loadNews();
+      loadPlex();
+
+      // Refresh intervals
+      setInterval(loadSystem, REFRESH_SYSTEM);
+      setInterval(loadAgents, REFRESH_OTHER);
+      setInterval(loadCrons, REFRESH_OTHER);
+      setInterval(loadStocks, REFRESH_OTHER);
+      setInterval(loadNews, REFRESH_OTHER);
+      setInterval(loadPlex, REFRESH_OTHER);
+
+    })();
+  </script>
+</body>
+</html>
