@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T18:00:01.813889+00:00",
+  "updatedAt": "2026-03-25T19:00:01.646651+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1888,6 +1888,14 @@
     "https://simonwillison.net/2026/Mar/25/litellm-hack": {
       "image": "",
       "checkedAt": "2026-03-25T18:00:01.813889+00:00"
+    },
+    "https://www.theverge.com/column/900536/alliance-for-a-better-future-polymarket": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/gettyimages-2267134964.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-03-25T19:00:01.646651+00:00"
+    },
+    "https://techcrunch.com/2026/03/25/harvey-confirms-11b-valuation-sequoia-triples-down": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/Screenshot-2025-11-14-at-11.50.31-AM.png?resize=1200,863",
+      "checkedAt": "2026-03-25T19:00:01.646651+00:00"
     }
   }
 }
