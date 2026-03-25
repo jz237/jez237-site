@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T09:05:49.853177+00:00",
+  "updatedAt": "2026-03-25T10:00:01.999107+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1804,6 +1804,14 @@
     "https://www.marktechpost.com/2026/03/25/nvidia-ai-introduces-pivotrl-a-new-ai-framework-achieving-high-agentic-accuracy-with-4x-fewer-rollout-turns-efficiently": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-6.png",
       "checkedAt": "2026-03-25T09:00:01.738315+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/25/1134571/the-ai-hype-index-ai-goes-to-war": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MA26-Thumb2.jpg?resize=1200,600",
+      "checkedAt": "2026-03-25T10:00:01.999107+00:00"
+    },
+    "https://www.techrepublic.com/article/meta-new-mexico-verdict": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-meta-ai-scam-detection.jpg",
+      "checkedAt": "2026-03-25T10:00:01.999107+00:00"
     }
   }
 }
