@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-25T09:00:01.738315+00:00",
+  "updatedAt": "2026-03-25T09:05:49.853177+00:00",
   "items": [
     {
       "title": "TIPS: Turn-Level Information-Potential Reward Shaping for Search-Augmented LLMs",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-25T09:00:07.493684+00:00",
+      "published": "2026-03-25T09:05:53.875135+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.46
+    },
+    {
+      "title": "Epoch Biodesign closes $12M to prove its nylon recycling enzymes can work at scale",
+      "url": "https://thenextweb.com/news/epoch-biodesign-12m-nylon-recycling",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The London startup uses AI-engineered enzymes to break nylon 6,6 waste, from leggings to airbags to carpets, back into the monomers it was made from, recovering more than 90% and removing the need for virgin petroleum feedstock. Total funding now exceeds $50M. Nylon 6,6 is one of the most useful materials humanity has ever made. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Epoch-Biodesign.png",
+      "published": "2026-03-25T08:51:47+00:00",
+      "firstSeen": "2026-03-25T09:05:49.853177+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1429
     },
     {
       "title": "NVIDIA AI Introduces PivotRL: A New AI Framework Achieving High Agentic Accuracy With 4x Fewer Rollout Turns Efficiently",
@@ -28,10 +44,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-6.png",
       "published": "2026-03-25T08:39:23+00:00",
       "firstSeen": "2026-03-25T09:00:01.738315+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.5095
+      "score": 4.5066
+    },
+    {
+      "title": "Amazon acquires Fauna Robotics and its approachable humanoid Sprout",
+      "url": "https://thenextweb.com/news/amazon-acquires-fauna-robotics-and-its-approachable-humanoid-sprout",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The deal, Amazon’s second robotics acquisition this month, brings a 50-pound, 3.5-foot bipedal robot called Sprout into the company’s portfolio, less than two months after Fauna launched it to research and development partners. Terms were not disclosed. The race to put a humanoid robot in every home has a new entrant. Amazon has acquired Fauna [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Fauna-Robotics.png",
+      "published": "2026-03-25T08:32:19+00:00",
+      "firstSeen": "2026-03-25T09:05:49.853177+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3331
+    },
+    {
+      "title": "The OpenAI Foundation plans to spend at least $1 billion this year",
+      "url": "https://thenextweb.com/news/openai-foundation-1-billion-invest",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The nonprofit that controls OpenAI has outlined four programme areas, Alzheimer’s, jobs, AI resilience, and community, and brought on two senior hires to run the biggest of them. The gap between its charitable history and its new ambitions is the most striking number in their announcement. When OpenAI moved its operational activities into a for-profit [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI-Foundation.png",
+      "published": "2026-03-25T08:01:21+00:00",
+      "firstSeen": "2026-03-25T09:05:49.853177+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1176
     },
     {
       "title": "This team password manager costs $1.50/user and just added the features businesses actually need",
@@ -44,10 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Passpack-Deal.png",
       "published": "2026-03-25T07:23:30+00:00",
       "firstSeen": "2026-03-25T09:00:01.738315+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1019
+      "score": 2.0991
     },
     {
       "title": "Google Introduces TurboQuant: A New Compression Algorithm that Reduces LLM Key-Value Cache Memory by 6x and Delivers Up to 8x Speedup, All with Zero Accuracy Loss",
@@ -60,10 +108,10 @@
       "image": "https://www.marktechpost.com/www.marktechpost.com/41f40e5d-9f22-4710-ae55-76aa655f4c89",
       "published": "2026-03-25T07:11:35+00:00",
       "firstSeen": "2026-03-25T07:16:42.604177+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.8661
+      "score": 3.8633
     },
     {
       "title": "With $3.5B in fresh capital, Kleiner Perkins is going all in on AI",
@@ -76,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/GettyImages-1058015746.jpg?resize=1200%2C800",
       "published": "2026-03-25T00:47:20+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7656
+      "score": 2.7633
     },
     {
       "title": "OpenAI’s Sora was the creepiest app on your phone — now it’s shutting down",
@@ -92,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages2238161095.jpg?w=1024",
       "published": "2026-03-24T23:57:55+00:00",
       "firstSeen": "2026-03-25T00:00:02.004516+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1458
+      "score": 6.1435
     },
     {
       "title": "Auto mode for Claude Code",
@@ -108,11 +156,11 @@
       "image": "",
       "published": "2026-03-24T23:57:33+00:00",
       "firstSeen": "2026-03-25T01:00:01.574077+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.5457
+      "score": 18.5434
     },
     {
       "title": "Kentucky woman rejects $26M offer to turn her farm into a data center",
@@ -125,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200%2C800",
       "published": "2026-03-24T22:22:57+00:00",
       "firstSeen": "2026-03-24T23:00:01.631449+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.009
+      "score": 2.0068
     },
     {
       "title": "Pentagon’s ‘Attempt to Cripple’ Anthropic Is Troubling, Judge Says",
@@ -141,10 +189,10 @@
       "image": "https://media.wired.com/photos/69c30bf9dc53bcd949e45335/master/pass/Pentagon-Attempt-to-Cripple-Anthropic-Troublesome-Business-2268179185.jpg",
       "published": "2026-03-24T22:13:17+00:00",
       "firstSeen": "2026-03-24T23:00:01.631449+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0054
+      "score": 9.0032
     },
     {
       "title": "Paged Attention in Large Language Models LLMs",
@@ -157,10 +205,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-46-150x150.png",
       "published": "2026-03-24T21:45:49+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7251
+      "score": 4.7229
     },
     {
       "title": "A Coding Implementation to Design Self-Evolving Skill Engine with OpenSpace for Skill Learning, Token Efficiency, and Collective Intelligence",
@@ -173,10 +221,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-3.png",
       "published": "2026-03-24T21:31:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1196
+      "score": 9.1175
     },
     {
       "title": "Package Managers Need to Cool Down",
@@ -189,10 +237,10 @@
       "image": "",
       "published": "2026-03-24T21:11:38+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9824
+      "score": 1.9803
     },
     {
       "title": "OpenAI just gave up on Sora and its billion-dollar Disney deal",
@@ -205,10 +253,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/ai-label-1.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.28438353380685%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T21:08:10+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1512
+      "score": 7.149
     },
     {
       "title": "Anthropic hands Claude Code more control, but keeps it on a leash",
@@ -221,10 +269,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-03-24T21:00:30+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0784
+      "score": 12.0762
     },
     {
       "title": "Spotify tests new tool to stop AI slop from being attributed to real artists",
@@ -237,10 +285,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
       "published": "2026-03-24T20:56:25+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9769
+      "score": 1.9748
     },
     {
       "title": "Arm’s first CPU ever will plug into Meta’s AI data centers later this year",
@@ -253,10 +301,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/20260216_VISION25_ExplodedTight_Chip-01-16x9_16bit_v2-1200x675-1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282",
       "published": "2026-03-24T20:43:14+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0421
+      "score": 4.04
     },
     {
       "title": "Databricks bought two startups to underpin its new AI security product",
@@ -269,10 +317,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/GettyImages-1177951659.jpg?resize=1200%2C800",
       "published": "2026-03-24T20:40:56+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9712
+      "score": 1.9692
     },
     {
       "title": "Quoting Christopher Mims",
@@ -285,10 +333,10 @@
       "image": "",
       "published": "2026-03-24T20:35:52+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9694
+      "score": 1.9673
     },
     {
       "title": "OpenAI open-sources teen safety policies for developers amid mounting lawsuits over ChatGPT deaths",
@@ -301,10 +349,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenAI-1.png",
       "published": "2026-03-24T19:55:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8149
+      "score": 10.8128
     },
     {
       "title": "Arm is releasing the first in-house chip in its 35-year history",
@@ -317,10 +365,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/08/GettyImages-576856756.jpg?resize=1200%2C840",
       "published": "2026-03-24T19:48:54+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9527
+      "score": 1.9506
     },
     {
       "title": "BlueConic joins Databricks Marketplace to bring real-time marketing decisions to the lakehouse",
@@ -330,13 +378,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Enterprises have spent years and considerable fortunes building data lakehouses, training models, and unifying customer records inside platforms like Databricks. The harder problem, it turns out, is not building the intelligence but deploying it, getting a prediction out of a data warehouse and into a marketing decision before the moment passes. BlueConic, the Boston-based customer [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/blueconic-databricks-marketplace-real-time-decisioning.png",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/blueconic.png",
       "published": "2026-03-24T19:33:32+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1072
+      "score": 2.1052
     },
     {
       "title": "OpenAI’s plans to make ChatGPT more like Amazon aren’t going so well",
@@ -349,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-9.15.10-AM.png?resize=1200%2C675",
       "published": "2026-03-24T19:27:56+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9453
+      "score": 10.9433
     },
     {
       "title": "Google TV’s new Gemini features keep fans updated on sports teams and more",
@@ -365,10 +413,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-tv.webp?resize=1200%2C675",
       "published": "2026-03-24T19:12:11+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9398
+      "score": 7.9378
     },
     {
       "title": "Halter raises $220M at $2 billion valuation as virtual fencing for cattle goes global",
@@ -381,10 +429,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Craig-Piggott-CEO-and-Founder-Halter.png",
       "published": "2026-03-24T19:02:44+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8965
+      "score": 2.8945
     },
     {
       "title": "This AI Paper Introduces TinyLoRA, A 13-Parameter Fine-Tuning Method That Reaches 91.8 Percent GSM8K on Qwen2.5-7B",
@@ -397,11 +445,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2.png",
       "published": "2026-03-24T18:49:40+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.712
+      "score": 13.71
     },
     {
       "title": "OpenAI adds open source tools to help developers build for teen safety",
@@ -414,10 +462,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-03-24T18:41:34+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6292
+      "score": 5.6273
     },
     {
       "title": "Talat’s AI meeting notes stay on your machine, not in the cloud",
@@ -430,10 +478,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/talat-app-at-2.11.22-PM.jpg?w=1086",
       "published": "2026-03-24T18:41:33+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0292
+      "score": 3.0273
     },
     {
       "title": "Energy Vault acquires 175 MW battery project in Texas as it bets on AI-driven power demand",
@@ -446,10 +494,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/energy-vault-mcmurtre-battery-texas-acquisitionpng.png",
       "published": "2026-03-24T18:36:53+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.2124
+      "score": -0.2143
     },
     {
       "title": "BNESIM on the evolving role of AI in travel eSIM as connectivity adapts to accelerating innovation cycles",
@@ -462,10 +510,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/bnesim-ai-travel-esim.png",
       "published": "2026-03-24T17:20:38+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8621
+      "score": 2.8601
     },
     {
       "title": "Doss raises $55M for AI inventory management that plugs into ERP",
@@ -478,10 +526,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Doss-Founder-Photo.jpg?resize=1200%2C800",
       "published": "2026-03-24T17:18:29+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9014
+      "score": 1.8994
     },
     {
       "title": "ChatGPT and Gemini are fighting to be the AI bot that sells you stuff",
@@ -494,10 +542,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362057/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-24T17:13:00+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.7695
+      "score": 17.7676
     },
     {
       "title": "Arm Is Now Making Its Own Chips",
@@ -510,10 +558,10 @@
       "image": "https://media.wired.com/photos/69c1dcea9b0c01414434424c/master/pass/Chip-Design-Firm-Arm-Making-Own-AI-CPU-Business-2250850574.jpg",
       "published": "2026-03-24T17:00:00+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8953
+      "score": 3.8934
     },
     {
       "title": "Apple Announces WWDC 2026: What to Expect From iOS 27, Siri Revamp",
@@ -526,10 +574,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03242026-apple-wwdc-2026.jpg",
       "published": "2026-03-24T16:43:19+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6499
+      "score": 4.648
     },
     {
       "title": "Tencent Brings OpenClaw AI Agents to 1B WeChat Users",
@@ -542,10 +590,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03242026-tencent-openclaw-ai-agents-wechat.jpg",
       "published": "2026-03-24T16:27:09+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.6446
+      "score": 6.6428
     },
     {
       "title": "Meet the former Apple designer building a new AI interface at Hark",
@@ -558,10 +606,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-6.20.59-AM.png?w=939",
       "published": "2026-03-24T16:00:00+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.976
+      "score": 2.9741
     },
     {
       "title": "Tony Siu on building AI-enabled developer communities through servitude leadership and human connection",
@@ -574,10 +622,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Coffee-Code-Philadelphia.png",
       "published": "2026-03-24T15:26:01+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8253
+      "score": 2.8234
     },
     {
       "title": "Malicious litellm_init.pth in litellm 1.82.8 — credential stealer",
@@ -590,58 +638,10 @@
       "image": "",
       "published": "2026-03-24T15:07:31+00:00",
       "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8595
-    },
-    {
-      "title": "Pagaya just proved Wall Street will buy AI-underwritten auto loans twice",
-      "url": "https://thenextweb.com/news/pagaya-auto-resecuritization-ai-lending-450-million",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Three years ago, institutional investors took a leap of faith when they purchased bonds backed by auto loans that an algorithm had selected. Now Pagaya Technologies is asking them to do it again, with the very same loans. The Israeli-founded, New York-headquartered fintech announced on Monday that it has closed a $450 million auto resecuritization [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/pagaya-auto-resecuritization.png",
-      "published": "2026-03-24T14:28:49+00:00",
-      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7076
-    },
-    {
-      "title": "Zalos raises $3.6M to automate finance workflows",
-      "url": "https://thenextweb.com/news/zalos-raises-3-6m-to-automate-finance-workflows",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The YC Fall 2025 startup, founded by a former Agicap GM and a former Apple Pay engineer, converts screen recordings of finance workflows directly into computer agents, no API integration required. 14 Peaks led the round, with Cohen Circle and 20VC participating. The CFO’s software stack is both the problem and the constraint. Enterprise finance [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Zalos-founders.png",
-      "published": "2026-03-24T13:55:57+00:00",
-      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1977
-    },
-    {
-      "title": "NeuReality taps former Google AI director to steer its inference operating system into the market",
-      "url": "https://thenextweb.com/news/neureality-google-advisor-nr-nexus-inference",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "When Jensen Huang told 30,000 attendees at GTC last week that the future data centre is a “token factory,” he was describing a world that a small Israeli startup has been quietly building toward for months. NeuReality, the Caesarea-based company behind the NR-NEXUS inference operating system, has appointed Shalini Agarwal, a product management director at [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/neureality-google-advisor-Shalini-Agarwal-nr-nexus-inference.png",
-      "published": "2026-03-24T13:45:25+00:00",
-      "firstSeen": "2026-03-24T22:15:00.072076+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0945
+      "score": 1.8577
     },
     {
       "title": "Superbugs: Resistance Rising Part 1",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2947
+      "score": 2.2936
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-25T09:00:01.738315+00:00",
+      "lastSeen": "2026-03-25T09:05:49.853177+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.5062
