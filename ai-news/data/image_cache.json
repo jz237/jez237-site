@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T20:00:01.182086+00:00",
+  "updatedAt": "2026-03-26T21:00:01.665865+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2016,6 +2016,10 @@
     "https://techcrunch.com/2026/03/26/data-centers-get-ready-the-senate-wants-to-see-your-power-bills": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/08/GettyImages-950173010.jpg?resize=1200,861",
       "checkedAt": "2026-03-26T19:00:01.578541+00:00"
+    },
+    "https://www.theverge.com/report/902005/apple-ai-playlist-playground-bad-at-music": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23925980/acastro_STK046_04.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-26T21:00:01.665865+00:00"
     }
   }
 }
