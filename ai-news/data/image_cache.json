@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T11:11:36.375753+00:00",
+  "updatedAt": "2026-03-26T12:00:01.898808+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1948,6 +1948,14 @@
     "https://techcrunch.com/2026/03/25/the-least-surprising-chapter-of-the-manus-story-is-whats-happening-right-now": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2170596427.jpg?resize=1200,799",
       "checkedAt": "2026-03-26T03:00:01.792678+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/901293/openai-adult-mode-erotic-chatbot-shelved-indefinitely": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/07/STK464_PORN_ADULT_CONTENT_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-03-26T12:00:01.898808+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/mistral-releases-a-new-open-source-model-for-speech-generation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200,800",
+      "checkedAt": "2026-03-26T12:00:01.898808+00:00"
     }
   }
 }
