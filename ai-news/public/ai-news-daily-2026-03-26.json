@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T00:00:01.310648+00:00",
+  "updatedAt": "2026-03-26T01:00:01.427623+00:00",
   "items": [
     {
       "title": "Yutao Xie, Nathaniel Thomas, Nicklas Hansen, Yang Fu, Li Erran Li, Xiaolong Wang",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-26T00:00:07.803014+00:00",
+      "published": "2026-03-26T01:00:11.274731+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-26T00:00:01.310648+00:00",
+      "lastSeen": "2026-03-26T01:00:01.427623+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Mercor competitor Deccan AI raises $25M, sources experts from India",
+      "url": "https://techcrunch.com/2026/03/25/deccan-ai-raises-25m-as-ai-training-push-relies-on-india-based-workforce",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Deccan AI concentrates its workforce in India to manage quality in a fast-growing but fragmented AI training market.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/deccan-ai-founder-rukesh-reddy.jpg?resize=1200%2C800",
+      "published": "2026-03-26T00:30:00+00:00",
+      "firstSeen": "2026-03-26T01:00:01.427623+00:00",
+      "lastSeen": "2026-03-26T01:00:01.427623+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.5252
     }
   ],
   "errors": []
