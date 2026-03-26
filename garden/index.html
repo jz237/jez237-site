@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Garden Calendar — Jez237</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+    .garden-hero {
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+    .garden-hero h1 { font-size: 2rem; margin: 0 0 6px; }
+    .garden-hero p { color: var(--muted); margin: 0; }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin: 24px 0 12px;
+    }
+    .month-nav button {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background .15s;
+    }
+    .month-nav button:hover { background: var(--panel-2); }
+    .month-nav h2 { margin: 0; font-size: 1.3rem; min-width: 220px; text-align: center; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 28px;
+    }
+    .day-header {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 6px 0;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .day-cell {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      min-height: 80px;
+      padding: 6px 7px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .day-cell:hover { border-color: var(--accent); background: var(--panel-2); }
+    .day-cell.today { border-color: #4f8cff; }
+    .day-cell.today .day-num { color: #4f8cff; font-weight: 700; }
+    .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+    .day-cell.empty:hover { background: transparent; border-color: transparent; }
+    .day-cell.has-event { border-color: #2a4a2a; }
+    .day-num { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .day-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+    .tag {
+      font-size: 10px;
+      border-radius: 4px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .tag-water   { background: #0d3a5c; color: #7dd3fc; }
+    .tag-fert    { background: #2a3d0e; color: #a3e635; }
+    .tag-prune   { background: #3d1a0e; color: #fb923c; }
+    .tag-plant   { background: #1a2a3d; color: #93c5fd; }
+    .tag-pest    { background: #3d0e2a; color: #f0abfc; }
+    .tag-task    { background: #1f2937; color: #d1d5db; }
+    .tag-harvest { background: #3d2a0e; color: #fcd34d; }
+
+    /* detail panel */
+    .detail-panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin-bottom: 32px;
+      display: none;
+    }
+    .detail-panel.visible { display: block; }
+    .detail-panel h3 { margin: 0 0 14px; font-size: 1.1rem; }
+    .detail-panel .close-btn {
+      float: right;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      margin-top: -2px;
+    }
+    .detail-panel .close-btn:hover { color: var(--text); }
+    .event-list { list-style: none; padding: 0; margin: 0; }
+    .event-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .event-list li:last-child { border-bottom: none; }
+    .event-icon { font-size: 18px; flex-shrink: 0; }
+
+    /* log section */
+    .log-section { margin-bottom: 40px; }
+    .log-section h2 { font-size: 1.1rem; margin-bottom: 12px; }
+    .log-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .log-card .log-date { color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+    .log-card .log-text { color: var(--text); }
+
+    /* legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .day-cell { min-height: 54px; padding: 4px 4px; }
+      .day-num { font-size: 11px; }
+      .tag { font-size: 9px; padding: 1px 3px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../index.html">Home</a>
+        <a href="../games/">Games</a>
+        <a href="../photos/">Photos</a>
+        <a href="../ai-news/">AI News</a>
+        <a href="../plex/">Plex</a>
+        <a href="../ops/">Ops Center</a>
+        <a href="../garden/">Garden</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="garden-hero">
+      <h1>🌱 Garden Calendar</h1>
+      <p>Zone 7a · Philadelphia, PA · ~20 plants</p>
+    </div>
+
+    <div class="legend">
+      <span class="tag tag-water">💧 Water</span>
+      <span class="tag tag-fert">🌿 Fertilize</span>
+      <span class="tag tag-prune">✂️ Prune</span>
+      <span class="tag tag-plant">🌱 Plant/Sow</span>
+      <span class="tag tag-pest">🐛 Pest/Disease</span>
+      <span class="tag tag-task">📋 Task</span>
+      <span class="tag tag-harvest">🍅 Harvest</span>
+    </div>
+
+    <div class="month-nav">
+      <button id="prev-btn">← Prev</button>
+      <h2 id="month-label"></h2>
+      <button id="next-btn">Next →</button>
+    </div>
+
+    <div class="calendar-grid" id="calendar-grid">
+      <div class="day-header">Sun</div>
+      <div class="day-header">Mon</div>
+      <div class="day-header">Tue</div>
+      <div class="day-header">Wed</div>
+      <div class="day-header">Thu</div>
+      <div class="day-header">Fri</div>
+      <div class="day-header">Sat</div>
+    </div>
+
+    <div class="detail-panel" id="detail-panel">
+      <button class="close-btn" id="close-detail">×</button>
+      <h3 id="detail-title"></h3>
+      <ul class="event-list" id="event-list"></ul>
+    </div>
+
+    <div class="log-section">
+      <h2>📝 Recent Applications Log</h2>
+      <div id="log-container"></div>
+    </div>
+  </main>
+
+  <script>
+    // ─── GARDEN DATA ────────────────────────────────────────────────────────
+
+    const ZONE = "7a";
+    const CITY = "Philadelphia, PA";
+
+    // Applications log — add entries here or update via garden_agent.py
+    const appLog = [
+      {
+        date: "2026-03-26",
+        text: "🌿 Crabgrass pre-emergent applied — Scotts Pendimethalin, 10.06 lb bag. Soil temp ~62°F. Rain next day to activate.",
+        type: "task"
+      }
+    ];
+
+    // Recurring calendar events by month/day (month is 1-based)
+    // Format: { month, day, icon, label, type, note }
+    // For date ranges, generate entries in the buildEvents() function below
+
+    function buildEvents() {
+      const events = {}; // key: "YYYY-MM-DD" → array of event objects
+
+      function add(year, month, day, icon, label, type, note = "") {
+        const key = `${year}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+        if (!events[key]) events[key] = [];
+        events[key].push({ icon, label, type, note });
+      }
+
+      for (let year = 2026; year <= 2027; year++) {
+
+        // ── FROST / SEASON DATES (Zone 7a Philadelphia) ──────────────────
+        // Last frost: ~Apr 15 · First fall frost: ~Oct 15
+
+        // ── MARCH ────────────────────────────────────────────────────────
+        add(year, 3, 1,  "🌿","Start tomato/pepper seeds indoors","plant","6–8 weeks before last frost (Apr 15)");
+        add(year, 3, 15, "✂️","Prune roses to outward-facing bud","prune","Before new growth fully opens");
+        add(year, 3, 15, "✂️","Cut back butterfly bush hard","prune","Dwarf Butterfly Bush — remove dead wood");
+        add(year, 3, 15, "✂️","Cut back crepe myrtle lightly if needed","prune","Shape only — avoid crepe murder");
+        add(year, 3, 20, "🌿","Apply pre-emergent crabgrass preventer","task","Soil temp 55°F+ — timing window opens");
+        add(year, 3, 21, "🌱","Sow cool-season crops outdoors","plant","Lettuce, spinach, kale if desired");
+        add(year, 3, 25, "🌿","Feed hostas as they emerge","fert","Balanced slow-release 10-10-10");
+        add(year, 3, 25, "🔍","Check rhododendron for lace bugs","pest","Look for stippled/bronzed leaves");
+
+        // ── APRIL ────────────────────────────────────────────────────────
+        add(year, 4, 1,  "🌸","Japanese maples leafing out — watch for late frost","task","Cover with frost cloth if <28°F forecast");
+        add(year, 4, 5,  "🌿","Feed hydrangeas with slow-release fertilizer","fert","Bobo + Climbing Hydrangea");
+        add(year, 4, 10, "🌿","Apply pre-emergent (2nd round if needed)","task","Reapply if first was before Mar 15");
+        add(year, 4, 10, "🌱","Start hardening off tomato/pepper transplants","plant","Move seedlings outdoors in shade 1–2 hrs/day");
+        add(year, 4, 10, "✂️","Prune dead/crossing canes on grapevine","prune","Before buds break fully");
+        add(year, 4, 12, "🌿","Feed loropetalum & barberry","fert","Acid-loving fertilizer for loropetalum");
+        add(year, 4, 15, "❄️","Average last frost date — Zone 7a","task","Watch forecast closely around this date");
+        add(year, 4, 15, "🌱","Direct sow beans, squash after frost","plant","After Apr 15 frost date clears");
+        add(year, 4, 20, "🌿","Feed heuchera with balanced fertilizer","fert","Coral bells are waking up");
+        add(year, 4, 20, "💧","Increase watering as temps rise","water","Check soil moisture daily for new growth");
+        add(year, 4, 25, "🌱","Plant tomatoes and peppers outdoors","plant","After last frost — Zone 7a safe zone");
+        add(year, 4, 28, "🔍","Inspect dwarf peach for peach leaf curl","pest","Treat early with copper if spotted");
+
+        // ── MAY ───────────────────────────────────────────────────────────
+        add(year, 5, 1,  "🌿","Feed Japanese maples with slow-release","fert","Seiryu + Rising Sun — low nitrogen");
+        add(year, 5, 1,  "🌿","Feed redbud with balanced fertilizer","fert","Once established, light feeding only");
+        add(year, 5, 5,  "🌱","Plant warm-season annuals","plant","Zone 7a fully safe after May 5");
+        add(year, 5, 10, "🌿","Feed sweetspire and ligustrum","fert","Pugster Sweetspire responds well to spring feeding");
+        add(year, 5, 15, "🔍","Spider mite check — all shrubs","pest","Especially barberry and ligustrum in heat");
+        add(year, 5, 21, "🌿","Pre-emergent reapplication window","task","~8 weeks after Mar 26 application — Pendimethalin");
+        add(year, 5, 25, "💧","Set watering schedule for summer","water","Deep water 1–2x week — avoid daily shallow");
+        add(year, 5, 28, "🌿","Feed tomatoes and peppers","fert","First feeding after transplant — balanced starter");
+
+        // ── JUNE ──────────────────────────────────────────────────────────
+        add(year, 6, 1,  "✂️","Deadhead rhododendron blooms","prune","Snap off spent flower clusters carefully");
+        add(year, 6, 5,  "🌿","Feed all hydrangeas","fert","Bobo + Climbing — balanced or bloom booster");
+        add(year, 6, 10, "🔍","Japanese beetle watch begins","pest","Peak: late June–July. Hand-pick or neem oil.");
+        add(year, 6, 15, "🌿","Feed tomatoes with high-K fertilizer","fert","Switch to low-N, high-K as fruit sets");
+        add(year, 6, 20, "💧","Deep watering critical in heat","water","1 inch/week minimum — mulch to retain");
+        add(year, 6, 25, "🔍","Check milkweed for aphids","pest","Orange milkweed often gets aphid colonies");
+
+        // ── JULY ──────────────────────────────────────────────────────────
+        add(year, 7, 1,  "🐛","Japanese beetle peak","pest","Hand-pick AM; avoid traps near garden");
+        add(year, 7, 4,  "🍅","Tomatoes should be producing","harvest","Harvest when fully colored — don't let sit");
+        add(year, 7, 10, "🔍","Check for powdery mildew on hydrangeas","pest","Treat with neem or baking soda spray");
+        add(year, 7, 15, "🌿","Feed hostas mid-season","fert","Balanced fertilizer — last summer feeding");
+        add(year, 7, 20, "💧","Peak heat watering — check daily","water","Containers may need twice daily in 90°F+");
+        add(year, 7, 25, "✂️","Prune spent Bobo hydrangea blooms","prune","Deadhead to encourage rebloom");
+        add(year, 7, 28, "🍑","Check dwarf peach for ripeness","harvest","Zone 7a peaches ready July–August");
+
+        // ── AUGUST ───────────────────────────────────────────────────────
+        add(year, 8, 1,  "🌿","Last nitrogen feeding for trees/shrubs","fert","No N after Aug 1 — stop pushing growth");
+        add(year, 8, 5,  "🍅","Continue tomato/pepper harvest","harvest","Keep picking to keep plants productive");
+        add(year, 8, 15, "🌿","Feed fall-blooming plants","fert","Sedum, butterfly bush — last boost");
+        add(year, 8, 20, "🌱","Sow fall cool-season crops","plant","Kale, spinach, lettuce — 8 weeks before frost");
+        add(year, 8, 25, "🔍","Scale insect inspection — hollies","pest","Check Japanese holly for armored scale");
+
+        // ── SEPTEMBER ────────────────────────────────────────────────────
+        add(year, 9, 1,  "🌿","Apply fall lawn fertilizer","task","High K, low N — winterize formula");
+        add(year, 9, 5,  "🍇","Grapevine harvest check","harvest","Taste test — harvest when sweet");
+        add(year, 9, 10, "✂️","Cut back hostas as they yellow","prune","Remove spent foliage after frost");
+        add(year, 9, 15, "🌱","Plant spring bulbs — ideal window starts","plant","Tulips, daffodils, alliums for Zone 7a");
+        add(year, 9, 20, "🌱","Plant fall shrubs and perennials","plant","Excellent planting time — soil still warm");
+        add(year, 9, 25, "🌿","Apply pre-emergent for winter weeds","task","Crabgrass control — before soil drops to 55°F");
+
+        // ── OCTOBER ──────────────────────────────────────────────────────
+        add(year, 10, 1, "🌱","Continue spring bulb planting","plant","Aim to finish by end of October");
+        add(year, 10, 10,"✂️","Prune perennials as they die back","prune","Sedum, milkweed, heuchera — cut to base");
+        add(year, 10, 15,"❄️","Average first fall frost — Zone 7a","task","Protect tender plants; bring in containers");
+        add(year, 10, 15,"🌱","Mulch all beds before frost","task","3-inch layer around trees, shrubs, perennials");
+        add(year, 10, 20,"✂️","Cut back butterfly bush to 12 inches","prune","After frost kills top growth");
+        add(year, 10, 25,"✂️","Prune climbing hydrangea lightly","prune","Remove dead wood; shape only");
+
+        // ── NOVEMBER ─────────────────────────────────────────────────────
+        add(year, 11, 1, "🌿","Apply anti-desiccant to broadleaf evergreens","task","Rhododendron, holly, loropetalum — Wilt-Pruf");
+        add(year, 11, 5, "🌱","Finish spring bulb planting","plant","Last chance before ground freezes");
+        add(year, 11, 10,"✂️","Prune roses for winter","prune","Reduce to 18–24 inches; mound mulch over crown");
+        add(year, 11, 15,"🌿","Rake leaves from around Japanese maples","task","Prevent fungal issues at root crown");
+        add(year, 11, 20,"🌿","Mulch Japanese maple roots deeply","task","3–4 inch mulch ring keeps roots insulated");
+
+        // ── DECEMBER / JANUARY ───────────────────────────────────────────
+        add(year, 12, 1, "📋","Review garden & plan for next year","task","Update plant list, order seeds, plan new beds");
+        add(year, 12, 15,"🌿","Check anti-desiccant on evergreens","task","Reapply if we got a lot of wind/sun");
+        add(year, 1,  15,"🌱","Order tomato/pepper seeds","plant","Start shopping now for best selection");
+        add(year, 1,  20,"📋","Plan spring fertilizer schedule","task","Map out pre-emergent timing for Mar/Apr");
+
+        // ── FEBRUARY ─────────────────────────────────────────────────────
+        add(year, 2, 15, "✂️","Prune dormant fruit trees","prune","Dwarf peach — before buds swell");
+        add(year, 2, 20, "🌱","Start tomato/pepper seeds indoors","plant","8 weeks before Apr 15 last frost");
+        add(year, 2, 25, "🌿","Apply dormant oil spray","pest","Scale, mites on fruit trees + woody shrubs");
+      }
+
+      // ── SPECIFIC 2026 LOG-BASED EVENTS ──────────────────────────────
+      // Pre-emergent applied 2026-03-26 → reapplication due ~2026-05-21
+      events["2026-05-21"] = events["2026-05-21"] || [];
+      events["2026-05-21"].push({ icon: "🌿", label: "Pre-emergent reapplication due", type: "task", note: "~8 weeks after 2026-03-26 Pendimethalin application" });
+
+      return events;
+    }
+
+    // ─── CALENDAR RENDER ────────────────────────────────────────────────────
+
+    const allEvents = buildEvents();
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    const today = new Date();
+    const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const grid = document.getElementById("calendar-grid");
+    const monthLabel = document.getElementById("month-label");
+    const detailPanel = document.getElementById("detail-panel");
+    const detailTitle = document.getElementById("detail-title");
+    const eventList  = document.getElementById("event-list");
+
+    function renderCalendar(year, month) {
+      // Remove day cells (keep headers)
+      const headers = grid.querySelectorAll(".day-header");
+      grid.innerHTML = "";
+      headers.forEach(h => grid.appendChild(h.cloneNode(true)));
+
+      monthLabel.textContent = `${monthNames[month - 1]} ${year}`;
+
+      const firstDay = new Date(year, month - 1, 1).getDay();
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      // Empty leading cells
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day-cell empty";
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = `${year}-${String(month).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+        const dayEvents = allEvents[key] || [];
+        const cell = document.createElement("div");
+        cell.className = "day-cell" + (dayEvents.length ? " has-event" : "") + (key === todayKey ? " today" : "");
+
+        const numEl = document.createElement("div");
+        numEl.className = "day-num";
+        numEl.textContent = d;
+        cell.appendChild(numEl);
+
+        if (dayEvents.length) {
+          const tags = document.createElement("div");
+          tags.className = "day-tags";
+          // Show up to 3 tags
+          dayEvents.slice(0, 3).forEach(ev => {
+            const tag = document.createElement("span");
+            tag.className = `tag tag-${ev.type === "fert" ? "fert" : ev.type === "water" ? "water" : ev.type === "prune" ? "prune" : ev.type === "plant" ? "plant" : ev.type === "pest" ? "pest" : ev.type === "harvest" ? "harvest" : "task"}`;
+            tag.textContent = ev.icon;
+            tags.appendChild(tag);
+          });
+          if (dayEvents.length > 3) {
+            const more = document.createElement("span");
+            more.className = "tag tag-task";
+            more.textContent = `+${dayEvents.length - 3}`;
+            tags.appendChild(more);
+          }
+          cell.appendChild(tags);
+
+          cell.addEventListener("click", () => showDetail(key, dayEvents));
+        }
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function showDetail(key, events) {
+      const [y, m, d] = key.split("-");
+      detailTitle.textContent = `${monthNames[parseInt(m)-1]} ${parseInt(d)}, ${y}`;
+      eventList.innerHTML = "";
+      events.forEach(ev => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="event-icon">${ev.icon}</span><div><strong>${ev.label}</strong>${ev.note ? `<br><span style="color:var(--muted);font-size:12px">${ev.note}</span>` : ""}</div>`;
+        eventList.appendChild(li);
+      });
+      detailPanel.classList.add("visible");
+      detailPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    document.getElementById("close-detail").addEventListener("click", () => {
+      detailPanel.classList.remove("visible");
+    });
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+      renderCalendar(currentYear, currentMonth);
+      detailPanel.classList.remove("visible");
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+      renderCalendar(currentYear, currentMonth);
+      detailPanel.classList.remove("visible");
+    });
+
+    // ─── LOG RENDER ─────────────────────────────────────────────────────────
+    function renderLog() {
+      const container = document.getElementById("log-container");
+      const sorted = [...appLog].sort((a,b) => b.date.localeCompare(a.date));
+      sorted.forEach(entry => {
+        const card = document.createElement("div");
+        card.className = "log-card";
+        card.innerHTML = `<div class="log-date">${entry.date}</div><div class="log-text">${entry.text}</div>`;
+        container.appendChild(card);
+      });
+    }
+
+    renderCalendar(currentYear, currentMonth);
+    renderLog();
+  </script>
+</body>
+</html>
