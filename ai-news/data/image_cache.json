@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T14:00:01.170512+00:00",
+  "updatedAt": "2026-03-26T15:00:01.545153+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1976,6 +1976,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/899108/webtoon-canvas-ai-translation-localization-yongsoo-kim": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-23-at-4.06.41%E2%80%AFPM.jpg?quality=90&amp;strip=all&amp;crop=14.72413231713%2C0%2C69.014862501971%2C100&amp;w=1200",
       "checkedAt": "2026-03-26T14:00:01.170512+00:00"
+    },
+    "https://www.theverge.com/policy/901404/senators-warren-hawley-eia-letter-data-centers": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/hero-001-10-gallery-data-center-drone-cropped-copy.jpeg?quality=90&amp;strip=all&amp;crop=0%2C3.4383212962771%2C100%2C93.123357407446&amp;w=1200",
+      "checkedAt": "2026-03-26T15:00:01.545153+00:00"
     }
   }
 }
