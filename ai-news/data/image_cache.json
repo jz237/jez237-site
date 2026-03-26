@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T13:00:01.716075+00:00",
+  "updatedAt": "2026-03-26T13:55:45.116066+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1964,6 +1964,18 @@
     "https://www.theverge.com/ai-artificial-intelligence/901293/openai-adult-mode-erotic-chatbot-shelved-indefinitely": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/07/STK464_PORN_ADULT_CONTENT_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
       "checkedAt": "2026-03-26T13:00:01.716075+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/conntour-raises-7m-from-general-catalyst-yc-to-build-an-ai-search-engine-for-security-video-systems": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Conntour-team.jpg?resize=1200,800",
+      "checkedAt": "2026-03-26T13:55:45.116066+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/cohere-launches-an-open-source-voice-model-specifically-for-transcription": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/260325_TranscribeLaunch_Hero.jpeg?resize=1200,600",
+      "checkedAt": "2026-03-26T13:55:45.116066+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/899108/webtoon-canvas-ai-translation-localization-yongsoo-kim": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-23-at-4.06.41%E2%80%AFPM.jpg?quality=90&amp;strip=all&amp;crop=14.72413231713%2C0%2C69.014862501971%2C100&amp;w=1200",
+      "checkedAt": "2026-03-26T13:55:45.116066+00:00"
     }
   }
 }
