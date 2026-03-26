@@ -935,6 +935,7 @@
           <div class="info-value" id="load">--</div>
         </div>
       </div>
+      <div id="system-extra"></div>
     </div>
 
     <!-- Agents Panel -->
@@ -1147,13 +1148,37 @@
         updateGauge('ram-ring', 'ram-value', (data.ram && data.ram.used_percent) || 0, 'var(--success)');
         updateGauge('disk-ring', 'disk-value', (data.disk && data.disk.used_percent) || 0, 'var(--warning)');
 
-        document.getElementById('cpu-cores').textContent = data.cpu_percent != null ? `${data.cpu_percent.toFixed(1)}%` : '-- cores';
+        document.getElementById('cpu-cores').textContent = data.cpu_threads ? `${data.cpu_threads} threads` : '--';
         document.getElementById('ram-total').textContent = data.ram ? `${data.ram.used_gb.toFixed(1)} / ${data.ram.total_gb.toFixed(1)} GB` : '-- GB';
-        document.getElementById('disk-total').textContent = data.disk ? `${data.disk.used_gb.toFixed(0)} / ${data.disk.total_gb.toFixed(0)} GB` : '-- GB';
+        document.getElementById('disk-total').textContent = data.disk ? `${data.disk.used_gb.toFixed(0)} / ${data.disk.total_gb.toFixed(0)} GB (${data.disk.free_gb.toFixed(0)} GB free)` : '-- GB';
         document.getElementById('hostname').textContent = data.hostname || '--';
         const ud = data.uptime_seconds;
         document.getElementById('uptime').textContent = ud ? `${Math.floor(ud/86400)}d ${Math.floor((ud%86400)/3600)}h` : '--';
-        document.getElementById('load').textContent = data.load_avg ? data.load_avg.join(', ') : '--';
+        document.getElementById('load').textContent = data.load_avg ? data.load_avg.join(' / ') : '--';
+
+        // Extra info cards — inject after the existing stat grid
+        const extraEl = document.getElementById('system-extra');
+        if (extraEl) {
+          const t = data.temps || {};
+          const b = data.backup || {};
+          const backupText = b.status === 'success' ? `✅ ${b.age || 'OK'}` : b.status === 'skipped' ? '⚠️ Drive not found' : b.status === 'failed' ? `❌ ${b.reason || 'Failed'}` : '❓ Unknown';
+          const backupDevice = data.backup_device || '--';
+          extraEl.innerHTML = `
+            <div class="glass-card" style="padding:16px 20px;margin-top:12px;">
+              <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">Hardware</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:13px;">
+                <div><div style="color:var(--muted);font-size:11px;">CPU Model</div><div style="margin-top:3px;font-size:11px;opacity:.85">${(data.cpu_model||'--').replace(/\(R\)/g,'').replace(/\(TM\)/g,'').trim()}</div></div>
+                <div><div style="color:var(--muted);font-size:11px;">OS</div><div style="margin-top:3px;font-size:11px;opacity:.85">${data.os||'--'}</div></div>
+                <div><div style="color:var(--muted);font-size:11px;">Load Avg</div><div style="margin-top:3px;">${data.load_avg ? data.load_avg.join(' / ') : '--'}</div></div>
+                ${t.cpu != null ? `<div><div style="color:var(--muted);font-size:11px;">🔥 CPU Temp</div><div style="margin-top:3px;color:${t.cpu>80?'var(--error)':t.cpu>65?'var(--warning)':'var(--success)'}">${t.cpu}°C</div></div>` : ''}
+                ${t.board != null ? `<div><div style="color:var(--muted);font-size:11px;">🌡️ Board Temp</div><div style="margin-top:3px;">${t.board}°C</div></div>` : ''}
+                ${t.wifi != null ? `<div><div style="color:var(--muted);font-size:11px;">📶 Wi-Fi Temp</div><div style="margin-top:3px;">${t.wifi}°C</div></div>` : ''}
+                <div><div style="color:var(--muted);font-size:11px;">💾 Last Backup</div><div style="margin-top:3px;">${backupText}</div></div>
+                <div><div style="color:var(--muted);font-size:11px;">🔌 Backup Drive</div><div style="margin-top:3px;">${backupDevice}</div></div>
+              </div>
+            </div>
+          `;
+        }
 
         updateTimestamp('system-updated');
       }
