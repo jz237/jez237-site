@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T11:59:21.630008+00:00",
+  "updatedAt": "2026-03-26T13:00:01.716075+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1952,6 +1952,18 @@
     "https://techcrunch.com/2026/03/26/mistral-releases-a-new-open-source-model-for-speech-generation": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200,800",
       "checkedAt": "2026-03-26T11:59:21.630008+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/901315/eu-ai-act-delays-ban-nudify-apps": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK450_EU_E.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-03-26T13:00:01.716075+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/a-pound-of-flesh-from-data-centers-one-senators-answer-to-ai-job-losses": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2265459578.jpg?w=1024",
+      "checkedAt": "2026-03-26T13:00:01.716075+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/901293/openai-adult-mode-erotic-chatbot-shelved-indefinitely": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/07/STK464_PORN_ADULT_CONTENT_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-03-26T13:00:01.716075+00:00"
     }
   }
 }
