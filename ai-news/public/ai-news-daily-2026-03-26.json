@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T09:00:01.136120+00:00",
+  "updatedAt": "2026-03-26T09:11:46.046257+00:00",
   "items": [
     {
       "title": "Visuospatial Perspective Taking in Multimodal Language Models",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-26T09:00:05.238618+00:00",
+      "published": "2026-03-26T09:11:53.212194+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
+      "lastSeen": "2026-03-26T09:11:46.046257+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-12.33.14-AM-1-150x150.png",
       "published": "2026-03-26T07:33:55+00:00",
       "firstSeen": "2026-03-26T07:34:48.591682+00:00",
-      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
+      "lastSeen": "2026-03-26T09:11:46.046257+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.577
+      "score": 4.5713
     },
     {
       "title": "The least surprising chapter of the Manus story is what’s happening right now",
@@ -45,10 +45,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2170596427.jpg?resize=1200%2C799",
       "published": "2026-03-26T02:46:48+00:00",
       "firstSeen": "2026-03-26T03:00:01.792678+00:00",
-      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
+      "lastSeen": "2026-03-26T09:11:46.046257+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2154
+      "score": 3.2104
+    },
+    {
+      "title": "Arkadia Space raises €14.5M for green propulsion system",
+      "url": "https://thenextweb.com/news/arkadia-space-14-5m-eic-hydrogen-peroxide",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Spanish propulsion startup, based at Castellón Airport, is the first Spanish space company selected for the European Innovation Council Accelerator. Its DARK system became the first hydrogen peroxide propulsion system flown in orbit in Europe, launching on a SpaceX mission in March 2025. Most of the satellites currently operating in orbit are kept in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Arkadia-Space.png",
+      "published": "2026-03-26T08:51:44+00:00",
+      "firstSeen": "2026-03-26T09:11:46.046257+00:00",
+      "lastSeen": "2026-03-26T09:11:46.046257+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8398
     },
     {
       "title": "Mercor competitor Deccan AI raises $25M, sources experts from India",
@@ -61,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/deccan-ai-founder-rukesh-reddy.jpg?resize=1200%2C800",
       "published": "2026-03-26T00:30:00+00:00",
       "firstSeen": "2026-03-26T01:00:01.427623+00:00",
-      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
+      "lastSeen": "2026-03-26T09:11:46.046257+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.7413
+      "score": -0.7461
     },
     {
       "title": "EU-Startups Summit returns to Malta in May with 2,500 attendees, and 80+ speakers",
@@ -77,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-Startups-Summit-returns-to-Malta-in-May.png",
       "published": "2026-03-26T07:54:15+00:00",
       "firstSeen": "2026-03-26T09:00:01.136120+00:00",
-      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
+      "lastSeen": "2026-03-26T09:11:46.046257+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.983
+      "score": -0.9888
     }
   ],
   "errors": []
