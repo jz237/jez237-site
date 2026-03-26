@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T15:00:01.545153+00:00",
+  "updatedAt": "2026-03-26T15:37:41.999050+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1980,6 +1980,22 @@
     "https://www.theverge.com/policy/901404/senators-warren-hawley-eia-letter-data-centers": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/hero-001-10-gallery-data-center-drone-cropped-copy.jpeg?quality=90&amp;strip=all&amp;crop=0%2C3.4383212962771%2C100%2C93.123357407446&amp;w=1200",
       "checkedAt": "2026-03-26T15:00:01.545153+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/bytedances-new-ai-video-generation-model-dreamina-seedance-2-0-comes-to-capcut": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/imgi_30_7d51e3a4c1434d7f9b2708a619f3783ftplv-2zwwjm3azk-image.webp?resize=1200,853",
+      "checkedAt": "2026-03-26T15:37:41.999050+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-agents-enterprise-security-trust-gap": {
+      "image": "",
+      "checkedAt": "2026-03-26T15:37:41.999050+00:00"
+    },
+    "https://www.theverge.com/tech/901461/wikipedia-ai-generated-article-ban": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STK037_WIKIPEDIA_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.728364100735%2C100%2C78.54327179853&amp;w=1200",
+      "checkedAt": "2026-03-26T15:37:41.999050+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-data-centers-atmospheric-water-harvesting": {
+      "image": "",
+      "checkedAt": "2026-03-26T15:37:41.999050+00:00"
     }
   }
 }
