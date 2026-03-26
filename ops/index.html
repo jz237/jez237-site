@@ -1014,18 +1014,18 @@
     (function() {
       'use strict';
 
-      const API_BASE = '/api/ops';
+      const API_BASE = 'http://localhost:7823/api/ops';
       const REFRESH_SYSTEM = 10000;  // 10s
       const REFRESH_OTHER = 60000;   // 60s
 
       // Agent emoji map
       const AGENT_EMOJIS = {
-        'Claw': '🦀',
-        'GameMaker': '🎮',
-        'NewsBot': '📰',
-        'Sentinel': '🛡️',
-        'StockBot': '📈',
-        'Vinyl': '🎵'
+        'claw': '🤖',
+        'gamemaster': '🎮',
+        'newsbot': '📰',
+        'sentinel': '🛡️',
+        'stockbot': '📊',
+        'vinyl': '🪟'
       };
 
       // Stock tickers to display
@@ -1131,16 +1131,17 @@
           return;
         }
 
-        updateGauge('cpu-ring', 'cpu-value', data.cpu || 0, 'var(--accent)');
-        updateGauge('ram-ring', 'ram-value', data.ram || 0, 'var(--success)');
-        updateGauge('disk-ring', 'disk-value', data.disk || 0, 'var(--warning)');
+        updateGauge('cpu-ring', 'cpu-value', data.cpu_percent || 0, 'var(--accent)');
+        updateGauge('ram-ring', 'ram-value', (data.ram && data.ram.used_percent) || 0, 'var(--success)');
+        updateGauge('disk-ring', 'disk-value', (data.disk && data.disk.used_percent) || 0, 'var(--warning)');
 
-        document.getElementById('cpu-cores').textContent = data.cores ? `${data.cores} cores` : '-- cores';
-        document.getElementById('ram-total').textContent = data.ramTotal ? `${data.ramTotal} GB` : '-- GB';
-        document.getElementById('disk-total').textContent = data.diskTotal ? `${data.diskTotal} GB` : '-- GB';
+        document.getElementById('cpu-cores').textContent = data.cpu_percent != null ? `${data.cpu_percent.toFixed(1)}%` : '-- cores';
+        document.getElementById('ram-total').textContent = data.ram ? `${data.ram.used_gb.toFixed(1)} / ${data.ram.total_gb.toFixed(1)} GB` : '-- GB';
+        document.getElementById('disk-total').textContent = data.disk ? `${data.disk.used_gb.toFixed(0)} / ${data.disk.total_gb.toFixed(0)} GB` : '-- GB';
         document.getElementById('hostname').textContent = data.hostname || '--';
-        document.getElementById('uptime').textContent = data.uptime || '--';
-        document.getElementById('load').textContent = data.load || '--';
+        const ud = data.uptime_seconds;
+        document.getElementById('uptime').textContent = ud ? `${Math.floor(ud/86400)}d ${Math.floor((ud%86400)/3600)}h` : '--';
+        document.getElementById('load').textContent = data.load_avg ? data.load_avg.join(', ') : '--';
 
         updateTimestamp('system-updated');
       }
@@ -1150,13 +1151,14 @@
         const data = await fetchData('/agents');
         const grid = document.getElementById('agents-grid');
 
-        if (!data || !Array.isArray(data) || data.length === 0) {
+        const agents = data.agents || (Array.isArray(data) ? data : null);
+        if (!agents || agents.length === 0) {
           showUnavailable('agents-grid', 'No agents data available');
           updateTimestamp('agents-updated');
           return;
         }
 
-        grid.innerHTML = data.map(agent => {
+        grid.innerHTML = agents.map(agent => {
           const emoji = AGENT_EMOJIS[agent.name] || '🤖';
           const statusClass = agent.status === 'online' ? 'online' :
                               agent.status === 'offline' ? 'offline' : 'unknown';
@@ -1172,7 +1174,7 @@
                   </span>
                 </div>
                 <div class="agent-meta">
-                  <span>&#128337; ${formatDate(agent.lastActivity)}</span>
+                  <span>&#128337; ${formatDate(agent.last_seen)}</span>
                   <span>&#129504; ${agent.model || 'Unknown model'}</span>
                 </div>
               </div>
@@ -1290,6 +1292,20 @@
       }
 
       // ============= Plex =============
+      function getLibraryEmoji(type) {
+        return { movie: '🎬', show: '📺', artist: '🎵' }[type] || '📁';
+      }
+
+      function getLoadLevelStyle(level) {
+        const styles = {
+          idle: { color: 'var(--success)', bg: 'rgba(34, 197, 94, 0.15)', border: 'rgba(34, 197, 94, 0.4)' },
+          normal: { color: 'var(--success)', bg: 'rgba(34, 197, 94, 0.15)', border: 'rgba(34, 197, 94, 0.4)' },
+          moderate: { color: 'var(--warning)', bg: 'rgba(245, 158, 11, 0.15)', border: 'rgba(245, 158, 11, 0.4)' },
+          high: { color: 'var(--error)', bg: 'rgba(239, 68, 68, 0.15)', border: 'rgba(239, 68, 68, 0.4)' },
+        };
+        return styles[level] || styles.normal;
+      }
+
       async function loadPlex() {
         const data = await fetchData('/plex');
         const grid = document.getElementById('plex-grid');
@@ -1302,38 +1318,179 @@
 
         let html = '';
 
-        // Now Playing
-        if (data.nowPlaying) {
-          const np = data.nowPlaying;
-          html += `
-            <div class="glass-card plex-card plex-now-playing">
-              <div class="plex-thumb">
-                ${np.thumb ? `<img src="${np.thumb}" alt="">` : '&#127916;'}
+        // 1. Server Status Card
+        const server = data.server || {};
+        const storage = data.storage || {};
+        const libs = data.libraries || [];
+        const totalItems = libs.reduce((sum, l) => sum + (parseInt(l.count) || 0), 0);
+        const onlineStyle = server.online
+          ? 'background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.4);'
+          : 'background: rgba(239, 68, 68, 0.2); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.4);';
+        html += `
+          <div class="glass-card" style="grid-column: span 2;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <span style="font-size: 24px;">🖥️</span>
+              <span style="font-size: 18px; font-weight: 600;">Server Status</span>
+              <span style="padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; ${onlineStyle}">${server.online ? '● ONLINE' : '● OFFLINE'}</span>
+              ${server.plexpass ? '<span style="padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: rgba(229, 160, 13, 0.2); color: #e5a00d; border: 1px solid rgba(229, 160, 13, 0.4);">✓ PLEX PASS</span>' : ''}
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; color: var(--text-dim); font-size: 13px;">
+              <div><span style="color: var(--text);">📦 Version</span><br>${server.version || '?'}</div>
+              <div><span style="color: var(--text);">🖥️ Platform</span><br>${server.platform || '?'}</div>
+              <div><span style="color: var(--text);">💾 Storage</span><br>${storage.total || '?'}</div>
+              <div><span style="color: var(--text);">📚 Items</span><br>${totalItems.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+
+        // 2. Active Streams Card
+        const activity = data.activity || {};
+        const nowPlaying = data.now_playing || [];
+        const loadStyle = getLoadLevelStyle(activity.load_level || 'idle');
+        const loadLabel = { idle: 'IDLE', normal: 'NORMAL', moderate: 'MODERATE LOAD', high: 'HIGH LOAD' }[activity.load_level] || 'UNKNOWN';
+        html += `
+          <div class="glass-card" style="grid-column: span 2;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <span style="font-size: 24px;">📺</span>
+              <span style="font-size: 18px; font-weight: 600;">Active Streams</span>
+              <span style="padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: ${loadStyle.bg}; color: ${loadStyle.color}; border: 1px solid ${loadStyle.border};">● ${loadLabel}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; color: var(--text-dim); font-size: 13px; margin-bottom: 12px;">
+              <div><span style="color: var(--text);">▶ Streams</span><br>${activity.stream_count || 0}</div>
+              <div><span style="color: var(--text);">🧪 Transcodes</span><br>${activity.transcode_count || 0}</div>
+              <div><span style="color: var(--text);">🏠 LAN</span><br>${(activity.lan_bandwidth || 0).toLocaleString()} kbps</div>
+              <div><span style="color: var(--text);">🌐 WAN</span><br>${(activity.wan_bandwidth || 0).toLocaleString()} kbps</div>
+            </div>
+            ${nowPlaying.length > 0 ? `
+              <div style="border-top: 1px solid var(--border); padding-top: 12px;">
+                ${nowPlaying.map(np => `
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0;">
+                    <span style="font-size: 20px;">${np.media_type === 'movie' ? '🎬' : '📺'}</span>
+                    <div style="flex: 1; min-width: 0;">
+                      <div style="font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${np.title || 'Unknown'}</div>
+                      <div style="font-size: 12px; color: var(--text-dim);">▶ ${np.user || 'Someone'} · ${np.state || 'playing'}</div>
+                    </div>
+                    <div style="width: 80px;">
+                      <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                        <div style="height: 100%; width: ${np.progress_percent || 0}%; background: var(--success); border-radius: 3px;"></div>
+                      </div>
+                      <div style="font-size: 10px; color: var(--text-dim); text-align: center; margin-top: 2px;">${np.progress_percent || 0}%</div>
+                    </div>
+                  </div>
+                `).join('')}
               </div>
-              <div class="plex-info">
-                <div class="plex-title">${np.title || 'Unknown'}</div>
-                <div class="plex-type">${np.type || 'Media'}</div>
-                <div class="plex-label">&#9654; Now Playing</div>
+            ` : '<div style="color: var(--text-dim); font-size: 13px;">No active streams</div>'}
+          </div>
+        `;
+
+        // 3. Recently Added Card
+        const recentlyAdded = data.recently_added || [];
+        if (recentlyAdded.length > 0) {
+          // Group by library
+          const groups = {};
+          recentlyAdded.forEach(item => {
+            const lib = item.library_name || 'Other';
+            if (!groups[lib]) groups[lib] = [];
+            groups[lib].push(item);
+          });
+
+          let recentHtml = '';
+          for (const [libName, items] of Object.entries(groups)) {
+            const libEmoji = libName.toLowerCase().includes('movie') || libName.toLowerCase().includes('4k') ? '🎬' :
+                            libName.toLowerCase().includes('tv') || libName.toLowerCase().includes('series') ? '📺' :
+                            libName.toLowerCase().includes('music') ? '🎵' : '📁';
+            recentHtml += `<div style="margin-bottom: 12px;">
+              <div style="font-weight: 600; margin-bottom: 6px;">${libEmoji} ${libName}</div>
+              ${items.map(item => `
+                <div style="padding: 4px 0 4px 20px; font-size: 13px; color: var(--text-dim);">
+                  ${item.title}${item.year ? ` (${item.year})` : ''}${item.added_at ? ` · ${item.added_at}` : ''}
+                </div>
+              `).join('')}
+            </div>`;
+          }
+
+          html += `
+            <div class="glass-card">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 24px;">🆕</span>
+                <span style="font-size: 18px; font-weight: 600;">Recently Added</span>
+              </div>
+              ${recentHtml}
+            </div>
+          `;
+        }
+
+        // 4. Top 30 Days Card
+        const topMovies = data.top_movies || [];
+        const topShows = data.top_shows || [];
+        if (topMovies.length > 0 || topShows.length > 0) {
+          html += `
+            <div class="glass-card">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 24px;">🏆</span>
+                <span style="font-size: 18px; font-weight: 600;">Top 30 Days</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                  <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-dim);">🎬 Top Movies</div>
+                  ${topMovies.length > 0 ? topMovies.map((m, i) => `
+                    <div style="padding: 4px 0; font-size: 13px;">${i+1}. ${m.title} <span style="color: var(--text-dim);">(${m.total_plays}▶)</span></div>
+                  `).join('') : '<div style="color: var(--muted); font-size: 13px;">No data</div>'}
+                </div>
+                <div>
+                  <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-dim);">📺 Top Shows</div>
+                  ${topShows.length > 0 ? topShows.map((s, i) => `
+                    <div style="padding: 4px 0; font-size: 13px;">${i+1}. ${s.title} <span style="color: var(--text-dim);">(${s.total_plays}▶)</span></div>
+                  `).join('') : '<div style="color: var(--muted); font-size: 13px;">No data</div>'}
+                </div>
               </div>
             </div>
           `;
         }
 
-        // Recently Added
-        if (data.recentlyAdded && Array.isArray(data.recentlyAdded)) {
-          data.recentlyAdded.slice(0, 5).forEach(item => {
-            html += `
-              <div class="glass-card plex-card">
-                <div class="plex-thumb">
-                  ${item.thumb ? `<img src="${item.thumb}" alt="">` : '&#127902;'}
-                </div>
-                <div class="plex-info">
-                  <div class="plex-title">${item.title || 'Unknown'}</div>
-                  <div class="plex-type">${item.type || 'Media'}</div>
-                </div>
+        // 5. Libraries Card
+        if (libs.length > 0) {
+          html += `
+            <div class="glass-card">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 24px;">📚</span>
+                <span style="font-size: 18px; font-weight: 600;">Libraries</span>
               </div>
-            `;
-          });
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px;">
+                ${libs.map(lib => `
+                  <div style="padding: 12px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px;">
+                    <div style="font-size: 20px; margin-bottom: 4px;">${getLibraryEmoji(lib.section_type)}</div>
+                    <div style="font-weight: 600;">${lib.name}</div>
+                    <div style="font-size: 13px; color: var(--text-dim);">${lib.count?.toLocaleString() || 0} items</div>
+                    ${lib.detail ? `<div style="font-size: 11px; color: var(--muted);">${lib.detail}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        // 6. Storage Card
+        const storageItems = storage.items || [];
+        if (storageItems.length > 0) {
+          html += `
+            <div class="glass-card">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 24px;">💾</span>
+                <span style="font-size: 18px; font-weight: 600;">Storage</span>
+                <span style="margin-left: auto; font-size: 14px; color: var(--text-dim);">Total: ${storage.total || '?'}</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
+                ${storageItems.map(s => `
+                  <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                    <span>${getLibraryEmoji(s.type)}</span>
+                    <span style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${s.name}</span>
+                    <span style="color: var(--text-dim);">${s.size_str}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
         }
 
         if (!html) {
