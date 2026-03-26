@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T22:49:10.449801+00:00",
+  "updatedAt": "2026-03-26T23:46:16.237810+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2040,6 +2040,14 @@
     "https://www.theverge.com/ai-artificial-intelligence/902085/google-gemini-import-memory-chat-history": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_B_474198.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-26T22:00:01.675000+00:00"
+    },
+    "https://www.theverge.com/policy/902140/david-sacks-out-ai-crypto-czar": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STKP213_DAVID_SACKS_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-26T23:46:16.237810+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/26/a-coding-implementation-to-run-qwen3-5-reasoning-models-distilled-with-claude-style-thinking-using-gguf-and-4-bit-quantization": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-1-1.png",
+      "checkedAt": "2026-03-26T23:46:16.237810+00:00"
     }
   }
 }
