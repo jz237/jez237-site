@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T18:00:01.922461+00:00",
+  "updatedAt": "2026-03-26T19:00:01.578541+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2004,6 +2004,18 @@
     "https://www.techrepublic.com/article/news-meta-layoffs-lawsuits-ai-spending": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-03-27T001306.494.png",
       "checkedAt": "2026-03-26T17:00:01.590259+00:00"
+    },
+    "https://www.theverge.com/tech/901816/google-search-live-ai-assistant-expansion": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Search-Live-Blog-Header.png?quality=90&amp;strip=all&amp;crop=0%2C3.579433208423%2C100%2C92.841133583154&amp;w=1200",
+      "checkedAt": "2026-03-26T19:00:01.578541+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/openai-abandons-yet-another-side-quest-chatgpts-erotic-mode": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2224158119.jpg?resize=1200,837",
+      "checkedAt": "2026-03-26T19:00:01.578541+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/data-centers-get-ready-the-senate-wants-to-see-your-power-bills": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/08/GettyImages-950173010.jpg?resize=1200,861",
+      "checkedAt": "2026-03-26T19:00:01.578541+00:00"
     }
   }
 }
