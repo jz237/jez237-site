@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T07:00:01.903124+00:00",
+  "updatedAt": "2026-03-26T07:34:48.591682+00:00",
   "items": [
     {
       "title": "Visuospatial Perspective Taking in Multimodal Language Models",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-26T07:00:08.348973+00:00",
+      "published": "2026-03-26T07:34:55.126789+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-26T07:00:01.903124+00:00",
+      "lastSeen": "2026-03-26T07:34:48.591682+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
+    },
+    {
+      "title": "Tencent AI Open Sources Covo-Audio: A 7B Speech Language Model and Inference Pipeline for Real-Time Audio Conversations and Reasoning",
+      "url": "https://www.marktechpost.com/2026/03/26/tencent-ai-open-sources-covo-audio-a-7b-speech-language-model-and-inference-pipeline-for-real-time-audio-conversations-and-reasoning",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Tencent AI Lab has released Covo-Audio, a 7B-parameter end-to-end Large Audio Language Model (LALM). The model is designed to unify speech processing and language intelligence by directly processing continuous audio inputs and generating audio outputs within a single architecture. System Architecture The Covo-Audio framework consists of four primary components designed for seamless cross-modal interaction: Hierarchical [&#8230;]\nThe post Tencent AI Open Sources Covo-Audio: A 7B Speech Language Model and Inference Pipeline for Real-Time Audio Conversations and Reasoning appeared first on MarkTe",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-12.33.14-AM-1-150x150.png",
+      "published": "2026-03-26T07:33:55+00:00",
+      "firstSeen": "2026-03-26T07:34:48.591682+00:00",
+      "lastSeen": "2026-03-26T07:34:48.591682+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.6195
     },
     {
       "title": "The least surprising chapter of the Manus story is what’s happening right now",
@@ -29,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2170596427.jpg?resize=1200%2C799",
       "published": "2026-03-26T02:46:48+00:00",
       "firstSeen": "2026-03-26T03:00:01.792678+00:00",
-      "lastSeen": "2026-03-26T07:00:01.903124+00:00",
+      "lastSeen": "2026-03-26T07:34:48.591682+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2683
+      "score": 3.2527
     },
     {
       "title": "Mercor competitor Deccan AI raises $25M, sources experts from India",
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/deccan-ai-founder-rukesh-reddy.jpg?resize=1200%2C800",
       "published": "2026-03-26T00:30:00+00:00",
       "firstSeen": "2026-03-26T01:00:01.427623+00:00",
-      "lastSeen": "2026-03-26T07:00:01.903124+00:00",
+      "lastSeen": "2026-03-26T07:34:48.591682+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.6917
+      "score": -0.7064
     }
   ],
   "errors": []
