@@ -139,6 +139,44 @@
       margin-bottom: 20px;
     }
 
+    /* weather overlay on day cells */
+    .wx-badge {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1px;
+      pointer-events: none;
+    }
+    .wx-icon { font-size: 14px; line-height: 1; }
+    .wx-rain {
+      font-size: 9px;
+      color: #7dd3fc;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    .wx-temp {
+      font-size: 9px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    /* weather strip at top */
+    .wx-strip {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wx-strip span { color: var(--text); }
+
     @media (max-width: 600px) {
       .day-cell { min-height: 54px; padding: 4px 4px; }
       .day-num { font-size: 11px; }
@@ -167,6 +205,8 @@
       <h1>🌱 Garden Calendar</h1>
       <p>Zone 7a · Philadelphia, PA · ~20 plants</p>
     </div>
+
+    <div class="wx-strip" id="wx-strip">🌤️ Loading weather…</div>
 
     <div class="legend">
       <span class="tag tag-water">💧 Water</span>
@@ -378,6 +418,8 @@
         const dayEvents = allEvents[key] || [];
         const cell = document.createElement("div");
         cell.className = "day-cell" + (dayEvents.length ? " has-event" : "") + (key === todayKey ? " today" : "");
+        cell.dataset.key = key;
+        if (dayEvents.length) cell.dataset.hasEvents = "1";
 
         const numEl = document.createElement("div");
         numEl.className = "day-num";
@@ -401,18 +443,39 @@
             tags.appendChild(more);
           }
           cell.appendChild(tags);
-
           cell.addEventListener("click", () => showDetail(key, dayEvents));
+        } else if (wxData[key]) {
+          // Clickable even with no garden events if there's weather
+          cell.style.cursor = "pointer";
+          cell.addEventListener("click", () => showDetail(key, []));
         }
 
         grid.appendChild(cell);
       }
+
+      applyWeatherBadges();
     }
 
     function showDetail(key, events) {
       const [y, m, d] = key.split("-");
       detailTitle.textContent = `${monthNames[parseInt(m)-1]} ${parseInt(d)}, ${y}`;
       eventList.innerHTML = "";
+
+      // Weather row if available
+      const wx = wxData[key];
+      if (wx) {
+        const li = document.createElement("li");
+        li.style.borderBottom = "1px solid var(--border)";
+        li.innerHTML = `<span class="event-icon">${wx.icon}</span><div><strong>${wx.desc || "Weather"}</strong><br><span style="color:var(--muted);font-size:12px">High ${wx.high}°F · Low ${wx.low}°F · 💧 Rain ${wx.rain}%${wx.rain >= 40 ? " — <em>skip outdoor tasks if heavy</em>" : ""}</span></div>`;
+        eventList.appendChild(li);
+      }
+
+      if (events.length === 0 && !wx) {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="event-icon">📅</span><div style="color:var(--muted)">No garden tasks scheduled</div>`;
+        eventList.appendChild(li);
+      }
+
       events.forEach(ev => {
         const li = document.createElement("li");
         li.innerHTML = `<span class="event-icon">${ev.icon}</span><div><strong>${ev.label}</strong>${ev.note ? `<br><span style="color:var(--muted);font-size:12px">${ev.note}</span>` : ""}</div>`;
@@ -452,8 +515,81 @@
       });
     }
 
+    // ─── WEATHER ────────────────────────────────────────────────────────────
+    // wttr.in weather codes → emoji
+    const WX_CODE = {
+      113:"☀️", 116:"⛅", 119:"☁️", 122:"☁️",
+      143:"🌫️", 176:"🌦️", 179:"🌨️", 182:"🌧️", 185:"🌧️",
+      200:"⛈️", 227:"🌨️", 230:"❄️",
+      248:"🌫️", 260:"🌫️",
+      263:"🌦️", 266:"🌧️", 281:"🌧️", 284:"🌧️",
+      293:"🌦️", 296:"🌧️", 299:"🌧️", 302:"🌧️", 305:"🌧️", 308:"🌧️",
+      311:"🌧️", 314:"🌧️", 317:"🌨️", 320:"🌨️", 323:"🌨️", 326:"🌨️",
+      329:"❄️", 332:"❄️", 335:"❄️", 338:"❄️", 350:"🌧️",
+      353:"🌦️", 356:"🌧️", 359:"🌧️", 362:"🌨️", 365:"🌨️",
+      368:"🌨️", 371:"❄️", 374:"🌨️", 377:"🌨️",
+      386:"⛈️", 389:"⛈️", 392:"⛈️", 395:"⛈️"
+    };
+
+    let wxData = {}; // key: "YYYY-MM-DD" → { icon, rain, high, low }
+
+    async function loadWeather() {
+      const strip = document.getElementById("wx-strip");
+      try {
+        const r = await fetch("https://wttr.in/Philadelphia?format=j1");
+        const j = await r.json();
+        const today2 = new Date();
+
+        j.weather.forEach((day, i) => {
+          const d = new Date(today2);
+          d.setDate(today2.getDate() + i);
+          const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+          const code = parseInt(day.hourly[4]?.weatherCode || day.hourly[0]?.weatherCode || 113);
+          const rainPct = Math.max(...day.hourly.map(h => parseInt(h.chanceofrain || 0)));
+          wxData[key] = {
+            icon: WX_CODE[code] || "🌤️",
+            rain: rainPct,
+            high: Math.round(parseInt(day.maxtempF)),
+            low:  Math.round(parseInt(day.mintempF)),
+            desc: day.hourly[4]?.weatherDesc?.[0]?.value || ""
+          };
+        });
+
+        // Update strip with today summary
+        const todayWx = wxData[todayKey];
+        if (todayWx) {
+          strip.innerHTML = `${todayWx.icon} Philadelphia today — <span>${todayWx.high}°F / ${todayWx.low}°F</span>&nbsp;&nbsp;💧 Rain <span>${todayWx.rain}%</span>&nbsp;&nbsp;<span style="color:var(--muted)">${todayWx.desc}</span>`;
+        } else {
+          strip.innerHTML = "🌤️ Philadelphia — weather unavailable";
+        }
+
+        // Re-render to paint weather badges
+        renderCalendar(currentYear, currentMonth);
+      } catch(e) {
+        strip.innerHTML = "🌤️ Weather unavailable";
+      }
+    }
+
+    function applyWeatherBadges() {
+      document.querySelectorAll(".day-cell:not(.empty)").forEach(cell => {
+        const key = cell.dataset.key;
+        if (!key || !wxData[key]) return;
+        const w = wxData[key];
+        const badge = document.createElement("div");
+        badge.className = "wx-badge";
+        badge.innerHTML = `<span class="wx-icon">${w.icon}</span>${w.rain > 0 ? `<span class="wx-rain">💧${w.rain}%</span>` : ""}<span class="wx-temp">${w.high}°/${w.low}°</span>`;
+        cell.appendChild(badge);
+
+        // Add weather to click detail if it has events
+        if (cell.dataset.hasEvents) {
+          const origClick = cell.onclick;
+        }
+      });
+    }
+
     renderCalendar(currentYear, currentMonth);
     renderLog();
+    loadWeather();
   </script>
 </body>
 </html>
