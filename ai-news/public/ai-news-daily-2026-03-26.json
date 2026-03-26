@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T05:00:02.098450+00:00",
+  "updatedAt": "2026-03-26T05:47:38.902817+00:00",
   "items": [
     {
       "title": "The least surprising chapter of the Manus story is what’s happening right now",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2170596427.jpg?resize=1200%2C799",
       "published": "2026-03-26T02:46:48+00:00",
       "firstSeen": "2026-03-26T03:00:01.792678+00:00",
-      "lastSeen": "2026-03-26T05:00:02.098450+00:00",
+      "lastSeen": "2026-03-26T05:47:38.902817+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3242
+      "score": 3.3017
     },
     {
       "title": "DISCO: Document Intelligence Suite for COmparative Evaluation",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-26T05:00:10.454980+00:00",
+      "published": "2026-03-26T05:47:43.590660+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-26T05:00:02.098450+00:00",
+      "lastSeen": "2026-03-26T05:47:38.902817+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/deccan-ai-founder-rukesh-reddy.jpg?resize=1200%2C800",
       "published": "2026-03-26T00:30:00+00:00",
       "firstSeen": "2026-03-26T01:00:01.427623+00:00",
-      "lastSeen": "2026-03-26T05:00:02.098450+00:00",
+      "lastSeen": "2026-03-26T05:47:38.902817+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.6393
+      "score": -0.6604
     }
   ],
   "errors": []
