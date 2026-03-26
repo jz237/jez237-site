@@ -472,6 +472,18 @@
       border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
+    .status-badge.sleeping {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .status-badge.idle {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
     .status-badge.unknown {
       background: rgba(245, 158, 11, 0.15);
       color: var(--warning);
@@ -1160,8 +1172,9 @@
 
         grid.innerHTML = agents.map(agent => {
           const emoji = AGENT_EMOJIS[agent.name] || '🤖';
-          const statusClass = agent.status === 'online' ? 'online' :
-                              agent.status === 'offline' ? 'offline' : 'unknown';
+          const statusClass = agent.status === 'active' ? 'online' :
+                              agent.status === 'idle' ? 'idle' :
+                              agent.status === 'sleeping' ? 'sleeping' : 'unknown';
           return `
             <div class="glass-card agent-card">
               <div class="agent-avatar">${emoji}</div>
@@ -1170,7 +1183,7 @@
                   <span class="agent-name">${agent.name}</span>
                   <span class="status-badge ${statusClass}">
                     <span class="status-dot"></span>
-                    ${agent.status || 'unknown'}
+                    ${agent.status === 'sleeping' ? '💤 sleeping' : agent.status === 'active' ? '● active' : agent.status === 'idle' ? '● idle' : agent.status || 'unknown'}
                   </span>
                 </div>
                 <div class="agent-meta">
