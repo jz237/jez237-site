@@ -1190,7 +1190,8 @@
         const data = await fetchData('/crons');
         const tbody = document.getElementById('crons-body');
 
-        if (!data || !Array.isArray(data) || data.length === 0) {
+        const cronJobs = data.jobs || (Array.isArray(data) ? data : null);
+        if (!cronJobs || cronJobs.length === 0) {
           tbody.innerHTML = `
             <tr>
               <td colspan="5" style="text-align: center; color: var(--muted); padding: 32px;">
@@ -1202,13 +1203,13 @@
           return;
         }
 
-        tbody.innerHTML = data.map(job => {
+        tbody.innerHTML = cronJobs.map(job => {
           let statusIcon = '&#9203;'; // pending
           let statusClass = 'pending';
-          if (job.lastStatus === 'success') {
+          if (job.last_status === 'ok' || job.lastStatus === 'success') {
             statusIcon = '&#9989;';
             statusClass = 'success';
-          } else if (job.lastStatus === 'error') {
+          } else if (job.last_status === 'error' || job.lastStatus === 'error') {
             statusIcon = '&#10060;';
             statusClass = 'error';
           }
@@ -1216,10 +1217,10 @@
           return `
             <tr>
               <td><strong>${job.name || '--'}</strong></td>
-              <td>${job.schedule || '--'}</td>
-              <td>${formatDate(job.lastRun)}</td>
+              <td>${job.schedule_desc || job.schedule || '--'}</td>
+              <td>${formatDate(job.last_run_at || job.lastRun)}</td>
               <td><span class="cron-status ${statusClass}">${statusIcon}</span></td>
-              <td>${formatDate(job.nextRun)}</td>
+              <td>${formatDate(job.next_run_at || job.nextRun)}</td>
             </tr>
           `;
         }).join('');
@@ -1238,8 +1239,16 @@
           return;
         }
 
+        // Build lookup map from array
+        const stockMap = {};
+        if (data.stocks && Array.isArray(data.stocks)) {
+          data.stocks.forEach(s => { stockMap[s.symbol] = s; });
+        } else if (typeof data === 'object') {
+          Object.assign(stockMap, data);
+        }
+
         grid.innerHTML = TICKERS.map(ticker => {
-          const stock = data[ticker];
+          const stock = stockMap[ticker];
           if (!stock) {
             return `
               <div class="glass-card stock-card">
@@ -1250,7 +1259,7 @@
             `;
           }
 
-          const change = stock.change || 0;
+          const change = stock.change_pct || stock.changePct || stock.change || 0;
           const changeClass = change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral';
           const arrow = change > 0 ? '&#9650;' : change < 0 ? '&#9660;' : '';
           const changeText = change > 0 ? `+${change.toFixed(2)}%` : `${change.toFixed(2)}%`;
@@ -1272,19 +1281,22 @@
         const data = await fetchData('/news');
         const grid = document.getElementById('news-grid');
 
-        if (!data || !Array.isArray(data) || data.length === 0) {
+        const headlines = data.headlines || (Array.isArray(data) ? data : null);
+        if (!headlines || headlines.length === 0) {
           showUnavailable('news-grid', 'No news available');
           updateTimestamp('news-updated');
           return;
         }
 
-        grid.innerHTML = data.slice(0, 10).map(item => `
+        grid.innerHTML = headlines.slice(0, 10).map(item => `
           <div class="glass-card news-card">
-            <div class="news-headline">${item.headline || item.title || 'Untitled'}</div>
-            <div class="news-meta">
-              <span class="news-source">${item.source || 'Unknown'}</span>
-              <span>${formatDate(item.timestamp || item.posted)}</span>
-            </div>
+            <a href="${item.url || '#'}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+              <div class="news-headline">${item.title || item.headline || 'Untitled'}</div>
+              <div class="news-meta">
+                <span class="news-source">${item.source || 'Unknown'}</span>
+                <span>${formatDate(item.posted_at || item.timestamp || item.posted)}</span>
+              </div>
+            </a>
           </div>
         `).join('');
 
