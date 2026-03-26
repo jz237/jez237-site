@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T17:00:01.590259+00:00",
+  "updatedAt": "2026-03-26T17:16:47.243442+00:00",
   "items": [
     {
       "title": "Mistral releases a new open source model for speech generation",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2264771189.jpg?resize=1200%2C800",
       "published": "2026-03-26T11:30:00+00:00",
       "firstSeen": "2026-03-26T11:59:21.630008+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.5341
+      "score": 18.5268
     },
     {
       "title": "Gemini 3.1 Flash Live: Making audio AI more natural and reliable",
@@ -30,11 +30,11 @@
       "image": "https://lh3.googleusercontent.com/X3xXSd8ns-IojsGTjvadPFyaBWT5bBGhubcQd_WSiIgQ9bESUPceaHtfOxwgYzwv3P-Gtz2r3sWs-1XFB5X72HuTMbVz30hqJCKOxBaQdq1Oq6895A=w528-h297-n-nu-rw-lo",
       "published": "2026-03-26T15:23:35+00:00",
       "firstSeen": "2026-03-26T15:37:41.999050+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.082
+      "score": 18.0738
     },
     {
       "title": "Gemini 3.1 Flash Live: Making audio AI more natural and reliable",
@@ -47,11 +47,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.1-flash-live_blog_head.max-600x600.format-webp.webp",
       "published": "2026-03-26T15:21:00+00:00",
       "firstSeen": "2026-03-26T15:37:41.999050+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.6807
+      "score": 16.6726
     },
     {
       "title": "Cohere launches an open source voice model specifically for transcription",
@@ -64,11 +64,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/260325_TranscribeLaunch_Hero.jpeg?resize=1200%2C600",
       "published": "2026-03-26T13:30:00+00:00",
       "firstSeen": "2026-03-26T14:00:01.170512+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6881
+      "score": 15.6804
     },
     {
       "title": "ByteDance’s new AI video generation model, Dreamina Seedance 2.0, comes to CapCut",
@@ -81,11 +81,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/imgi_30_7d51e3a4c1434d7f9b2708a619f3783ftplv-2zwwjm3azk-image.webp?resize=1200%2C853",
       "published": "2026-03-26T15:25:13+00:00",
       "firstSeen": "2026-03-26T15:37:41.999050+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.6428
+      "score": 13.6346
     },
     {
       "title": "Senators are pushing to find out how much electricity data centers actually use",
@@ -98,11 +98,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/hero-001-10-gallery-data-center-drone-cropped-copy.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4383212962771%2C100%2C93.123357407446&amp%3Bw=1200",
       "published": "2026-03-26T14:25:32+00:00",
       "firstSeen": "2026-03-26T15:00:01.545153+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.5841
+      "score": 10.5762
     },
     {
       "title": "OpenAI shelves erotic chatbot &#8216;indefinitely&#8217;",
@@ -115,10 +115,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/07/STK464_PORN_ADULT_CONTENT_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-03-26T11:58:09+00:00",
       "firstSeen": "2026-03-26T13:00:01.716075+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9165
+      "score": 9.9091
     },
     {
       "title": "The Next Billion Users Won’t Be Human: Securing the Agentic Enterprise",
@@ -131,10 +131,10 @@
       "image": "",
       "published": "2026-03-26T15:06:21+00:00",
       "firstSeen": "2026-03-26T15:37:41.999050+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2936
+      "score": 7.2855
     },
     {
       "title": "Search Live is expanding globally",
@@ -147,10 +147,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Search_Live_blog_header.max-600x600.format-webp.webp",
       "published": "2026-03-26T15:00:00+00:00",
       "firstSeen": "2026-03-26T15:37:41.999050+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8705
+      "score": 5.8625
     },
     {
       "title": "Cohere AI Releases Cohere Transcribe: A SOTA Automatic Speech Recognition (ASR) Model Powering Enterprise Speech Intelligence",
@@ -163,10 +163,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-7.46.03-AM-1-150x150.png",
       "published": "2026-03-26T15:01:23+00:00",
       "firstSeen": "2026-03-26T15:37:41.999050+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 5.0112
+      "score": 5.0032
     },
     {
       "title": "Conntour raises $7M from General Catalyst, YC to build an AI search engine for security video systems",
@@ -179,10 +179,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Conntour-team.jpg?resize=1200%2C800",
       "published": "2026-03-26T13:41:00+00:00",
       "firstSeen": "2026-03-26T14:00:01.170512+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5932
+      "score": 4.5854
     },
     {
       "title": "Tencent AI Open Sources Covo-Audio: A 7B Speech Language Model and Inference Pipeline for Real-Time Audio Conversations and Reasoning",
@@ -195,10 +195,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-12.33.14-AM-1-150x150.png",
       "published": "2026-03-26T07:33:55+00:00",
       "firstSeen": "2026-03-26T07:34:48.591682+00:00",
-      "lastSeen": "2026-03-26T17:00:01.590259+00:00",
+      "lastSeen": "2026-03-26T17:16:47.243442+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.3664
+      "score": 4.3598
     }
   ],
   "errors": []
