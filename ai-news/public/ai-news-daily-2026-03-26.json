@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T10:00:01.152837+00:00",
+  "updatedAt": "2026-03-26T10:11:45.182867+00:00",
   "items": [
     {
       "title": "Visuospatial Perspective Taking in Multimodal Language Models",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-26T10:00:06.321881+00:00",
+      "published": "2026-03-26T10:11:50.528444+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-26T10:00:01.152837+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -29,10 +29,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-12.33.14-AM-1-150x150.png",
       "published": "2026-03-26T07:33:55+00:00",
       "firstSeen": "2026-03-26T07:34:48.591682+00:00",
-      "lastSeen": "2026-03-26T10:00:01.152837+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.5481
+      "score": 4.5425
+    },
+    {
+      "title": "Giraffe360 raises $10M Series B to expand AI property media platform",
+      "url": "https://thenextweb.com/news/giraffe360-10m-series-b",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The London-based proptech, which combines a proprietary robotic camera with an AI software stack to produce a full property media kit from a single visit, has closed its Series B led by Cipio Partners. The premise behind Giraffe360 is straightforward: a single property visit should generate everything a real estate agent or photographer needs to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Giraffe360.png",
+      "published": "2026-03-26T09:35:35+00:00",
+      "firstSeen": "2026-03-26T10:11:45.182867+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8317
     },
     {
       "title": "The least surprising chapter of the Manus story is what’s happening right now",
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2170596427.jpg?resize=1200%2C799",
       "published": "2026-03-26T02:46:48+00:00",
       "firstSeen": "2026-03-26T03:00:01.792678+00:00",
-      "lastSeen": "2026-03-26T10:00:01.152837+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1901
+      "score": 3.1852
     },
     {
       "title": "Arkadia Space raises €14.5M for green propulsion system",
@@ -61,10 +77,58 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Arkadia-Space.png",
       "published": "2026-03-26T08:51:44+00:00",
       "firstSeen": "2026-03-26T09:11:46.046257+00:00",
-      "lastSeen": "2026-03-26T10:00:01.152837+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8158
+      "score": 2.81
+    },
+    {
+      "title": "OpenUp raises €20M to scale employee mental health platform",
+      "url": "https://thenextweb.com/news/openup-20m-employee-mental-health",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Amsterdam startup, which gives employees direct anonymous access to psychologists, lifestyle experts, and financial counsellors through their employer, now serves more than 2,000 organisations across five European markets. Smartfin led the round; Rubio Impact Ventures, which led the 2022 Series A, returned. The traditional path to professional psychological help in Europe involves a GP [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/OpenUp.png",
+      "published": "2026-03-26T09:59:30+00:00",
+      "firstSeen": "2026-03-26T10:11:45.182867+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1438
+    },
+    {
+      "title": "Sony and Honda cancel the electric vehicle AFEELA dream",
+      "url": "https://thenextweb.com/news/sony-honda-afeela-cancelled",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sony Honda Mobility has discontinued both its AFEELA 1 sedan and an unnamed follow-up SUV, less than a year after opening a dedicated showroom in California. Honda’s sweeping EV retreat left the joint venture without the technical foundations it needed to build either car. Nine days after Sony Honda Mobility opened its AFEELA Studio and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/AFEELA.-png.png",
+      "published": "2026-03-26T09:26:02+00:00",
+      "firstSeen": "2026-03-26T10:11:45.182867+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.127
+    },
+    {
+      "title": "SOUS raises €4M to power culinary entrepreneurs",
+      "url": "https://thenextweb.com/news/sous-4m-seed-ai-restaurant-growth-platform",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Amsterdam startup, founded in 2022, is building a single AI platform that handles customer discovery, direct ordering, and retention for independent food and beverage operators. seed + speed Ventures led the round; PeakBridge returned alongside āltitude and Gekko Capital. A local pizzeria and Domino’s compete for the same dinner occasion, but they do not [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/SOUS.png",
+      "published": "2026-03-26T09:06:51+00:00",
+      "firstSeen": "2026-03-26T10:11:45.182867+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.2826
     },
     {
       "title": "Mercor competitor Deccan AI raises $25M, sources experts from India",
@@ -77,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/deccan-ai-founder-rukesh-reddy.jpg?resize=1200%2C800",
       "published": "2026-03-26T00:30:00+00:00",
       "firstSeen": "2026-03-26T01:00:01.427623+00:00",
-      "lastSeen": "2026-03-26T10:00:01.152837+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.7651
+      "score": -0.7697
     },
     {
       "title": "EU-Startups Summit returns to Malta in May with 2,500 attendees, and 80+ speakers",
@@ -93,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-Startups-Summit-returns-to-Malta-in-May.png",
       "published": "2026-03-26T07:54:15+00:00",
       "firstSeen": "2026-03-26T09:00:01.136120+00:00",
-      "lastSeen": "2026-03-26T10:00:01.152837+00:00",
+      "lastSeen": "2026-03-26T10:11:45.182867+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0122
+      "score": -1.0178
     }
   ],
   "errors": []
