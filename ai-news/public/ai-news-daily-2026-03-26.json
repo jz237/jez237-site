@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "updatedAt": "2026-03-26T08:00:01.810745+00:00",
+  "updatedAt": "2026-03-26T09:00:01.136120+00:00",
   "items": [
     {
       "title": "Visuospatial Perspective Taking in Multimodal Language Models",
@@ -11,12 +11,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-26T07:34:55.126789+00:00",
+      "published": "2026-03-26T09:00:05.238618+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-26T07:34:48.591682+00:00",
+      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7473
+      "score": 4.76
     },
     {
       "title": "Tencent AI Open Sources Covo-Audio: A 7B Speech Language Model and Inference Pipeline for Real-Time Audio Conversations and Reasoning",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-12.33.14-AM-1-150x150.png",
       "published": "2026-03-26T07:33:55+00:00",
       "firstSeen": "2026-03-26T07:34:48.591682+00:00",
-      "lastSeen": "2026-03-26T08:00:01.810745+00:00",
+      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.6068
+      "score": 4.577
     },
     {
       "title": "The least surprising chapter of the Manus story is what’s happening right now",
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2170596427.jpg?resize=1200%2C799",
       "published": "2026-03-26T02:46:48+00:00",
       "firstSeen": "2026-03-26T03:00:01.792678+00:00",
-      "lastSeen": "2026-03-26T08:00:01.810745+00:00",
+      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2415
+      "score": 3.2154
     },
     {
       "title": "Mercor competitor Deccan AI raises $25M, sources experts from India",
@@ -61,10 +61,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/deccan-ai-founder-rukesh-reddy.jpg?resize=1200%2C800",
       "published": "2026-03-26T00:30:00+00:00",
       "firstSeen": "2026-03-26T01:00:01.427623+00:00",
-      "lastSeen": "2026-03-26T08:00:01.810745+00:00",
+      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.7169
+      "score": -0.7413
+    },
+    {
+      "title": "EU-Startups Summit returns to Malta in May with 2,500 attendees, and 80+ speakers",
+      "url": "https://thenextweb.com/news/eu-startups-summit-2026-malta",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The 12th edition of one of Europe’s longest-running startup events takes place on 7–8 May in Valletta. Alongside the usual pitch competition and investor matchmaking, this year’s programme includes a media panel featuring founders and editors from some of the continent’s most-read tech publications. Most startup founders know they need press coverage. Far fewer know [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/EU-Startups-Summit-returns-to-Malta-in-May.png",
+      "published": "2026-03-26T07:54:15+00:00",
+      "firstSeen": "2026-03-26T09:00:01.136120+00:00",
+      "lastSeen": "2026-03-26T09:00:01.136120+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.983
     }
   ],
   "errors": []
