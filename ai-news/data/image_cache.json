@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T16:03:32.769167+00:00",
+  "updatedAt": "2026-03-27T17:08:07.726757+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2096,6 +2096,10 @@
     "https://techcrunch.com/2026/03/26/david-sacks-is-done-as-ai-czar-heres-what-hes-doing-instead": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2203859648.jpg?w=1024",
       "checkedAt": "2026-03-27T16:03:32.769167+00:00"
+    },
+    "https://www.techrepublic.com/article/news-bissell-ai-workflows-two-day-build-domo": {
+      "image": "",
+      "checkedAt": "2026-03-27T17:08:07.726757+00:00"
     }
   }
 }
