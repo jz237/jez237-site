@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T19:49:53.527216+00:00",
+  "updatedAt": "2026-03-27T20:53:49.473365+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2112,6 +2112,18 @@
     "https://techcrunch.com/2026/03/27/memory-chip-giant-sk-hynix-could-help-end-rammageddon-with-blockbuster-us-ipo": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/SK-hynix-logo.jpg?w=1200",
       "checkedAt": "2026-03-27T19:49:53.527216+00:00"
+    },
+    "https://openai.com/index/stadler": {
+      "image": "",
+      "checkedAt": "2026-03-27T20:53:49.473365+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/27/an-implementation-of-iwes-context-bridge-as-an-ai-powered-knowledge-graph-with-agentic-rag-openai-function-calling-and-graph-traversal": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-12.png",
+      "checkedAt": "2026-03-27T20:53:49.473365+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ford-ai-agents-dealer-analysis-domo": {
+      "image": "",
+      "checkedAt": "2026-03-27T20:53:49.473365+00:00"
     }
   }
 }
