@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T19:09:36.615889+00:00",
+  "updatedAt": "2026-03-27T19:49:53.527216+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2108,6 +2108,10 @@
     "https://huggingface.co/blog/liberate-your-openclaw": {
       "image": "https://huggingface.co/blog/assets/liberate-your-openclaw/thumbnail.png",
       "checkedAt": "2026-03-27T19:09:36.615889+00:00"
+    },
+    "https://techcrunch.com/2026/03/27/memory-chip-giant-sk-hynix-could-help-end-rammageddon-with-blockbuster-us-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/SK-hynix-logo.jpg?w=1200",
+      "checkedAt": "2026-03-27T19:49:53.527216+00:00"
     }
   }
 }
