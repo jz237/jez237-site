@@ -1,6 +1,6 @@
 {
   "date": "2026-03-27",
-  "updatedAt": "2026-03-27T21:49:21.762762+00:00",
+  "updatedAt": "2026-03-27T22:50:32.839042+00:00",
   "items": [
     {
       "title": "Google Releases Gemini 3.1 Flash Live: A Real-Time Multimodal Voice Model for Low-Latency Audio, Video, and Tool Use for AI Agents",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-53-150x150.png",
       "published": "2026-03-27T02:38:45+00:00",
       "firstSeen": "2026-03-27T03:00:01.473796+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 25.3657
+      "score": 25.3477
     },
     {
       "title": "Vibe coding SwiftUI apps is a lot of fun",
@@ -30,11 +30,11 @@
       "image": "https://github.com/simonw/bandwidther/raw/main/screenshot.png",
       "published": "2026-03-27T20:59:53+00:00",
       "firstSeen": "2026-03-27T21:49:21.762762+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0651
+      "score": 20.0351
     },
     {
       "title": "iPhone’s Next Upgrade: Siri Could Soon Run on Gemini, Claude, and More",
@@ -47,10 +47,10 @@
       "image": "",
       "published": "2026-03-27T15:17:25+00:00",
       "firstSeen": "2026-03-27T16:03:32.769167+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.0675
+      "score": 15.0418
     },
     {
       "title": "I Asked ChatGPT 500 Questions. Here Are the Ads I Saw Most Often",
@@ -63,10 +63,10 @@
       "image": "https://media.wired.com/photos/69c566552e06a34450ad87fa/master/pass/Asked-ChatGPT-Questions-Here-Are-Ads-I-Saw-Most-Often-Gear-1258531803.jpg",
       "published": "2026-03-27T10:30:00+00:00",
       "firstSeen": "2026-03-27T11:00:01.773806+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4932
+      "score": 11.4707
     },
     {
       "title": "Meta Releases TRIBE v2: A Brain Encoding Model That Predicts fMRI Responses Across Video, Audio, and Text Stimuli",
@@ -79,11 +79,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-9.38.28-PM-1-150x150.png",
       "published": "2026-03-27T04:39:55+00:00",
       "firstSeen": "2026-03-27T05:00:01.299762+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 9.503
+      "score": 9.4839
     },
     {
       "title": "6 Best Gemini Photo Editing Prompts in 2026: How to Get Better AI Images",
@@ -96,10 +96,10 @@
       "image": "",
       "published": "2026-03-27T20:51:45+00:00",
       "firstSeen": "2026-03-27T21:49:21.762762+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.221
+      "score": 9.1911
     },
     {
       "title": "OpenAI backs a nine-month-old startup building swarms of AI agents at a $650 million valuation",
@@ -112,10 +112,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/openai-isara-ai-agent-swarms-650m-valuation.png",
       "published": "2026-03-27T14:24:14+00:00",
       "firstSeen": "2026-03-27T15:00:01.274964+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.6451
+      "score": 7.6201
     },
     {
       "title": "openJiuwen Community Releases ‘JiuwenClaw’: A Self Evolving AI Agent for Task Management",
@@ -128,10 +128,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-62-150x150.png",
       "published": "2026-03-27T17:02:48+00:00",
       "firstSeen": "2026-03-27T17:08:07.726757+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5833
+      "score": 6.5564
     },
     {
       "title": "STADLER reshapes knowledge work at a 230-year-old company",
@@ -144,10 +144,10 @@
       "image": "",
       "published": "2026-03-27T22:00:00+00:00",
       "firstSeen": "2026-03-27T20:53:49.473365+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5
+      "score": 6.4746
     },
     {
       "title": "SoftBank secures $40B bridge loan to fund its OpenAI bet",
@@ -160,10 +160,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/SoftBank.png",
       "published": "2026-03-27T14:51:43+00:00",
       "firstSeen": "2026-03-27T16:03:32.769167+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0566
+      "score": 6.0313
     },
     {
       "title": "An Implementation of IWE’s Context Bridge as an AI-Powered Knowledge Graph with Agentic RAG, OpenAI Function Calling, and Graph Traversal",
@@ -176,10 +176,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-12.png",
       "published": "2026-03-27T20:06:55+00:00",
       "firstSeen": "2026-03-27T20:53:49.473365+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.869
+      "score": 5.8397
     },
     {
       "title": "Ysios Capital launches €100M fund to build biotech companies from Spanish science",
@@ -192,10 +192,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/InceptionBio.png",
       "published": "2026-03-27T14:02:33+00:00",
       "firstSeen": "2026-03-27T15:00:01.274964+00:00",
-      "lastSeen": "2026-03-27T21:49:21.762762+00:00",
+      "lastSeen": "2026-03-27T22:50:32.839042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8362
+      "score": 5.8115
     }
   ],
   "errors": []
