@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T01:00:01.833148+00:00",
+  "updatedAt": "2026-03-27T02:00:01.990571+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2064,6 +2064,10 @@
     "https://simonwillison.net/2026/Mar/26/response-to-the-litellm-malware-attack": {
       "image": "",
       "checkedAt": "2026-03-27T01:00:01.833148+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/anthropic-wins-injunction-against-trump-administration-over-defense-department-saga": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
+      "checkedAt": "2026-03-27T02:00:01.990571+00:00"
     }
   }
 }
