@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T15:00:01.274964+00:00",
+  "updatedAt": "2026-03-27T15:06:58.406222+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2072,6 +2072,10 @@
     "https://thenextweb.com/news/activecampaign-free-trial-marketing-automation": {
       "image": "https://img-cdn.tnwcdn.com/image/tnw-blurple?filter_last=1&amp;fit=1280%2C640&amp;url=https%3A%2F%2Fcdn0.tnwcdn.com%2Fwp-content%2Fblogs.dir%2F1%2Ffiles%2F2026%2F03%2FActivecampaign-TNW-Article-Banner.png&amp;signature=713c2b53114be0fbc6826b04e31b400c",
       "checkedAt": "2026-03-27T15:00:01.274964+00:00"
+    },
+    "https://www.wired.com/story/apple-50-year-anniversary-artificial-intelligence-iphone": {
+      "image": "",
+      "checkedAt": "2026-03-27T15:06:58.406222+00:00"
     }
   }
 }
