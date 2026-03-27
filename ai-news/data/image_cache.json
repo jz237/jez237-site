@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T18:01:52.749661+00:00",
+  "updatedAt": "2026-03-27T20:00:01.620454+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2104,6 +2104,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/902546/data-centers-ai-energy-power-grids-controversy": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/12/258090_EOY_2025_CVirginia_DATA_CENTER.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-27T19:00:01.216063+00:00"
+    },
+    "https://techcrunch.com/2026/03/27/memory-chip-giant-sk-hynix-could-help-end-rammageddon-with-blockbuster-us-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/SK-hynix-logo.jpg?w=1200",
+      "checkedAt": "2026-03-27T20:00:01.620454+00:00"
     }
   }
 }
