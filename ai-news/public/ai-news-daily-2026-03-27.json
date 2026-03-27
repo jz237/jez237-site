@@ -1,6 +1,6 @@
 {
   "date": "2026-03-27",
-  "updatedAt": "2026-03-27T07:22:43.214360+00:00",
+  "updatedAt": "2026-03-27T08:00:01.442990+00:00",
   "items": [
     {
       "title": "Google Releases Gemini 3.1 Flash Live: A Real-Time Multimodal Voice Model for Low-Latency Audio, Video, and Tool Use for AI Agents",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-53-150x150.png",
       "published": "2026-03-27T02:38:45+00:00",
       "firstSeen": "2026-03-27T03:00:01.473796+00:00",
-      "lastSeen": "2026-03-27T07:22:43.214360+00:00",
+      "lastSeen": "2026-03-27T08:00:01.442990+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 25.6845
+      "score": 25.668
     },
     {
       "title": "Meta Releases TRIBE v2: A Brain Encoding Model That Predicts fMRI Responses Across Video, Audio, and Text Stimuli",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-9.38.28-PM-1-150x150.png",
       "published": "2026-03-27T04:39:55+00:00",
       "firstSeen": "2026-03-27T05:00:01.299762+00:00",
-      "lastSeen": "2026-03-27T07:22:43.214360+00:00",
+      "lastSeen": "2026-03-27T08:00:01.442990+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 9.8401
+      "score": 9.8227
     },
     {
       "title": "Judge sides with Anthropic to temporarily block the Pentagon&#8217;s ban",
@@ -47,10 +47,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/268367_dod_and_anthropics_public_fight_over_lethal_autonomous_weapons_a_mass_surveillance_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-27T00:33:44+00:00",
       "firstSeen": "2026-03-27T01:00:01.833148+00:00",
-      "lastSeen": "2026-03-27T07:22:43.214360+00:00",
+      "lastSeen": "2026-03-27T08:00:01.442990+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1703
+      "score": 5.1547
     },
     {
       "title": "Anthropic wins injunction against Trump administration over Defense Department saga",
@@ -63,10 +63,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
       "published": "2026-03-27T01:18:38+00:00",
       "firstSeen": "2026-03-27T02:00:01.990571+00:00",
-      "lastSeen": "2026-03-27T07:22:43.214360+00:00",
+      "lastSeen": "2026-03-27T08:00:01.442990+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1194
+      "score": 5.1035
     },
     {
       "title": "Can LLMs Beat Classical Hyperparameter Optimization Algorithms? A Study on autoresearch",
@@ -77,9 +77,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-27T07:22:52.455706+00:00",
+      "published": "2026-03-27T08:00:05.525112+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-27T07:22:43.214360+00:00",
+      "lastSeen": "2026-03-27T08:00:01.442990+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -95,10 +95,10 @@
       "image": "",
       "published": "2026-03-27T00:35:01+00:00",
       "firstSeen": "2026-03-27T01:00:01.833148+00:00",
-      "lastSeen": "2026-03-27T07:22:43.214360+00:00",
+      "lastSeen": "2026-03-27T08:00:01.442990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1008
+      "score": 2.0852
     }
   ],
   "errors": []
