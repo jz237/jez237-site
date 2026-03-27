@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T18:00:01.210671+00:00",
+  "updatedAt": "2026-03-27T17:08:07.726757+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2098,8 +2098,8 @@
       "checkedAt": "2026-03-27T16:03:32.769167+00:00"
     },
     "https://www.techrepublic.com/article/news-bissell-ai-workflows-two-day-build-domo": {
-      "image": "https://assets.techrepublic.com/uploads/2026/03/AdobeStock_273431842.jpg",
-      "checkedAt": "2026-03-27T18:00:01.210671+00:00"
+      "image": "",
+      "checkedAt": "2026-03-27T17:08:07.726757+00:00"
     }
   }
 }
