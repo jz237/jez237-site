@@ -1,6 +1,6 @@
 {
   "date": "2026-03-27",
-  "updatedAt": "2026-03-27T21:00:01.336815+00:00",
+  "updatedAt": "2026-03-27T20:53:49.473365+00:00",
   "items": [
     {
       "title": "Google Releases Gemini 3.1 Flash Live: A Real-Time Multimodal Voice Model for Low-Latency Audio, Video, and Tool Use for AI Agents",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-53-150x150.png",
       "published": "2026-03-27T02:38:45+00:00",
       "firstSeen": "2026-03-27T03:00:01.473796+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 25.3806
+      "score": 25.3825
     },
     {
       "title": "iPhone’s Next Upgrade: Siri Could Soon Run on Gemini, Claude, and More",
@@ -30,10 +30,10 @@
       "image": "",
       "published": "2026-03-27T15:17:25+00:00",
       "firstSeen": "2026-03-27T16:03:32.769167+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.0887
+      "score": 15.0914
     },
     {
       "title": "I Asked ChatGPT 500 Questions. Here Are the Ads I Saw Most Often",
@@ -46,10 +46,10 @@
       "image": "https://media.wired.com/photos/69c566552e06a34450ad87fa/master/pass/Asked-ChatGPT-Questions-Here-Are-Ads-I-Saw-Most-Often-Gear-1258531803.jpg",
       "published": "2026-03-27T10:30:00+00:00",
       "firstSeen": "2026-03-27T11:00:01.773806+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5117
+      "score": 11.5141
     },
     {
       "title": "Meta Releases TRIBE v2: A Brain Encoding Model That Predicts fMRI Responses Across Video, Audio, and Text Stimuli",
@@ -62,11 +62,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-26-at-9.38.28-PM-1-150x150.png",
       "published": "2026-03-27T04:39:55+00:00",
       "firstSeen": "2026-03-27T05:00:01.299762+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 9.5188
+      "score": 9.5208
     },
     {
       "title": "OpenAI backs a nine-month-old startup building swarms of AI agents at a $650 million valuation",
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/openai-isara-ai-agent-swarms-650m-valuation.png",
       "published": "2026-03-27T14:24:14+00:00",
       "firstSeen": "2026-03-27T15:00:01.274964+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.6658
+      "score": 7.6685
     },
     {
       "title": "openJiuwen Community Releases ‘JiuwenClaw’: A Self Evolving AI Agent for Task Management",
@@ -95,10 +95,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-62-150x150.png",
       "published": "2026-03-27T17:02:48+00:00",
       "firstSeen": "2026-03-27T17:08:07.726757+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6056
+      "score": 6.6084
     },
     {
       "title": "STADLER reshapes knowledge work at a 230-year-old company",
@@ -108,10 +108,10 @@
       "sourceWeight": 1.0,
       "category": "AI",
       "summary": "Learn how STADLER uses ChatGPT to transform knowledge work, saving time and accelerating productivity across 650 employees.",
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/7gH7N0xTGVcaEf1JzuezAp/97b0aa1e3d5aa4027cb265825bfa2cf4/oai_Stadler_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "image": "",
       "published": "2026-03-27T22:00:00+00:00",
-      "firstSeen": "2026-03-27T21:00:01.336815+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "firstSeen": "2026-03-27T20:53:49.473365+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 6.5
@@ -127,10 +127,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/SoftBank.png",
       "published": "2026-03-27T14:51:43+00:00",
       "firstSeen": "2026-03-27T16:03:32.769167+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0776
+      "score": 6.0802
     },
     {
       "title": "An Implementation of IWE’s Context Bridge as an AI-Powered Knowledge Graph with Agentic RAG, OpenAI Function Calling, and Graph Traversal",
@@ -142,11 +142,11 @@
       "summary": "In this tutorial, we implement IWE: an open-source, Rust-powered personal knowledge management system that treats markdown notes as a navigable knowledge graph. Since IWE is a CLI/LSP tool designed for local editors. We build a realistic developer knowledge base from scratch, wire up wiki-links and markdown links into a directed graph, and then walk through [&#8230;]\nThe post An Implementation of IWE&#8217;s Context Bridge as an AI-Powered Knowledge Graph with Agentic RAG, OpenAI Function Calling, and Graph Traversal appeared first on MarkTechPost.",
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-12.png",
       "published": "2026-03-27T20:06:55+00:00",
-      "firstSeen": "2026-03-27T21:00:01.336815+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "firstSeen": "2026-03-27T20:53:49.473365+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8933
+      "score": 5.8964
     },
     {
       "title": "Ysios Capital launches €100M fund to build biotech companies from Spanish science",
@@ -159,10 +159,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/InceptionBio.png",
       "published": "2026-03-27T14:02:33+00:00",
       "firstSeen": "2026-03-27T15:00:01.274964+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8567
+      "score": 5.8593
     },
     {
       "title": "VCs are betting billions on AI’s next wave, so why is OpenAI killing Sora?",
@@ -175,10 +175,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2239565319.jpg?resize=1200%2C798",
       "published": "2026-03-27T15:40:19+00:00",
       "firstSeen": "2026-03-27T16:03:32.769167+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1387
+      "score": 5.1414
     },
     {
       "title": "OpenAI shuts down Sora while Meta gets shut out in court",
@@ -191,10 +191,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/zuckerberg-LA-trial-2026-GettyImages-2261841364.jpg?w=1024",
       "published": "2026-03-27T13:30:00+00:00",
       "firstSeen": "2026-03-27T16:03:32.769167+00:00",
-      "lastSeen": "2026-03-27T21:00:01.336815+00:00",
+      "lastSeen": "2026-03-27T20:53:49.473365+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0831
+      "score": 5.0857
     }
   ],
   "errors": []
