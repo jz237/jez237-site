@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T15:06:58.406222+00:00",
+  "updatedAt": "2026-03-27T16:03:32.769167+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2076,6 +2076,26 @@
     "https://www.wired.com/story/apple-50-year-anniversary-artificial-intelligence-iphone": {
       "image": "",
       "checkedAt": "2026-03-27T15:06:58.406222+00:00"
+    },
+    "https://techcrunch.com/podcast/vcs-are-betting-billions-on-ais-next-wave-so-why-is-openai-killing-sora": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2239565319.jpg?resize=1200,798",
+      "checkedAt": "2026-03-27T16:03:32.769167+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-siri-ai-extensions-ios-27": {
+      "image": "",
+      "checkedAt": "2026-03-27T16:03:32.769167+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-upgrades-security-breaches-and-industry-shifts-define-this-week-in-tech": {
+      "image": "",
+      "checkedAt": "2026-03-27T16:03:32.769167+00:00"
+    },
+    "https://techcrunch.com/video/openai-shuts-down-sora-while-meta-gets-shut-out-in-court": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/zuckerberg-LA-trial-2026-GettyImages-2261841364.jpg?w=1024",
+      "checkedAt": "2026-03-27T16:03:32.769167+00:00"
+    },
+    "https://techcrunch.com/2026/03/26/david-sacks-is-done-as-ai-czar-heres-what-hes-doing-instead": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2203859648.jpg?w=1024",
+      "checkedAt": "2026-03-27T16:03:32.769167+00:00"
     }
   }
 }
