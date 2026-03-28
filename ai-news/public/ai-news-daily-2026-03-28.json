@@ -1,6 +1,6 @@
 {
   "date": "2026-03-28",
-  "updatedAt": "2026-03-28T18:58:52.488077+00:00",
+  "updatedAt": "2026-03-28T19:41:38.786697+00:00",
   "items": [
     {
       "title": "Why OpenAI killed Sora",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK201_SAM_ALTMAN_CVIRGINIA_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-28T12:00:00+00:00",
       "firstSeen": "2026-03-28T13:00:01.793509+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6661
+      "score": 11.6483
     },
     {
       "title": "Anthropic’s Claude popularity with paying consumers is skyrocketing",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Claude-Opus-4.5-illustration.png?resize=1200%2C675",
       "published": "2026-03-28T14:15:00+00:00",
       "firstSeen": "2026-03-28T14:48:38.136944+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1545
+      "score": 11.1356
     },
     {
       "title": "NVIDIA AI Unveils ProRL Agent: A Decoupled Rollout-as-a-Service Infrastructure for Reinforcement Learning of Multi-Turn LLM Agents at Scale",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-27-at-10.37.36-PM-1-150x150.png",
       "published": "2026-03-28T05:38:49+00:00",
       "firstSeen": "2026-03-28T06:00:01.275812+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5795
+      "score": 6.5646
     },
     {
       "title": "All 11 xAI co-founders have now reportedly left Elon Musk’s AI company",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/xai-all-cofounders-departed-musk-spacex-rebuild.png",
       "published": "2026-03-28T17:46:11+00:00",
       "firstSeen": "2026-03-28T18:00:02.098430+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4136
+      "score": 5.3927
     },
     {
       "title": "Elon Musk’s last co-founder reportedly leaves xAI",
@@ -77,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200%2C800",
       "published": "2026-03-28T16:11:16+00:00",
       "firstSeen": "2026-03-28T16:49:31.086200+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2079
+      "score": 5.1879
     },
     {
       "title": "Quoting Matt Webb",
@@ -93,10 +93,10 @@
       "image": "",
       "published": "2026-03-28T12:04:26+00:00",
       "firstSeen": "2026-03-28T13:00:01.793509+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.198
+      "score": 5.1802
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -107,9 +107,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-28T18:58:56.965397+00:00",
+      "published": "2026-03-28T19:41:43.759000+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -125,10 +125,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Samsung-AI-video-promotion.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C1.5826921155434%2C100%2C65.708980020247",
       "published": "2026-03-28T14:00:00+00:00",
       "firstSeen": "2026-03-28T14:48:38.136944+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3179
+      "score": 3.2991
     },
     {
       "title": "Suno leans into customization with v5.5",
@@ -141,10 +141,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/1774532259-suno_v5-5_blogouterbanner.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-03-28T18:33:10+00:00",
       "firstSeen": "2026-03-28T18:58:52.488077+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.047
+      "score": 3.0257
     },
     {
       "title": "Meta’s new prescription Ray-Ban smart glasses are a distribution play, not a technology leap",
@@ -157,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/meta-ray-ban-prescription-smart-glasses.png",
       "published": "2026-03-28T17:25:01+00:00",
       "firstSeen": "2026-03-28T18:00:02.098430+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8032
+      "score": 2.7826
     },
     {
       "title": "Kandou AI raises $225 million to bet that copper can outlast the optical revolution",
@@ -173,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/kandou-ai-225m-copper-interconnect-ai-infrastructure.png",
       "published": "2026-03-28T17:04:15+00:00",
       "firstSeen": "2026-03-28T18:00:02.098430+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0931
+      "score": 2.0727
     },
     {
       "title": "The class of 2025 is using AI in job interviews, and a startup industry is cashing in",
@@ -189,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/gen-z-ai-job-interviews.png",
       "published": "2026-03-28T10:09:46+00:00",
       "firstSeen": "2026-03-28T11:00:01.385866+00:00",
-      "lastSeen": "2026-03-28T18:58:52.488077+00:00",
+      "lastSeen": "2026-03-28T19:41:38.786697+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.911
+      "score": 1.8941
     }
   ],
   "errors": []
