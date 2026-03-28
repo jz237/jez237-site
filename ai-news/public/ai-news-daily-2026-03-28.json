@@ -1,6 +1,6 @@
 {
   "date": "2026-03-28",
-  "updatedAt": "2026-03-28T06:00:01.275812+00:00",
+  "updatedAt": "2026-03-28T05:34:01.542166+00:00",
   "items": [
     {
       "title": "NVIDIA AI Unveils ProRL Agent: A Decoupled Rollout-as-a-Service Infrastructure for Reinforcement Learning of Multi-Turn LLM Agents at Scale",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-28T06:00:06.865207+00:00",
+      "published": "2026-03-28T05:34:06.479455+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-28T06:00:01.275812+00:00",
+      "lastSeen": "2026-03-28T05:34:01.542166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
