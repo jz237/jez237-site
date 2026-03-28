@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-28T15:00:01.257347+00:00",
+  "updatedAt": "2026-03-28T14:48:38.136944+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2151,11 +2151,11 @@
     },
     "https://techcrunch.com/2026/03/28/anthropics-claude-popularity-with-paying-consumers-is-skyrocketing": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Claude-Opus-4.5-illustration.png?resize=1200,675",
-      "checkedAt": "2026-03-28T15:00:01.257347+00:00"
+      "checkedAt": "2026-03-28T14:48:38.136944+00:00"
     },
     "https://www.theverge.com/ai-artificial-intelligence/900400/tiktok-ai-ads-labels-samsung-disclosure": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Samsung-AI-video-promotion.jpg?quality=90&amp;strip=all&amp;crop=0,1.5826921155434,100,65.708980020247",
-      "checkedAt": "2026-03-28T15:00:01.257347+00:00"
+      "checkedAt": "2026-03-28T14:48:38.136944+00:00"
     }
   }
 }

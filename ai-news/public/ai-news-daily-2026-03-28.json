@@ -1,6 +1,6 @@
 {
   "date": "2026-03-28",
-  "updatedAt": "2026-03-28T15:00:01.257347+00:00",
+  "updatedAt": "2026-03-28T14:48:38.136944+00:00",
   "items": [
     {
       "title": "Why OpenAI killed Sora",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK201_SAM_ALTMAN_CVIRGINIA_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-28T12:00:00+00:00",
       "firstSeen": "2026-03-28T13:00:01.793509+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.772
+      "score": 11.7774
     },
     {
       "title": "Anthropic’s Claude popularity with paying consumers is skyrocketing",
@@ -28,11 +28,11 @@
       "summary": "Estimates for total Claude consumer users are all over the map (we've seen figures ranging from 18 million to 30 million). Anthropic hasn't disclosed this data, but a spokesperson did tell TechCrunch that Claude paid subscriptions have more than doubled this year.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Claude-Opus-4.5-illustration.png?resize=1200%2C675",
       "published": "2026-03-28T14:15:00+00:00",
-      "firstSeen": "2026-03-28T15:00:01.257347+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "firstSeen": "2026-03-28T14:48:38.136944+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2673
+      "score": 11.273
     },
     {
       "title": "NVIDIA AI Unveils ProRL Agent: A Decoupled Rollout-as-a-Service Infrastructure for Reinforcement Learning of Multi-Turn LLM Agents at Scale",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-27-at-10.37.36-PM-1-150x150.png",
       "published": "2026-03-28T05:38:49+00:00",
       "firstSeen": "2026-03-28T06:00:01.275812+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6683
+      "score": 6.6728
     },
     {
       "title": "Quoting Matt Webb",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-03-28T12:04:26+00:00",
       "firstSeen": "2026-03-28T13:00:01.793509+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3041
+      "score": 5.3095
     },
     {
       "title": "TikTok&#8217;s policy for AI ads isn&#8217;t working",
@@ -76,11 +76,11 @@
       "summary": "I've been struggling to tell whether the ads appearing in my TikTok feeds have been made with generative AI tools. As someone who spends a great deal of time scrutinizing images and videos for the usual \"tells\" that something was synthetically generated, some of the promotions I've seen have definitely sparked suspicion. For several weeks, [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Samsung-AI-video-promotion.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C1.5826921155434%2C100%2C65.708980020247",
       "published": "2026-03-28T14:00:00+00:00",
-      "firstSeen": "2026-03-28T15:00:01.257347+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "firstSeen": "2026-03-28T14:48:38.136944+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4299
+      "score": 3.4355
     },
     {
       "title": "The class of 2025 is using AI in job interviews, and a startup industry is cashing in",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/gen-z-ai-job-interviews.png",
       "published": "2026-03-28T10:09:46+00:00",
       "firstSeen": "2026-03-28T11:00:01.385866+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0117
+      "score": 2.0168
     },
     {
       "title": "How GRPO, DAPO, RLVR, and synthetic self-play replaced RLHF as the dominant post-training stack. A technical survey of what changed and why.",
@@ -107,9 +107,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-28T15:00:06.053991+00:00",
+      "published": "2026-03-28T14:48:41.738765+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-28T15:00:01.257347+00:00",
+      "lastSeen": "2026-03-28T14:48:38.136944+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.76
