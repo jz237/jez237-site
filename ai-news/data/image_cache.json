@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-28T19:41:38.786697+00:00",
+  "updatedAt": "2026-03-28T21:00:01.547408+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2164,6 +2164,10 @@
     "https://www.theverge.com/entertainment/903056/suno-ai-music-v5-5-model": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/1774532259-suno_v5-5_blogouterbanner.webp?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
       "checkedAt": "2026-03-28T18:58:52.488077+00:00"
+    },
+    "https://techcrunch.com/2026/03/28/stanford-study-outlines-dangers-of-asking-ai-chatbots-for-personal-advice": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200,800",
+      "checkedAt": "2026-03-28T21:00:01.547408+00:00"
     }
   }
 }
