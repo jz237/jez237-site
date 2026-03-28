@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-28T15:45:12.153367+00:00",
+  "updatedAt": "2026-03-28T17:00:02.035510+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2156,6 +2156,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/900400/tiktok-ai-ads-labels-samsung-disclosure": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Samsung-AI-video-promotion.jpg?quality=90&amp;strip=all&amp;crop=0,1.5826921155434,100,65.708980020247",
       "checkedAt": "2026-03-28T14:48:38.136944+00:00"
+    },
+    "https://techcrunch.com/2026/03/28/elon-musks-last-co-founder-reportedly-leaves-xai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200,800",
+      "checkedAt": "2026-03-28T17:00:02.035510+00:00"
     }
   }
 }
