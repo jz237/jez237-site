@@ -1,6 +1,6 @@
 {
   "date": "2026-03-29",
-  "updatedAt": "2026-03-29T16:00:01.184916+00:00",
+  "updatedAt": "2026-03-29T15:45:15.938016+00:00",
   "items": [
     {
       "title": "Google-Agent vs Googlebot: Google Defines the Technical Boundary Between User Triggered AI Access and Search Crawling Systems Today",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-16-1024x731.png",
       "published": "2026-03-29T06:03:27+00:00",
       "firstSeen": "2026-03-29T07:00:01.285535+00:00",
-      "lastSeen": "2026-03-29T16:00:01.184916+00:00",
+      "lastSeen": "2026-03-29T15:45:15.938016+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1545
+      "score": 8.1603
     },
     {
       "title": "A Coding Guide to Exploring nanobot’s Full Agent Pipeline, from Wiring Up Tools and Memory to Skills, Subagents, and Cron Scheduling",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-15.png",
       "published": "2026-03-29T05:40:25+00:00",
       "firstSeen": "2026-03-29T05:49:21.007826+00:00",
-      "lastSeen": "2026-03-29T16:00:01.184916+00:00",
+      "lastSeen": "2026-03-29T15:45:15.938016+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4457
+      "score": 7.4513
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -43,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-29T16:00:07.084442+00:00",
+      "published": "2026-03-29T15:45:22.588382+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-29T16:00:01.184916+00:00",
+      "lastSeen": "2026-03-29T15:45:15.938016+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-29-at-1.21.10-AM-1-150x150.png",
       "published": "2026-03-29T08:25:09+00:00",
       "firstSeen": "2026-03-29T08:56:52.680891+00:00",
-      "lastSeen": "2026-03-29T16:00:01.184916+00:00",
+      "lastSeen": "2026-03-29T15:45:15.938016+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.1111
+      "score": 4.1172
     },
     {
       "title": "Recap: Europe’s top funding rounds this week (23–29 March)",
@@ -77,10 +77,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Europes-top-funding-rounds-this-week-23–29-March-.png",
       "published": "2026-03-29T12:05:39+00:00",
       "firstSeen": "2026-03-29T13:00:01.626947+00:00",
-      "lastSeen": "2026-03-29T16:00:01.184916+00:00",
+      "lastSeen": "2026-03-29T15:45:15.938016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7369
+      "score": 2.7437
     }
   ],
   "errors": []
