@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-28T22:46:53.183727+00:00",
+  "updatedAt": "2026-03-29T00:00:01.686199+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2168,6 +2168,10 @@
     "https://techcrunch.com/2026/03/28/stanford-study-outlines-dangers-of-asking-ai-chatbots-for-personal-advice": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200,800",
       "checkedAt": "2026-03-28T20:47:29.587826+00:00"
+    },
+    "https://techcrunch.com/2026/03/28/bluesky-leans-into-ai-with-attie-an-app-for-building-custom-feeds": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/bluesky-GettyImages-2185142051.jpg?resize=1200,800",
+      "checkedAt": "2026-03-29T00:00:01.686199+00:00"
     }
   }
 }
