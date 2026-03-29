@@ -1,7 +1,23 @@
 {
   "date": "2026-03-29",
-  "updatedAt": "2026-03-29T05:49:21.007826+00:00",
+  "updatedAt": "2026-03-29T07:00:01.285535+00:00",
   "items": [
+    {
+      "title": "Google-Agent vs Googlebot: Google Defines the Technical Boundary Between User Triggered AI Access and Search Crawling Systems Today",
+      "url": "https://www.marktechpost.com/2026/03/28/google-agent-vs-googlebot-google-defines-the-technical-boundary-between-user-triggered-ai-access-and-search-crawling-systems-today",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "As Google integrates AI capabilities across its product suite, a new technical entity has surfaced in server logs: Google-Agent. For software devs, understanding this entity is critical for distinguishing between automated indexers and real-time, user-initiated requests. Unlike the autonomous crawlers that have defined the web for decades, Google-Agent operates under a different set of rules [&#8230;]\nThe post Google-Agent vs Googlebot: Google Defines the Technical Boundary Between User Triggered AI Access and Search Crawling Systems Today appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-16-1024x731.png",
+      "published": "2026-03-29T06:03:27+00:00",
+      "firstSeen": "2026-03-29T07:00:01.285535+00:00",
+      "lastSeen": "2026-03-29T07:00:01.285535+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.3916
+    },
     {
       "title": "A Coding Guide to Exploring nanobot’s Full Agent Pipeline, from Wiring Up Tools and Memory to Skills, Subagents, and Cron Scheduling",
       "url": "https://www.marktechpost.com/2026/03/28/a-coding-guide-to-exploring-nanobots-full-agent-pipeline-from-wiring-up-tools-and-memory-to-skills-subagents-and-cron-scheduling",
@@ -13,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-15.png",
       "published": "2026-03-29T05:40:25+00:00",
       "firstSeen": "2026-03-29T05:49:21.007826+00:00",
-      "lastSeen": "2026-03-29T05:49:21.007826+00:00",
+      "lastSeen": "2026-03-29T07:00:01.285535+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.7155
+      "score": 7.6802
     },
     {
       "title": "Post-Training in 2026: GRPO, DAPO, RLVR & Beyond",
@@ -27,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-29T05:49:26.340528+00:00",
+      "published": "2026-03-29T07:00:14.704896+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-29T05:49:21.007826+00:00",
+      "lastSeen": "2026-03-29T07:00:01.285535+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66

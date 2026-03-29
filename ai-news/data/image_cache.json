@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-29T05:49:21.007826+00:00",
+  "updatedAt": "2026-03-29T07:00:01.285535+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2176,6 +2176,10 @@
     "https://www.marktechpost.com/2026/03/28/a-coding-guide-to-exploring-nanobots-full-agent-pipeline-from-wiring-up-tools-and-memory-to-skills-subagents-and-cron-scheduling": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-15.png",
       "checkedAt": "2026-03-29T05:49:21.007826+00:00"
+    },
+    "https://www.marktechpost.com/2026/03/28/google-agent-vs-googlebot-google-defines-the-technical-boundary-between-user-triggered-ai-access-and-search-crawling-systems-today": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-16-1024x731.png",
+      "checkedAt": "2026-03-29T07:00:01.285535+00:00"
     }
   }
 }
