@@ -1,6 +1,6 @@
 {
   "date": "2026-03-29",
-  "updatedAt": "2026-03-29T11:00:01.521691+00:00",
+  "updatedAt": "2026-03-29T10:51:38.708100+00:00",
   "items": [
     {
       "title": "Google-Agent vs Googlebot: Google Defines the Technical Boundary Between User Triggered AI Access and Search Crawling Systems Today",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-16-1024x731.png",
       "published": "2026-03-29T06:03:27+00:00",
       "firstSeen": "2026-03-29T07:00:01.285535+00:00",
-      "lastSeen": "2026-03-29T11:00:01.521691+00:00",
+      "lastSeen": "2026-03-29T10:51:38.708100+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2789
+      "score": 8.2826
     },
     {
       "title": "A Coding Guide to Exploring nanobot’s Full Agent Pipeline, from Wiring Up Tools and Memory to Skills, Subagents, and Cron Scheduling",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-15.png",
       "published": "2026-03-29T05:40:25+00:00",
       "firstSeen": "2026-03-29T05:49:21.007826+00:00",
-      "lastSeen": "2026-03-29T11:00:01.521691+00:00",
+      "lastSeen": "2026-03-29T10:51:38.708100+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5687
+      "score": 7.5724
     },
     {
       "title": "Chroma Releases Context-1: A 20B Agentic Search Model for Multi-Hop Retrieval, Context Management, and Scalable Synthetic Task Generation",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-29-at-1.21.10-AM-1-150x150.png",
       "published": "2026-03-29T08:25:09+00:00",
       "firstSeen": "2026-03-29T08:56:52.680891+00:00",
-      "lastSeen": "2026-03-29T11:00:01.521691+00:00",
+      "lastSeen": "2026-03-29T10:51:38.708100+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.2439
+      "score": 4.2479
     },
     {
       "title": "A benchmark that measures functional correctness for synthesizing programs from docstrings, consisting of 164 original programming problems assessing language comprehension, algorithms, and simple mathematics",
@@ -59,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-29T11:00:06.730736+00:00",
+      "published": "2026-03-29T10:51:44.512866+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-29T11:00:01.521691+00:00",
+      "lastSeen": "2026-03-29T10:51:38.708100+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
