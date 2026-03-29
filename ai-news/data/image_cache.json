@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-29T20:48:59.279651+00:00",
+  "updatedAt": "2026-03-29T22:00:02.005529+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2196,6 +2196,10 @@
     "https://simonwillison.net/2026/Mar/29/pretext-explainer": {
       "image": "",
       "checkedAt": "2026-03-29T20:48:59.279651+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/903190/bluesky-attie-ai-custom-feeds": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/attie-ai.jpeg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-03-29T22:00:02.005529+00:00"
     }
   }
 }
