@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T19:17:03.380760+00:00",
+  "updatedAt": "2026-03-30T21:00:01.943887+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2268,6 +2268,14 @@
     "https://www.technologyreview.com/2026/03/30/1134881/the-pentagons-culture-war-tactic-against-anthropic-has-backfired": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/anthropic-ruling.jpg?resize=1200,600",
       "checkedAt": "2026-03-30T17:00:01.473321+00:00"
+    },
+    "https://techcrunch.com/2026/03/30/ai-trust-adoption-poll-more-americans-adopt-tools-fewer-say-they-can-trust-the-results": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200,801",
+      "checkedAt": "2026-03-30T21:00:01.943887+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8js4": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-03-30T21:00:01.943887+00:00"
     }
   }
 }

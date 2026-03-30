@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T19:17:03.380760+00:00",
+  "updatedAt": "2026-03-30T21:00:01.943887+00:00",
   "items": [
     {
       "title": "Matteo Salis, Gabriele Sartor, Rosa Meo, Stefano Ferraris, Abdourrahmane M. Atto",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-30T19:17:07.670313+00:00",
+      "published": "2026-03-30T21:00:09.946093+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "As more Americans adopt AI tools, fewer say they can trust the results",
+      "url": "https://techcrunch.com/2026/03/30/ai-trust-adoption-poll-more-americans-adopt-tools-fewer-say-they-can-trust-the-results",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI adoption is rising in the U.S., but trust remains low, with most Americans concerned about transparency, regulation, and the technology’s broader societal impact, according to a new Quinnipiac poll.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/claude-app-centered-in-ai-apps-GettyImages-2167861906.jpg?resize=1200%2C801",
+      "published": "2026-03-30T20:24:53+00:00",
+      "firstSeen": "2026-03-30T21:00:01.943887+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2722
+    },
+    {
+      "title": "Flipsnack and the shift toward motion-first business content with living visuals",
+      "url": "https://thenextweb.com/news/flipsnack-living-visuals-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Interactive content now generates 52.6% higher engagement than static formats, with users spending significantly longer interacting with dynamic media and showing higher recall for brands that use it. In practical terms, that shift may have transformed expectations around how digital content should be produced, especially in commerce and B2B environments, where attention is often a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/flipsnack-living-visuals-ai.png",
+      "published": "2026-03-30T19:58:03+00:00",
+      "firstSeen": "2026-03-30T21:00:01.943887+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5189
+    },
+    {
+      "title": "How AI’s capital explosion signals opportunity but also reveals a critical need for measurable ROI and meaningful impact",
+      "url": "https://thenextweb.com/news/how-ais-capital-explosion-signals-opportunity-but-also-reveals-a-critical-need-for-measurable-roi-and-meaningful-impact",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The current wave of investment in artificial intelligence reflects one of the largest capital shifts in modern technology, yet questions around financial return remain central to how this growth is being interpreted. According to a report, global venture capital investment in AI firms reached over $258 billion in 2025, accounting for 61% of all global [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/ai-investment-roi-impact.png",
+      "published": "2026-03-30T19:35:21+00:00",
+      "firstSeen": "2026-03-30T21:00:01.943887+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8077
+    },
+    {
+      "title": "From satellite ops to nordic launchpad",
+      "url": "https://thenextweb.com/news/europe-space-economy-bjorn-elseth",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Bjørn Ottar Elseth, an aerospace engineer and strategic advisor, has dedicated his career to connecting technology, leadership, and collaboration in ways that support meaningful industrial progress. His work is shaped by a longstanding commitment to helping organizations navigate complexity while unlocking new opportunities across the evolving space and energy landscape.  The global space economy is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bjorn-Ottar-Elseth-Nordic-Space-Bridge.png",
+      "published": "2026-03-30T19:13:04+00:00",
+      "firstSeen": "2026-03-30T21:00:01.943887+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.7969
     },
     {
       "title": "Rebellions closes $400M pre-IPO round at a $2.34B valuation",
@@ -28,10 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Rebellions-CEO.png",
       "published": "2026-03-30T19:03:43+00:00",
       "firstSeen": "2026-03-30T19:17:03.380760+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4432
+      "score": 4.3923
     },
     {
       "title": "ScaleOps raises $130M to autonomously manage cloud and AI infrastructure",
@@ -44,10 +108,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/ScaleOps.png",
       "published": "2026-03-30T18:40:41+00:00",
       "firstSeen": "2026-03-30T19:17:03.380760+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1316
+      "score": 2.0813
     },
     {
       "title": "Midas raises $50M Series A to solve tokenised finance’s liquidity problem",
@@ -60,10 +124,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Midas.png",
       "published": "2026-03-30T18:27:15+00:00",
       "firstSeen": "2026-03-30T19:17:03.380760+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9249
+      "score": 3.8749
     },
     {
       "title": "Uber is acquiring Blacklane, the Berlin chauffeur platform backed by Sixt and Mercedes-Benz",
@@ -76,10 +140,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Uber-x-Blacklane.png",
       "published": "2026-03-30T18:08:04+00:00",
       "firstSeen": "2026-03-30T19:17:03.380760+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8154
+      "score": 2.7658
     },
     {
       "title": "Mainland Chinese tech firms are flooding into Hong Kong as the West tightens the door",
@@ -92,10 +156,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/chinese-tech-companies-hong-kong-listings-geopolitical.png",
       "published": "2026-03-30T16:58:25+00:00",
       "firstSeen": "2026-03-30T17:09:32.226548+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0816
+      "score": 2.0336
     },
     {
       "title": "UK fines Apple subsidiary for paying a sanctioned Russian streaming service through the App Store",
@@ -108,10 +172,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/apple-uk-fine-russia-sanctions.png",
       "published": "2026-03-30T16:11:04+00:00",
       "firstSeen": "2026-03-30T17:09:32.226548+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1592
+      "score": 3.1123
     },
     {
       "title": "There are more AI health tools than ever—but how well do they work?",
@@ -124,10 +188,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AI_healthcare2.jpg?resize=1200%2C600",
       "published": "2026-03-30T16:00:00+00:00",
       "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9941
+      "score": 5.9473
     },
     {
       "title": "Judge throws out Musk’s advertising boycott lawsuit against X’s former sponsors",
@@ -140,10 +204,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/x-advertising-boycott-lawsuit-dismissed-garm-antitrust.png",
       "published": "2026-03-30T15:44:43+00:00",
       "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.047
+      "score": 2.0006
     },
     {
       "title": "The Pentagon’s culture war tactic against Anthropic has backfired",
@@ -156,10 +220,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/anthropic-ruling.jpg?resize=1200%2C600",
       "published": "2026-03-30T15:42:50+00:00",
       "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2861
+      "score": 6.2398
     },
     {
       "title": "Okta&#8217;s CEO is betting big on AI agent identity",
@@ -172,10 +236,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-30T15:15:00+00:00",
       "firstSeen": "2026-03-30T15:22:14.284028+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0434
+      "score": 5.9976
     },
     {
       "title": "Mantis Biotech is making ‘digital twins’ of humans to help solve medicine’s data availability problem",
@@ -188,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/09/brain_pills.jpg?resize=1200%2C899",
       "published": "2026-03-30T14:30:00+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1531
+      "score": 2.1083
     },
     {
       "title": "Mr. Chatterbox is a (weak) Victorian-era ethically trained model you can run on your own computer",
@@ -204,10 +268,10 @@
       "image": "https://static.simonwillison.net/static/2026/chatterbox.jpg",
       "published": "2026-03-30T14:28:34+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0525
+      "score": 0.0077
     },
     {
       "title": "Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War",
@@ -220,10 +284,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
       "published": "2026-03-30T14:23:03+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.11
+      "score": 5.0653
     },
     {
       "title": "ScaleOps raises $130M to improve computing efficiency amid AI demand",
@@ -236,10 +300,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/01/GettyImages-1136663877.jpg?resize=1200%2C800",
       "published": "2026-03-30T13:52:02+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4363
+      "score": 2.3923
     },
     {
       "title": "DeepSeek Outage Shakes AI Service Used by 355M Worldwide",
@@ -252,10 +316,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
       "published": "2026-03-30T13:02:13+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0748
+      "score": 6.0317
     },
     {
       "title": "AI chip startup Rebellions raises $400 million at $2.3B valuation in pre-IPO round",
@@ -268,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Screenshot-2026-02-08-at-12.27.26-PM.png?resize=1200%2C671",
       "published": "2026-03-30T13:00:00+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4138
+      "score": 2.3708
     },
     {
       "title": "Mistral AI raises $830M in debt to set up a data center near Paris",
@@ -284,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219786590.jpg?w=1024",
       "published": "2026-03-30T12:49:51+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1095
+      "score": 5.0667
     },
     {
       "title": "Qodo raises $70M for code verification as AI coding scales",
@@ -300,10 +364,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2080252145.jpg?resize=1200%2C800",
       "published": "2026-03-30T12:30:00+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5011
+      "score": 4.4586
     },
     {
       "title": "Starcloud raises $170M at a $1.1B valuation to build data centres in orbit",
@@ -319,7 +383,7 @@
       "lastSeen": "2026-03-30T19:17:03.380760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6105
+      "score": 2.5681
     },
     {
       "title": "Starcloud raises $170 million Series A to build data centers in space",
@@ -332,10 +396,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Starcloud-1-deployment-virtical-e1774655359557.png?w=549",
       "published": "2026-03-30T11:00:00+00:00",
       "firstSeen": "2026-03-30T11:17:19.982718+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0639
+      "score": 2.0232
     },
     {
       "title": "This $584 AI Meeting Assistant Is Now Only $67",
@@ -348,10 +412,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-42.jpg",
       "published": "2026-03-30T10:37:45+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1149
+      "score": 4.0747
     },
     {
       "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
@@ -364,10 +428,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
       "published": "2026-03-30T09:56:14+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1685
+      "score": 6.129
     },
     {
       "title": "Swiss startup miros raises €1.1M for bookable workpods",
@@ -383,7 +447,7 @@
       "lastSeen": "2026-03-30T19:17:03.380760+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8949
+      "score": 1.8555
     },
     {
       "title": "The largest AI survey ever reveals what humans actually want",
@@ -399,7 +463,7 @@
       "lastSeen": "2026-03-30T19:17:03.380760+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.989
+      "score": 2.9499
     },
     {
       "title": "The IRS Wants Smarter Audits. Palantir Could Help Decide Who Gets Flagged",
@@ -412,10 +476,10 @@
       "image": "https://media.wired.com/photos/69960bd38a9c9ad6ce51c112/master/pass/biz-irs-palantir-2203317568.jpg",
       "published": "2026-03-30T09:30:00+00:00",
       "firstSeen": "2026-03-30T09:45:11.015169+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0282
+      "score": 1.9892
     },
     {
       "title": "TerraSpark raises €5M+ to beam solar power from orbit to Earth",
@@ -431,7 +495,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9664
+      "score": 2.9284
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -447,7 +511,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9604
+      "score": 8.9227
     },
     {
       "title": "Finnish quantum unicorn IQM lands €50M from BlackRock",
@@ -463,7 +527,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9515
+      "score": 2.9142
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -479,7 +543,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8405
+      "score": 4.8037
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -492,10 +556,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9929
+      "score": 5.9602
     },
     {
       "title": "llm-mrchatterbox 0.1",
@@ -508,10 +572,10 @@
       "image": "",
       "published": "2026-03-30T02:20:46+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5772
+      "score": 2.5452
     },
     {
       "title": "All the latest in AI &#8216;music&#8217;",
@@ -524,10 +588,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK467_AI_MUSIC_CVirginia_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-30T01:32:14+00:00",
       "firstSeen": "2026-03-30T02:00:01.959512+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9319
+      "score": 1.9006
     },
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -540,10 +604,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.3653
+      "score": 10.3352
     },
     {
       "title": "How to Build Advanced Cybersecurity AI Agents with CAI Using Tools, Guardrails, Handoffs, and Multi-Agent Workflows",
@@ -556,10 +620,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2-1.png",
       "published": "2026-03-29T23:28:57+00:00",
       "firstSeen": "2026-03-29T23:46:45.464788+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.1546
+      "score": 5.1251
     },
     {
       "title": "Helping disaster response teams turn AI into action across Asia",
@@ -572,74 +636,26 @@
       "image": "",
       "published": "2026-03-29T22:15:00+00:00",
       "firstSeen": "2026-03-30T06:00:01.560692+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0133
+      "score": 3.9847
     },
     {
-      "title": "Bluesky’s new app is an AI for customizing your feed",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/903190/bluesky-attie-ai-custom-feeds",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "The latest app from the team behind Bluesky is Attie, an AI assistant that lets you build your own algorithm. At the Atmosphere conference, Bluesky's former CEO, Jay Graber, and CTO Paul Frazee, unveiled Attie, which is powered by Anthropic's Claude and built on top of Bluesky's underlying AT Protocol (atproto). Attie allows users to [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/attie-ai.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
-      "published": "2026-03-29T21:44:41+00:00",
-      "firstSeen": "2026-03-29T21:45:20.129259+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.0647
-    },
-    {
-      "title": "Pretext",
-      "url": "https://simonwillison.net/2026/Mar/29/pretext",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "title": "Superbugs: Resistance Rising Part 2",
+      "url": "http://www.bbc.co.uk/programmes/w3ct8js4",
+      "source": "BBC Discovery",
+      "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
       "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Pretext\nExciting new browser library from Cheng Lou, previously a React core developer and the original creator of the react-motion animation library.\nPretext solves the problem of calculating the height of a paragraph of line-wrapped text without touching the DOM. The usual way of doing this is to render the text and measure its dimensions, but this is extremely expensive. Pretext uses an array of clever tricks to make this much, much faster, which enables all sorts of new text rendering effects in browser applications.\nHere's one demo that shows the kind of things this makes possible:\n\n  \n\n\n",
-      "image": "https://static.simonwillison.net/static/2026/pretex.jpg",
-      "published": "2026-03-29T20:08:45+00:00",
-      "firstSeen": "2026-03-29T20:48:59.279651+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "category": "Science",
+      "summary": "The rapid spread of antibiotic resistant bacteria is already claiming lives - and a far greater global crisis is on the horizon.In this three part series for Discovery, reporter Roland Pease traces how we reached this point, uncovers the forces driving resistance ever faster, and meets the scientists racing to outpace evolving superbugs before our lifesaving medicines fail for good.Episode 2 - The chemists' challenge.  With all the low-hanging fruit in the antibiotic search space gone, chemists are having to work harder and be cleverer to top up the antibiotic pipeline. The chances of finding ",
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "published": "2026-03-30T20:00:00+00:00",
+      "firstSeen": "2026-03-30T21:00:01.943887+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.9316
-    },
-    {
-      "title": "Pretext — Under the Hood",
-      "url": "https://simonwillison.net/2026/Mar/29/pretext-explainer",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tool: Pretext — Under the Hood\n    See my notes on Pretext here.",
-      "image": "",
-      "published": "2026-03-29T19:59:28+00:00",
-      "firstSeen": "2026-03-29T20:48:59.279651+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.766
-    },
-    {
-      "title": "Python Vulnerability Lookup",
-      "url": "https://simonwillison.net/2026/Mar/29/python-vulnerability-lookup",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tool: Python Vulnerability Lookup\n    I learned that the OSV.dev open source vulnerability database has an open CORS JSON API, so I had Claude Code build this HTML tool for pasting in a pyproject.toml or requirements.txt file (or name of a GitHub repo containing those) and seeing a list of all reported vulnerabilities from that API.\n    \n        Tags: tools, python, supply-chain, vibe-coding, security",
-      "image": "",
-      "published": "2026-03-29T18:46:16+00:00",
-      "firstSeen": "2026-03-29T19:44:35.396348+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.5468
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3598
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
@@ -652,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-30T19:17:03.380760+00:00",
+      "lastSeen": "2026-03-30T21:00:01.943887+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9008
+      "score": 1.9003
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
