@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jez237 — Deep Space Terminal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cyan: #00ffff;
+  --magenta: #ff00ff;
+  --bg: #000000;
+  --text: #e0e0e0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Share Tech Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* CRT Scanline Overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* CRT Flicker */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  animation: flicker 0.15s infinite;
+  background: rgba(18, 16, 16, 0);
+}
+
+@keyframes flicker {
+  0% { opacity: 0.27861; }
+  5% { opacity: 0.34769; }
+  10% { opacity: 0.23604; }
+  15% { opacity: 0.90626; }
+  20% { opacity: 0.18128; }
+  25% { opacity: 0.83891; }
+  30% { opacity: 0.65583; }
+  35% { opacity: 0.67807; }
+  40% { opacity: 0.26559; }
+  45% { opacity: 0.84693; }
+  50% { opacity: 0.96019; }
+  55% { opacity: 0.08594; }
+  60% { opacity: 0.20313; }
+  65% { opacity: 0.71988; }
+  70% { opacity: 0.53455; }
+  75% { opacity: 0.37288; }
+  80% { opacity: 0.71428; }
+  85% { opacity: 0.70419; }
+  90% { opacity: 0.78160; }
+  95% { opacity: 0.68498; }
+  100% { opacity: 0.21498; }
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  border-bottom: 1px solid var(--cyan);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+nav .logo {
+  color: var(--cyan);
+  font-size: 1.4rem;
+  text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+}
+
+nav .nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+nav .nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+  position: relative;
+}
+
+nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--magenta);
+  box-shadow: 0 0 8px var(--magenta);
+  transition: width 0.3s;
+}
+
+nav .nav-links a:hover { color: var(--cyan); }
+nav .nav-links a:hover::after { width: 100%; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 25px; height: 2px;
+  background: var(--cyan);
+  transition: 0.3s;
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan), 0 0 80px rgba(0, 255, 255, 0.3);
+  margin-bottom: 1rem;
+  letter-spacing: 4px;
+}
+
+.hero .subtitle {
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+  color: var(--magenta);
+  text-shadow: 0 0 10px var(--magenta);
+  min-height: 2em;
+}
+
+.hero .cursor {
+  display: inline-block;
+  width: 10px;
+  animation: blink 1s step-end infinite;
+  color: var(--cyan);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.hero .prompt {
+  margin-top: 2rem;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.hero .prompt span {
+  color: var(--cyan);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  animation: bounce 2s infinite;
+  color: var(--cyan);
+  font-size: 1.5rem;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-15px); }
+  60% { transform: translateY(-7px); }
+}
+
+/* Sections */
+section {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: 3rem;
+  text-align: center;
+  color: var(--cyan);
+  text-shadow: 0 0 15px var(--cyan);
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--magenta);
+  box-shadow: 0 0 10px var(--magenta);
+  margin: 0.5rem auto 0;
+}
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(0, 255, 255, 0.02);
+  border: 1px solid var(--cyan);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+  animation: neon-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.2), inset 0 0 5px rgba(0, 255, 255, 0.05);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.1), inset 0 0 15px rgba(0, 255, 255, 0.1);
+  }
+}
+
+.card:nth-child(even) {
+  border-color: var(--magenta);
+  animation-name: neon-pulse-magenta;
+}
+
+@keyframes neon-pulse-magenta {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 0, 255, 0.2), inset 0 0 5px rgba(255, 0, 255, 0.05);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.4), 0 0 40px rgba(255, 0, 255, 0.1), inset 0 0 15px rgba(255, 0, 255, 0.1);
+  }
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.card:nth-child(even):hover {
+  background: rgba(255, 0, 255, 0.05);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+  transition: left 0.6s;
+}
+
+.card:hover::before { left: 100%; }
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.card h3 {
+  color: var(--cyan);
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.card:nth-child(even) h3 { color: var(--magenta); }
+
+.card p {
+  font-size: 0.85rem;
+  color: #999;
+  line-height: 1.8;
+}
+
+.card .status-line {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.75rem;
+  color: var(--cyan);
+}
+
+.card:nth-child(even) .status-line { color: var(--magenta); }
+
+/* Footer */
+footer {
+  border-top: 1px solid rgba(0, 255, 255, 0.3);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #555;
+  font-size: 0.8rem;
+}
+
+footer .footer-line {
+  color: var(--cyan);
+  text-shadow: 0 0 5px var(--cyan);
+  margin-bottom: 0.5rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    flex-direction: column;
+    padding: 1rem 2rem;
+    gap: 1rem;
+    border-bottom: 1px solid var(--cyan);
+  }
+
+  nav .nav-links.active { display: flex; }
+
+  .hamburger { display: flex; }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  section { padding: 3rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">&gt; jez237_</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#games">Games</a></li>
+    <li><a href="#photos">Photos</a></li>
+    <li><a href="#ai-news">AI News</a></li>
+    <li><a href="#garden">Garden</a></li>
+    <li><a href="#ops">Ops Center</a></li>
+    <li><a href="#plex">Plex</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="hero">
+  <h1>JEZ237</h1>
+  <div class="subtitle">
+    <span id="typewriter"></span><span class="cursor">█</span>
+  </div>
+  <div class="prompt">
+    <span>&gt;</span> builder // experimenter // curious person
+  </div>
+  <div class="scroll-indicator">▼</div>
+</section>
+
+<section id="explore">
+  <h2 class="section-title">// SYSTEMS ONLINE</h2>
+  <div class="cards-grid">
+
+    <div class="card" id="games">
+      <span class="card-icon">🎮</span>
+      <h3>Games</h3>
+      <p>Interactive experiments and game prototypes. Playable browser-based creations built with code and curiosity.</p>
+      <div class="status-line">[STATUS: ACTIVE] &gt; 4 games deployed_</div>
+    </div>
+
+    <div class="card" id="photos">
+      <span class="card-icon">📸</span>
+      <h3>Photos</h3>
+      <p>Cats being cats. Garden through the seasons. Snapshots from daily life captured and curated.</p>
+      <div class="status-line">[STATUS: UPDATED] &gt; gallery_sync OK_</div>
+    </div>
+
+    <div class="card" id="ai-news">
+      <span class="card-icon">🤖</span>
+      <h3>AI News</h3>
+      <p>Curated feed of the latest developments in artificial intelligence. Auto-updated by NewsBot agent.</p>
+      <div class="status-line">[STATUS: LIVE] &gt; feed_refresh 30min_</div>
+    </div>
+
+    <div class="card" id="garden">
+      <span class="card-icon">🌱</span>
+      <h3>Garden</h3>
+      <p>Tracking growth, experiments, and seasonal changes in the garden. Plants, soil, sunlight, patience.</p>
+      <div class="status-line">[STATUS: GROWING] &gt; spring_cycle active_</div>
+    </div>
+
+    <div class="card" id="ops">
+      <span class="card-icon">⚙️</span>
+      <h3>Ops Center</h3>
+      <p>System health dashboard. Agent status, cron jobs, service monitors — the nerve center of everything running.</p>
+      <div class="status-line">[STATUS: NOMINAL] &gt; all_agents online_</div>
+    </div>
+
+    <div class="card" id="plex">
+      <span class="card-icon">🎬</span>
+      <h3>Plex</h3>
+      <p>Media server activity. Currently watching, recently added, and library statistics for the home theater setup.</p>
+      <div class="status-line">[STATUS: STREAMING] &gt; plex_server OK_</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-line">&gt; jez237 — builder / experimenter / curious person</div>
+  <div>system uptime: ∞ | all systems nominal | 2026</div>
+  <div style="margin-top: 0.5rem; color: #333;">[ end of transmission ]</div>
+</footer>
+
+<script>
+// Typewriter effect
+const phrases = [
+  "Building things that work.",
+  "Experimenting with everything.",
+  "Curious about what's next.",
+  "Running agents in the dark.",
+  "Automating the mundane.",
+];
+const el = document.getElementById('typewriter');
+let phraseIdx = 0, charIdx = 0, deleting = false, pause = 0;
+
+function type() {
+  const current = phrases[phraseIdx];
+  if (pause > 0) { pause--; requestAnimationFrame(() => setTimeout(type, 60)); return; }
+
+  if (!deleting) {
+    el.textContent = current.substring(0, charIdx + 1);
+    charIdx++;
+    if (charIdx === current.length) { deleting = true; pause = 30; }
+  } else {
+    el.textContent = current.substring(0, charIdx - 1);
+    charIdx--;
+    if (charIdx === 0) { deleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; pause = 8; }
+  }
+  requestAnimationFrame(() => setTimeout(type, deleting ? 30 : 70));
+}
+type();
+
+// Hamburger menu
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('active');
+});
+</script>
+</body>
+</html>
