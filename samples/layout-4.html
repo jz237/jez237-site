@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jez237 — Aurora Gradient</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #00ff87;
+  --pink: #ff6b9d;
+  --deep-purple: #1a0533;
+  --indigo: #0d1b69;
+  --text: #e8e0f0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+  background: var(--deep-purple);
+}
+
+/* Animated gradient background */
+.bg-gradient {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    var(--deep-purple) 0%,
+    #15083a 20%,
+    var(--indigo) 40%,
+    #0a1550 60%,
+    var(--deep-purple) 80%,
+    #1f0845 100%
+  );
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Aurora overlay */
+.aurora {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aurora-band {
+  position: absolute;
+  width: 200%;
+  height: 40%;
+  opacity: 0.12;
+  filter: blur(80px);
+  animation: aurora-drift 12s ease-in-out infinite alternate;
+}
+
+.aurora-band:nth-child(1) {
+  top: -10%;
+  left: -50%;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  animation-duration: 12s;
+}
+
+.aurora-band:nth-child(2) {
+  top: 20%;
+  left: -30%;
+  background: linear-gradient(90deg, transparent, var(--pink), transparent);
+  animation-duration: 16s;
+  animation-delay: -4s;
+}
+
+.aurora-band:nth-child(3) {
+  top: 50%;
+  left: -70%;
+  background: linear-gradient(90deg, transparent, var(--green), var(--pink), transparent);
+  animation-duration: 20s;
+  animation-delay: -8s;
+}
+
+@keyframes aurora-drift {
+  0% { transform: translateX(-10%) rotate(-3deg); }
+  100% { transform: translateX(10%) rotate(3deg); }
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(26, 5, 51, 0.6);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+nav .logo {
+  font-weight: 800;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, var(--green), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+nav a {
+  color: rgba(232, 224, 240, 0.7);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+nav a:hover { color: var(--green); }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  width: 25px; height: 2px;
+  background: var(--green);
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--green), #7effc4, var(--pink), var(--green));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: color-cycle 6s ease-in-out infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes color-cycle {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero .tagline {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 300;
+  color: rgba(232, 224, 240, 0.6);
+  max-width: 550px;
+}
+
+.hero .scroll-hint {
+  position: absolute;
+  bottom: 3rem;
+  font-size: 0.8rem;
+  color: rgba(232, 224, 240, 0.3);
+  animation: fade-pulse 3s ease-in-out infinite;
+}
+
+@keyframes fade-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* Floating elements */
+.floater {
+  position: fixed;
+  font-size: 2rem;
+  opacity: 0.15;
+  animation: bob 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+.floater:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; animation-duration: 7s; }
+.floater:nth-child(2) { top: 35%; right: 8%; animation-delay: -2s; animation-duration: 8s; }
+.floater:nth-child(3) { top: 60%; left: 10%; animation-delay: -4s; animation-duration: 6s; }
+.floater:nth-child(4) { top: 80%; right: 12%; animation-delay: -1s; animation-duration: 9s; }
+.floater:nth-child(5) { top: 25%; left: 85%; animation-delay: -3s; animation-duration: 7.5s; }
+
+/* Sections */
+.section {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-header h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--green), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.8rem;
+}
+
+.section-header p {
+  color: rgba(232, 224, 240, 0.4);
+  font-size: 1rem;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2.5rem;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 255, 135, 0.3);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 255, 135, 0.08);
+}
+
+.card-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 255, 135, 0.15), rgba(255, 107, 157, 0.15));
+}
+
+.card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.8rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: rgba(232, 224, 240, 0.5);
+  line-height: 1.8;
+}
+
+.card .card-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.card .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 255, 135, 0.4); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(0, 255, 135, 0); }
+}
+
+.card .status-text {
+  font-size: 0.75rem;
+  color: rgba(0, 255, 135, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Footer */
+footer {
+  padding: 4rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
+}
+
+footer .brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--green), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+footer p {
+  color: rgba(232, 224, 240, 0.25);
+  font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(26, 5, 51, 0.95);
+    backdrop-filter: blur(30px);
+    flex-direction: column;
+    padding: 1.5rem 2rem;
+    gap: 1rem;
+  }
+
+  nav ul.active { display: flex; }
+  .hamburger { display: flex; }
+  .cards { grid-template-columns: 1fr; }
+  nav { padding: 1rem 1.5rem; }
+  .floater { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="aurora">
+  <div class="aurora-band"></div>
+  <div class="aurora-band"></div>
+  <div class="aurora-band"></div>
+</div>
+
+<div class="floater">✨</div>
+<div class="floater">🌿</div>
+<div class="floater">🎮</div>
+<div class="floater">📸</div>
+<div class="floater">⚡</div>
+
+<nav>
+  <div class="logo">jez237</div>
+  <ul id="navLinks">
+    <li><a href="#explore">Explore</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#photos">Photos</a></li>
+    <li><a href="#news">AI News</a></li>
+    <li><a href="#garden">Garden</a></li>
+    <li><a href="#ops">Ops</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="hero">
+  <h1>Jez237</h1>
+  <p class="tagline">Building, experimenting, and staying curious — one project at a time</p>
+  <span class="scroll-hint">scroll to explore ↓</span>
+</section>
+
+<div class="section" id="explore">
+  <div class="section-header">
+    <h2>What's Live</h2>
+    <p>All the things running, growing, and streaming</p>
+  </div>
+
+  <div class="cards">
+    <div class="card" id="games">
+      <div class="card-icon">🎮</div>
+      <h3>Games</h3>
+      <p>Interactive browser games and experimental prototypes. Built from scratch with code and creative curiosity.</p>
+      <div class="card-footer">
+        <span class="dot"></span>
+        <span class="status-text">Active</span>
+      </div>
+    </div>
+
+    <div class="card" id="photos">
+      <div class="card-icon">📸</div>
+      <h3>Photos</h3>
+      <p>Cat life and garden seasons. A visual diary of everything that grows and purrs around the home.</p>
+      <div class="card-footer">
+        <span class="dot"></span>
+        <span class="status-text">Updated</span>
+      </div>
+    </div>
+
+    <div class="card" id="news">
+      <div class="card-icon">🤖</div>
+      <h3>AI News</h3>
+      <p>Curated AI developments, auto-refreshed by a dedicated agent. Always current, never stale.</p>
+      <div class="card-footer">
+        <span class="dot"></span>
+        <span class="status-text">Live Feed</span>
+      </div>
+    </div>
+
+    <div class="card" id="garden">
+      <div class="card-icon">🌱</div>
+      <h3>Garden</h3>
+      <p>Seasonal progress, planting experiments, and the slow joy of watching things grow over time.</p>
+      <div class="card-footer">
+        <span class="dot"></span>
+        <span class="status-text">Spring Cycle</span>
+      </div>
+    </div>
+
+    <div class="card" id="ops">
+      <div class="card-icon">⚙️</div>
+      <h3>Ops Center</h3>
+      <p>System dashboard — agent health, cron schedules, service uptime. The control room view.</p>
+      <div class="card-footer">
+        <span class="dot"></span>
+        <span class="status-text">All Nominal</span>
+      </div>
+    </div>
+
+    <div class="card" id="plex">
+      <div class="card-icon">🎬</div>
+      <h3>Plex</h3>
+      <p>Home theater server. What's playing now, recently added content, and library statistics.</p>
+      <div class="card-footer">
+        <span class="dot"></span>
+        <span class="status-text">Streaming</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="brand">jez237</div>
+  <p>Builder / Experimenter / Curious — 2026</p>
+</footer>
+
+<script>
+// Hamburger
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('active');
+});
+
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.card').forEach((card, i) => {
+  card.style.transitionDelay = `${i * 0.1}s`;
+  observer.observe(card);
+});
+</script>
+</body>
+</html>
