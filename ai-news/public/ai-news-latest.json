@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T15:22:14.284028+00:00",
+  "updatedAt": "2026-03-30T16:00:02.055162+00:00",
   "items": [
     {
       "title": "Doctorina MedBench: End-to-End Evaluation of Agent-Based Medical AI",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-30T15:22:18.471794+00:00",
+      "published": "2026-03-30T16:00:09.577945+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.41
@@ -28,10 +28,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-30T15:15:00+00:00",
       "firstSeen": "2026-03-30T15:22:14.284028+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1563
+      "score": 6.1373
     },
     {
       "title": "Mantis Biotech is making ‘digital twins’ of humans to help solve medicine’s data availability problem",
@@ -44,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/09/brain_pills.jpg?resize=1200%2C899",
       "published": "2026-03-30T14:30:00+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2637
+      "score": 2.2451
     },
     {
       "title": "Mr. Chatterbox is a (weak) Victorian-era ethically trained model you can run on your own computer",
@@ -60,10 +60,10 @@
       "image": "https://static.simonwillison.net/static/2026/chatterbox.jpg",
       "published": "2026-03-30T14:28:34+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.163
+      "score": 0.1444
     },
     {
       "title": "Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War",
@@ -76,10 +76,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
       "published": "2026-03-30T14:23:03+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2203
+      "score": 5.2017
     },
     {
       "title": "ScaleOps raises $130M to improve computing efficiency amid AI demand",
@@ -92,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/01/GettyImages-1136663877.jpg?resize=1200%2C800",
       "published": "2026-03-30T13:52:02+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.545
+      "score": 2.5267
     },
     {
       "title": "DeepSeek Outage Shakes AI Service Used by 355M Worldwide",
@@ -108,10 +108,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
       "published": "2026-03-30T13:02:13+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.181
+      "score": 6.1631
     },
     {
       "title": "AI chip startup Rebellions raises $400 million at $2.3B valuation in pre-IPO round",
@@ -124,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Screenshot-2026-02-08-at-12.27.26-PM.png?resize=1200%2C671",
       "published": "2026-03-30T13:00:00+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5199
+      "score": 2.502
     },
     {
       "title": "Mistral AI raises $830M in debt to set up a data center near Paris",
@@ -140,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219786590.jpg?w=1024",
       "published": "2026-03-30T12:49:51+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2151
+      "score": 5.1973
     },
     {
       "title": "Qodo raises $70M for code verification as AI coding scales",
@@ -156,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2080252145.jpg?resize=1200%2C800",
       "published": "2026-03-30T12:30:00+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6057
+      "score": 4.5881
     },
     {
       "title": "Starcloud raises $170M at a $1.1B valuation to build data centres in orbit",
@@ -172,10 +172,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Starcloud.png",
       "published": "2026-03-30T12:28:35+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.715
+      "score": 2.6974
     },
     {
       "title": "Starcloud raises $170 million Series A to build data centers in space",
@@ -188,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Starcloud-1-deployment-virtical-e1774655359557.png?w=549",
       "published": "2026-03-30T11:00:00+00:00",
       "firstSeen": "2026-03-30T11:17:19.982718+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1642
+      "score": 2.1473
     },
     {
       "title": "This $584 AI Meeting Assistant Is Now Only $67",
@@ -204,10 +204,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-42.jpg",
       "published": "2026-03-30T10:37:45+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2143
+      "score": 4.1975
     },
     {
       "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
@@ -220,10 +220,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
       "published": "2026-03-30T09:56:14+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2659
+      "score": 6.2495
     },
     {
       "title": "Swiss startup miros raises €1.1M for bookable workpods",
@@ -236,10 +236,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/miros-pods.png",
       "published": "2026-03-30T09:47:02+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9919
+      "score": 1.9755
     },
     {
       "title": "The largest AI survey ever reveals what humans actually want",
@@ -252,10 +252,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Humans-and-AI.png",
       "published": "2026-03-30T09:32:01+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.0854
+      "score": 3.0691
     },
     {
       "title": "The IRS Wants Smarter Audits. Palantir Could Help Decide Who Gets Flagged",
@@ -268,10 +268,10 @@
       "image": "https://media.wired.com/photos/69960bd38a9c9ad6ce51c112/master/pass/biz-irs-palantir-2203317568.jpg",
       "published": "2026-03-30T09:30:00+00:00",
       "firstSeen": "2026-03-30T09:45:11.015169+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1245
+      "score": 2.1083
     },
     {
       "title": "TerraSpark raises €5M+ to beam solar power from orbit to Earth",
@@ -284,10 +284,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TerraSpark.png",
       "published": "2026-03-30T08:32:58+00:00",
       "firstSeen": "2026-03-30T09:00:01.356191+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0601
+      "score": 3.0443
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -300,10 +300,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bluesky-.png",
       "published": "2026-03-30T08:17:05+00:00",
       "firstSeen": "2026-03-30T09:00:01.356191+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0535
+      "score": 9.0378
     },
     {
       "title": "Finnish quantum unicorn IQM lands €50M from BlackRock",
@@ -316,10 +316,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IQM-CEO.png",
       "published": "2026-03-30T07:53:18+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0436
+      "score": 3.0281
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -332,10 +332,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
       "published": "2026-03-30T07:23:20+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9313
+      "score": 4.916
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -348,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0736
+      "score": 6.06
     },
     {
       "title": "llm-mrchatterbox 0.1",
@@ -364,10 +364,10 @@
       "image": "",
       "published": "2026-03-30T02:20:46+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6561
+      "score": 2.6428
     },
     {
       "title": "All the latest in AI &#8216;music&#8217;",
@@ -380,10 +380,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK467_AI_MUSIC_CVirginia_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-30T01:32:14+00:00",
       "firstSeen": "2026-03-30T02:00:01.959512+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.009
+      "score": 1.9961
     },
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -396,10 +396,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.4394
+      "score": 10.4269
     },
     {
       "title": "How to Build Advanced Cybersecurity AI Agents with CAI Using Tools, Guardrails, Handoffs, and Multi-Agent Workflows",
@@ -412,10 +412,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2-1.png",
       "published": "2026-03-29T23:28:57+00:00",
       "firstSeen": "2026-03-29T23:46:45.464788+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.2275
+      "score": 5.2152
     },
     {
       "title": "Helping disaster response teams turn AI into action across Asia",
@@ -428,10 +428,10 @@
       "image": "",
       "published": "2026-03-29T22:15:00+00:00",
       "firstSeen": "2026-03-30T06:00:01.560692+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0837
+      "score": 4.0718
     },
     {
       "title": "Bluesky’s new app is an AI for customizing your feed",
@@ -444,10 +444,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/attie-ai.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-03-29T21:44:41+00:00",
       "firstSeen": "2026-03-29T21:45:20.129259+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1342
+      "score": 10.1225
     },
     {
       "title": "Pretext",
@@ -460,10 +460,10 @@
       "image": "https://static.simonwillison.net/static/2026/pretex.jpg",
       "published": "2026-03-29T20:08:45+00:00",
       "firstSeen": "2026-03-29T20:48:59.279651+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.8651
+      "score": -1.8763
     },
     {
       "title": "Pretext — Under the Hood",
@@ -476,10 +476,10 @@
       "image": "",
       "published": "2026-03-29T19:59:28+00:00",
       "firstSeen": "2026-03-29T20:48:59.279651+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8321
+      "score": 1.821
     },
     {
       "title": "Python Vulnerability Lookup",
@@ -492,10 +492,10 @@
       "image": "",
       "published": "2026-03-29T18:46:16+00:00",
       "firstSeen": "2026-03-29T19:44:35.396348+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6107
+      "score": 8.5999
     },
     {
       "title": "Meet A-Evolve: The PyTorch Moment For Agentic AI Systems Replacing Manual Tuning With Automated State Mutation And Self-Correction",
@@ -508,10 +508,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/mk1-1-150x150.png",
       "published": "2026-03-29T18:17:23+00:00",
       "firstSeen": "2026-03-29T19:00:01.689220+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.5325
+      "score": 4.5218
     },
     {
       "title": "Sora’s shutdown could be a reality check moment for AI video",
@@ -524,10 +524,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2239565319.jpg?resize=1200%2C798",
       "published": "2026-03-29T16:30:00+00:00",
       "firstSeen": "2026-03-29T16:50:07.730654+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7728
+      "score": 1.7626
     },
     {
       "title": "Recap: Europe’s top funding rounds this week (23–29 March)",
@@ -540,10 +540,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Europes-top-funding-rounds-this-week-23–29-March-.png",
       "published": "2026-03-29T12:05:39+00:00",
       "firstSeen": "2026-03-29T13:00:01.626947+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2656
+      "score": 2.2567
     },
     {
       "title": "Chroma Releases Context-1: A 20B Agentic Search Model for Multi-Hop Retrieval, Context Management, and Scalable Synthetic Task Generation",
@@ -556,10 +556,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-29-at-1.21.10-AM-1-150x150.png",
       "published": "2026-03-29T08:25:09+00:00",
       "firstSeen": "2026-03-29T08:56:52.680891+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.6856
+      "score": 3.6775
     },
     {
       "title": "Google-Agent vs Googlebot: Google Defines the Technical Boundary Between User Triggered AI Access and Search Crawling Systems Today",
@@ -572,10 +572,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-16-1024x731.png",
       "published": "2026-03-29T06:03:27+00:00",
       "firstSeen": "2026-03-29T07:00:01.285535+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.756
+      "score": 7.7485
     },
     {
       "title": "A Coding Guide to Exploring nanobot’s Full Agent Pipeline, from Wiring Up Tools and Memory to Skills, Subagents, and Cron Scheduling",
@@ -588,10 +588,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-15.png",
       "published": "2026-03-29T05:40:25+00:00",
       "firstSeen": "2026-03-29T05:49:21.007826+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0514
+      "score": 7.0439
     },
     {
       "title": "Bluesky leans into AI with Attie, an app for building custom feeds",
@@ -604,10 +604,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/bluesky-GettyImages-2185142051.jpg?resize=1200%2C800",
       "published": "2026-03-28T23:00:00+00:00",
       "firstSeen": "2026-03-28T23:44:10.603814+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6484
+      "score": 2.6422
     },
     {
       "title": "Mistral AI Releases Voxtral TTS: A 4B Open-Weight Streaming Speech Model for Low-Latency Multilingual Voice Generation",
@@ -620,11 +620,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-28-at-1.48.14-PM-1-150x150.png",
       "published": "2026-03-28T20:58:21+00:00",
       "firstSeen": "2026-03-28T21:42:35.747806+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2588
+      "score": 15.2529
     },
     {
       "title": "Stanford study outlines dangers of asking AI chatbots for personal advice",
@@ -637,10 +637,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-bots-agents-GettyImages-2230799616.jpg?resize=1200%2C800",
       "published": "2026-03-28T20:45:54+00:00",
       "firstSeen": "2026-03-28T20:47:29.587826+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5268
+      "score": 1.521
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9021
+      "score": 1.9019
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-16T21:00:00+00:00",
       "firstSeen": "2026-03-16T21:52:48.382497+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.5099
