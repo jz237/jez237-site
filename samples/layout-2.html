@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jez237 — Bioluminescent Ocean</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;800&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #050a1a;
+  --teal: #00f5d4;
+  --purple: #9b5de5;
+  --coral: #f72585;
+  --text: #c8d6e5;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Raleway', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(5, 10, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 245, 212, 0.1);
+  transition: background 0.3s;
+}
+
+nav .logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--teal), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav ul {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: color 0.3s;
+}
+
+nav a:hover { color: var(--teal); }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 25px; height: 2px;
+  background: var(--teal);
+  transition: 0.3s;
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Floating Particles */
+.particles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float-up linear infinite;
+  opacity: 0;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.particle:nth-child(1) { left: 10%; width: 8px; height: 8px; background: var(--teal); animation-duration: 8s; animation-delay: 0s; }
+.particle:nth-child(2) { left: 25%; width: 12px; height: 12px; background: var(--purple); animation-duration: 12s; animation-delay: 2s; filter: blur(1px); }
+.particle:nth-child(3) { left: 40%; width: 6px; height: 6px; background: var(--coral); animation-duration: 9s; animation-delay: 1s; }
+.particle:nth-child(4) { left: 55%; width: 14px; height: 14px; background: var(--teal); animation-duration: 14s; animation-delay: 3s; filter: blur(2px); }
+.particle:nth-child(5) { left: 70%; width: 10px; height: 10px; background: var(--purple); animation-duration: 10s; animation-delay: 0.5s; }
+.particle:nth-child(6) { left: 85%; width: 7px; height: 7px; background: var(--coral); animation-duration: 11s; animation-delay: 4s; }
+.particle:nth-child(7) { left: 15%; width: 16px; height: 16px; background: rgba(0, 245, 212, 0.4); animation-duration: 16s; animation-delay: 5s; filter: blur(3px); }
+.particle:nth-child(8) { left: 50%; width: 5px; height: 5px; background: var(--teal); animation-duration: 7s; animation-delay: 1.5s; }
+.particle:nth-child(9) { left: 35%; width: 18px; height: 18px; background: rgba(155, 93, 229, 0.3); animation-duration: 18s; animation-delay: 6s; filter: blur(4px); }
+.particle:nth-child(10) { left: 65%; width: 9px; height: 9px; background: var(--coral); animation-duration: 13s; animation-delay: 2.5s; }
+.particle:nth-child(11) { left: 5%; width: 11px; height: 11px; background: var(--teal); animation-duration: 15s; animation-delay: 7s; filter: blur(1px); }
+.particle:nth-child(12) { left: 90%; width: 13px; height: 13px; background: rgba(247, 37, 133, 0.5); animation-duration: 11s; animation-delay: 3.5s; filter: blur(2px); }
+
+.hero h1 {
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--teal) 0%, var(--purple) 50%, var(--coral) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero .tagline {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 300;
+  color: rgba(200, 214, 229, 0.7);
+  max-width: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero .cta {
+  margin-top: 2.5rem;
+  display: inline-block;
+  padding: 0.8rem 2.5rem;
+  border: 2px solid var(--teal);
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.4s;
+  position: relative;
+  z-index: 1;
+}
+
+.hero .cta:hover {
+  background: var(--teal);
+  color: var(--bg);
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.4);
+}
+
+/* Wave Separator */
+.wave-separator {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  position: relative;
+}
+
+.wave-separator svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Sections */
+.section {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-header h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h2 .gradient-text {
+  background: linear-gradient(135deg, var(--teal), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-header p {
+  color: rgba(200, 214, 229, 0.5);
+  font-size: 1rem;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2.5rem;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.05), rgba(155, 93, 229, 0.05));
+  opacity: 0;
+  transition: opacity 0.5s;
+  border-radius: 20px;
+}
+
+.card:hover::before { opacity: 1; }
+
+.card:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-10px);
+  border-color: rgba(0, 245, 212, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 245, 212, 0.1);
+}
+
+.card-emoji {
+  font-size: 3rem;
+  margin-bottom: 1.2rem;
+  display: block;
+}
+
+.card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.8rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: rgba(200, 214, 229, 0.6);
+  line-height: 1.8;
+}
+
+.card .tag {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.3rem 1rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tag-teal { background: rgba(0, 245, 212, 0.15); color: var(--teal); }
+.tag-purple { background: rgba(155, 93, 229, 0.15); color: var(--purple); }
+.tag-coral { background: rgba(247, 37, 133, 0.15); color: var(--coral); }
+
+/* Footer */
+footer {
+  padding: 4rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+footer .footer-brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--teal), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+footer p {
+  color: rgba(200, 214, 229, 0.3);
+  font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(5, 10, 26, 0.95);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 1.5rem 2rem;
+    gap: 1.2rem;
+    border-bottom: 1px solid rgba(0, 245, 212, 0.1);
+  }
+
+  nav ul.active { display: flex; }
+  .hamburger { display: flex; }
+  .cards { grid-template-columns: 1fr; }
+  nav { padding: 1rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">jez237</div>
+  <ul id="navLinks">
+    <li><a href="#explore">Explore</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#photos">Photos</a></li>
+    <li><a href="#ai-news">AI News</a></li>
+    <li><a href="#garden">Garden</a></li>
+    <li><a href="#ops">Ops</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="hero">
+  <div class="particles">
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  </div>
+  <h1>Jez237</h1>
+  <p class="tagline">Builder. Experimenter. Endlessly curious. Diving deep into code, gardens, and everything between.</p>
+  <a href="#explore" class="cta">Dive In</a>
+</section>
+
+<div class="wave-separator">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,40 C360,120 720,0 1080,80 C1260,110 1380,60 1440,40 L1440,120 L0,120 Z" fill="rgba(0, 245, 212, 0.05)"/>
+    <path d="M0,60 C360,0 720,100 1080,40 C1260,20 1380,80 1440,60 L1440,120 L0,120 Z" fill="rgba(155, 93, 229, 0.03)"/>
+  </svg>
+</div>
+
+<div class="section" id="explore">
+  <div class="section-header">
+    <h2><span class="gradient-text">What's Running</span></h2>
+    <p>Projects, feeds, and experiments — all alive and breathing</p>
+  </div>
+
+  <div class="cards">
+    <div class="card" id="games">
+      <span class="card-emoji">🎮</span>
+      <h3>Games</h3>
+      <p>Browser-based games and interactive experiments. Built from scratch, played in the browser, constantly evolving.</p>
+      <span class="tag tag-teal">Interactive</span>
+    </div>
+
+    <div class="card" id="photos">
+      <span class="card-emoji">📸</span>
+      <h3>Photos</h3>
+      <p>Cat portraits and garden snapshots. A visual journal of the living things around the house and yard.</p>
+      <span class="tag tag-purple">Gallery</span>
+    </div>
+
+    <div class="card" id="ai-news">
+      <span class="card-emoji">🤖</span>
+      <h3>AI News</h3>
+      <p>Automated curation of AI developments. Powered by NewsBot, refreshed every 30 minutes, always current.</p>
+      <span class="tag tag-coral">Live Feed</span>
+    </div>
+
+    <div class="card" id="garden">
+      <span class="card-emoji">🌿</span>
+      <h3>Garden</h3>
+      <p>Seasonal tracking and garden experiments. What's growing, what's blooming, what's being tried for the first time.</p>
+      <span class="tag tag-teal">Growing</span>
+    </div>
+
+    <div class="card" id="ops">
+      <span class="card-emoji">⚙️</span>
+      <h3>Ops Center</h3>
+      <p>The dashboard behind the curtain. Agent health, cron schedules, service monitors — everything at a glance.</p>
+      <span class="tag tag-purple">System</span>
+    </div>
+
+    <div class="card" id="plex">
+      <span class="card-emoji">🎬</span>
+      <h3>Plex</h3>
+      <p>Home media server. What's playing, what's new, library stats. The entertainment hub of the house.</p>
+      <span class="tag tag-coral">Streaming</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">jez237</div>
+  <p>Built with curiosity and caffeine — 2026</p>
+  <p style="margin-top: 0.5rem;">Builder / Experimenter / Curious Person</p>
+</footer>
+
+<script>
+// Hamburger
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('active');
+});
+
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.card').forEach((card, i) => {
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(40px)';
+  card.style.transition = `all 0.6s cubic-bezier(0.23, 1, 0.32, 1) ${i * 0.1}s`;
+  observer.observe(card);
+});
+</script>
+</body>
+</html>
