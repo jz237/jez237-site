@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T15:22:14.284028+00:00",
+  "updatedAt": "2026-03-30T16:00:02.055162+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.4394
+      "score": 10.4269
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -29,10 +29,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bluesky-.png",
       "published": "2026-03-30T08:17:05+00:00",
       "firstSeen": "2026-03-30T09:00:01.356191+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0535
+      "score": 9.0378
     },
     {
       "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
       "published": "2026-03-30T09:56:14+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2659
+      "score": 6.2495
     },
     {
       "title": "DeepSeek Outage Shakes AI Service Used by 355M Worldwide",
@@ -61,10 +61,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
       "published": "2026-03-30T13:02:13+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.181
+      "score": 6.1631
     },
     {
       "title": "Okta&#8217;s CEO is betting big on AI agent identity",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-30T15:15:00+00:00",
       "firstSeen": "2026-03-30T15:22:14.284028+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1563
+      "score": 6.1373
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -93,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0736
+      "score": 6.06
     },
     {
       "title": "Doctorina MedBench: End-to-End Evaluation of Agent-Based Medical AI",
@@ -107,9 +107,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-30T15:22:18.471794+00:00",
+      "published": "2026-03-30T16:00:09.577945+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.41
@@ -125,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
       "published": "2026-03-30T14:23:03+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2203
+      "score": 5.2017
     },
     {
       "title": "Mistral AI raises $830M in debt to set up a data center near Paris",
@@ -141,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219786590.jpg?w=1024",
       "published": "2026-03-30T12:49:51+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2151
+      "score": 5.1973
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -157,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
       "published": "2026-03-30T07:23:20+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9313
+      "score": 4.916
     },
     {
       "title": "Qodo raises $70M for code verification as AI coding scales",
@@ -173,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2080252145.jpg?resize=1200%2C800",
       "published": "2026-03-30T12:30:00+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6057
+      "score": 4.5881
     },
     {
       "title": "This $584 AI Meeting Assistant Is Now Only $67",
@@ -189,10 +189,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-42.jpg",
       "published": "2026-03-30T10:37:45+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T15:22:14.284028+00:00",
+      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2143
+      "score": 4.1975
     }
   ],
   "errors": []
