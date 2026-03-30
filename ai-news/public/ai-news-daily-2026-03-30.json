@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T16:00:02.055162+00:00",
+  "updatedAt": "2026-03-30T17:00:01.473321+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.4269
+      "score": 10.4075
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -29,10 +29,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bluesky-.png",
       "published": "2026-03-30T08:17:05+00:00",
       "firstSeen": "2026-03-30T09:00:01.356191+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0378
+      "score": 9.0135
+    },
+    {
+      "title": "The Pentagon’s culture war tactic against Anthropic has backfired",
+      "url": "https://www.technologyreview.com/2026/03/30/1134881/the-pentagons-culture-war-tactic-against-anthropic-has-backfired",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. Last Thursday, a California judge temporarily blocked the Pentagon from labeling Anthropic a supply chain risk and ordering government agencies to stop using its AI. It’s the latest development in the month-long&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/anthropic-ruling.jpg?resize=1200%2C600",
+      "published": "2026-03-30T15:42:50+00:00",
+      "firstSeen": "2026-03-30T17:00:01.473321+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3514
     },
     {
       "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
@@ -45,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
       "published": "2026-03-30T09:56:14+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2495
+      "score": 6.224
     },
     {
       "title": "DeepSeek Outage Shakes AI Service Used by 355M Worldwide",
@@ -61,10 +77,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
       "published": "2026-03-30T13:02:13+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1631
+      "score": 6.1353
     },
     {
       "title": "Okta&#8217;s CEO is betting big on AI agent identity",
@@ -77,10 +93,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-30T15:15:00+00:00",
       "firstSeen": "2026-03-30T15:22:14.284028+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1373
+      "score": 6.1078
+    },
+    {
+      "title": "There are more AI health tools than ever—but how well do they work?",
+      "url": "https://www.technologyreview.com/2026/03/30/1134795/there-are-more-ai-health-tools-than-ever-but-how-well-do-they-work",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Earlier this month, Microsoft launched Copilot Health, a new space within its Copilot app where users will be able to connect their medical records and ask specific questions about their health. A couple of days earlier, Amazon had announced that Health AI, an LLM-based tool previously restricted to members of its One Medical service, would&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AI_healthcare2.jpg?resize=1200%2C600",
+      "published": "2026-03-30T16:00:00+00:00",
+      "firstSeen": "2026-03-30T17:00:01.473321+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.0599
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -93,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.06
+      "score": 6.0389
     },
     {
       "title": "Doctorina MedBench: End-to-End Evaluation of Agent-Based Medical AI",
@@ -112,7 +144,7 @@
       "lastSeen": "2026-03-30T16:00:02.055162+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
+      "score": 5.3799
     },
     {
       "title": "Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War",
@@ -125,10 +157,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
       "published": "2026-03-30T14:23:03+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2017
+      "score": 5.1729
     },
     {
       "title": "Mistral AI raises $830M in debt to set up a data center near Paris",
@@ -141,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219786590.jpg?w=1024",
       "published": "2026-03-30T12:49:51+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1973
+      "score": 5.1697
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -157,42 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
       "published": "2026-03-30T07:23:20+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
+      "lastSeen": "2026-03-30T17:00:01.473321+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.916
-    },
-    {
-      "title": "Qodo raises $70M for code verification as AI coding scales",
-      "url": "https://techcrunch.com/2026/03/30/qodo-bets-on-code-verification-as-ai-coding-scales-raises-70m",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As AI floods software development with code, Qodo is betting the real challenge is making sure it actually works.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2080252145.jpg?resize=1200%2C800",
-      "published": "2026-03-30T12:30:00+00:00",
-      "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5881
-    },
-    {
-      "title": "This $584 AI Meeting Assistant Is Now Only $67",
-      "url": "https://www.techrepublic.com/article/meetscribe-pro-lifetime-subscription",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "MeetScribe joins calls on major platforms, provides transcriptions, and even summarizes action items for you.\nThe post This $584 AI Meeting Assistant Is Now Only $67 appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-42.jpg",
-      "published": "2026-03-30T10:37:45+00:00",
-      "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T16:00:02.055162+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.1975
+      "score": 4.8923
     }
   ],
   "errors": []

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T16:00:02.055162+00:00",
+  "updatedAt": "2026-03-30T17:00:01.473321+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2260,6 +2260,14 @@
     "https://www.theverge.com/podcast/902264/oktas-ceo-is-betting-big-on-ai-agent-identity": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
       "checkedAt": "2026-03-30T15:22:14.284028+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/30/1134795/there-are-more-ai-health-tools-than-ever-but-how-well-do-they-work": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AI_healthcare2.jpg?resize=1200,600",
+      "checkedAt": "2026-03-30T17:00:01.473321+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/30/1134881/the-pentagons-culture-war-tactic-against-anthropic-has-backfired": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/anthropic-ruling.jpg?resize=1200,600",
+      "checkedAt": "2026-03-30T17:00:01.473321+00:00"
     }
   }
 }
