@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T01:00:01.975899+00:00",
+  "updatedAt": "2026-03-30T02:00:01.959512+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2204,6 +2204,10 @@
     "https://www.marktechpost.com/2026/03/29/how-to-build-advanced-cybersecurity-ai-agents-with-cai-using-tools-guardrails-handoffs-and-multi-agent-workflows": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-2-1.png",
       "checkedAt": "2026-03-29T23:46:45.464788+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/903196/ai-music-suno-udio-art-lawsuit": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK467_AI_MUSIC_CVirginia_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-03-30T02:00:01.959512+00:00"
     }
   }
 }
