@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T13:00:01.299422+00:00",
+  "updatedAt": "2026-03-30T14:00:01.683204+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2232,6 +2232,18 @@
     "https://www.techrepublic.com/article/meetscribe-pro-lifetime-subscription": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-42.jpg",
       "checkedAt": "2026-03-30T13:00:01.299422+00:00"
+    },
+    "https://techcrunch.com/2026/03/30/scaleops-130m-series-c-kubernetes-efficiency-ai-demand-funding": {
+      "image": "https://techcrunch.com/wp-content/uploads/2020/01/GettyImages-1136663877.jpg?resize=1200,800",
+      "checkedAt": "2026-03-30T14:00:01.683204+00:00"
+    },
+    "https://www.techrepublic.com/article/news-deepseek-12-hour-outage-millions-users-cut-off": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
+      "checkedAt": "2026-03-30T14:00:01.683204+00:00"
+    },
+    "https://techcrunch.com/2026/03/30/ai-chip-startup-rebellions-raises-400-million-at-2-3b-valuation-in-pre-ipo-round": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/Screenshot-2026-02-08-at-12.27.26-PM.png?resize=1200,671",
+      "checkedAt": "2026-03-30T14:00:01.683204+00:00"
     }
   }
 }
