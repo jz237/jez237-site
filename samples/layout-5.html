@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jez237 — Retro 90s Vaporwave</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Inconsolata:wght@400;600;700&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pink: #ff71ce;
+  --blue: #01cdfe;
+  --green: #05ffa1;
+  --purple: #b967ff;
+  --bg: #1a0030;
+  --text: #e0d0f0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inconsolata', monospace;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Stars background */
+.stars {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+.star:nth-child(1) { top: 5%; left: 12%; animation-delay: 0s; animation-duration: 2.5s; }
+.star:nth-child(2) { top: 15%; left: 45%; animation-delay: 0.5s; animation-duration: 3.2s; }
+.star:nth-child(3) { top: 8%; left: 78%; animation-delay: 1s; animation-duration: 2.8s; }
+.star:nth-child(4) { top: 25%; left: 25%; animation-delay: 1.5s; animation-duration: 3.5s; }
+.star:nth-child(5) { top: 35%; left: 60%; animation-delay: 0.3s; animation-duration: 2.2s; }
+.star:nth-child(6) { top: 12%; left: 90%; animation-delay: 2s; animation-duration: 4s; }
+.star:nth-child(7) { top: 45%; left: 8%; animation-delay: 0.8s; animation-duration: 3s; }
+.star:nth-child(8) { top: 55%; left: 35%; animation-delay: 1.2s; animation-duration: 2.6s; }
+.star:nth-child(9) { top: 20%; left: 55%; animation-delay: 2.2s; animation-duration: 3.8s; }
+.star:nth-child(10) { top: 40%; left: 82%; animation-delay: 0.7s; animation-duration: 2.4s; }
+.star:nth-child(11) { top: 65%; left: 18%; animation-delay: 1.8s; animation-duration: 3.3s; }
+.star:nth-child(12) { top: 50%; left: 50%; animation-delay: 0.2s; animation-duration: 2.9s; }
+.star:nth-child(13) { top: 30%; left: 70%; animation-delay: 1.4s; animation-duration: 3.6s; }
+.star:nth-child(14) { top: 75%; left: 42%; animation-delay: 0.6s; animation-duration: 2.1s; }
+.star:nth-child(15) { top: 10%; left: 30%; animation-delay: 2.5s; animation-duration: 4.2s; }
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(26, 0, 48, 0.9);
+  border-bottom: 3px solid var(--pink);
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+nav .logo {
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+  color: var(--pink);
+  text-shadow: 0 0 10px var(--pink), 2px 2px 0 var(--purple);
+}
+
+nav ul {
+  display: flex;
+  gap: 0;
+  list-style: none;
+}
+
+nav a {
+  font-family: 'VT323', monospace;
+  color: var(--blue);
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.5rem 1.2rem;
+  transition: all 0.2s;
+  border-left: 1px solid rgba(1, 205, 254, 0.3);
+}
+
+nav a:hover {
+  background: var(--blue);
+  color: var(--bg);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  width: 28px; height: 3px;
+  background: var(--pink);
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid floor */
+.grid-floor {
+  position: absolute;
+  bottom: 0; left: -50%;
+  width: 200%; height: 40%;
+  background:
+    linear-gradient(90deg, rgba(185, 103, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(185, 103, 255, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(300px) rotateX(60deg);
+  transform-origin: bottom center;
+  animation: grid-scroll 3s linear infinite;
+}
+
+@keyframes grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
+}
+
+/* Sunset gradient behind hero */
+.sunset {
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--pink), #ff3864, var(--purple), transparent);
+  filter: blur(60px);
+  opacity: 0.4;
+}
+
+/* Glitch text */
+.glitch {
+  font-family: 'VT323', monospace;
+  font-size: clamp(4rem, 12vw, 10rem);
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 20px var(--pink);
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+
+.glitch::before {
+  color: var(--blue);
+  animation: glitch-1 3s infinite linear alternate-reverse;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+
+.glitch::after {
+  color: var(--pink);
+  animation: glitch-2 2s infinite linear alternate-reverse;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch-1 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -1px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 3px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-2 {
+  0% { transform: translate(0); }
+  20% { transform: translate(3px, -2px); }
+  40% { transform: translate(-2px, 3px); }
+  60% { transform: translate(3px, 1px); }
+  80% { transform: translate(-3px, -1px); }
+  100% { transform: translate(0); }
+}
+
+.hero .tagline {
+  font-family: 'VT323', monospace;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green);
+  margin-top: 1rem;
+  z-index: 1;
+  position: relative;
+}
+
+.hero .sub-tagline {
+  font-size: 0.9rem;
+  color: rgba(224, 208, 240, 0.5);
+  margin-top: 0.5rem;
+  z-index: 1;
+  position: relative;
+}
+
+/* Section headers */
+.section-title {
+  font-family: 'VT323', monospace;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  color: var(--pink);
+  text-shadow: 0 0 15px var(--pink), 3px 3px 0 var(--purple);
+  position: relative;
+  z-index: 1;
+}
+
+/* Windows 95 style cards */
+.win95-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.win95-card {
+  background: linear-gradient(135deg, rgba(26, 0, 48, 0.9), rgba(40, 0, 70, 0.9));
+  border: 2px solid var(--purple);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.win95-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(185, 103, 255, 0.3), 0 0 40px rgba(255, 113, 206, 0.1);
+  border-color: var(--pink);
+}
+
+/* Title bar */
+.win95-titlebar {
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.win95-titlebar span {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+}
+
+.win95-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.win95-btn {
+  width: 16px; height: 16px;
+  border: 1px solid rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+  font-size: 0.7rem;
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.win95-body {
+  padding: 1.5rem;
+}
+
+.win95-body .card-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.win95-body h3 {
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
+  color: var(--blue);
+  margin-bottom: 0.5rem;
+}
+
+.win95-body p {
+  font-size: 0.85rem;
+  color: rgba(224, 208, 240, 0.6);
+  line-height: 1.7;
+}
+
+.win95-body .status-bar {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(185, 103, 255, 0.3);
+  font-family: 'VT323', monospace;
+  font-size: 0.9rem;
+  color: var(--green);
+  text-shadow: 0 0 5px var(--green);
+}
+
+/* Neon divider */
+.neon-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--pink), var(--blue), var(--green), var(--purple), transparent);
+  margin: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Footer */
+footer {
+  border-top: 3px solid var(--purple);
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  background: rgba(26, 0, 48, 0.8);
+}
+
+footer .footer-logo {
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+  background: linear-gradient(90deg, var(--pink), var(--blue), var(--green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.8rem;
+}
+
+footer p {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: rgba(224, 208, 240, 0.4);
+}
+
+footer .footer-art {
+  margin-top: 1rem;
+  font-family: 'VT323', monospace;
+  color: var(--purple);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(26, 0, 48, 0.95);
+    flex-direction: column;
+    border-bottom: 3px solid var(--pink);
+  }
+
+  nav ul.active { display: flex; }
+  .hamburger { display: flex; }
+
+  nav a { border-left: none; border-bottom: 1px solid rgba(185, 103, 255, 0.3); }
+
+  .win95-grid { grid-template-columns: 1fr; }
+
+  .grid-floor { height: 30%; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars">
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+</div>
+
+<nav>
+  <div class="logo">JEZ237.EXE</div>
+  <ul id="navLinks">
+    <li><a href="#projects">PROJECTS</a></li>
+    <li><a href="#games">GAMES</a></li>
+    <li><a href="#photos">PHOTOS</a></li>
+    <li><a href="#ai">AI NEWS</a></li>
+    <li><a href="#ops">OPS</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="hero">
+  <div class="sunset"></div>
+  <div class="grid-floor"></div>
+  <h1 class="glitch" data-text="JEZ237">JEZ237</h1>
+  <p class="tagline">BUILDER // EXPERIMENTER // CURIOUS</p>
+  <p class="sub-tagline">Welcome to the personal homepage — circa always</p>
+</section>
+
+<div class="neon-divider"></div>
+
+<h2 class="section-title" id="projects">[ PROJECTS ]</h2>
+
+<div class="win95-grid">
+  <div class="win95-card" id="games">
+    <div class="win95-titlebar">
+      <span>games.exe</span>
+      <div class="win95-buttons">
+        <div class="win95-btn">—</div>
+        <div class="win95-btn">□</div>
+        <div class="win95-btn">×</div>
+      </div>
+    </div>
+    <div class="win95-body">
+      <span class="card-emoji">🎮</span>
+      <h3>Games</h3>
+      <p>Browser-based games and interactive experiments. Built for fun, played for glory.</p>
+      <div class="status-bar">C:\GAMES> status: ONLINE_</div>
+    </div>
+  </div>
+
+  <div class="win95-card" id="photos">
+    <div class="win95-titlebar">
+      <span>gallery.exe</span>
+      <div class="win95-buttons">
+        <div class="win95-btn">—</div>
+        <div class="win95-btn">□</div>
+        <div class="win95-btn">×</div>
+      </div>
+    </div>
+    <div class="win95-body">
+      <span class="card-emoji">📸</span>
+      <h3>Photos</h3>
+      <p>Cat portraits and garden snapshots. A visual log of the living things around home.</p>
+      <div class="status-bar">C:\PHOTOS> last_update: TODAY_</div>
+    </div>
+  </div>
+
+  <div class="win95-card" id="ai">
+    <div class="win95-titlebar">
+      <span>newsbot.exe</span>
+      <div class="win95-buttons">
+        <div class="win95-btn">—</div>
+        <div class="win95-btn">□</div>
+        <div class="win95-btn">×</div>
+      </div>
+    </div>
+    <div class="win95-body">
+      <span class="card-emoji">🤖</span>
+      <h3>AI News</h3>
+      <p>Auto-curated AI feed. Agent-powered, always fresh, never sleeping.</p>
+      <div class="status-bar">C:\NEWS> feed: LIVE_</div>
+    </div>
+  </div>
+
+  <div class="win95-card">
+    <div class="win95-titlebar">
+      <span>garden.exe</span>
+      <div class="win95-buttons">
+        <div class="win95-btn">—</div>
+        <div class="win95-btn">□</div>
+        <div class="win95-btn">×</div>
+      </div>
+    </div>
+    <div class="win95-body">
+      <span class="card-emoji">🌱</span>
+      <h3>Garden</h3>
+      <p>Seasonal tracker. What's growing, blooming, and being tried for the first time.</p>
+      <div class="status-bar">C:\GARDEN> season: SPRING_</div>
+    </div>
+  </div>
+
+  <div class="win95-card" id="ops">
+    <div class="win95-titlebar">
+      <span>opscenter.exe</span>
+      <div class="win95-buttons">
+        <div class="win95-btn">—</div>
+        <div class="win95-btn">□</div>
+        <div class="win95-btn">×</div>
+      </div>
+    </div>
+    <div class="win95-body">
+      <span class="card-emoji">⚙️</span>
+      <h3>Ops Center</h3>
+      <p>System dashboard. Agents, crons, monitors — the nerve center of it all.</p>
+      <div class="status-bar">C:\OPS> systems: NOMINAL_</div>
+    </div>
+  </div>
+
+  <div class="win95-card">
+    <div class="win95-titlebar">
+      <span>plex.exe</span>
+      <div class="win95-buttons">
+        <div class="win95-btn">—</div>
+        <div class="win95-btn">□</div>
+        <div class="win95-btn">×</div>
+      </div>
+    </div>
+    <div class="win95-body">
+      <span class="card-emoji">🎬</span>
+      <h3>Plex</h3>
+      <p>Home media server. Currently streaming, recently added, library stats.</p>
+      <div class="status-bar">C:\PLEX> stream: ACTIVE_</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">★ JEZ237 ★</div>
+  <p>BUILDER / EXPERIMENTER / CURIOUS PERSON — EST. 2026</p>
+  <div class="footer-art">═══════════════════════════════════════</div>
+  <p style="margin-top: 0.5rem;">[ THANK YOU FOR VISITING ]</p>
+</footer>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('active');
+});
+</script>
+</body>
+</html>
