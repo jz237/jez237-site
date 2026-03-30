@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T14:00:01.683204+00:00",
+  "updatedAt": "2026-03-30T15:00:01.161847+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2244,6 +2244,18 @@
     "https://techcrunch.com/2026/03/30/ai-chip-startup-rebellions-raises-400-million-at-2-3b-valuation-in-pre-ipo-round": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/Screenshot-2026-02-08-at-12.27.26-PM.png?resize=1200,671",
       "checkedAt": "2026-03-30T14:00:01.683204+00:00"
+    },
+    "https://techcrunch.com/2026/03/30/mantis-biotech-is-making-digital-twins-of-humans-to-help-solve-medicines-data-availability-problem": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/09/brain_pills.jpg?resize=1200,899",
+      "checkedAt": "2026-03-30T15:00:01.161847+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-ai-talent-war-bonuses": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
+      "checkedAt": "2026-03-30T15:00:01.161847+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/30/llm-mrchatterbox-2": {
+      "image": "",
+      "checkedAt": "2026-03-30T15:00:01.161847+00:00"
     }
   }
 }
