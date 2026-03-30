@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T11:00:01.671432+00:00",
+  "updatedAt": "2026-03-30T11:17:19.982718+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2216,6 +2216,10 @@
     "https://openai.com/index/helping-disaster-response-teams-asia": {
       "image": "",
       "checkedAt": "2026-03-30T06:00:01.560692+00:00"
+    },
+    "https://techcrunch.com/2026/03/30/starcloud-raises-170-million-series-ato-build-data-centers-in-space": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Starcloud-1-deployment-virtical-e1774655359557.png?w=549",
+      "checkedAt": "2026-03-30T11:17:19.982718+00:00"
     }
   }
 }
