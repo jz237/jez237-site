@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T07:58:29.899508+00:00",
+  "updatedAt": "2026-03-30T09:00:01.356191+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.6034
+      "score": 10.5786
+    },
+    {
+      "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
+      "url": "https://thenextweb.com/news/blueskys-new-attie-app-uses-ai-to-give-you-full-control-over-your-social-feed",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The standalone app, built on the AT Protocol and powered by Anthropic’s Claude, was unveiled at the ATmosphere conference by Jay Graber, who stepped back from Bluesky’s CEO role specifically to build it. It’s currently invite-only, with a waitlist open. Bluesky’s best-known differentiator from X and Threads has always been its custom feed system, the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bluesky-.png",
+      "published": "2026-03-30T08:17:05+00:00",
+      "firstSeen": "2026-03-30T09:00:01.356191+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2283
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -29,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2523
+      "score": 6.2253
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -45,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
       "published": "2026-03-30T07:23:20+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1322
+      "score": 5.1018
     },
     {
       "title": "MAGNET: Autonomous Expert Model Generation via Decentralized Autoresearch and BitNet Training",
@@ -59,12 +75,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-30T07:58:33.831858+00:00",
+      "published": "2026-03-30T09:00:10.885995+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "TerraSpark raises €5M+ to beam solar power from orbit to Earth",
+      "url": "https://thenextweb.com/news/terraspark-5m-pre-seed-space-based-solar-power",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Luxembourg startup is taking a deliberately earth-first approach: proving radio-frequency wireless power transmission on the ground before scaling to orbit. Its CTO ran ESA’s Solaris SBSP initiative until the agency paused it in 2024. Daphni led the pre-seed round. The person best placed to know why the European Space Agency decided not to press [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TerraSpark.png",
+      "published": "2026-03-30T08:32:58+00:00",
+      "firstSeen": "2026-03-30T09:00:01.356191+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2363
     },
     {
       "title": "Finnish quantum unicorn IQM lands €50M from BlackRock",
@@ -77,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IQM-CEO.png",
       "published": "2026-03-30T07:53:18+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2474
+      "score": 3.2165
     },
     {
       "title": "All the latest in AI &#8216;music&#8217;",
@@ -93,10 +125,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK467_AI_MUSIC_CVirginia_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-30T01:32:14+00:00",
       "firstSeen": "2026-03-30T02:00:01.959512+00:00",
-      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T09:00:01.356191+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1799
+      "score": 2.154
     }
   ],
   "errors": []
