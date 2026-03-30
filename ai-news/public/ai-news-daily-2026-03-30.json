@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T08:00:02.015570+00:00",
+  "updatedAt": "2026-03-30T07:58:29.899508+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T08:00:02.015570+00:00",
+      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.6028
+      "score": 10.6034
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T08:00:02.015570+00:00",
+      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2516
+      "score": 6.2523
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -44,11 +44,11 @@
       "summary": "The French AI company has secured the financing from a seven-bank consortium including BNP Paribas, Crédit Agricole CIB, HSBC, and MUFG. The data centre at Bruyères-le-Châtel is expected to be operational in Q2 2026 and is part of a broader push for European AI compute sovereignty. Mistral AI has raised $830 million in debt, its [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
       "published": "2026-03-30T07:23:20+00:00",
-      "firstSeen": "2026-03-30T08:00:02.015570+00:00",
-      "lastSeen": "2026-03-30T08:00:02.015570+00:00",
+      "firstSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1315
+      "score": 5.1322
     },
     {
       "title": "MAGNET: Autonomous Expert Model Generation via Decentralized Autoresearch and BitNet Training",
@@ -59,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-30T08:00:09.779794+00:00",
+      "published": "2026-03-30T07:58:33.831858+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-30T08:00:02.015570+00:00",
+      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -76,11 +76,11 @@
       "summary": "The Helsinki-based company, which builds and sells full-stack superconducting quantum computers for on-premises deployment, disclosed the financing today. It was secured before the February announcement of IQM’s SPAC merger with Real Asset Acquisition Corp at a $1.8B valuation. IQM Quantum Computers has secured a €50 million financing package, approximately $57.6 million, from funds and accounts [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IQM-CEO.png",
       "published": "2026-03-30T07:53:18+00:00",
-      "firstSeen": "2026-03-30T08:00:02.015570+00:00",
-      "lastSeen": "2026-03-30T08:00:02.015570+00:00",
+      "firstSeen": "2026-03-30T07:58:29.899508+00:00",
+      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2466
+      "score": 3.2474
     },
     {
       "title": "All the latest in AI &#8216;music&#8217;",
@@ -93,10 +93,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK467_AI_MUSIC_CVirginia_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-30T01:32:14+00:00",
       "firstSeen": "2026-03-30T02:00:01.959512+00:00",
-      "lastSeen": "2026-03-30T08:00:02.015570+00:00",
+      "lastSeen": "2026-03-30T07:58:29.899508+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1792
+      "score": 2.1799
     }
   ],
   "errors": []
