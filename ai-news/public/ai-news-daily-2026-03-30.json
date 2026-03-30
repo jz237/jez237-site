@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T09:45:11.015169+00:00",
+  "updatedAt": "2026-03-30T11:00:01.671432+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.5608
+      "score": 10.5322
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -29,10 +29,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Bluesky-.png",
       "published": "2026-03-30T08:17:05+00:00",
       "firstSeen": "2026-03-30T09:00:01.356191+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.206
+      "score": 9.1701
+    },
+    {
+      "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
+      "url": "https://www.marktechpost.com/2026/03/30/salesforce-ai-research-releases-voiceagentrag-a-dual-agent-memory-router-that-cuts-voice-rag-retrieval-latency-by-316x",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In the world of voice AI, the difference between a helpful assistant and an awkward interaction is measured in milliseconds. While text-based Retrieval-Augmented Generation (RAG) systems can afford a few seconds of &#8216;thinking&#8217; time, voice agents must respond within a 200ms budget to maintain a natural conversational flow. Standard production vector database queries typically add [&#8230;]\nThe post Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
+      "published": "2026-03-30T09:56:14+00:00",
+      "firstSeen": "2026-03-30T11:00:01.671432+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.388
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -45,13 +61,13 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2059
+      "score": 6.1747
     },
     {
-      "title": "Doctorina MedBench: End-to-End Evaluation of Agent-Based Medical AI",
+      "title": "RealChart2Code: Advancing Chart-to-Code Generation with Real Data and Multi-Task Evaluation",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -59,12 +75,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-30T09:45:18.223062+00:00",
+      "published": "2026-03-30T11:00:07.849767+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.41
+      "score": 5.11
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -77,10 +93,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
       "published": "2026-03-30T07:23:20+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0801
+      "score": 5.045
+    },
+    {
+      "title": "The largest AI survey ever reveals what humans actually want",
+      "url": "https://thenextweb.com/news/the-largest-ai-survey-ever-reveals-what-humans-actually-want",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic’s massive AI interview study isn’t really about technology. It’s the largest mirror ever held up to human desire. In December 2025, a software engineer in Mexico finished his workday early enough to pick up his children from school. A lawyer in India sat down with an AI tutor and, for the first time in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Humans-and-AI.png",
+      "published": "2026-03-30T09:32:01+00:00",
+      "firstSeen": "2026-03-30T11:00:01.671432+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.2061
     },
     {
       "title": "TerraSpark raises €5M+ to beam solar power from orbit to Earth",
@@ -93,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/TerraSpark.png",
       "published": "2026-03-30T08:32:58+00:00",
       "firstSeen": "2026-03-30T09:00:01.356191+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2138
+      "score": 3.1776
     },
     {
       "title": "Finnish quantum unicorn IQM lands €50M from BlackRock",
@@ -109,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/IQM-CEO.png",
       "published": "2026-03-30T07:53:18+00:00",
       "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1945
+      "score": 3.1589
     },
     {
       "title": "The IRS Wants Smarter Audits. Palantir Could Help Decide Who Gets Flagged",
@@ -125,10 +157,26 @@
       "image": "https://media.wired.com/photos/69960bd38a9c9ad6ce51c112/master/pass/biz-irs-palantir-2203317568.jpg",
       "published": "2026-03-30T09:30:00+00:00",
       "firstSeen": "2026-03-30T09:45:11.015169+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2823
+      "score": 2.2451
+    },
+    {
+      "title": "Swiss startup miros raises €1.1M for bookable workpods",
+      "url": "https://thenextweb.com/news/miros-workpods-1-1m-pre-seed",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Lausanne startup, spun out of EPFL’s robotics lab, has deployed 15 pods across Switzerland and made its first international move with a unit in Toulouse. Its founder’s longer-term ambition: making commercial real estate itself modular and on-demand. The problem miros is solving is visible in any busy train station, airport, or hospital: people who [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/miros-pods.png",
+      "published": "2026-03-30T09:47:02+00:00",
+      "firstSeen": "2026-03-30T11:00:01.671432+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1134
     },
     {
       "title": "All the latest in AI &#8216;music&#8217;",
@@ -141,10 +189,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK467_AI_MUSIC_CVirginia_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-30T01:32:14+00:00",
       "firstSeen": "2026-03-30T02:00:01.959512+00:00",
-      "lastSeen": "2026-03-30T09:45:11.015169+00:00",
+      "lastSeen": "2026-03-30T11:00:01.671432+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1355
+      "score": 2.1057
     }
   ],
   "errors": []
