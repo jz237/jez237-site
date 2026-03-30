@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T18:05:04.351365+00:00",
+  "updatedAt": "2026-03-30T20:00:01.721711+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.3871
+      "score": 10.3525
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9879
+      "score": 8.9444
     },
     {
       "title": "The Pentagon’s culture war tactic against Anthropic has backfired",
@@ -45,10 +45,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/anthropic-ruling.jpg?resize=1200%2C600",
       "published": "2026-03-30T15:42:50+00:00",
       "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3199
+      "score": 6.2665
     },
     {
       "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
       "published": "2026-03-30T09:56:14+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1972
+      "score": 6.1517
     },
     {
       "title": "DeepSeek Outage Shakes AI Service Used by 355M Worldwide",
@@ -77,10 +77,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
       "published": "2026-03-30T13:02:13+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1061
+      "score": 6.0565
     },
     {
       "title": "Okta&#8217;s CEO is betting big on AI agent identity",
@@ -93,26 +93,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-30T15:15:00+00:00",
       "firstSeen": "2026-03-30T15:22:14.284028+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0767
-    },
-    {
-      "title": "There are more AI health tools than ever—but how well do they work?",
-      "url": "https://www.technologyreview.com/2026/03/30/1134795/there-are-more-ai-health-tools-than-ever-but-how-well-do-they-work",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Earlier this month, Microsoft launched Copilot Health, a new space within its Copilot app where users will be able to connect their medical records and ask specific questions about their health. A couple of days earlier, Amazon had announced that Health AI, an LLM-based tool previously restricted to members of its One Medical service, would&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AI_healthcare2.jpg?resize=1200%2C600",
-      "published": "2026-03-30T16:00:00+00:00",
-      "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.0281
+      "score": 6.024
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -125,26 +109,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0167
+      "score": 5.979
     },
     {
-      "title": "Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War",
-      "url": "https://www.techrepublic.com/article/news-apple-ai-talent-war-bonuses",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
+      "title": "There are more AI health tools than ever—but how well do they work?",
+      "url": "https://www.technologyreview.com/2026/03/30/1134795/there-are-more-ai-health-tools-than-ever-but-how-well-do-they-work",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Apple offers up to $400,000 in stock bonuses to retain top designers as OpenAI and AI startups ramp up hiring in the race to build next-gen devices.\nThe post Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
-      "published": "2026-03-30T14:23:03+00:00",
-      "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1425
+      "summary": "Earlier this month, Microsoft launched Copilot Health, a new space within its Copilot app where users will be able to connect their medical records and ask specific questions about their health. A couple of days earlier, Amazon had announced that Health AI, an LLM-based tool previously restricted to members of its One Medical service, would&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AI_healthcare2.jpg?resize=1200%2C600",
+      "published": "2026-03-30T16:00:00+00:00",
+      "firstSeen": "2026-03-30T17:00:01.473321+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9743
     },
     {
       "title": "Mistral AI raises $830M in debt to set up a data center near Paris",
@@ -157,10 +141,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219786590.jpg?w=1024",
       "published": "2026-03-30T12:49:51+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1406
+      "score": 5.0914
+    },
+    {
+      "title": "Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War",
+      "url": "https://www.techrepublic.com/article/news-apple-ai-talent-war-bonuses",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple offers up to $400,000 in stock bonuses to retain top designers as OpenAI and AI startups ramp up hiring in the race to build next-gen devices.\nThe post Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
+      "published": "2026-03-30T14:23:03+00:00",
+      "firstSeen": "2026-03-30T15:00:01.161847+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0911
     },
     {
       "title": "Mistral secures $830M from seven banks to build its own AI data centre",
@@ -176,7 +176,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8673
+      "score": 4.8249
     },
     {
       "title": "Qodo raises $70M for code verification as AI coding scales",
@@ -189,10 +189,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2080252145.jpg?resize=1200%2C800",
       "published": "2026-03-30T12:30:00+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
+      "lastSeen": "2026-03-30T20:00:01.721711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5319
+      "score": 4.4831
     }
   ],
   "errors": []
