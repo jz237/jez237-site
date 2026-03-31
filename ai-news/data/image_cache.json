@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T15:20:21.483754+00:00",
+  "updatedAt": "2026-03-31T17:00:02.319239+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2344,6 +2344,14 @@
     "https://www.theverge.com/tech/903954/art-schools-generative-ai-education-creative-jobs": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268425_How_art_schools_are_teaching_AI__CVirginia.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-31T15:20:21.483754+00:00"
+    },
+    "https://www.techrepublic.com/article/news-mistral-830m-debt-nvidia-ai-data-centers-europe": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-04-01T002854.091-1024x658.png",
+      "checkedAt": "2026-03-31T17:00:02.319239+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-ray-ban-smart-glasses-prescription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03312026-meta-ray-ban-smart-glasses-prescription.jpg",
+      "checkedAt": "2026-03-31T17:00:02.319239+00:00"
     }
   }
 }
