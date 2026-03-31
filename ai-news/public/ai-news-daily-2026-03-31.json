@@ -1,6 +1,6 @@
 {
   "date": "2026-03-31",
-  "updatedAt": "2026-03-31T08:00:01.994069+00:00",
+  "updatedAt": "2026-03-31T07:43:01.759763+00:00",
   "items": [
     {
       "title": "Alibaba Qwen Team Releases Qwen3.5 Omni: A Native Multimodal Model for Text, Audio, Video, and Realtime Interaction",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-10.06.06-PM-1-150x150.png",
       "published": "2026-03-31T05:17:07+00:00",
       "firstSeen": "2026-03-31T05:51:58.738728+00:00",
-      "lastSeen": "2026-03-31T08:00:01.994069+00:00",
+      "lastSeen": "2026-03-31T07:43:01.759763+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0401
+      "score": 20.0481
     },
     {
       "title": "Anna Kozlova, Stanislau Salavei, Pavel Satalkin, Hanna Plotnitskaya, Sergey Parfenyuk",
@@ -28,9 +28,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-31T08:00:09.851005+00:00",
+      "published": "2026-03-31T07:43:06.865299+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-31T08:00:01.994069+00:00",
+      "lastSeen": "2026-03-31T07:43:01.759763+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -45,11 +45,11 @@
       "summary": "The wool sneaker brand that briefly hit a $4 billion valuation in 2021 has agreed to sell all its assets and IP to American Exchange Group. The company is dissolving. Shares jumped 36% after-hours because $39M is still a premium over where they were already trading. Allbirds has agreed to sell all of its intellectual [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/allbirds.png",
       "published": "2026-03-31T07:09:46+00:00",
-      "firstSeen": "2026-03-31T08:00:01.994069+00:00",
-      "lastSeen": "2026-03-31T08:00:01.994069+00:00",
+      "firstSeen": "2026-03-31T07:43:01.759763+00:00",
+      "lastSeen": "2026-03-31T07:43:01.759763+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1247
+      "score": 2.1332
     },
     {
       "title": "RepAir Carbon opens a Luxembourg office to scale its electrochemical carbon capture tech across Europe",
@@ -61,11 +61,11 @@
       "summary": "The Israeli deeptech, which uses 70% less energy than conventional carbon capture methods and has already signed with Shell, Mitsubishi, and C-Questra, is expanding into Europe’s industrial decarbonisation market as EU regulatory frameworks mature. RepAir Carbon, the Israeli developer of electrochemical direct air capture technology, has opened a European office in Luxembourg, the company announced [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/RepAir.png",
       "published": "2026-03-31T06:50:30+00:00",
-      "firstSeen": "2026-03-31T08:00:01.994069+00:00",
-      "lastSeen": "2026-03-31T08:00:01.994069+00:00",
+      "firstSeen": "2026-03-31T07:43:01.759763+00:00",
+      "lastSeen": "2026-03-31T07:43:01.759763+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9848
+      "score": -0.9764
     }
   ],
   "errors": []
