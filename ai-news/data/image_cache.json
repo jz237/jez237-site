@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T23:49:13.541438+00:00",
+  "updatedAt": "2026-03-31T01:00:01.878790+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2300,6 +2300,10 @@
     "https://techcrunch.com/2026/03/30/popular-ai-gateway-startup-litellm-ditches-controversial-startup-delve": {
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/exit.png?w=900",
       "checkedAt": "2026-03-30T23:49:13.541438+00:00"
+    },
+    "https://simonwillison.net/2026/Mar/30/datasette-files": {
+      "image": "",
+      "checkedAt": "2026-03-31T01:00:01.878790+00:00"
     }
   }
 }
