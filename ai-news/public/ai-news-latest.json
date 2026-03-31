@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T19:17:16.773682+00:00",
+  "updatedAt": "2026-03-31T20:56:00.720403+00:00",
   "items": [
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-31T19:17:21.387079+00:00",
+      "published": "2026-03-31T20:56:06.910075+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    },
+    {
+      "title": "Yupp shuts down after raising $33M from a16z crypto’s Chris Dixon",
+      "url": "https://techcrunch.com/2026/03/31/yupp-ai-shuts-down-33m-a16z-crypto-chris-dixon",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Less than a year after launching, with checks from some of the biggest names in Silicon Valley, crowdsourced AI model feedback startup Yupp is closing its business, the company said Tuesday.",
+      "image": "",
+      "published": "2026-03-31T20:01:07+00:00",
+      "firstSeen": "2026-03-31T20:56:00.720403+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.218
+      "score": 2.9624
+    },
+    {
+      "title": "Apple Intelligence briefly goes live in China without approval, raising the spectre of regulatory penalties",
+      "url": "https://thenextweb.com/news/apple-intelligence-china-accidental-rollout-regulatory-risk",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In the small hours of Tuesday morning, something unexpected appeared on iPhones across mainland China. Apple Intelligence, the suite of AI-powered tools that the company has spent nearly two years trying to bring to its largest market outside the US, flickered to life, showed up in users’ settings menus, and then vanished. The brief, unannounced [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/apple-intelligence-china-accidental-rollout-regulatory-risk.png",
+      "published": "2026-03-31T18:56:18+00:00",
+      "firstSeen": "2026-03-31T20:56:00.720403+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1907
     },
     {
       "title": "Nexus raises $4.3M seed to let non-technical teams deploy enterprise AI agents",
@@ -28,10 +60,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nexus.png",
       "published": "2026-03-31T18:49:40+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-03-31T20:00:01.693349+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8147
+      "score": 4.7875
     },
     {
       "title": "EnerVenue lands $300 million to bring NASA’s space batteries down to Earth",
@@ -44,10 +76,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/enervenue-300m-series-b-metal-hydrogen-batteriespng.png",
       "published": "2026-03-31T18:36:47+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-03-31T20:00:01.693349+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1084
+      "score": 2.0813
     },
     {
       "title": "ALSO hits $1B valuation and signs DoorDash as its first major autonomous delivery partner",
@@ -60,10 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Also.png",
       "published": "2026-03-31T18:34:26+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-03-31T20:00:01.693349+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1073
+      "score": 2.0802
     },
     {
       "title": "Quantum computers need vastly fewer resources than thought to break vital encryption",
@@ -76,10 +108,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2024/03/GettyImages-1070527780-1152x648.jpg",
       "published": "2026-03-31T18:25:33+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-03-31T20:00:01.693349+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1029
+      "score": 2.076
     },
     {
       "title": "How to Build and Evolve a Custom OpenAI Agent with A-Evolve Using Benchmarks, Skills, Memory, and Workspace Mutations",
@@ -92,10 +124,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-22.png",
       "published": "2026-03-31T18:24:44+00:00",
       "firstSeen": "2026-03-31T19:00:01.616698+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.6436
+      "score": 8.5956
     },
     {
       "title": "The Galaxy S26’s photo app can sloppify your memories",
@@ -108,10 +140,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/ai-label-17.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-31T18:15:00+00:00",
       "firstSeen": "2026-03-31T19:00:01.616698+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4287
+      "score": 3.381
     },
     {
       "title": "Google Drive Expands AI Ransomware Detection, File Recovery to More Users",
@@ -124,10 +156,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/ransomware.jpg",
       "published": "2026-03-31T18:01:54+00:00",
       "firstSeen": "2026-03-31T19:00:01.616698+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2123
+      "score": 3.1648
     },
     {
       "title": "Alexa+ gets new food ordering experiences with Uber Eats and Grubhub",
@@ -140,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/food-order-cart-echo-show-amazon-news-nb-033126.png?w=1200",
       "published": "2026-03-31T17:41:35+00:00",
       "firstSeen": "2026-03-31T18:00:02.072544+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.6423
+      "score": 9.5953
     },
     {
       "title": "Austrian food-waste startup Afreshed acquires German rival Etepetete in DACH consolidation play",
@@ -156,10 +188,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/afreshed-acquires-etepetete-food-waste-dach-consolidation.png",
       "published": "2026-03-31T17:08:05+00:00",
       "firstSeen": "2026-03-31T18:00:02.072544+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0861
+      "score": 2.0398
     },
     {
       "title": "Mistral Raises $830M in Debt Financing to Build Nvidia-Powered AI Hub in Europe",
@@ -172,10 +204,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-04-01T002854.091-1024x658.png",
       "published": "2026-03-31T16:30:48+00:00",
       "firstSeen": "2026-03-31T17:00:02.319239+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1684
+      "score": 6.1229
     },
     {
       "title": "Build with Veo 3.1 Lite, our most cost-effective video generation model",
@@ -188,10 +220,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/veo31lite.max-600x600.format-webp.webp",
       "published": "2026-03-31T16:00:00+00:00",
       "firstSeen": "2026-03-31T17:00:02.319239+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.734
+      "score": 4.6891
     },
     {
       "title": "Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents",
@@ -204,10 +236,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-vision.png",
       "published": "2026-03-31T15:10:41+00:00",
       "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1113
+      "score": 7.0675
     },
     {
       "title": "Efficiency at Scale: NVIDIA, Energy Leaders Accelerating Power‑Flexible AI Factories to Fortify the Grid",
@@ -217,13 +249,13 @@
       "sourceWeight": 0.85,
       "category": "AI",
       "summary": "CERAWeek — dubbed the Davos of energy — is where policymakers, producers, technologists and financiers gather to discuss how the world powers itself next.  NVIDIA and Emerald AI unveiled at the conference last week a new way forward — treating AI factories not as static power loads but as flexible, intelligent grid assets. This collaboration [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/energy-promo-pack-rolling-corp-blog-1920x1080-1.jpg",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/energy-promo-pack-rolling-corp-blog-1920x1080-1-e1774982193753.jpg",
       "published": "2026-03-31T15:00:51+00:00",
       "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1669
+      "score": 2.1232
     },
     {
       "title": "Nomadic raises $8.4 million to wrangle the data pouring off autonomous vehicles",
@@ -236,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/founder_photo.jpeg?resize=1200%2C793",
       "published": "2026-03-31T15:00:00+00:00",
       "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5665
+      "score": 3.5229
     },
     {
       "title": "Art schools are being torn apart by AI",
@@ -252,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268425_How_art_schools_are_teaching_AI__CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-31T15:00:00+00:00",
       "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2365
+      "score": 2.1929
     },
     {
       "title": "Meta Expands Smart Glasses Line With Prescription-First Ray-Ban Models",
@@ -268,10 +300,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03312026-meta-ray-ban-smart-glasses-prescription.jpg",
       "published": "2026-03-31T14:48:45+00:00",
       "firstSeen": "2026-03-31T17:00:02.319239+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8214
+      "score": 3.778
     },
     {
       "title": "Mac Studio 2026: New Leaks Tease M5 Power, Price, and Launch Timeline",
@@ -284,10 +316,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/mediamodifier-qI9Rm2jIwSc-unsplash.jpg",
       "published": "2026-03-31T14:28:21+00:00",
       "firstSeen": "2026-03-31T15:00:01.465929+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.5123
+      "score": 4.4693
     },
     {
       "title": "Shifting to AI model customization is an architectural imperative",
@@ -300,11 +332,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/mistral-iStock-1398800653.jpg?resize=1200%2C600",
       "published": "2026-03-31T14:12:50+00:00",
       "firstSeen": "2026-03-31T15:00:01.465929+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2454
+      "score": 14.2027
     },
     {
       "title": "Exclusive: Runway launches $10M fund, Builders program to support early-stage AI startups",
@@ -317,10 +349,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_5963.png?w=1200",
       "published": "2026-03-31T14:00:00+00:00",
       "firstSeen": "2026-03-31T15:00:01.465929+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0397
+      "score": 4.9973
     },
     {
       "title": "Oracle is cutting up to 30,000 employees to pay for AI data centres",
@@ -333,10 +365,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/CEO-Oracle.png",
       "published": "2026-03-31T13:48:10+00:00",
       "firstSeen": "2026-03-31T15:00:01.465929+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9945
+      "score": 1.9523
     },
     {
       "title": "myStoria raises $1.625M to support patients navigating complex reproductive health",
@@ -349,10 +381,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/myStoria.png",
       "published": "2026-03-31T13:08:49+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1225
+      "score": -1.164
     },
     {
       "title": "French open-source orchestration platform Kestra raises $25M",
@@ -365,10 +397,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Kestra.png",
       "published": "2026-03-31T13:00:33+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9739
+      "score": 1.9327
+    },
+    {
+      "title": "Accelerating the next phase of AI",
+      "url": "https://openai.com/index/accelerating-the-next-phase-ai",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "OpenAI raises $122 billion in new funding to expand frontier AI globally, invest in next-generation compute, and meet growing demand for ChatGPT, Codex, and enterprise AI.",
+      "image": "",
+      "published": "2026-03-31T13:00:00+00:00",
+      "firstSeen": "2026-03-31T20:56:00.720403+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.2824
     },
     {
       "title": "You can order Grubhub and Uber Eats ‘conversationally’ with Alexa Plus",
@@ -381,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Food-Ordering_Echo-Show_Customization.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.275132439047%2C100%2C77.449735121906&amp%3Bw=1200",
       "published": "2026-03-31T13:00:00+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1837
+      "score": 8.1424
     },
     {
       "title": "With its new app store, Ring bets on AI to go beyond home security",
@@ -397,10 +445,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/20250611-lifestyle-outdoorcampro-plugin-home-exterior-wall-wht-rgb.jpg?w=1200",
       "published": "2026-03-31T13:00:00+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2137
+      "score": 3.1724
     },
     {
       "title": "AI Has Flooded All the Weather Apps",
@@ -413,10 +461,10 @@
       "image": "https://media.wired.com/photos/69c5a16aef09a65ca95d7cdb/master/pass/Gear_AI_IsHereForYourWeatherApp_2400x1350.jpg",
       "published": "2026-03-31T13:00:00+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2137
+      "score": 3.1724
     },
     {
       "title": "Standing Ovation raises €30M to commercialise casein made from dairy waste",
@@ -429,10 +477,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Standing-Ovation.png",
       "published": "2026-03-31T12:36:20+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0636
+      "score": 3.0228
     },
     {
       "title": "AI benchmarks are broken. Here’s what we need instead.",
@@ -445,10 +493,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AIlearningOpEd2.jpg?resize=1200%2C600",
       "published": "2026-03-31T12:01:08+00:00",
       "firstSeen": "2026-03-31T15:00:01.465929+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9389
+      "score": 4.8987
     },
     {
       "title": "Airbnb launches private car transfers in 125+ cities",
@@ -461,10 +509,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Airbnb.png",
       "published": "2026-03-31T09:39:36+00:00",
       "firstSeen": "2026-03-31T11:00:01.454505+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7919
+      "score": 4.7543
     },
     {
       "title": "Enkei raises a pre-seed round to scale a material made from construction waste that replaces marble and concrete",
@@ -480,7 +528,7 @@
       "lastSeen": "2026-03-31T19:17:16.773682+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8824
+      "score": 1.8452
     },
     {
       "title": "Qover raises $12M from CIBC, and sets its sights on 100 million people protected by 2030",
@@ -496,7 +544,7 @@
       "lastSeen": "2026-03-31T19:17:16.773682+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5664
+      "score": 2.5299
     },
     {
       "title": "Microsoft commits $1 billion to Thailand for cloud and AI infrastructure",
@@ -512,7 +560,7 @@
       "lastSeen": "2026-03-31T19:17:16.773682+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1622
+      "score": 2.1259
     },
     {
       "title": "Empirical Ventures secures £10M from the British Business Bank to back UK ‘venture scientists",
@@ -528,7 +576,7 @@
       "lastSeen": "2026-03-31T19:17:16.773682+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8578
+      "score": 1.8217
     },
     {
       "title": "How the Silicon Valley sneaker that was once worth $4 billion ended up selling for $39M",
@@ -544,7 +592,7 @@
       "lastSeen": "2026-03-31T17:12:22.137863+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8354
+      "score": 1.8004
     },
     {
       "title": "RepAir Carbon opens a Luxembourg office to scale its electrochemical carbon capture tech across Europe",
@@ -560,7 +608,7 @@
       "lastSeen": "2026-03-31T13:59:43.671029+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2715
+      "score": -1.3063
     },
     {
       "title": "Alibaba Qwen Team Releases Qwen3.5 Omni: A Native Multimodal Model for Text, Audio, Video, and Realtime Interaction",
@@ -573,11 +621,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-10.06.06-PM-1-150x150.png",
       "published": "2026-03-31T05:17:07+00:00",
       "firstSeen": "2026-03-31T05:51:58.738728+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.7655
+      "score": 19.7322
     },
     {
       "title": "TRL v1.0: Post-Training Library Built to Move with the Field",
@@ -590,123 +638,10 @@
       "image": "https://huggingface.co/blog/assets/trl-v1/thumbnail.png",
       "published": "2026-03-31T00:00:00+00:00",
       "firstSeen": "2026-03-31T13:59:43.671029+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.8263
-    },
-    {
-      "title": "datasette-files 0.1a3",
-      "url": "https://simonwillison.net/2026/Mar/30/datasette-files",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: datasette-files 0.1a3\n    I'm working on integrating datasette-files into other plugins, such as datasette-extract. This necessitated a new release of the base plugin.\n\n\nowners_can_edit and owners_can_delete configuration options, plus the files-edit and files-delete actions are now scoped to a new FileResource which is a child of FileSourceResource. #18\nThe file picker UI is now available as a &lt;datasette-file-picker&gt; Web Component. Thanks, Alex Garcia. #19\nNew from datasette_files import get_file Python API for other plugins that need to access file data. #20\n\n\n    \n        Tag",
-      "image": "",
-      "published": "2026-03-30T23:58:49+00:00",
-      "firstSeen": "2026-03-31T01:00:01.878790+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 11.5334
-    },
-    {
-      "title": "15% of Americans say they’d be willing to work for an AI boss, according to new poll",
-      "url": "https://techcrunch.com/2026/03/30/ai-work-boss-supervisor-us-quinnipiac-poll",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "According to a Quinnipiac University poll, 15% of Americans say they'd be willing to have a job where their direct supervisor was an AI program that assigned tasks and set schedules.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/id-work.jpg?resize=1200%2C828",
-      "published": "2026-03-30T23:41:48+00:00",
-      "firstSeen": "2026-03-30T23:49:13.541438+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8283
-    },
-    {
-      "title": "7 Best ChatGPT Image Prompts in 2026: How to Get Better AI Photos",
-      "url": "https://www.techrepublic.com/article/news-7-best-chatgpt-image-prompts-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Use these prompt templates to generate sharper ChatGPT images in 2026, from hero sections and product shots to retouching and pricing layouts.\nThe post 7 Best ChatGPT Image Prompts in 2026: How to Get Better AI Photos appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-03-30T23:11:03+00:00",
-      "firstSeen": "2026-03-30T23:49:13.541438+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.7793
-    },
-    {
-      "title": "Popular AI gateway startup LiteLLM ditches controversial startup Delve",
-      "url": "https://techcrunch.com/2026/03/30/popular-ai-gateway-startup-litellm-ditches-controversial-startup-delve",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "LiteLLM had obtained two security compliance certifications via Delve and fell victim to some horrific credential-stealing malware last week.",
-      "image": "https://techcrunch.com/wp-content/uploads/2018/02/exit.png?w=900",
-      "published": "2026-03-30T23:08:12+00:00",
-      "firstSeen": "2026-03-30T23:49:13.541438+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8185
-    },
-    {
-      "title": "Microsoft AI Releases Harrier-OSS-v1: A New Family of Multilingual Embedding Models Hitting SOTA on Multilingual MTEB v2",
-      "url": "https://www.marktechpost.com/2026/03/30/microsoft-ai-releases-harrier-oss-v1-a-new-family-of-multilingual-embedding-models-hitting-sota-on-multilingual-mteb-v2",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Microsoft has announced the release of Harrier-OSS-v1, a family of three multilingual text embedding models designed to provide high-quality semantic representations across a wide range of languages. The release includes three distinct scales: a 270M parameter model, a 0.6B model, and a 27B model. The Harrier-OSS-v1 models achieved state-of-the-art (SOTA) results on the Multilingual MTEB [&#8230;]\nThe post Microsoft AI Releases Harrier-OSS-v1: A New Family of Multilingual Embedding Models Hitting SOTA on Multilingual MTEB v2 appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.29.35-PM-150x150.png",
-      "published": "2026-03-30T22:22:49+00:00",
-      "firstSeen": "2026-03-30T22:54:25.617790+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.2354
-    },
-    {
-      "title": "15% of Americans say they’d be willing to work for an AI boss",
-      "url": "https://techcrunch.com/2026/03/30/ai-boss-supervisor-us-quinnipiac-poll",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Your human manager may soon be a chatbot. Across organizations, AI is being used to replace layers of management in what some are calling \"The Great Flattening.\"",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/id-work.jpg?resize=1200%2C828",
-      "published": "2026-03-30T21:39:51+00:00",
-      "firstSeen": "2026-03-30T21:54:49.910031+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7933
-    },
-    {
-      "title": "Quoting Georgi Gerganov",
-      "url": "https://simonwillison.net/2026/Mar/30/georgi-gerganov",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Note that the main issues that people currently unknowingly face with local models mostly revolve around the harness and some intricacies around model chat templates and prompt construction. Sometimes there are even pure inference bugs. From typing the task in the client to the actual result, there is a long chain of components that atm are not only fragile - are also developed by different parties. So it's difficult to consolidate the entire stack and you have to keep in mind that what you are currently observing is with very high probability still broken in some subtle way along that chain.\n",
-      "image": "",
-      "published": "2026-03-30T21:31:02+00:00",
-      "firstSeen": "2026-03-30T21:54:49.910031+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.0092
+      "score": -0.855
     },
     {
       "title": "Superbugs: Resistance Rising Part 2",
@@ -719,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.866
+      "score": 3.8403
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
@@ -735,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-03-31T19:17:16.773682+00:00",
+      "lastSeen": "2026-03-31T20:56:00.720403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8955
+      "score": 1.8953
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
