@@ -1,9 +1,26 @@
 {
   "date": "2026-03-31",
-  "updatedAt": "2026-03-31T05:00:01.960101+00:00",
+  "updatedAt": "2026-03-31T06:00:01.916744+00:00",
   "items": [
     {
-      "title": "A Compression Perspective on Simplicity Bias",
+      "title": "Alibaba Qwen Team Releases Qwen3.5 Omni: A Native Multimodal Model for Text, Audio, Video, and Realtime Interaction",
+      "url": "https://www.marktechpost.com/2026/03/30/alibaba-qwen-team-releases-qwen3-5-omni-a-native-multimodal-model-for-text-audio-video-and-realtime-interaction",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The landscape of multimodal large language models (MLLMs) has shifted from experimental &#8216;wrappers&#8217;—where separate vision or audio encoders are stitched onto a text-based backbone—to native, end-to-end &#8216;omnimodal&#8217; architectures. Alibaba Qwen team latest release, Qwen3.5-Omni, represents a significant milestone in this evolution. Designed as a direct competitor to flagship models like Gemini 3.1 Pro, the Qwen3.5-Omni [&#8230;]\nThe post Alibaba Qwen Team Releases Qwen3.5 Omni: A Native Multimodal Model for Text, Audio, Video, and Realtime Interaction appeared first on Mark",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-10.06.06-PM-1-150x150.png",
+      "published": "2026-03-31T05:17:07+00:00",
+      "firstSeen": "2026-03-31T06:00:01.916744+00:00",
+      "lastSeen": "2026-03-31T06:00:01.916744+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 20.0984
+    },
+    {
+      "title": "Anna Kozlova, Stanislau Salavei, Pavel Satalkin, Hanna Plotnitskaya, Sergey Parfenyuk",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,9 +28,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-31T05:00:09.481808+00:00",
+      "published": "2026-03-31T06:00:08.366625+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-31T05:00:01.960101+00:00",
+      "lastSeen": "2026-03-31T06:00:01.916744+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
