@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T13:59:43.671029+00:00",
+  "updatedAt": "2026-03-31T15:00:01.465929+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2316,6 +2316,22 @@
     "https://huggingface.co/blog/trl-v1": {
       "image": "https://huggingface.co/blog/assets/trl-v1/thumbnail.png",
       "checkedAt": "2026-03-31T13:59:43.671029+00:00"
+    },
+    "https://www.techrepublic.com/article/news-mac-studio-2026-m5-price-release-timeline": {
+      "image": "https://assets.techrepublic.com/uploads/2026/02/mediamodifier-qI9Rm2jIwSc-unsplash.jpg",
+      "checkedAt": "2026-03-31T15:00:01.465929+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/31/1134762/shifting-to-ai-model-customization-is-an-architectural-imperative": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/mistral-iStock-1398800653.jpg?resize=1200,600",
+      "checkedAt": "2026-03-31T15:00:01.465929+00:00"
+    },
+    "https://techcrunch.com/2026/03/31/exclusive-runway-launches-10m-fund-builders-program-to-support-early-stage-ai-startups": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/IMG_5963.png?w=1200",
+      "checkedAt": "2026-03-31T15:00:01.465929+00:00"
+    },
+    "https://www.technologyreview.com/2026/03/31/1134833/ai-benchmarks-are-broken-heres-what-we-need-instead": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AIlearningOpEd2.jpg?resize=1200,600",
+      "checkedAt": "2026-03-31T15:00:01.465929+00:00"
     }
   }
 }
