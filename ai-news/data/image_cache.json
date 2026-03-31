@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T21:00:01.824929+00:00",
+  "updatedAt": "2026-03-31T20:56:00.720403+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2370,12 +2370,12 @@
       "checkedAt": "2026-03-31T19:00:01.616698+00:00"
     },
     "https://techcrunch.com/2026/03/31/yupp-ai-shuts-down-33m-a16z-crypto-chris-dixon": {
-      "image": "https://techcrunch.com/wp-content/uploads/2023/10/GettyImages-1303642234.jpg?w=1024",
-      "checkedAt": "2026-03-31T21:00:01.824929+00:00"
+      "image": "",
+      "checkedAt": "2026-03-31T20:56:00.720403+00:00"
     },
     "https://openai.com/index/accelerating-the-next-phase-ai": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/6OSKcUkJputeSfEUssuwQk/ca93432564e7748ab08ee2b5be907f29/Frame-1.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-03-31T21:00:01.824929+00:00"
+      "image": "",
+      "checkedAt": "2026-03-31T20:56:00.720403+00:00"
     }
   }
 }
