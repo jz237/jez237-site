@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T19:17:16.773682+00:00",
+  "updatedAt": "2026-03-31T20:56:00.720403+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2368,6 +2368,14 @@
     "https://www.techrepublic.com/article/news-google-drive-ransomware-detection-file-recovery": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/ransomware.jpg",
       "checkedAt": "2026-03-31T19:00:01.616698+00:00"
+    },
+    "https://techcrunch.com/2026/03/31/yupp-ai-shuts-down-33m-a16z-crypto-chris-dixon": {
+      "image": "",
+      "checkedAt": "2026-03-31T20:56:00.720403+00:00"
+    },
+    "https://openai.com/index/accelerating-the-next-phase-ai": {
+      "image": "",
+      "checkedAt": "2026-03-31T20:56:00.720403+00:00"
     }
   }
 }
