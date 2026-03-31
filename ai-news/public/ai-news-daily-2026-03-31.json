@@ -1,6 +1,6 @@
 {
   "date": "2026-03-31",
-  "updatedAt": "2026-03-31T12:00:01.383422+00:00",
+  "updatedAt": "2026-03-31T11:58:55.878431+00:00",
   "items": [
     {
       "title": "Alibaba Qwen Team Releases Qwen3.5 Omni: A Native Multimodal Model for Text, Audio, Video, and Realtime Interaction",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-10.06.06-PM-1-150x150.png",
       "published": "2026-03-31T05:17:07+00:00",
       "firstSeen": "2026-03-31T05:51:58.738728+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.9328
+      "score": 19.9333
     },
     {
       "title": "Airbnb launches private car transfers in 125+ cities",
@@ -30,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Airbnb.png",
       "published": "2026-03-31T09:39:36+00:00",
       "firstSeen": "2026-03-31T11:00:01.454505+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9808
+      "score": 4.9813
     },
     {
       "title": "Qover raises $12M from CIBC, and sets its sights on 100 million people protected by 2030",
@@ -46,10 +46,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Qover.png",
       "published": "2026-03-31T08:33:12+00:00",
       "firstSeen": "2026-03-31T09:15:18.312317+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7496
+      "score": 2.7501
     },
     {
       "title": "Matteo Salis, Gabriele Sartor, Rosa Meo, Stefano Ferraris, Abdourrahmane M. Atto",
@@ -60,9 +60,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-31T12:00:08.021003+00:00",
+      "published": "2026-03-31T11:59:00.808307+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -78,10 +78,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-commits-1-billion-to-Thailand.png",
       "published": "2026-03-31T08:22:08+00:00",
       "firstSeen": "2026-03-31T09:15:18.312317+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3445
+      "score": 2.345
     },
     {
       "title": "Enkei raises a pre-seed round to scale a material made from construction waste that replaces marble and concrete",
@@ -94,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Enkei.png",
       "published": "2026-03-31T09:15:03+00:00",
       "firstSeen": "2026-03-31T11:00:01.454505+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0691
+      "score": 2.0696
     },
     {
       "title": "Empirical Ventures secures £10M from the British Business Bank to back UK ‘venture scientists",
@@ -110,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/empirical-Ventures.png",
       "published": "2026-03-31T08:10:15+00:00",
       "firstSeen": "2026-03-31T09:00:01.776924+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.039
+      "score": 2.0395
     },
     {
       "title": "How the Silicon Valley sneaker that was once worth $4 billion ended up selling for $39M",
@@ -126,10 +126,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/allbirds.png",
       "published": "2026-03-31T07:09:46+00:00",
       "firstSeen": "2026-03-31T07:43:01.759763+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0117
+      "score": 2.0122
     },
     {
       "title": "RepAir Carbon opens a Luxembourg office to scale its electrochemical carbon capture tech across Europe",
@@ -142,10 +142,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/RepAir.png",
       "published": "2026-03-31T06:50:30+00:00",
       "firstSeen": "2026-03-31T07:43:01.759763+00:00",
-      "lastSeen": "2026-03-31T12:00:01.383422+00:00",
+      "lastSeen": "2026-03-31T11:58:55.878431+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0969
+      "score": -1.0964
     }
   ],
   "errors": []
