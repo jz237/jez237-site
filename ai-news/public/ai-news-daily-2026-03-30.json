@@ -1,6 +1,6 @@
 {
   "date": "2026-03-30",
-  "updatedAt": "2026-03-30T22:54:25.617790+00:00",
+  "updatedAt": "2026-03-30T23:49:13.541438+00:00",
   "items": [
     {
       "title": "Agent-Infra Releases AIO Sandbox: An All-in-One Runtime for AI Agents with Browser, Shell, Shared Filesystem, and MCP",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/image-63-150x150.png",
       "published": "2026-03-30T00:04:53+00:00",
       "firstSeen": "2026-03-30T01:00:01.975899+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.3035
+      "score": 10.2889
+    },
+    {
+      "title": "7 Best ChatGPT Image Prompts in 2026: How to Get Better AI Photos",
+      "url": "https://www.techrepublic.com/article/news-7-best-chatgpt-image-prompts-2026",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Use these prompt templates to generate sharper ChatGPT images in 2026, from hero sections and product shots to retouching and pricing layouts.\nThe post 7 Best ChatGPT Image Prompts in 2026: How to Get Better AI Photos appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-03-30T23:11:03+00:00",
+      "firstSeen": "2026-03-30T23:49:13.541438+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2307
     },
     {
       "title": "Bluesky’s new Attie app uses AI to give you full control over your social feed",
@@ -32,7 +48,7 @@
       "lastSeen": "2026-03-30T18:05:04.351365+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8828
+      "score": 8.8645
     },
     {
       "title": "The Pentagon’s culture war tactic against Anthropic has backfired",
@@ -45,10 +61,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/anthropic-ruling.jpg?resize=1200%2C600",
       "published": "2026-03-30T15:42:50+00:00",
       "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1908
+      "score": 6.1682
     },
     {
       "title": "Salesforce AI Research Releases VoiceAgentRAG: A Dual-Agent Memory Router that Cuts Voice RAG Retrieval Latency by 316x",
@@ -61,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.49.13-AM-1-150x150.png",
       "published": "2026-03-30T09:56:14+00:00",
       "firstSeen": "2026-03-30T11:00:01.671432+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0872
+      "score": 6.068
     },
     {
       "title": "DeepSeek Outage Shakes AI Service Used by 355M Worldwide",
@@ -77,10 +93,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/unnamed-44.jpg",
       "published": "2026-03-30T13:02:13+00:00",
       "firstSeen": "2026-03-30T14:00:01.683204+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9862
+      "score": 5.9653
     },
     {
       "title": "Okta&#8217;s CEO is betting big on AI agent identity",
@@ -93,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/DCD_McKinnon_Okta.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.711631919237%2C100%2C78.576736161526&amp%3Bw=1200",
       "published": "2026-03-30T15:15:00+00:00",
       "firstSeen": "2026-03-30T15:22:14.284028+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9492
+      "score": 5.927
     },
     {
       "title": "Why OpenAI really shut down Sora",
@@ -109,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/sora-app-GettyImages-2240278671.jpeg?resize=1200%2C800",
       "published": "2026-03-30T03:09:38+00:00",
       "firstSeen": "2026-03-30T03:36:01.536524+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9256
+      "score": 5.9097
     },
     {
       "title": "There are more AI health tools than ever—but how well do they work?",
@@ -125,10 +141,26 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/260326_AI_healthcare2.jpg?resize=1200%2C600",
       "published": "2026-03-30T16:00:00+00:00",
       "firstSeen": "2026-03-30T17:00:01.473321+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.898
+      "score": 5.8752
+    },
+    {
+      "title": "MAGNET: Autonomous Expert Model Generation via Decentralized Autoresearch and BitNet Training",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-03-30T23:49:17.448126+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "Mistral AI raises $830M in debt to set up a data center near Paris",
@@ -141,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219786590.jpg?w=1024",
       "published": "2026-03-30T12:49:51+00:00",
       "firstSeen": "2026-03-30T13:00:01.299422+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0214
+      "score": 5.0006
     },
     {
       "title": "Apple Offers Up to $400K to Keep iPhone Designers Amid AI Talent War",
@@ -157,42 +189,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/shutterstock1069919405.jpg",
       "published": "2026-03-30T14:23:03+00:00",
       "firstSeen": "2026-03-30T15:00:01.161847+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
+      "lastSeen": "2026-03-30T23:49:13.541438+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0181
-    },
-    {
-      "title": "Mistral secures $830M from seven banks to build its own AI data centre",
-      "url": "https://thenextweb.com/news/mistral-ai-830m-debt-data-centre-paris",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The French AI company has secured the financing from a seven-bank consortium including BNP Paribas, Crédit Agricole CIB, HSBC, and MUFG. The data centre at Bruyères-le-Châtel is expected to be operational in Q2 2026 and is part of a broader push for European AI compute sovereignty. Mistral AI has raised $830 million in debt, its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Mistral-AI.png",
-      "published": "2026-03-30T07:23:20+00:00",
-      "firstSeen": "2026-03-30T07:58:29.899508+00:00",
-      "lastSeen": "2026-03-30T18:05:04.351365+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7648
-    },
-    {
-      "title": "Microsoft AI Releases Harrier-OSS-v1: A New Family of Multilingual Embedding Models Hitting SOTA on Multilingual MTEB v2",
-      "url": "https://www.marktechpost.com/2026/03/30/microsoft-ai-releases-harrier-oss-v1-a-new-family-of-multilingual-embedding-models-hitting-sota-on-multilingual-mteb-v2",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Microsoft has announced the release of Harrier-OSS-v1, a family of three multilingual text embedding models designed to provide high-quality semantic representations across a wide range of languages. The release includes three distinct scales: a 270M parameter model, a 0.6B model, and a 27B model. The Harrier-OSS-v1 models achieved state-of-the-art (SOTA) results on the Multilingual MTEB [&#8230;]\nThe post Microsoft AI Releases Harrier-OSS-v1: A New Family of Multilingual Embedding Models Hitting SOTA on Multilingual MTEB v2 appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-2.29.35-PM-150x150.png",
-      "published": "2026-03-30T22:22:49+00:00",
-      "firstSeen": "2026-03-30T22:54:25.617790+00:00",
-      "lastSeen": "2026-03-30T22:54:25.617790+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.704
+      "score": 4.9964
     }
   ],
   "errors": []
