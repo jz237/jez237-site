@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T13:00:01.953945+00:00",
+  "updatedAt": "2026-03-31T13:59:43.671029+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2304,6 +2304,18 @@
     "https://simonwillison.net/2026/Mar/30/datasette-files": {
       "image": "",
       "checkedAt": "2026-03-31T01:00:01.878790+00:00"
+    },
+    "https://techcrunch.com/2026/03/31/ring-app-store-bets-on-ai-to-go-beyond-home-security": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/20250611-lifestyle-outdoorcampro-plugin-home-exterior-wall-wht-rgb.jpg?w=1200",
+      "checkedAt": "2026-03-31T13:59:43.671029+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/903938/alexa-plus-order-food-grubhub-uber-eats": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Food-Ordering_Echo-Show_Customization.png?quality=90&amp;strip=all&amp;crop=0%2C11.275132439047%2C100%2C77.449735121906&amp;w=1200",
+      "checkedAt": "2026-03-31T13:59:43.671029+00:00"
+    },
+    "https://huggingface.co/blog/trl-v1": {
+      "image": "https://huggingface.co/blog/assets/trl-v1/thumbnail.png",
+      "checkedAt": "2026-03-31T13:59:43.671029+00:00"
     }
   }
 }
