@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T17:12:22.137863+00:00",
+  "updatedAt": "2026-03-31T18:00:02.072544+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2352,6 +2352,10 @@
     "https://www.techrepublic.com/article/news-meta-ray-ban-smart-glasses-prescription": {
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03312026-meta-ray-ban-smart-glasses-prescription.jpg",
       "checkedAt": "2026-03-31T17:00:02.319239+00:00"
+    },
+    "https://techcrunch.com/2026/03/31/alexa-plus-new-food-ordering-experiences-with-uber-eats-and-grubhub": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/food-order-cart-echo-show-amazon-news-nb-033126.png?w=1200",
+      "checkedAt": "2026-03-31T18:00:02.072544+00:00"
     }
   }
 }
