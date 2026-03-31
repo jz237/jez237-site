@@ -1,6 +1,6 @@
 {
   "date": "2026-03-31",
-  "updatedAt": "2026-03-31T09:00:01.776924+00:00",
+  "updatedAt": "2026-03-31T09:15:18.312317+00:00",
   "items": [
     {
       "title": "Alibaba Qwen Team Releases Qwen3.5 Omni: A Native Multimodal Model for Text, Audio, Video, and Realtime Interaction",
@@ -13,11 +13,43 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-30-at-10.06.06-PM-1-150x150.png",
       "published": "2026-03-31T05:17:07+00:00",
       "firstSeen": "2026-03-31T05:51:58.738728+00:00",
-      "lastSeen": "2026-03-31T09:00:01.776924+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0121
+      "score": 20.0051
+    },
+    {
+      "title": "Qover raises $12M from CIBC, and sets its sights on 100 million people protected by 2030",
+      "url": "https://thenextweb.com/news/qover-12m-cibc-innovation-banking",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Belgian embedded insurance orchestration platform, which backs Revolut, Mastercard, BMW, and Monzo, has tripled revenue over four years and now covers 15 million people across 32+ countries. Total funding crosses $100 million. Qover, the Belgian embedded insurance orchestration platform, is marking its tenth anniversary with a $12 million growth capital facility from CIBC Innovation [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Qover.png",
+      "published": "2026-03-31T08:33:12+00:00",
+      "firstSeen": "2026-03-31T09:15:18.312317+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8288
+    },
+    {
+      "title": "Microsoft commits $1 billion to Thailand for cloud and AI infrastructure",
+      "url": "https://thenextweb.com/news/microsoft-1-billion-thailand-cloud-ai-infrastructure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Brad Smith met Prime Minister Anutin Charnvirakul in Bangkok to announce the 2026-2028 investment spanning data centre infrastructure, cybersecurity, sovereign technology, and AI skills training for millions of Thai workers. Microsoft has announced a commitment of more than $1 billion in cloud and AI infrastructure in Thailand between 2026 and 2028, the company’s largest publicly [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Microsoft-commits-1-billion-to-Thailand.png",
+      "published": "2026-03-31T08:22:08+00:00",
+      "firstSeen": "2026-03-31T09:15:18.312317+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4233
     },
     {
       "title": "Anna Kozlova, Stanislau Salavei, Pavel Satalkin, Hanna Plotnitskaya, Sergey Parfenyuk",
@@ -28,9 +60,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-03-31T09:00:07.730037+00:00",
+      "published": "2026-03-31T09:15:24.929842+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-03-31T09:00:01.776924+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -46,10 +78,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/empirical-Ventures.png",
       "published": "2026-03-31T08:10:15+00:00",
       "firstSeen": "2026-03-31T09:00:01.776924+00:00",
-      "lastSeen": "2026-03-31T09:00:01.776924+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1249
+      "score": 2.1174
     },
     {
       "title": "How the Silicon Valley sneaker that was once worth $4 billion ended up selling for $39M",
@@ -62,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/allbirds.png",
       "published": "2026-03-31T07:09:46+00:00",
       "firstSeen": "2026-03-31T07:43:01.759763+00:00",
-      "lastSeen": "2026-03-31T09:00:01.776924+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0953
+      "score": 2.0879
     },
     {
       "title": "RepAir Carbon opens a Luxembourg office to scale its electrochemical carbon capture tech across Europe",
@@ -78,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/RepAir.png",
       "published": "2026-03-31T06:50:30+00:00",
       "firstSeen": "2026-03-31T07:43:01.759763+00:00",
-      "lastSeen": "2026-03-31T09:00:01.776924+00:00",
+      "lastSeen": "2026-03-31T09:15:18.312317+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.014
+      "score": -1.0213
     }
   ],
   "errors": []
