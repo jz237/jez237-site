@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T00:00:01.113299+00:00",
+  "updatedAt": "2026-03-31T23:47:28.063477+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2421,13 +2421,9 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STKB364_CLAUDE_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-03-31T22:50:42.912923+00:00"
     },
-    "https://techcrunch.com/2026/03/31/anthropic-is-having-a-month": {
-      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-1570465901.jpg?w=1024",
-      "checkedAt": "2026-04-01T00:00:01.113299+00:00"
-    },
     "https://simonwillison.net/2026/Mar/31/supply-chain-attack-on-axios": {
       "image": "",
-      "checkedAt": "2026-04-01T00:00:01.113299+00:00"
+      "checkedAt": "2026-03-31T23:47:28.063477+00:00"
     }
   }
 }
