@@ -1,6 +1,6 @@
 {
   "date": "2026-04-01",
-  "updatedAt": "2026-04-01T07:51:41.560439+00:00",
+  "updatedAt": "2026-04-01T09:00:01.251116+00:00",
   "items": [
     {
       "title": "Google AI Releases Veo 3.1 Lite: Giving Developers Low Cost High Speed Video Generation via The Gemini API",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-31-at-11.22.01-PM-1-150x150.png",
       "published": "2026-04-01T06:22:48+00:00",
       "firstSeen": "2026-04-01T07:00:01.939483+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.0756
+      "score": 22.0428
     },
     {
       "title": "8 Gemini AI Prompts That Turn Ordinary Photos Into Professional Portraits",
@@ -30,10 +30,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/featured-image.png",
       "published": "2026-04-01T00:16:16+00:00",
       "firstSeen": "2026-04-01T01:00:01.638782+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0409
+      "score": 9.0131
     },
     {
       "title": "Quoting Soohoon Choi",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-04-01T02:07:16+00:00",
       "firstSeen": "2026-04-01T03:00:01.118133+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2279
+      "score": 5.1987
     },
     {
       "title": "datasette-llm-usage 0.2a0",
@@ -62,10 +62,10 @@
       "image": "",
       "published": "2026-04-01T03:24:03+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2618
+      "score": 4.2315
     },
     {
       "title": "Liquid AI Released LFM2.5-350M: A Compact 350M Parameter Model Trained on 28T Tokens with Scaled Reinforcement Learning",
@@ -78,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/69ca8b787a45a5bfb5a222b8_LFM2.5-350M-Benchmarks-1-150x150.png",
       "published": "2026-04-01T05:01:59+00:00",
       "firstSeen": "2026-04-01T06:00:01.145545+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.2369
+      "score": 4.2052
     },
     {
       "title": "datasette-llm 0.1a5",
@@ -94,10 +94,10 @@
       "image": "",
       "published": "2026-04-01T03:11:01+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.956
+      "score": 3.9259
     },
     {
       "title": "datasette-extract 0.3a0",
@@ -110,10 +110,10 @@
       "image": "",
       "published": "2026-04-01T03:32:16+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8655
+      "score": 2.8351
     },
     {
       "title": "datasette-enrichments-llm 0.2a0",
@@ -126,10 +126,10 @@
       "image": "",
       "published": "2026-04-01T03:28:44+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8639
+      "score": 2.8336
     },
     {
       "title": "Falcon Perception",
@@ -142,10 +142,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/tiiuae/falcon-perception.png",
       "published": "2026-04-01T07:13:20+00:00",
       "firstSeen": "2026-04-01T07:51:41.560439+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4106
+      "score": 2.377
     },
     {
       "title": "Structural Pass Analysis in Football: Learning Pass Archetypes and Tactical Impact from Spatio-Temporal Tracking Data",
@@ -156,9 +156,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-01T07:51:46.574191+00:00",
+      "published": "2026-04-01T09:00:09.579772+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -174,10 +174,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/mercor-website.jpg?resize=1200%2C800",
       "published": "2026-04-01T01:42:59+00:00",
       "firstSeen": "2026-04-01T02:00:01.719803+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1174
+      "score": 2.0885
     },
     {
       "title": "Hugging Face Releases TRL v1.0: A Unified Post-Training Stack for SFT, Reward Modeling, DPO, and GRPO Workflows",
@@ -190,10 +190,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-25-1024x731.png",
       "published": "2026-04-01T07:04:43+00:00",
       "firstSeen": "2026-04-01T07:51:41.560439+00:00",
-      "lastSeen": "2026-04-01T07:51:41.560439+00:00",
+      "lastSeen": "2026-04-01T09:00:01.251116+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1963
+      "score": 0.1628
     }
   ],
   "errors": []
