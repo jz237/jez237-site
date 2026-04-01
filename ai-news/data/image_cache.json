@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T15:00:02.066168+00:00",
+  "updatedAt": "2026-04-01T16:00:01.728249+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2500,6 +2500,10 @@
     "https://www.techrepublic.com/article/news-google-quantum-computing-crypto-security-risk": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04012026-google-quantum-computing.jpg",
       "checkedAt": "2026-04-01T15:00:02.066168+00:00"
+    },
+    "https://www.techrepublic.com/article/news-iran-threatens-us-tech-firms-middle-east": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/iran-threatens-us-tech-firms.png",
+      "checkedAt": "2026-04-01T16:00:01.728249+00:00"
     }
   }
 }
