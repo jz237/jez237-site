@@ -1,6 +1,6 @@
 {
   "date": "2026-04-01",
-  "updatedAt": "2026-04-01T17:00:01.411099+00:00",
+  "updatedAt": "2026-04-01T17:09:40.231072+00:00",
   "items": [
     {
       "title": "Google AI Releases Veo 3.1 Lite: Giving Developers Low Cost High Speed Video Generation via The Gemini API",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-31-at-11.22.01-PM-1-150x150.png",
       "published": "2026-04-01T06:22:48+00:00",
       "firstSeen": "2026-04-01T07:00:01.939483+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.839
+      "score": 21.8353
     },
     {
       "title": "Corti’s new Symphony AI beats OpenAI and Anthropic on medical coding",
@@ -30,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Corti-founders.png",
       "published": "2026-04-01T10:00:25+00:00",
       "firstSeen": "2026-04-01T11:00:01.354657+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.1558
+      "score": 14.1517
     },
     {
       "title": "Gradient Labs gives every bank customer an AI account manager",
@@ -46,11 +46,11 @@
       "image": "",
       "published": "2026-04-01T02:00:00+00:00",
       "firstSeen": "2026-04-01T09:20:32.860393+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1252
+      "score": 14.1219
     },
     {
       "title": "AI can push your Stream Deck buttons for you",
@@ -63,10 +63,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24595940/236572_BOTM_Stream_Deck_DSeifert_0008.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-01T12:38:58+00:00",
       "firstSeen": "2026-04-01T13:00:01.513632+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7348
+      "score": 12.7304
     },
     {
       "title": "OpenAI is hiring ad-tech firms to make ChatGPT ads talk back to you",
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-smartly-chatgpt-laura-desmond.png",
       "published": "2026-04-01T15:57:27+00:00",
       "firstSeen": "2026-04-01T17:00:01.411099+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1186
+      "score": 11.1138
     },
     {
       "title": "8 Gemini AI Prompts That Turn Ordinary Photos Into Professional Portraits",
@@ -95,10 +95,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/featured-image.png",
       "published": "2026-04-01T00:16:16+00:00",
       "firstSeen": "2026-04-01T01:00:01.638782+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8412
+      "score": 8.8381
     },
     {
       "title": "I Asked ChatGPT What WIRED’s Reviewers Recommend. Its Answers Were All Wrong",
@@ -111,10 +111,10 @@
       "image": "https://media.wired.com/photos/69cc506cc2fe4f23a0fb523c/master/pass/Looking-for-WIREDs-Best-Product-Reccommendations--ChatGPT-Isnt-Trustworthy-Gear.jpg",
       "published": "2026-04-01T09:30:00+00:00",
       "firstSeen": "2026-04-01T10:00:01.591410+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4831
+      "score": 5.4791
     },
     {
       "title": "Quoting Soohoon Choi",
@@ -127,10 +127,10 @@
       "image": "",
       "published": "2026-04-01T02:07:16+00:00",
       "firstSeen": "2026-04-01T03:00:01.118133+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0176
+      "score": 5.0144
     },
     {
       "title": "Apple Prepares Siri for Multi-Step AI Requests in iOS 27",
@@ -143,10 +143,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/omid-armin-AGRtDoZlpYw-unsplash.jpg",
       "published": "2026-04-01T14:17:31+00:00",
       "firstSeen": "2026-04-01T15:00:02.066168+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2703
+      "score": 4.2657
     },
     {
       "title": "datasette-llm-usage 0.2a0",
@@ -159,10 +159,10 @@
       "image": "",
       "published": "2026-04-01T03:24:03+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0439
+      "score": 4.0406
     },
     {
       "title": "Liquid AI Released LFM2.5-350M: A Compact 350M Parameter Model Trained on 28T Tokens with Scaled Reinforcement Learning",
@@ -175,10 +175,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/69ca8b787a45a5bfb5a222b8_LFM2.5-350M-Benchmarks-1-150x150.png",
       "published": "2026-04-01T05:01:59+00:00",
       "firstSeen": "2026-04-01T06:00:01.145545+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0089
+      "score": 4.0054
     },
     {
       "title": "datasette-llm 0.1a5",
@@ -191,10 +191,10 @@
       "image": "",
       "published": "2026-04-01T03:11:01+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T17:00:01.411099+00:00",
+      "lastSeen": "2026-04-01T17:09:40.231072+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7394
+      "score": 3.7361
     }
   ],
   "errors": []
