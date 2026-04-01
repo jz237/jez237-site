@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T01:00:01.638782+00:00",
+  "updatedAt": "2026-04-01T02:00:01.719803+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2432,6 +2432,10 @@
     "https://techcrunch.com/2026/03/31/anthropic-is-having-a-month": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-1570465901.jpg?w=1024",
       "checkedAt": "2026-04-01T01:00:01.638782+00:00"
+    },
+    "https://techcrunch.com/2026/03/31/mercor-says-it-was-hit-by-cyberattack-tied-to-compromise-of-open-source-litellm-project": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/mercor-website.jpg?resize=1200,800",
+      "checkedAt": "2026-04-01T02:00:01.719803+00:00"
     }
   }
 }
