@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T10:00:01.591410+00:00",
+  "updatedAt": "2026-04-01T09:20:32.860393+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2470,8 +2470,8 @@
       "checkedAt": "2026-04-01T07:51:41.560439+00:00"
     },
     "https://openai.com/index/gradient-labs": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/6wiEoJfnWidLn3IKZd3lWF/27e8dd155aa94cbff436a18ab9b9e2c4/oai_GradientLabs_SEO.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-04-01T10:00:01.591410+00:00"
+      "image": "",
+      "checkedAt": "2026-04-01T09:20:32.860393+00:00"
     }
   }
 }
