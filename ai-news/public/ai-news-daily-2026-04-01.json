@@ -1,6 +1,6 @@
 {
   "date": "2026-04-01",
-  "updatedAt": "2026-04-01T09:20:32.860393+00:00",
+  "updatedAt": "2026-04-01T11:00:01.354657+00:00",
   "items": [
     {
       "title": "Google AI Releases Veo 3.1 Lite: Giving Developers Low Cost High Speed Video Generation via The Gemini API",
@@ -13,11 +13,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/Screenshot-2026-03-31-at-11.22.01-PM-1-150x150.png",
       "published": "2026-04-01T06:22:48+00:00",
       "firstSeen": "2026-04-01T07:00:01.939483+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.0331
+      "score": 21.9875
+    },
+    {
+      "title": "Corti’s new Symphony AI beats OpenAI and Anthropic on medical coding",
+      "url": "https://thenextweb.com/news/corti-symphony-medical-coding-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Copenhagen-based health AI company built Symphony on peer-reviewed research from the largest medical coding study of its kind, treating coding as a reasoning task rather than a labelling problem. It’s available via API now. Medical coding, the process of converting clinical notes, diagnoses, and procedures into standardised alphanumeric codes used for billing, reporting, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Corti-founders.png",
+      "published": "2026-04-01T10:00:25+00:00",
+      "firstSeen": "2026-04-01T11:00:01.354657+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 14.3201
     },
     {
       "title": "Gradient Labs gives every bank customer an AI account manager",
@@ -30,11 +46,11 @@
       "image": "",
       "published": "2026-04-01T02:00:00+00:00",
       "firstSeen": "2026-04-01T09:20:32.860393+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.297
+      "score": 14.2567
     },
     {
       "title": "8 Gemini AI Prompts That Turn Ordinary Photos Into Professional Portraits",
@@ -47,10 +63,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/featured-image.png",
       "published": "2026-04-01T00:16:16+00:00",
       "firstSeen": "2026-04-01T01:00:01.638782+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.005
+      "score": 8.9665
+    },
+    {
+      "title": "I Asked ChatGPT What WIRED’s Reviewers Recommend—Its Answers Were All Wrong",
+      "url": "https://www.wired.com/story/i-asked-chatgpt-what-wired-reviewers-recommend-its-answers-were-all-wrong",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Want to know what our reviewers have actually tested and picked as the best TVs, headphones, and laptops? Ask ChatGPT, and it'll give you the wrong answers.",
+      "image": "https://media.wired.com/photos/69cc506cc2fe4f23a0fb523c/master/pass/Looking-for-WIREDs-Best-Product-Reccommendations--ChatGPT-Isnt-Trustworthy-Gear.jpg",
+      "published": "2026-04-01T09:30:00+00:00",
+      "firstSeen": "2026-04-01T10:00:01.591410+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6451
     },
     {
       "title": "Quoting Soohoon Choi",
@@ -63,10 +95,10 @@
       "image": "",
       "published": "2026-04-01T02:07:16+00:00",
       "firstSeen": "2026-04-01T03:00:01.118133+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1901
+      "score": 5.1496
     },
     {
       "title": "datasette-llm-usage 0.2a0",
@@ -79,10 +111,10 @@
       "image": "",
       "published": "2026-04-01T03:24:03+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2226
+      "score": 4.1807
     },
     {
       "title": "Liquid AI Released LFM2.5-350M: A Compact 350M Parameter Model Trained on 28T Tokens with Scaled Reinforcement Learning",
@@ -95,10 +127,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/69ca8b787a45a5bfb5a222b8_LFM2.5-350M-Benchmarks-1-150x150.png",
       "published": "2026-04-01T05:01:59+00:00",
       "firstSeen": "2026-04-01T06:00:01.145545+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1959
+      "score": 4.152
     },
     {
       "title": "datasette-llm 0.1a5",
@@ -111,10 +143,42 @@
       "image": "",
       "published": "2026-04-01T03:11:01+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.917
+      "score": 3.8753
+    },
+    {
+      "title": "Baidu’s robotaxis froze in traffic creating chaos",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/905012/baidu-apollo-robotaxi-freeze-china",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Numerous robotaxis operated by Chinese tech giant Baidu froze in a major city on Tuesday, reportedly trapping passengers inside, stranding them on highways, and causing at least one accident in snarled traffic. Police in Wuhan confirmed receiving multiple reports of Baidu's Apollo Go robotaxis stopping in the middle of streets and being unable to move. [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2152484525.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
+      "published": "2026-04-01T10:39:52+00:00",
+      "firstSeen": "2026-04-01T11:00:01.354657+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4498
+    },
+    {
+      "title": "Credibur hits €2B in debt facility volume on its private credit infrastructure platform",
+      "url": "https://thenextweb.com/news/credibur-2-billion-debt-facility-volume",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Berlin fintech, which raised $2.2M in pre-seed in July 2025, has connected clients managing €2 billion in structured debt portfolios to its continuous monitoring and reconciliation platform, faster than almost any comparable infrastructure startup. Credibur, the Berlin-based infrastructure fintech building operational control software for non-bank lenders and their capital providers, has reached €2 billion [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Credibur.png",
+      "published": "2026-04-01T09:57:24+00:00",
+      "firstSeen": "2026-04-01T11:00:01.354657+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8186
     },
     {
       "title": "datasette-extract 0.3a0",
@@ -127,74 +191,10 @@
       "image": "",
       "published": "2026-04-01T03:32:16+00:00",
       "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
+      "lastSeen": "2026-04-01T11:00:01.354657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8262
-    },
-    {
-      "title": "datasette-enrichments-llm 0.2a0",
-      "url": "https://simonwillison.net/2026/Apr/1/datasette-enrichments-llm",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: datasette-enrichments-llm 0.2a0\n    \n\nThis plugin now uses datasette-llm to configure and manage models. This means it's possible to specify which models should be made available for enrichments, using the new enrichments purpose.\n\n\n    \n        Tags: llm, datasette",
-      "image": "",
-      "published": "2026-04-01T03:28:44+00:00",
-      "firstSeen": "2026-04-01T04:00:01.181171+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8247
-    },
-    {
-      "title": "Falcon Perception",
-      "url": "https://huggingface.co/blog/tiiuae/falcon-perception",
-      "source": "Hugging Face Blog",
-      "sourceUrl": "https://huggingface.co/blog/feed.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "",
-      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/tiiuae/falcon-perception.png",
-      "published": "2026-04-01T07:13:20+00:00",
-      "firstSeen": "2026-04-01T07:51:41.560439+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3671
-    },
-    {
-      "title": "Structural Pass Analysis in Football: Learning Pass Archetypes and Tactical Impact from Spatio-Temporal Tracking Data",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-01T09:20:39.913356+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "Mercor says it was hit by cyberattack tied to compromise of open-source LiteLLM project",
-      "url": "https://techcrunch.com/2026/03/31/mercor-says-it-was-hit-by-cyberattack-tied-to-compromise-of-open-source-litellm-project",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The AI recruiting startup confirmed a security incident after an extortion hacking crew took credit for stealing data from the company's systems.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/mercor-website.jpg?resize=1200%2C800",
-      "published": "2026-04-01T01:42:59+00:00",
-      "firstSeen": "2026-04-01T02:00:01.719803+00:00",
-      "lastSeen": "2026-04-01T09:20:32.860393+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.08
+      "score": 2.7841
     }
   ],
   "errors": []

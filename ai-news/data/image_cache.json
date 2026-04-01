@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T09:20:32.860393+00:00",
+  "updatedAt": "2026-04-01T11:00:01.354657+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2472,6 +2472,10 @@
     "https://openai.com/index/gradient-labs": {
       "image": "",
       "checkedAt": "2026-04-01T09:20:32.860393+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/905012/baidu-apollo-robotaxi-freeze-china": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2152484525.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.729057198914%2C100%2C78.541885602173&amp;w=1200",
+      "checkedAt": "2026-04-01T11:00:01.354657+00:00"
     }
   }
 }
