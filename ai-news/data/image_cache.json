@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T21:55:03.103687+00:00",
+  "updatedAt": "2026-04-01T23:00:01.594248+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2524,6 +2524,10 @@
     "https://www.together.ai/blog/inside-the-together-ai-kernels-team": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cc3eac11cbb96f8b10c816_20260331_Kernels_Lab_1200x630.jpg",
       "checkedAt": "2026-04-01T19:00:01.672822+00:00"
+    },
+    "https://techcrunch.com/2026/04/01/anthropic-took-down-thousands-of-github-repos-trying-to-yank-its-leaked-source-code-a-move-the-company-says-was-an-accident": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261514463.jpg?w=1024",
+      "checkedAt": "2026-04-01T23:00:01.594248+00:00"
     }
   }
 }
