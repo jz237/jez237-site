@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T11:00:01.354657+00:00",
+  "updatedAt": "2026-04-01T12:00:02.110525+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2476,6 +2476,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/905012/baidu-apollo-robotaxi-freeze-china": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2152484525.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.729057198914%2C100%2C78.541885602173&amp;w=1200",
       "checkedAt": "2026-04-01T11:00:01.354657+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/01/1134863/humanoid-data-training-gig-economy-2026-breakthrough-technology": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/TR11-HumanoidRobot.jpg?resize=1200,600",
+      "checkedAt": "2026-04-01T12:00:02.110525+00:00"
     }
   }
 }
