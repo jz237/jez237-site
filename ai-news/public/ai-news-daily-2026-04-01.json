@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-01",
+  "updatedAt": "2026-04-01T00:00:01.113299+00:00",
+  "items": [
+    {
+      "title": "How GRPO, DAPO, RLVR, and synthetic self-play replaced RLHF as the dominant post-training stack. A technical survey of what changed and why.",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-01T00:00:10.187528+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-01T00:00:01.113299+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.76
+    }
+  ],
+  "errors": []
+}
