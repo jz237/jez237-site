@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T23:47:28.063477+00:00",
+  "updatedAt": "2026-04-01T01:00:01.638782+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2424,6 +2424,14 @@
     "https://simonwillison.net/2026/Mar/31/supply-chain-attack-on-axios": {
       "image": "",
       "checkedAt": "2026-03-31T23:47:28.063477+00:00"
+    },
+    "https://www.techrepublic.com/article/news-gemini-ai-portrait-prompts": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/featured-image.png",
+      "checkedAt": "2026-04-01T01:00:01.638782+00:00"
+    },
+    "https://techcrunch.com/2026/03/31/anthropic-is-having-a-month": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-1570465901.jpg?w=1024",
+      "checkedAt": "2026-04-01T01:00:01.638782+00:00"
     }
   }
 }
