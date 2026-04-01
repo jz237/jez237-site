@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T03:00:01.118133+00:00",
+  "updatedAt": "2026-04-01T04:00:01.181171+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2440,6 +2440,22 @@
     "https://simonwillison.net/2026/Apr/1/soohoon-choi": {
       "image": "",
       "checkedAt": "2026-04-01T03:00:01.118133+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/1/datasette-extract": {
+      "image": "",
+      "checkedAt": "2026-04-01T04:00:01.181171+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/1/datasette-enrichments-llm": {
+      "image": "",
+      "checkedAt": "2026-04-01T04:00:01.181171+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/1/datasette-llm-usage": {
+      "image": "",
+      "checkedAt": "2026-04-01T04:00:01.181171+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/1/datasette-llm": {
+      "image": "",
+      "checkedAt": "2026-04-01T04:00:01.181171+00:00"
     }
   }
 }

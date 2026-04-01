@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-01T03:00:01.118133+00:00",
+  "updatedAt": "2026-04-01T04:00:01.181171+00:00",
   "items": [
     {
-      "title": "Learning to Select Visual In-Context Demonstrations",
+      "title": "Junsol Kim, Winnie Street, Roberta Rocca, Daine M. Korngiebel, Adam Waytz, James Evans, Geoff Keeling",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-01T03:00:06.515221+00:00",
+      "published": "2026-04-01T04:00:12.671897+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "datasette-extract 0.3a0",
+      "url": "https://simonwillison.net/2026/Apr/1/datasette-extract",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-extract 0.3a0\n    \n\nThis plugin now uses datasette-llm to configure and manage models. This means it's possible to specify which models should be made available for enrichments, using the new enrichments purpose.\n\n\n    \n        Tags: llm, datasette",
+      "image": "",
+      "published": "2026-04-01T03:32:16+00:00",
+      "firstSeen": "2026-04-01T04:00:01.181171+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.976
+    },
+    {
+      "title": "datasette-enrichments-llm 0.2a0",
+      "url": "https://simonwillison.net/2026/Apr/1/datasette-enrichments-llm",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-enrichments-llm 0.2a0\n    \n\nThis plugin now uses datasette-llm to configure and manage models. This means it's possible to specify which models should be made available for enrichments, using the new enrichments purpose.\n\n\n    \n        Tags: llm, datasette",
+      "image": "",
+      "published": "2026-04-01T03:28:44+00:00",
+      "firstSeen": "2026-04-01T04:00:01.181171+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9742
+    },
+    {
+      "title": "datasette-llm-usage 0.2a0",
+      "url": "https://simonwillison.net/2026/Apr/1/datasette-llm-usage",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-llm-usage 0.2a0\n    \n\nRemoved features relating to allowances and estimated pricing. These are now the domain of datasette-llm-accountant.\nNow depends on datasette-llm for model configuration. #3\nFull prompts and responses and tool calls can now be logged to thellm_usage_prompt_log table in the internal database if you set the new datasette-llm-usage.log_prompts plugin configuration setting.\nRedesigned the /-/llm-usage-simple-prompt page, which now requires the llm-usage-simple-prompt permission.\n\n\n    \n        Tags: llm, datasette",
+      "image": "",
+      "published": "2026-04-01T03:24:03+00:00",
+      "firstSeen": "2026-04-01T04:00:01.181171+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3718
+    },
+    {
+      "title": "datasette-llm 0.1a5",
+      "url": "https://simonwillison.net/2026/Apr/1/datasette-llm",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-llm 0.1a5\n    \n\nThe llm_prompt_context() plugin hook wrapper mechanism now tracks prompts executed within a chain as well as one-off prompts, which means it can be used to track tool call loops. #5\n\n\n    \n        Tags: llm, datasette",
+      "image": "",
+      "published": "2026-04-01T03:11:01+00:00",
+      "firstSeen": "2026-04-01T04:00:01.181171+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.0653
     },
     {
       "title": "Quoting Soohoon Choi",
@@ -28,10 +92,10 @@
       "image": "",
       "published": "2026-04-01T02:07:16+00:00",
       "firstSeen": "2026-04-01T03:00:01.118133+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3635
+      "score": 5.3341
     },
     {
       "title": "Mercor says it was hit by cyberattack tied to compromise of open-source LiteLLM project",
@@ -44,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/mercor-website.jpg?resize=1200%2C800",
       "published": "2026-04-01T01:42:59+00:00",
       "firstSeen": "2026-04-01T02:00:01.719803+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2515
+      "score": 2.2224
     },
     {
       "title": "8 Gemini AI Prompts That Turn Ordinary Photos Into Professional Portraits",
@@ -60,10 +124,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/featured-image.png",
       "published": "2026-04-01T00:16:16+00:00",
       "firstSeen": "2026-04-01T01:00:01.638782+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1697
+      "score": 9.1418
     },
     {
       "title": "Anthropic is having a month",
@@ -76,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-1570465901.jpg?w=1024",
       "published": "2026-03-31T23:58:26+00:00",
       "firstSeen": "2026-04-01T01:00:01.638782+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2013
+      "score": 5.1736
     },
     {
       "title": "Supply Chain Attack on Axios Pulls Malicious Dependency from npm",
@@ -92,10 +156,10 @@
       "image": "",
       "published": "2026-03-31T23:28:40+00:00",
       "firstSeen": "2026-03-31T23:47:28.063477+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1875
+      "score": 2.1601
     },
     {
       "title": "Decentraland just launched on the Epic Games Store.",
@@ -108,10 +172,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/decentraland-epic-games-store-mobile-launch.png",
       "published": "2026-03-31T23:14:10+00:00",
       "firstSeen": "2026-03-31T23:47:28.063477+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8408
+      "score": 3.8136
     },
     {
       "title": "The Multi-Hop Challenge: Understanding Indirect Blockchain Exposure in Compliance",
@@ -124,10 +188,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/multi-hop-transactions-crypto-indirect-exposure-compliance.png",
       "published": "2026-03-31T23:03:00+00:00",
       "firstSeen": "2026-03-31T23:47:28.063477+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0357
+      "score": 2.0087
     },
     {
       "title": "Salesforce announces an AI-heavy makeover for Slack, with 30 new features",
@@ -140,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/06/GettyImages-1211180761.jpg?w=1024",
       "published": "2026-03-31T22:46:25+00:00",
       "firstSeen": "2026-03-31T22:50:42.912923+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9681
+      "score": 3.9413
     },
     {
       "title": "Claude Code leak exposes a Tamagotchi-style ‘pet’ and an always-on agent",
@@ -156,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STKB364_CLAUDE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-31T22:24:19+00:00",
       "firstSeen": "2026-03-31T22:50:42.912923+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.6282
+      "score": 13.6017
     },
     {
       "title": "Iran’s Revolutionary Guards just named 18 US tech firms as military targets. The age of the civilian data centre is over.",
@@ -172,10 +236,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/iran-irgc-18-us-tech-companies-military-targetspng.png",
       "published": "2026-03-31T22:01:48+00:00",
       "firstSeen": "2026-03-31T22:50:42.912923+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0081
+      "score": 1.9819
     },
     {
       "title": "ByteDance adds watermarking and IP guardrails to Seedance 2.0 as it begins cautious global rollout",
@@ -188,10 +252,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/bytedance-seedance-watermarking.png",
       "published": "2026-03-31T21:35:04+00:00",
       "firstSeen": "2026-03-31T22:50:42.912923+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9964
+      "score": 1.9704
     },
     {
       "title": "OpenAI, not yet public, raises $3B from retail investors in monster $122B fund raise",
@@ -204,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544149.jpg?resize=1200%2C800",
       "published": "2026-03-31T21:25:04+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.132
+      "score": 5.1062
     },
     {
       "title": "New North Korean AI Hiring Scheme Targets US Companies",
@@ -220,10 +284,10 @@
       "image": "",
       "published": "2026-03-31T21:19:19+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0895
+      "score": 3.0637
     },
     {
       "title": "datasette-llm 0.1a4",
@@ -236,11 +300,11 @@
       "image": "",
       "published": "2026-03-31T21:17:23+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.8286
+      "score": 13.8029
     },
     {
       "title": "OpenAI closes record $122 billion round at $852 billion valuation, opens door to retail investors for the first time",
@@ -253,10 +317,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/openai-122-billion-round-852-billion-valuation-retail-investors.png",
       "published": "2026-03-31T21:17:03+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.6885
+      "score": 9.6628
     },
     {
       "title": "You can now use ChatGPT with Apple’s CarPlay",
@@ -269,10 +333,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462047/STK155_OPEN_AI_CVirginia_2_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-31T21:03:18+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3925
+      "score": 12.367
     },
     {
       "title": "South Korea turns to Russian naphtha as Asia’s chip supply chain feels the squeeze",
@@ -285,10 +349,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/south-korea-russian-naphtha-chip-supply-squeeze.png",
       "published": "2026-03-31T20:53:58+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9785
+      "score": 1.9531
     },
     {
       "title": "llm-all-models-async 0.1",
@@ -301,11 +365,11 @@
       "image": "",
       "published": "2026-03-31T20:52:02+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5177
+      "score": 16.4923
     },
     {
       "title": "llm 0.30",
@@ -318,10 +382,10 @@
       "image": "",
       "published": "2026-03-31T20:35:51+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8108
+      "score": 2.7855
     },
     {
       "title": "Yupp shuts down after raising $33M from a16z crypto’s Chris Dixon",
@@ -334,10 +398,10 @@
       "image": "",
       "published": "2026-03-31T20:01:07+00:00",
       "firstSeen": "2026-03-31T20:56:00.720403+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7961
+      "score": 2.7713
     },
     {
       "title": "Apple Intelligence briefly goes live in China without approval, raising the spectre of regulatory penalties",
@@ -350,10 +414,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/apple-intelligence-china-accidental-rollout-regulatory-risk.png",
       "published": "2026-03-31T18:56:18+00:00",
       "firstSeen": "2026-03-31T20:56:00.720403+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0293
+      "score": 3.0052
     },
     {
       "title": "Nexus raises $4.3M seed to let non-technical teams deploy enterprise AI agents",
@@ -366,10 +430,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Nexus.png",
       "published": "2026-03-31T18:49:40+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6266
+      "score": 4.6026
     },
     {
       "title": "EnerVenue lands $300 million to bring NASA’s space batteries down to Earth",
@@ -382,10 +446,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/enervenue-300m-series-b-metal-hydrogen-batteriespng.png",
       "published": "2026-03-31T18:36:47+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9214
+      "score": 1.8975
     },
     {
       "title": "ALSO hits $1B valuation and signs DoorDash as its first major autonomous delivery partner",
@@ -398,10 +462,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Also.png",
       "published": "2026-03-31T18:34:26+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9204
+      "score": 1.8966
     },
     {
       "title": "Quantum computers need vastly fewer resources than thought to break vital encryption",
@@ -414,10 +478,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2024/03/GettyImages-1070527780-1152x648.jpg",
       "published": "2026-03-31T18:25:33+00:00",
       "firstSeen": "2026-03-31T20:00:01.693349+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9169
+      "score": 1.8931
     },
     {
       "title": "How to Build and Evolve a Custom OpenAI Agent with A-Evolve Using Benchmarks, Skills, Memory, and Workspace Mutations",
@@ -430,10 +494,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-22.png",
       "published": "2026-03-31T18:24:44+00:00",
       "firstSeen": "2026-03-31T19:00:01.616698+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.4365
+      "score": 8.4128
     },
     {
       "title": "The Galaxy S26’s photo app can sloppify your memories",
@@ -446,10 +510,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/ai-label-17.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-03-31T18:15:00+00:00",
       "firstSeen": "2026-03-31T19:00:01.616698+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2226
+      "score": 3.199
     },
     {
       "title": "Google Drive Expands AI Ransomware Detection, File Recovery to More Users",
@@ -462,10 +526,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/ransomware.jpg",
       "published": "2026-03-31T18:01:54+00:00",
       "firstSeen": "2026-03-31T19:00:01.616698+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0074
+      "score": 2.9839
     },
     {
       "title": "Alexa+ gets new food ordering experiences with Uber Eats and Grubhub",
@@ -478,10 +542,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/food-order-cart-echo-show-amazon-news-nb-033126.png?w=1200",
       "published": "2026-03-31T17:41:35+00:00",
       "firstSeen": "2026-03-31T18:00:02.072544+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4394
+      "score": 9.4161
     },
     {
       "title": "Austrian food-waste startup Afreshed acquires German rival Etepetete in DACH consolidation play",
@@ -497,7 +561,7 @@
       "lastSeen": "2026-03-31T22:50:42.912923+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8863
+      "score": 1.8634
     },
     {
       "title": "llm-echo 0.4",
@@ -510,10 +574,10 @@
       "image": "",
       "published": "2026-03-31T16:48:59+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.719
+      "score": 2.6963
     },
     {
       "title": "Mistral Raises $830M in Debt Financing to Build Nvidia-Powered AI Hub in Europe",
@@ -526,10 +590,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/Copy-of-Untitled-Design-2026-04-01T002854.091-1024x658.png",
       "published": "2026-03-31T16:30:48+00:00",
       "firstSeen": "2026-03-31T17:00:02.319239+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.972
+      "score": 5.9495
     },
     {
       "title": "Build with Veo 3.1 Lite, our most cost-effective video generation model",
@@ -542,10 +606,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/veo31lite.max-600x600.format-webp.webp",
       "published": "2026-03-31T16:00:00+00:00",
       "firstSeen": "2026-03-31T17:00:02.319239+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5404
+      "score": 4.5182
     },
     {
       "title": "llm-echo 0.3",
@@ -558,10 +622,10 @@
       "image": "",
       "published": "2026-03-31T15:43:26+00:00",
       "firstSeen": "2026-03-31T21:53:05.226224+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6942
+      "score": 2.6722
     },
     {
       "title": "Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents",
@@ -574,74 +638,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-vision.png",
       "published": "2026-03-31T15:10:41+00:00",
       "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9221
-    },
-    {
-      "title": "Efficiency at Scale: NVIDIA, Energy Leaders Accelerating Power‑Flexible AI Factories to Fortify the Grid",
-      "url": "https://blogs.nvidia.com/blog/energy-efficiency-ai-factories-grid",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "CERAWeek — dubbed the Davos of energy — is where policymakers, producers, technologists and financiers gather to discuss how the world powers itself next.  NVIDIA and Emerald AI unveiled at the conference last week a new way forward — treating AI factories not as static power loads but as flexible, intelligent grid assets. This collaboration [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/03/energy-promo-pack-rolling-corp-blog-1920x1080-1-e1774982193753.jpg",
-      "published": "2026-03-31T15:00:51+00:00",
-      "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9785
-    },
-    {
-      "title": "Nomadic raises $8.4 million to wrangle the data pouring off autonomous vehicles",
-      "url": "https://techcrunch.com/2026/03/31/nomadic-raises-8-4-million-to-wrangle-the-data-pouring-off-avs",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The company turns footage from robots into structured, searchable datasets with a deep learning model.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/founder_photo.jpeg?resize=1200%2C793",
-      "published": "2026-03-31T15:00:00+00:00",
-      "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3782
-    },
-    {
-      "title": "Art schools are being torn apart by AI",
-      "url": "https://www.theverge.com/tech/903954/art-schools-generative-ai-education-creative-jobs",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "When my baby brother, a 3D modelling and animation student, talks to me about his projects and studies, the pride I usually feel is becoming increasingly tainted by a growing sense of dread. As a creative professional and former design student myself, I understand all too well how fierce the competition for postgraduate jobs will [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/268425_How_art_schools_are_teaching_AI__CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-03-31T15:00:00+00:00",
-      "firstSeen": "2026-03-31T15:20:21.483754+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0482
-    },
-    {
-      "title": "Meta Expands Smart Glasses Line With Prescription-First Ray-Ban Models",
-      "url": "https://www.techrepublic.com/article/news-meta-ray-ban-smart-glasses-prescription",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Meta is launching new Ray-Ban smart glasses built for prescription users, signaling a stronger push into AI-powered wearables and everyday smart tech.\nThe post Meta Expands Smart Glasses Line With Prescription-First Ray-Ban Models appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03312026-meta-ray-ban-smart-glasses-prescription.jpg",
-      "published": "2026-03-31T14:48:45+00:00",
-      "firstSeen": "2026-03-31T17:00:02.319239+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.6341
+      "score": 6.9004
     },
     {
       "title": "Superbugs: Resistance Rising Part 2",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.755
+      "score": 3.7422
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-04-01T03:00:01.118133+00:00",
+      "lastSeen": "2026-04-01T04:00:01.181171+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8945
+      "score": 1.8944
     },
     {
       "title": "The Life Scientific: Jehane Ragai",
