@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T14:00:01.711448+00:00",
+  "updatedAt": "2026-04-01T14:02:27.538912+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2488,6 +2488,10 @@
     "https://www.techrepublic.com/article/news-oracle-thousands-layoffs-ai-data-center-spending": {
       "image": "https://assets.techrepublic.com/uploads/2019/02/layoff.jpg",
       "checkedAt": "2026-04-01T14:00:01.711448+00:00"
+    },
+    "https://techcrunch.com/2026/04/01/join-the-first-strictlyvc-of-2026-in-sf-with-leaders-from-tdk-ventures-and-replits-co-founder": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/54963244981_66492e96cc_6k.jpg?resize=1200,800",
+      "checkedAt": "2026-04-01T14:02:27.538912+00:00"
     }
   }
 }
