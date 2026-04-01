@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T09:00:01.251116+00:00",
+  "updatedAt": "2026-04-01T09:20:32.860393+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2468,6 +2468,10 @@
     "https://www.marktechpost.com/2026/04/01/hugging-face-releases-trl-v1-0-a-unified-post-training-stack-for-sft-reward-modeling-dpo-and-grpo-workflows": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/03/blog-25-1024x731.png",
       "checkedAt": "2026-04-01T07:51:41.560439+00:00"
+    },
+    "https://openai.com/index/gradient-labs": {
+      "image": "",
+      "checkedAt": "2026-04-01T09:20:32.860393+00:00"
     }
   }
 }
