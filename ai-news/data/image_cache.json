@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T22:00:01.908017+00:00",
+  "updatedAt": "2026-04-02T21:50:54.618822+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2603,7 +2603,7 @@
     },
     "https://www.together.ai/blog/deepgram-speech-to-text-and-voice-models-now-available-natively-on-together-ai": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cecf5f50ec4a260bb92a5f_OG-image_20260402_BLOG_Deepgram_2026.jpg",
-      "checkedAt": "2026-04-02T22:00:01.908017+00:00"
+      "checkedAt": "2026-04-02T21:50:54.618822+00:00"
     }
   }
 }
