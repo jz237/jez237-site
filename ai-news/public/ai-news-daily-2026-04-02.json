@@ -1,6 +1,6 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T05:47:22.241068+00:00",
+  "updatedAt": "2026-04-02T07:00:01.196126+00:00",
   "items": [
     {
       "title": "March 2026 sponsors-only newsletter",
@@ -13,11 +13,27 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T05:47:22.241068+00:00",
+      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.9737
+      "score": 12.9378
+    },
+    {
+      "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
+      "url": "https://www.marktechpost.com/2026/04/01/ibm-releases-granite-4-0-3b-vision-a-new-vision-language-model-for-enterprise-grade-document-data-extraction",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "IBM has announced the release of Granite 4.0 3B Vision, a vision-language model (VLM) engineered specifically for enterprise-grade document data extraction. Departing from the monolithic approach of larger multimodal models, the 4.0 Vision release is architected as a specialized adapter designed to bring high-fidelity visual reasoning to the Granite 4.0 Micro language backbone. This release [&#8230;]\nThe post IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
+      "published": "2026-04-02T06:04:34+00:00",
+      "firstSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.4921
     },
     {
       "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
@@ -28,9 +44,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-02T05:47:26.818384+00:00",
+      "published": "2026-04-02T07:00:07.279809+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-02T05:47:22.241068+00:00",
+      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -46,10 +62,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
       "published": "2026-04-02T05:34:13+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T05:47:22.241068+00:00",
+      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.9133
+      "score": 4.8772
+    },
+    {
+      "title": "Generare raises €20M to decode the 97% of microbial chemistry",
+      "url": "https://thenextweb.com/news/generare-20m-series-a",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Paris techbio company screens microbial genomes to find molecules that evolution spent three billion years producing, and claims to have characterised more novel small molecules in 2025 than the rest of the field combined. Alven and Daphni co-led the Series A. Generare, the Paris-based techbio company reading microbial genomes for molecules that drug development [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Generare.png",
+      "published": "2026-04-02T06:21:21+00:00",
+      "firstSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1305
     }
   ],
   "errors": []
