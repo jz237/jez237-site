@@ -1,7 +1,24 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T05:00:01.687075+00:00",
+  "updatedAt": "2026-04-02T06:00:01.155261+00:00",
   "items": [
+    {
+      "title": "March 2026 sponsors-only newsletter",
+      "url": "https://simonwillison.net/2026/Apr/2/march-newsletter",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I just sent the March edition of my sponsors-only monthly newsletter. If you are a sponsor (or if you start a sponsorship now) you can access it here. In this month's newsletter:\n\nMore agentic engineering patterns\nStreaming experts with MoE models on a Mac\nModel releases in March\nVibe porting\nSupply chain attacks against PyPI and NPM\nStuff I shipped\nWhat I'm using, March 2026 edition\nAnd a couple of museums\n\nHere's a copy of the February newsletter as a preview of what you'll get. Pay $10/month to stay a month ahead of the free copy!\n\n    Tags: newsletter",
+      "image": "",
+      "published": "2026-04-02T05:15:04+00:00",
+      "firstSeen": "2026-04-02T06:00:01.155261+00:00",
+      "lastSeen": "2026-04-02T06:00:01.155261+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 12.9673
+    },
     {
       "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
       "url": "https://llm-stats.com/ai-news",
@@ -11,12 +28,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-02T05:00:08.164211+00:00",
+      "published": "2026-04-02T06:00:06.249038+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-02T05:00:01.687075+00:00",
+      "lastSeen": "2026-04-02T06:00:01.155261+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "How to Build Production Ready AgentScope Workflows with ReAct Agents, Custom Tools, Multi-Agent Debate, Structured Output and Concurrent Pipelines",
+      "url": "https://www.marktechpost.com/2026/04/01/how-to-build-production-ready-agentscope-workflows-with-react-agents-custom-tools-multi-agent-debate-structured-output-and-concurrent-pipelines",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build a complete AgentScope workflow from the ground up and run everything in Colab. We start by wiring OpenAI through AgentScope and validating a basic model call to understand how messages and responses are handled. From there, we define custom tool functions, register them in a toolkit, and inspect the auto-generated [&#8230;]\nThe post How to Build Production Ready AgentScope Workflows with ReAct Agents, Custom Tools, Multi-Agent Debate, Structured Output and Concurrent Pipelines appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
+      "published": "2026-04-02T05:34:13+00:00",
+      "firstSeen": "2026-04-02T06:00:01.155261+00:00",
+      "lastSeen": "2026-04-02T06:00:01.155261+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.9069
     }
   ],
   "errors": []
