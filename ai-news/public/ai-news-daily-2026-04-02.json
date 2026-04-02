@@ -1,6 +1,6 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T07:00:01.196126+00:00",
+  "updatedAt": "2026-04-02T07:39:50.598877+00:00",
   "items": [
     {
       "title": "March 2026 sponsors-only newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:39:50.598877+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.9378
+      "score": 12.9187
     },
     {
       "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
       "published": "2026-04-02T06:04:34+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:39:50.598877+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.4921
+      "score": 9.4725
     },
     {
       "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
@@ -44,9 +44,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-02T07:00:07.279809+00:00",
+      "published": "2026-04-02T07:39:55.045648+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:39:50.598877+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -62,10 +62,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
       "published": "2026-04-02T05:34:13+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:39:50.598877+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.8772
+      "score": 4.8578
     },
     {
       "title": "Generare raises €20M to decode the 97% of microbial chemistry",
@@ -78,10 +78,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Generare.png",
       "published": "2026-04-02T06:21:21+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T07:00:01.196126+00:00",
+      "lastSeen": "2026-04-02T07:39:50.598877+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1305
+      "score": 2.1107
     }
   ],
   "errors": []
