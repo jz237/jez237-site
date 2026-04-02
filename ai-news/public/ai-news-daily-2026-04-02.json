@@ -1,0 +1,29 @@
+{
+  "date": "2026-04-02",
+  "updatedAt": "2026-04-02T00:00:01.845616+00:00",
+  "items": [
+    {
+      "title": "Beta-Scheduling: Momentum from Critical Damping as a Diagnostic and Correction Tool for Neural Network Training",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-02T00:00:57.344073+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-02T00:00:01.845616+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.66
+    }
+  ],
+  "errors": [
+    {
+      "source": "ScienceDaily AI",
+      "url": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
+      "error": "The read operation timed out"
+    }
+  ]
+}
