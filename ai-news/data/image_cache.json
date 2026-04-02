@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T21:50:54.618822+00:00",
+  "updatedAt": "2026-04-02T23:00:01.143700+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2604,6 +2604,10 @@
     "https://www.together.ai/blog/deepgram-speech-to-text-and-voice-models-now-available-natively-on-together-ai": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cecf5f50ec4a260bb92a5f_OG-image_20260402_BLOG_Deepgram_2026.jpg",
       "checkedAt": "2026-04-02T21:50:54.618822+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/906253/granola-note-links-ai-training-psa": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/granola-logo.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-04-02T23:00:01.143700+00:00"
     }
   }
 }
