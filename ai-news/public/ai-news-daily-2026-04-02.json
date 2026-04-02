@@ -1,7 +1,23 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T17:00:02.110400+00:00",
+  "updatedAt": "2026-04-02T17:08:02.070009+00:00",
   "items": [
+    {
+      "title": "Cursor Launches a New AI Agent Experience to Take on Claude Code and Codex",
+      "url": "https://www.wired.com/story/cusor-launches-coding-agent-openai-anthropic",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As Cursor launches the next generation of its product, the AI coding startup has to compete with OpenAI and Anthropic more directly than ever.",
+      "image": "https://media.wired.com/photos/69cc30f8d49844d66356c85d/master/pass/Model-Behavior-Cursor-Build-Own-AI-Business%202%20(0-00-07-17).jpg",
+      "published": "2026-04-02T17:00:00+00:00",
+      "firstSeen": "2026-04-02T17:08:02.070009+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 18.1859
+    },
     {
       "title": "March 2026 sponsors-only newsletter",
       "url": "https://simonwillison.net/2026/Apr/2/march-newsletter",
@@ -13,11 +29,11 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6837
+      "score": 12.6808
     },
     {
       "title": "Anthropic Says That Claude Contains Its Own Kind of Emotions",
@@ -30,10 +46,10 @@
       "image": "https://media.wired.com/photos/69cdad16cbb86885d7c233d3/master/pass/Anthropic-AI-Emotions-Business-2218715988%20(0-00-00-04).jpg",
       "published": "2026-04-02T16:00:00+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6598
+      "score": 12.6559
     },
     {
       "title": "Google Home’s latest update makes Gemini better at understanding your commands",
@@ -46,10 +62,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/google-home-display.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=5.4061833688699%2C0%2C89.18763326226%2C100&amp%3Bw=1200",
       "published": "2026-04-02T13:30:12+00:00",
       "firstSeen": "2026-04-02T13:53:42.101213+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8582
+      "score": 11.8545
     },
     {
       "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
@@ -62,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
       "published": "2026-04-02T06:04:34+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2321
+      "score": 9.2291
     },
     {
       "title": "What we can learn from Avocado: The unreleased AI Meta’s model",
@@ -78,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Meta-AI.png",
       "published": "2026-04-02T09:55:13+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.3536
+      "score": 8.3503
     },
     {
       "title": "Gemma 4: Byte for byte, the most capable open models",
@@ -94,10 +110,10 @@
       "image": "https://lh3.googleusercontent.com/dP82fYfjynerdo1ze8VAz5F-miu-ghwM9mrzzQoi_FDYVcG4lLTtb7id7b_IKbFVDuv9q765JG_dEWRJK8cFDrxfCeMpzjzvlj3kwqyZWA6zqt_ecw=w528-h297-n-nu-rw-lo",
       "published": "2026-04-02T16:00:49+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8003
+      "score": 5.7963
     },
     {
       "title": "From RTX to Spark: NVIDIA Accelerates Gemma 4 for Local Agentic AI",
@@ -110,10 +126,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/eevee-nv-blog-1280x680-1.jpg",
       "published": "2026-04-02T16:15:58+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9678
+      "score": 4.9638
     },
     {
       "title": "How to Build Production Ready AgentScope Workflows with ReAct Agents, Custom Tools, Multi-Agent Debate, Structured Output and Concurrent Pipelines",
@@ -126,10 +142,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
       "published": "2026-04-02T05:34:13+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.6208
+      "score": 4.6178
     },
     {
       "title": "Welcome Gemma 4: Frontier multimodal intelligence on device",
@@ -142,10 +158,10 @@
       "image": "https://huggingface.co/blog/assets/gemma4/thumbnail.png",
       "published": "2026-04-02T00:00:00+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.416
+      "score": 4.4134
     },
     {
       "title": "Google now lets you direct avatars through prompts in its Vids app",
@@ -158,10 +174,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
       "published": "2026-04-02T16:00:00+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3598
+      "score": 3.3559
     },
     {
       "title": "Report: Apple Testing AI-Powered ‘Alternative Words’ Feature for iPhone Keyboard",
@@ -174,26 +190,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04022026-apple-ios-27-iphone-keyboard-ai.jpg",
       "published": "2026-04-02T15:03:50+00:00",
       "firstSeen": "2026-04-02T16:00:01.891784+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
+      "lastSeen": "2026-04-02T17:08:02.070009+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1924
-    },
-    {
-      "title": "Quanscient and Haiqu run the most complex quantum fluid simulation yet, on IBM’s Heron R3",
-      "url": "https://thenextweb.com/news/quanscient-haiqu-quantum-cfd-simulation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A new quantum algorithm ran a 15-step nonlinear fluid simulation around a solid obstacle on real quantum hardware, the most physically complex publicly documented demonstration of its kind. The technique reduces qubit requirements and circuit depth, bringing industrial CFD applications closer to feasibility. Finnish simulation company Quanscient and quantum middleware developer Haiqu have demonstrated what [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Quanscient-and-Haiqu.png",
-      "published": "2026-04-02T13:28:20+00:00",
-      "firstSeen": "2026-04-02T13:53:42.101213+00:00",
-      "lastSeen": "2026-04-02T17:00:02.110400+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1473
+      "score": 3.1885
     }
   ],
   "errors": []
