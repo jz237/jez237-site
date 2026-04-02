@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T05:00:01.687075+00:00",
+  "updatedAt": "2026-04-02T05:47:22.241068+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2536,6 +2536,14 @@
     "https://simonwillison.net/2026/Apr/1/datasette-enrichments-llm-2": {
       "image": "",
       "checkedAt": "2026-04-02T01:00:01.195728+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/01/how-to-build-production-ready-agentscope-workflows-with-react-agents-custom-tools-multi-agent-debate-structured-output-and-concurrent-pipelines": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
+      "checkedAt": "2026-04-02T05:47:22.241068+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/2/march-newsletter": {
+      "image": "",
+      "checkedAt": "2026-04-02T05:47:22.241068+00:00"
     }
   }
 }
