@@ -1,6 +1,6 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T14:00:01.124499+00:00",
+  "updatedAt": "2026-04-02T13:53:42.101213+00:00",
   "items": [
     {
       "title": "March 2026 sponsors-only newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.7527
+      "score": 12.7552
     },
     {
       "title": "Google Home’s latest update makes Gemini better at understanding your commands",
@@ -29,11 +29,11 @@
       "summary": "Google is launching another update to its Home app, which is supposed to make controlling your smart home with its Gemini AI assistant \"more natural and reliable,\" according to this week's release notes. With the update, you can describe the type of lighting you want, such as \"the color of the ocean,\" and Gemini will [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/google-home-display.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=5.4061833688699%2C0%2C89.18763326226%2C100&amp%3Bw=1200",
       "published": "2026-04-02T13:30:12+00:00",
-      "firstSeen": "2026-04-02T14:00:01.124499+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "firstSeen": "2026-04-02T13:53:42.101213+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9449
+      "score": 11.9481
     },
     {
       "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
@@ -46,10 +46,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
       "published": "2026-04-02T06:04:34+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3027
+      "score": 9.3053
     },
     {
       "title": "What we can learn from Avocado: The unreleased AI Meta’s model",
@@ -62,10 +62,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Meta-AI.png",
       "published": "2026-04-02T09:55:13+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.4321
+      "score": 8.435
     },
     {
       "title": "LinearARD: Linear-Memory Attention Distillation for RoPE Restoration",
@@ -76,9 +76,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-02T14:00:06.050478+00:00",
+      "published": "2026-04-02T13:53:48.249163+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -94,10 +94,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
       "published": "2026-04-02T05:34:13+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.6904
+      "score": 4.6929
     },
     {
       "title": "Quanscient and Haiqu run the most complex quantum fluid simulation yet, on IBM’s Heron R3",
@@ -109,11 +109,11 @@
       "summary": "A new quantum algorithm ran a 15-step nonlinear fluid simulation around a solid obstacle on real quantum hardware, the most physically complex publicly documented demonstration of its kind. The technique reduces qubit requirements and circuit depth, bringing industrial CFD applications closer to feasibility. Finnish simulation company Quanscient and quantum middleware developer Haiqu have demonstrated what [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Quanscient-and-Haiqu.png",
       "published": "2026-04-02T13:28:20+00:00",
-      "firstSeen": "2026-04-02T14:00:01.124499+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "firstSeen": "2026-04-02T13:53:42.101213+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.234
+      "score": 3.2372
     },
     {
       "title": "Fortis Solutions on the rise of human-governed AI: Building trust through intelligent infrastructure",
@@ -125,11 +125,11 @@
       "summary": "Fortis Solutions, an enterprise technology partner with decades of experience across infrastructure, cybersecurity, and data systems, approaches artificial intelligence as a force that is redefining how work is performed while preserving the importance of human contribution. Its perspective reflects a future where human judgment and machine precision operate in tandem, introducing new ways to elevate [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/human-governed-ai-fortis-solutions.png",
       "published": "2026-04-02T13:28:18+00:00",
-      "firstSeen": "2026-04-02T14:00:01.124499+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "firstSeen": "2026-04-02T13:53:42.101213+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.234
+      "score": 3.2371
     },
     {
       "title": "Amazon is in talks to buy Globalstar for $9 billion",
@@ -142,10 +142,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Globalstar.png",
       "published": "2026-04-02T10:43:26+00:00",
       "firstSeen": "2026-04-02T11:55:41.706377+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1543
+      "score": 3.1572
     },
     {
       "title": "When the machine asks you to stay",
@@ -158,10 +158,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-intimacy-.png",
       "published": "2026-04-02T11:32:43+00:00",
       "firstSeen": "2026-04-02T11:55:41.706377+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9775
+      "score": 2.9805
     },
     {
       "title": "Dan Pratl believes the credibility economy is coming and it will redefine value in the age of AI",
@@ -173,11 +173,11 @@
       "summary": "A growing sense of unease is shaping how professionals engage with artificial intelligence, particularly as its capabilities expand across information creation and execution. Dan Pratl, founder of Quadron, believes this anxiety reflects a deeper structural issue that extends beyond automation and into how value itself is recognized. “We’ve reached a point at which the maturation [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/credibility-economy-ai-value.png",
       "published": "2026-04-02T13:07:47+00:00",
-      "firstSeen": "2026-04-02T14:00:01.124499+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "firstSeen": "2026-04-02T13:53:42.101213+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8237
+      "score": 2.8269
     },
     {
       "title": "Two ex-McKinsey founders raise $4.1M from Seedcamp to give boards an AI analyst that monitors corporate reputation in real time",
@@ -190,10 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Omniscient.png",
       "published": "2026-04-02T10:01:37+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T14:00:01.124499+00:00",
+      "lastSeen": "2026-04-02T13:53:42.101213+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0351
+      "score": 2.0379
     }
   ],
   "errors": []

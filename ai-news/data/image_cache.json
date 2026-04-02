@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T14:00:01.124499+00:00",
+  "updatedAt": "2026-04-02T13:53:42.101213+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2547,7 +2547,7 @@
     },
     "https://www.theverge.com/tech/905805/google-home-gemini-temperature-controls-lighting": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/google-home-display.webp?quality=90&amp;strip=all&amp;crop=5.4061833688699%2C0%2C89.18763326226%2C100&amp;w=1200",
-      "checkedAt": "2026-04-02T14:00:01.124499+00:00"
+      "checkedAt": "2026-04-02T13:53:42.101213+00:00"
     }
   }
 }
