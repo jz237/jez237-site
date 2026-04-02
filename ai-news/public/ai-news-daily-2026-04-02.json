@@ -1,6 +1,6 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T23:00:01.143700+00:00",
+  "updatedAt": "2026-04-02T22:49:12.200377+00:00",
   "items": [
     {
       "title": "Google launches Gemma 4: four open-weight models from smartphones to workstations",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Gemma-4.png",
       "published": "2026-04-02T18:16:22+00:00",
       "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.2146
+      "score": 18.2195
     },
     {
       "title": "Cursor Launches a New AI Agent Experience to Take On Claude Code and Codex",
@@ -30,10 +30,10 @@
       "image": "https://media.wired.com/photos/69cc30f8d49844d66356c85d/master/pass/Model-Behavior-Cursor-Build-Own-AI-Business%202%20(0-00-07-17).jpg",
       "published": "2026-04-02T17:00:00+00:00",
       "firstSeen": "2026-04-02T17:08:02.070009+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.0211
+      "score": 18.0258
     },
     {
       "title": "llm-gemini 0.30",
@@ -46,11 +46,11 @@
       "image": "",
       "published": "2026-04-02T18:25:08+00:00",
       "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.8586
+      "score": 17.8634
     },
     {
       "title": "Deepgram speech-to-text and voice models now available natively on Together AI",
@@ -63,11 +63,11 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cecf5f50ec4a260bb92a5f_OG-image_20260402_BLOG_Deepgram_2026.jpg",
       "published": "2026-04-02T00:00:00+00:00",
       "firstSeen": "2026-04-02T21:50:54.618822+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4007
+      "score": 14.4036
     },
     {
       "title": "March 2026 sponsors-only newsletter",
@@ -80,11 +80,11 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5618
+      "score": 12.5652
     },
     {
       "title": "Anthropic Says That Claude Contains Its Own Kind of Emotions",
@@ -97,10 +97,10 @@
       "image": "https://media.wired.com/photos/69cdad16cbb86885d7c233d3/master/pass/Anthropic-AI-Emotions-Business-2218715988%20(0-00-00-04).jpg",
       "published": "2026-04-02T16:00:00+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4956
+      "score": 12.5002
     },
     {
       "title": "Google Home’s latest update makes Gemini better at understanding your commands",
@@ -113,10 +113,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/google-home-display.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=5.4061833688699%2C0%2C89.18763326226%2C100&amp%3Bw=1200",
       "published": "2026-04-02T13:30:12+00:00",
       "firstSeen": "2026-04-02T13:53:42.101213+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7049
+      "score": 11.7092
     },
     {
       "title": "Gemma 4: Byte for byte, the most capable open models",
@@ -129,10 +129,10 @@
       "image": "https://static.simonwillison.net/static/2026/gemma-4-2b-pelican.png",
       "published": "2026-04-02T18:28:54+00:00",
       "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.6602
+      "score": 10.6651
     },
     {
       "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
@@ -145,10 +145,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
       "published": "2026-04-02T06:04:34+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1074
+      "score": 9.1109
     },
     {
       "title": "New ways to balance cost and reliability in the Gemini API",
@@ -161,10 +161,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/cost_reliability_Gemini_API-soc.max-600x600.format-webp.webp",
       "published": "2026-04-02T16:00:00+00:00",
       "firstSeen": "2026-04-02T19:12:51.319493+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.9356
+      "score": 8.9402
     },
     {
       "title": "What we can learn from Avocado: The unreleased AI Meta’s model",
@@ -177,10 +177,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Meta-AI.png",
       "published": "2026-04-02T09:55:13+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.2149
+      "score": 8.2187
     },
     {
       "title": "Defeating the ‘Token Tax’: How Google Gemma 4, NVIDIA, and OpenClaw are Revolutionizing Local Agentic AI: From RTX Desktops to DGX Spark",
@@ -193,10 +193,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-02-at-1.10.18-PM-1-150x150.png",
       "published": "2026-04-02T20:35:54+00:00",
       "firstSeen": "2026-04-02T20:51:07.533319+00:00",
-      "lastSeen": "2026-04-02T23:00:01.143700+00:00",
+      "lastSeen": "2026-04-02T22:49:12.200377+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.749
+      "score": 7.7542
     }
   ],
   "errors": []
