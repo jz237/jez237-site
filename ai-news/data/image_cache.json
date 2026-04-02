@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T19:12:51.319493+00:00",
+  "updatedAt": "2026-04-02T20:51:07.533319+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2596,6 +2596,10 @@
     "https://techcrunch.com/2026/04/02/openai-acquires-tbpn-the-buzzy-founder-led-business-talk-show": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Jordi_Hays_and_John_Coogan_on_set_2_1.webp?resize=1200,675",
       "checkedAt": "2026-04-02T20:00:01.443115+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/2/lennys-podcast": {
+      "image": "https://static.simonwillison.net/static/2026/youtube-lenny.jpg",
+      "checkedAt": "2026-04-02T20:51:07.533319+00:00"
     }
   }
 }
