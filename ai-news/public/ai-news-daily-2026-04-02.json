@@ -1,6 +1,6 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T19:00:02.098041+00:00",
+  "updatedAt": "2026-04-02T20:00:01.443115+00:00",
   "items": [
     {
       "title": "Google launches Gemma 4: four open-weight models from smartphones to workstations",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Gemma-4.png",
       "published": "2026-04-02T18:16:22+00:00",
       "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.328
+      "score": 18.2985
     },
     {
       "title": "Cursor Launches a New AI Agent Experience to Take On Claude Code and Codex",
@@ -30,10 +30,10 @@
       "image": "https://media.wired.com/photos/69cc30f8d49844d66356c85d/master/pass/Model-Behavior-Cursor-Build-Own-AI-Business%202%20(0-00-07-17).jpg",
       "published": "2026-04-02T17:00:00+00:00",
       "firstSeen": "2026-04-02T17:08:02.070009+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.1305
+      "score": 18.102
     },
     {
       "title": "llm-gemini 0.30",
@@ -46,11 +46,11 @@
       "image": "",
       "published": "2026-04-02T18:25:08+00:00",
       "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9724
+      "score": 17.9427
     },
     {
       "title": "March 2026 sponsors-only newsletter",
@@ -63,11 +63,11 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6408
+      "score": 12.6202
     },
     {
       "title": "Anthropic Says That Claude Contains Its Own Kind of Emotions",
@@ -80,10 +80,10 @@
       "image": "https://media.wired.com/photos/69cdad16cbb86885d7c233d3/master/pass/Anthropic-AI-Emotions-Business-2218715988%20(0-00-00-04).jpg",
       "published": "2026-04-02T16:00:00+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.602
+      "score": 12.5743
     },
     {
       "title": "Google Home’s latest update makes Gemini better at understanding your commands",
@@ -96,10 +96,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/google-home-display.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=5.4061833688699%2C0%2C89.18763326226%2C100&amp%3Bw=1200",
       "published": "2026-04-02T13:30:12+00:00",
       "firstSeen": "2026-04-02T13:53:42.101213+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8042
+      "score": 11.7784
     },
     {
       "title": "Gemma 4: Byte for byte, the most capable open models",
@@ -112,10 +112,10 @@
       "image": "https://static.simonwillison.net/static/2026/gemma-4-2b-pelican.png",
       "published": "2026-04-02T18:28:54+00:00",
       "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.7743
+      "score": 10.7446
     },
     {
       "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
@@ -128,10 +128,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
       "published": "2026-04-02T06:04:34+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1882
+      "score": 9.1672
+    },
+    {
+      "title": "New ways to balance cost and reliability in the Gemini API",
+      "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-flex-and-priority-inference",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Gemini API Dials",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/cost_reliability_Gemini_API-soc.max-600x600.format-webp.webp",
+      "published": "2026-04-02T16:00:00+00:00",
+      "firstSeen": "2026-04-02T20:00:01.443115+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 9.0143
     },
     {
       "title": "What we can learn from Avocado: The unreleased AI Meta’s model",
@@ -144,10 +160,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Meta-AI.png",
       "published": "2026-04-02T09:55:13+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.3048
+      "score": 8.2814
     },
     {
       "title": "Codex now offers more flexible pricing for teams",
@@ -160,10 +176,10 @@
       "image": "",
       "published": "2026-04-02T10:00:00+00:00",
       "firstSeen": "2026-04-02T17:59:11.032412+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2567
+      "score": 6.2332
     },
     {
       "title": "Gemma 4: Byte for byte, the most capable open models",
@@ -176,26 +192,10 @@
       "image": "https://lh3.googleusercontent.com/dP82fYfjynerdo1ze8VAz5F-miu-ghwM9mrzzQoi_FDYVcG4lLTtb7id7b_IKbFVDuv9q765JG_dEWRJK8cFDrxfCeMpzjzvlj3kwqyZWA6zqt_ecw=w528-h297-n-nu-rw-lo",
       "published": "2026-04-02T16:00:49+00:00",
       "firstSeen": "2026-04-02T17:00:02.110400+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
+      "lastSeen": "2026-04-02T20:00:01.443115+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7424
-    },
-    {
-      "title": "OpenAI just bought TBPN",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/906022/openai-buys-tbpn",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "OpenAI has purchased TBPN, an online talk show that often interviews AI executives and other tech leaders. The show goes live every weekday at 2PM PT, often for a three-hour duration, counting OpenAI CEO Sam Altman, as well as executives from Meta, Microsoft, Palantir, and Andreessen Horowitz, among its past guests, and Bloomberg, CNBC, and [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK155_OPEN_AI_CVirginia__C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-02T17:40:07+00:00",
-      "firstSeen": "2026-04-02T17:59:11.032412+00:00",
-      "lastSeen": "2026-04-02T19:00:02.098041+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.32
+      "score": 5.7147
     }
   ],
   "errors": []
