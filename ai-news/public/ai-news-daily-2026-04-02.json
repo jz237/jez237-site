@@ -1,9 +1,9 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T03:23:41.427669+00:00",
+  "updatedAt": "2026-04-02T05:00:01.687075+00:00",
   "items": [
     {
-      "title": "Oktay Karaku\\c{s}, Hasan Arkada\\c{s}",
+      "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +11,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-02T03:23:47.300927+00:00",
+      "published": "2026-04-02T05:00:08.164211+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-02T03:23:41.427669+00:00",
+      "lastSeen": "2026-04-02T05:00:01.687075+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     }
   ],
   "errors": []
