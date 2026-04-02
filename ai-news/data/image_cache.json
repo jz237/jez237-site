@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T15:13:27.684638+00:00",
+  "updatedAt": "2026-04-02T17:00:02.110400+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2560,6 +2560,18 @@
     "https://www.techrepublic.com/article/news-apple-ios-27-iphone-keyboard-ai-autocorrect-report": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04022026-apple-ios-27-iphone-keyboard-ai.jpg",
       "checkedAt": "2026-04-02T16:00:01.891784+00:00"
+    },
+    "https://techcrunch.com/2026/04/02/microsoft-takes-on-ai-rivals-with-three-new-foundational-models": {
+      "image": "",
+      "checkedAt": "2026-04-02T17:00:02.110400+00:00"
+    },
+    "https://techcrunch.com/2026/04/02/google-now-lets-you-direct-avatars-through-prompts-in-its-vids-app": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-04-02T17:00:02.110400+00:00"
+    },
+    "https://huggingface.co/blog/gemma4": {
+      "image": "https://huggingface.co/blog/assets/gemma4/thumbnail.png",
+      "checkedAt": "2026-04-02T17:00:02.110400+00:00"
     }
   }
 }
