@@ -1,6 +1,6 @@
 {
   "date": "2026-04-02",
-  "updatedAt": "2026-04-02T11:00:01.920515+00:00",
+  "updatedAt": "2026-04-02T11:07:44.262384+00:00",
   "items": [
     {
       "title": "March 2026 sponsors-only newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-02T05:15:04+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8276
+      "score": 12.8243
     },
     {
       "title": "IBM Releases Granite 4.0 3B Vision: A New Vision Language Model for Enterprise Grade Document Data Extraction",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-01-at-10.52.33-PM-1-150x150.png",
       "published": "2026-04-02T06:04:34+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3794
+      "score": 9.376
     },
     {
       "title": "What we can learn from Avocado: The unreleased AI Meta’s model",
@@ -46,10 +46,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Meta-AI.png",
       "published": "2026-04-02T09:55:13+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.5175
+      "score": 8.5137
     },
     {
       "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
@@ -60,9 +60,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-02T11:00:06.718933+00:00",
+      "published": "2026-04-02T11:07:53.466276+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -78,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2.png",
       "published": "2026-04-02T05:34:13+00:00",
       "firstSeen": "2026-04-02T05:47:22.241068+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.766
+      "score": 4.7626
     },
     {
       "title": "Two ex-McKinsey founders raise $4.1M from Seedcamp to give boards an AI analyst that monitors corporate reputation in real time",
@@ -94,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Omniscient.png",
       "published": "2026-04-02T10:01:37+00:00",
       "firstSeen": "2026-04-02T11:00:01.920515+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1207
+      "score": 2.1168
     },
     {
       "title": "Covalo raises €3.5M to become the shared data infrastructure for an industry where 80% of products will need reformulating by 2030",
@@ -110,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Covalo.png",
       "published": "2026-04-02T06:54:59+00:00",
       "firstSeen": "2026-04-02T08:00:01.443671+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.032
+      "score": 2.0285
     },
     {
       "title": "Generare raises €20M to decode the 97% of microbial chemistry",
@@ -126,10 +126,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Generare.png",
       "published": "2026-04-02T06:21:21+00:00",
       "firstSeen": "2026-04-02T07:00:01.196126+00:00",
-      "lastSeen": "2026-04-02T11:00:01.920515+00:00",
+      "lastSeen": "2026-04-02T11:07:44.262384+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0169
+      "score": 2.0134
     }
   ],
   "errors": []
