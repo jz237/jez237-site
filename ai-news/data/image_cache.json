@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T14:59:31.465799+00:00",
+  "updatedAt": "2026-04-03T16:00:02.088714+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2628,6 +2628,10 @@
     "https://techcrunch.com/2026/04/03/moonbounce-fundraise-content-moderation-for-the-ai-era": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Brett-Levenson_Ash-Bhardwaj_Moonbounce.png?resize=1200,800",
       "checkedAt": "2026-04-03T14:59:31.465799+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-breakthroughs-security-breaches-and-industry-shakeups-define-the-week-in-tech": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/dailytechinsider-april-3-chatgptimage-1024x576.png",
+      "checkedAt": "2026-04-03T16:00:02.088714+00:00"
     }
   }
 }
