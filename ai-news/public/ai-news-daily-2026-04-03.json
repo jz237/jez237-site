@@ -1,6 +1,6 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T16:00:02.088714+00:00",
+  "updatedAt": "2026-04-03T15:51:28.495517+00:00",
   "items": [
     {
       "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
@@ -13,10 +13,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
       "published": "2026-04-03T14:50:18+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9151
+      "score": 7.9193
     },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.6212
+      "score": 6.6248
     },
     {
       "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
       "published": "2026-04-03T13:41:16+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9816
+      "score": 4.9856
     },
     {
       "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
       "published": "2026-04-03T08:29:53+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9431
+      "score": 4.9466
     },
     {
       "title": "Tencent is building an enterprise empire on top of an Austrian developer’s open-source lobster",
@@ -77,10 +77,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.png",
       "published": "2026-04-03T14:25:13+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.6028
+      "score": 4.6069
     },
     {
       "title": "Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning",
@@ -93,26 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-1.png",
       "published": "2026-04-03T07:48:18+00:00",
       "firstSeen": "2026-04-03T08:00:01.228823+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.396
-    },
-    {
-      "title": "How NinjaOne went from scrappy startup to $5B challenger in the race to unify IT operations",
-      "url": "https://thenextweb.com/news/ninjaone-unified-it-operations",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sal Sferlazza has a habit of building companies that get acquired. Before NinjaOne, the serial founder sold four startups in succession: a gaming studio to NCSoft, a data-protection firm to SonicWall, a network management company to Quest Software, and a file-sync service to eFolder. Each one solved a narrow IT problem. Each one got swallowed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/NinjaOne-Editorial.png",
-      "published": "2026-04-03T15:12:13+00:00",
-      "firstSeen": "2026-04-03T16:00:02.088714+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2259
+      "score": 3.3995
     },
     {
       "title": "AI Breakthroughs, Security Breaches, and Industry Shakeups Define the Week in Tech",
@@ -122,13 +106,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "See what you missed in Daily Tech Insider from March 30–April 3.\nThe post AI Breakthroughs, Security Breaches, and Industry Shakeups Define the Week in Tech appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/dailytechinsider-april-3-chatgptimage-1024x576.png",
+      "image": "",
       "published": "2026-04-03T14:00:57+00:00",
-      "firstSeen": "2026-04-03T16:00:02.088714+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "firstSeen": "2026-04-03T15:51:28.495517+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.191
+      "score": 3.1951
     },
     {
       "title": "The Axios supply chain attack used individually targeted social engineering",
@@ -141,10 +125,10 @@
       "image": "",
       "published": "2026-04-03T13:54:53+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9281
+      "score": 2.9322
     },
     {
       "title": "Italian rehabilitation robotics startup Wearable Robotics raises €5M to expand its arm exoskeleton",
@@ -157,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Wearable-Robotics-.png",
       "published": "2026-04-03T11:23:22+00:00",
       "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7178
+      "score": 2.7216
     },
     {
       "title": "UQ-SHRED: uncertainty quantification of shallow recurrent decoder networks for sparse sensing via engression",
@@ -171,9 +155,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-03T16:00:06.014856+00:00",
+      "published": "2026-04-03T15:51:33.607945+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -189,10 +173,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS524_AI_HEALTH_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-03T11:43:21+00:00",
       "firstSeen": "2026-04-03T11:50:34.821903+00:00",
-      "lastSeen": "2026-04-03T16:00:02.088714+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2367
+      "score": 2.2406
+    },
+    {
+      "title": "The Facebook insider building content moderation for the AI era",
+      "url": "https://techcrunch.com/2026/04/03/moonbounce-fundraise-content-moderation-for-the-ai-era",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Moonbounce has raised $12 million to grow its AI control engine that converts content moderation policies into consistent, predictable AI behavior.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Brett-Levenson_Ash-Bhardwaj_Moonbounce.png?resize=1200%2C800",
+      "published": "2026-04-03T14:00:15+00:00",
+      "firstSeen": "2026-04-03T14:59:31.465799+00:00",
+      "lastSeen": "2026-04-03T15:51:28.495517+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2348
     }
   ],
   "errors": []
