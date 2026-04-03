@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T21:00:01.337455+00:00",
+  "updatedAt": "2026-04-03T20:52:22.174735+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2655,15 +2655,19 @@
     },
     "https://techcrunch.com/2026/04/03/openai-executive-shuffle-new-roles-coo-brad-lightcap-fidji-simo-kate-rouch": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/brad-lightcap-GettyImages-2147824375-1.jpg?w=1024",
-      "checkedAt": "2026-04-03T21:00:01.337455+00:00"
+      "checkedAt": "2026-04-03T20:52:22.174735+00:00"
     },
     "https://techcrunch.com/2026/04/03/anthropic-buys-biotech-startup-coefficient-bio-in-400m-deal-reports": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200,800",
-      "checkedAt": "2026-04-03T21:00:01.337455+00:00"
+      "checkedAt": "2026-04-03T20:52:22.174735+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/906965/openais-agi-boss-is-taking-a-leave-of-absence": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1239231852.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-04-03T20:52:22.174735+00:00"
     },
     "https://techcrunch.com/2026/04/03/anthropic-ramps-up-its-political-activities-with-a-new-pac": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
-      "checkedAt": "2026-04-03T21:00:01.337455+00:00"
+      "checkedAt": "2026-04-03T20:52:22.174735+00:00"
     }
   }
 }
