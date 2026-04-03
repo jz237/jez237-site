@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T11:50:34.821903+00:00",
+  "updatedAt": "2026-04-03T13:00:01.922085+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2616,6 +2616,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/906525/ai-chatbot-prescribe-refill-psychiatric-drugs": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS524_AI_HEALTH_E.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-03T11:50:34.821903+00:00"
+    },
+    "https://www.theverge.com/podcast/906548/best-apple-product-vergecast": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0402_Site.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-03T13:00:01.922085+00:00"
     }
   }
 }
