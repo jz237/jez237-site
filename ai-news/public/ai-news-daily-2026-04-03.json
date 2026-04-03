@@ -1,6 +1,6 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T16:55:41.682247+00:00",
+  "updatedAt": "2026-04-03T18:00:01.364096+00:00",
   "items": [
     {
       "title": "Can JavaScript Escape a CSP Meta Tag Inside an Iframe?",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-04-03T16:05:00+00:00",
       "firstSeen": "2026-04-03T16:55:41.682247+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7645
+      "score": 8.733
     },
     {
       "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
@@ -29,10 +29,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
       "published": "2026-04-03T14:50:18+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.888
+      "score": 7.8575
     },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5983
+      "score": 6.5725
     },
     {
       "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
       "published": "2026-04-03T13:41:16+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9553
+      "score": 4.9258
     },
     {
       "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
@@ -77,10 +77,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
       "published": "2026-04-03T08:29:53+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9203
+      "score": 4.8948
     },
     {
       "title": "Tencent is building an enterprise empire on top of an Austrian developer’s open-source lobster",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.png",
       "published": "2026-04-03T14:25:13+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.576
+      "score": 4.5459
     },
     {
       "title": "Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning",
@@ -109,10 +109,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-1.png",
       "published": "2026-04-03T07:48:18+00:00",
       "firstSeen": "2026-04-03T08:00:01.228823+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3738
+      "score": 3.3487
+    },
+    {
+      "title": "AI for Systems: Using LLMs to Optimize Database Query Execution",
+      "url": "https://www.together.ai/blog/using-llms-to-optimize-database-query-execution",
+      "source": "Together AI Blog",
+      "sourceUrl": "https://www.together.ai/blog/rss.xml",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "New research shows LLMs can optimize database query execution plans—achieving up to 4.78x speedups by correcting the cardinality estimation errors that statistical heuristics miss.",
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cece32f241afeefe0b6f8b_20260331_Query_Execution_Plan_Plan_1200x630.jpg",
+      "published": "2026-04-03T00:00:00+00:00",
+      "firstSeen": "2026-04-03T18:00:01.364096+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.1872
     },
     {
       "title": "How NinjaOne went from scrappy startup to $5B challenger in the race to unify IT operations",
@@ -125,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/NinjaOne-Editorial.png",
       "published": "2026-04-03T15:12:13+00:00",
       "firstSeen": "2026-04-03T16:00:02.088714+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1985
+      "score": 3.1678
     },
     {
       "title": "AI Breakthroughs, Security Breaches, and Industry Shakeups Define the Week in Tech",
@@ -141,10 +157,10 @@
       "image": "",
       "published": "2026-04-03T14:00:57+00:00",
       "firstSeen": "2026-04-03T15:51:28.495517+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1645
+      "score": 3.1347
     },
     {
       "title": "The Axios supply chain attack used individually targeted social engineering",
@@ -157,42 +173,26 @@
       "image": "",
       "published": "2026-04-03T13:54:53+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9017
+      "score": 2.872
     },
     {
-      "title": "Italian rehabilitation robotics startup Wearable Robotics raises €5M to expand its arm exoskeleton",
-      "url": "https://thenextweb.com/news/wearable-robotics-5m-series-a",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Pisa-based Sant’Anna spin-off has deployed its ALEX RS bilateral upper-limb exoskeleton across 20 countries since founding in 2014. CDP Venture Capital led the Series A, with SIMEST providing international expansion funding through Italy’s Ministry of Foreign Affairs. Wearable Robotics, an Italian rehabilitation technology company spun out of the Sant’Anna School of Advanced Studies in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Wearable-Robotics-.png",
-      "published": "2026-04-03T11:23:22+00:00",
-      "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6931
-    },
-    {
-      "title": "Mars Liyao Gao, Yuxuan Bao, Amy S. Rude, Xinwei Shen, J. Nathan Kutz",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
+      "title": "Gemma 4 and what makes an open model succeed",
+      "url": "https://www.interconnects.ai/p/gemma-4-and-what-makes-an-open-model",
+      "source": "Interconnects AI",
+      "sourceUrl": "https://www.interconnects.ai/feed",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-03T16:55:46.390455+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-03T16:55:41.682247+00:00",
+      "summary": "Hint: it's not benchmark scores.",
+      "image": "https://substack-post-media.s3.amazonaws.com/public/images/c03578d7-2c0a-47cd-988e-c0e29008cc06_3182x1790.png",
+      "published": "2026-04-03T16:57:36+00:00",
+      "firstSeen": "2026-04-03T18:00:01.364096+00:00",
+      "lastSeen": "2026-04-03T18:00:01.364096+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.6787
     }
   ],
   "errors": []

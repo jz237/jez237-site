@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T16:55:41.682247+00:00",
+  "updatedAt": "2026-04-03T18:00:01.364096+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2636,6 +2636,10 @@
     "https://simonwillison.net/2026/Apr/3/test-csp-iframe-escape": {
       "image": "",
       "checkedAt": "2026-04-03T16:55:41.682247+00:00"
+    },
+    "https://www.together.ai/blog/using-llms-to-optimize-database-query-execution": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cece32f241afeefe0b6f8b_20260331_Query_Execution_Plan_Plan_1200x630.jpg",
+      "checkedAt": "2026-04-03T18:00:01.364096+00:00"
     }
   }
 }
