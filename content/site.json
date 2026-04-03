@@ -4,6 +4,12 @@
   "about": "Welcome to my public corner of the internet. This site is evolving into a home for projects, utilities, game prototypes, AI news, and personal creative stuff.",
   "projects": [
     {
+      "name": "How AI Works",
+      "desc": "Interactive explainer covering neural networks, LLMs, training, hallucinations, and more. Built with React + Framer Motion.",
+      "status": "live",
+      "link": "./experiments/ai-explainer/"
+    },
+    {
       "name": "AI News Feed",
       "desc": "Curated AI model releases, tooling updates, and notable research.",
       "status": "live",
