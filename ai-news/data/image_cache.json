@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T15:51:28.495517+00:00",
+  "updatedAt": "2026-04-03T16:55:41.682247+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2632,6 +2632,10 @@
     "https://www.techrepublic.com/article/ai-breakthroughs-security-breaches-and-industry-shakeups-define-the-week-in-tech": {
       "image": "",
       "checkedAt": "2026-04-03T15:51:28.495517+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/3/test-csp-iframe-escape": {
+      "image": "",
+      "checkedAt": "2026-04-03T16:55:41.682247+00:00"
     }
   }
 }
