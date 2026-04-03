@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T13:37:03.585639+00:00",
+  "updatedAt": "2026-04-03T15:00:01.181172+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2624,6 +2624,10 @@
     "https://simonwillison.net/2026/Apr/3/supply-chain-social-engineering": {
       "image": "",
       "checkedAt": "2026-04-03T14:00:01.375767+00:00"
+    },
+    "https://techcrunch.com/2026/04/03/moonbounce-fundraise-content-moderation-for-the-ai-era": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Brett-Levenson_Ash-Bhardwaj_Moonbounce.png?resize=1200,800",
+      "checkedAt": "2026-04-03T15:00:01.181172+00:00"
     }
   }
 }

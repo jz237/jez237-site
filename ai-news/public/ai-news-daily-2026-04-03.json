@@ -1,7 +1,23 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T13:37:03.585639+00:00",
+  "updatedAt": "2026-04-03T15:00:01.181172+00:00",
   "items": [
+    {
+      "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
+      "url": "https://thenextweb.com/news/anthropic-just-paid-400-million-for-a-startup-with-fewer-than-10-people",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic has acquired Coefficient Bio, a stealth biotech AI startup founded barely eight months ago, in an all-stock deal worth just over $400 million. The acquisition brings a team of fewer than 10 people, nearly all former Genentech computational biology researchers, into Anthropic’s healthcare and life sciences division, and it signals something larger than a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
+      "published": "2026-04-03T14:50:18+00:00",
+      "firstSeen": "2026-04-03T15:00:01.181172+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.9451
+    },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
       "url": "https://www.marktechpost.com/2026/04/03/tii-releases-falcon-perception-a-0-6b-parameter-early-fusion-transformer-for-open-vocabulary-grounding-and-segmentation-from-natural-language-prompts",
@@ -13,26 +29,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.6829
+      "score": 6.6466
     },
     {
-      "title": "Scaling Reasoning Tokens via RL and Parallel Thinking: Evidence From Competitive Programming",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
+      "url": "https://thenextweb.com/news/irex-ai-fire-detection",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-03T13:37:08.746958+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "summary": "[Washington, DC – April 2, 2026] – IREX, a global pioneer in ethical AI and intelligent video analytics deployed across 10+ countries and over 300,000 cameras, announced a major update to its FireTrack smoke and fire detection module. The update doesn’t require any additional hardware and broadens FireTrack’s applicability to critical infrastructure such as energy [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
+      "published": "2026-04-03T13:41:16+00:00",
+      "firstSeen": "2026-04-03T15:00:01.181172+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 5.0106
     },
     {
       "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
@@ -45,10 +61,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
       "published": "2026-04-03T08:29:53+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0042
+      "score": 4.9682
+    },
+    {
+      "title": "Tencent is building an enterprise empire on top of an Austrian developer’s open-source lobster",
+      "url": "https://thenextweb.com/news/tencent-clawpro-openclaw-enterprise-ai-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tencent Holdings has launched ClawPro, an enterprise AI agent management platform built on OpenClaw, the open-source framework that has become the fastest-growing project in GitHub’s history and the unlikely centrepiece of a national technology craze in China. The tool, released in public beta by Tencent’s cloud division on Thursday, allows businesses to deploy OpenClaw-based AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.png",
+      "published": "2026-04-03T14:25:13+00:00",
+      "firstSeen": "2026-04-03T15:00:01.181172+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.6324
     },
     {
       "title": "Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning",
@@ -61,10 +93,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-1.png",
       "published": "2026-04-03T07:48:18+00:00",
       "firstSeen": "2026-04-03T08:00:01.228823+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.456
+      "score": 3.4207
+    },
+    {
+      "title": "The Axios supply chain attack used individually targeted social engineering",
+      "url": "https://simonwillison.net/2026/Apr/3/supply-chain-social-engineering",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The Axios team have published a full postmortem on the supply chain attack which resulted in a malware dependency going out in a release the other day, and it involved a sophisticated social engineering campaign targeting one of their maintainers directly. Here's Jason Saayman'a description of how that worked:\n\nso the attack vector mimics what google has documented here: https://cloud.google.com/blog/topics/threat-intelligence/unc1069-targets-cryptocurrency-ai-social-engineering\nthey tailored this process specifically to me by doing the following:\n\nthey reached out masquerading as the founder ",
+      "image": "",
+      "published": "2026-04-03T13:54:53+00:00",
+      "firstSeen": "2026-04-03T15:00:01.181172+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9573
     },
     {
       "title": "Italian rehabilitation robotics startup Wearable Robotics raises €5M to expand its arm exoskeleton",
@@ -77,10 +125,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Wearable-Robotics-.png",
       "published": "2026-04-03T11:23:22+00:00",
       "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.784
+      "score": 2.745
+    },
+    {
+      "title": "UQ-SHRED: uncertainty quantification of shallow recurrent decoder networks for sparse sensing via engression",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-03T15:00:09.008673+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "Chatbots are now prescribing psychiatric drugs",
@@ -93,10 +157,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS524_AI_HEALTH_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-03T11:43:21+00:00",
       "firstSeen": "2026-04-03T11:50:34.821903+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3036
+      "score": 2.2643
+    },
+    {
+      "title": "The Facebook insider building content moderation for the AI era",
+      "url": "https://techcrunch.com/2026/04/03/moonbounce-fundraise-content-moderation-for-the-ai-era",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Moonbounce has raised $12 million to grow its AI control engine that converts content moderation policies into consistent, predictable AI behavior.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Brett-Levenson_Ash-Bhardwaj_Moonbounce.png?resize=1200%2C800",
+      "published": "2026-04-03T14:00:15+00:00",
+      "firstSeen": "2026-04-03T15:00:01.181172+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.26
     },
     {
       "title": "The 3 Best Portable Jump Starters in 2026: Get Charged Up",
@@ -109,42 +189,10 @@
       "image": "https://media.wired.com/photos/69cf3cac8743a73489a83876/master/pass/I-Jumped-an-Old-Land-Cruiser-60-Times-to-Find-the-Best-Portable-Jump-Starters.jpg",
       "published": "2026-04-03T10:39:00+00:00",
       "firstSeen": "2026-04-03T11:00:01.751910+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
+      "lastSeen": "2026-04-03T15:00:01.181172+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.203
-    },
-    {
-      "title": "Penemue raises €1.7M to scale AI hate speech detection",
-      "url": "https://thenextweb.com/news/penemue-1-7m-ai-hate-speech-digital-violence",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The German startup detects online hate, digital violence, and disinformation across 89 languages in real time, and works with public prosecutors and police alongside commercial clients. Investors were not disclosed. Penemue, the Freiburg-based TrustTech startup developing AI to detect and counter online hate speech, digital violence, and disinformation, has raised more than €1.7 million in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Penemue.png",
-      "published": "2026-04-03T11:39:09+00:00",
-      "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0916
-    },
-    {
-      "title": "Apple’s best product ever",
-      "url": "https://www.theverge.com/podcast/906548/best-apple-product-vergecast",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "All week, we've been asking you to help us rank the 50 best products Apple ever made, as we mark the company's 50th anniversary. Thanks to everyone who pitched in - we ended up with more than 1.6 million votes! We also have lots of other coverage of Apple's first half century, and you should [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0402_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-03T12:52:41+00:00",
-      "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T13:37:03.585639+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.3376
+      "score": 2.1648
     }
   ],
   "errors": []
