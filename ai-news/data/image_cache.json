@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T19:02:57.322749+00:00",
+  "updatedAt": "2026-04-03T20:00:01.647678+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2640,6 +2640,18 @@
     "https://www.together.ai/blog/using-llms-to-optimize-database-query-execution": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cece32f241afeefe0b6f8b_20260331_Query_Execution_Plan_Plan_1200x630.jpg",
       "checkedAt": "2026-04-03T17:50:57.095298+00:00"
+    },
+    "https://techcrunch.com/2026/04/03/ai-energy-microsoft-meta-google-natural-gas-mining-fomo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1294103185.jpg?resize=1200,799",
+      "checkedAt": "2026-04-03T20:00:01.647678+00:00"
+    },
+    "https://techcrunch.com/2026/04/03/people-would-rather-have-an-amazon-warehouse-in-their-backyard-than-a-data-center": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2159544073.jpeg?resize=1200,800",
+      "checkedAt": "2026-04-03T20:00:01.647678+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-vids-ai-avatars-update": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/google-vids-news.png",
+      "checkedAt": "2026-04-03T20:00:01.647678+00:00"
     }
   }
 }
