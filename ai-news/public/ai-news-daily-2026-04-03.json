@@ -1,9 +1,9 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T03:25:16.472857+00:00",
+  "updatedAt": "2026-04-03T05:00:01.405298+00:00",
   "items": [
     {
-      "title": "LinearARD: Linear-Memory Attention Distillation for RoPE Restoration",
+      "title": "Benjamin Turtel, Paul Wilczewski, Kris Skotheim",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +11,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-03T03:25:20.832991+00:00",
+      "published": "2026-04-03T05:00:05.751134+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-03T03:25:16.472857+00:00",
+      "lastSeen": "2026-04-03T05:00:01.405298+00:00",
       "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     }
   ],
   "errors": []
