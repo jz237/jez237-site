@@ -1,6 +1,6 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T19:02:57.322749+00:00",
+  "updatedAt": "2026-04-03T19:50:55.180549+00:00",
   "items": [
     {
       "title": "Can JavaScript Escape a CSP Meta Tag Inside an Iframe?",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-04-03T16:05:00+00:00",
       "firstSeen": "2026-04-03T16:55:41.682247+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.703
+      "score": 8.6808
     },
     {
       "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
@@ -29,10 +29,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
       "published": "2026-04-03T14:50:18+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.8286
+      "score": 7.8071
     },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
@@ -45,10 +45,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5481
+      "score": 6.5299
+    },
+    {
+      "title": "OpenAI's Fidji Simo Is Taking Medical Leave Amid an Executive Shake-Up",
+      "url": "https://www.wired.com/story/openais-fidji-simo-is-taking-a-leave-of-absence",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company is undergoing major leadership restructuring as its CEO of applications goes on leave for “several weeks.”",
+      "image": "https://media.wired.com/photos/69d0149cf17585df8fd63f56/master/pass/Fidji-Leave-of-Absence-Business-2198337396.jpg",
+      "published": "2026-04-03T19:38:35+00:00",
+      "firstSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3837
+    },
+    {
+      "title": "Scaling Reasoning Tokens via RL and Parallel Thinking: Evidence From Competitive Programming",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-03T19:51:00.234925+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
@@ -61,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
       "published": "2026-04-03T13:41:16+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8978
+      "score": 4.877
     },
     {
       "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
@@ -77,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
       "published": "2026-04-03T08:29:53+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8706
+      "score": 4.8525
     },
     {
       "title": "Tencent is building an enterprise empire on top of an Austrian developer’s open-source lobster",
@@ -93,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.png",
       "published": "2026-04-03T14:25:13+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.5173
+      "score": 4.496
     },
     {
       "title": "Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning",
@@ -109,10 +141,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-1.png",
       "published": "2026-04-03T07:48:18+00:00",
       "firstSeen": "2026-04-03T08:00:01.228823+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3249
+      "score": 3.3072
+    },
+    {
+      "title": "Google Vids Just Got a Major AI Upgrade — Here’s What’s New",
+      "url": "https://www.techrepublic.com/article/news-google-vids-ai-avatars-update",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google Vids adds AI avatar controls, custom music, and YouTube publishing, positioning itself as a powerful new competitor in AI video creation.\nThe post Google Vids Just Got a Major AI Upgrade — Here’s What’s New appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-04-03T18:58:56+00:00",
+      "firstSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2238
     },
     {
       "title": "AI for Systems: Using LLMs to Optimize Database Query Execution",
@@ -125,10 +173,10 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cece32f241afeefe0b6f8b_20260331_Query_Execution_Plan_Plan_1200x630.jpg",
       "published": "2026-04-03T00:00:00+00:00",
       "firstSeen": "2026-04-03T17:50:57.095298+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.168
+      "score": 3.1538
     },
     {
       "title": "How NinjaOne went from scrappy startup to $5B challenger in the race to unify IT operations",
@@ -141,58 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/NinjaOne-Editorial.png",
       "published": "2026-04-03T15:12:13+00:00",
       "firstSeen": "2026-04-03T16:00:02.088714+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
+      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1386
-    },
-    {
-      "title": "AI Breakthroughs, Security Breaches, and Industry Shakeups Define the Week in Tech",
-      "url": "https://www.techrepublic.com/article/ai-breakthroughs-security-breaches-and-industry-shakeups-define-the-week-in-tech",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "See what you missed in Daily Tech Insider from March 30–April 3.\nThe post AI Breakthroughs, Security Breaches, and Industry Shakeups Define the Week in Tech appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-04-03T14:00:57+00:00",
-      "firstSeen": "2026-04-03T15:51:28.495517+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1065
-    },
-    {
-      "title": "The Axios supply chain attack used individually targeted social engineering",
-      "url": "https://simonwillison.net/2026/Apr/3/supply-chain-social-engineering",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The Axios team have published a full postmortem on the supply chain attack which resulted in a malware dependency going out in a release the other day, and it involved a sophisticated social engineering campaign targeting one of their maintainers directly. Here's Jason Saayman'a description of how that worked:\n\nso the attack vector mimics what google has documented here: https://cloud.google.com/blog/topics/threat-intelligence/unc1069-targets-cryptocurrency-ai-social-engineering\nthey tailored this process specifically to me by doing the following:\n\nthey reached out masquerading as the founder ",
-      "image": "",
-      "published": "2026-04-03T13:54:53+00:00",
-      "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8438
-    },
-    {
-      "title": "Gemma 4 and what makes an open model succeed",
-      "url": "https://www.interconnects.ai/p/gemma-4-and-what-makes-an-open-model",
-      "source": "Interconnects AI",
-      "sourceUrl": "https://www.interconnects.ai/feed",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Hint: it's not benchmark scores.",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/c03578d7-2c0a-47cd-988e-c0e29008cc06_3182x1790.png",
-      "published": "2026-04-03T16:57:36+00:00",
-      "firstSeen": "2026-04-03T17:50:57.095298+00:00",
-      "lastSeen": "2026-04-03T19:02:57.322749+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.648
+      "score": 3.1168
     }
   ],
   "errors": []
