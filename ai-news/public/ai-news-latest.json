@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-03T20:52:22.174735+00:00",
+  "updatedAt": "2026-04-03T22:00:01.503767+00:00",
   "items": [
     {
-      "title": "Qianfan Zhang, Tianyu Guo, Xuandi Ren, Jiale Chen, Ming Ding, Ran Xin, Xia Xiao",
+      "title": "An Online Machine Learning Multi-resolution Optimization Framework for Energy System Design Limit of Performance Analysis",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-03T20:52:30.507457+00:00",
+      "published": "2026-04-03T22:00:08.856981+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.44
+    },
+    {
+      "title": "Quoting Willy Tarreau",
+      "url": "https://simonwillison.net/2026/Apr/3/willy-tarreau",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "On the kernel security list we've seen a huge bump of reports. We were between 2 and 3 per week maybe two years ago, then reached probably 10 a week over the last year with the only difference being only AI slop, and now since the beginning of the year we're around 5-10 per day depending on the days (fridays and tuesdays seem the worst). Now most of these reports are correct, to the point that we had to bring in more maintainers to help us.\nAnd we're now seeing on a daily basis something that never happened before: duplicate reports, or the same bug found by two different people using (possibl",
+      "image": "",
+      "published": "2026-04-03T21:48:22+00:00",
+      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.3841
+    },
+    {
+      "title": "Quoting Daniel Stenberg",
+      "url": "https://simonwillison.net/2026/Apr/3/daniel-stenberg",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The challenge with AI in open source security has transitioned from an AI slop tsunami into more of a ... plain security report tsunami. Less slop but lots of reports. Many of them really good.\nI'm spending hours per day on this now. It's intense.\n&mdash; Daniel Stenberg, lead developer of cURL\n\n    Tags: daniel-stenberg, security, curl, generative-ai, ai, llms, ai-security-research",
+      "image": "",
+      "published": "2026-04-03T21:46:07+00:00",
+      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3829
+    },
+    {
+      "title": "Quoting Greg Kroah-Hartman",
+      "url": "https://simonwillison.net/2026/Apr/3/greg-kroah-hartman",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Months ago, we were getting what we called 'AI slop,' AI-generated security reports that were obviously wrong or low quality. It was kind of funny. It didn't really worry us.\nSomething happened a month ago, and the world switched. Now we have real reports. All open source projects have real reports that are made with AI, but they're good, and they're real.\n&mdash; Greg Kroah-Hartman, Linux kernel maintainer (bio), in conversation with Steven J. Vaughan-Nichols\n\n    Tags: security, linux, generative-ai, ai, llms, ai-security-research",
+      "image": "",
+      "published": "2026-04-03T21:44:41+00:00",
+      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4822
+    },
+    {
+      "title": "Meta Pauses Work With Mercor After Data Breach Puts AI Industry Secrets at Risk",
+      "url": "https://www.wired.com/story/meta-pauses-work-with-mercor-after-data-breach-puts-ai-industry-secrets-at-risk",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Major AI labs are investigating a security incident that impacted Mercor, a leading data vendor. The incident could have exposed key data about how they train AI models.",
+      "image": "https://media.wired.com/photos/69d0349ce79739f75ca71863/master/pass/security_Mercor3_GettyImages-1429228638-copy-2.jpg",
+      "published": "2026-04-03T21:28:14+00:00",
+      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2739
     },
     {
       "title": "OpenAI executive shuffle includes new role for COO Brad Lightcap to lead ‘special projects’",
@@ -28,13 +92,29 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/brad-lightcap-GettyImages-2147824375-1.jpg?w=1024",
       "published": "2026-04-03T20:35:34+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2815
+      "score": 5.2478
     },
     {
-      "title": "Anthropic buys biotech startup Coefficient Bio in $400M deal: reports",
+      "title": "OpenClaw gives users yet another reason to be freaked out about security",
+      "url": "https://arstechnica.com/security/2026/04/heres-why-its-prudent-for-openclaw-users-to-assume-compromise",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The viral AI agentic tool let attackers silently gain admin unauthenticated access.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/bluecrayfish-1152x648.jpg",
+      "published": "2026-04-03T20:30:15+00:00",
+      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8052
+    },
+    {
+      "title": "Anthropic buys biotech startup Coefficient Bio in $400M deal: Reports",
       "url": "https://techcrunch.com/2026/04/03/anthropic-buys-biotech-startup-coefficient-bio-in-400m-deal-reports",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
@@ -44,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200%2C800",
       "published": "2026-04-03T20:28:40+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.278
+      "score": 5.2444
     },
     {
       "title": "OpenAI’s AGI boss is taking a leave of absence",
@@ -60,10 +140,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1239231852.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-04-03T20:22:59+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4451
+      "score": 6.4117
     },
     {
       "title": "Anthropic ramps up its political activities with a new PAC",
@@ -76,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
       "published": "2026-04-03T20:22:18+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2748
+      "score": 5.2413
     },
     {
       "title": "AI companies are building huge natural gas plants to power data centers. What could go wrong?",
@@ -92,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1294103185.jpg?resize=1200%2C799",
       "published": "2026-04-03T19:48:22+00:00",
       "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2579
+      "score": 2.225
     },
     {
       "title": "OpenAI’s Fidji Simo Is Taking Medical Leave Amid an Executive Shake-Up",
@@ -108,10 +188,10 @@
       "image": "https://media.wired.com/photos/69d0149cf17585df8fd63f56/master/pass/Fidji-Leave-of-Absence-Business-2198337396.jpg",
       "published": "2026-04-03T19:38:35+00:00",
       "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2531
+      "score": 5.2203
     },
     {
       "title": "Musk wants a million data centre satellites. Bezos wants 51,600. Scientists want to know why.",
@@ -124,10 +204,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/space-data-centers-musk-bezos-scientists.png",
       "published": "2026-04-03T19:30:59+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5093
+      "score": 3.4767
     },
     {
       "title": "People would rather have an Amazon warehouse in their backyard than a data center",
@@ -140,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2159544073.jpeg?resize=1200%2C800",
       "published": "2026-04-03T19:20:36+00:00",
       "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2442
+      "score": 2.2117
     },
     {
       "title": "Microsoft just shipped the clearest signal yet that it is building an AI empire without OpenAI",
@@ -156,11 +236,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/microsoft-mai-models-openai-independence.png",
       "published": "2026-04-03T19:06:13+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0972
+      "score": 14.065
     },
     {
       "title": "Google Vids Just Got a Major AI Upgrade — Here’s What’s New",
@@ -173,10 +253,10 @@
       "image": "",
       "published": "2026-04-03T18:58:56+00:00",
       "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1937
+      "score": 3.1615
     },
     {
       "title": "Tesla reclaims the quarterly EV crown from BYD, but the numbers tell a more complicated story",
@@ -189,10 +269,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tesla-byd-q1-2026-electric-vehicle-sales.png",
       "published": "2026-04-03T18:31:10+00:00",
       "firstSeen": "2026-04-03T19:00:01.774575+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0804
+      "score": 2.0486
     },
     {
       "title": "Gemma 4 and what makes an open model succeed",
@@ -205,10 +285,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/c03578d7-2c0a-47cd-988e-c0e29008cc06_3182x1790.png",
       "published": "2026-04-03T16:57:36+00:00",
       "firstSeen": "2026-04-03T17:50:57.095298+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5967
+      "score": 2.5663
     },
     {
       "title": "Can JavaScript Escape a CSP Meta Tag Inside an Iframe?",
@@ -221,10 +301,10 @@
       "image": "",
       "published": "2026-04-03T16:05:00+00:00",
       "firstSeen": "2026-04-03T16:55:41.682247+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.653
+      "score": 8.6233
     },
     {
       "title": "How NinjaOne went from scrappy startup to $5B challenger in the race to unify IT operations",
@@ -237,10 +317,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/NinjaOne-Editorial.png",
       "published": "2026-04-03T15:12:13+00:00",
       "firstSeen": "2026-04-03T16:00:02.088714+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0897
+      "score": 3.0607
     },
     {
       "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
@@ -253,10 +333,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
       "published": "2026-04-03T14:50:18+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.7802
+      "score": 7.7516
     },
     {
       "title": "Tencent is building an enterprise empire on top of an Austrian developer’s open-source lobster",
@@ -269,10 +349,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.png",
       "published": "2026-04-03T14:25:13+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.4695
+      "score": 4.4411
     },
     {
       "title": "AI Breakthroughs, Security Breaches, and Industry Shakeups Define the Week in Tech",
@@ -285,10 +365,10 @@
       "image": "",
       "published": "2026-04-03T14:00:57+00:00",
       "firstSeen": "2026-04-03T15:51:28.495517+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0592
+      "score": 3.0312
     },
     {
       "title": "The Facebook insider building content moderation for the AI era",
@@ -301,10 +381,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Brett-Levenson_Ash-Bhardwaj_Moonbounce.png?resize=1200%2C800",
       "published": "2026-04-03T14:00:15+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0989
+      "score": 2.0709
     },
     {
       "title": "The Axios supply chain attack used individually targeted social engineering",
@@ -317,10 +397,10 @@
       "image": "",
       "published": "2026-04-03T13:54:53+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7967
+      "score": 2.7687
     },
     {
       "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
@@ -333,10 +413,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
       "published": "2026-04-03T13:41:16+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.851
+      "score": 4.8232
     },
     {
       "title": "Apple’s best product ever",
@@ -349,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0402_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-03T12:52:41+00:00",
       "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1409
+      "score": 0.1138
     },
     {
       "title": "Chatbots are now prescribing psychiatric drugs",
@@ -365,10 +445,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS524_AI_HEALTH_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-03T11:43:21+00:00",
       "firstSeen": "2026-04-03T11:50:34.821903+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1131
+      "score": 2.0868
     },
     {
       "title": "Penemue raises €1.7M to scale AI hate speech detection",
@@ -381,10 +461,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Penemue.png",
       "published": "2026-04-03T11:39:09+00:00",
       "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9015
+      "score": 1.8752
     },
     {
       "title": "Italian rehabilitation robotics startup Wearable Robotics raises €5M to expand its arm exoskeleton",
@@ -397,10 +477,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Wearable-Robotics-.png",
       "published": "2026-04-03T11:23:22+00:00",
       "firstSeen": "2026-04-03T13:00:01.922085+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5953
+      "score": 2.5692
     },
     {
       "title": "The 3 Best Portable Jump Starters in 2026: Get Charged Up",
@@ -413,10 +493,10 @@
       "image": "https://media.wired.com/photos/69cf3cac8743a73489a83876/master/pass/I-Jumped-an-Old-Land-Cruiser-60-Times-to-Find-the-Best-Portable-Jump-Starters.jpg",
       "published": "2026-04-03T10:39:00+00:00",
       "firstSeen": "2026-04-03T11:00:01.751910+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0181
+      "score": 1.9925
     },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
@@ -429,10 +509,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5072
+      "score": 6.4829
     },
     {
       "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
@@ -445,10 +525,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
       "published": "2026-04-03T08:29:53+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.83
+      "score": 4.806
     },
     {
       "title": "Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning",
@@ -461,10 +541,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-1.png",
       "published": "2026-04-03T07:48:18+00:00",
       "firstSeen": "2026-04-03T08:00:01.228823+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2851
+      "score": 3.2616
+    },
+    {
+      "title": "Wan 2.7 now available on Together AI",
+      "url": "https://www.together.ai/blog/wan-2-7-now-available-on-together-ai",
+      "source": "Together AI Blog",
+      "sourceUrl": "https://www.together.ai/blog/rss.xml",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "A four-model video suite for generation, continuation, reference-driven workflows, and editing, rolling out on Together AI starting with text-to-video.",
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69d02c1d0725009721eafc04_OG-image_20260402_BLOG_WAN27_2026.jpg",
+      "published": "2026-04-03T00:00:00+00:00",
+      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 11.117
     },
     {
       "title": "AI for Systems: Using LLMs to Optimize Database Query Execution",
@@ -477,10 +574,10 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cece32f241afeefe0b6f8b_20260331_Query_Execution_Plan_Plan_1200x630.jpg",
       "published": "2026-04-03T00:00:00+00:00",
       "firstSeen": "2026-04-03T17:50:57.095298+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.136
+      "score": 3.117
     },
     {
       "title": "Arcee AI Releases Trinity Large Thinking: An Apache 2.0 Open Reasoning Model for Long-Horizon Agents and Tool Use",
@@ -493,10 +590,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/pinchbench-success-rate-by-model-1-150x150.png",
       "published": "2026-04-02T23:56:20+00:00",
       "firstSeen": "2026-04-03T01:00:02.154610+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.635
+      "score": 11.616
     },
     {
       "title": "PSA: Anyone with a link can view your Granola notes by default",
@@ -509,10 +606,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/granola-logo.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-04-02T21:56:16+00:00",
       "firstSeen": "2026-04-02T22:49:12.200377+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2417
+      "score": 3.2238
     },
     {
       "title": "‘Uncanny Valley’: Iran’s Threats on US Tech, Trump’s Plans for Midterms, and Polymarket’s Pop-up Flop",
@@ -525,10 +622,10 @@
       "image": "https://media.wired.com/photos/69cda03bbbb99516b24f8b5f/master/pass/Uncanny-Valley-Trump-Iran-Tech-Companies-Security-2268129741.jpg",
       "published": "2026-04-02T21:04:22+00:00",
       "firstSeen": "2026-04-02T21:50:54.618822+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7579
+      "score": 1.7404
     },
     {
       "title": "Highlights from my conversation about agentic engineering on Lenny's Podcast",
@@ -541,107 +638,10 @@
       "image": "https://static.simonwillison.net/static/2026/youtube-lenny.jpg",
       "published": "2026-04-02T20:40:47+00:00",
       "firstSeen": "2026-04-02T20:51:07.533319+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9517
-    },
-    {
-      "title": "Defeating the ‘Token Tax’: How Google Gemma 4, NVIDIA, and OpenClaw are Revolutionizing Local Agentic AI: From RTX Desktops to DGX Spark",
-      "url": "https://www.marktechpost.com/2026/04/02/defeating-the-token-tax-how-google-gemma-4-nvidia-and-openclaw-are-revolutionizing-local-agentic-ai-from-rtx-desktops-to-dgx-spark",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Run Google’s latest omni-capable open models faster on NVIDIA RTX AI PCs, from NVIDIA Jetson Orin Nano, GeForce RTX desktops to the new DGX Spark, to build personalized, always-on AI assistants like OpenClaw without paying a massive &#8220;token tax&#8221; for every action. The landscape of modern AI is shifting rapidly. We are moving away from [&#8230;]\nThe post Defeating the ‘Token Tax’: How Google Gemma 4, NVIDIA, and OpenClaw are Revolutionizing Local Agentic AI: From RTX Desktops to DGX Spark appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-02-at-1.10.18-PM-1-150x150.png",
-      "published": "2026-04-02T20:35:54+00:00",
-      "firstSeen": "2026-04-02T20:51:07.533319+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.2805
-    },
-    {
-      "title": "OpenAI Acquires Tech Talk Show ‘TBPN’—and Buys Itself Some Positive News",
-      "url": "https://www.wired.com/story/openai-acquires-tbpn-buys-positive-news-coverage",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "OpenAI is acquiring TBPN, a business talk show that’s popular among Silicon Valley elites, as it continues to battle its negative public image.",
-      "image": "https://media.wired.com/photos/69ceb0342d07f16b3b533631/master/pass/OpenAI-Focus-Lasted-2-Weeks-Business-2265991721.jpg",
-      "published": "2026-04-02T19:29:48+00:00",
-      "firstSeen": "2026-04-02T20:00:01.443115+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7336
-    },
-    {
-      "title": "OpenAI acquires TBPN, the buzzy founder-led business talk show",
-      "url": "https://techcrunch.com/2026/04/02/openai-acquires-tbpn-the-buzzy-founder-led-business-talk-show",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "TBPN, Silicon Valley's cult-favorite tech podcast, will operate independently, even as it's overseen by chief political operative Chris Lehane.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Jordi_Hays_and_John_Coogan_on_set_2_1.webp?resize=1200%2C675",
-      "published": "2026-04-02T19:21:00+00:00",
-      "firstSeen": "2026-04-02T20:00:01.443115+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7314
-    },
-    {
-      "title": "Gemma 4: Byte for byte, the most capable open models",
-      "url": "https://simonwillison.net/2026/Apr/2/gemma-4",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Gemma 4: Byte for byte, the most capable open models\nFour new vision-capable Apache 2.0 licensed reasoning LLMs from Google DeepMind, sized at 2B, 4B, 31B, plus a 26B-A4B Mixture-of-Experts.\nGoogle emphasize \"unprecedented level of intelligence-per-parameter\", providing yet more evidence that creating small useful models is one of the hottest areas of research right now.\nThey actually label the two smaller models as E2B and E4B for \"Effective\" parameter size. The system card explains:\n\nThe smaller models incorporate Per-Layer Embeddings (PLE) to maximize parameter efficiency in on-device deplo",
-      "image": "https://static.simonwillison.net/static/2026/gemma-4-2b-pelican.png",
-      "published": "2026-04-02T18:28:54+00:00",
-      "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 10.2185
-    },
-    {
-      "title": "A New Google-Funded Data Center Will Be Powered by a Massive Gas Plant",
-      "url": "https://www.wired.com/story/a-new-google-funded-data-center-will-be-powered-by-a-massive-gas-plant",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Documents show that one of Google’s new data centers would be powered by a natural gas plant that emits millions of tons of emissions each year—an increasingly common trend in the industry.",
-      "image": "https://media.wired.com/photos/69cda0ecca819c3b6fb66073/master/pass/As-Google-Builds-Out-Renewables-Its-Also-Leaning-on-Fossil-Fuels-Science.jpg",
-      "published": "2026-04-02T18:27:29+00:00",
-      "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7181
-    },
-    {
-      "title": "llm-gemini 0.30",
-      "url": "https://simonwillison.net/2026/Apr/2/llm-gemini",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: llm-gemini 0.30\n    New models gemini-3.1-flash-lite-preview, gemma-4-26b-a4b-it and gemma-4-31b-it. See my notes on Gemma 4.\n    \n        Tags: gemini, llm, gemma",
-      "image": "",
-      "published": "2026-04-02T18:25:08+00:00",
-      "firstSeen": "2026-04-02T19:00:02.098041+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 17.4175
+      "score": 6.9344
     },
     {
       "title": "Superbugs: Resistance Rising Part 2",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3646
+      "score": 3.3623
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8907
