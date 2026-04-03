@@ -1,6 +1,6 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T22:00:01.503767+00:00",
+  "updatedAt": "2026-04-03T21:48:08.303574+00:00",
   "items": [
     {
       "title": "Microsoft just shipped the clearest signal yet that it is building an AI empire without OpenAI",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/microsoft-mai-models-openai-independence.png",
       "published": "2026-04-03T19:06:13+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.065
+      "score": 14.0706
     },
     {
       "title": "Wan 2.7 now available on Together AI",
@@ -29,12 +29,12 @@
       "summary": "A four-model video suite for generation, continuation, reference-driven workflows, and editing, rolling out on Together AI starting with text-to-video.",
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69d02c1d0725009721eafc04_OG-image_20260402_BLOG_WAN27_2026.jpg",
       "published": "2026-04-03T00:00:00+00:00",
-      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "firstSeen": "2026-04-03T21:48:08.303574+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.117
+      "score": 11.1203
     },
     {
       "title": "Can JavaScript Escape a CSP Meta Tag Inside an Iframe?",
@@ -47,10 +47,10 @@
       "image": "",
       "published": "2026-04-03T16:05:00+00:00",
       "firstSeen": "2026-04-03T16:55:41.682247+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6233
+      "score": 8.6284
     },
     {
       "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
@@ -63,10 +63,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
       "published": "2026-04-03T14:50:18+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.7516
+      "score": 7.7565
     },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
@@ -79,10 +79,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.4829
+      "score": 6.4871
     },
     {
       "title": "OpenAI’s AGI boss is taking a leave of absence",
@@ -95,26 +95,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1239231852.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-04-03T20:22:59+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4117
-    },
-    {
-      "title": "Quoting Greg Kroah-Hartman",
-      "url": "https://simonwillison.net/2026/Apr/3/greg-kroah-hartman",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Months ago, we were getting what we called 'AI slop,' AI-generated security reports that were obviously wrong or low quality. It was kind of funny. It didn't really worry us.\nSomething happened a month ago, and the world switched. Now we have real reports. All open source projects have real reports that are made with AI, but they're good, and they're real.\n&mdash; Greg Kroah-Hartman, Linux kernel maintainer (bio), in conversation with Steven J. Vaughan-Nichols\n\n    Tags: security, linux, generative-ai, ai, llms, ai-security-research",
-      "image": "",
-      "published": "2026-04-03T21:44:41+00:00",
-      "firstSeen": "2026-04-03T22:00:01.503767+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4822
+      "score": 6.4175
     },
     {
       "title": "OpenAI executive shuffle includes new role for COO Brad Lightcap to lead ‘special projects’",
@@ -127,10 +111,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/brad-lightcap-GettyImages-2147824375-1.jpg?w=1024",
       "published": "2026-04-03T20:35:34+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2478
+      "score": 5.2537
     },
     {
       "title": "Anthropic buys biotech startup Coefficient Bio in $400M deal: Reports",
@@ -143,10 +127,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200%2C800",
       "published": "2026-04-03T20:28:40+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2444
+      "score": 5.2503
     },
     {
       "title": "Anthropic ramps up its political activities with a new PAC",
@@ -159,10 +143,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
       "published": "2026-04-03T20:22:18+00:00",
       "firstSeen": "2026-04-03T20:52:22.174735+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2413
+      "score": 5.2471
     },
     {
       "title": "OpenAI’s Fidji Simo Is Taking Medical Leave Amid an Executive Shake-Up",
@@ -175,10 +159,10 @@
       "image": "https://media.wired.com/photos/69d0149cf17585df8fd63f56/master/pass/Fidji-Leave-of-Absence-Business-2198337396.jpg",
       "published": "2026-04-03T19:38:35+00:00",
       "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2203
+      "score": 5.226
     },
     {
       "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
@@ -191,10 +175,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
       "published": "2026-04-03T13:41:16+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T22:00:01.503767+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8232
+      "score": 4.828
+    },
+    {
+      "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
+      "url": "https://thenextweb.com/news/openai-acquires-tbpn-media-talk-show",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The daily live show, hosted by former founders John Coogan and Jordi Hays, will sit inside OpenAI’s strategy organisation and report to chief global affairs officer Chris Lehane. Terms were not disclosed. OpenAI says TBPN will keep its editorial independence. OpenAI has acquired TBPN, the Technology Business Programming Network, the Silicon Valley talk show that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
+      "published": "2026-04-03T08:29:53+00:00",
+      "firstSeen": "2026-04-03T09:00:01.916572+00:00",
+      "lastSeen": "2026-04-03T21:48:08.303574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8101
     }
   ],
   "errors": []
