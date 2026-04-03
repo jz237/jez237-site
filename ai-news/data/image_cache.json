@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T20:52:22.174735+00:00",
+  "updatedAt": "2026-04-03T21:48:08.303574+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2668,6 +2668,10 @@
     "https://techcrunch.com/2026/04/03/anthropic-ramps-up-its-political-activities-with-a-new-pac": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
       "checkedAt": "2026-04-03T20:52:22.174735+00:00"
+    },
+    "https://www.together.ai/blog/wan-2-7-now-available-on-together-ai": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69d02c1d0725009721eafc04_OG-image_20260402_BLOG_WAN27_2026.jpg",
+      "checkedAt": "2026-04-03T21:48:08.303574+00:00"
     }
   }
 }
