@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T13:00:01.922085+00:00",
+  "updatedAt": "2026-04-03T14:00:01.375767+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2620,6 +2620,10 @@
     "https://www.theverge.com/podcast/906548/best-apple-product-vergecast": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0402_Site.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-03T13:00:01.922085+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/3/supply-chain-social-engineering": {
+      "image": "",
+      "checkedAt": "2026-04-03T14:00:01.375767+00:00"
     }
   }
 }
