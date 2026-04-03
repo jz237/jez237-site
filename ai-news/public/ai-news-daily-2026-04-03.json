@@ -1,6 +1,6 @@
 {
   "date": "2026-04-03",
-  "updatedAt": "2026-04-03T19:50:55.180549+00:00",
+  "updatedAt": "2026-04-03T20:52:22.174735+00:00",
   "items": [
     {
       "title": "Microsoft just shipped the clearest signal yet that it is building an AI empire without OpenAI",
@@ -12,12 +12,12 @@
       "summary": "Six months after renegotiating the contract that once barred it from independently pursuing frontier AI, Microsoft has released three in-house models that directly challenge the partner it spent $13 billion cultivating. MAI-Transcribe-1, MAI-Voice-1, and MAI-Image-2 are now available in Microsoft Foundry, and they do not carry OpenAI’s name anywhere on the label. The models are [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/microsoft-mai-models-openai-independence.png",
       "published": "2026-04-03T19:06:13+00:00",
-      "firstSeen": "2026-04-03T20:00:01.647678+00:00",
-      "lastSeen": "2026-04-03T20:00:01.647678+00:00",
+      "firstSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1229
+      "score": 14.0972
     },
     {
       "title": "Can JavaScript Escape a CSP Meta Tag Inside an Iframe?",
@@ -30,10 +30,10 @@
       "image": "",
       "published": "2026-04-03T16:05:00+00:00",
       "firstSeen": "2026-04-03T16:55:41.682247+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6808
+      "score": 8.653
     },
     {
       "title": "Anthropic just paid $400 million for a startup with fewer than 10 people",
@@ -46,10 +46,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dario-Amodei-anthropic-acquires-Coefficint-Bio.png",
       "published": "2026-04-03T14:50:18+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.8071
+      "score": 7.7802
     },
     {
       "title": "TII Releases Falcon Perception: A 0.6B-Parameter Early-Fusion Transformer for Open-Vocabulary Grounding and Segmentation from Natural Language Prompts",
@@ -62,42 +62,90 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-03-at-1.47.18-AM-1-150x150.png",
       "published": "2026-04-03T08:49:34+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5299
+      "score": 6.5072
     },
     {
-      "title": "OpenAI's Fidji Simo Is Taking Medical Leave Amid an Executive Shake-Up",
+      "title": "OpenAI’s AGI boss is taking a leave of absence",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/906965/openais-agi-boss-is-taking-a-leave-of-absence",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "OpenAI is undergoing another round of C-suite changes, according to an internal memo viewed by The Verge. Fidji Simo, OpenAI's CEO of AGI deployment - who was until recently the company's CEO of Applications - says in the memo that she will be stepping away on medical leave \"for the next several weeks\" due to [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1239231852.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
+      "published": "2026-04-03T20:22:59+00:00",
+      "firstSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.4451
+    },
+    {
+      "title": "OpenAI executive shuffle includes new role for COO Brad Lightcap to lead ‘special projects’",
+      "url": "https://techcrunch.com/2026/04/03/openai-executive-shuffle-new-roles-coo-brad-lightcap-fidji-simo-kate-rouch",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In addition to Lightcap's new role, OpenAI CMO Kate Rouch will be stepping away from the company to focus on cancer recovery, with a plan to return when her health allows.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/brad-lightcap-GettyImages-2147824375-1.jpg?w=1024",
+      "published": "2026-04-03T20:35:34+00:00",
+      "firstSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2815
+    },
+    {
+      "title": "Anthropic buys biotech startup Coefficient Bio in $400M deal: reports",
+      "url": "https://techcrunch.com/2026/04/03/anthropic-buys-biotech-startup-coefficient-bio-in-400m-deal-reports",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic has purchased the stealth biotech AI startup Coefficient Bio in a $400 million stock deal, according to The Information and Eric Newcomer.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200%2C800",
+      "published": "2026-04-03T20:28:40+00:00",
+      "firstSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.278
+    },
+    {
+      "title": "Anthropic ramps up its political activities with a new PAC",
+      "url": "https://techcrunch.com/2026/04/03/anthropic-ramps-up-its-political-activities-with-a-new-pac",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "With the midterms right around the corner, the new group is positioned to back candidates who support the AI company's policy agenda.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
+      "published": "2026-04-03T20:22:18+00:00",
+      "firstSeen": "2026-04-03T20:52:22.174735+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2748
+    },
+    {
+      "title": "OpenAI’s Fidji Simo Is Taking Medical Leave Amid an Executive Shake-Up",
       "url": "https://www.wired.com/story/openais-fidji-simo-is-taking-a-leave-of-absence",
       "source": "Wired AI",
       "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "The company is undergoing major leadership restructuring as its CEO of applications goes on leave for “several weeks.”",
+      "summary": "The company is undergoing major leadership restructuring as its CEO of AGI deployment goes on leave for “several weeks.”",
       "image": "https://media.wired.com/photos/69d0149cf17585df8fd63f56/master/pass/Fidji-Leave-of-Absence-Business-2198337396.jpg",
       "published": "2026-04-03T19:38:35+00:00",
       "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.3837
-    },
-    {
-      "title": "Scaling Reasoning Tokens via RL and Parallel Thinking: Evidence From Competitive Programming",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-03T19:51:00.234925+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 5.2531
     },
     {
       "title": "IREX Launches Smarter, Faster Fire and Smoke AI Detection to Protect Communities and Critical Infrastructure",
@@ -110,10 +158,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/IREX-Launches-Smarte-Faster-Fire-and-Smoke-AI-Detection-.png",
       "published": "2026-04-03T13:41:16+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.877
+      "score": 4.851
     },
     {
       "title": "OpenAI buys TBPN, Silicon Valley’s favourite tech talk show, in its first media acquisition",
@@ -126,10 +174,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-has-acquired-TBPN.png",
       "published": "2026-04-03T08:29:53+00:00",
       "firstSeen": "2026-04-03T09:00:01.916572+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8525
+      "score": 4.83
     },
     {
       "title": "Tencent is building an enterprise empire on top of an Austrian developer’s open-source lobster",
@@ -142,74 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tencent-clawpro-openclaw-enterprise-ai-agents.png",
       "published": "2026-04-03T14:25:13+00:00",
       "firstSeen": "2026-04-03T14:59:31.465799+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
+      "lastSeen": "2026-04-03T20:52:22.174735+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.496
-    },
-    {
-      "title": "Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning",
-      "url": "https://www.marktechpost.com/2026/04/03/step-by-step-guide-to-build-an-end-to-end-model-optimization-pipeline-with-nvidia-model-optimizer-using-fastnas-pruning-and-fine-tuning",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build a complete end-to-end pipeline using NVIDIA Model Optimizer to train, prune, and fine-tune a deep learning model directly in Google Colab. We start by setting up the environment and preparing the CIFAR-10 dataset, then define a ResNet architecture and train it to establish a strong baseline. From there, we apply [&#8230;]\nThe post Step by Step Guide to Build an End-to-End Model Optimization Pipeline with NVIDIA Model Optimizer Using FastNAS Pruning and Fine-Tuning appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-1.png",
-      "published": "2026-04-03T07:48:18+00:00",
-      "firstSeen": "2026-04-03T08:00:01.228823+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3072
-    },
-    {
-      "title": "Google Vids Just Got a Major AI Upgrade — Here’s What’s New",
-      "url": "https://www.techrepublic.com/article/news-google-vids-ai-avatars-update",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google Vids adds AI avatar controls, custom music, and YouTube publishing, positioning itself as a powerful new competitor in AI video creation.\nThe post Google Vids Just Got a Major AI Upgrade — Here’s What’s New appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-04-03T18:58:56+00:00",
-      "firstSeen": "2026-04-03T19:50:55.180549+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2238
-    },
-    {
-      "title": "AI for Systems: Using LLMs to Optimize Database Query Execution",
-      "url": "https://www.together.ai/blog/using-llms-to-optimize-database-query-execution",
-      "source": "Together AI Blog",
-      "sourceUrl": "https://www.together.ai/blog/rss.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "New research shows LLMs can optimize database query execution plans—achieving up to 4.78x speedups by correcting the cardinality estimation errors that statistical heuristics miss.",
-      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69cece32f241afeefe0b6f8b_20260331_Query_Execution_Plan_Plan_1200x630.jpg",
-      "published": "2026-04-03T00:00:00+00:00",
-      "firstSeen": "2026-04-03T17:50:57.095298+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.1538
-    },
-    {
-      "title": "How NinjaOne went from scrappy startup to $5B challenger in the race to unify IT operations",
-      "url": "https://thenextweb.com/news/ninjaone-unified-it-operations",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sal Sferlazza has a habit of building companies that get acquired. Before NinjaOne, the serial founder sold four startups in succession: a gaming studio to NCSoft, a data-protection firm to SonicWall, a network management company to Quest Software, and a file-sync service to eFolder. Each one solved a narrow IT problem. Each one got swallowed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/NinjaOne-Editorial.png",
-      "published": "2026-04-03T15:12:13+00:00",
-      "firstSeen": "2026-04-03T16:00:02.088714+00:00",
-      "lastSeen": "2026-04-03T19:50:55.180549+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1168
+      "score": 4.4695
     }
   ],
   "errors": []
