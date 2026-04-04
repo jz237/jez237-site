@@ -1,6 +1,6 @@
 {
   "date": "2026-04-04",
-  "updatedAt": "2026-04-04T07:00:01.517161+00:00",
+  "updatedAt": "2026-04-04T07:14:39.202353+00:00",
   "items": [
     {
       "title": "Anthropic is having a moment in the private markets; SpaceX could spoil the party",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2148589533.jpg?resize=1200%2C800",
       "published": "2026-04-04T01:31:00+00:00",
       "firstSeen": "2026-04-04T02:00:02.086116+00:00",
-      "lastSeen": "2026-04-04T07:00:01.517161+00:00",
+      "lastSeen": "2026-04-04T07:14:39.202353+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.2346
+      "score": 8.2282
     },
     {
       "title": "How to Build Production-Ready Agentic Systems with Z.AI GLM-5 Using Thinking Mode, Tool Calling, Streaming, and Multi-Turn Workflows",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-7-1024x731.png",
       "published": "2026-04-04T03:06:56+00:00",
       "firstSeen": "2026-04-04T03:13:22.360124+00:00",
-      "lastSeen": "2026-04-04T07:00:01.517161+00:00",
+      "lastSeen": "2026-04-04T07:14:39.202353+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.8075
+      "score": 4.8008
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -43,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-04T07:00:05.853868+00:00",
+      "published": "2026-04-04T07:14:42.856630+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-04T07:00:01.517161+00:00",
+      "lastSeen": "2026-04-04T07:14:39.202353+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-04-04T02:20:17+00:00",
       "firstSeen": "2026-04-04T03:00:01.744440+00:00",
-      "lastSeen": "2026-04-04T07:00:01.517161+00:00",
+      "lastSeen": "2026-04-04T07:14:39.202353+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1564
+      "score": 2.1499
     }
   ],
   "errors": []
