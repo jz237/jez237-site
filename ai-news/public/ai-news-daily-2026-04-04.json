@@ -1,6 +1,6 @@
 {
   "date": "2026-04-04",
-  "updatedAt": "2026-04-04T18:00:01.250267+00:00",
+  "updatedAt": "2026-04-04T17:46:30.378910+00:00",
   "items": [
     {
       "title": "Anthropic says Claude Code subscribers will need to pay extra for OpenClaw usage",
@@ -13,10 +13,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-1396827010.jpg?resize=1200%2C839",
       "published": "2026-04-04T16:32:22+00:00",
       "firstSeen": "2026-04-04T16:51:11.796516+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.7463
+      "score": 13.7529
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -28,12 +28,12 @@
       "summary": "This National Robotics Week, NVIDIA is highlighting the breakthroughs that are bringing AI into the physical world — as well as the growing wave of robots transforming industries, from agricultural and manufacturing to energy and beyond. Advancements in robot learning, simulation and foundation models are accelerating development, enabling robots to move from training in virtual [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-04T17:00:59+00:00",
-      "firstSeen": "2026-04-04T18:00:01.250267+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "firstSeen": "2026-04-04T17:46:30.378910+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2603
+      "score": 13.2671
     },
     {
       "title": "Netflix AI Team Just Open-Sourced VOID: an AI Model That Erases Objects From Videos — Physics and All",
@@ -46,11 +46,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-04-at-2.02.50-AM-1-150x150.png",
       "published": "2026-04-04T09:03:26+00:00",
       "firstSeen": "2026-04-04T09:52:41.765411+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.378
+      "score": 11.3834
     },
     {
       "title": "Hackers Are Posting the Claude Code Leak With Bonus Malware",
@@ -63,10 +63,10 @@
       "image": "https://media.wired.com/photos/69d03b9326dd2d3a7ba902f2/master/pass/security_roundup_claude_GettyImages-2181575875.jpg",
       "published": "2026-04-04T10:30:00+00:00",
       "firstSeen": "2026-04-04T10:50:54.833455+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0831
+      "score": 8.0887
     },
     {
       "title": "Anthropic is having a moment in the private markets; SpaceX could spoil the party",
@@ -79,10 +79,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2148589533.jpg?resize=1200%2C800",
       "published": "2026-04-04T01:31:00+00:00",
       "firstSeen": "2026-04-04T02:00:02.086116+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.9859
+      "score": 7.9903
     },
     {
       "title": "How to Build Production-Ready Agentic Systems with Z.AI GLM-5 Using Thinking Mode, Tool Calling, Streaming, and Multi-Turn Workflows",
@@ -95,10 +95,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-7-1024x731.png",
       "published": "2026-04-04T03:06:56+00:00",
       "firstSeen": "2026-04-04T03:13:22.360124+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.5475
+      "score": 4.5521
     },
     {
       "title": "Really, you made this without AI? Prove it",
@@ -111,10 +111,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Human-made-ai-free-labels-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-04T13:00:00+00:00",
       "firstSeen": "2026-04-04T13:18:59.987684+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2173
+      "score": 2.2234
     },
     {
       "title": "Keeper Security brings zero-trust database access to its PAM platform with KeeperDB",
@@ -127,10 +127,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Keeper-Security-Article.png",
       "published": "2026-04-04T14:15:31+00:00",
       "firstSeen": "2026-04-04T15:46:18.441280+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0414
+      "score": 2.0476
     },
     {
       "title": "NinjaOne offers a free trial of the IT management platform trusted by 35,000 organisations",
@@ -143,10 +143,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/NinjaOne-Deal.png",
       "published": "2026-04-04T14:04:56+00:00",
       "firstSeen": "2026-04-04T15:46:18.441280+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0366
+      "score": 2.0428
     },
     {
       "title": "Hackers breached the European Commission by poisoning the security tool it used to protect itself",
@@ -159,10 +159,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/european-commission-breach-trivy-supply-chain.png",
       "published": "2026-04-04T13:45:16+00:00",
       "firstSeen": "2026-04-04T14:49:26.415146+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0276
+      "score": 2.0338
     },
     {
       "title": "Nvidia’s $2 billion Marvell bet is not an investment. It is a toll booth.",
@@ -175,10 +175,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/nvidia-marvell-nvlink-fusion-ecosystem-lock-in.png",
       "published": "2026-04-04T13:14:58+00:00",
       "firstSeen": "2026-04-04T14:49:26.415146+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.014
+      "score": 2.0201
     },
     {
       "title": "Quoting Kyle Daigle",
@@ -191,10 +191,10 @@
       "image": "",
       "published": "2026-04-04T02:20:17+00:00",
       "firstSeen": "2026-04-04T03:00:01.744440+00:00",
-      "lastSeen": "2026-04-04T18:00:01.250267+00:00",
+      "lastSeen": "2026-04-04T17:46:30.378910+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9019
+      "score": 1.9064
     }
   ],
   "errors": []
