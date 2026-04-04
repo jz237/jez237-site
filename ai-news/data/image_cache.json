@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-04T17:46:30.378910+00:00",
+  "updatedAt": "2026-04-04T18:59:37.808026+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2724,6 +2724,10 @@
     "https://techcrunch.com/2026/04/04/anthropic-says-claude-code-subscribers-will-need-to-pay-extra-for-openclaw-support": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-1396827010.jpg?resize=1200,839",
       "checkedAt": "2026-04-04T16:51:11.796516+00:00"
+    },
+    "https://www.theverge.com/entertainment/907111/murphy-campbell-folk-music-ai-copyright": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/0040566978_25.jpg?quality=90&amp;strip=all&amp;crop=0,11.156428956539,100,41.810022438295",
+      "checkedAt": "2026-04-04T18:59:37.808026+00:00"
     }
   }
 }
