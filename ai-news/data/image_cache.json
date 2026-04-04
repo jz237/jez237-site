@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-04T03:00:01.744440+00:00",
+  "updatedAt": "2026-04-04T03:13:22.360124+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2712,6 +2712,10 @@
     "https://simonwillison.net/2026/Apr/4/kyle-daigle": {
       "image": "",
       "checkedAt": "2026-04-04T03:00:01.744440+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/03/how-to-build-production-ready-agentic-systems-with-z-ai-glm-5-using-thinking-mode-tool-calling-streaming-and-multi-turn-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-7-1024x731.png",
+      "checkedAt": "2026-04-04T03:13:22.360124+00:00"
     }
   }
 }
