@@ -1,6 +1,6 @@
 {
   "date": "2026-04-05",
-  "updatedAt": "2026-04-05T15:00:01.230938+00:00",
+  "updatedAt": "2026-04-05T14:51:30.113263+00:00",
   "items": [
     {
       "title": "research-llm-apis 2026-04-04",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-04-05T00:32:11+00:00",
       "firstSeen": "2026-04-05T01:00:01.986124+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.626
+      "score": 12.629
     },
     {
       "title": "scan-for-secrets 0.1",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-04-05T03:27:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7882
+      "score": 10.7913
     },
     {
       "title": "I let Gemini in Google Maps plan my day and it went surprisingly well",
@@ -44,11 +44,11 @@
       "summary": "You may be familiar with Gemini as the thing that's in every Google service you use - whether you want it or not. While it's been a constant, sometimes unwelcome presence in Gmail for at least the past year, it's a relatively new addition to Maps. And you know what? It's kind of great. To [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/IMG_0562.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
       "published": "2026-04-05T14:00:00+00:00",
-      "firstSeen": "2026-04-05T15:00:01.230938+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "firstSeen": "2026-04-05T14:51:30.113263+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3299
+      "score": 8.3341
     },
     {
       "title": "LinkedIn is secretly scanning your browser for 6,000 extensions, and you weren’t told",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/linkedin-browsergate-extension-scanning-privacy-fingerprint.png",
       "published": "2026-04-05T11:35:47+00:00",
       "firstSeen": "2026-04-05T13:00:01.952054+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5508
+      "score": 6.5547
     },
     {
       "title": "Inside the Creative Artificial Intelligence (AI) Stack: Where Human Vision and Artificial Intelligence Meet to Design Future Fashion",
@@ -77,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-8.png",
       "published": "2026-04-05T08:45:37+00:00",
       "firstSeen": "2026-04-05T08:58:35.896153+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5449
+      "score": 5.5486
     },
     {
       "title": "Microsoft calls Copilot ‘entertainment only’ while charging $30 a month for it",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/microsoft-copilot-entertainment-only-disclaimer-adoption.png",
       "published": "2026-04-05T10:58:54+00:00",
       "firstSeen": "2026-04-05T11:41:53.789034+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0338
+      "score": 5.0377
     },
     {
       "title": "scan-for-secrets 0.2",
@@ -109,10 +109,10 @@
       "image": "",
       "published": "2026-04-05T04:07:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8031
+      "score": 4.8063
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -123,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-05T15:00:16.484832+00:00",
+      "published": "2026-04-05T14:51:34.738858+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -141,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Europes-top-funding-rounds-this-week-30-March-–-5-April-.png",
       "published": "2026-04-05T08:29:40+00:00",
       "firstSeen": "2026-04-05T09:53:56.232337+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9681
+      "score": 3.9718
     },
     {
       "title": "Grammarly’s sloppelganger saga",
@@ -157,10 +157,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268400_Grammarlys_sloppelganger_saga_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-05T12:00:00+00:00",
       "firstSeen": "2026-04-05T13:00:01.952054+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.672
+      "score": 3.676
     },
     {
       "title": "scan-for-secrets 0.1.1",
@@ -173,10 +173,10 @@
       "image": "",
       "published": "2026-04-05T03:39:33+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3927
+      "score": 3.3959
     },
     {
       "title": "Meet ‘AutoAgent’: The Open-Source Library That Lets an AI Engineer and Optimize Its Own Agent Harness Overnight",
@@ -189,10 +189,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-6-150x150.png",
       "published": "2026-04-05T09:21:16+00:00",
       "firstSeen": "2026-04-05T09:53:56.232337+00:00",
-      "lastSeen": "2026-04-05T15:00:01.230938+00:00",
+      "lastSeen": "2026-04-05T14:51:30.113263+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.1103
+      "score": 3.114
     }
   ],
   "errors": []
