@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-05T19:46:39.965478+00:00",
+  "updatedAt": "2026-04-05T20:48:54.433731+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2772,6 +2772,10 @@
     "https://techcrunch.com/2026/04/05/copilot-is-for-entertainment-purposes-only-according-to-microsofts-terms-of-service": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/04/GettyImages-2041281128-e1712563728365.jpg?resize=1200,676",
       "checkedAt": "2026-04-05T19:00:01.483743+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/05/how-to-build-a-netflix-void-video-object-removal-and-inpainting-pipeline-with-cogvideox-custom-prompting-and-end-to-end-sample-inference": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-10.png",
+      "checkedAt": "2026-04-05T20:48:54.433731+00:00"
     }
   }
 }
