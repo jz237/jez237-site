@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-05T03:35:14.226818+00:00",
+  "updatedAt": "2026-04-05T05:00:01.167946+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2732,6 +2732,18 @@
     "https://simonwillison.net/2026/Apr/5/research-llm-apis": {
       "image": "",
       "checkedAt": "2026-04-05T01:00:01.986124+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/5/scan-for-secrets": {
+      "image": "",
+      "checkedAt": "2026-04-05T05:00:01.167946+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/5/scan-for-secrets-2": {
+      "image": "",
+      "checkedAt": "2026-04-05T05:00:01.167946+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/5/scan-for-secrets-3": {
+      "image": "",
+      "checkedAt": "2026-04-05T05:00:01.167946+00:00"
     }
   }
 }
