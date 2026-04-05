@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-05T14:51:30.113263+00:00",
+  "updatedAt": "2026-04-05T15:46:16.316411+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2756,6 +2756,14 @@
     "https://www.theverge.com/tech/907015/gemini-google-maps-hands-on": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/IMG_0562.jpg?quality=90&amp;strip=all&amp;crop=0%2C15.095986038394%2C100%2C69.808027923211&amp;w=1200",
       "checkedAt": "2026-04-05T14:51:30.113263+00:00"
+    },
+    "https://techcrunch.com/2026/04/05/can-orbital-data-centers-help-justify-a-massive-valuation-for-spacex": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2240506392.jpg?resize=1200,800",
+      "checkedAt": "2026-04-05T15:46:16.316411+00:00"
+    },
+    "https://techcrunch.com/2026/04/05/japan-is-proving-experimental-physical-ai-is-ready-for-the-real-world": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/09/GettyImages-965917342.jpg?resize=1200,779",
+      "checkedAt": "2026-04-05T15:46:16.316411+00:00"
     }
   }
 }
