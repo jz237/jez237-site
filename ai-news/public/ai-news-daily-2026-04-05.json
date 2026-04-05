@@ -1,6 +1,6 @@
 {
   "date": "2026-04-05",
-  "updatedAt": "2026-04-05T07:00:01.681511+00:00",
+  "updatedAt": "2026-04-05T08:00:01.279735+00:00",
   "items": [
     {
       "title": "research-llm-apis 2026-04-04",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-04-05T00:32:11+00:00",
       "firstSeen": "2026-04-05T01:00:01.986124+00:00",
-      "lastSeen": "2026-04-05T07:00:01.681511+00:00",
+      "lastSeen": "2026-04-05T08:00:01.279735+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.8092
+      "score": 12.784
     },
     {
       "title": "scan-for-secrets 0.1",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-04-05T03:27:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T07:00:01.681511+00:00",
+      "lastSeen": "2026-04-05T08:00:01.279735+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9868
+      "score": 10.9595
     },
     {
       "title": "scan-for-secrets 0.2",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-04-05T04:07:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T07:00:01.681511+00:00",
+      "lastSeen": "2026-04-05T08:00:01.279735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0054
+      "score": 4.9776
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -59,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-05T07:00:08.273632+00:00",
+      "published": "2026-04-05T08:00:05.922887+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-05T07:00:01.681511+00:00",
+      "lastSeen": "2026-04-05T08:00:01.279735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -77,10 +77,10 @@
       "image": "",
       "published": "2026-04-05T03:39:33+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T07:00:01.681511+00:00",
+      "lastSeen": "2026-04-05T08:00:01.279735+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5925
+      "score": 3.565
     }
   ],
   "errors": []
