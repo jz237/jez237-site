@@ -1,6 +1,6 @@
 {
   "date": "2026-04-05",
-  "updatedAt": "2026-04-05T03:35:14.226818+00:00",
+  "updatedAt": "2026-04-05T05:00:01.167946+00:00",
   "items": [
     {
       "title": "research-llm-apis 2026-04-04",
@@ -13,10 +13,58 @@
       "image": "",
       "published": "2026-04-05T00:32:11+00:00",
       "firstSeen": "2026-04-05T01:00:01.986124+00:00",
-      "lastSeen": "2026-04-05T03:35:14.226818+00:00",
+      "lastSeen": "2026-04-05T05:00:01.167946+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.9006
+      "score": 12.8617
+    },
+    {
+      "title": "scan-for-secrets 0.1",
+      "url": "https://simonwillison.net/2026/Apr/5/scan-for-secrets-3",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: scan-for-secrets 0.1\n    I like publishing transcripts of local Claude Code sessions using my claude-code-transcripts tool but I'm often paranoid that one of my API keys or similar secrets might inadvertently be revealed in the detailed log files.\nI built this new Python scanning tool to help reassure me. You can feed it secrets and have it scan for them in a specified directory:\nuvx scan-for-secrets $OPENAI_API_KEY -d logs-to-publish/\n\nIf you leave off the -d it defaults to the current directory.\nIt doesn't just scan for the literal secrets - it also scans for common encodings of tho",
+      "image": "",
+      "published": "2026-04-05T03:27:13+00:00",
+      "firstSeen": "2026-04-05T05:00:01.167946+00:00",
+      "lastSeen": "2026-04-05T05:00:01.167946+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.0437
+    },
+    {
+      "title": "scan-for-secrets 0.2",
+      "url": "https://simonwillison.net/2026/Apr/5/scan-for-secrets",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: scan-for-secrets 0.2\n    \nCLI tool now streams results as they are found rather than waiting until the end, which is better for large directories.\n-d/--directory option can now be used multiple times to scan multiple directories.\nNew -f/--file option for specifying one or more individual files to scan.\nNew scan_directory_iter(), scan_file() and scan_file_iter() Python API functions.\nNew -v/--verbose option which shows each directory that is being scanned.",
+      "image": "",
+      "published": "2026-04-05T04:07:13+00:00",
+      "firstSeen": "2026-04-05T05:00:01.167946+00:00",
+      "lastSeen": "2026-04-05T05:00:01.167946+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0634
+    },
+    {
+      "title": "scan-for-secrets 0.1.1",
+      "url": "https://simonwillison.net/2026/Apr/5/scan-for-secrets-2",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: scan-for-secrets 0.1.1\n    \n\nAdded documentation of the escaping schemes that are also scanned.\nRemoved unnecessary repr escaping scheme, which was already covered by json.",
+      "image": "",
+      "published": "2026-04-05T03:39:33+00:00",
+      "firstSeen": "2026-04-05T05:00:01.167946+00:00",
+      "lastSeen": "2026-04-05T05:00:01.167946+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.6498
     },
     {
       "title": "The complete guide to estimating VRAM, RAM, storage, and compute for self-hosting LLMs. Covers quantization, context length, KV cache, multi-GPU setups, and practical GPU recommendations for every budget.",
@@ -27,9 +75,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-05T03:35:32.898121+00:00",
+      "published": "2026-04-05T05:00:05.105760+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-05T03:35:14.226818+00:00",
+      "lastSeen": "2026-04-05T05:00:01.167946+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.44
