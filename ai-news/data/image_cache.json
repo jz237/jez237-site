@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-05T13:19:42.855845+00:00",
+  "updatedAt": "2026-04-05T15:00:01.230938+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2752,6 +2752,10 @@
     "https://www.theverge.com/column/906606/grammarly-expert-review-ai-saga": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268400_Grammarlys_sloppelganger_saga_CVirginia.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-05T13:00:01.952054+00:00"
+    },
+    "https://www.theverge.com/tech/907015/gemini-google-maps-hands-on": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/IMG_0562.jpg?quality=90&amp;strip=all&amp;crop=0%2C15.095986038394%2C100%2C69.808027923211&amp;w=1200",
+      "checkedAt": "2026-04-05T15:00:01.230938+00:00"
     }
   }
 }
