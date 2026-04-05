@@ -1,6 +1,6 @@
 {
   "date": "2026-04-05",
-  "updatedAt": "2026-04-05T08:58:35.896153+00:00",
+  "updatedAt": "2026-04-05T10:00:01.253325+00:00",
   "items": [
     {
       "title": "research-llm-apis 2026-04-04",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-04-05T00:32:11+00:00",
       "firstSeen": "2026-04-05T01:00:01.986124+00:00",
-      "lastSeen": "2026-04-05T08:58:35.896153+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7601
+      "score": 12.7357
     },
     {
       "title": "scan-for-secrets 0.1",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-04-05T03:27:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T08:58:35.896153+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9335
+      "score": 10.9071
     },
     {
       "title": "Inside the Creative Artificial Intelligence (AI) Stack: Where Human Vision and Artificial Intelligence Meet to Design Future Fashion",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-8.png",
       "published": "2026-04-05T08:45:37+00:00",
       "firstSeen": "2026-04-05T08:58:35.896153+00:00",
-      "lastSeen": "2026-04-05T08:58:35.896153+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7134
+      "score": 5.6828
     },
     {
       "title": "scan-for-secrets 0.2",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-04-05T04:07:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T08:58:35.896153+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9512
+      "score": 4.9242
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -75,12 +75,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-05T08:58:44.474400+00:00",
+      "published": "2026-04-05T10:00:05.623622+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-05T08:58:35.896153+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
+    },
+    {
+      "title": "Recap: Europe’s top funding rounds this week (30 March – 5 April)",
+      "url": "https://thenextweb.com/news/europes-top-funding-rounds-30-march-5-april",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A week bookended by Mistral’s $830 million debt raise and a €1.1 million workpod pre-seed is a useful reminder of how wide the band of European ambition now runs. The dominant theme is not a single technology but a single instinct: build the infrastructure layer first, whether that means sovereign AI compute, quantum hardware ready [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Europes-top-funding-rounds-this-week-30-March-–-5-April-.png",
+      "published": "2026-04-05T08:29:40+00:00",
+      "firstSeen": "2026-04-05T10:00:01.253325+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1049
     },
     {
       "title": "scan-for-secrets 0.1.1",
@@ -93,10 +109,26 @@
       "image": "",
       "published": "2026-04-05T03:39:33+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T08:58:35.896153+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.539
+      "score": 3.5123
+    },
+    {
+      "title": "Meet ‘AutoAgent’: The Open-Source Library That Lets an AI Engineer and Optimize Its Own Agent Harness Overnight",
+      "url": "https://www.marktechpost.com/2026/04/05/meet-autoagent-the-open-source-library-that-lets-an-ai-engineer-and-optimize-its-own-agent-harness-overnight",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "There&#8217;s a particular kind of tedium that every AI engineer knows intimately: the prompt-tuning loop. You write a system prompt, run your agent against a benchmark, read the failure traces, tweak the prompt, add a tool, rerun. Repeat this a few dozen times and you might move the needle. It&#8217;s grunt work dressed up in [&#8230;]\nThe post Meet &#8216;AutoAgent&#8217;: The Open-Source Library That Lets an AI Engineer and Optimize Its Own Agent Harness Overnight appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-6-150x150.png",
+      "published": "2026-04-05T09:21:16+00:00",
+      "firstSeen": "2026-04-05T10:00:01.253325+00:00",
+      "lastSeen": "2026-04-05T10:00:01.253325+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 3.2504
     }
   ],
   "errors": []
