@@ -1,6 +1,6 @@
 {
   "date": "2026-04-06",
-  "updatedAt": "2026-04-06T11:57:36.253517+00:00",
+  "updatedAt": "2026-04-06T13:43:47.983132+00:00",
   "items": [
     {
       "title": "Cleanup Claude Code Paste",
@@ -13,10 +13,10 @@
       "image": "https://static.simonwillison.net/static/2026/claude-code-cleanup.jpg",
       "published": "2026-04-06T02:55:23+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1458
+      "score": 9.1047
     },
     {
       "title": "RightNow AI Releases AutoKernel: An Open-Source Framework that Applies an Autonomous Agent Loop to GPU Kernel Optimization for Arbitrary PyTorch Models",
@@ -29,10 +29,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-1.19.54-AM-1-150x150.png",
       "published": "2026-04-06T08:20:19+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5147
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 5.467
+    },
+    {
+      "title": "OpenAI calls for robot taxes, a public wealth fund, and a four-day week",
+      "url": "https://thenextweb.com/news/openai-robot-taxes-wealth-fund-superintelligence-policy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sam Altman’s 13-page policy blueprint, ‘Industrial Policy for the Intelligence Age,’ proposes auto-triggering safety nets, containment playbooks for rogue AI, and direct citizen dividends from AI-driven growth. He told Axios it is a starting point, not a prescription. OpenAI has published a 13-page policy document calling for sweeping economic reforms to prepare for what it [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
+      "published": "2026-04-06T13:05:09+00:00",
+      "firstSeen": "2026-04-06T13:43:47.983132+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1305
     },
     {
       "title": "Salesforce gives Slackbot 30 new AI powers, and a strategy that looks a lot like Microsoft’s",
@@ -45,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/slack-slackbot-30-ai-features-agentic-1.png",
       "published": "2026-04-06T08:13:10+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8414
+      "score": 4.7939
     },
     {
       "title": "LiME: Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning",
@@ -59,9 +75,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-06T11:57:40.137476+00:00",
+      "published": "2026-04-06T13:43:52.449715+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -77,10 +93,10 @@
       "image": "",
       "published": "2026-04-06T08:37:49+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2528
+      "score": 4.2047
     },
     {
       "title": "scan-for-secrets 0.3",
@@ -93,10 +109,10 @@
       "image": "",
       "published": "2026-04-06T02:59:28+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4474
+      "score": 3.4063
     },
     {
       "title": "Google AI Edge Gallery",
@@ -109,10 +125,10 @@
       "image": "https://static.simonwillison.net/static/2026/gemini-agent-skills.jpg",
       "published": "2026-04-06T05:18:26+00:00",
       "firstSeen": "2026-04-06T06:05:27.839501+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2044
+      "score": 3.1605
     },
     {
       "title": "datasette-ports 0.2",
@@ -125,10 +141,10 @@
       "image": "",
       "published": "2026-04-06T03:25:43+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7579
+      "score": 2.7163
     },
     {
       "title": "datasette-ports 0.1",
@@ -141,10 +157,26 @@
       "image": "",
       "published": "2026-04-06T00:23:55+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6878
+      "score": 2.6496
+    },
+    {
+      "title": "Spain’s Xoople raises $130 million Series B to map the Earth for AI",
+      "url": "https://techcrunch.com/2026/04/06/spains-xoople-raises-130-million-series-b-to-map-the-earth-for-ai",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The company is also announcing a deal with L3Harris to build the sensors for Xoople's spacecraft.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Xoople_Founders-May2024_APPROVED-FOR-PUBLISHING-1.jpeg?resize=1200%2C801",
+      "published": "2026-04-06T13:00:00+00:00",
+      "firstSeen": "2026-04-06T13:43:47.983132+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2679
     },
     {
       "title": "AI is changing how small online sellers decide what to make",
@@ -157,42 +189,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/small-biz-suppliers2.jpg?resize=1200%2C600",
       "published": "2026-04-06T11:00:00+00:00",
       "firstSeen": "2026-04-06T11:57:36.253517+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
+      "lastSeen": "2026-04-06T13:43:47.983132+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2611
-    },
-    {
-      "title": "Industrial policy for the Intelligence Age",
-      "url": "https://openai.com/index/industrial-policy-for-the-intelligence-age",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Explore our ambitious, people-first industrial policy ideas for the AI era—focused on expanding opportunity, sharing prosperity, and building resilient institutions as advanced intelligence evolves.",
-      "image": "",
-      "published": "2026-04-06T02:30:00+00:00",
-      "firstSeen": "2026-04-06T11:10:40.143703+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2458
-    },
-    {
-      "title": "The Ridiculously Nerdy Intel Bet That Could Rake in Billions",
-      "url": "https://www.wired.com/story/why-chip-packaging-could-decide-the-next-phase-of-the-ai-boom",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Advanced chip packaging is suddenly at the center of the AI boom. Intel is going all in.",
-      "image": "https://media.wired.com/photos/69d0010ebd20ea771b0078c1/master/pass/Intel-Copackaging-Business-DSC01068.jpg",
-      "published": "2026-04-06T09:00:00+00:00",
-      "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T11:57:36.253517+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2032
+      "score": 2.2097
     }
   ],
   "errors": []
