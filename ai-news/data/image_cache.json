@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-06T09:21:38.497180+00:00",
+  "updatedAt": "2026-04-06T11:10:40.143703+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2800,6 +2800,10 @@
     "https://www.techrepublic.com/article/chaton-ai-assistant-premium-subscription": {
       "image": "",
       "checkedAt": "2026-04-06T09:21:38.497180+00:00"
+    },
+    "https://openai.com/index/industrial-policy-for-the-intelligence-age": {
+      "image": "",
+      "checkedAt": "2026-04-06T11:10:40.143703+00:00"
     }
   }
 }
