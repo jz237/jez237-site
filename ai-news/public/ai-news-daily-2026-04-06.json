@@ -1,6 +1,6 @@
 {
   "date": "2026-04-06",
-  "updatedAt": "2026-04-06T03:37:16.746659+00:00",
+  "updatedAt": "2026-04-06T06:05:27.839501+00:00",
   "items": [
     {
       "title": "Cleanup Claude Code Paste",
@@ -13,10 +13,10 @@
       "image": "https://static.simonwillison.net/static/2026/claude-code-cleanup.jpg",
       "published": "2026-04-06T02:55:23+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T06:05:27.839501+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3689
+      "score": 9.2973
     },
     {
       "title": "scan-for-secrets 0.3",
@@ -29,10 +29,26 @@
       "image": "",
       "published": "2026-04-06T02:59:28+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T06:05:27.839501+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6709
+      "score": 3.5992
+    },
+    {
+      "title": "Google AI Edge Gallery",
+      "url": "https://simonwillison.net/2026/Apr/6/google-ai-edge-gallery",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google AI Edge Gallery\nTerrible name, really great app: this is Google's official app for running their Gemma 4 models (the E2B and E4B sizes, plus some members of the Gemma 3 family) directly on your iPhone.\nIt works really well. The E2B model is a 2.54GB download and is both fast and genuinely useful.\nThe app also provides \"ask questions about images\" and audio transcription (up to 30s) with the two small Gemma 4 models, and has an interesting \"skills\" demo which demonstrates tool calling against eight different interactive widgets, each implemented as an HTML page (though sadly the source c",
+      "image": "https://static.simonwillison.net/static/2026/gemini-agent-skills.jpg",
+      "published": "2026-04-06T05:18:26+00:00",
+      "firstSeen": "2026-04-06T06:05:27.839501+00:00",
+      "lastSeen": "2026-04-06T06:05:27.839501+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3663
     },
     {
       "title": "datasette-ports 0.2",
@@ -45,10 +61,10 @@
       "image": "",
       "published": "2026-04-06T03:25:43+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T06:05:27.839501+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9841
+      "score": 2.9116
     },
     {
       "title": "datasette-ports 0.1",
@@ -61,13 +77,13 @@
       "image": "",
       "published": "2026-04-06T00:23:55+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T06:05:27.839501+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8958
+      "score": 2.8291
     },
     {
-      "title": "How to Calculate Hardware Requirements for Running LLMs Locally",
+      "title": "Not All Denoising Steps Are Equal: Model Scheduling for Faster Masked Diffusion Language Models",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -75,9 +91,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-06T03:37:20.901761+00:00",
+      "published": "2026-04-06T06:05:34.270978+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T06:05:27.839501+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
