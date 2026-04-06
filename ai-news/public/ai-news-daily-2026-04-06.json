@@ -1,6 +1,6 @@
 {
   "date": "2026-04-06",
-  "updatedAt": "2026-04-06T09:21:38.497180+00:00",
+  "updatedAt": "2026-04-06T11:10:40.143703+00:00",
   "items": [
     {
       "title": "Cleanup Claude Code Paste",
@@ -13,10 +13,10 @@
       "image": "https://static.simonwillison.net/static/2026/claude-code-cleanup.jpg",
       "published": "2026-04-06T02:55:23+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2099
+      "score": 9.1646
     },
     {
       "title": "RightNow AI Releases AutoKernel: An Open-Source Framework that Applies an Autonomous Agent Loop to GPU Kernel Optimization for Arbitrary PyTorch Models",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-1.19.54-AM-1-150x150.png",
       "published": "2026-04-06T08:20:19+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5892
+      "score": 5.5366
     },
     {
       "title": "Salesforce gives Slackbot 30 new AI powers, and a strategy that looks a lot like Microsoft’s",
@@ -45,10 +45,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/slack-slackbot-30-ai-features-agentic-1.png",
       "published": "2026-04-06T08:13:10+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9157
+      "score": 4.8632
+    },
+    {
+      "title": "LiME: Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-06T11:10:43.893783+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
     },
     {
       "title": "This $85 AI Assistant Aims to Consolidate Your Daily Work Tools",
@@ -61,10 +77,10 @@
       "image": "",
       "published": "2026-04-06T08:37:49+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3279
+      "score": 4.2748
     },
     {
       "title": "scan-for-secrets 0.3",
@@ -77,10 +93,10 @@
       "image": "",
       "published": "2026-04-06T02:59:28+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5116
+      "score": 3.4663
     },
     {
       "title": "Google AI Edge Gallery",
@@ -93,10 +109,10 @@
       "image": "https://static.simonwillison.net/static/2026/gemini-agent-skills.jpg",
       "published": "2026-04-06T05:18:26+00:00",
       "firstSeen": "2026-04-06T06:05:27.839501+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2729
+      "score": 3.2245
     },
     {
       "title": "datasette-ports 0.2",
@@ -109,10 +125,10 @@
       "image": "",
       "published": "2026-04-06T03:25:43+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8229
+      "score": 2.777
     },
     {
       "title": "datasette-ports 0.1",
@@ -125,26 +141,26 @@
       "image": "",
       "published": "2026-04-06T00:23:55+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7476
+      "score": 2.7054
     },
     {
-      "title": "Md Kowsher, Haris Mansoor, Nusrat Jahan Prottasha, Ozlem Garibay, Victor Zhu, Zhengping Ji, Chen Chen",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Industrial policy for the Intelligence Age",
+      "url": "https://openai.com/index/industrial-policy-for-the-intelligence-age",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-06T09:21:43.781712+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "summary": "Explore our ambitious, people-first industrial policy ideas for the AI era—focused on expanding opportunity, sharing prosperity, and building resilient institutions as advanced intelligence evolves.",
+      "image": "",
+      "published": "2026-04-06T02:30:00+00:00",
+      "firstSeen": "2026-04-06T11:10:40.143703+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.2644
     },
     {
       "title": "The Ridiculously Nerdy Intel Bet That Could Rake in Billions",
@@ -157,10 +173,10 @@
       "image": "https://media.wired.com/photos/69d0010ebd20ea771b0078c1/master/pass/Intel-Copackaging-Business-DSC01068.jpg",
       "published": "2026-04-06T09:00:00+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T09:21:38.497180+00:00",
+      "lastSeen": "2026-04-06T11:10:40.143703+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.279
+      "score": 2.2254
     }
   ],
   "errors": []
