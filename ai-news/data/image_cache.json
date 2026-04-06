@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-06T13:43:47.983132+00:00",
+  "updatedAt": "2026-04-06T15:59:02.982347+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2812,6 +2812,30 @@
     "https://techcrunch.com/2026/04/06/spains-xoople-raises-130-million-series-b-to-map-the-earth-for-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Xoople_Founders-May2024_APPROVED-FOR-PUBLISHING-1.jpeg?resize=1200,801",
       "checkedAt": "2026-04-06T13:43:47.983132+00:00"
+    },
+    "https://techcrunch.com/2026/04/06/openais-vision-for-the-ai-economy-public-wealth-funds-robot-taxes-and-a-four-day-work-week": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2226496284.jpg?w=1024",
+      "checkedAt": "2026-04-06T15:59:02.982347+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/907427/iran-openai-stargate-datacenter-uae-abu-dhabi-threat": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/Stargate-UAE-2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-06T15:59:02.982347+00:00"
+    },
+    "https://www.theverge.com/podcast/906727/cisco-ceo-chuck-robbins-data-centers-space-ai-elon-musk-interview": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/DCD-Chuck-Robbins-Cisco.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-06T15:59:02.982347+00:00"
+    },
+    "https://techcrunch.com/2026/04/06/startup-battlefield-200-applications-open-get-vc-access-techcrunch-coverage-and-100k": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/sb200_trophy.png?w=1080",
+      "checkedAt": "2026-04-06T15:59:02.982347+00:00"
+    },
+    "https://techcrunch.com/2026/04/06/how-to-use-chatgpt-apps-doordash-spotify-uber": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "checkedAt": "2026-04-06T15:59:02.982347+00:00"
+    },
+    "https://techcrunch.com/2026/04/06/massive-ticket-savings-of-up-to-500-this-week-for-techcrunch-disrupt-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200,675",
+      "checkedAt": "2026-04-06T15:59:02.982347+00:00"
     }
   }
 }
