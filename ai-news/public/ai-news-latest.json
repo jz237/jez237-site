@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-05T23:48:14.074655+00:00",
+  "updatedAt": "2026-04-06T03:37:16.746659+00:00",
   "items": [
     {
       "title": "How to Calculate Hardware Requirements for Running LLMs Locally",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-05T23:48:19.906378+00:00",
+      "published": "2026-04-06T03:37:20.901761+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "datasette-ports 0.2",
+      "url": "https://simonwillison.net/2026/Apr/6/datasette-ports-2",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-ports 0.2\n    \n\nNo longer requires Datasette - running uvx datasette-ports now works as well.\nInstalling it as a Datasette plugin continues to provide the datasette ports command.\n\n\n    \n        Tags: datasette",
+      "image": "",
+      "published": "2026-04-06T03:25:43+00:00",
+      "firstSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9841
+    },
+    {
+      "title": "scan-for-secrets 0.3",
+      "url": "https://simonwillison.net/2026/Apr/6/scan-for-secrets",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: scan-for-secrets 0.3\n    \n\nNew -r/--redact option which shows the list of matches, asks for confirmation and then replaces every match with REDACTED, taking escaping rules into account.\nNew Python function redact_file(file_path: str | Path, secrets: list[str], replacement: str = \"REDACTED\") -&gt; int.\n\n\n    \n        Tags: projects",
+      "image": "",
+      "published": "2026-04-06T02:59:28+00:00",
+      "firstSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.6709
+    },
+    {
+      "title": "Cleanup Claude Code Paste",
+      "url": "https://simonwillison.net/2026/Apr/6/cleanup-claude-code-paste",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Tool: Cleanup Claude Code Paste\n    Super-niche tool this. I sometimes copy prompts out of the Claude Code terminal app and they come out with a bunch of weird additional whitespace. This tool cleans that up.\n\n    \n        Tags: tools, claude-code",
+      "image": "https://static.simonwillison.net/static/2026/claude-code-cleanup.jpg",
+      "published": "2026-04-06T02:55:23+00:00",
+      "firstSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3689
+    },
+    {
+      "title": "datasette-ports 0.1",
+      "url": "https://simonwillison.net/2026/Apr/6/datasette-ports",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-ports 0.1\n    Another example of README-driven development, this time solving a problem that might be unique to me.\nI often find myself running a bunch of different Datasette instances with different databases and different in-development plugins, spreads across dozens of different terminal windows - enough that I frequently lose them!\nNow I can run this:\ndatasette install datasette-ports\ndatasette ports\n\nAnd get a list of every running instance that looks something like this:\nhttp://127.0.0.1:8333/ - v1.0a26\n  Databases: data\n  Plugins: datasette-enrichments, datasette-enri",
+      "image": "",
+      "published": "2026-04-06T00:23:55+00:00",
+      "firstSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8958
+    },
+    {
+      "title": "Eight years of wanting, three months of building with AI",
+      "url": "https://simonwillison.net/2026/Apr/5/building-with-ai",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Eight years of wanting, three months of building with AI\nLalit Maganti provides one of my favorite pieces of long-form writing on agentic engineering I've seen in ages.\nThey spent eight years thinking about and then three months building syntaqlite, which they describe as \"high-fidelity devtools that SQLite deserves\".\nThe goal was to provide fast, robust and comprehensive linting and verifying tools for SQLite, suitable for use in language servers and other development tools - a parser, formatter, and verifier for SQLite queries. I've found myself wanting this kind of thing in the past myself,",
+      "image": "",
+      "published": "2026-04-05T23:54:18+00:00",
+      "firstSeen": "2026-04-06T03:37:16.746659+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8821
     },
     {
       "title": "Quoting Chengpeng Mou",
@@ -28,10 +108,10 @@
       "image": "",
       "published": "2026-04-05T21:47:06+00:00",
       "firstSeen": "2026-04-05T22:49:52.802115+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.33
+      "score": 9.2254
     },
     {
       "title": "Meet MaxToki: The AI That Predicts How Your Cells Age — and What to Do About It",
@@ -44,11 +124,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-05-at-1.43.30-PM-1-150x150.png",
       "published": "2026-04-05T20:50:14+00:00",
       "firstSeen": "2026-04-05T21:46:07.218791+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.533
+      "score": 11.4311
     },
     {
       "title": "How to Build a Netflix VOID Video Object Removal and Inpainting Pipeline with CogVideoX, Custom Prompting, and End-to-End Sample Inference",
@@ -61,10 +141,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-10.png",
       "published": "2026-04-05T20:19:56+00:00",
       "firstSeen": "2026-04-05T20:48:54.433731+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5189
+      "score": 3.4184
     },
     {
       "title": "Syntaqlite Playground",
@@ -77,10 +157,10 @@
       "image": "https://static.simonwillison.net/static/2026/syntaqlite-playground.jpg",
       "published": "2026-04-05T19:32:59+00:00",
       "firstSeen": "2026-04-05T19:46:39.965478+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.5674
+      "score": 2.4691
     },
     {
       "title": "Copilot is ‘for entertainment purposes only,’ according to Microsoft’s terms of use",
@@ -93,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/04/GettyImages-2041281128-e1712563728365.jpg?resize=1200%2C676",
       "published": "2026-04-05T18:51:37+00:00",
       "firstSeen": "2026-04-05T19:00:01.483743+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1489
+      "score": 5.0524
     },
     {
       "title": "Monzo is shutting down its US operation, and its European banking licence explains why",
@@ -109,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/monzo-us-exit-europe-ipo.png",
       "published": "2026-04-05T17:57:44+00:00",
       "firstSeen": "2026-04-05T19:00:01.483743+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0852
+      "score": 2.9911
     },
     {
       "title": "Netflix owes Italian subscribers up to €500 after court rules its price hikes were illegal",
@@ -125,10 +205,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/netflix-italy-price-hikes-refund.png",
       "published": "2026-04-05T16:58:17+00:00",
       "firstSeen": "2026-04-05T17:47:25.521698+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6598
+      "score": 2.5683
     },
     {
       "title": "Vibe coding is flooding Apple’s App Store, and Apple is fighting back",
@@ -141,10 +221,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/vibe-coding-apple-app-store-surge-crackdown.png",
       "published": "2026-04-05T16:48:55+00:00",
       "firstSeen": "2026-04-05T17:47:25.521698+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7559
+      "score": 5.6648
     },
     {
       "title": "Suno is a music copyright nightmare",
@@ -157,10 +237,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STKB368_SUNO_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-05T16:00:00+00:00",
       "firstSeen": "2026-04-05T16:51:35.698136+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1456
+      "score": 2.0565
     },
     {
       "title": "Can orbital data centers help justify a massive valuation for SpaceX?",
@@ -173,10 +253,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2240506392.jpg?resize=1200%2C800",
       "published": "2026-04-05T15:40:58+00:00",
       "firstSeen": "2026-04-05T15:46:16.316411+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4679
+      "score": 3.3795
     },
     {
       "title": "I let Gemini in Google Maps plan my day and it went surprisingly well",
@@ -189,10 +269,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/IMG_0562.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
       "published": "2026-04-05T14:00:00+00:00",
       "firstSeen": "2026-04-05T14:51:30.113263+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0978
+      "score": 8.0135
     },
     {
       "title": "In Japan, the robot isn’t coming for your job; it’s filling the one nobody wants",
@@ -205,10 +285,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/09/GettyImages-965917342.jpg?resize=1200%2C779",
       "published": "2026-04-05T14:00:00+00:00",
       "firstSeen": "2026-04-05T15:46:16.316411+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0278
+      "score": 1.9435
     },
     {
       "title": "Grammarly’s sloppelganger saga",
@@ -221,10 +301,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268400_Grammarlys_sloppelganger_saga_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-05T12:00:00+00:00",
       "firstSeen": "2026-04-05T13:00:01.952054+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4525
+      "score": 3.3728
     },
     {
       "title": "LinkedIn is secretly scanning your browser for 6,000 extensions, and you weren’t told",
@@ -237,10 +317,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/linkedin-browsergate-extension-scanning-privacy-fingerprint.png",
       "published": "2026-04-05T11:35:47+00:00",
       "firstSeen": "2026-04-05T13:00:01.952054+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3337
+      "score": 6.2548
     },
     {
       "title": "Microsoft calls Copilot ‘entertainment only’ while charging $30 a month for it",
@@ -253,10 +333,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/microsoft-copilot-entertainment-only-disclaimer-adoption.png",
       "published": "2026-04-05T10:58:54+00:00",
       "firstSeen": "2026-04-05T11:41:53.789034+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8204
+      "score": 4.7429
     },
     {
       "title": "Meet ‘AutoAgent’: The Open-Source Library That Lets an AI Engineer and Optimize Its Own Agent Harness Overnight",
@@ -269,10 +349,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-6-150x150.png",
       "published": "2026-04-05T09:21:16+00:00",
       "firstSeen": "2026-04-05T09:53:56.232337+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.9063
+      "score": 2.8323
     },
     {
       "title": "Inside the Creative Artificial Intelligence (AI) Stack: Where Human Vision and Artificial Intelligence Meet to Design Future Fashion",
@@ -285,10 +365,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-8.png",
       "published": "2026-04-05T08:45:37+00:00",
       "firstSeen": "2026-04-05T08:58:35.896153+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3443
+      "score": 5.2714
     },
     {
       "title": "Recap: Europe’s top funding rounds this week (30 March – 5 April)",
@@ -301,10 +381,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Europes-top-funding-rounds-this-week-30-March-–-5-April-.png",
       "published": "2026-04-05T08:29:40+00:00",
       "firstSeen": "2026-04-05T09:53:56.232337+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.769
+      "score": 3.6966
     },
     {
       "title": "scan-for-secrets 0.2",
@@ -317,10 +397,10 @@
       "image": "",
       "published": "2026-04-05T04:07:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6267
+      "score": 4.5626
     },
     {
       "title": "scan-for-secrets 0.1.1",
@@ -333,10 +413,10 @@
       "image": "",
       "published": "2026-04-05T03:39:33+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2186
+      "score": 3.1554
     },
     {
       "title": "scan-for-secrets 0.1",
@@ -349,10 +429,10 @@
       "image": "",
       "published": "2026-04-05T03:27:13+00:00",
       "firstSeen": "2026-04-05T05:00:01.167946+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.615
+      "score": 10.5521
     },
     {
       "title": "research-llm-apis 2026-04-04",
@@ -365,10 +445,10 @@
       "image": "",
       "published": "2026-04-05T00:32:11+00:00",
       "firstSeen": "2026-04-05T01:00:01.986124+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4664
+      "score": 12.4084
     },
     {
       "title": "Anthropic cuts Claude subscribers off from OpenClaw in cost crackdown",
@@ -381,10 +461,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-openclaw-claude-subscription-ban-cost.png",
       "published": "2026-04-04T18:53:55+00:00",
       "firstSeen": "2026-04-04T19:42:04.390269+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1428
+      "score": 11.0932
     },
     {
       "title": "Meta freezes AI data work after breach puts training secrets at risk",
@@ -397,10 +477,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meta-mercor-breach-ai-training-secrets-risk.png",
       "published": "2026-04-04T18:31:09+00:00",
       "firstSeen": "2026-04-04T19:42:04.390269+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8377
+      "score": 1.7886
     },
     {
       "title": "WHOOP raises $575m at $10.1bn valuation, signals IPO ahead",
@@ -413,10 +493,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/whoop-series-g-575m-valuation-ipo-health-platform.png",
       "published": "2026-04-04T18:21:57+00:00",
       "firstSeen": "2026-04-04T19:42:04.390269+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5356
+      "score": 1.4867
     },
     {
       "title": "A folk musician became a target for AI fakes and a copyright troll",
@@ -429,10 +509,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/0040566978_25.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C11.156428956539%2C100%2C41.810022438295",
       "published": "2026-04-04T17:52:10+00:00",
       "firstSeen": "2026-04-04T18:59:37.808026+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7389
+      "score": 1.6907
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -445,11 +525,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-04T17:00:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6577
+      "score": 12.6107
     },
     {
       "title": "Anthropic says Claude Code subscribers will need to pay extra for OpenClaw usage",
@@ -462,10 +542,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-1396827010.jpg?resize=1200%2C839",
       "published": "2026-04-04T16:32:22+00:00",
       "firstSeen": "2026-04-04T16:51:11.796516+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.1516
+      "score": 13.1051
     },
     {
       "title": "Keeper Security brings zero-trust database access to its PAM platform with KeeperDB",
@@ -478,10 +558,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Keeper-Security-Article.png",
       "published": "2026-04-04T14:15:31+00:00",
       "firstSeen": "2026-04-04T15:46:18.441280+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4832
+      "score": 1.4396
     },
     {
       "title": "NinjaOne offers a free trial of the IT management platform trusted by 35,000 organisations",
@@ -497,7 +577,7 @@
       "lastSeen": "2026-04-05T17:47:25.521698+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4811
+      "score": 1.4377
     },
     {
       "title": "Hackers breached the European Commission by poisoning the security tool it used to protect itself",
@@ -513,7 +593,7 @@
       "lastSeen": "2026-04-05T16:51:35.698136+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4772
+      "score": 1.4342
     },
     {
       "title": "Nvidia’s $2 billion Marvell bet is not an investment. It is a toll booth.",
@@ -529,7 +609,7 @@
       "lastSeen": "2026-04-05T16:51:35.698136+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4712
+      "score": 1.4289
     },
     {
       "title": "Really, you made this without AI? Prove it",
@@ -542,10 +622,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Human-made-ai-free-labels-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-04T13:00:00+00:00",
       "firstSeen": "2026-04-04T13:18:59.987684+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6783
+      "score": 1.6362
     },
     {
       "title": "Hackers Are Posting the Claude Code Leak With Bonus Malware",
@@ -558,91 +638,10 @@
       "image": "https://media.wired.com/photos/69d03b9326dd2d3a7ba902f2/master/pass/security_roundup_claude_GettyImages-2181575875.jpg",
       "published": "2026-04-04T10:30:00+00:00",
       "firstSeen": "2026-04-04T10:50:54.833455+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5803
-    },
-    {
-      "title": "Netflix AI Team Just Open-Sourced VOID: an AI Model That Erases Objects From Videos — Physics and All",
-      "url": "https://www.marktechpost.com/2026/04/04/netflix-ai-team-just-open-sourced-void-an-ai-model-that-erases-objects-from-videos-physics-and-all",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Video editing has always had a dirty secret: removing an object from footage is easy; making the scene look like it was never there is brutally hard. Take out a person holding a guitar, and you&#8217;re left with a floating instrument that defies gravity. Hollywood VFX teams spend weeks fixing exactly this kind of problem. [&#8230;]\nThe post Netflix AI Team Just Open-Sourced VOID: an AI Model That Erases Objects From Videos — Physics and All appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-04-at-2.02.50-AM-1-150x150.png",
-      "published": "2026-04-04T09:03:26+00:00",
-      "firstSeen": "2026-04-04T09:52:41.765411+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 10.8949
-    },
-    {
-      "title": "How to Build Production-Ready Agentic Systems with Z.AI GLM-5 Using Thinking Mode, Tool Calling, Streaming, and Multi-Turn Workflows",
-      "url": "https://www.marktechpost.com/2026/04/03/how-to-build-production-ready-agentic-systems-with-z-ai-glm-5-using-thinking-mode-tool-calling-streaming-and-multi-turn-workflows",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we explore the full capabilities of Z.AI’s GLM-5 model and build a complete understanding of how to use it for real-world, agentic applications. We start from the fundamentals by setting up the environment using the Z.AI SDK and its OpenAI-compatible interface, and then progressively move on to advanced features such as streaming [&#8230;]\nThe post How to Build Production-Ready Agentic Systems with Z.AI GLM-5 Using Thinking Mode, Tool Calling, Streaming, and Multi-Turn Workflows appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-7-1024x731.png",
-      "published": "2026-04-04T03:06:56+00:00",
-      "firstSeen": "2026-04-04T03:13:22.360124+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.1379
-    },
-    {
-      "title": "Quoting Kyle Daigle",
-      "url": "https://simonwillison.net/2026/Apr/4/kyle-daigle",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "[GitHub] platform activity is surging. There were 1 billion commits in 2025. Now, it's 275 million per week, on pace for 14 billion this year if growth remains linear (spoiler: it won't.)\nGitHub Actions has grown from 500M minutes/week in 2023 to 1B minutes/week in 2025, and now 2.1B minutes so far this week.\n&mdash; Kyle Daigle, COO, GitHub\n\n    Tags: github, github-actions",
-      "image": "",
-      "published": "2026-04-04T02:20:17+00:00",
-      "firstSeen": "2026-04-04T03:00:01.744440+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5011
-    },
-    {
-      "title": "Anthropic is having a moment in the private markets; SpaceX could spoil the party",
-      "url": "https://techcrunch.com/2026/04/03/anthropic-is-having-a-moment-in-the-private-markets-spacex-could-spoil-the-party",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Glen Anderson, president of Rainmaker Securities, says the secondary market for private shares has never been more active — with Anthropic the hottest trade around, OpenAI losing ground, and SpaceX's looming IPO poised to reshape the landscape for everyone.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/09/GettyImages-2148589533.jpg?resize=1200%2C800",
-      "published": "2026-04-04T01:31:00+00:00",
-      "firstSeen": "2026-04-04T02:00:02.086116+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 7.5941
-    },
-    {
-      "title": "Vulnerability Research Is Cooked",
-      "url": "https://simonwillison.net/2026/Apr/3/vulnerability-research-is-cooked",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Vulnerability Research Is Cooked\nThomas Ptacek's take on the sudden and enormous impact the latest frontier models are having on the field of vulnerability research.\n\nWithin the next few months, coding agents will drastically alter both the practice and the economics of exploit development. Frontier model improvement won’t be a slow burn, but rather a step function. Substantial amounts of high-impact vulnerability research (maybe even most of it) will happen simply by pointing an agent at a source tree and typing “find me zero days”.\n\nWhy are agents so good at this? A combination of baked-in k",
-      "image": "",
-      "published": "2026-04-03T23:59:08+00:00",
-      "firstSeen": "2026-04-04T01:00:02.083488+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.0814
+      "score": 7.541
     },
     {
       "title": "Superbugs: Resistance Rising Part 2",
@@ -655,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3081
+      "score": 3.3063
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
@@ -671,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-23T21:00:00+00:00",
       "firstSeen": "2026-03-23T21:49:24.906231+00:00",
-      "lastSeen": "2026-04-05T23:48:14.074655+00:00",
+      "lastSeen": "2026-04-06T03:37:16.746659+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8902
