@@ -16,6 +16,12 @@
       "link": "./news.html"
     },
     {
+      "name": "Top 4 AI Models",
+      "desc": "Opinionated standalone page: best picks for coding, conversation, voice-native commercial work, and cheap practical use.",
+      "status": "live",
+      "link": "./ai-models/"
+    },
+    {
       "name": "Game Experiments",
       "desc": "Playable prototypes and mechanics tests from GameMaster runs.",
       "status": "in-progress",
