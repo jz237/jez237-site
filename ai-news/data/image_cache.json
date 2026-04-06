@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-06T19:16:51.430531+00:00",
+  "updatedAt": "2026-04-06T20:52:55.504986+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2856,6 +2856,10 @@
     "https://techcrunch.com/2026/04/06/iran-threatens-stargate-ai-data-centers": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/iran-airstrike-2263722022.jpg?resize=1200,800",
       "checkedAt": "2026-04-06T19:00:01.550547+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8js5": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-04-06T20:52:55.504986+00:00"
     }
   }
 }
