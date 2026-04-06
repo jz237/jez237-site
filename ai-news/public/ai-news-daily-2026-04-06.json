@@ -1,6 +1,6 @@
 {
   "date": "2026-04-06",
-  "updatedAt": "2026-04-06T21:49:43.737003+00:00",
+  "updatedAt": "2026-04-06T22:54:02.846921+00:00",
   "items": [
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -11,13 +11,13 @@
       "category": "AI",
       "summary": "This National Robotics Week, NVIDIA is highlighting the breakthroughs that are bringing AI into the physical world — as well as the growing wave of robots transforming industries, from agricultural and manufacturing to energy and beyond. Advancements in robot learning, simulation and foundation models are accelerating development, enabling robots to move from training in virtual [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
-      "published": "2026-04-06T17:00:59+00:00",
+      "published": "2026-04-06T09:55:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.1524
+      "score": 12.9573
     },
     {
       "title": "How to use the new ChatGPT app integrations, including DoorDash, Spotify, Uber, and others",
@@ -30,10 +30,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-04-06T14:11:42+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2798
+      "score": 10.2537
     },
     {
       "title": "Cleanup Claude Code Paste",
@@ -46,10 +46,10 @@
       "image": "https://static.simonwillison.net/static/2026/claude-code-cleanup.jpg",
       "published": "2026-04-06T02:55:23+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9406
+      "score": 8.9215
     },
     {
       "title": "OpenAI’s vision for the AI economy: public wealth funds, robot taxes, and a four-day workweek",
@@ -62,10 +62,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2226496284.jpg?w=1024",
       "published": "2026-04-06T15:55:55+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2238
+      "score": 8.1964
     },
     {
       "title": "The one piece of data that could actually shed light on your job and AI",
@@ -78,10 +78,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/help-wanted2a.jpg?resize=1200%2C600",
       "published": "2026-04-06T16:33:35+00:00",
       "firstSeen": "2026-04-06T17:03:35.064170+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.6402
+      "score": 6.6123
     },
     {
       "title": "Announcing the OpenAI Safety Fellowship",
@@ -94,10 +94,42 @@
       "image": "",
       "published": "2026-04-06T10:00:00+00:00",
       "firstSeen": "2026-04-06T17:03:35.064170+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5919
+      "score": 6.5687
+    },
+    {
+      "title": "OpenAI alums have been quietly investing from a new, potentially $100M fund",
+      "url": "https://techcrunch.com/2026/04/06/openai-alums-have-been-quietly-investing-from-a-new-potentially-100m-fund",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Zero Shot, a new venture capital fund with deep ties to OpenAI, is aiming to raise $100 million for its first fund. It has already written some checks.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/openAI-spiral-color-v2.jpg?resize=1200%2C675",
+      "published": "2026-04-06T21:54:26+00:00",
+      "firstSeen": "2026-04-06T22:54:02.846921+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9601
+    },
+    {
+      "title": "Iran threatens to destroy OpenAI’s $30bn Stargate data centre in Abu Dhabi",
+      "url": "https://thenextweb.com/news/iran-threatens-stargate-openai-abu-dhabi",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Iran’s Islamic Revolutionary Guard Corps has released a video threatening “complete and utter annihilation” of OpenAI’s $30bn Stargate AI campus in Abu Dhabi, singling out the facility by name for the first time and warning it will strike if the US proceeds with threatened attacks on Iranian civilian infrastructure. A senior officer in Iran’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/iran-threatens-stargate-openai-abu-dhabi.png",
+      "published": "2026-04-06T21:24:12+00:00",
+      "firstSeen": "2026-04-06T22:54:02.846921+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8052
     },
     {
       "title": "RightNow AI Releases AutoKernel: An Open-Source Framework that Applies an Autonomous Agent Loop to GPU Kernel Optimization for Arbitrary PyTorch Models",
@@ -110,10 +142,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-1.19.54-AM-1-150x150.png",
       "published": "2026-04-06T08:20:19+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.2762
+      "score": 5.254
     },
     {
       "title": "Iran threatens OpenAI’s Stargate data center in Abu Dhabi",
@@ -126,10 +158,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/Stargate-UAE-2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-06T15:54:19+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1931
+      "score": 5.1657
+    },
+    {
+      "title": "Netflix launches Playground, a standalone games app for children aged eight and under",
+      "url": "https://thenextweb.com/news/netflix-playground-kids-games-app",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Netflix has launched Netflix Playground, a dedicated standalone gaming app for children aged eight and under, bundled into existing memberships with no ads or in-app purchases and full offline support, positioning it squarely against Apple Arcade in the family market. Netflix has quietly extended its gaming ambitions into the family market with the launch [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/netflix-playground-kids-games-app.png",
+      "published": "2026-04-06T21:38:05+00:00",
+      "firstSeen": "2026-04-06T22:54:02.846921+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.012
     },
     {
       "title": "OpenAI calls for robot taxes, a public wealth fund, and a four-day week",
@@ -142,58 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
       "published": "2026-04-06T13:05:09+00:00",
       "firstSeen": "2026-04-06T13:43:47.983132+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
+      "lastSeen": "2026-04-06T22:54:02.846921+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9128
-    },
-    {
-      "title": "Salesforce gives Slackbot 30 new AI powers, and a strategy that looks a lot like Microsoft’s",
-      "url": "https://thenextweb.com/news/slack-slackbot-30-ai-features-agentic",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Salesforce unveiled more than 30 new AI capabilities for Slackbot on 31 March 2026, the most sweeping overhaul of the platform since its $27.7 billion acquisition in 2021. The update transforms Slackbot from a conversational assistant into an agentic system that can transcribe meetings across any video platform, monitor users’ desktop activity, execute tasks [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/slack-slackbot-30-ai-features-agentic-1.png",
-      "published": "2026-04-06T08:13:10+00:00",
-      "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6037
-    },
-    {
-      "title": "This $85 AI Assistant Aims to Consolidate Your Daily Work Tools",
-      "url": "https://www.techrepublic.com/article/chaton-ai-assistant-premium-subscription",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Instead of bouncing between AI tools, this platform puts models, file features, and creative tools together.\nThe post This $85 AI Assistant Aims to Consolidate Your Daily Work Tools appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-04-06T08:37:49+00:00",
-      "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0124
-    },
-    {
-      "title": "Google quietly launched an AI dictation app that works offline",
-      "url": "https://techcrunch.com/2026/04/06/google-quietly-releases-an-offline-first-ai-dictation-app-on-ios",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google's new offline-first dictation app uses Gemma AI models to take on the apps like Wispr Flow.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
-      "published": "2026-04-06T18:54:33+00:00",
-      "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-06T21:49:43.737003+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.0043
+      "score": 4.8875
     }
   ],
   "errors": []
