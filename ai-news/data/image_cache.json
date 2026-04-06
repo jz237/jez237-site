@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-06T18:00:01.576741+00:00",
+  "updatedAt": "2026-04-06T17:03:35.064170+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2839,11 +2839,11 @@
     },
     "https://www.technologyreview.com/2026/04/06/1135187/the-one-piece-of-data-that-could-actually-shed-light-on-your-job-and-ai": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/help-wanted2a.jpg?resize=1200,600",
-      "checkedAt": "2026-04-06T18:00:01.576741+00:00"
+      "checkedAt": "2026-04-06T17:03:35.064170+00:00"
     },
     "https://openai.com/index/introducing-openai-safety-fellowship": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/5VluJolTRjUBECOuHMbj1M/c6ff53f2bfb4658e74e5f24e48dabcc8/Frame__7_.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-04-06T18:00:01.576741+00:00"
+      "image": "",
+      "checkedAt": "2026-04-06T17:03:35.064170+00:00"
     }
   }
 }
