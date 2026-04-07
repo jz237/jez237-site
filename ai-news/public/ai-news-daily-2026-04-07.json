@@ -1,6 +1,6 @@
 {
   "date": "2026-04-07",
-  "updatedAt": "2026-04-07T09:00:01.251081+00:00",
+  "updatedAt": "2026-04-07T10:00:01.778344+00:00",
   "items": [
     {
       "title": "Meta AI Releases EUPE: A Compact Vision Encoder Family Under 100M Parameters That Rivals Specialist Models Across Image Understanding, Dense Prediction, and VLM Tasks",
@@ -13,11 +13,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-9.29.32-PM-1-150x150.png",
       "published": "2026-04-07T04:41:59+00:00",
       "firstSeen": "2026-04-07T05:00:01.428313+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9461
+      "score": 17.9194
+    },
+    {
+      "title": "OpenAI launched a safety fellowship",
+      "url": "https://thenextweb.com/news/openai-safety-fellowship",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The OpenAI Safety Fellowship, announced on 6 April 2026, is a pilot programme for external researchers to conduct independent work on AI safety and alignment. It runs from September 2026 to February 2027. It was posted to social media hours after a Ronan Farrow investigation in The New Yorker reported that OpenAI had dissolved its [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/OpenAI-Safety-Fellowship.png",
+      "published": "2026-04-07T08:12:36+00:00",
+      "firstSeen": "2026-04-07T10:00:01.778344+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.1966
     },
     {
       "title": "Anthropic signs biggest compute deal yet with Google and Broadcom as revenue run rate hits $30bn",
@@ -30,10 +46,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-google-broadcom-compute-deal.png",
       "published": "2026-04-07T06:00:36+00:00",
       "firstSeen": "2026-04-07T07:00:01.438263+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1623
+      "score": 6.1346
+    },
+    {
+      "title": "LiME: Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-07T10:00:07.049423+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
     },
     {
       "title": "A $20 Private AI Tool Makes Analyzing Spreadsheets Much Easier",
@@ -46,10 +78,10 @@
       "image": "",
       "published": "2026-04-07T05:09:48+00:00",
       "firstSeen": "2026-04-07T05:53:52.202673+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2388
+      "score": 4.2117
     },
     {
       "title": "AI startup Rocket offers vibe McKinsey-style reports at a fraction of the cost",
@@ -62,10 +94,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/rocket-co-founder-ceo-vishal-virani.jpg?resize=1200%2C800",
       "published": "2026-04-07T05:30:00+00:00",
       "firstSeen": "2026-04-07T05:53:52.202673+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5881
+      "score": 3.5607
     },
     {
       "title": "This new chip survives 1300°F (700°C) and could change AI forever",
@@ -78,26 +110,10 @@
       "image": "https://www.sciencedaily.com/images/1920/hot-lava-computer-memory-chip.webp",
       "published": "2026-04-07T05:32:38+00:00",
       "firstSeen": "2026-04-07T07:00:01.438263+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5193
-    },
-    {
-      "title": "SIEVE: Sample-Efficient Parametric Learning from Natural Language",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-07T09:00:06.551403+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.4919
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -110,10 +126,26 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2048
+      "score": 2.1751
+    },
+    {
+      "title": "Bill Ackman proposes buying Universal Music Group for €56B",
+      "url": "https://thenextweb.com/news/ackman-pershing-square-universal-music-56-billion-proposal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Pershing Square’s non-binding proposal values UMG at €30.40 per share, a 78% premium to its last closing price. Ackman argues the world’s largest music label has been undervalued by structural factors, including the Bolloré Group’s 18% stake and the postponement of a US listing, that have nothing to do with its underlying business. Bill Ackman’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Universal-Music.png",
+      "published": "2026-04-07T08:31:06+00:00",
+      "firstSeen": "2026-04-07T10:00:01.778344+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1056
     },
     {
       "title": "The Uffizi cyberattack should worry every museum in Europe",
@@ -126,10 +158,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Uffizi-Gallery.png",
       "published": "2026-04-07T06:30:16+00:00",
       "firstSeen": "2026-04-07T07:47:32.481060+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0763
+      "score": 2.0482
     },
     {
       "title": "nFuse raises $2M to let small retailers order via WhatsApp",
@@ -142,10 +174,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/nfuse.png",
       "published": "2026-04-07T07:38:41+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T10:00:01.778344+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.8093
+      "score": 0.7803
     }
   ],
   "errors": []
