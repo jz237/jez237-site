@@ -1,6 +1,6 @@
 {
   "date": "2026-04-07",
-  "updatedAt": "2026-04-07T05:00:01.428313+00:00",
+  "updatedAt": "2026-04-07T05:53:52.202673+00:00",
   "items": [
     {
       "title": "Meta AI Releases EUPE: A Compact Vision Encoder Family Under 100M Parameters That Rivals Specialist Models Across Image Understanding, Dense Prediction, and VLM Tasks",
@@ -13,11 +13,43 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-9.29.32-PM-1-150x150.png",
       "published": "2026-04-07T04:41:59+00:00",
       "firstSeen": "2026-04-07T05:00:01.428313+00:00",
-      "lastSeen": "2026-04-07T05:00:01.428313+00:00",
+      "lastSeen": "2026-04-07T05:53:52.202673+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.0609
+      "score": 18.034
+    },
+    {
+      "title": "A $20 Private AI Tool Makes Analyzing Spreadsheets Much Easier",
+      "url": "https://www.techrepublic.com/article/your-data-assistant-lifetime-subscription",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Your Data Assistant is a local data analysis tool for spreadsheets that lets you talk directly to the data.\nThe post A $20 Private AI Tool Makes Analyzing Spreadsheets Much Easier appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-04-07T05:09:48+00:00",
+      "firstSeen": "2026-04-07T05:53:52.202673+00:00",
+      "lastSeen": "2026-04-07T05:53:52.202673+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3278
+    },
+    {
+      "title": "AI startup Rocket offers vibe McKinsey-style reports at a fraction of the cost",
+      "url": "https://techcrunch.com/2026/04/06/indian-startup-rocket-wants-its-ai-to-do-mckinsey-style-consulting-at-a-fraction-of-the-cost",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Rocket's new AI platform combines strategy, product building, and competitive intelligence, aiming to move beyond code generation.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/rocket-co-founder-ceo-vishal-virani.jpg?resize=1200%2C800",
+      "published": "2026-04-07T05:30:00+00:00",
+      "firstSeen": "2026-04-07T05:53:52.202673+00:00",
+      "lastSeen": "2026-04-07T05:53:52.202673+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.6779
     },
     {
       "title": "SIEVE: Sample-Efficient Parametric Learning from Natural Language",
@@ -28,9 +60,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-07T05:00:07.363267+00:00",
+      "published": "2026-04-07T05:53:57.064797+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-07T05:00:01.428313+00:00",
+      "lastSeen": "2026-04-07T05:53:52.202673+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
