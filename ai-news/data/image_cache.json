@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-07T01:00:02.104230+00:00",
+  "updatedAt": "2026-04-07T02:00:01.363324+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2868,6 +2868,10 @@
     "https://www.marktechpost.com/2026/04/06/an-implementation-guide-to-running-nvidia-transformer-engine-with-mixed-precision-fp8-checks-benchmarking-and-fallback-execution": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-13.png",
       "checkedAt": "2026-04-06T23:49:45.737003+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/04/260405003952.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/server-facility-at-sandia-national-laboratory.webp",
+      "checkedAt": "2026-04-07T02:00:01.363324+00:00"
     }
   }
 }
