@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-07T17:00:01.925715+00:00",
+  "updatedAt": "2026-04-07T18:00:01.657518+00:00",
   "items": [
     {
-      "title": "SIEVE: Sample-Efficient Parametric Learning from Natural Language",
+      "title": "Parth Asawa, Alexandros G. Dimakis, Matei Zaharia",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-07T17:00:05.917991+00:00",
+      "published": "2026-04-07T18:00:08.223774+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Joby and Air Space Intelligence team up to manage US electric air taxi skies",
+      "url": "https://thenextweb.com/news/joby-air-space-intelligence-airspace-evtol",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Joby Aviation and Air Space Intelligence have announced a partnership to integrate AI-driven airspace management into U.S. electric air taxi operations, using ASI’s Flyways AI platform to model high-density eVTOL traffic before commercial flights begin later this year. The electric air taxi race has long centred on the aircraft itself: wing count, battery range, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/joby-air-space-intelligence-airspace-evtol.png",
+      "published": "2026-04-07T17:08:41+00:00",
+      "firstSeen": "2026-04-07T18:00:01.657518+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1242
     },
     {
       "title": "Uber is the latest to be won over by Amazon’s AI chips",
@@ -28,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/AWS-Trainium2-chip-11-29-24-embargo-till-12-3-24-1.jpg?resize=1200%2C812",
       "published": "2026-04-07T16:46:59+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2834
+      "score": 2.2534
     },
     {
       "title": "Suno and major music labels reportedly clash over AI music sharing",
@@ -44,10 +60,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK467_AI_MUSIC_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T16:21:22+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4405
+      "score": 3.4109
     },
     {
       "title": "Anthropic ups compute deal with Google and Broadcom amid skyrocketing demand",
@@ -60,10 +76,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
       "published": "2026-04-07T16:05:56+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2628
+      "score": 5.2334
     },
     {
       "title": "Medialister opens editorial media marketplace to AI Agents with MCP server",
@@ -76,42 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/ai-editorial-advertising-marketplace.png",
       "published": "2026-04-07T15:46:39+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.7133
-    },
-    {
-      "title": "Intel will help build Elon Musk’s Terafab AI chip factory",
-      "url": "https://www.theverge.com/transportation/907976/elon-musk-terafab-intel-ai-chip-spacex-tesla",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Elon Musk's Terafab AI chip project in Austin, Texas, is gaining a crucial new partner: Intel. On Tuesday, the American chipmaker announced it was signing on to help design and build the sprawling facility, which would supply AI chips to Musk's two companies, SpaceX (newly merged with xAI) and Tesla. Musk needs AI chips to [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/acastro_STK094_02.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-07T15:43:17+00:00",
-      "firstSeen": "2026-04-07T16:00:01.363474+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3216
-    },
-    {
-      "title": "Google Maps can now write captions for your photos using AI",
-      "url": "https://techcrunch.com/2026/04/07/google-maps-can-now-write-captions-for-your-photos-using-ai",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Gemini can now create captions when users are looking to share a photo or video.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200%2C800",
-      "published": "2026-04-07T15:30:00+00:00",
-      "firstSeen": "2026-04-07T15:40:42.555152+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.6451
+      "score": 1.6841
     },
     {
       "title": "Intel will help build Elon Musk’s Terafab AI chip factory",
@@ -124,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/acastro_STK094_02.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T15:43:17+00:00",
       "firstSeen": "2026-04-07T16:00:01.889444+00:00",
-      "lastSeen": "2026-04-07T17:00:01.467758+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3216
+      "score": 4.2925
     },
     {
       "title": "Google Maps can now write captions for your photos using AI",
@@ -136,14 +120,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Gemini can now create captions when users are looking to share a photo or video.",
+      "summary": "Google is rolling out new features to make it easier for users to contribute local knowledge to Maps. Most notably, Gemini can now create captions when users are looking to share a photo or video about a place.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200%2C800",
       "published": "2026-04-07T15:30:00+00:00",
       "firstSeen": "2026-04-07T15:40:42.555152+00:00",
-      "lastSeen": "2026-04-07T17:00:01.467758+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6451
+      "score": 11.7162
     },
     {
       "title": "4 days left to save close to $500 on TechCrunch Disrupt 2026 passes",
@@ -156,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-04-07T14:00:00+00:00",
       "firstSeen": "2026-04-07T15:00:01.962700+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.302
+      "score": 3.2743
     },
     {
       "title": "Enabling agent-first process redesign",
@@ -172,10 +156,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/Deloitte-Landing-Page-Card.png?resize=1200%2C600",
       "published": "2026-04-07T14:00:00+00:00",
       "firstSeen": "2026-04-07T15:00:01.962700+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.102
+      "score": 2.0743
     },
     {
       "title": "HexemBio raises $10.4M for a stem cell rejuvenation therapy",
@@ -188,10 +172,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/HexemBio-CEO.png",
       "published": "2026-04-07T13:09:32+00:00",
       "firstSeen": "2026-04-07T15:00:01.962700+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8387
+      "score": 3.8116
     },
     {
       "title": "Hermeus raises $350M at a $1B valuation to build autonomous hypersonic fighters",
@@ -204,10 +188,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Hermeus.png",
       "published": "2026-04-07T13:08:59+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0384
+      "score": 2.0113
     },
     {
       "title": "The AI gold rush is pulling private wealth into riskier, earlier bets",
@@ -220,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-493527752.jpg?resize=1200%2C906",
       "published": "2026-04-07T13:00:00+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1743
+      "score": 2.1473
     },
     {
       "title": "Natter raises $23M to replace enterprise surveys with AI-moderated video conversations",
@@ -236,10 +220,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Natter.png",
       "published": "2026-04-07T12:58:37+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1337
+      "score": 1.1067
     },
     {
       "title": "Conxai raises €5M to bring agentic AI to construction industry",
@@ -252,10 +236,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Conxai-.png",
       "published": "2026-04-07T12:43:28+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.7268
+      "score": 7.7
     },
     {
       "title": "Nvidia-backed Firmus targets $2bn ASX IPO after locking in $505m equity and $10bn Blackstone debt for its AI factory network",
@@ -268,10 +252,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/firmus-asx-ipo-blackstone-ai-data-center-australia.png",
       "published": "2026-04-07T12:42:01+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0261
+      "score": 1.9994
     },
     {
       "title": "EIB lends PLD Space €30M to finish building its MIURA 5 rocket",
@@ -284,10 +268,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/PLD-Space.png",
       "published": "2026-04-07T12:29:20+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0204
+      "score": 1.9938
     },
     {
       "title": "neuroClues closes €10M Series A to bring its eye-tracking Parkinson’s diagnostic to European and US neurologists",
@@ -300,10 +284,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/neuroClues.png",
       "published": "2026-04-07T12:19:52+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1162
+      "score": 3.0897
     },
     {
       "title": "Anthropic in talks to invest $200m in private equity venture to push Claude deeper into enterprise",
@@ -316,10 +300,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-private-equity-venture-claude-enterprise.png",
       "published": "2026-04-07T12:16:37+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7147
+      "score": 11.6883
     },
     {
       "title": "Picsart launches “Earn with Picsart”, a monetisation programme with no invite list",
@@ -335,7 +319,7 @@
       "lastSeen": "2026-04-07T17:00:01.925715+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4606
+      "score": 5.4356
     },
     {
       "title": "Gemini is making it faster for distressed users to reach mental health resources",
@@ -348,10 +332,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK255_Google_Gemini_B_474198.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T10:09:57+00:00",
       "firstSeen": "2026-04-07T11:00:01.548845+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1698
+      "score": 8.1449
     },
     {
       "title": "Cheap cloud was built for stability, but that world is changing",
@@ -367,7 +351,7 @@
       "lastSeen": "2026-04-07T15:40:42.555152+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9371
+      "score": 1.9128
     },
     {
       "title": "Bill Ackman proposes buying Universal Music Group for €56B",
@@ -383,7 +367,7 @@
       "lastSeen": "2026-04-07T13:58:25.145756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9191
+      "score": 1.8953
     },
     {
       "title": "OpenAI launched a safety fellowship",
@@ -399,7 +383,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0117
+      "score": 6.9881
     },
     {
       "title": "nFuse raises $2M to let small retailers order via WhatsApp",
@@ -415,7 +399,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.5983
+      "score": 0.575
     },
     {
       "title": "The Uffizi cyberattack should worry every museum in Europe",
@@ -431,7 +415,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8718
+      "score": 1.8493
     },
     {
       "title": "Anthropic signs biggest compute deal yet with Google and Broadcom as revenue run rate hits $30bn",
@@ -447,7 +431,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9606
+      "score": 5.9384
     },
     {
       "title": "This new chip survives 1300°F (700°C) and could change AI forever",
@@ -460,10 +444,10 @@
       "image": "https://www.sciencedaily.com/images/1920/hot-lava-computer-memory-chip.webp",
       "published": "2026-04-07T05:32:38+00:00",
       "firstSeen": "2026-04-07T07:00:01.438263+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3202
+      "score": 3.2983
     },
     {
       "title": "AI startup Rocket offers vibe McKinsey-style reports at a fraction of the cost",
@@ -476,10 +460,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/rocket-co-founder-ceo-vishal-virani.jpg?resize=1200%2C800",
       "published": "2026-04-07T05:30:00+00:00",
       "firstSeen": "2026-04-07T05:53:52.202673+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3892
+      "score": 3.3673
     },
     {
       "title": "A $20 Private AI Tool Makes Analyzing Spreadsheets Much Easier",
@@ -492,10 +476,10 @@
       "image": "",
       "published": "2026-04-07T05:09:48+00:00",
       "firstSeen": "2026-04-07T05:53:52.202673+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0418
+      "score": 4.0201
     },
     {
       "title": "Meta AI Releases EUPE: A Compact Vision Encoder Family Under 100M Parameters That Rivals Specialist Models Across Image Understanding, Dense Prediction, and VLM Tasks",
@@ -508,11 +492,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-9.29.32-PM-1-150x150.png",
       "published": "2026-04-07T04:41:59+00:00",
       "firstSeen": "2026-04-07T05:00:01.428313+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7516
+      "score": 17.7302
     },
     {
       "title": "What is an AI Native Cloud?",
@@ -525,10 +509,10 @@
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69d447b821539df86d69a3b4_OG-image_20260407_BLOG_AINativeCloud2026.png",
       "published": "2026-04-07T00:00:00+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.806
+      "score": 1.7872
     },
     {
       "title": "An Implementation Guide to Running NVIDIA Transformer Engine with Mixed Precision, FP8 Checks, Benchmarking, and Fallback Execution",
@@ -541,10 +525,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-13.png",
       "published": "2026-04-06T23:23:53+00:00",
       "firstSeen": "2026-04-06T23:49:45.737003+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5446
+      "score": 3.5261
     },
     {
       "title": "OpenAI alums have been quietly investing from a new, potentially $100M fund",
@@ -557,10 +541,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/openAI-spiral-color-v2.jpg?resize=1200%2C675",
       "published": "2026-04-06T21:54:26+00:00",
       "firstSeen": "2026-04-06T22:54:02.846921+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5372
+      "score": 5.5195
     },
     {
       "title": "Netflix launches Playground, a standalone games app for children aged eight and under",
@@ -576,7 +560,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5923
+      "score": 4.5747
     },
     {
       "title": "Iran threatens to destroy OpenAI’s $30bn Stargate data centre in Abu Dhabi",
@@ -592,7 +576,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3882
+      "score": 5.3707
     },
     {
       "title": "Google’s free offline dictation app just made paying $15 a month for Wispr Flow hard to justify",
@@ -608,7 +592,7 @@
       "lastSeen": "2026-04-07T13:00:01.177891+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4833
+      "score": 3.466
     },
     {
       "title": "Spain’s Xoople raises $130m to build the data infrastructure AI needs to understand Earth",
@@ -624,7 +608,7 @@
       "lastSeen": "2026-04-07T11:00:01.548845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3779
+      "score": 2.3607
     },
     {
       "title": "Google quietly launched an AI dictation app that works offline",
@@ -637,10 +621,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
       "published": "2026-04-06T18:54:33+00:00",
       "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5855
+      "score": 3.5692
     },
     {
       "title": "Meta Pauses Work With Mercor After LiteLLM-Linked Data Breach",
@@ -653,26 +637,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-meta-ai-scam-detection.jpg",
       "published": "2026-04-06T18:23:05+00:00",
       "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7369
-    },
-    {
-      "title": "Iran threatens ‘Stargate’ AI data centers",
-      "url": "https://techcrunch.com/2026/04/06/iran-threatens-stargate-ai-data-centers",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Iran said it will target U.S.-linked data centers with new missile strikes, as the war between the U.S. and Iran escalates.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/iran-airstrike-2263722022.jpg?resize=1200%2C800",
-      "published": "2026-04-06T18:06:28+00:00",
-      "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7724
+      "score": 2.7208
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -685,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9886
+      "score": 1.9649
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -701,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5038
+      "score": 2.487
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
@@ -717,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-07T17:00:01.925715+00:00",
+      "lastSeen": "2026-04-07T18:00:01.657518+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2958
+      "score": 3.2956
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
