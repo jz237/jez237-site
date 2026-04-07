@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-07T23:00:01.724009+00:00",
+  "updatedAt": "2026-04-07T22:55:56.847762+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2967,11 +2967,11 @@
     },
     "https://simonwillison.net/2026/Apr/7/sqlite-wal-docker-containers": {
       "image": "",
-      "checkedAt": "2026-04-07T23:00:01.724009+00:00"
+      "checkedAt": "2026-04-07T22:55:56.847762+00:00"
     },
     "https://www.anthropic.com/news/google-broadcom-partnership-compute": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Growth&amp;backgroundColor=fig",
-      "checkedAt": "2026-04-07T23:00:01.724009+00:00"
+      "checkedAt": "2026-04-07T22:55:56.847762+00:00"
     }
   }
 }
