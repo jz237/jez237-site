@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-07T13:58:25.145756+00:00",
+  "updatedAt": "2026-04-07T15:00:01.962700+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2900,6 +2900,14 @@
     "https://techcrunch.com/2026/04/07/the-ai-gold-rush-is-pulling-private-wealth-into-riskier-earlier-bets": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-493527752.jpg?resize=1200,906",
       "checkedAt": "2026-04-07T13:58:25.145756+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/07/1134966/enabling-agent-first-process-redesign": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/Deloitte-Landing-Page-Card.png?resize=1200,600",
+      "checkedAt": "2026-04-07T15:00:01.962700+00:00"
+    },
+    "https://techcrunch.com/2026/04/07/4-days-left-to-save-close-to-500-on-techcrunch-disrupt-2026-passes": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200,675",
+      "checkedAt": "2026-04-07T15:00:01.962700+00:00"
     }
   }
 }
