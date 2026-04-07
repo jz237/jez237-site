@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-07T21:00:01.253155+00:00",
+  "updatedAt": "2026-04-07T21:00:01.834582+00:00",
   "items": [
     {
       "title": "Scaling DPPs for RAG: Density Meets Diversity",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-07T21:00:13.828721+00:00",
+      "published": "2026-04-07T21:00:07.920791+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.74
@@ -27,8 +27,8 @@
       "summary": "Anthropic didn't release their latest model, Claude Mythos (system card PDF), today. They have instead made it available to a very restricted set of preview partners under their newly announced Project Glasswing.\nThe model is a general purpose model, similar to Claude Opus 4.6, but Anthropic claim that its cyber-security research abilities are strong enough that they need to give the software industry as a whole time to prepare.\n\nMythos Preview has already found thousands of high-severity vulnerabilities, including some in every major operating system and web browser. Given the rate of AI prog",
       "image": "https://static.simonwillison.net/static/2026/openbsd-27-years.jpg",
       "published": "2026-04-07T20:52:54+00:00",
-      "firstSeen": "2026-04-07T21:00:01.253155+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "firstSeen": "2026-04-07T21:00:01.834582+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -44,8 +44,8 @@
       "summary": "On Tuesday, Spotify expanded its Prompted Playlists feature to include podcasts, an update that could make it easier for Premium users to find new shows to listen to. Prompted Playlists were originally launched as a beta feature in December, but previously only worked for music. You can use the feature to effectively generate customized Discover [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/VRG_Illo_STK130_K_Radtke_Spotify_Podcast_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T20:13:23+00:00",
-      "firstSeen": "2026-04-07T21:00:01.253155+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "firstSeen": "2026-04-07T21:00:01.834582+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.0365
@@ -60,8 +60,8 @@
       "summary": "Microsoft’s April Windows 11 update brings Smart App Control changes, AI-powered Narrator upgrades, and performance improvements.\nThe post Microsoft’s Latest Windows 11 Update Adds New Features, Strengthens Security appeared first on TechRepublic.",
       "image": "https://assets.techrepublic.com/uploads/2026/04/security-update.jpg",
       "published": "2026-04-07T19:03:24+00:00",
-      "firstSeen": "2026-04-07T20:00:01.914611+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "firstSeen": "2026-04-07T20:00:01.741396+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.1922
@@ -76,8 +76,8 @@
       "summary": "The FCC is considering tighter restrictions on Chinese telecom and surveillance equipment, a move that could reshape US data center and AI infrastructure.\nThe post Trump Eyes Sweeping Expansion of China Tech Ban Across Critical Infrastructure appeared first on TechRepublic.",
       "image": "https://assets.techrepublic.com/uploads/2026/04/donald-trump.jpg",
       "published": "2026-04-07T18:53:24+00:00",
-      "firstSeen": "2026-04-07T20:00:01.914611+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "firstSeen": "2026-04-07T20:00:01.741396+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.1874
@@ -93,7 +93,7 @@
       "image": "https://media.wired.com/photos/69d4e951d8b67218cd4b81ad/master/pass/04072026_New%20Anthropic%20Industry%20Coalition%20Racing%20to%20Use%20Private%20Claude%20Mythos%20Model%20To%20Secure%20Software.jpg",
       "published": "2026-04-07T18:49:50+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 10.3257
@@ -109,7 +109,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-1955086330.jpg?resize=1200%2C675",
       "published": "2026-04-07T18:46:55+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.2243
@@ -125,7 +125,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/HFTb6BbbcAANe5y-e1775584097859.jpeg?w=597",
       "published": "2026-04-07T18:10:01+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.2067
@@ -141,7 +141,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/cisa-budget-cut-700-million-trump-fy27.png",
       "published": "2026-04-07T18:08:09+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.0659
@@ -157,7 +157,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200%2C800",
       "published": "2026-04-07T18:00:00+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -174,7 +174,7 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK461_INTERNET_CHILD_SAFETY_Stock_B_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T18:00:00+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
       "score": 9.472
@@ -190,7 +190,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-maps-gemini-ai-photo-captions.png",
       "published": "2026-04-07T17:48:27+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 8.7566
@@ -206,7 +206,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/paladin-ict-ireland-itad-acquisition-europe.png",
       "published": "2026-04-07T17:27:08+00:00",
       "firstSeen": "2026-04-07T19:00:01.989814+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.0468
@@ -222,7 +222,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/joby-air-space-intelligence-airspace-evtol.png",
       "published": "2026-04-07T17:08:41+00:00",
       "firstSeen": "2026-04-07T17:14:35.725636+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.0383
@@ -238,7 +238,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/AWS-Trainium2-chip-11-29-24-embargo-till-12-3-24-1.jpg?resize=1200%2C812",
       "published": "2026-04-07T16:46:59+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.1684
@@ -254,7 +254,7 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK467_AI_MUSIC_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T16:21:22+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.3269
@@ -270,7 +270,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
       "published": "2026-04-07T16:05:56+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.15
@@ -286,7 +286,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/ai-editorial-advertising-marketplace.png",
       "published": "2026-04-07T15:46:39+00:00",
       "firstSeen": "2026-04-07T17:00:01.925715+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": 1.6014
@@ -302,7 +302,7 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/acastro_STK094_02.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T15:43:17+00:00",
       "firstSeen": "2026-04-07T16:00:01.889444+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.21
@@ -318,7 +318,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200%2C800",
       "published": "2026-04-07T15:30:00+00:00",
       "firstSeen": "2026-04-07T15:40:42.555152+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 11.6341
@@ -334,7 +334,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-04-07T14:00:00+00:00",
       "firstSeen": "2026-04-07T15:00:01.962700+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.1956
@@ -350,7 +350,7 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/Deloitte-Landing-Page-Card.png?resize=1200%2C600",
       "published": "2026-04-07T14:00:00+00:00",
       "firstSeen": "2026-04-07T15:00:01.962700+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": 1.9956
@@ -366,7 +366,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/HexemBio-CEO.png",
       "published": "2026-04-07T13:09:32+00:00",
       "firstSeen": "2026-04-07T15:00:01.962700+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.7347
@@ -382,7 +382,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Hermeus.png",
       "published": "2026-04-07T13:08:59+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.9345
@@ -398,7 +398,7 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-493527752.jpg?resize=1200%2C906",
       "published": "2026-04-07T13:00:00+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.0708
@@ -414,7 +414,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Natter.png",
       "published": "2026-04-07T12:58:37+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.0302
@@ -430,7 +430,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Conxai-.png",
       "published": "2026-04-07T12:43:28+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 7.6241
@@ -446,7 +446,7 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/firmus-asx-ipo-blackstone-ai-data-center-australia.png",
       "published": "2026-04-07T12:42:01+00:00",
       "firstSeen": "2026-04-07T13:58:25.145756+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.9235
@@ -526,7 +526,7 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK255_Google_Gemini_B_474198.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-07T10:09:57+00:00",
       "firstSeen": "2026-04-07T11:00:01.548845+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 8.0741
@@ -638,7 +638,7 @@
       "image": "https://www.sciencedaily.com/images/1920/hot-lava-computer-memory-chip.webp",
       "published": "2026-04-07T05:32:38+00:00",
       "firstSeen": "2026-04-07T07:00:01.438263+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 3.236
@@ -654,7 +654,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8973
@@ -670,7 +670,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.4393
@@ -686,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-07T21:00:01.253155+00:00",
+      "lastSeen": "2026-04-07T21:00:01.834582+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 3.2952
