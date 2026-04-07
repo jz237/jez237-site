@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-07T15:00:01.962700+00:00",
+  "updatedAt": "2026-04-07T15:40:42.555152+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2908,6 +2908,10 @@
     "https://techcrunch.com/2026/04/07/4-days-left-to-save-close-to-500-on-techcrunch-disrupt-2026-passes": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200,675",
       "checkedAt": "2026-04-07T15:00:01.962700+00:00"
+    },
+    "https://techcrunch.com/2026/04/07/google-maps-can-now-write-captions-for-your-photos-using-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2202707012.jpg?resize=1200,800",
+      "checkedAt": "2026-04-07T15:40:42.555152+00:00"
     }
   }
 }
