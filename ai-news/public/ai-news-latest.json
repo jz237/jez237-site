@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-07T07:47:32.481060+00:00",
+  "updatedAt": "2026-04-07T09:00:01.251081+00:00",
   "items": [
     {
       "title": "SIEVE: Sample-Efficient Parametric Learning from Natural Language",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-07T07:47:36.102636+00:00",
+      "published": "2026-04-07T09:00:06.551403+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "nFuse raises $2M to let small retailers order via WhatsApp",
+      "url": "https://thenextweb.com/news/nfuse-raises-2m-whatsapp-b2b-ordering",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Two former Coca-Cola operators built a messaging-first ordering platform after watching B2B eCommerce initiatives repeatedly fail in fragmented trade. The platform claims 70% retailer adoption and order processing costs up to 20 times lower than traditional digital channels. Bulgarian B2B ordering startup nFuse has raised $2 million from Eleven Ventures and LAUNCHub in a round [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/nfuse.png",
+      "published": "2026-04-07T07:38:41+00:00",
+      "firstSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.8093
     },
     {
       "title": "The Uffizi cyberattack should worry every museum in Europe",
@@ -28,10 +44,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Uffizi-Gallery.png",
       "published": "2026-04-07T06:30:16+00:00",
       "firstSeen": "2026-04-07T07:47:32.481060+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1113
+      "score": 2.0763
     },
     {
       "title": "Anthropic signs biggest compute deal yet with Google and Broadcom as revenue run rate hits $30bn",
@@ -44,10 +60,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-google-broadcom-compute-deal.png",
       "published": "2026-04-07T06:00:36+00:00",
       "firstSeen": "2026-04-07T07:00:01.438263+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1969
+      "score": 6.1623
     },
     {
       "title": "This new chip survives 1300°F (700°C) and could change AI forever",
@@ -60,10 +76,10 @@
       "image": "https://www.sciencedaily.com/images/1920/hot-lava-computer-memory-chip.webp",
       "published": "2026-04-07T05:32:38+00:00",
       "firstSeen": "2026-04-07T07:00:01.438263+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5534
+      "score": 3.5193
     },
     {
       "title": "AI startup Rocket offers vibe McKinsey-style reports at a fraction of the cost",
@@ -76,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/rocket-co-founder-ceo-vishal-virani.jpg?resize=1200%2C800",
       "published": "2026-04-07T05:30:00+00:00",
       "firstSeen": "2026-04-07T05:53:52.202673+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6221
+      "score": 3.5881
     },
     {
       "title": "A $20 Private AI Tool Makes Analyzing Spreadsheets Much Easier",
@@ -92,10 +108,10 @@
       "image": "",
       "published": "2026-04-07T05:09:48+00:00",
       "firstSeen": "2026-04-07T05:53:52.202673+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2725
+      "score": 4.2388
     },
     {
       "title": "Meta AI Releases EUPE: A Compact Vision Encoder Family Under 100M Parameters That Rivals Specialist Models Across Image Understanding, Dense Prediction, and VLM Tasks",
@@ -108,11 +124,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-9.29.32-PM-1-150x150.png",
       "published": "2026-04-07T04:41:59+00:00",
       "firstSeen": "2026-04-07T05:00:01.428313+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9794
+      "score": 17.9461
     },
     {
       "title": "An Implementation Guide to Running NVIDIA Transformer Engine with Mixed Precision, FP8 Checks, Benchmarking, and Fallback Execution",
@@ -125,10 +141,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-13.png",
       "published": "2026-04-06T23:23:53+00:00",
       "firstSeen": "2026-04-06T23:49:45.737003+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7412
+      "score": 3.7125
     },
     {
       "title": "OpenAI alums have been quietly investing from a new, potentially $100M fund",
@@ -141,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/openAI-spiral-color-v2.jpg?resize=1200%2C675",
       "published": "2026-04-06T21:54:26+00:00",
       "firstSeen": "2026-04-06T22:54:02.846921+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7259
+      "score": 5.6983
     },
     {
       "title": "Netflix launches Playground, a standalone games app for children aged eight and under",
@@ -157,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/netflix-playground-kids-games-app.png",
       "published": "2026-04-06T21:38:05+00:00",
       "firstSeen": "2026-04-06T22:54:02.846921+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7796
+      "score": 4.7522
     },
     {
       "title": "Iran threatens to destroy OpenAI’s $30bn Stargate data centre in Abu Dhabi",
@@ -173,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/iran-threatens-stargate-openai-abu-dhabi.png",
       "published": "2026-04-06T21:24:12+00:00",
       "firstSeen": "2026-04-06T22:54:02.846921+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5743
+      "score": 5.5471
     },
     {
       "title": "Google’s free offline dictation app just made paying $15 a month for Wispr Flow hard to justify",
@@ -189,10 +205,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/TNW-Article-Banner-2.png",
       "published": "2026-04-06T21:07:28+00:00",
       "firstSeen": "2026-04-06T22:54:02.846921+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6679
+      "score": 3.6409
     },
     {
       "title": "Spain’s Xoople raises $130m to build the data infrastructure AI needs to understand Earth",
@@ -205,10 +221,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/xoople-130m-series-b-earth-ai.png",
       "published": "2026-04-06T20:48:56+00:00",
       "firstSeen": "2026-04-06T21:49:43.737003+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5609
+      "score": 2.5341
     },
     {
       "title": "Google quietly launched an AI dictation app that works offline",
@@ -221,10 +237,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
       "published": "2026-04-06T18:54:33+00:00",
       "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7591
+      "score": 3.7337
     },
     {
       "title": "Meta Pauses Work With Mercor After LiteLLM-Linked Data Breach",
@@ -237,10 +253,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03122026-meta-ai-scam-detection.jpg",
       "published": "2026-04-06T18:23:05+00:00",
       "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.908
+      "score": 2.8829
     },
     {
       "title": "Iran threatens ‘Stargate’ AI data centers",
@@ -253,10 +269,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/iran-airstrike-2263722022.jpg?resize=1200%2C800",
       "published": "2026-04-06T18:06:28+00:00",
       "firstSeen": "2026-04-06T19:00:01.550547+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9422
+      "score": 1.9173
     },
     {
       "title": "The one piece of data that could actually shed light on your job and AI",
@@ -269,10 +285,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/help-wanted2a.jpg?resize=1200%2C600",
       "published": "2026-04-06T16:33:35+00:00",
       "firstSeen": "2026-04-06T17:03:35.064170+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.4105
+      "score": 6.3867
     },
     {
       "title": "OpenAI’s vision for the AI economy: public wealth funds, robot taxes, and a four-day workweek",
@@ -285,10 +301,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2226496284.jpg?w=1024",
       "published": "2026-04-06T15:55:55+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.998
+      "score": 7.9747
     },
     {
       "title": "Iran threatens OpenAI’s Stargate data center in Abu Dhabi",
@@ -301,10 +317,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/Stargate-UAE-2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-06T15:54:19+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9675
+      "score": 4.9442
     },
     {
       "title": "Cisco CEO Chuck Robbins wants data centers in space",
@@ -317,10 +333,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/DCD-Chuck-Robbins-Cisco.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-06T15:15:00+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9548
+      "score": 1.9318
     },
     {
       "title": "Argentine wildfire AI startup raises $2.7M after building a detection system that beats NASA’s alerts by 35 minutes",
@@ -333,10 +349,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Satellites-on-Fire.png",
       "published": "2026-04-06T14:44:59+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4352
+      "score": 2.4126
     },
     {
       "title": "Startup Battlefield 200 applications open: a chance for VC access, TechCrunch coverage, and $100K",
@@ -349,10 +365,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/sb200_trophy.png?w=1080",
       "published": "2026-04-06T14:30:00+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.1296
+      "score": -0.152
     },
     {
       "title": "Bolt expands its Hopp ride-hailing brand into Canadian corporate travel",
@@ -365,10 +381,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Hopp.png",
       "published": "2026-04-06T14:18:16+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.6733
+      "score": -0.6956
     },
     {
       "title": "How to use the new ChatGPT app integrations, including DoorDash, Spotify, Uber, and others",
@@ -381,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
       "published": "2026-04-06T14:11:42+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0647
+      "score": 10.0424
     },
     {
       "title": "Ticket savings of up to $500 this week for TechCrunch Disrupt 2026",
@@ -397,10 +413,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-04-06T14:00:00+00:00",
       "firstSeen": "2026-04-06T15:59:02.982347+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.961
+      "score": 2.9389
     },
     {
       "title": "OpenAI calls for robot taxes, a public wealth fund, and a four-day week",
@@ -413,10 +429,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
       "published": "2026-04-06T13:05:09+00:00",
       "firstSeen": "2026-04-06T13:43:47.983132+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7042
+      "score": 4.6826
     },
     {
       "title": "Spain’s Xoople raises $130 million Series B to map the Earth for AI",
@@ -429,10 +445,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Xoople_Founders-May2024_APPROVED-FOR-PUBLISHING-1.jpeg?resize=1200%2C801",
       "published": "2026-04-06T13:00:00+00:00",
       "firstSeen": "2026-04-06T13:43:47.983132+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8427
+      "score": 1.8211
     },
     {
       "title": "IBM and Arm are partnering to stop mainframes being left out of the AI era",
@@ -448,7 +464,7 @@
       "lastSeen": "2026-04-07T07:47:32.481060+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7018
+      "score": 1.6803
     },
     {
       "title": "Chinese humanoid robot maker UBTech is offering $18M to hire a chief AI scientist",
@@ -464,7 +480,7 @@
       "lastSeen": "2026-04-07T07:00:01.438263+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7001
+      "score": 1.6786
     },
     {
       "title": "Which Telegram growth service is worth It",
@@ -480,7 +496,7 @@
       "lastSeen": "2026-04-07T05:53:52.202673+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6875
+      "score": 1.6664
     },
     {
       "title": "AI is changing how small online sellers decide what to make",
@@ -493,10 +509,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/small-biz-suppliers2.jpg?resize=1200%2C600",
       "published": "2026-04-06T11:00:00+00:00",
       "firstSeen": "2026-04-06T11:57:36.253517+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8074
+      "score": 1.787
     },
     {
       "title": "Announcing the OpenAI Safety Fellowship",
@@ -509,10 +525,10 @@
       "image": "",
       "published": "2026-04-06T10:00:00+00:00",
       "firstSeen": "2026-04-06T17:03:35.064170+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4005
+      "score": 6.3807
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -525,11 +541,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-06T09:55:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.7894
+      "score": 12.7696
     },
     {
       "title": "The Ridiculously Nerdy Intel Bet That Could Rake in Billions",
@@ -542,10 +558,10 @@
       "image": "https://media.wired.com/photos/69d0010ebd20ea771b0078c1/master/pass/Intel-Copackaging-Business-DSC01068.jpg",
       "published": "2026-04-06T09:00:00+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.774
+      "score": 1.7548
     },
     {
       "title": "This $85 AI Assistant Aims to Consolidate Your Daily Work Tools",
@@ -558,10 +574,10 @@
       "image": "",
       "published": "2026-04-06T08:37:49+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8281
+      "score": 3.809
     },
     {
       "title": "RightNow AI Releases AutoKernel: An Open-Source Framework that Applies an Autonomous Agent Loop to GPU Kernel Optimization for Arbitrary PyTorch Models",
@@ -574,10 +590,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-06-at-1.19.54-AM-1-150x150.png",
       "published": "2026-04-06T08:20:19+00:00",
       "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.0934
+      "score": 5.0745
     },
     {
       "title": "Salesforce gives Slackbot 30 new AI powers, and a strategy that looks a lot like Microsoft’s",
@@ -593,7 +609,7 @@
       "lastSeen": "2026-04-06T21:49:43.737003+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4215
+      "score": 4.4026
     },
     {
       "title": "Google AI Edge Gallery",
@@ -606,10 +622,10 @@
       "image": "https://static.simonwillison.net/static/2026/gemini-agent-skills.jpg",
       "published": "2026-04-06T05:18:26+00:00",
       "firstSeen": "2026-04-06T06:05:27.839501+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8171
+      "score": 2.7997
     },
     {
       "title": "datasette-ports 0.2",
@@ -622,26 +638,26 @@
       "image": "",
       "published": "2026-04-06T03:25:43+00:00",
       "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3903
+      "score": 2.3738
     },
     {
-      "title": "scan-for-secrets 0.3",
-      "url": "https://simonwillison.net/2026/Apr/6/scan-for-secrets",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: scan-for-secrets 0.3\n    \n\nNew -r/--redact option which shows the list of matches, asks for confirmation and then replaces every match with REDACTED, taking escaping rules into account.\nNew Python function redact_file(file_path: str | Path, secrets: list[str], replacement: str = \"REDACTED\") -&gt; int.\n\n\n    \n        Tags: projects",
-      "image": "",
-      "published": "2026-04-06T02:59:28+00:00",
-      "firstSeen": "2026-04-06T03:37:16.746659+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
+      "url": "http://www.bbc.co.uk/programmes/m002sf6b",
+      "source": "BBC The Life Scientific",
+      "sourceUrl": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
+      "sourceWeight": 0.8,
+      "category": "Science",
+      "summary": "It's a rare thing to encounter a medical specialist who has experience of his field from the expert and the patient perspective - but not unheard of...Jim Ashworth-Beaumont is an orthotist and prosthetist who spent years helping people adapt to life with artificial limbs and musculoskeletal supports, before a near-fatal accident left him relying on both.This twist of fate might have derailed many - but Jim drew on reserves of resilience and determination forged long before his accident; initially in the army, then by returning to education to earn the qualifications he missed out on as a young",
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
+      "published": "2026-04-07T08:30:00+00:00",
+      "firstSeen": "2026-04-07T09:00:01.251081+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0842
+      "score": 2.2048
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -654,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6827
+      "score": 2.6566
     },
     {
       "title": "Superbugs: Resistance Rising Part 2",
@@ -670,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-07T07:47:32.481060+00:00",
+      "lastSeen": "2026-04-07T09:00:01.251081+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2975
+      "score": 3.2972
     },
     {
       "title": "Superbugs: Resistance rising, part 1",
