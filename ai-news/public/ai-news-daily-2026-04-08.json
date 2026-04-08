@@ -1,6 +1,6 @@
 {
   "date": "2026-04-08",
-  "updatedAt": "2026-04-08T20:59:14.018607+00:00",
+  "updatedAt": "2026-04-08T21:57:36.541798+00:00",
   "items": [
     {
       "title": "Meta is reentering the AI race with a new model called Muse Spark",
@@ -13,11 +13,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/257980_Meta_Ray-Ban_Display_AKrales_0312.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-08T16:12:54+00:00",
       "firstSeen": "2026-04-08T17:00:02.104085+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.0234
+      "score": 14.9977
     },
     {
       "title": "How to Combine Google Search, Google Maps, and Custom Functions in a Single Gemini API Call With Context Circulation, Parallel Tool IDs, and Multi-Step Agentic Chains",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-15.png",
       "published": "2026-04-08T01:56:34+00:00",
       "firstSeen": "2026-04-08T02:00:01.437106+00:00",
-      "lastSeen": "2026-04-08T21:00:01.223847+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.6681
+      "score": 14.6508
     },
     {
       "title": "OpenAI releases a new safety blueprint to address the rise in child sexual exploitation",
@@ -46,11 +46,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
       "published": "2026-04-08T15:23:44+00:00",
       "firstSeen": "2026-04-08T15:41:17.726167+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1318
+      "score": 14.1066
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -63,11 +63,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-08T15:45:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.1415
+      "score": 13.1161
     },
     {
       "title": "Anthropic’s New Product Aims to Handle the Hard Part of Building AI Agents",
@@ -80,10 +80,10 @@
       "image": "https://media.wired.com/photos/69d55aad5eeab2b48af87714/master/pass/Business_AnthropicLaunchesClaudeManagedAgents.jpg",
       "published": "2026-04-08T17:00:00+00:00",
       "firstSeen": "2026-04-08T17:19:00.520927+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5747
+      "score": 12.5484
     },
     {
       "title": "Anthropic’s most capable AI escaped its sandbox and emailed a researcher – so the company won’t release it",
@@ -96,10 +96,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-mythos-preview-glasswing.png",
       "published": "2026-04-08T15:41:04+00:00",
       "firstSeen": "2026-04-08T17:00:02.104085+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0993
+      "score": 12.074
     },
     {
       "title": "Tubi is the first streamer to launch a native app within ChatGPT",
@@ -112,10 +112,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Chat-GPT-Tubi.png?w=1200",
       "published": "2026-04-08T18:23:06+00:00",
       "firstSeen": "2026-04-08T19:00:01.441412+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1133
+      "score": 11.086
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -128,10 +128,26 @@
       "image": "",
       "published": "2026-04-08T13:00:24+00:00",
       "firstSeen": "2026-04-08T13:59:54.505487+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0313
+      "score": 11.0078
+    },
+    {
+      "title": "The next phase of enterprise AI",
+      "url": "https://openai.com/index/next-phase-of-enterprise-ai",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "OpenAI outlines the next phase of enterprise AI, as adoption accelerates across industries with Frontier, ChatGPT Enterprise, Codex, and company-wide AI agents.",
+      "image": "",
+      "published": "2026-04-08T14:00:00+00:00",
+      "firstSeen": "2026-04-08T21:57:36.541798+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.9818
     },
     {
       "title": "Z.AI Introduces GLM-5.1: An Open-Weight 754B Agentic Model That Achieves SOTA on SWE-Bench Pro and Sustains 8-Hour Autonomous Execution",
@@ -144,10 +160,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-5.png",
       "published": "2026-04-08T08:19:10+00:00",
       "firstSeen": "2026-04-08T09:00:01.185431+00:00",
-      "lastSeen": "2026-04-08T21:00:01.223847+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.5437
+      "score": 9.5231
     },
     {
       "title": "The vibes are off at OpenAI",
@@ -160,10 +176,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25431704/STK201_SAM_ALTMAN_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-08T13:47:38+00:00",
       "firstSeen": "2026-04-08T13:59:54.505487+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1608
+      "score": 9.1368
     },
     {
       "title": "10 ChatGPT AI Prompts L1 SOC Analysts Can Use in Their Daily Work",
@@ -176,33 +192,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/ai-artificial-intelligence-technology-that-allows-2026-01-08-06-42-40-utc-1.jpg",
       "published": "2026-04-08T17:34:50+00:00",
       "firstSeen": "2026-04-08T18:00:02.045379+00:00",
-      "lastSeen": "2026-04-08T20:59:14.018607+00:00",
+      "lastSeen": "2026-04-08T21:57:36.541798+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1507
-    },
-    {
-      "title": "How to Deploy Open WebUI with Secure OpenAI API Integration, Public Tunneling, and Browser-Based Chat Access",
-      "url": "https://www.marktechpost.com/2026/04/07/how-to-deploy-open-webui-with-secure-openai-api-integration-public-tunneling-and-browser-based-chat-access",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build a complete Open WebUI setup in Colab, in a practical, hands-on way, using Python. We begin by installing the required dependencies, then securely provide our OpenAI API key through terminal-based secret input so that sensitive credentials are not exposed directly in the notebook. From there, we configure the environment variables [&#8230;]\nThe post How to Deploy Open WebUI with Secure OpenAI API Integration, Public Tunneling, and Browser-Based Chat Access appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-4.png",
-      "published": "2026-04-08T01:31:56+00:00",
-      "firstSeen": "2026-04-08T02:00:01.437106+00:00",
-      "lastSeen": "2026-04-08T21:00:01.223847+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.9608
+      "score": 9.124
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
