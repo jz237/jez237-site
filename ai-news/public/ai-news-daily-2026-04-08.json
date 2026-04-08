@@ -1,6 +1,6 @@
 {
   "date": "2026-04-08",
-  "updatedAt": "2026-04-08T03:00:02.001199+00:00",
+  "updatedAt": "2026-04-08T03:29:48.400662+00:00",
   "items": [
     {
       "title": "How to Combine Google Search, Google Maps, and Custom Functions in a Single Gemini API Call With Context Circulation, Parallel Tool IDs, and Multi-Step Agentic Chains",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-04-08T03:00:02.001199+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.0881
+      "score": 15.0735
     },
     {
       "title": "How to Deploy Open WebUI with Secure OpenAI API Integration, Public Tunneling, and Browser-Based Chat Access",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-04-08T03:00:02.001199+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.376
+      "score": 9.3616
     },
     {
       "title": "Xun Sun, Baiheng Xie, Li Huang, Qiang Gao",
@@ -43,13 +43,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-08T03:00:06.026245+00:00",
+      "published": "2026-04-08T03:29:55.388416+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-08T03:00:02.001199+00:00",
+      "lastSeen": "2026-04-08T03:29:48.400662+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
