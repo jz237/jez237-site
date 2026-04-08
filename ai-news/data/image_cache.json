@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T09:16:47.075410+00:00",
+  "updatedAt": "2026-04-08T11:00:01.157387+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2988,6 +2988,10 @@
     "https://www.marktechpost.com/2026/04/08/z-ai-introduces-glm-5-1-an-open-weight-754b-agentic-model-that-achieves-sota-on-swe-bench-pro-and-sustains-8-hour-autonomous-execution": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-5.png",
       "checkedAt": "2026-04-08T09:00:01.185431+00:00"
+    },
+    "https://www.techrepublic.com/article/news-utah-ai-chatbot-psychiatric-prescription-renewals": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/Gemini_Generated_Image_vbbvitvbbvitvbbv.jpg",
+      "checkedAt": "2026-04-08T11:00:01.157387+00:00"
     }
   }
 }
