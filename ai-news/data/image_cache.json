@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T15:00:01.280640+00:00",
+  "updatedAt": "2026-04-08T15:41:17.726167+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3028,6 +3028,18 @@
     "https://huggingface.co/blog/safetensors-joins-pytorch-foundation": {
       "image": "https://huggingface.co/blog/assets/safetensors-joins-pytorch-foundation/thumbnail.png",
       "checkedAt": "2026-04-08T15:00:01.280640+00:00"
+    },
+    "https://techcrunch.com/2026/04/08/openai-releases-a-new-safety-blueprint-to-address-the-rise-in-child-sexual-exploitation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
+      "checkedAt": "2026-04-08T15:41:17.726167+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/8/giles-turnbull": {
+      "image": "",
+      "checkedAt": "2026-04-08T15:41:17.726167+00:00"
+    },
+    "https://techcrunch.com/2026/04/08/databricks-matei-zaharia-wins-acm-computing-prize-agi": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Databricks_Matei_Zaharia_for-ACM.jpg?resize=1200,845",
+      "checkedAt": "2026-04-08T15:41:17.726167+00:00"
     }
   }
 }
