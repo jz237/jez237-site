@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T05:00:01.209295+00:00",
+  "updatedAt": "2026-04-08T05:54:51.033063+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2980,6 +2980,10 @@
     "https://www.marktechpost.com/2026/04/07/how-to-deploy-open-webui-with-secure-openai-api-integration-public-tunneling-and-browser-based-chat-access": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-4.png",
       "checkedAt": "2026-04-08T02:00:01.437106+00:00"
+    },
+    "https://techcrunch.com/2026/04/07/google-quietly-releases-an-offline-first-ai-dictation-app-on-ios": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-04-08T05:54:51.033063+00:00"
     }
   }
 }
