@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T01:00:01.593432+00:00",
+  "updatedAt": "2026-04-08T02:00:01.437106+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -2972,6 +2972,14 @@
     "https://www.anthropic.com/news/google-broadcom-partnership-compute": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Growth&amp;backgroundColor=fig",
       "checkedAt": "2026-04-07T22:55:56.847762+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/07/how-to-combine-google-search-google-maps-and-custom-functions-in-a-single-gemini-api-call-with-context-circulation-parallel-tool-ids-and-multi-step-agentic-chains": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-15.png",
+      "checkedAt": "2026-04-08T02:00:01.437106+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/07/how-to-deploy-open-webui-with-secure-openai-api-integration-public-tunneling-and-browser-based-chat-access": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-4.png",
+      "checkedAt": "2026-04-08T02:00:01.437106+00:00"
     }
   }
 }
