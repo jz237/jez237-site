@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T21:57:36.541798+00:00",
+  "updatedAt": "2026-04-08T23:00:01.474189+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3088,6 +3088,10 @@
     "https://openai.com/index/next-phase-of-enterprise-ai": {
       "image": "",
       "checkedAt": "2026-04-08T21:57:36.541798+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/08/a-comprehensive-implementation-guide-to-modelscope-for-model-search-inference-fine-tuning-evaluation-and-export": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-17-1024x731.png",
+      "checkedAt": "2026-04-08T23:00:01.474189+00:00"
     }
   }
 }
