@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T13:59:54.505487+00:00",
+  "updatedAt": "2026-04-08T15:00:01.280640+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3008,6 +3008,26 @@
     "https://www.techrepublic.com/article/chatplayground-ai": {
       "image": "",
       "checkedAt": "2026-04-08T13:59:54.505487+00:00"
+    },
+    "https://huggingface.co/blog/ibm-research/altk-evolve": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/6435a1131860001f144239ea/hNoPqYEH7TYWM8ayDpZgF.png",
+      "checkedAt": "2026-04-08T15:00:01.280640+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/08/1135398/mustafa-suleyman-ai-future": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Final-Header_Suleyman.png?resize=1200,600",
+      "checkedAt": "2026-04-08T15:00:01.280640+00:00"
+    },
+    "https://techcrunch.com/2026/04/08/final-3-days-to-save-up-to-500-on-your-techcrunch-disrupt-2026-pass": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_3Days-16X9-Dark.png?resize=1200,675",
+      "checkedAt": "2026-04-08T15:00:01.280640+00:00"
+    },
+    "https://techcrunch.com/2026/04/08/atlassian-confluence-visual-ai-tools-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/10/atlassian-confluence-bug-getty.jpg?resize=1200,800",
+      "checkedAt": "2026-04-08T15:00:01.280640+00:00"
+    },
+    "https://huggingface.co/blog/safetensors-joins-pytorch-foundation": {
+      "image": "https://huggingface.co/blog/assets/safetensors-joins-pytorch-foundation/thumbnail.png",
+      "checkedAt": "2026-04-08T15:00:01.280640+00:00"
     }
   }
 }
