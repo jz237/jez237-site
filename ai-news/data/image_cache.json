@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-08T20:59:14.018607+00:00",
+  "updatedAt": "2026-04-08T22:00:01.554184+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3080,6 +3080,14 @@
     "https://techcrunch.com/2026/04/08/aws-boss-explains-why-investing-billions-in-both-anthropic-and-openai-is-an-ok-conflict": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2179195367.jpg?resize=1200,746",
       "checkedAt": "2026-04-08T20:59:14.018607+00:00"
+    },
+    "https://techcrunch.com/2026/04/08/poke-makes-ai-agents-as-easy-as-sending-a-text": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Poke-at-3.57.33-PM.jpg?resize=1200,604",
+      "checkedAt": "2026-04-08T22:00:01.554184+00:00"
+    },
+    "https://openai.com/index/next-phase-of-enterprise-ai": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6hAH6ERUZCYnjwvdeDQf1v/afda5a94a25682356a0375536dbb5944/Next_phase_of_enterprise_AI_SEO_16x9.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-08T22:00:01.554184+00:00"
     }
   }
 }
