@@ -1,7 +1,24 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T17:00:01.228664+00:00",
+  "updatedAt": "2026-04-09T17:20:05.052071+00:00",
   "items": [
+    {
+      "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
+      "url": "https://blogs.nvidia.com/blog/national-robotics-week-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "This National Robotics Week, NVIDIA is highlighting the breakthroughs that are bringing AI into the physical world — as well as the growing wave of robots transforming industries, from agricultural and manufacturing to energy and beyond. Advancements in robot learning, simulation and foundation models are accelerating development, enabling robots to move from training in virtual [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
+      "published": "2026-04-09T16:45:59+00:00",
+      "firstSeen": "2026-04-04T17:46:30.378910+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 13.2728
+    },
     {
       "title": "Demis Hassabis says Google DeepMind had to return to its startup roots after the Brain merger",
       "url": "https://thenextweb.com/news/google-deepmind-hassabis-startup-pace",
@@ -13,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-deepmind-hassabis-startup-pace.png",
       "published": "2026-04-09T15:11:22+00:00",
       "firstSeen": "2026-04-09T15:53:12.486965+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.496
+      "score": 9.4864
     },
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -29,10 +46,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9479
+      "score": 7.9416
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -45,10 +62,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0244
+      "score": 6.0174
     },
     {
       "title": "OpenAI Full Fan Mode Contest: Terms & Conditions",
@@ -61,10 +78,10 @@
       "image": "",
       "published": "2026-04-09T00:00:00+00:00",
       "firstSeen": "2026-04-09T13:00:01.589776+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.086
+      "score": 5.0796
     },
     {
       "title": "Workday’s CTO traded his C-suite title for a technical staff role at Anthropic",
@@ -77,10 +94,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-09T14:39:55+00:00",
       "firstSeen": "2026-04-09T15:53:12.486965+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0809
+      "score": 5.0714
     },
     {
       "title": "Consistency-Guided Decoding with Proof-Driven Disambiguation for Three-Way Logical Question Answering",
@@ -91,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-09T17:00:12.453593+00:00",
+      "published": "2026-04-09T17:20:09.889724+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -109,10 +126,10 @@
       "image": "https://media.wired.com/photos/69d67ff20c95e3e9dba17bfa/master/pass/gear_wearable_Book-Worm_9218.jpg",
       "published": "2026-04-09T09:30:00+00:00",
       "firstSeen": "2026-04-09T10:00:01.619985+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5831
+      "score": 4.5749
     },
     {
       "title": "Multimodal Embedding & Reranker Models with Sentence Transformers",
@@ -125,10 +142,10 @@
       "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
       "published": "2026-04-09T00:00:00+00:00",
       "firstSeen": "2026-04-09T14:00:01.403835+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.416
+      "score": 4.4096
     },
     {
       "title": "The AI industry’s race for profits is now existential",
@@ -141,10 +158,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/DCD_0409.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T14:00:00+00:00",
       "firstSeen": "2026-04-09T14:09:14.537978+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.272
+      "score": 4.2627
     },
     {
       "title": "Google makes it easy to deepfake yourself",
@@ -157,10 +174,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/acastro_STK092_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T10:53:49+00:00",
       "firstSeen": "2026-04-09T11:15:17.539947+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9885
+      "score": 3.9799
     },
     {
       "title": "Sigmoid vs ReLU Activation Functions: The Inference Cost of Losing Geometric Context",
@@ -173,26 +190,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-11-150x150.png",
       "published": "2026-04-09T07:10:00+00:00",
       "firstSeen": "2026-04-09T07:53:01.948224+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
+      "lastSeen": "2026-04-09T17:20:05.052071+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3571
-    },
-    {
-      "title": "GoPro Is Cutting Nearly a Quarter of Its Workforce (and AI Isn’t the Reason)",
-      "url": "https://www.techrepublic.com/article/news-gopro-layoffs-23-percent-workforce",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "GoPro is cutting nearly 23% of its workforce amid declining revenue, signaling a cost-cutting shift… not AI-driven layoffs like others.\nThe post GoPro Is Cutting Nearly a Quarter of Its Workforce (and AI Isn’t the Reason) appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/Copy-of-Untitled-Design-2026-04-09T232620.212.png",
-      "published": "2026-04-09T15:33:32+00:00",
-      "firstSeen": "2026-04-09T17:00:01.228664+00:00",
-      "lastSeen": "2026-04-09T17:00:01.228664+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2068
+      "score": 3.3493
     }
   ],
   "errors": []
