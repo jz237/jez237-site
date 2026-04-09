@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T17:00:01.228664+00:00",
+  "updatedAt": "2026-04-09T18:00:01.868571+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3128,6 +3128,10 @@
     "https://www.techrepublic.com/article/news-gopro-layoffs-23-percent-workforce": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/Copy-of-Untitled-Design-2026-04-09T232620.212.png",
       "checkedAt": "2026-04-09T17:00:01.228664+00:00"
+    },
+    "https://techcrunch.com/2026/04/09/sierras-bret-taylor-says-the-era-of-clicking-buttons-is-over": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/10/AP22166762816752.jpg?w=1200",
+      "checkedAt": "2026-04-09T18:00:01.868571+00:00"
     }
   }
 }
