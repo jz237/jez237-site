@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T19:00:01.324097+00:00",
+  "updatedAt": "2026-04-09T20:00:01.877959+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3144,6 +3144,14 @@
     "https://www.theverge.com/tech/909391/google-gemini-ai-3d-models-simulations": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-09T19:00:01.324097+00:00"
+    },
+    "https://techcrunch.com/2026/04/09/after-data-breach-10b-valued-startup-mercor-is-having-a-month": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/10/54888410931_c37fed4674_k.jpg?resize=1200,800",
+      "checkedAt": "2026-04-09T20:00:01.877959+00:00"
+    },
+    "https://techcrunch.com/2026/04/09/meta-ai-app-climbs-to-no-5-on-the-app-store-after-muse-spark-launch": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200,800",
+      "checkedAt": "2026-04-09T20:00:01.877959+00:00"
     }
   }
 }
