@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T23:00:01.710381+00:00",
+  "updatedAt": "2026-04-09T22:58:33.112030+00:00",
   "items": [
     {
       "title": "Meta AI app climbs to No. 5 on the App Store after Muse Spark launch",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200%2C800",
       "published": "2026-04-09T19:10:07+00:00",
       "firstSeen": "2026-04-09T19:34:12.357082+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.9789
+      "score": 15.9796
     },
     {
       "title": "Florida AG announces investigation into OpenAI over shooting that allegedly involved ChatGPT",
@@ -30,10 +30,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
       "published": "2026-04-09T20:11:55+00:00",
       "firstSeen": "2026-04-09T21:00:01.723872+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.0076
+      "score": 13.0083
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -46,27 +46,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-09T09:45:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.9516
-    },
-    {
-      "title": "ChatGPT has a new $100 per month Pro subscription",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/909599/chatgpt-pro-subscription-new",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "OpenAI has announced a new version of its ChatGPT Pro subscription that costs $100 per month. The new Pro tier offers \"5x more\" usage of its Codex coding tool than the $20 per month Plus subscription and \"is best for longer, high-effort Codex sessions,\" OpenAI says. The company is introducing the new tier as it [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-09T22:57:15+00:00",
-      "firstSeen": "2026-04-09T23:00:01.710381+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.7586
+      "score": 12.9521
     },
     {
       "title": "ChatGPT finally offers $100/month Pro plan",
@@ -79,10 +63,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/09/GettyImages-1574154948-e1695647511123.jpg?resize=1200%2C676",
       "published": "2026-04-09T21:29:11+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2447
+      "score": 10.2454
     },
     {
       "title": "Demis Hassabis says Google DeepMind had to return to its startup roots after the Brain merger",
@@ -95,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-deepmind-hassabis-startup-pace.png",
       "published": "2026-04-09T15:11:22+00:00",
       "firstSeen": "2026-04-09T15:53:12.486965+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.3354
+      "score": 9.3361
     },
     {
       "title": "Claude Mythos and misguided open-weight fearmongering",
@@ -111,10 +95,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/18fbf26c-4d1b-42a4-94e3-369522619514_3182x1790.png",
       "published": "2026-04-09T21:28:39+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3144
+      "score": 8.3152
     },
     {
       "title": "Google&#8217;s Gemini AI can answer your questions with 3D models and simulations",
@@ -127,10 +111,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T17:57:58+00:00",
       "firstSeen": "2026-04-09T19:00:01.324097+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2164
+      "score": 8.2171
     },
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -143,10 +127,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8423
+      "score": 7.8427
     },
     {
       "title": "CyberAgent moves faster with ChatGPT Enterprise and Codex",
@@ -159,10 +143,10 @@
       "image": "",
       "published": "2026-04-09T00:00:00+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5807
+      "score": 7.5811
     },
     {
       "title": "Florida launches investigation into OpenAI",
@@ -174,11 +158,11 @@
       "summary": "Florida Attorney General James Uthmeier is launching an investigation into OpenAI over public safety and national security risks, as reported earlier by Reuters. In a statement on Thursday, Uthmeier says there are concerns that OpenAI's data and technology are \"falling into the hands of America's enemies, such as the Chinese Communist Party.\" Uthmeier also says [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK155_OPEN_AI_2025_CVirgiia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T22:17:06+00:00",
-      "firstSeen": "2026-04-09T23:00:01.710381+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "firstSeen": "2026-04-09T22:58:33.112030+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1384
+      "score": 7.1391
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -191,10 +175,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T23:00:01.710381+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9086
+      "score": 5.909
+    },
+    {
+      "title": "Is Anthropic limiting the release of Mythos to protect the internet — or Anthropic?",
+      "url": "https://techcrunch.com/2026/04/09/is-anthropic-limiting-the-release-of-mythos-to-protect-the-internet-or-anthropic",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic said this week that it limited the release of its newest model, dubbed Mythos, because it is too capable of finding security exploits in software relied upon by users around the world. Are real cybersecurity concerns a cover for a bigger problem at the frontier lab?",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/Anthropic-Dario-Amodei.jpeg?w=1182",
+      "published": "2026-04-09T18:50:05+00:00",
+      "firstSeen": "2026-04-09T19:00:01.324097+00:00",
+      "lastSeen": "2026-04-09T22:58:33.112030+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8705
     }
   ],
   "errors": []
