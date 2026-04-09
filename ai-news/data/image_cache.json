@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T13:00:01.589776+00:00",
+  "updatedAt": "2026-04-09T14:00:01.403835+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3108,6 +3108,10 @@
     "https://openai.com/index/full-fan-mode-contest-terms-conditions": {
       "image": "",
       "checkedAt": "2026-04-09T13:00:01.589776+00:00"
+    },
+    "https://huggingface.co/blog/multimodal-sentence-transformers": {
+      "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+      "checkedAt": "2026-04-09T14:00:01.403835+00:00"
     }
   }
 }
