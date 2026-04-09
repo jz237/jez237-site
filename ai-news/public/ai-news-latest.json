@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-08T23:51:05.039377+00:00",
+  "updatedAt": "2026-04-09T01:00:01.812270+00:00",
   "items": [
     {
-      "title": "Min Sun (F. Hoffmann-La Roche AG, Roche Pharma Research and Early Development), Federica Storti (F. Hoffmann-La Roche...",
+      "title": "TDA-RC: Task-Driven Alignment for Knowledge-Based Reasoning Chains in Large Language Models",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-08T23:51:10.106019+00:00",
+      "published": "2026-04-09T01:00:07.598869+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 5.06
+    },
+    {
+      "title": "Gemini gets notebooks to help you organize projects",
+      "url": "https://www.theverge.com/tech/909031/google-gemini-notebooks-notebooklm",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Google's Gemini is getting a feature called \"notebooks\" to help you organize things about certain topics in a single place while using the AI chatbot, the company announced on Wednesday. You can pull in things like files, past conversations, and custom instructions into notebooks that Gemini can then use as context while you're talking with [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-09T00:06:12+00:00",
+      "firstSeen": "2026-04-09T01:00:01.812270+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.3329
     },
     {
       "title": "Meta's new model is Muse Spark, and meta.ai chat has some interesting tools",
@@ -28,11 +44,11 @@
       "image": "https://static.simonwillison.net/static/2026/muse-spark-instant-pelican.jpg",
       "published": "2026-04-08T23:07:44+00:00",
       "firstSeen": "2026-04-08T23:51:05.039377+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 24.1181
+      "score": 24.0843
     },
     {
       "title": "A Comprehensive Implementation Guide to ModelScope for Model Search, Inference, Fine-Tuning, Evaluation, and Export",
@@ -45,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-17-1024x731.png",
       "published": "2026-04-08T22:43:24+00:00",
       "firstSeen": "2026-04-08T23:51:05.039377+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.5361
+      "score": 3.5026
     },
     {
       "title": "Conflicting Rulings Leave Anthropic in ‘Supply-Chain Risk’ Limbo",
@@ -61,10 +77,10 @@
       "image": "https://media.wired.com/photos/69cea9a12b790324f16d5a40/master/pass/Anthropic-Supply-Chain-Risk-Business.jpg",
       "published": "2026-04-08T22:27:26+00:00",
       "firstSeen": "2026-04-08T22:58:20.175691+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3482
+      "score": 10.315
     },
     {
       "title": "Meet OSGym: A New OS Infrastructure Framework That Manages 1,000+ Replicas at $0.23/Day for Computer Use Agent Research",
@@ -77,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-2.53.44-PM-1-150x150.png",
       "published": "2026-04-08T21:54:44+00:00",
       "firstSeen": "2026-04-08T21:57:36.541798+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5623
+      "score": 5.5296
     },
     {
       "title": "AI agent Poke makes setting up automations as easy as sending a text",
@@ -93,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Poke-at-3.57.33-PM.jpg?resize=1200%2C604",
       "published": "2026-04-08T21:05:13+00:00",
       "firstSeen": "2026-04-08T21:57:36.541798+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0087
+      "score": 5.9767
     },
     {
       "title": "Canva acquires Simtheory and Ortto in a twin deal aimed at turning a design tool into an end-to-end work platform",
@@ -109,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Simtheory-and-Ortto-founders.png",
       "published": "2026-04-08T21:00:05+00:00",
       "firstSeen": "2026-04-08T21:57:36.541798+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7663
+      "score": 3.7343
     },
     {
       "title": "Iran-linked hackers disrupt operations at US critical infrastructure sites",
@@ -125,10 +141,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/iranhax-1152x648.jpg",
       "published": "2026-04-08T20:49:11+00:00",
       "firstSeen": "2026-04-08T22:58:20.175691+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0612
+      "score": 2.0294
     },
     {
       "title": "Volkswagen’s MOIA and Uber begin testing self-driving ID. Buzz minibuses in Los Angeles",
@@ -141,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/volkswagen-moia-uber-los-angeles-id-buzz-robotaxi.png",
       "published": "2026-04-08T20:31:08+00:00",
       "firstSeen": "2026-04-08T21:57:36.541798+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0527
+      "score": 2.0212
     },
     {
       "title": "OpenAI made economic proposals — here’s what DC thinks of them",
@@ -157,10 +173,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK155_OPEN_AI_4_CVirginia_D.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742221417566%2C100%2C78.515557164868&amp%3Bw=1200",
       "published": "2026-04-08T20:14:00+00:00",
       "firstSeen": "2026-04-08T20:59:14.018607+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3548
+      "score": 6.3236
     },
     {
       "title": "Meta’s Muse Spark is here – and it’s closed source",
@@ -173,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meta-muse-spark-msl-first-model.png",
       "published": "2026-04-08T20:09:31+00:00",
       "firstSeen": "2026-04-08T20:59:14.018607+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2428
+      "score": 8.2116
     },
     {
       "title": "AWS boss explains why investing billions in both Anthropic and OpenAI is an OK conflict",
@@ -189,10 +205,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2179195367.jpg?resize=1200%2C746",
       "published": "2026-04-08T20:09:14+00:00",
       "firstSeen": "2026-04-08T20:59:14.018607+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1826
+      "score": 8.1514
     },
     {
       "title": "Atlassian brings AI visual tools and partner agents to Confluence, 1 month after cutting 1,600 jobs",
@@ -205,10 +221,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/atlassian-confluence-remix-partner-agents.png",
       "published": "2026-04-08T19:56:25+00:00",
       "firstSeen": "2026-04-08T20:59:14.018607+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9368
+      "score": 6.9058
     },
     {
       "title": "Meta’s New AI Model Gives Mark Zuckerberg a Seat at the Big Kid’s Table",
@@ -221,10 +237,10 @@
       "image": "https://media.wired.com/photos/69d69875661a1966c2be199c/master/pass/Meta-Abandons-OpenSource-Models-Business-2243527585.jpg",
       "published": "2026-04-08T18:51:09+00:00",
       "firstSeen": "2026-04-08T19:00:01.441412+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4974
+      "score": 2.4673
     },
     {
       "title": "Tubi is the first streamer to launch a native app within ChatGPT",
@@ -237,10 +253,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Chat-GPT-Tubi.png?w=1200",
       "published": "2026-04-08T18:23:06+00:00",
       "firstSeen": "2026-04-08T19:00:01.441412+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.035
+      "score": 11.0053
     },
     {
       "title": "The US Army Is Building Its Own Chatbot for Combat",
@@ -253,10 +269,10 @@
       "image": "https://media.wired.com/photos/69d585fca17189a9bfdc3917/master/pass/AI-Lab-Victor-Army-LLM-Business.jpg",
       "published": "2026-04-08T18:00:00+00:00",
       "firstSeen": "2026-04-08T19:00:01.441412+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.125
+      "score": 2.0956
     },
     {
       "title": "Why Operationalizing AI Security Is the Next Great Enterprise Hurdle",
@@ -269,10 +285,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/laptop-with-antivirus-shield-hologram-web-safety-2026-03-26-05-09-23-utc-1.jpg",
       "published": "2026-04-08T17:50:11+00:00",
       "firstSeen": "2026-04-08T18:00:02.045379+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.5807
+      "score": 6.5515
     },
     {
       "title": "10 ChatGPT AI Prompts L1 SOC Analysts Can Use in Their Daily Work",
@@ -285,10 +301,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/ai-artificial-intelligence-technology-that-allows-2026-01-08-06-42-40-utc-1.jpg",
       "published": "2026-04-08T17:34:50+00:00",
       "firstSeen": "2026-04-08T18:00:02.045379+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0742
+      "score": 9.0451
     },
     {
       "title": "5 Burning Questions About Elon Musk’s Terafab Chip Partnership with Intel",
@@ -301,10 +317,10 @@
       "image": "https://media.wired.com/photos/69d58724a4ccef95d80999c9/master/pass/Five-Key-Questions-About-Elon-Terafab-Deal-with-Intel-Business.jpg",
       "published": "2026-04-08T17:13:33+00:00",
       "firstSeen": "2026-04-08T17:19:00.520927+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1051
+      "score": 2.0763
     },
     {
       "title": "AI Is Slashing 16,000 Jobs a Month in the US (Gen Z Hit the Hardest)",
@@ -317,10 +333,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/sad-upset-businessman-sitting-hopelessly-on-stair-2026-03-13-04-39-05-utc-1.jpg",
       "published": "2026-04-08T17:11:15+00:00",
       "firstSeen": "2026-04-08T18:00:02.045379+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4641
+      "score": 4.4354
     },
     {
       "title": "Anthropic’s New Product Aims to Handle the Hard Part of Building AI Agents",
@@ -333,10 +349,10 @@
       "image": "https://media.wired.com/photos/69d55aad5eeab2b48af87714/master/pass/Business_AnthropicLaunchesClaudeManagedAgents.jpg",
       "published": "2026-04-08T17:00:00+00:00",
       "firstSeen": "2026-04-08T17:19:00.520927+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4994
+      "score": 12.4708
     },
     {
       "title": "Europe’s first commercial robotaxi service is live in Zagreb",
@@ -349,10 +365,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Verne-launch.png",
       "published": "2026-04-08T16:54:20+00:00",
       "firstSeen": "2026-04-08T17:19:00.520927+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.657
+      "score": 2.6285
     },
     {
       "title": "Google Photos Adds One-Tap ‘AI Enhance’ Tool, Video Speed Controls",
@@ -365,10 +381,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/HFPhyLjbUAAcZjd.jpg",
       "published": "2026-04-08T16:43:47+00:00",
       "firstSeen": "2026-04-08T17:00:02.104085+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1526
+      "score": 4.1242
     },
     {
       "title": "Meta is reentering the AI race with a new model called Muse Spark",
@@ -381,11 +397,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/257980_Meta_Ray-Ban_Display_AKrales_0312.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-08T16:12:54+00:00",
       "firstSeen": "2026-04-08T17:00:02.104085+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.9498
+      "score": 14.9218
     },
     {
       "title": "Astropad’s Workbench reimagines remote desktop for AI agents, not IT support",
@@ -398,10 +414,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/poppy-claude-hero-scaled-1.webp?resize=1200%2C563",
       "published": "2026-04-08T16:01:09+00:00",
       "firstSeen": "2026-04-08T17:00:02.104085+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7749
+      "score": 4.7471
     },
     {
       "title": "Anthropic’s most capable AI escaped its sandbox and emailed a researcher – so the company won’t release it",
@@ -414,10 +430,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-mythos-preview-glasswing.png",
       "published": "2026-04-08T15:41:04+00:00",
       "firstSeen": "2026-04-08T17:00:02.104085+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0267
+      "score": 11.9992
     },
     {
       "title": "OpenAI releases a new safety blueprint to address the rise in child sexual exploitation",
@@ -430,11 +446,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
       "published": "2026-04-08T15:23:44+00:00",
       "firstSeen": "2026-04-08T15:41:17.726167+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0597
+      "score": 14.0324
     },
     {
       "title": "Quoting Giles Turnbull",
@@ -447,10 +463,10 @@
       "image": "",
       "published": "2026-04-08T15:18:49+00:00",
       "firstSeen": "2026-04-08T15:41:17.726167+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0578
+      "score": 2.0305
     },
     {
       "title": "Databricks co-founder wins prestigious ACM award, says ‘AGI is here already’",
@@ -463,10 +479,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Databricks_Matei_Zaharia_for-ACM.jpg?resize=1200%2C845",
       "published": "2026-04-08T15:00:00+00:00",
       "firstSeen": "2026-04-08T15:41:17.726167+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4502
+      "score": 3.4232
     },
     {
       "title": "Intel joins Musk’s Terafab as foundry partner in $25B chip megaproject",
@@ -479,10 +495,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/intel-terafab-elon-musk-foundry-partnership.png",
       "published": "2026-04-08T14:59:04+00:00",
       "firstSeen": "2026-04-08T15:41:17.726167+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3099
+      "score": 5.2828
     },
     {
       "title": "ALTK‑Evolve: On‑the‑Job Learning for AI Agents",
@@ -495,10 +511,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6435a1131860001f144239ea/hNoPqYEH7TYWM8ayDpZgF.png",
       "published": "2026-04-08T14:27:42+00:00",
       "firstSeen": "2026-04-08T15:00:01.280640+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8775
+      "score": 4.8508
     },
     {
       "title": "Your team’s whiteboard just got its own AI agents, and they already know the context",
@@ -511,10 +527,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Miro-Deal.png",
       "published": "2026-04-08T14:06:39+00:00",
       "firstSeen": "2026-04-08T15:00:01.280640+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5892
+      "score": 4.5629
     },
     {
       "title": "The next phase of enterprise AI",
@@ -527,10 +543,10 @@
       "image": "",
       "published": "2026-04-08T14:00:00+00:00",
       "firstSeen": "2026-04-08T21:57:36.541798+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9367
+      "score": 9.9104
     },
     {
       "title": "Mustafa Suleyman: AI development won’t hit a wall anytime soon—here’s why",
@@ -543,10 +559,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Final-Header_Suleyman.png?resize=1200%2C600",
       "published": "2026-04-08T14:00:00+00:00",
       "firstSeen": "2026-04-08T15:00:01.280640+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0267
+      "score": 2.0004
     },
     {
       "title": "Final 3 days to save up to $500 on your TechCrunch Disrupt 2026 pass",
@@ -559,10 +575,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_3Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-04-08T14:00:00+00:00",
       "firstSeen": "2026-04-08T15:00:01.280640+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0267
+      "score": 2.0004
     },
     {
       "title": "The vibes are off at OpenAI",
@@ -575,10 +591,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25431704/STK201_SAM_ALTMAN_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-08T13:47:38+00:00",
       "firstSeen": "2026-04-08T13:59:54.505487+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0919
+      "score": 9.0657
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -591,10 +607,10 @@
       "image": "",
       "published": "2026-04-08T13:00:24+00:00",
       "firstSeen": "2026-04-08T13:59:54.505487+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9639
+      "score": 10.9383
     },
     {
       "title": "Atlassian launches visual AI tools and third-party agents in Confluence",
@@ -607,10 +623,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/10/atlassian-confluence-bug-getty.jpg?resize=1200%2C800",
       "published": "2026-04-08T13:00:00+00:00",
       "firstSeen": "2026-04-08T15:00:01.280640+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9037
+      "score": 7.8782
     },
     {
       "title": "Unionized ProPublica staff are on strike over AI, layoffs, and wages",
@@ -623,26 +639,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK149_AI_Writing.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-08T11:53:28+00:00",
       "firstSeen": "2026-04-08T12:00:02.097572+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0491
-    },
-    {
-      "title": "Thousands of consumer routers hacked by Russia's military",
-      "url": "https://arstechnica.com/security/2026/04/russias-military-hacks-thousands-of-consumer-routers-to-steal-credentials",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "End-of-life routers in homes and small offices hacked in 120 countries.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2022/04/russia-cyber-hack-1000x648.jpeg",
-      "published": "2026-04-08T11:00:08+00:00",
-      "firstSeen": "2026-04-08T13:00:02.007600+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8198
+      "score": 2.0243
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4887
+      "score": 1.4771
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -671,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1505
+      "score": 2.1424
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
@@ -687,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-08T23:51:05.039377+00:00",
+      "lastSeen": "2026-04-09T01:00:01.812270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 3.2924
