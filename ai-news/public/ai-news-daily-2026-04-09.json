@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T09:22:14.911483+00:00",
+  "updatedAt": "2026-04-09T11:00:01.383756+00:00",
   "items": [
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T09:22:14.911483+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1103
+      "score": 8.0727
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -29,10 +29,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T09:22:14.911483+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2025
+      "score": 6.1612
+    },
+    {
+      "title": "This AI Wearable From Ex-Apple Engineers Looks Like an iPod Shuffle",
+      "url": "https://www.wired.com/story/this-ai-button-wearable-from-ex-apple-engineers-looks-like-an-ipod-shuffle",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Two former Apple Vision Pro developers made an AI wearable that only listens when you tap it. They hope to win where other AI gadgets have fumbled: privacy.",
+      "image": "https://media.wired.com/photos/69d67ff20c95e3e9dba17bfa/master/pass/gear_wearable_Book-Worm_9218.jpg",
+      "published": "2026-04-09T09:30:00+00:00",
+      "firstSeen": "2026-04-09T10:00:01.619985+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7451
     },
     {
       "title": "Sigmoid vs ReLU Activation Functions: The Inference Cost of Losing Geometric Context",
@@ -45,10 +61,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-11-150x150.png",
       "published": "2026-04-09T07:10:00+00:00",
       "firstSeen": "2026-04-09T07:53:01.948224+00:00",
-      "lastSeen": "2026-04-09T09:22:14.911483+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5547
+      "score": 3.5089
+    },
+    {
+      "title": "YouTubers sue Amazon for allegedly scraping their videos to train Nova Reel",
+      "url": "https://thenextweb.com/news/amazon-nova-reel-youtubers-dmca-lawsuit",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Three YouTube content creators, specifically the company behind H3H3 Productions, a solo golf presenter, and a golf channel, have filed a proposed class action lawsuit in Seattle alleging that Amazon bypassed YouTube’s technical protections using virtual machines and rotating IP addresses to scrape their videos without consent, feeding the footage into training datasets for [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-nova-reel-youtubers-dmca-lawsuit.png",
+      "published": "2026-04-09T10:03:02+00:00",
+      "firstSeen": "2026-04-09T11:00:01.383756+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1214
     },
     {
       "title": "A Coding Guide to Build Advanced Document Intelligence Pipelines with Google LangExtract, OpenAI Models, Structured Extraction, and Interactive Visualization",
@@ -61,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-19.png",
       "published": "2026-04-09T06:54:36+00:00",
       "firstSeen": "2026-04-09T07:00:01.329817+00:00",
-      "lastSeen": "2026-04-09T09:22:14.911483+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.1473
+      "score": 3.1019
     },
     {
       "title": "BILL lets enterprise suppliers collect from any SMB, even ones not on its platform",
@@ -76,11 +108,11 @@
       "summary": "In short: BILL has expanded its Supplier Payments Plus product to let large enterprise suppliers accept card and ACH payments from any SMB customer, including those with no BILL account, converting paper checks into digital transactions automatically and depositing card payments directly into supplier accounts. The company says the changes can shorten collection times by up [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/bill-supplier-payments-plus-expansion-b2b-network.png",
       "published": "2026-04-09T08:18:50+00:00",
-      "firstSeen": "2026-04-09T09:22:14.911483+00:00",
-      "lastSeen": "2026-04-09T09:22:14.911483+00:00",
+      "firstSeen": "2026-04-09T10:00:01.619985+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4682
+      "score": 2.4209
     },
     {
       "title": "Feng Chen, Manas Bedmutha, Janice Sabin, Andrea Hartzler, Nadir Weibel, Trevor Cohen",
@@ -91,12 +123,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-09T10:00:10.765836+00:00",
+      "published": "2026-04-09T11:00:07.295147+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3488
+      "score": 2.36
+    },
+    {
+      "title": "Kia cuts EV target, confirms electric pickup, and plans to put Atlas robots in its Georgia factories",
+      "url": "https://thenextweb.com/news/kia-ceo-investor-day-2026-ev-pickup-atlas",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: On the day that 25% US tariffs on South Korean imports took effect, Kia held its 2026 CEO Investor Day in Seoul and presented a plan built for a changed world: a quietly reduced EV sales target for 2030, a major expansion of its hybrid range, the first confirmation of a North American electric [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/kia-ceo-investor-day-2026-ev-pickup-atlas.png",
+      "published": "2026-04-09T10:13:09+00:00",
+      "firstSeen": "2026-04-09T11:00:01.383756+00:00",
+      "lastSeen": "2026-04-09T11:00:01.383756+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1264
     }
   ],
   "errors": []
