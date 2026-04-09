@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T13:00:01.589776+00:00",
+  "updatedAt": "2026-04-09T14:00:01.403835+00:00",
   "items": [
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0288
+      "score": 8.0077
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1131
+      "score": 6.09
     },
     {
       "title": "OpenAI Full Fan Mode Contest: Terms & Conditions",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-04-09T00:00:00+00:00",
       "firstSeen": "2026-04-09T13:00:01.589776+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1666
+      "score": 5.1456
     },
     {
       "title": "This AI Wearable From Ex-Apple Engineers Looks Like an iPod Shuffle",
@@ -61,10 +61,26 @@
       "image": "https://media.wired.com/photos/69d67ff20c95e3e9dba17bfa/master/pass/gear_wearable_Book-Worm_9218.jpg",
       "published": "2026-04-09T09:30:00+00:00",
       "firstSeen": "2026-04-09T10:00:01.619985+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6881
+      "score": 4.6607
+    },
+    {
+      "title": "Multimodal Embedding & Reranker Models with Sentence Transformers",
+      "url": "https://huggingface.co/blog/multimodal-sentence-transformers",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+      "published": "2026-04-09T00:00:00+00:00",
+      "firstSeen": "2026-04-09T14:00:01.403835+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.4756
     },
     {
       "title": "Google makes it easy to deepfake yourself",
@@ -77,10 +93,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/acastro_STK092_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T10:53:49+00:00",
       "firstSeen": "2026-04-09T11:15:17.539947+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0976
+      "score": 4.0691
     },
     {
       "title": "Sigmoid vs ReLU Activation Functions: The Inference Cost of Losing Geometric Context",
@@ -93,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-11-150x150.png",
       "published": "2026-04-09T07:10:00+00:00",
       "firstSeen": "2026-04-09T07:53:01.948224+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4554
+      "score": 3.4298
     },
     {
       "title": "YouTubers sue Amazon for allegedly scraping their videos to train Nova Reel",
@@ -109,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-nova-reel-youtubers-dmca-lawsuit.png",
       "published": "2026-04-09T10:03:02+00:00",
       "firstSeen": "2026-04-09T11:00:01.383756+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0635
+      "score": 3.0357
     },
     {
       "title": "A Coding Guide to Build Advanced Document Intelligence Pipelines with Google LangExtract, OpenAI Models, Structured Extraction, and Interactive Visualization",
@@ -125,10 +141,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-19.png",
       "published": "2026-04-09T06:54:36+00:00",
       "firstSeen": "2026-04-09T07:00:01.329817+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.0488
+      "score": 3.0234
+    },
+    {
+      "title": "Inside the Pro-Iran Meme Machine Trolling Trump With AI Lego Cartoons",
+      "url": "https://www.wired.com/story/inside-the-pro-iran-meme-machine-trolling-trump-with-ai-lego-cartoons",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Since the beginning of the Iran war, the group Explosive Media has released over a dozen viral videos mocking Trump and the US.",
+      "image": "https://media.wired.com/photos/69d681be0aa0c0c6d4da5c6c/master/pass/GettyImages-825967636.jpg",
+      "published": "2026-04-09T13:25:21+00:00",
+      "firstSeen": "2026-04-09T14:00:01.403835+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9725
+    },
+    {
+      "title": "Hallucination as output-boundary misclassification: a composite abstention architecture for language models",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-09T14:00:16.774601+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "BILL lets enterprise suppliers collect from any SMB, even ones not on its platform",
@@ -141,42 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/bill-supplier-payments-plus-expansion-b2b-network.png",
       "published": "2026-04-09T08:18:50+00:00",
       "firstSeen": "2026-04-09T10:00:01.619985+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
+      "lastSeen": "2026-04-09T14:00:01.403835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3657
-    },
-    {
-      "title": "Hallucination as output-boundary misclassification: a composite abstention architecture for language models",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-09T13:00:16.313056+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "Kia cuts EV target, confirms electric pickup, and plans to put Atlas robots in its Georgia factories",
-      "url": "https://thenextweb.com/news/kia-ceo-investor-day-2026-ev-pickup-atlas",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: On the day that 25% US tariffs on South Korean imports took effect, Kia held its 2026 CEO Investor Day in Seoul and presented a plan built for a changed world: a quietly reduced EV sales target for 2030, a major expansion of its hybrid range, the first confirmation of a North American electric [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/kia-ceo-investor-day-2026-ev-pickup-atlas.png",
-      "published": "2026-04-09T10:13:09+00:00",
-      "firstSeen": "2026-04-09T11:00:01.383756+00:00",
-      "lastSeen": "2026-04-09T13:00:01.589776+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0682
+      "score": 2.3393
     }
   ],
   "errors": []
