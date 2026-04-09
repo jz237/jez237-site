@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T16:00:01.556886+00:00",
+  "updatedAt": "2026-04-09T15:53:12.486965+00:00",
   "items": [
     {
       "title": "Demis Hassabis says Google DeepMind had to return to its startup roots after the Brain merger",
@@ -12,11 +12,11 @@
       "summary": "In short: Demis Hassabis, speaking on the 20VC podcast with Harry Stebbings in early April 2026, described how Google DeepMind has accelerated its pace over the past two to three years by merging Google Brain’s compute resources with DeepMind’s research culture and returning to what he called a “startup or entrepreneurial” way of working. He also [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-deepmind-hassabis-startup-pace.png",
       "published": "2026-04-09T15:11:22+00:00",
-      "firstSeen": "2026-04-09T16:00:01.556886+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "firstSeen": "2026-04-09T15:53:12.486965+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.5255
+      "score": 9.5289
     },
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -29,10 +29,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9673
+      "score": 7.9696
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0457
+      "score": 6.0481
     },
     {
       "title": "Workday’s CTO traded his C-suite title for a technical staff role at Anthropic",
@@ -60,11 +60,11 @@
       "summary": "In short: Peter Bailis, who joined Workday as chief technology officer in May 2025, left the company last month and has taken a role as member of technical staff at Anthropic, where he will focus on reinforcement learning engineering. The move strips away a C-suite title in exchange for technical proximity to the frontier, and lands [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-09T14:39:55+00:00",
-      "firstSeen": "2026-04-09T16:00:01.556886+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "firstSeen": "2026-04-09T15:53:12.486965+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.11
+      "score": 5.1133
     },
     {
       "title": "OpenAI Full Fan Mode Contest: Terms & Conditions",
@@ -77,10 +77,10 @@
       "image": "",
       "published": "2026-04-09T00:00:00+00:00",
       "firstSeen": "2026-04-09T13:00:01.589776+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1053
+      "score": 5.1075
     },
     {
       "title": "Consistency-Guided Decoding with Proof-Driven Disambiguation for Three-Way Logical Question Answering",
@@ -91,9 +91,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-09T16:00:10.463102+00:00",
+      "published": "2026-04-09T15:53:21.735142+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/69d67ff20c95e3e9dba17bfa/master/pass/gear_wearable_Book-Worm_9218.jpg",
       "published": "2026-04-09T09:30:00+00:00",
       "firstSeen": "2026-04-09T10:00:01.619985+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6083
+      "score": 4.6112
     },
     {
       "title": "Multimodal Embedding & Reranker Models with Sentence Transformers",
@@ -125,10 +125,10 @@
       "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
       "published": "2026-04-09T00:00:00+00:00",
       "firstSeen": "2026-04-09T14:00:01.403835+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4353
+      "score": 4.4375
     },
     {
       "title": "The AI industry’s race for profits is now existential",
@@ -141,10 +141,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/DCD_0409.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T14:00:00+00:00",
       "firstSeen": "2026-04-09T14:09:14.537978+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3005
+      "score": 4.3038
     },
     {
       "title": "Google makes it easy to deepfake yourself",
@@ -157,10 +157,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/acastro_STK092_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T10:53:49+00:00",
       "firstSeen": "2026-04-09T11:15:17.539947+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0146
+      "score": 4.0176
     },
     {
       "title": "Sigmoid vs ReLU Activation Functions: The Inference Cost of Losing Geometric Context",
@@ -173,10 +173,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-11-150x150.png",
       "published": "2026-04-09T07:10:00+00:00",
       "firstSeen": "2026-04-09T07:53:01.948224+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3806
+      "score": 3.3834
     },
     {
       "title": "GoPro Is Cutting Nearly a Quarter of Its Workforce (and AI Isn’t the Reason)",
@@ -185,14 +185,14 @@
       "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "GoPro is cutting nearly 23% of its workforce amid declining revenue, signaling a cost-cutting shift… not AI-driven layoffs like others.\nThe post GoPro Is Cutting Nearly a Quarter of Its Workforce (and AI Isn’t the Reason) appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/Copy-of-Untitled-Design-2026-04-09T232620.212.png",
-      "published": "2026-04-09T15:33:32+00:00",
-      "firstSeen": "2026-04-09T16:00:01.556886+00:00",
-      "lastSeen": "2026-04-09T16:00:01.556886+00:00",
+      "summary": "In short: Three YouTube content creators, specifically the company behind H3H3 Productions, a solo golf presenter, and a golf channel, have filed a proposed class action lawsuit in Seattle alleging that Amazon bypassed YouTube’s technical protections using virtual machines and rotating IP addresses to scrape their videos without consent, feeding the footage into training datasets for [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-nova-reel-youtubers-dmca-lawsuit.png",
+      "published": "2026-04-09T10:03:02+00:00",
+      "firstSeen": "2026-04-09T11:00:01.383756+00:00",
+      "lastSeen": "2026-04-09T15:53:12.486965+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2366
+      "score": 2.9854
     }
   ],
   "errors": []
