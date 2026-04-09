@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T19:34:12.357082+00:00",
+  "updatedAt": "2026-04-09T21:00:01.723872+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3152,6 +3152,18 @@
     "https://techcrunch.com/2026/04/09/meta-ai-app-climbs-to-no-5-on-the-app-store-after-muse-spark-launch": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200,800",
       "checkedAt": "2026-04-09T19:34:12.357082+00:00"
+    },
+    "https://techcrunch.com/2026/04/09/florida-ag-investigation-openai-chatgpt-shooting": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
+      "checkedAt": "2026-04-09T21:00:01.723872+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/9/asgi-gzip": {
+      "image": "",
+      "checkedAt": "2026-04-09T21:00:01.723872+00:00"
+    },
+    "https://huggingface.co/blog/waypoint-1-5": {
+      "image": "https://huggingface.co/blog/assets/overworld/waypoint-v1-5.png",
+      "checkedAt": "2026-04-09T21:00:01.723872+00:00"
     }
   }
 }
