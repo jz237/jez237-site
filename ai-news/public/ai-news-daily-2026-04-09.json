@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T09:00:01.895770+00:00",
+  "updatedAt": "2026-04-09T10:00:01.619985+00:00",
   "items": [
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T09:00:01.895770+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1191
+      "score": 8.0956
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -29,10 +29,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T09:00:01.895770+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2121
+      "score": 6.1863
+    },
+    {
+      "title": "This AI Wearable From Ex-Apple Engineers Looks Like an iPod Shuffle",
+      "url": "https://www.wired.com/story/this-ai-button-wearable-from-ex-apple-engineers-looks-like-an-ipod-shuffle",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Two former Apple Vision Pro developers made an AI wearable that only listens when you tap it. They hope to win where other AI gadgets have fumbled: privacy.",
+      "image": "https://media.wired.com/photos/69d67ff20c95e3e9dba17bfa/master/pass/gear_wearable_Book-Worm_9218.jpg",
+      "published": "2026-04-09T09:30:00+00:00",
+      "firstSeen": "2026-04-09T10:00:01.619985+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7748
     },
     {
       "title": "Sigmoid vs ReLU Activation Functions: The Inference Cost of Losing Geometric Context",
@@ -45,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-11-150x150.png",
       "published": "2026-04-09T07:10:00+00:00",
       "firstSeen": "2026-04-09T07:53:01.948224+00:00",
-      "lastSeen": "2026-04-09T09:00:01.895770+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5654
+      "score": 3.5367
     },
     {
       "title": "A Coding Guide to Build Advanced Document Intelligence Pipelines with Google LangExtract, OpenAI Models, Structured Extraction, and Interactive Visualization",
@@ -61,10 +77,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-19.png",
       "published": "2026-04-09T06:54:36+00:00",
       "firstSeen": "2026-04-09T07:00:01.329817+00:00",
-      "lastSeen": "2026-04-09T09:00:01.895770+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.1579
+      "score": 3.1295
+    },
+    {
+      "title": "BILL lets enterprise suppliers collect from any SMB, even ones not on its platform",
+      "url": "https://thenextweb.com/news/bill-lets-enterprise-suppliers-collect-from-any-smb-even-ones-not-on-its-platform",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: BILL has expanded its Supplier Payments Plus product to let large enterprise suppliers accept card and ACH payments from any SMB customer, including those with no BILL account, converting paper checks into digital transactions automatically and depositing card payments directly into supplier accounts. The company says the changes can shorten collection times by up [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/bill-supplier-payments-plus-expansion-b2b-network.png",
+      "published": "2026-04-09T08:18:50+00:00",
+      "firstSeen": "2026-04-09T10:00:01.619985+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4497
     },
     {
       "title": "Feng Chen, Manas Bedmutha, Janice Sabin, Andrea Hartzler, Nadir Weibel, Trevor Cohen",
@@ -75,9 +107,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-09T09:00:07.438289+00:00",
+      "published": "2026-04-09T10:00:10.765836+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-09T09:00:01.895770+00:00",
+      "lastSeen": "2026-04-09T10:00:01.619985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
