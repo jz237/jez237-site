@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T21:00:01.723872+00:00",
+  "updatedAt": "2026-04-09T22:00:01.520709+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3164,6 +3164,18 @@
     "https://huggingface.co/blog/waypoint-1-5": {
       "image": "https://huggingface.co/blog/assets/overworld/waypoint-v1-5.png",
       "checkedAt": "2026-04-09T21:00:01.723872+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/9/github-repo-size": {
+      "image": "",
+      "checkedAt": "2026-04-09T22:00:01.520709+00:00"
+    },
+    "https://techcrunch.com/2026/04/09/chatgpt-pro-plan-100-month-codex": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/09/GettyImages-1574154948-e1695647511123.jpg?resize=1200,676",
+      "checkedAt": "2026-04-09T22:00:01.520709+00:00"
+    },
+    "https://openai.com/index/cyber-agent": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/KJPZjF7vHs0QmSdTZsJ1o/200c943c46f99f17ada9290ec2612e03/oai_CyberAgent_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-09T22:00:01.520709+00:00"
     }
   }
 }
