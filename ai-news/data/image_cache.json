@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T22:58:33.112030+00:00",
+  "updatedAt": "2026-04-09T23:51:20.884103+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3180,6 +3180,14 @@
     "https://www.theverge.com/policy/909557/openai-florida-investigation": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK155_OPEN_AI_2025_CVirgiia_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-09T22:58:33.112030+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/909599/chatgpt-pro-subscription-new": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-09T23:51:20.884103+00:00"
+    },
+    "https://openai.com/index/cyberagent": {
+      "image": "",
+      "checkedAt": "2026-04-09T23:51:20.884103+00:00"
     }
   }
 }
