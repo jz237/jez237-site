@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "updatedAt": "2026-04-09T12:00:01.435527+00:00",
+  "updatedAt": "2026-04-09T11:15:17.539947+00:00",
   "items": [
     {
       "title": "Gemini gets notebooks to help you organize projects",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T00:06:12+00:00",
       "firstSeen": "2026-04-09T01:00:01.812270+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0504
+      "score": 8.067
     },
     {
       "title": "Google AI Research Introduces PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-08-at-8.23.44-PM-1-150x150.png",
       "published": "2026-04-09T03:25:24+00:00",
       "firstSeen": "2026-04-09T03:25:54.326380+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1368
+      "score": 6.1549
     },
     {
       "title": "This AI Wearable From Ex-Apple Engineers Looks Like an iPod Shuffle",
@@ -45,10 +45,10 @@
       "image": "https://media.wired.com/photos/69d67ff20c95e3e9dba17bfa/master/pass/gear_wearable_Book-Worm_9218.jpg",
       "published": "2026-04-09T09:30:00+00:00",
       "firstSeen": "2026-04-09T10:00:01.619985+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7162
+      "score": 4.7377
     },
     {
       "title": "Google makes it easy to deepfake yourself",
@@ -60,11 +60,11 @@
       "summary": "YouTube Shorts is rolling out a new AI-powered feature giving creators an easy way to realistically clone themselves on camera. The launch, hinted at earlier this year, reflects the platform's fraught relationship with AI-generated content, adding more generative features while struggling to contain AI slop, deepfake scams, and impersonations. YouTube says the new tool will [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/acastro_STK092_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T10:53:49+00:00",
-      "firstSeen": "2026-04-09T12:00:01.435527+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "firstSeen": "2026-04-09T11:15:17.539947+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1268
+      "score": 4.1491
     },
     {
       "title": "Sigmoid vs ReLU Activation Functions: The Inference Cost of Losing Geometric Context",
@@ -77,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-11-150x150.png",
       "published": "2026-04-09T07:10:00+00:00",
       "firstSeen": "2026-04-09T07:53:01.948224+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4818
+      "score": 3.5019
     },
     {
       "title": "YouTubers sue Amazon for allegedly scraping their videos to train Nova Reel",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-nova-reel-youtubers-dmca-lawsuit.png",
       "published": "2026-04-09T10:03:02+00:00",
       "firstSeen": "2026-04-09T11:00:01.383756+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.092
+      "score": 3.1138
     },
     {
       "title": "A Coding Guide to Build Advanced Document Intelligence Pipelines with Google LangExtract, OpenAI Models, Structured Extraction, and Interactive Visualization",
@@ -109,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-19.png",
       "published": "2026-04-09T06:54:36+00:00",
       "firstSeen": "2026-04-09T07:00:01.329817+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.075
+      "score": 3.0949
     },
     {
       "title": "BILL lets enterprise suppliers collect from any SMB, even ones not on its platform",
@@ -125,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/bill-supplier-payments-plus-expansion-b2b-network.png",
       "published": "2026-04-09T08:18:50+00:00",
       "firstSeen": "2026-04-09T10:00:01.619985+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3929
+      "score": 2.4137
     },
     {
       "title": "Feng Chen, Manas Bedmutha, Janice Sabin, Andrea Hartzler, Nadir Weibel, Trevor Cohen",
@@ -139,9 +139,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-09T12:00:06.973903+00:00",
+      "published": "2026-04-09T11:15:21.743931+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -157,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/kia-ceo-investor-day-2026-ev-pickup-atlas.png",
       "published": "2026-04-09T10:13:09+00:00",
       "firstSeen": "2026-04-09T11:00:01.383756+00:00",
-      "lastSeen": "2026-04-09T12:00:01.435527+00:00",
+      "lastSeen": "2026-04-09T11:15:17.539947+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0969
+      "score": 2.1188
     }
   ],
   "errors": []
