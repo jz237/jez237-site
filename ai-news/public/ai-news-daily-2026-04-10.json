@@ -1,6 +1,6 @@
 {
   "date": "2026-04-10",
-  "updatedAt": "2026-04-10T21:52:41.039489+00:00",
+  "updatedAt": "2026-04-10T22:54:04.154213+00:00",
   "items": [
     {
       "title": "ChatGPT voice mode is a weaker model",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-10T15:56:02+00:00",
       "firstSeen": "2026-04-10T16:00:01.718339+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.8226
+      "score": 20.7964
     },
     {
       "title": "Meow Technologies launches the first agentic banking platform for AI agents",
@@ -30,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meow-technologies-agentic-banking-ai-agents.png",
       "published": "2026-04-10T14:26:56+00:00",
       "firstSeen": "2026-04-10T16:05:14.086153+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4449
+      "score": 16.4198
     },
     {
       "title": "Revolut launches its new AI assistant AIR to UK customers",
@@ -50,7 +50,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0922
+      "score": 14.0714
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -63,27 +63,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-10T19:40:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2249
-    },
-    {
-      "title": "Anthropic temporarily banned OpenClaw’s creator from accessing Claude",
-      "url": "https://techcrunch.com/2026/04/10/anthropic-temporarily-banned-openclaws-creator-from-accessing-claude",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "This ban took place after Claude's pricing changed for OpenClaw users last week.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/ChatGPT-OpenClaw-Claude.jpg?resize=1200%2C800",
-      "published": "2026-04-10T20:27:52+00:00",
-      "firstSeen": "2026-04-10T20:53:02.891448+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.2476
+      "score": 13.1959
     },
     {
       "title": "Google Brings NotebookLM to Gemini for Easy Project Organization",
@@ -96,10 +80,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/unnamed-2026-04-10T220103.688.png",
       "published": "2026-04-10T14:30:20+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2463
+      "score": 11.2212
+    },
+    {
+      "title": "Anthropic temporarily banned OpenClaw’s creator from accessing Claude",
+      "url": "https://techcrunch.com/2026/04/10/anthropic-temporarily-banned-openclaws-creator-from-accessing-claude",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "This ban took place after Claude's pricing changed for OpenClaw users last week.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/ChatGPT-OpenClaw-Claude.jpg?resize=1200%2C800",
+      "published": "2026-04-10T20:27:52+00:00",
+      "firstSeen": "2026-04-10T20:53:02.891448+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.218
     },
     {
       "title": "Stalking victim sues OpenAI, claims ChatGPT fueled her abuser’s delusions and ignored her warnings",
@@ -112,27 +112,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1733837014-e.jpg?resize=1200%2C800",
       "published": "2026-04-10T16:41:34+00:00",
       "firstSeen": "2026-04-10T17:04:08.537163+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1424
-    },
-    {
-      "title": "NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model",
-      "url": "https://www.marktechpost.com/2026/04/10/nvidia-releases-aitune-an-open-source-inference-toolkit-that-automatically-finds-the-fastest-inference-backend-for-any-pytorch-model",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Deploying a deep learning model into production has always involved a painful gap between the model a researcher trains and the model that actually runs efficiently at scale. TensorRT exists, Torch-TensorRT exists, TorchAO exists — but wiring them together, deciding which backend to use for which layer, and validating that the tuned model still produces [&#8230;]\nThe post NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-24.png",
-      "published": "2026-04-10T17:43:00+00:00",
-      "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T20:53:02.891448+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 10.7999
+      "score": 11.1158
     },
     {
       "title": "Applications of AI at OpenAI",
@@ -145,10 +128,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.799
+      "score": 10.7823
     },
     {
       "title": "Anthropic is exploring building its own AI chips as Claude revenues surge past $30 billion run rate",
@@ -161,10 +144,27 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-10T07:50:53+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.795
+      "score": 10.7741
+    },
+    {
+      "title": "NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model",
+      "url": "https://www.marktechpost.com/2026/04/10/nvidia-releases-aitune-an-open-source-inference-toolkit-that-automatically-finds-the-fastest-inference-backend-for-any-pytorch-model",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Deploying a deep learning model into production has always involved a painful gap between the model a researcher trains and the model that actually runs efficiently at scale. TensorRT exists, Torch-TensorRT exists, TorchAO exists — but wiring them together, deciding which backend to use for which layer, and validating that the tuned model still produces [&#8230;]\nThe post NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-24.png",
+      "published": "2026-04-10T17:43:00+00:00",
+      "firstSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 10.7725
     },
     {
       "title": "ChatGPT for research",
@@ -177,10 +177,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.399
+      "score": 10.3823
     },
     {
       "title": "Research with ChatGPT",
@@ -193,17 +193,11 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "lastSeen": "2026-04-10T22:54:04.154213+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.399
+      "score": 10.3823
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
