@@ -1,6 +1,6 @@
 {
   "date": "2026-04-10",
-  "updatedAt": "2026-04-10T17:00:01.943704+00:00",
+  "updatedAt": "2026-04-10T16:05:14.086153+00:00",
   "items": [
     {
       "title": "ChatGPT voice mode is a weaker model",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-10T15:56:02+00:00",
       "firstSeen": "2026-04-10T16:00:01.718339+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.9579
+      "score": 20.9853
     },
     {
       "title": "Meow Technologies launches the first agentic banking platform for AI agents",
@@ -29,11 +29,11 @@
       "summary": "In short: Meow Technologies has launched what it describes as the world’s first agentic banking platform, enabling AI agents to open business bank accounts, issue cards, send payments, and manage day-to-day account activity on behalf of users, with no human required to initiate any action. The platform supports Claude, ChatGPT, Cursor, Gemini, and other leading AI [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meow-technologies-agentic-banking-ai-agents.png",
       "published": "2026-04-10T14:26:56+00:00",
-      "firstSeen": "2026-04-10T17:00:01.943704+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "firstSeen": "2026-04-10T16:05:14.086153+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.5747
+      "score": 16.6011
     },
     {
       "title": "Revolut launches its new AI assistant AIR to UK customers",
@@ -46,28 +46,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AIR-Revolut.png",
       "published": "2026-04-10T07:42:48+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1999
-    },
-    {
-      "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
-      "url": "https://blogs.nvidia.com/blog/national-robotics-week-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "This National Robotics Week, NVIDIA is highlighting the breakthroughs that are bringing AI into the physical world — as well as the growing wave of robots transforming industries, from agricultural and manufacturing to energy and beyond. Advancements in robot learning, simulation and foundation models are accelerating development, enabling robots to move from training in virtual [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
-      "published": "2026-04-10T16:40:59+00:00",
-      "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 13.2803
+      "score": 14.2217
     },
     {
       "title": "Google Brings NotebookLM to Gemini for Easy Project Organization",
@@ -80,26 +63,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/unnamed-2026-04-10T220103.688.png",
       "published": "2026-04-10T14:30:20+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3763
-    },
-    {
-      "title": "Stalking victim sues OpenAI, claims ChatGPT fueled her abuser’s delusions and ignored her warnings",
-      "url": "https://techcrunch.com/2026/04/10/stalking-victim-sues-openai-claims-chatgpt-fueled-her-abusers-delusions-and-ignored-her-warnings",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "OpenAI ignored three warnings that a ChatGPT user was dangerous — including its own mass casualty flag — while he stalked and harassed his ex-girlfriend, a new lawsuit alleges.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1733837014-e.jpg?resize=1200%2C800",
-      "published": "2026-04-10T16:41:34+00:00",
-      "firstSeen": "2026-04-10T17:00:01.943704+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.2806
+      "score": 11.4027
     },
     {
       "title": "Anthropic is exploring building its own AI chips as Claude revenues surge past $30 billion run rate",
@@ -112,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-10T07:50:53+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9031
+      "score": 10.925
     },
     {
       "title": "CoreWeave signs multi-year Anthropic deal as nine of ten top AI model providers join its platform",
@@ -128,10 +95,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/coreweave-anthropic-multi-year-cloud-deal.png",
       "published": "2026-04-10T13:49:10+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.357
+      "score": 9.3828
     },
     {
       "title": "OpenAI Backs Bill That Would Limit Liability for AI-Enabled Mass Deaths or Financial Disasters",
@@ -144,10 +111,10 @@
       "image": "https://media.wired.com/photos/69d81fc99011397f817a1986/master/pass/OpenAI-Backs-Bill-That-Lets-AI-Labs-Dodge-Liability-for-Critical-Harms-Business-2244268254.jpg",
       "published": "2026-04-10T00:19:53+00:00",
       "firstSeen": "2026-04-10T01:00:01.651477+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8823
+      "score": 8.9001
     },
     {
       "title": "An End-to-End Coding Guide to NVIDIA KVPress for Long-Context LLM Inference, KV Cache Compression, and Memory-Efficient Generation",
@@ -160,10 +127,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-22.png",
       "published": "2026-04-10T02:21:18+00:00",
       "firstSeen": "2026-04-10T03:00:01.215099+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0523
+      "score": 8.0712
     },
     {
       "title": "Microsoft starts removing Copilot buttons from Windows 11 apps",
@@ -176,10 +143,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/copilotbutton.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T09:22:06+00:00",
       "firstSeen": "2026-04-10T10:00:02.043510+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2499
+      "score": 6.2727
     },
     {
       "title": "Fear and loathing at OpenAI",
@@ -192,10 +159,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0410_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T12:23:18+00:00",
       "firstSeen": "2026-04-10T13:00:01.983147+00:00",
-      "lastSeen": "2026-04-10T17:00:01.943704+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9277
+      "score": 5.9526
+    },
+    {
+      "title": "Gmail’s end-to-end encryption comes to mobile, a year after its web launch",
+      "url": "https://thenextweb.com/news/gmail-end-to-end-encryption-mobile-enterprise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Google has brought end-to-end encryption in Gmail to Android and iOS, closing the mobile gap that remained after the feature launched on the web in April 2025. Enterprise users on Google Workspace Enterprise Plus with the Assured Controls add-on can now compose and read encrypted messages directly in the Gmail app, with no extra [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/gmail-favicon.png",
+      "published": "2026-04-10T12:44:57+00:00",
+      "firstSeen": "2026-04-10T13:45:39.785691+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2526
+    },
+    {
+      "title": "Five AI Compute Architectures Every Engineer Should Know: CPUs, GPUs, TPUs, NPUs, and LPUs Compared",
+      "url": "https://www.marktechpost.com/2026/04/09/five-ai-compute-architectures-every-engineer-should-know-cpus-gpus-tpus-npus-and-lpus-compared",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Modern AI is no longer powered by a single type of processor—it runs on a diverse ecosystem of specialized compute architectures, each making deliberate tradeoffs between flexibility, parallelism, and memory efficiency. While traditional systems relied heavily on CPUs, today’s AI workloads are distributed across GPUs for massive parallel computation, NPUs for efficient on-device inference, and [&#8230;]\nThe post Five AI Compute Architectures Every Engineer Should Know: CPUs, GPUs, TPUs, NPUs, and LPUs Compared appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-16-150x150.png",
+      "published": "2026-04-10T03:58:02+00:00",
+      "firstSeen": "2026-04-10T04:00:01.716387+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0056
     }
   ],
   "errors": []
