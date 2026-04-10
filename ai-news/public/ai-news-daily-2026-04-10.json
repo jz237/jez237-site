@@ -1,6 +1,6 @@
 {
   "date": "2026-04-10",
-  "updatedAt": "2026-04-10T22:00:01.979061+00:00",
+  "updatedAt": "2026-04-10T21:52:41.039489+00:00",
   "items": [
     {
       "title": "ChatGPT voice mode is a weaker model",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-10T15:56:02+00:00",
       "firstSeen": "2026-04-10T16:00:01.718339+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.8194
+      "score": 20.8226
     },
     {
       "title": "Meow Technologies launches the first agentic banking platform for AI agents",
@@ -30,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meow-technologies-agentic-banking-ai-agents.png",
       "published": "2026-04-10T14:26:56+00:00",
       "firstSeen": "2026-04-10T16:05:14.086153+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4418
+      "score": 16.4449
     },
     {
       "title": "Revolut launches its new AI assistant AIR to UK customers",
@@ -50,7 +50,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0897
+      "score": 14.0922
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -63,11 +63,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-10T19:40:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2214
+      "score": 13.2249
     },
     {
       "title": "Anthropic temporarily banned OpenClaw’s creator from accessing Claude",
@@ -80,10 +80,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/ChatGPT-OpenClaw-Claude.jpg?resize=1200%2C800",
       "published": "2026-04-10T20:27:52+00:00",
       "firstSeen": "2026-04-10T20:53:02.891448+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2441
+      "score": 11.2476
     },
     {
       "title": "Google Brings NotebookLM to Gemini for Easy Project Organization",
@@ -96,10 +96,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/unnamed-2026-04-10T220103.688.png",
       "published": "2026-04-10T14:30:20+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2433
+      "score": 11.2463
     },
     {
       "title": "Stalking victim sues OpenAI, claims ChatGPT fueled her abuser’s delusions and ignored her warnings",
@@ -112,26 +112,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1733837014-e.jpg?resize=1200%2C800",
       "published": "2026-04-10T16:41:34+00:00",
       "firstSeen": "2026-04-10T17:04:08.537163+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1392
-    },
-    {
-      "title": "Applications of AI at OpenAI",
-      "url": "https://openai.com/academy/applications-of-ai",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Explore how OpenAI products like ChatGPT, Codex, and APIs bring AI into real-world use for work, development, and everyday tasks.",
-      "image": "",
-      "published": "2026-04-10T00:00:00+00:00",
-      "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.797
+      "score": 11.1424
     },
     {
       "title": "NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model",
@@ -144,11 +128,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-24.png",
       "published": "2026-04-10T17:43:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T20:53:02.891448+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.7966
+      "score": 10.7999
+    },
+    {
+      "title": "Applications of AI at OpenAI",
+      "url": "https://openai.com/academy/applications-of-ai",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Explore how OpenAI products like ChatGPT, Codex, and APIs bring AI into real-world use for work, development, and everyday tasks.",
+      "image": "",
+      "published": "2026-04-10T00:00:00+00:00",
+      "firstSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.799
     },
     {
       "title": "Anthropic is exploring building its own AI chips as Claude revenues surge past $30 billion run rate",
@@ -161,10 +161,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-10T07:50:53+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7924
+      "score": 10.795
     },
     {
       "title": "ChatGPT for research",
@@ -177,10 +177,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.397
+      "score": 10.399
     },
     {
       "title": "Research with ChatGPT",
@@ -193,11 +193,17 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T22:00:01.979061+00:00",
+      "lastSeen": "2026-04-10T21:52:41.039489+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.397
+      "score": 10.399
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
