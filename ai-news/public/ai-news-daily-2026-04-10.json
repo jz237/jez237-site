@@ -1,6 +1,6 @@
 {
   "date": "2026-04-10",
-  "updatedAt": "2026-04-10T17:58:44.741321+00:00",
+  "updatedAt": "2026-04-10T19:00:01.298226+00:00",
   "items": [
     {
       "title": "ChatGPT voice mode is a weaker model",
@@ -9,15 +9,15 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "I think it's non-obvious to many people that the OpenAI voice mode runs on a much older, much weaker model - it feels like the AI that you can talk to should be the smartest AI but it really isn't.\nIf you ask ChatGPT voice mode for its knowledge cutoff date it tells you April 2024 - it's a GPT-4o era model.\nThis thought inspired by this Karpathy tweet about the growing gap in understanding of AI capability based on the access points and domains people are using the models with:\n\n[...] It really is simultaneously the case that OpenAI's free and I think slightly orphaned (?) \"Advanced Voice Mode",
+      "summary": "I think it's non-obvious to many people that the OpenAI voice mode runs on a much older, much weaker model - it feels like the AI that you can talk to should be the smartest AI but it really isn't.\nIf you ask ChatGPT voice mode for its knowledge cutoff date it tells you April 2024 - it's a GPT-4o era model.\nThis thought inspired by this Andrej Karpathy tweet about the growing gap in understanding of AI capability based on the access points and domains people are using the models with:\n\n[...] It really is simultaneously the case that OpenAI's free and I think slightly orphaned (?) \"Advanced Voi",
       "image": "",
       "published": "2026-04-10T15:56:02+00:00",
       "firstSeen": "2026-04-10T16:00:01.718339+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.9292
+      "score": 20.9002
     },
     {
       "title": "Meow Technologies launches the first agentic banking platform for AI agents",
@@ -30,10 +30,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meow-technologies-agentic-banking-ai-agents.png",
       "published": "2026-04-10T14:26:56+00:00",
       "firstSeen": "2026-04-10T16:05:14.086153+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.5473
+      "score": 16.5194
     },
     {
       "title": "Revolut launches its new AI assistant AIR to UK customers",
@@ -46,11 +46,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AIR-Revolut.png",
       "published": "2026-04-10T07:42:48+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1771
+      "score": 14.1539
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -63,11 +63,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-10T16:40:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2511
+      "score": 13.2214
     },
     {
       "title": "Google Brings NotebookLM to Gemini for Easy Project Organization",
@@ -80,10 +80,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/unnamed-2026-04-10T220103.688.png",
       "published": "2026-04-10T14:30:20+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3488
+      "score": 11.3209
     },
     {
       "title": "Stalking victim sues OpenAI, claims ChatGPT fueled her abuser’s delusions and ignored her warnings",
@@ -96,10 +96,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1733837014-e.jpg?resize=1200%2C800",
       "published": "2026-04-10T16:41:34+00:00",
       "firstSeen": "2026-04-10T17:04:08.537163+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2514
+      "score": 11.2217
     },
     {
       "title": "NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model",
@@ -112,11 +112,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-24.png",
       "published": "2026-04-10T17:43:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.912
+      "score": 10.8815
     },
     {
       "title": "Anthropic is exploring building its own AI chips as Claude revenues surge past $30 billion run rate",
@@ -129,10 +129,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-10T07:50:53+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8802
+      "score": 10.857
     },
     {
       "title": "Applications of AI at OpenAI",
@@ -145,10 +145,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8676
+      "score": 10.8489
     },
     {
       "title": "ChatGPT for research",
@@ -161,10 +161,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4676
+      "score": 10.4489
     },
     {
       "title": "Research with ChatGPT",
@@ -177,10 +177,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4676
+      "score": 10.4489
     },
     {
       "title": "Personalizing ChatGPT",
@@ -193,10 +193,10 @@
       "image": "",
       "published": "2026-04-10T00:00:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-10T17:58:44.741321+00:00",
+      "lastSeen": "2026-04-10T19:00:01.298226+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4676
+      "score": 9.4489
     }
   ],
   "errors": []
