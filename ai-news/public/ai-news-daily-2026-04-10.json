@@ -1,6 +1,6 @@
 {
   "date": "2026-04-10",
-  "updatedAt": "2026-04-10T03:37:44.123207+00:00",
+  "updatedAt": "2026-04-10T05:00:01.832894+00:00",
   "items": [
     {
       "title": "OpenAI Backs Bill That Would Limit Liability for AI-Enabled Mass Deaths or Financial Disasters",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/69d81fc99011397f817a1986/master/pass/OpenAI-Backs-Bill-That-Lets-AI-Labs-Dodge-Liability-for-Critical-Harms-Business-2244268254.jpg",
       "published": "2026-04-10T00:19:53+00:00",
       "firstSeen": "2026-04-10T01:00:01.651477+00:00",
-      "lastSeen": "2026-04-10T03:37:44.123207+00:00",
+      "lastSeen": "2026-04-10T05:00:01.832894+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1937
+      "score": 9.1562
     },
     {
       "title": "An End-to-End Coding Guide to NVIDIA KVPress for Long-Context LLM Inference, KV Cache Compression, and Memory-Efficient Generation",
@@ -29,13 +29,29 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-22.png",
       "published": "2026-04-10T02:21:18+00:00",
       "firstSeen": "2026-04-10T03:00:01.215099+00:00",
-      "lastSeen": "2026-04-10T03:37:44.123207+00:00",
+      "lastSeen": "2026-04-10T05:00:01.832894+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3818
+      "score": 8.3421
     },
     {
-      "title": "Feng Chen, Manas Bedmutha, Janice Sabin, Andrea Hartzler, Nadir Weibel, Trevor Cohen",
+      "title": "Five AI Compute Architectures Every Engineer Should Know: CPUs, GPUs, TPUs, NPUs, and LPUs Compared",
+      "url": "https://www.marktechpost.com/2026/04/09/five-ai-compute-architectures-every-engineer-should-know-cpus-gpus-tpus-npus-and-lpus-compared",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Modern AI is no longer powered by a single type of processor—it runs on a diverse ecosystem of specialized compute architectures, each making deliberate tradeoffs between flexibility, parallelism, and memory efficiency. While traditional systems relied heavily on CPUs, today’s AI workloads are distributed across GPUs for massive parallel computation, NPUs for efficient on-device inference, and [&#8230;]\nThe post Five AI Compute Architectures Every Engineer Should Know: CPUs, GPUs, TPUs, NPUs, and LPUs Compared appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-16-150x150.png",
+      "published": "2026-04-10T03:58:02+00:00",
+      "firstSeen": "2026-04-10T04:00:01.716387+00:00",
+      "lastSeen": "2026-04-10T05:00:01.832894+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2889
+    },
+    {
+      "title": "BLEG: LLM Functions as Powerful fMRI Graph-Enhancer for Brain Network Analysis",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-10T03:37:49.029948+00:00",
+      "published": "2026-04-10T05:00:06.229160+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-10T03:37:44.123207+00:00",
+      "lastSeen": "2026-04-10T05:00:01.832894+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
