@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T15:02:59.482890+00:00",
+  "updatedAt": "2026-04-10T16:05:14.086153+00:00",
   "items": [
     {
       "title": "Rui Dong, Zitong Wang, Jiaxing Li, Weihuang Zheng, Youyong Kong",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-10T15:03:04.466286+00:00",
+      "published": "2026-04-10T16:05:17.558833+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "This Startup Wants You to Pay Up to Talk With AI Versions of Human Experts",
+      "url": "https://www.wired.com/story/onix-substack-ai-platform-therapy-medicine-nutrition",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Onix is launching a “Substack of bots,” where digital twins of health and wellness influencers dispense advice 24/7. And maybe hawk their products.",
+      "image": "https://media.wired.com/photos/69d7e1f9ba44cf4c6fc2717f/master/pass/Backchannel-Worst-Application-of-AI-Yet-Business-1443132344.jpg",
+      "published": "2026-04-10T16:00:00+00:00",
+      "firstSeen": "2026-04-10T16:05:14.086153+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9873
     },
     {
       "title": "ChatGPT voice mode is a weaker model",
@@ -28,11 +44,11 @@
       "image": "",
       "published": "2026-04-10T15:56:02+00:00",
       "firstSeen": "2026-04-10T16:00:01.718339+00:00",
-      "lastSeen": "2026-04-10T16:00:01.718339+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.988
+      "score": 20.9853
     },
     {
       "title": "Google Brings NotebookLM to Gemini for Easy Project Organization",
@@ -45,10 +61,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/unnamed-2026-04-10T220103.688.png",
       "published": "2026-04-10T14:30:20+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4335
+      "score": 11.4027
+    },
+    {
+      "title": "Meow Technologies launches the first agentic banking platform for AI agents",
+      "url": "https://thenextweb.com/news/meow-technologies-agentic-banking-ai-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Meow Technologies has launched what it describes as the world’s first agentic banking platform, enabling AI agents to open business bank accounts, issue cards, send payments, and manage day-to-day account activity on behalf of users, with no human required to initiate any action. The platform supports Claude, ChatGPT, Cursor, Gemini, and other leading AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meow-technologies-agentic-banking-ai-agents.png",
+      "published": "2026-04-10T14:26:56+00:00",
+      "firstSeen": "2026-04-10T16:05:14.086153+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 16.6011
     },
     {
       "title": "Amazon’s AI tool matches shelter dogs and cats with adopters in the Protect Playtime campaign",
@@ -61,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-ai-pet-adoption-tool-protect-playtime.png",
       "published": "2026-04-10T14:15:18+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.826
+      "score": 2.7954
     },
     {
       "title": "Last 24 hours: Save up to $500 on your TechCrunch Disrupt 2026 pass",
@@ -77,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/10/27055664959_5fbe947d9b_o.jpg?resize=1200%2C799",
       "published": "2026-04-10T14:00:00+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2584
+      "score": 2.228
     },
     {
       "title": "CoreWeave signs multi-year Anthropic deal as nine of ten top AI model providers join its platform",
@@ -93,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/coreweave-anthropic-multi-year-cloud-deal.png",
       "published": "2026-04-10T13:49:10+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.413
+      "score": 9.3828
     },
     {
       "title": "SiFive raises $400m Series G at $3.65bn valuation in final round before IPO",
@@ -109,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/sifive-400m-series-g-risc-v-ipo.png",
       "published": "2026-04-10T13:17:37+00:00",
       "firstSeen": "2026-04-10T13:45:39.785691+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7976
+      "score": 2.7679
     },
     {
       "title": "Amazon Leo targets mid-2026 commercial launch as enterprise beta goes live",
@@ -125,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-leo-satellite-internet-mid-2026.png",
       "published": "2026-04-10T12:54:46+00:00",
       "firstSeen": "2026-04-10T13:45:39.785691+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7866
+      "score": 2.7572
     },
     {
       "title": "This new chip could slash data center energy waste",
@@ -141,10 +173,10 @@
       "image": "https://www.sciencedaily.com/images/1920/piezoelectric-power-converter-on-penny.webp",
       "published": "2026-04-10T12:45:22+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4521
+      "score": 2.4228
     },
     {
       "title": "Gmail’s end-to-end encryption comes to mobile, a year after its web launch",
@@ -157,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/gmail-favicon.png",
       "published": "2026-04-10T12:44:57+00:00",
       "firstSeen": "2026-04-10T13:45:39.785691+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2819
+      "score": 5.2526
     },
     {
       "title": "10 Best SOC 2 Compliance Software for 2026",
@@ -173,10 +205,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/soc-2-compliance-software-2026.png",
       "published": "2026-04-10T12:32:12+00:00",
       "firstSeen": "2026-04-10T13:45:39.785691+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0758
+      "score": 2.0467
     },
     {
       "title": "Fear and loathing at OpenAI",
@@ -189,10 +221,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0410_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T12:23:18+00:00",
       "firstSeen": "2026-04-10T13:00:01.983147+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9816
+      "score": 5.9526
     },
     {
       "title": "Gen Z’s love-hate relationship with AI",
@@ -205,10 +237,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK414_AI_CVIRGINIA_2_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T11:23:28+00:00",
       "firstSeen": "2026-04-10T11:58:45.753829+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9537
+      "score": 2.9255
     },
     {
       "title": "AI Podcasters Really Want to Tell You How to Keep a Man Happy",
@@ -221,10 +253,10 @@
       "image": "https://media.wired.com/photos/69d6e881e2485977e01e633f/master/pass/AI-Podcasters-Telling-You-How-to-Keep-A-Man-Culture.jpg",
       "published": "2026-04-10T10:30:00+00:00",
       "firstSeen": "2026-04-10T11:00:02.055140+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2594
+      "score": 3.2319
     },
     {
       "title": "Meta’s New AI Asked for My Raw Health Data—and Gave Me Terrible Advice",
@@ -237,10 +269,10 @@
       "image": "https://media.wired.com/photos/69d8273352260a3f1748cbdd/master/pass/gear_meta_doctor_getty.jpg",
       "published": "2026-04-10T09:30:00+00:00",
       "firstSeen": "2026-04-10T10:00:02.043510+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1328
+      "score": 2.1061
     },
     {
       "title": "Microsoft starts removing Copilot buttons from Windows 11 apps",
@@ -253,10 +285,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/copilotbutton.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T09:22:06+00:00",
       "firstSeen": "2026-04-10T10:00:02.043510+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2994
+      "score": 6.2727
     },
     {
       "title": "Anthropic is exploring building its own AI chips as Claude revenues surge past $30 billion run rate",
@@ -269,10 +301,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-10T07:50:53+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9506
+      "score": 10.925
     },
     {
       "title": "Revolut launches its new AI assistant AIR to UK customers",
@@ -285,11 +317,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AIR-Revolut.png",
       "published": "2026-04-10T07:42:48+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2472
+      "score": 14.2217
     },
     {
       "title": "Eight, the Portuguese dating app,is raising a €3M seed round",
@@ -302,10 +334,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Eight-founders.png",
       "published": "2026-04-10T07:35:53+00:00",
       "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0443
+      "score": 3.0189
     },
     {
       "title": "Maeconomy raises €1.5M to give building materials a digital identity",
@@ -321,7 +353,7 @@
       "lastSeen": "2026-04-10T15:02:59.482890+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9379
+      "score": 1.9127
     },
     {
       "title": "Serve First secures €5.7M to scale its AI-driven customer experience platform beyond the UK",
@@ -337,7 +369,7 @@
       "lastSeen": "2026-04-10T13:45:39.785691+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9327
+      "score": 1.9076
     },
     {
       "title": "Databricks co-founder Matei Zaharia wins ACM Prize and declares AGI is already here",
@@ -353,7 +385,7 @@
       "lastSeen": "2026-04-10T13:45:39.785691+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9093
+      "score": 1.8849
     },
     {
       "title": "Five AI Compute Architectures Every Engineer Should Know: CPUs, GPUs, TPUs, NPUs, and LPUs Compared",
@@ -366,10 +398,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-16-150x150.png",
       "published": "2026-04-10T03:58:02+00:00",
       "firstSeen": "2026-04-10T04:00:01.716387+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0285
+      "score": 5.0056
     },
     {
       "title": "An End-to-End Coding Guide to NVIDIA KVPress for Long-Context LLM Inference, KV Cache Compression, and Memory-Efficient Generation",
@@ -382,10 +414,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-22.png",
       "published": "2026-04-10T02:21:18+00:00",
       "firstSeen": "2026-04-10T03:00:01.215099+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0931
+      "score": 8.0712
     },
     {
       "title": "OpenAI Backs Bill That Would Limit Liability for AI-Enabled Mass Deaths or Financial Disasters",
@@ -398,10 +430,10 @@
       "image": "https://media.wired.com/photos/69d81fc99011397f817a1986/master/pass/OpenAI-Backs-Bill-That-Lets-AI-Labs-Dodge-Liability-for-Critical-Harms-Business-2244268254.jpg",
       "published": "2026-04-10T00:19:53+00:00",
       "firstSeen": "2026-04-10T01:00:01.651477+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9209
+      "score": 8.9001
     },
     {
       "title": "Meta Superintelligence Lab Releases Muse Spark: A Multimodal Reasoning Model With Thought Compression and Parallel Agents",
@@ -414,10 +446,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-09-at-4.03.45-PM-1-150x150.png",
       "published": "2026-04-09T23:06:29+00:00",
       "firstSeen": "2026-04-10T00:00:02.114023+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.4264
+      "score": 11.4064
     },
     {
       "title": "ChatGPT has a new $100 per month Pro subscription",
@@ -430,10 +462,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T22:57:15+00:00",
       "firstSeen": "2026-04-09T23:51:20.884103+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3634
+      "score": 11.3434
     },
     {
       "title": "Florida launches investigation into OpenAI",
@@ -446,10 +478,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK155_OPEN_AI_2025_CVirgiia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-09T22:17:06+00:00",
       "firstSeen": "2026-04-09T22:58:33.112030+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7505
+      "score": 6.7309
     },
     {
       "title": "GitHub Repo Size",
@@ -462,10 +494,10 @@
       "image": "",
       "published": "2026-04-09T21:31:50+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5662
+      "score": 2.5469
     },
     {
       "title": "ChatGPT finally offers $100/month Pro plan",
@@ -478,10 +510,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/09/GettyImages-1574154948-e1695647511123.jpg?resize=1200%2C676",
       "published": "2026-04-09T21:29:11+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.8653
+      "score": 9.8461
     },
     {
       "title": "Claude Mythos and misguided open-weight fearmongering",
@@ -494,10 +526,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/18fbf26c-4d1b-42a4-94e3-369522619514_3182x1790.png",
       "published": "2026-04-09T21:28:39+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9352
+      "score": 7.916
     },
     {
       "title": "Meta commits another $21 billion to CoreWeave, bringing total AI cloud spend to $35 billion",
@@ -513,7 +545,7 @@
       "lastSeen": "2026-04-10T13:00:01.983147+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8076
+      "score": 2.7889
     },
     {
       "title": "Florida AG announces investigation into OpenAI over shooting that allegedly involved ChatGPT",
@@ -526,10 +558,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024",
       "published": "2026-04-09T20:11:55+00:00",
       "firstSeen": "2026-04-09T21:00:01.723872+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6416
+      "score": 12.6231
     },
     {
       "title": "OpenAI pauses Stargate UK as energy costs and copyright rules block the path",
@@ -545,7 +577,7 @@
       "lastSeen": "2026-04-10T13:00:01.983147+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9986
+      "score": 4.9802
     },
     {
       "title": "“Negative” views of Broadcom driving thousands of VMware migrations, rival says",
@@ -558,10 +590,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/04/GettyImages-1934095718-1152x648.jpg",
       "published": "2026-04-09T19:44:31+00:00",
       "firstSeen": "2026-04-09T21:55:52.021829+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6934
+      "score": 1.6751
     },
     {
       "title": "After data breach, $10B-valued startup Mercor is having a month",
@@ -574,10 +606,10 @@
       "image": "",
       "published": "2026-04-09T19:33:54+00:00",
       "firstSeen": "2026-04-09T19:34:12.357082+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8302
+      "score": 1.812
     },
     {
       "title": "Meta AI app climbs to No. 5 on the App Store after Muse Spark launch",
@@ -590,11 +622,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195497483.jpg?resize=1200%2C800",
       "published": "2026-04-09T19:10:07+00:00",
       "firstSeen": "2026-04-09T19:34:12.357082+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.6232
+      "score": 15.6052
     },
     {
       "title": "Google Cloud deepens AI infrastructure partnership with Intel across Xeon and custom chips",
@@ -610,55 +642,7 @@
       "lastSeen": "2026-04-10T13:00:01.983147+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.681
-    },
-    {
-      "title": "Is Anthropic limiting the release of Mythos to protect the internet — or Anthropic?",
-      "url": "https://techcrunch.com/2026/04/09/is-anthropic-limiting-the-release-of-mythos-to-protect-the-internet-or-anthropic",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic said this week that it limited the release of its newest model, dubbed Mythos, because it is too capable of finding security exploits in software relied upon by users around the world. Are real cybersecurity concerns a cover for a bigger problem at the frontier lab?",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/02/Anthropic-Dario-Amodei.jpeg?w=1182",
-      "published": "2026-04-09T18:50:05+00:00",
-      "firstSeen": "2026-04-09T19:00:01.324097+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5174
-    },
-    {
-      "title": "Amazon’s chip business could be worth $50 billion, Jassy says, and he hints it may sell them externally",
-      "url": "https://thenextweb.com/news/amazon-custom-chips-jassy-letter-fifty-billion-trainium",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Andy Jassy’s annual letter to shareholders, published on 9 April 2026, reveals that Amazon’s custom chip business, covering Graviton, Trainium, and Nitro, generates more than $20 billion in annualised revenue growing at triple-digit rates year-on-year. If sold on the open market like Nvidia, Jassy says, the business would be worth roughly $50 billion a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-custom-chips-jassy-letter-fifty-billion-trainium.png",
-      "published": "2026-04-09T18:30:46+00:00",
-      "firstSeen": "2026-04-09T19:34:12.357082+00:00",
-      "lastSeen": "2026-04-10T13:00:01.983147+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.6718
-    },
-    {
-      "title": "Google and Intel deepen AI infrastructure partnership",
-      "url": "https://techcrunch.com/2026/04/09/google-and-intel-deepen-ai-infrastructure-partnership",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The two tech giants are looking to co-develop custom chips, at a time when demand for CPUs is high due to a growing global shortage.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/04/GettyImages-1709348485.jpg?w=1024",
-      "published": "2026-04-09T18:27:47+00:00",
-      "firstSeen": "2026-04-09T19:00:01.324097+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8109
+      "score": 1.6631
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -671,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2441
+      "score": 1.2406
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -687,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9777
+      "score": 1.9752
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
@@ -703,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
+      "lastSeen": "2026-04-10T16:05:14.086153+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 3.2908
