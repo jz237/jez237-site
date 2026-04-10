@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T02:00:01.330812+00:00",
+  "updatedAt": "2026-04-10T03:00:01.215099+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3188,6 +3188,10 @@
     "https://openai.com/index/cyberagent": {
       "image": "",
       "checkedAt": "2026-04-09T23:51:20.884103+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/09/an-end-to-end-coding-guide-to-nvidia-kvpress-for-long-context-llm-inference-kv-cache-compression-and-memory-efficient-generation": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-22.png",
+      "checkedAt": "2026-04-10T03:00:01.215099+00:00"
     }
   }
 }
