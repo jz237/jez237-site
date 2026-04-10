@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T19:00:01.298226+00:00",
+  "updatedAt": "2026-04-10T19:09:25.039682+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3328,6 +3328,14 @@
     "https://openai.com/academy/image-generation": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/7v5h6Z00V6Tt9XQW2AVW62/4ec32f6ad895b9fb038c46ab27b10067/Academy-SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-10T19:00:01.298226+00:00"
+    },
+    "https://openai.com/academy/healthcare": {
+      "image": "",
+      "checkedAt": "2026-04-10T19:09:25.039682+00:00"
+    },
+    "https://openai.com/academy/what-is-ai": {
+      "image": "",
+      "checkedAt": "2026-04-10T19:09:25.039682+00:00"
     }
   }
 }
