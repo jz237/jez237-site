@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T15:00:01.336882+00:00",
+  "updatedAt": "2026-04-10T16:00:01.718339+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3216,6 +3216,10 @@
     "https://www.sciencedaily.com/releases/2026/04/260409101103.htm": {
       "image": "https://www.sciencedaily.com/images/1920/piezoelectric-power-converter-on-penny.webp",
       "checkedAt": "2026-04-10T15:00:01.336882+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/10/voice-mode-is-weaker": {
+      "image": "",
+      "checkedAt": "2026-04-10T16:00:01.718339+00:00"
     }
   }
 }
