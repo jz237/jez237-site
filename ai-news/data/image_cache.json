@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T15:02:59.482890+00:00",
+  "updatedAt": "2026-04-10T17:00:01.943704+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3220,6 +3220,14 @@
     "https://simonwillison.net/2026/Apr/10/voice-mode-is-weaker": {
       "image": "",
       "checkedAt": "2026-04-10T16:00:01.718339+00:00"
+    },
+    "https://techcrunch.com/2026/04/10/stalking-victim-sues-openai-claims-chatgpt-fueled-her-abusers-delusions-and-ignored-her-warnings": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1733837014-e.jpg?resize=1200,800",
+      "checkedAt": "2026-04-10T17:00:01.943704+00:00"
+    },
+    "https://techcrunch.com/2026/04/10/techcrunch-is-heading-to-tokyo-and-bringing-the-startup-battlefield-with-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/STTchallenge.jpeg?w=800",
+      "checkedAt": "2026-04-10T17:00:01.943704+00:00"
     }
   }
 }
