@@ -1,7 +1,23 @@
 {
   "date": "2026-04-10",
-  "updatedAt": "2026-04-10T00:00:02.114023+00:00",
+  "updatedAt": "2026-04-10T01:00:01.651477+00:00",
   "items": [
+    {
+      "title": "OpenAI Backs Bill That Would Limit Liability for AI-Enabled Mass Deaths or Financial Disasters",
+      "url": "https://www.wired.com/story/openai-backs-bill-exempt-ai-firms-model-harm-lawsuits",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The ChatGPT-maker testified in favor of an Illinois bill that would limit when AI labs can be held liable—even in cases where their products cause “critical harm.”",
+      "image": "https://media.wired.com/photos/69d81fc99011397f817a1986/master/pass/OpenAI-Backs-Bill-That-Lets-AI-Labs-Dodge-Liability-for-Critical-Harms-Business-2244268254.jpg",
+      "published": "2026-04-10T00:19:53+00:00",
+      "firstSeen": "2026-04-10T01:00:01.651477+00:00",
+      "lastSeen": "2026-04-10T01:00:01.651477+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2697
+    },
     {
       "title": "Consistency-Guided Decoding with Proof-Driven Disambiguation for Three-Way Logical Question Answering",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-10T00:00:09.091256+00:00",
+      "published": "2026-04-10T01:00:06.310461+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-10T00:00:02.114023+00:00",
+      "lastSeen": "2026-04-10T01:00:01.651477+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
