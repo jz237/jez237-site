@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T17:04:08.537163+00:00",
+  "updatedAt": "2026-04-10T17:58:44.741321+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3228,6 +3228,82 @@
     "https://techcrunch.com/2026/04/10/techcrunch-is-heading-to-tokyo-and-bringing-the-startup-battlefield-with-it": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/STTchallenge.jpeg?w=800",
       "checkedAt": "2026-04-10T17:00:01.943704+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/10/nvidia-releases-aitune-an-open-source-inference-toolkit-that-automatically-finds-the-fastest-inference-backend-for-any-pytorch-model": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-24.png",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://www.techrepublic.com/article/news-alibaba-10000-ai-chips-data-center-apac": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/909948/explosive-media-lego-iran-war-trump-netanyahu": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-10-at-12.40.05PM.png?quality=90&amp;strip=all&amp;crop=0%2C2.8121699660697%2C100%2C94.375660067861&amp;w=1200",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-expansion-security-crises-and-workforce-upheaval-define-this-week-in-tech": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/applications-of-ai": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/brainstorming": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/data-analysis": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/marketing": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/writing": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/research": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/responsible-and-safe-use": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/prompting": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/custom-gpts": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/search-and-deep-research": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/operations": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/personalization": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/customer-success": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/skills": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
+    },
+    "https://openai.com/academy/managers": {
+      "image": "",
+      "checkedAt": "2026-04-10T17:58:44.741321+00:00"
     }
   }
 }
