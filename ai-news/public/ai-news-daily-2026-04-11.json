@@ -1,6 +1,6 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T06:00:01.614093+00:00",
+  "updatedAt": "2026-04-11T05:38:01.917057+00:00",
   "items": [
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -11,13 +11,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T06:00:06.297911+00:00",
+      "published": "2026-04-11T05:38:08.026407+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T06:00:01.614093+00:00",
+      "lastSeen": "2026-04-11T05:38:01.917057+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
