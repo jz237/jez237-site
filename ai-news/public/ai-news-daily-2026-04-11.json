@@ -1,9 +1,9 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T05:38:01.917057+00:00",
+  "updatedAt": "2026-04-11T07:00:01.403525+00:00",
   "items": [
     {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
+      "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T05:38:08.026407+00:00",
+      "published": "2026-04-11T07:00:05.264613+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T05:38:01.917057+00:00",
+      "lastSeen": "2026-04-11T07:00:01.403525+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
+    },
+    {
+      "title": "AI can screen 15 million molecules in a day. It still can’t cure Alzheimer’s.",
+      "url": "https://thenextweb.com/news/ai-healthcare-drug-discovery-chatbots-reality",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The drug discovery revolution is real but radically overstated, the health chatbots are a documented hazard, and the diseases that matter most remain stubbornly unsolved. At Novartis, sometime in late 2025, a team of researchers working on Huntington’s disease used generative AI to computationally design 15 million potential compounds for a type of molecule called [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
+      "published": "2026-04-11T06:00:30+00:00",
+      "firstSeen": "2026-04-11T07:00:01.403525+00:00",
+      "lastSeen": "2026-04-11T07:00:01.403525+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5201
     }
   ],
   "errors": [
