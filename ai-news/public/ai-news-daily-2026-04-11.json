@@ -1,6 +1,6 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T07:00:01.403525+00:00",
+  "updatedAt": "2026-04-11T07:15:15.742217+00:00",
   "items": [
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T07:00:05.264613+00:00",
+      "published": "2026-04-11T07:15:21.520059+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T07:00:01.403525+00:00",
+      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -29,10 +29,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
       "published": "2026-04-11T06:00:30+00:00",
       "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-11T07:00:01.403525+00:00",
+      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5201
+      "score": 3.5126
     }
   ],
   "errors": [
