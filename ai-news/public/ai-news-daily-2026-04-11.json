@@ -1,6 +1,6 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T08:59:30.395606+00:00",
+  "updatedAt": "2026-04-11T09:54:15.487375+00:00",
   "items": [
     {
       "title": "AI is making us faster, more productive, and worse at thinking",
@@ -13,10 +13,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/artificial-intelligence-hype.png",
       "published": "2026-04-11T07:30:27+00:00",
       "firstSeen": "2026-04-11T08:59:30.395606+00:00",
-      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9056
+      "score": 5.8791
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T08:59:36.304909+00:00",
+      "published": "2026-04-11T09:54:20.262308+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -45,10 +45,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
       "published": "2026-04-11T06:00:30+00:00",
       "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4625
+      "score": 3.4372
     },
     {
       "title": "How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-23-150x150.png",
       "published": "2026-04-11T07:33:41+00:00",
       "firstSeen": "2026-04-11T08:00:01.537842+00:00",
-      "lastSeen": "2026-04-11T08:00:01.537842+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2772
+      "score": 3.2507
     },
     {
       "title": "Estonia is the rare EU country opposing bans on children’s social media use",
@@ -77,17 +77,59 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/estonia-eu-child-social-media-ban-opposition.png",
       "published": "2026-04-11T08:14:53+00:00",
       "firstSeen": "2026-04-11T08:59:30.395606+00:00",
-      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2275
+      "score": 3.2005
+    },
+    {
+      "title": "How the Internet Broke Everyone’s Bullshit Detectors",
+      "url": "https://www.wired.com/story/how-the-internet-broke-everyones-bullshit-detectors",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "From AI-generated images to restricted satellite data, the systems used to verify what’s real online are struggling to keep up.",
+      "image": "https://media.wired.com/clips/69d8f8b670354d7c78851625/master/pass/Fake_lead_1%20(1).mp4",
+      "published": "2026-04-11T09:30:00+00:00",
+      "firstSeen": "2026-04-11T09:54:15.487375+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2777
+    },
+    {
+      "title": "SaaS on the Beach returns to Barcelona with a founder-only format",
+      "url": "https://thenextweb.com/news/saas-on-the-beach-returns-to-barcelona",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "As the tech conference circuit grows more crowded, one SaaS event is making the opposite pitch: fewer people, fewer sales decks, and a lot less noise. SaaS on the Beach, a curated event for SaaS founders, will return to Barcelona between May 20 and 21 for its second edition, positioning itself as an alternative to the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/SaaS-on-the-beach.png",
+      "published": "2026-04-11T08:38:48+00:00",
+      "firstSeen": "2026-04-11T09:54:15.487375+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1122
+    },
+    {
+      "title": "UK startup Altilium bags £18.5m to build Britain’s first commercial EV battery refinery",
+      "url": "https://thenextweb.com/news/1417451-altilium-drive35-ev-battery-recycling-plymouth",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Altilium, a UK clean technology company, has secured £18.5 million in grant funding from the government’s DRIVE35 Scale-Up Fund to build ACT3, the country’s first commercial refinery for recovering critical minerals from end-of-life electric vehicle batteries. Located in Plymouth, Devon, the facility will process 24,000 EV batteries a year using Altilium’s proprietary EcoCathode™ process, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/altilium-drive35-ev-battery-recycling-plymouth.png",
+      "published": "2026-04-11T08:32:09+00:00",
+      "firstSeen": "2026-04-11T09:54:15.487375+00:00",
+      "lastSeen": "2026-04-11T09:54:15.487375+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.109
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
