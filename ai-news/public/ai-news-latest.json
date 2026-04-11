@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-11T07:15:15.742217+00:00",
+  "updatedAt": "2026-04-11T08:59:30.395606+00:00",
   "items": [
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T07:15:21.520059+00:00",
+      "published": "2026-04-11T08:59:36.304909+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
+    },
+    {
+      "title": "Estonia is the rare EU country opposing bans on children’s social media use",
+      "url": "https://thenextweb.com/news/estonia-eu-child-social-media-ban-opposition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Estonia and Belgium are the only two EU member states to have declined the Jutland Declaration, an October 2025 pan-European commitment to restrict children’s access to social media. Estonia’s ministers argue that age-based bans are unenforceable, that children will find ways around them, and that the correct approach is to enforce the GDPR against [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/estonia-eu-child-social-media-ban-opposition.png",
+      "published": "2026-04-11T08:14:53+00:00",
+      "firstSeen": "2026-04-11T08:59:30.395606+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2275
     },
     {
       "title": "How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model",
@@ -31,7 +47,23 @@
       "lastSeen": "2026-04-11T08:00:01.537842+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3067
+      "score": 3.2772
+    },
+    {
+      "title": "AI is making us faster, more productive, and worse at thinking",
+      "url": "https://thenextweb.com/news/ai-intelligence-losing-our-own",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI is everywhere, the pressure to adopt it is relentless, and the evidence that it’s making us smarter is getting thinner by the quarter. On New Year’s Day 2026, a programmer named Steve Yegge launched an open-source platform called Gas Town. It lets users orchestrate swarms of AI coding agents simultaneously, assembling software at speeds [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/artificial-intelligence-hype.png",
+      "published": "2026-04-11T07:30:27+00:00",
+      "firstSeen": "2026-04-11T08:59:30.395606+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9056
     },
     {
       "title": "AI can screen 15 million molecules in a day. It still can’t cure Alzheimer’s.",
@@ -44,10 +76,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
       "published": "2026-04-11T06:00:30+00:00",
       "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5126
+      "score": 3.4625
     },
     {
       "title": "Alibaba’s Tongyi Lab Releases VimRAG: a Multimodal RAG Framework that Uses a Memory Graph to Navigate Massive Visual Contexts",
@@ -63,7 +95,7 @@
       "lastSeen": "2026-04-11T08:00:01.537842+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.4973
+      "score": 1.456
     },
     {
       "title": "France orders all government ministries to ditch Windows for Linux in digital sovereignty push",
@@ -76,10 +108,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/france-linux-windows-migration-digital-sovereignty.png",
       "published": "2026-04-10T21:21:12+00:00",
       "firstSeen": "2026-04-10T21:52:41.039489+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8855
+      "score": 1.8461
     },
     {
       "title": "Police arrest 20-year-old after Molotov cocktail thrown at Sam Altman’s San Francisco home",
@@ -92,10 +124,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-sam-altman-molotov-cocktail-arrest.png",
       "published": "2026-04-10T21:00:41+00:00",
       "firstSeen": "2026-04-10T21:52:41.039489+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8776
+      "score": 3.8386
     },
     {
       "title": "Anthropic temporarily banned OpenClaw’s creator from accessing Claude",
@@ -108,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/ChatGPT-OpenClaw-Claude.jpg?resize=1200%2C800",
       "published": "2026-04-10T20:27:52+00:00",
       "firstSeen": "2026-04-10T20:53:02.891448+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0051
+      "score": 10.9667
     },
     {
       "title": "20-year-old man arrested for allegedly throwing a Molotov cocktail at Sam Altman’s house",
@@ -124,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1778705436.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.629941573716%2C100%2C74.740116852568&amp%3Bw=1200",
       "published": "2026-04-10T20:16:57+00:00",
       "firstSeen": "2026-04-10T20:53:02.891448+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.071
+      "score": 4.0328
     },
     {
       "title": "A Coding Guide to Markerless 3D Human Kinematics with Pose2Sim, RTMPose, and OpenSim",
@@ -143,7 +175,7 @@
       "lastSeen": "2026-04-11T08:00:01.537842+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4302
+      "score": 5.392
     },
     {
       "title": "National Robotics Week — Latest Physical AI Research, Breakthroughs and Resources",
@@ -156,11 +188,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/robotics-tech-blog-nrw-rolling-blog-1280x680-1.jpg",
       "published": "2026-04-10T19:40:59+00:00",
       "firstSeen": "2026-04-04T17:46:30.378910+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.9876
+      "score": 12.95
     },
     {
       "title": "Kākāpō parrots",
@@ -173,10 +205,10 @@
       "image": "https://static.simonwillison.net/static/2026/kakapo-lenny.jpg",
       "published": "2026-04-10T19:07:02+00:00",
       "firstSeen": "2026-04-10T19:52:45.729043+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9752
+      "score": 1.9382
     },
     {
       "title": "Samsung Eyes Vietnam for $4B Semiconductor Packaging Project",
@@ -189,10 +221,10 @@
       "image": "",
       "published": "2026-04-10T18:45:21+00:00",
       "firstSeen": "2026-04-10T19:52:45.729043+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9273
+      "score": 2.8907
     },
     {
       "title": "Anthropic’s Mythos Will Force a Cybersecurity Reckoning—Just Not the One You Think",
@@ -205,10 +237,10 @@
       "image": "https://media.wired.com/photos/69d81392ce1f65d162ddb2f0/master/pass/Security_Anthropic_Getty.jpg",
       "published": "2026-04-10T18:08:37+00:00",
       "firstSeen": "2026-04-10T19:00:01.298226+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9542
+      "score": 4.9182
     },
     {
       "title": "NVIDIA Releases AITune: An Open-Source Inference Toolkit That Automatically Finds the Fastest Inference Backend for Any PyTorch Model",
@@ -225,7 +257,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.5752
+      "score": 10.5396
     },
     {
       "title": "Alibaba Launches AI Data Center Powered by 10,000 Homegrown Chips",
@@ -238,10 +270,10 @@
       "image": "",
       "published": "2026-04-10T17:34:07+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7021
+      "score": 4.6667
     },
     {
       "title": "The Iranian Lego AI video creators credit their virality to &#8216;heart&#8217;",
@@ -254,10 +286,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-10-at-12.40.05PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.8121699660697%2C100%2C94.375660067861&amp%3Bw=1200",
       "published": "2026-04-10T17:30:00+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0107
+      "score": 1.9753
     },
     {
       "title": "Stalking victim sues OpenAI, claims ChatGPT fueled her abuser’s delusions and ignored her warnings",
@@ -270,10 +302,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1733837014-e.jpg?resize=1200%2C800",
       "published": "2026-04-10T16:41:34+00:00",
       "firstSeen": "2026-04-10T17:04:08.537163+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.924
+      "score": 10.8895
     },
     {
       "title": "TechCrunch is heading to Tokyo — and bringing the Startup Battlefield with it",
@@ -286,10 +318,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/STTchallenge.jpeg?w=800",
       "published": "2026-04-10T16:38:43+00:00",
       "firstSeen": "2026-04-10T17:04:08.537163+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6231
+      "score": 2.5885
     },
     {
       "title": "Suspect Arrested for Allegedly Throwing Molotov Cocktail at Sam Altman’s Home",
@@ -302,10 +334,10 @@
       "image": "https://media.wired.com/photos/69d930fa862e81dfa45e021e/master/pass/Sam-Altman-Intruder.jpg",
       "published": "2026-04-10T16:32:19+00:00",
       "firstSeen": "2026-04-10T17:04:08.537163+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9209
+      "score": 3.8865
     },
     {
       "title": "This Startup Wants You to Pay Up to Talk With AI Versions of Human Experts",
@@ -318,10 +350,10 @@
       "image": "https://media.wired.com/photos/69d7e1f9ba44cf4c6fc2717f/master/pass/Backchannel-Worst-Application-of-AI-Yet-Business-1443132344.jpg",
       "published": "2026-04-10T16:00:00+00:00",
       "firstSeen": "2026-04-10T16:05:14.086153+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6101
+      "score": 2.5761
     },
     {
       "title": "ChatGPT voice mode is a weaker model",
@@ -334,11 +366,11 @@
       "image": "",
       "published": "2026-04-10T15:56:02+00:00",
       "firstSeen": "2026-04-10T16:00:01.718339+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.6087
+      "score": 20.5749
     },
     {
       "title": "Google Brings NotebookLM to Gemini for Easy Project Organization",
@@ -351,10 +383,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/unnamed-2026-04-10T220103.688.png",
       "published": "2026-04-10T14:30:20+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0408
+      "score": 11.0082
     },
     {
       "title": "Meow Technologies launches the first agentic banking platform for AI agents",
@@ -367,10 +399,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meow-technologies-agentic-banking-ai-agents.png",
       "published": "2026-04-10T14:26:56+00:00",
       "firstSeen": "2026-04-10T16:05:14.086153+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.2397
+      "score": 16.2072
     },
     {
       "title": "Amazon’s AI tool matches shelter dogs and cats with adopters in the Protect Playtime campaign",
@@ -383,10 +415,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-ai-pet-adoption-tool-protect-playtime.png",
       "published": "2026-04-10T14:15:18+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.436
+      "score": 2.4037
     },
     {
       "title": "AI Expansion, Security Crises, and Workforce Upheaval Define This Week in Tech",
@@ -399,10 +431,10 @@
       "image": "",
       "published": "2026-04-10T14:00:51+00:00",
       "firstSeen": "2026-04-10T17:58:44.741321+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8314
+      "score": 2.7993
     },
     {
       "title": "Last 24 hours: Save up to $500 on your TechCrunch Disrupt 2026 pass",
@@ -415,10 +447,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/10/27055664959_5fbe947d9b_o.jpg?resize=1200%2C799",
       "published": "2026-04-10T14:00:00+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8711
+      "score": 1.8391
     },
     {
       "title": "CoreWeave signs multi-year Anthropic deal as nine of ten top AI model providers join its platform",
@@ -431,10 +463,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/coreweave-anthropic-multi-year-cloud-deal.png",
       "published": "2026-04-10T13:49:10+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0277
+      "score": 8.9958
     },
     {
       "title": "SiFive raises $400m Series G at $3.65bn valuation in final round before IPO",
@@ -447,10 +479,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/sifive-400m-series-g-risc-v-ipo.png",
       "published": "2026-04-10T13:17:37+00:00",
       "firstSeen": "2026-04-10T13:45:39.785691+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4179
+      "score": 2.3864
     },
     {
       "title": "Amazon Leo targets mid-2026 commercial launch as enterprise beta goes live",
@@ -463,10 +495,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/amazon-leo-satellite-internet-mid-2026.png",
       "published": "2026-04-10T12:54:46+00:00",
       "firstSeen": "2026-04-10T13:45:39.785691+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4109
+      "score": 2.3797
     },
     {
       "title": "This new chip could slash data center energy waste",
@@ -479,10 +511,10 @@
       "image": "https://www.sciencedaily.com/images/1920/piezoelectric-power-converter-on-penny.webp",
       "published": "2026-04-10T12:45:22+00:00",
       "firstSeen": "2026-04-10T15:00:01.336882+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.078
+      "score": 2.047
     },
     {
       "title": "Gmail’s end-to-end encryption comes to mobile, a year after its web launch",
@@ -498,7 +530,7 @@
       "lastSeen": "2026-04-11T07:15:15.742217+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9079
+      "score": 4.8769
     },
     {
       "title": "10 Best SOC 2 Compliance Software for 2026",
@@ -514,7 +546,7 @@
       "lastSeen": "2026-04-11T07:15:15.742217+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.704
+      "score": 1.6732
     },
     {
       "title": "Fear and loathing at OpenAI",
@@ -527,10 +559,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0410_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T12:23:18+00:00",
       "firstSeen": "2026-04-10T13:00:01.983147+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6113
+      "score": 5.5806
     },
     {
       "title": "Gen Z’s love-hate relationship with AI",
@@ -543,10 +575,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK414_AI_CVIRGINIA_2_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T11:23:28+00:00",
       "firstSeen": "2026-04-10T11:58:45.753829+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5935
+      "score": 2.5637
     },
     {
       "title": "AI Podcasters Really Want to Tell You How to Keep a Man Happy",
@@ -559,10 +591,10 @@
       "image": "https://media.wired.com/photos/69d6e881e2485977e01e633f/master/pass/AI-Podcasters-Telling-You-How-to-Keep-A-Man-Culture.jpg",
       "published": "2026-04-10T10:30:00+00:00",
       "firstSeen": "2026-04-10T11:00:02.055140+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.908
+      "score": 2.8789
     },
     {
       "title": "Meta’s New AI Asked for My Raw Health Data—and Gave Me Terrible Advice",
@@ -575,10 +607,10 @@
       "image": "https://media.wired.com/photos/69d8273352260a3f1748cbdd/master/pass/gear_meta_doctor_getty.jpg",
       "published": "2026-04-10T09:30:00+00:00",
       "firstSeen": "2026-04-10T10:00:02.043510+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7911
+      "score": 1.7628
     },
     {
       "title": "Microsoft starts removing Copilot buttons from Windows 11 apps",
@@ -591,10 +623,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/copilotbutton.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-10T09:22:06+00:00",
       "firstSeen": "2026-04-10T10:00:02.043510+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9589
+      "score": 5.9307
     },
     {
       "title": "Anthropic is exploring building its own AI chips as Claude revenues surge past $30 billion run rate",
@@ -610,56 +642,7 @@
       "lastSeen": "2026-04-11T05:38:01.917057+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6241
-    },
-    {
-      "title": "Revolut launches its new AI assistant AIR to UK customers",
-      "url": "https://thenextweb.com/news/revolut-launches-its-new-ai-assistant-air-to-uk-customers",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Revolut, the British virtual bank platform, has just launched its new AI financial assistant named AIR (AI by Revolut) to its more than 13 million customers in the UK.  The new AI assistant allows customers to manage their finances through in-app chat, their spending insights, investment tracking, subscription monitoring, and card management. It also provides [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AIR-Revolut.png",
-      "published": "2026-04-10T07:42:48+00:00",
-      "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T20:53:02.891448+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 13.922
-    },
-    {
-      "title": "Eight, the Portuguese dating app,is raising a €3M seed round",
-      "url": "https://thenextweb.com/news/eight-dating-app-3m-seed-video-first-portugal",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The app goes live each night between 8 and 9pm, connecting verified users through 30-second video intros and instant live calls. It is currently available in Portugal and the UK. CEO Afonso Simão previously founded Miofar, a fitness brand he grew to over $1.2M in revenue. Eight, a Portuguese video-first dating app, is raising a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Eight-founders.png",
-      "published": "2026-04-10T07:35:53+00:00",
-      "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T20:53:02.891448+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7202
-    },
-    {
-      "title": "Maeconomy raises €1.5M to give building materials a digital identity",
-      "url": "https://thenextweb.com/news/maeconomy-raises-e1-5m-to-give-building-materials-a-digital-identity",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Dutch startup is tackling one of construction’s most stubborn problems: the fact that most building materials lack traceability, making them impossible to reuse when a structure is demolished or renovated. Maeconomy, a Dutch startup, has raised €1.5 million to build a platform that turns building materials into auditable, monetisable circular assets. The Netherlands has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Maeconomy.png",
-      "published": "2026-04-10T07:20:21+00:00",
-      "firstSeen": "2026-04-10T09:00:01.206707+00:00",
-      "lastSeen": "2026-04-10T15:02:59.482890+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.6161
+      "score": 10.5971
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -672,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1991
+      "score": 1.1954
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -688,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9459
+      "score": 1.9433
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
@@ -704,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T08:59:30.395606+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 3.2905
@@ -790,5 +773,11 @@
       "score": 1.19
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
