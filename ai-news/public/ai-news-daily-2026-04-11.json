@@ -1,6 +1,6 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T07:00:01.403525+00:00",
+  "updatedAt": "2026-04-11T08:00:01.537842+00:00",
   "items": [
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T07:00:05.264613+00:00",
+      "published": "2026-04-11T08:00:07.135628+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T07:00:01.403525+00:00",
+      "lastSeen": "2026-04-11T08:00:01.537842+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -29,17 +29,27 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
       "published": "2026-04-11T06:00:30+00:00",
       "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-11T07:00:01.403525+00:00",
+      "lastSeen": "2026-04-11T08:00:01.537842+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5201
+      "score": 3.4908
+    },
+    {
+      "title": "How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model",
+      "url": "https://www.marktechpost.com/2026/04/11/how-knowledge-distillation-compresses-ensemble-intelligence-into-a-single-deployable-ai-model",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Complex prediction problems often lead to ensembles because combining multiple models improves accuracy by reducing variance and capturing diverse patterns. However, these ensembles are impractical in production due to latency constraints and operational complexity. Instead of discarding them, Knowledge Distillation offers a smarter approach: keep the ensemble as a teacher and train a smaller student [&#8230;]\nThe post How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-23-150x150.png",
+      "published": "2026-04-11T07:33:41+00:00",
+      "firstSeen": "2026-04-11T08:00:01.537842+00:00",
+      "lastSeen": "2026-04-11T08:00:01.537842+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3067
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
