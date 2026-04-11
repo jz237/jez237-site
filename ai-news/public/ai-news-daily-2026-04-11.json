@@ -1,7 +1,23 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T07:15:15.742217+00:00",
+  "updatedAt": "2026-04-11T09:00:01.214711+00:00",
   "items": [
+    {
+      "title": "AI is making us faster, more productive, and worse at thinking",
+      "url": "https://thenextweb.com/news/ai-intelligence-losing-our-own",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI is everywhere, the pressure to adopt it is relentless, and the evidence that it’s making us smarter is getting thinner by the quarter. On New Year’s Day 2026, a programmer named Steve Yegge launched an open-source platform called Gas Town. It lets users orchestrate swarms of AI coding agents simultaneously, assembling software at speeds [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/artificial-intelligence-hype.png",
+      "published": "2026-04-11T07:30:27+00:00",
+      "firstSeen": "2026-04-11T09:00:01.214711+00:00",
+      "lastSeen": "2026-04-11T09:00:01.214711+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9053
+    },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T07:15:21.520059+00:00",
+      "published": "2026-04-11T09:00:05.225043+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T09:00:01.214711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -29,11 +45,49 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
       "published": "2026-04-11T06:00:30+00:00",
       "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-11T07:15:15.742217+00:00",
+      "lastSeen": "2026-04-11T09:00:01.214711+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5126
+      "score": 3.4623
+    },
+    {
+      "title": "How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model",
+      "url": "https://www.marktechpost.com/2026/04/11/how-knowledge-distillation-compresses-ensemble-intelligence-into-a-single-deployable-ai-model",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Complex prediction problems often lead to ensembles because combining multiple models improves accuracy by reducing variance and capturing diverse patterns. However, these ensembles are impractical in production due to latency constraints and operational complexity. Instead of discarding them, Knowledge Distillation offers a smarter approach: keep the ensemble as a teacher and train a smaller student [&#8230;]\nThe post How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-23-150x150.png",
+      "published": "2026-04-11T07:33:41+00:00",
+      "firstSeen": "2026-04-11T08:00:01.537842+00:00",
+      "lastSeen": "2026-04-11T08:00:01.537842+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2769
+    },
+    {
+      "title": "Estonia is the rare EU country opposing bans on children’s social media use",
+      "url": "https://thenextweb.com/news/estonia-eu-child-social-media-ban-opposition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Estonia and Belgium are the only two EU member states to have declined the Jutland Declaration, an October 2025 pan-European commitment to restrict children’s access to social media. Estonia’s ministers argue that age-based bans are unenforceable, that children will find ways around them, and that the correct approach is to enforce the GDPR against [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/estonia-eu-child-social-media-ban-opposition.png",
+      "published": "2026-04-11T08:14:53+00:00",
+      "firstSeen": "2026-04-11T09:00:01.214711+00:00",
+      "lastSeen": "2026-04-11T09:00:01.214711+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2273
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
