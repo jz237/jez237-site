@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-11T13:00:01.936363+00:00",
+  "updatedAt": "2026-04-11T14:00:01.940566+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3356,6 +3356,10 @@
     "https://www.marktechpost.com/2026/04/10/a-coding-guide-to-markerless-3d-human-kinematics-with-pose2sim-rtmpose-and-opensim": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-6.png",
       "checkedAt": "2026-04-10T20:53:02.891448+00:00"
+    },
+    "https://www.theverge.com/policy/910401/iran-war-propaganda-blackout-lego-ai-slop": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Vrg_illo_k_radtke_shitpost_iran_white_house.jpg?quality=90&amp;strip=all&amp;crop=0%2C6.369982547993%2C100%2C87.260034904014&amp;w=1200",
+      "checkedAt": "2026-04-11T14:00:01.940566+00:00"
     }
   }
 }
