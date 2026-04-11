@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-11T19:47:25.409105+00:00",
+  "updatedAt": "2026-04-11T20:49:56.362722+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3376,6 +3376,14 @@
     "https://www.marktechpost.com/2026/04/11/how-to-build-a-secure-local-first-agent-runtime-with-openclaw-gateway-skills-and-controlled-tool-execution": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-2.png",
       "checkedAt": "2026-04-11T19:00:01.239788+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/11/sqlite": {
+      "image": "",
+      "checkedAt": "2026-04-11T20:49:56.362722+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/11/sqlite-qrf": {
+      "image": "",
+      "checkedAt": "2026-04-11T20:49:56.362722+00:00"
     }
   }
 }
