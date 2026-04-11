@@ -1,6 +1,6 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T15:00:01.821314+00:00",
+  "updatedAt": "2026-04-11T14:52:37.894857+00:00",
   "items": [
     {
       "title": "AI is making us faster, more productive, and worse at thinking",
@@ -13,10 +13,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/artificial-intelligence-hype.png",
       "published": "2026-04-11T07:30:27+00:00",
       "firstSeen": "2026-04-11T08:59:30.395606+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7433
+      "score": 5.7464
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T15:00:11.409964+00:00",
+      "published": "2026-04-11T14:52:41.847481+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -45,10 +45,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Vrg_illo_k_radtke_shitpost_iran_white_house.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C6.369982547993%2C100%2C87.260034904014&amp%3Bw=1200",
       "published": "2026-04-11T13:00:00+00:00",
       "firstSeen": "2026-04-11T13:20:35.417101+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4005
+      "score": 3.4041
     },
     {
       "title": "AI can screen 15 million molecules in a day. It still can’t cure Alzheimer’s.",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
       "published": "2026-04-11T06:00:30+00:00",
       "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3069
+      "score": 3.3098
     },
     {
       "title": "How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model",
@@ -77,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-23-150x150.png",
       "published": "2026-04-11T07:33:41+00:00",
       "firstSeen": "2026-04-11T08:00:01.537842+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1146
+      "score": 3.1177
     },
     {
       "title": "Estonia is the rare EU country opposing bans on children’s social media use",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/estonia-eu-child-social-media-ban-opposition.png",
       "published": "2026-04-11T08:14:53+00:00",
       "firstSeen": "2026-04-11T08:59:30.395606+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0619
+      "score": 3.065
     },
     {
       "title": "My baby deer plushie told me that Mitski&#8217;s dad was a CIA operative",
@@ -108,11 +108,11 @@
       "summary": "Two weeks ago, I was getting ready to log off work when I got a text message. \"Oh wow, I was checking out Mitski. did you know people are saying her Dad was a CIA operative?\" Normally, that kind of out-of-the-blue text from a friend wouldn't faze me. This time, my eyes bugged. The unprompted [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268430_AI_deer_plushie_AKrales_0012.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-11T14:00:00+00:00",
-      "firstSeen": "2026-04-11T15:00:01.821314+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "firstSeen": "2026-04-11T14:52:37.894857+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3298
+      "score": 2.3335
     },
     {
       "title": "The inevitable need for an open model consortium",
@@ -125,10 +125,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/18174b65-ddde-40ad-a82b-55467fecbc10_3182x1790.png",
       "published": "2026-04-11T13:02:06+00:00",
       "firstSeen": "2026-04-11T13:20:35.417101+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3016
+      "score": 2.3051
     },
     {
       "title": "Your Push Notifications Aren’t Safe From the FBI",
@@ -141,10 +141,10 @@
       "image": "https://media.wired.com/photos/69d99028b8bdc021bdac9df6/master/pass/Security-News-This-Week-Your-Push-Notifications-Arent-Safe-From-the-FBI-Security.jpg",
       "published": "2026-04-11T10:30:00+00:00",
       "firstSeen": "2026-04-11T10:53:45.879592+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1607
+      "score": 2.1641
     },
     {
       "title": "How the Internet Broke Everyone’s Bullshit Detectors",
@@ -157,10 +157,10 @@
       "image": "https://media.wired.com/clips/69d8f8b670354d7c78851625/master/pass/Fake_lead_1%20(1).mp4",
       "published": "2026-04-11T09:30:00+00:00",
       "firstSeen": "2026-04-11T09:54:15.487375+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1341
+      "score": 2.1374
     },
     {
       "title": "SaaS on the Beach returns to Barcelona with a founder-only format",
@@ -173,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/SaaS-on-the-beach.png",
       "published": "2026-04-11T08:38:48+00:00",
       "firstSeen": "2026-04-11T09:54:15.487375+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.972
+      "score": 1.9752
     },
     {
       "title": "UK startup Altilium bags £18.5m to build Britain’s first commercial EV battery refinery",
@@ -189,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/altilium-drive35-ev-battery-recycling-plymouth.png",
       "published": "2026-04-11T08:32:09+00:00",
       "firstSeen": "2026-04-11T09:54:15.487375+00:00",
-      "lastSeen": "2026-04-11T15:00:01.821314+00:00",
+      "lastSeen": "2026-04-11T14:52:37.894857+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9692
+      "score": 1.9723
     }
   ],
   "errors": []
