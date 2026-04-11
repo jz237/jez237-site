@@ -1,6 +1,6 @@
 {
   "date": "2026-04-11",
-  "updatedAt": "2026-04-11T01:00:01.668053+00:00",
+  "updatedAt": "2026-04-11T02:00:01.661351+00:00",
   "items": [
     {
       "title": "LLM-Generated Fault Scenarios for Evaluating Perception-Driven Lane Following in Autonomous Edge Systems",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-11T01:00:06.374982+00:00",
+      "published": "2026-04-11T02:00:08.293405+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-11T01:00:01.668053+00:00",
+      "lastSeen": "2026-04-11T02:00:01.661351+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
