@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-11T17:47:31.026381+00:00",
+  "updatedAt": "2026-04-11T19:00:01.239788+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3372,6 +3372,10 @@
     "https://techcrunch.com/2026/04/11/sam-altman-responds-to-incendiary-new-yorker-article-after-attack-on-his-home": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544077.jpg?resize=1200,800",
       "checkedAt": "2026-04-11T17:47:31.026381+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/11/how-to-build-a-secure-local-first-agent-runtime-with-openclaw-gateway-skills-and-controlled-tool-execution": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-2.png",
+      "checkedAt": "2026-04-11T19:00:01.239788+00:00"
     }
   }
 }
