@@ -1,6 +1,6 @@
 {
   "date": "2026-04-12",
-  "updatedAt": "2026-04-12T09:00:02.134096+00:00",
+  "updatedAt": "2026-04-12T09:02:11.718393+00:00",
   "items": [
     {
       "title": "Liquid AI Releases LFM2.5-VL-450M: a 450M-Parameter Vision-Language Model with Bounding Box Prediction, Multilingual Support, and Sub-250ms Edge Inference",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-04-12T09:00:02.134096+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.243
+      "score": 7.2421
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -27,13 +27,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-12T09:00:08.614597+00:00",
+      "published": "2026-04-12T09:02:18.319138+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-12T09:00:02.134096+00:00",
+      "lastSeen": "2026-04-12T09:02:11.718393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
