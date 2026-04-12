@@ -1,6 +1,6 @@
 {
   "date": "2026-04-12",
-  "updatedAt": "2026-04-12T22:52:41.436529+00:00",
+  "updatedAt": "2026-04-12T23:00:02.120100+00:00",
   "items": [
     {
       "title": "OpenAI’s new $100 ChatGPT Pro plan targets Claude Max with five times the Codex access",
@@ -13,10 +13,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-chatgpt-pro-100-codex-claude-max.png",
       "published": "2026-04-12T18:11:22+00:00",
       "firstSeen": "2026-04-12T19:00:02.089863+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.7157
+      "score": 16.7124
     },
     {
       "title": "MiniMax Just Open Sourced MiniMax M2.7: A Self-Evolving Agent Model that Scores 56.22% on SWE-Pro and 57.0% on Terminal Bench 2",
@@ -29,11 +29,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-28.png",
       "published": "2026-04-12T09:20:15+00:00",
       "firstSeen": "2026-04-12T10:00:01.854986+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.6752
+      "score": 14.6726
     },
     {
       "title": "Anthropic brings Claude into Microsoft Word, and legal contract review leads its use cases",
@@ -46,10 +46,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-claude-word-lawyers-legal-ai.png",
       "published": "2026-04-12T15:35:28+00:00",
       "firstSeen": "2026-04-12T16:55:55.232905+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7484
+      "score": 12.7454
     },
     {
       "title": "At the HumanX conference, everyone was talking about Claude",
@@ -62,10 +62,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/Claude-ad-e1733259907871.jpg?resize=1200%2C800",
       "published": "2026-04-12T15:00:00+00:00",
       "firstSeen": "2026-04-12T15:49:45.484700+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0738
+      "score": 10.0708
     },
     {
       "title": "A Coding Implementation of MolmoAct for Depth-Aware Spatial Reasoning, Visual Trajectory Tracing, and Robotic Action Prediction",
@@ -78,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-29-1024x731.png",
       "published": "2026-04-12T20:17:15+00:00",
       "firstSeen": "2026-04-12T20:51:11.817106+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3436
+      "score": 8.3401
     },
     {
       "title": "Meta AI and KAUST Researchers Propose Neural Computers That Fold Computation, Memory, and I/O Into One Learned Model",
@@ -94,10 +94,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-12-at-2.47.35-PM-1-150x150.png",
       "published": "2026-04-12T21:52:24+00:00",
       "firstSeen": "2026-04-12T22:00:02.052316+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9897
+      "score": 7.9861
     },
     {
       "title": "Liquid AI Releases LFM2.5-VL-450M: a 450M-Parameter Vision-Language Model with Bounding Box Prediction, Multilingual Support, and Sub-250ms Edge Inference",
@@ -110,10 +110,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/HFZP3rGWoAAGZAm-1-150x150.jpeg",
       "published": "2026-04-12T02:41:10+00:00",
       "firstSeen": "2026-04-12T05:00:01.891703+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9478
+      "score": 6.9456
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -124,9 +124,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-12T22:52:47.670393+00:00",
+      "published": "2026-04-12T23:00:08.300116+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -142,10 +142,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268441_AI_CODING_RACE_CVIRGINIA.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-12T12:00:00+00:00",
       "firstSeen": "2026-04-12T13:00:01.927694+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5731
+      "score": 4.5704
     },
     {
       "title": "Apple reportedly testing four designs for upcoming smart glasses",
@@ -158,10 +158,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2224174932.jpg?w=1024",
       "published": "2026-04-12T19:58:42+00:00",
       "firstSeen": "2026-04-12T20:51:11.817106+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0049
+      "score": 4.0014
     },
     {
       "title": "Mac mini and Mac Studio go out of stock – is it the RAM crisis or an M5 refresh?",
@@ -174,10 +174,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/mac-mini-mac-studio-out-of-stock-dram-shortage-m5-refresh.png",
       "published": "2026-04-12T18:37:18+00:00",
       "firstSeen": "2026-04-12T19:49:33.673919+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1273
+      "score": 3.124
     },
     {
       "title": "The Netherlands becomes the first European country to approve Tesla’s FSD Supervised",
@@ -190,10 +190,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tesla-fsd-supervised-netherlands-europe.png",
       "published": "2026-04-12T17:55:05+00:00",
       "firstSeen": "2026-04-12T19:00:02.089863+00:00",
-      "lastSeen": "2026-04-12T22:52:41.436529+00:00",
+      "lastSeen": "2026-04-12T23:00:02.120100+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1084
+      "score": 3.1052
     }
   ],
   "errors": []
