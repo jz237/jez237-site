@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Twombly's Red Sentinel — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1d1512;
+      --earth-panel: #2c201d;
+      --earth-border: #61463e;
+      --earth-text: #f2e5db;
+      --earth-muted: #ccb8ab;
+      --earth-accent: #b85152;
+      --earth-accent-2: #d0b06c;
+    }
+    body { background: radial-gradient(circle at top, #4e2c2d 0%, #1d1512 58%, #120d0b 100%); color: var(--earth-text); }
+    header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e3c89f; }
+    .hero, .panel, .entry-card {
+      border: 1px solid var(--earth-border);
+      border-radius: 18px;
+      box-shadow: 0 14px 32px rgba(0,0,0,.18);
+    }
+    .hero { background: linear-gradient(135deg, rgba(88,41,43,.95), rgba(72,42,33,.92)); padding: 24px; }
+    .panel, .entry-card { background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97)); padding: 18px; }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .shell { display:grid; gap:18px; margin-top:18px; }
+    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
+    .photo {
+      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 16px 34px rgba(0,0,0,.24);
+    }
+    .section-title, .entry-title { margin:0 0 8px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-copy { line-height:1.7; }
+    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../">Plant Progress</a>
+        <a href="../../photos/garden/">Garden Timeline</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Acer palmatum 'Twombly's Red Sentinel'</div>
+      <h1 class="title">Twombly's Red Sentinel</h1>
+      <p class="muted">A narrow red column with a spring glow, made even better by the gold-dusted green behind it.</p>
+    </section>
+
+    <div class="shell">
+      <section class="panel split">
+        <div>
+          <h2 class="section-title">Leafing out in red</h2>
+          <p class="note">This is that sharp early maple stage where the new growth looks almost lit from inside, bright red at the tips, deepening lower down, and already reading in the upright disciplined form this cultivar is known for.</p>
+          <div class="meta-row">
+            <span class="meta-pill">spring leaf-out</span>
+            <span class="meta-pill">upright columnar form</span>
+            <span class="meta-pill">great contrast planting</span>
+          </div>
+        </div>
+        <div>
+          <img class="photo" src="../../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg" alt="Twombly's Red Sentinel Japanese maple with gold dust aucuba behind it" />
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="split">
+          <div>
+            <div class="entry-date">April 12, 2026</div>
+            <h2 class="entry-title">Red against gold dust</h2>
+            <div class="entry-copy">
+              The Twombly’s Red Sentinel is leafing out in that sharp spring red that almost looks backlit, bright at the tips, deeper burgundy through the older leaves, and still narrow and upright the way this cultivar should be. Even young, it already has that vertical, disciplined silhouette that makes it feel more architectural than soft.
+              <div class="quote">Fine-cut red foliage in front, gold-flecked evergreen behind it, one of those accidental color pairings that looks completely intentional.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg" alt="Twombly's Red Sentinel spring update" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>strong spring leaf-out</li>
+          <li>bright red new growth at the tips</li>
+          <li>narrow upright structure is already reading clearly</li>
+          <li>excellent contrast with the gold dust aucuba behind it</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
