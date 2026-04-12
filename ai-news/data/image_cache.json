@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-12T19:49:33.673919+00:00",
+  "updatedAt": "2026-04-12T20:51:11.817106+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3404,6 +3404,10 @@
     "https://techcrunch.com/2026/04/12/apple-reportedly-testing-four-designs-for-upcoming-smart-glasses": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2224174932.jpg?w=1024",
       "checkedAt": "2026-04-12T20:00:01.325938+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/12/a-coding-implementation-of-molmoact-for-depth-aware-spatial-reasoning-visual-trajectory-tracing-and-robotic-action-prediction": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-29-1024x731.png",
+      "checkedAt": "2026-04-12T20:51:11.817106+00:00"
     }
   }
 }
