@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dwarf Peach Tree — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1d1512;
+      --earth-panel: #2d221b;
+      --earth-border: #624b37;
+      --earth-text: #f2e7da;
+      --earth-muted: #ccb9a4;
+      --earth-accent: #d66c84;
+      --earth-accent-2: #d39a67;
+      --earth-accent-3: #9bb06f;
+    }
+    body { background: radial-gradient(circle at top, #4a2d30 0%, #1d1512 56%, #120d0a 100%); color: var(--earth-text); }
+    header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e2c892; }
+    .hero, .panel, .timeline-entry { border: 1px solid var(--earth-border); border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,.18); }
+    .hero { background: linear-gradient(135deg, rgba(95,50,60,.95), rgba(71,48,34,.92)); padding: 24px; }
+    .panel, .timeline-entry { background: linear-gradient(180deg, rgba(50,39,31,.97), rgba(33,25,20,.97)); padding: 18px; }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .shell { display:grid; gap:18px; margin-top:18px; }
+    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
+    .photo {
+      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 16px 34px rgba(0,0,0,.24);
+    }
+    .section-title, .entry-title { margin:0 0 8px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-copy { line-height:1.7; }
+    .timeline-stack { display:grid; gap:18px; }
+    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent-2);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../../index.html#projects">Projects</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../games/">Games</a>
+        <a href="../../photos/">Photos</a>
+        <a href="../../plants/">Plant Progress</a>
+        <a href="../../ai-news/">AI News</a>
+        <a href="../../plex/">Plex</a>
+        <a href="../../ops/">Ops Center</a>
+        <a href="../../garden/">Garden Calendar</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Dwarf Peach Tree</div>
+      <h1 class="title">Dwarf Peach Tree</h1>
+      <p class="muted">From swelling buds to full pink bloom, a small tree with a surprisingly dramatic spring arc.</p>
+    </section>
+
+    <div class="shell">
+      <section class="panel split">
+        <div>
+          <h2 class="section-title">Season arc</h2>
+          <p class="note">This is exactly the kind of plant that deserves one page with multiple entries. You can watch the whole spring progression, bare structure, bud swell, bloom, leaf-out, and later fruit if it sets.</p>
+          <div class="meta-row">
+            <span class="meta-pill">multi-entry timeline</span>
+            <span class="meta-pill">spring bloom sequence</span>
+            <span class="meta-pill">young fruit tree</span>
+          </div>
+        </div>
+        <div>
+          <img class="photo" src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in bloom" />
+        </div>
+      </section>
+
+      <section class="timeline-stack">
+        <article class="timeline-entry">
+          <div class="split">
+            <div>
+              <div class="entry-date">March 29, 2026</div>
+              <h2 class="entry-title">Before the show</h2>
+              <div class="entry-copy">
+                A quieter look at the dwarf peach before the pink show started, bare branching still exposed, buds swelling along the stems, and just enough movement to hint that bloom was close. This is the useful stage to remember later, because once the tree explodes into flower it’s easy to forget how quickly it turned.
+                <div class="quote">All structure and promise, the kind of in-between moment that only feels dramatic after you’ve seen what comes next.</div>
+              </div>
+            </div>
+            <div>
+              <img class="photo" src="../../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="Dwarf peach tree before bloom" />
+            </div>
+          </div>
+          <ul class="bullet-list">
+            <li>buds swelling along the branches</li>
+            <li>tree still mostly bare</li>
+            <li>pre-bloom structure easy to see</li>
+            <li>Pugster behind it still mostly acting as quiet background structure</li>
+          </ul>
+        </article>
+
+        <article class="timeline-entry">
+          <div class="split">
+            <div>
+              <div class="entry-date">April 12, 2026</div>
+              <h2 class="entry-title">Full spring pink</h2>
+              <div class="entry-copy">
+                The dwarf peach is putting on a real spring show here, deep pink bloom clustered all along the branches while the first narrow green leaves start to slip out between the flowers. It still has that young upright shape, but the bloom is already strong enough to make it feel established, not tentative.
+                <div class="quote">Small tree, big entrance. The kind of spring color that completely changes the mood of a corner.</div>
+              </div>
+            </div>
+            <div>
+              <img class="photo" src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in peak bloom" />
+            </div>
+          </div>
+          <ul class="bullet-list">
+            <li>peak to near-peak bloom</li>
+            <li>early leaf-out underway</li>
+            <li>strong flowering across the canopy</li>
+            <li>nice contrast with the Pugster butterfly bush behind it</li>
+          </ul>
+        </article>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
