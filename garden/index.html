@@ -17,13 +17,6 @@
       --earth-accent-2: #d19463;
       --earth-accent-3: #d8c07b;
       --earth-water: #8fc8df;
-      --earth-water-bg: rgba(92,167,199,.16);
-      --earth-fert-bg: rgba(158,176,119,.16);
-      --earth-prune-bg: rgba(209,148,99,.16);
-      --earth-plant-bg: rgba(151,170,111,.12);
-      --earth-pest-bg: rgba(200,139,199,.14);
-      --earth-task-bg: rgba(255,255,255,.07);
-      --earth-harvest-bg: rgba(216,192,123,.16);
     }
     body {
       background: radial-gradient(circle at top, #453226 0%, var(--earth-bg) 52%, #15100c 100%);
@@ -57,8 +50,8 @@
       background: var(--earth-panel);
       border: 1px solid var(--earth-border);
       color: var(--earth-text);
-      border-radius: 8px;
-      padding: 8px 14px;
+      border-radius: 6px;
+      padding: 6px 14px;
       cursor: pointer;
       font-size: 15px;
       transition: background .15s;
@@ -84,8 +77,8 @@
     .day-cell {
       background: var(--earth-panel);
       border: 1px solid var(--earth-border);
-      border-radius: 9px;
-      min-height: 84px;
+      border-radius: 7px;
+      min-height: 80px;
       padding: 6px 7px;
       cursor: pointer;
       transition: border-color .15s, background .15s;
@@ -102,28 +95,28 @@
     .day-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
     .tag {
       font-size: 10px;
-      border-radius: 5px;
+      border-radius: 4px;
       padding: 1px 5px;
       white-space: nowrap;
       font-weight: 600;
       letter-spacing: .02em;
     }
-    .tag-water   { background: var(--earth-water-bg); color: var(--earth-water); }
-    .tag-fert    { background: var(--earth-fert-bg); color: #c8e09d; }
-    .tag-prune   { background: var(--earth-prune-bg); color: #f1b27c; }
-    .tag-plant   { background: var(--earth-plant-bg); color: #d4e0aa; }
-    .tag-pest    { background: var(--earth-pest-bg); color: #efb7ec; }
-    .tag-task    { background: var(--earth-task-bg); color: #ddd5c8; }
-    .tag-harvest { background: var(--earth-harvest-bg); color: #f3db9d; }
+    .tag-water   { background: rgba(92,167,199,.16); color: var(--earth-water); }
+    .tag-fert    { background: rgba(158,176,119,.16); color: #c8e09d; }
+    .tag-prune   { background: rgba(209,148,99,.16); color: #f1b27c; }
+    .tag-plant   { background: rgba(151,170,111,.12); color: #d4e0aa; }
+    .tag-pest    { background: rgba(200,139,199,.14); color: #efb7ec; }
+    .tag-task    { background: rgba(255,255,255,.07); color: #ddd5c8; }
+    .tag-harvest { background: rgba(216,192,123,.16); color: #f3db9d; }
 
+    /* detail panel */
     .detail-panel {
       background: var(--earth-panel);
       border: 1px solid var(--earth-border);
-      border-radius: 14px;
+      border-radius: 10px;
       padding: 22px 24px;
       margin-bottom: 32px;
       display: none;
-      box-shadow: 0 14px 30px rgba(0,0,0,.14);
     }
     .detail-panel.visible { display: block; }
     .detail-panel h3 { margin: 0 0 14px; font-size: 1.1rem; }
@@ -144,18 +137,19 @@
       gap: 10px;
       align-items: flex-start;
       padding: 8px 0;
-      border-bottom: 1px solid var(--earth-border);
+      border-bottom: 1px solid var(--border);
       font-size: 14px;
     }
     .event-list li:last-child { border-bottom: none; }
     .event-icon { font-size: 18px; flex-shrink: 0; }
 
+    /* log section */
     .log-section { margin-bottom: 40px; }
     .log-section h2 { font-size: 1.1rem; margin-bottom: 12px; }
     .log-card {
       background: var(--earth-panel);
       border: 1px solid var(--earth-border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 12px 16px;
       margin-bottom: 8px;
       font-size: 13px;
@@ -163,6 +157,7 @@
     .log-card .log-date { color: var(--earth-accent-2); font-weight: 600; margin-bottom: 4px; }
     .log-card .log-text { color: var(--earth-text); }
 
+    /* legend */
     .legend {
       display: flex;
       flex-wrap: wrap;
@@ -170,6 +165,7 @@
       margin-bottom: 20px;
     }
 
+    /* weather overlay on day cells */
     .wx-badge {
       position: absolute;
       top: 5px;
@@ -192,10 +188,11 @@
       color: var(--earth-muted);
       font-weight: 600;
     }
+    /* weather strip at top */
     .wx-strip {
       background: var(--earth-panel);
       border: 1px solid var(--earth-border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 10px 16px;
       margin-bottom: 16px;
       font-size: 12px;
@@ -279,129 +276,402 @@
   </main>
 
   <script>
+    // ─── GARDEN DATA ────────────────────────────────────────────────────────
+
     const ZONE = "7a";
     const CITY = "Philadelphia, PA";
 
+    // Applications log — add entries here or update via garden_agent.py
     const appLog = [
       {
-        date: "2026-04-03",
-        text: "Preen Garden Weed Preventer applied to garden beds. Reapply around early July."
-      },
-      {
         date: "2026-03-26",
-        text: "Scotts Crabgrass & Grassy Weed Preventer (pendimethalin) applied. Good timing with rain next day to water in."
-      },
-      {
-        date: "2026-03-26",
-        text: "Dragoon Dust copper fungicide applied to dwarf peach tree and rose bushes."
+        text: "🌿 Crabgrass pre-emergent applied — Scotts Pendimethalin, 10.06 lb bag. Soil temp ~62°F. Rain next day to activate.",
+        type: "task"
       }
     ];
 
-    const events = {
-      "2026-04-12": [
-        { type: "task", icon: "🌱", text: "Keep sending photo updates for Plant Progress entries while spring growth is changing fast." }
-      ],
-      "2026-05-21": [
-        { type: "task", icon: "📋", text: "Reapply pendimethalin pre-emergent, about 8 weeks after the March 26 application." }
-      ]
-    };
+    // Recurring calendar events by month/day (month is 1-based)
+    // Format: { month, day, icon, label, type, note }
+    // For date ranges, generate entries in the buildEvents() function below
+
+    function buildEvents() {
+      const events = {}; // key: "YYYY-MM-DD" → array of event objects
+
+      function add(year, month, day, icon, label, type, note = "") {
+        const key = `${year}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+        if (!events[key]) events[key] = [];
+        events[key].push({ icon, label, type, note });
+      }
+
+      for (let year = 2026; year <= 2027; year++) {
+
+        // ── FROST / SEASON DATES (Zone 7a Philadelphia) ──────────────────
+        // Last frost: ~Apr 15 · First fall frost: ~Oct 15
+
+        // ── FEBRUARY ─────────────────────────────────────────────────────
+        add(year, 2, 1,  "🍑","Dwarf Peach: dormant oil spray","pest","Spray now while fully dormant — smothers scale, mite eggs, overwintering pests");
+        add(year, 2, 5,  "🍇","Grapevine: hard prune before bud break","prune","Cut back hard — remove 80-90% of last year's growth; prune to 2-bud spurs");
+        add(year, 2, 10, "✂️","Limelight Hydrangea: prune now (blooms on new wood)","prune","Cut back by 1/3 to 1/2 before buds swell — do NOT skip, this drives bloom size");
+        add(year, 2, 15, "✂️","Dwarf Peach: prune before bud break","prune","Open up center; remove crossing/dead wood; keep compact shape");
+        add(year, 2, 15, "🌿","Barberry (Orange Rocket): shape prune","prune","Late winter is the right window — light shaping before new growth");
+        add(year, 2, 20, "🌱","Start tomato/pepper seeds indoors","plant","8 weeks before Apr 15 last frost");
+        add(year, 2, 25, "🌿","Apply dormant oil spray — woody shrubs","pest","Scale, mites on fruit trees + Japanese holly, euonymus, barberry");
+
+        // ── MARCH ────────────────────────────────────────────────────────
+        add(year, 3, 1,  "🌱","Start tomato/pepper seeds indoors","plant","6–8 weeks before last frost (Apr 15)");
+        add(year, 3, 5,  "✂️","Butterfly Bush (both): cut back hard","prune","Dwarf Butterfly Bush + Buzz Midnight — cut to 6-12 inches; they bloom on new wood");
+        add(year, 3, 5,  "✂️","Salvia (May Night): cut back hard","prune","Remove all old stems to base — new growth will push quickly");
+        add(year, 3, 5,  "✂️","Autumn Joy Sedum: cut back to base","prune","Leave seed heads all winter for birds; cut back now as new growth emerges");
+        add(year, 3, 8,  "🌿","Heuchera (Coral Bells): refresh crown mulch","task","Pull back mulch slightly; trim any dead outer leaves; divide if crowded (every 3-4 yrs)");
+        add(year, 3, 8,  "✂️","Creeping Jenny: check and trim edges","prune","Spreads aggressively — cut back runners encroaching on other plants");
+        add(year, 3, 10, "✂️","Purple Aster: cut back to ground","prune","Remove all last year's stems; new growth will emerge from base");
+        add(year, 3, 10, "✂️","Holiday Sedum + Sedum: cut back old growth","prune","Remove dead stems before new rosettes push through");
+        add(year, 3, 12, "🌸","Japanese Maples: DO NOT PRUNE in spring","task","All three maples (Seiryu, Rising Sun, Dwarf) bleed badly if pruned now — wait until late summer");
+        add(year, 3, 12, "❄️","Japanese Maples: watch for late frost","task","Cover with frost cloth if temps drop below 28°F after buds open");
+        add(year, 3, 15, "✂️","Prune roses to outward-facing bud","prune","Before new growth fully opens");
+        add(year, 3, 15, "✂️","Dwarf Strawberry Crepe Myrtle: light shape ONLY","prune","Do NOT hard prune — just remove dead tips and crossing twigs; crepe murder ruins form");
+        add(year, 3, 18, "🌿","Aucuba (both Gold Dust): trim sun-damaged foliage","prune","As new growth pushes, remove any winter-burned or blackened leaves; they are shade-tolerant — check sun exposure");
+        add(year, 3, 20, "🌿","Apply pre-emergent crabgrass preventer","task","Soil temp 55°F+ — timing window opens");
+        add(year, 3, 21, "🌱","Sow cool-season crops outdoors","plant","Lettuce, spinach, kale if desired");
+        add(year, 3, 22, "🌿","Hostas: mark locations — late to emerge","task","Don't disturb soil where hostas are — they emerge much later than other perennials");
+        add(year, 3, 25, "🌿","Feed hostas as they emerge","fert","Balanced slow-release 10-10-10");
+        add(year, 3, 25, "🔍","Check rhododendron for lace bugs","pest","Look for stippled/bronzed leaves on underside");
+        add(year, 3, 28, "🌿","Milkweed (Asclepias): do not disturb — very late to emerge","task","Orange milkweed is one of the last perennials up; don't assume it's dead until May");
+
+        // ── APRIL ────────────────────────────────────────────────────────
+        add(year, 4, 1,  "🌸","Japanese maples leafing out — watch for late frost","task","Cover with frost cloth if <28°F forecast");
+        add(year, 4, 1,  "🌿","Rhododendron: feed with acid fertilizer","fert","Holly-tone or similar ericaceous fertilizer — apply as buds swell");
+        add(year, 4, 3,  "🌿","Loropetalum (both): feed with acid fertilizer","fert","Purple Daydream + Purple Loropetalum #2 — Holly-tone; they are ericaceous");
+        add(year, 4, 5,  "🌿","Feed Bobo Hydrangea — spring feeding","fert","Balanced slow-release; minimal pruning needed — just deadhead last year's spent blooms");
+        add(year, 4, 5,  "🌿","Feed Climbing Hydrangea","fert","Patient plant — blooms on old wood; don't prune spring growth; feed to encourage establishment");
+        add(year, 4, 8,  "🌸","Forsythia blooming — plan post-bloom prune","task","Prune IMMEDIATELY after bloom (late April) — do NOT prune in fall or you lose next year's flowers");
+        add(year, 4, 10, "🌿","Apply pre-emergent (2nd round if needed)","task","Reapply if first was before Mar 15");
+        add(year, 4, 10, "🌱","Start hardening off tomato/pepper transplants","plant","Move seedlings outdoors in shade 1–2 hrs/day");
+        add(year, 4, 12, "🌿","Loropetalum (both): light prune after spring bloom","prune","Trim only after flowers fade — don't cut hard; just shape lightly");
+        add(year, 4, 12, "🌿","Feed loropetalum (2nd application if heavy feeder)","fert","Can apply again in May if growth seems slow");
+        add(year, 4, 15, "❄️","Average last frost date — Zone 7a","task","Watch forecast closely around this date");
+        add(year, 4, 15, "🌱","Direct sow beans, squash after frost","plant","After Apr 15 frost date clears");
+        add(year, 4, 18, "🌿","Rising Sun Redbud: minimal care — prune only if needed","task","Prune after bloom if shaping is necessary; otherwise leave it alone — redbuds resent heavy pruning");
+        add(year, 4, 20, "🌿","Feed Heuchera (Coral Bells) with balanced fertilizer","fert","Coral bells waking up — light feeding; divide if clumps have heaved");
+        add(year, 4, 20, "💧","Increase watering as temps rise","water","Check soil moisture daily for new growth");
+        add(year, 4, 22, "✂️","Forsythia: prune immediately after bloom","prune","Cut out oldest/thickest canes at base; shorten long arching canes by 1/3; do NOT prune in fall");
+        add(year, 4, 25, "🌱","Plant tomatoes and peppers outdoors","plant","After last frost — Zone 7a safe zone");
+        add(year, 4, 25, "🌸","Alliums: foliage active — don't cut back","task","Let foliage die back naturally after bloom; resist tidying it up");
+        add(year, 4, 28, "🔍","Inspect Dwarf Peach for peach leaf curl","pest","Treat early with copper if spotted; fruit thinning coming in May");
+        add(year, 4, 28, "✂️","Japanese Holly: light shaping in late spring","prune","Narrow You Glow Stick — light trim to maintain columnar form; check for scale insects");
+
+        // ── MAY ───────────────────────────────────────────────────────────
+        add(year, 5, 1,  "🌿","Feed Japanese Maples (all three)","fert","Seiryu, Rising Sun, Dwarf — low-N slow-release; never high nitrogen");
+        add(year, 5, 1,  "🌿","Feed Rising Sun Redbud","fert","Light balanced feeding once established");
+        add(year, 5, 3,  "🌿","Sunshine Ligustrum: prune to shape","prune","Late spring shaping — can cut back fairly hard; it regrows fast");
+        add(year, 5, 5,  "🌱","Plant warm-season annuals","plant","Zone 7a fully safe after May 5");
+        add(year, 5, 5,  "🍑","Dwarf Peach: thin fruit","task","Remove all but 1 fruit every 6 inches — painful but essential for good-size peaches");
+        add(year, 5, 8,  "🌿","Hostas: slugs check","pest","Hostas emerged — check under leaves and at crown for slug damage; treat with iron phosphate bait");
+        add(year, 5, 10, "🌿","Feed Pugster Sweetspire","fert","Spring feeding before it blooms; prune AFTER bloom — do not cut in fall");
+        add(year, 5, 10, "🌿","Feed Sunshine Ligustrum","fert","Responds well to spring balanced feeding");
+        add(year, 5, 12, "🌿","Hostas: divide if overcrowded","task","Spring division is ideal — dig and split clumps; replant immediately");
+        add(year, 5, 15, "🔍","Spider mite check — all shrubs","pest","Especially barberry and ligustrum in heat");
+        add(year, 5, 15, "🔍","Barberry (Orange Rocket): pest check","pest","Look for aphids and barberry webworm; treat with neem if spotted");
+        add(year, 5, 18, "🌼","Salvia (May Night): deadhead after first bloom","prune","Shear off spent flower spikes by half — triggers strong second flush in 4-6 weeks");
+        add(year, 5, 18, "🌸","Lavender (Munstead): light prune after first bloom","prune","Trim spent flower spikes and 1/3 of green growth — do NOT cut into old woody stems");
+        add(year, 5, 21, "🌿","Pre-emergent reapplication window","task","~8 weeks after Mar 26 application — Pendimethalin");
+        add(year, 5, 22, "🌱","Alliums: foliage dying back — let it go","task","Resist cutting the foliage — plant is feeding the bulb for next year");
+        add(year, 5, 25, "💧","Set watering schedule for summer","water","Deep water 1–2x week — avoid daily shallow");
+        add(year, 5, 28, "🌿","Feed tomatoes and peppers","fert","First feeding after transplant — balanced starter");
+        add(year, 5, 28, "🌿","Variegated Japanese Euonymus: check for scale","pest","Euonymus scale is common — check stems for white/brown specks; treat with horticultural oil");
+
+        // ── JUNE ──────────────────────────────────────────────────────────
+        add(year, 6, 1,  "✂️","Rhododendron: deadhead spent blooms","prune","Snap off spent flower clusters carefully — do not cut into leaf buds below");
+        add(year, 6, 1,  "🌸","Giant Daylily: daily deadheading begins","task","Remove spent blooms daily — each flower lasts one day; keep it tidy for continuous bloom");
+        add(year, 6, 5,  "🌿","Feed all hydrangeas","fert","Bobo + Limelight + Climbing — balanced or bloom booster");
+        add(year, 6, 8,  "🌿","Milkweed (Asclepias): aphid check","pest","Orange milkweed gets dense aphid colonies in June — blast with hose or wipe; don't spray insecticides near monarchs");
+        add(year, 6, 10, "🔍","Japanese beetle watch begins","pest","Peak: late June–July. Hand-pick in AM; avoid beetle traps near garden.");
+        add(year, 6, 12, "✂️","Climbing Hydrangea: prune after bloom","prune","Blooms on old wood — prune right after flowers fade; remove dead wood and over-long shoots only");
+        add(year, 6, 15, "🌿","Feed tomatoes with high-K fertilizer","fert","Switch to low-N, high-K as fruit sets");
+        add(year, 6, 18, "🔍","Purple Aster: pinch for bushier plant","task","Pinch back stem tips by 1/3 now — results in more branching and more blooms in fall");
+        add(year, 6, 20, "💧","Deep watering critical in heat","water","1 inch/week minimum — mulch to retain moisture");
+        add(year, 6, 22, "✂️","Pugster Sweetspire: prune after bloom","prune","Trim back after flowers finish — do NOT cut in fall; fall foliage color is part of the show");
+        add(year, 6, 25, "🔍","Check milkweed for aphids (2nd check)","pest","Orange milkweed aphids peak — treat if colonies are large");
+        add(year, 6, 28, "🌿","Butterfly Bush (both): deadhead spent spikes","prune","Deadhead Dwarf + Buzz Midnight regularly to extend bloom into fall");
+
+        // ── JULY ──────────────────────────────────────────────────────────
+        add(year, 7, 1,  "🐛","Japanese beetle peak","pest","Hand-pick AM; avoid traps near garden");
+        add(year, 7, 4,  "🍅","Tomatoes should be producing","harvest","Harvest when fully colored — don't let sit");
+        add(year, 7, 5,  "🍇","Grapevine: cluster thinning","task","Remove extra clusters — leave 1-2 per shoot for best fruit quality; reduces disease pressure");
+        add(year, 7, 10, "🔍","Check for powdery mildew on hydrangeas","pest","Treat with neem or baking soda spray");
+        add(year, 7, 15, "🌿","Feed hostas mid-season","fert","Balanced fertilizer — last summer feeding");
+        add(year, 7, 18, "🍑","Dwarf Peach: harvest window opens","harvest","Zone 7a peaches ready July–August; taste test — pick when full color and slightly soft");
+        add(year, 7, 20, "💧","Peak heat watering — check daily","water","Containers may need twice daily in 90°F+");
+        add(year, 7, 22, "✂️","Bobo Hydrangea: deadhead spent blooms","prune","Minimal pruning needed overall — just remove faded flower heads");
+        add(year, 7, 25, "✂️","Limelight Hydrangea: deadhead if desired","prune","Not required — blooms age to parchment and look good; remove only if untidy");
+        add(year, 7, 28, "✂️","Japanese Maples: prune if shaping needed","prune","Late summer is the ONLY good window for Japanese maples — remove crossing/dead branches only");
+
+        // ── AUGUST ───────────────────────────────────────────────────────
+        add(year, 8, 1,  "🌿","Last nitrogen feeding for trees/shrubs","fert","No N after Aug 1 — stop pushing growth that won't harden before frost");
+        add(year, 8, 5,  "🍅","Continue tomato/pepper harvest","harvest","Keep picking to keep plants productive");
+        add(year, 8, 5,  "🍑","Dwarf Peach: final harvest window","harvest","Harvest all remaining peaches before they drop; refrigerate or process");
+        add(year, 8, 10, "🌿","Munstead Lavender: light prune after summer bloom","prune","Trim spent spikes and lightly shape — do NOT cut into old gray wood; lavender won't regenerate from old wood");
+        add(year, 8, 15, "🌿","Feed fall-blooming plants","fert","Purple Aster, Sedum — last boost before bloom");
+        add(year, 8, 20, "🌱","Sow fall cool-season crops","plant","Kale, spinach, lettuce — 8 weeks before Oct 15 frost");
+        add(year, 8, 22, "🌿","Autumn Joy Sedum: leave seed heads forming","task","Do NOT cut back — seed heads are developing; birds will use them all winter");
+        add(year, 8, 25, "🔍","Scale insect inspection — hollies + euonymus","pest","Check Japanese Holly and Variegated Euonymus for armored scale; treat with dormant oil in fall if found");
+
+        // ── SEPTEMBER ────────────────────────────────────────────────────
+        add(year, 9, 1,  "🌿","Apply fall lawn fertilizer","task","High K, low N — winterize formula");
+        add(year, 9, 5,  "🍇","Grapevine: harvest check","harvest","Taste test grapes — harvest when sweet and full-flavored; don't wait too long");
+        add(year, 9, 8,  "🌸","Purple Aster: in bloom — enjoy!","task","No tasks — just enjoy the fall color; remove spent stems after first hard frost");
+        add(year, 9, 10, "✂️","Cut back hostas as they yellow","prune","Remove spent foliage; check for slug damage at crown");
+        add(year, 9, 15, "🌱","Plant Allium bulbs now","plant","Sept-Oct is the window — plant 3-4 inches deep; they'll bloom May-June next year");
+        add(year, 9, 15, "🌱","Plant spring bulbs — ideal window starts","plant","Tulips, daffodils for Zone 7a — aim for 6 weeks before hard freeze");
+        add(year, 9, 20, "🌱","Plant fall shrubs and perennials","plant","Excellent planting time — soil still warm, roots establish before frost");
+        add(year, 9, 22, "🌼","Giant Daylily: divide if needed","task","Divide overcrowded daylily clumps in fall every 3-5 years — dig, split, replant immediately");
+        add(year, 9, 25, "🌿","Apply pre-emergent for winter weeds","task","Before soil drops to 55°F");
+
+        // ── OCTOBER ──────────────────────────────────────────────────────
+        add(year, 10, 1, "🌱","Continue Allium + spring bulb planting","plant","Aim to finish by end of October; store extras in cool dry place");
+        add(year, 10, 5, "🌸","Alliums: foliage dies back after bloom (in season)","task","Don't cut back remaining allium foliage until fully brown");
+        add(year, 10, 10,"✂️","Prune perennials as they die back","prune","Holiday Sedum, heuchera, milkweed — cut to base; leave Autumn Joy seed heads");
+        add(year, 10, 12,"🍁","Japanese Maples: enjoy fall color","task","No tasks — Seiryu, Rising Sun, and Dwarf all have spectacular fall foliage");
+        add(year, 10, 15,"❄️","Average first fall frost — Zone 7a","task","Protect tender plants; bring in containers");
+        add(year, 10, 15,"🌱","Mulch all beds before frost","task","3-inch layer around trees, shrubs, perennials");
+        add(year, 10, 18,"🌱","Hostas: good time to divide before frost","task","Lift and divide crowded hostas now; replant at same depth");
+        add(year, 10, 20,"🍁","Crepe Myrtle: note — do NOT cut back","task","Dwarf Strawberry Crepe Myrtle — leave it alone until light shaping after bloom next year");
+
+        // ── NOVEMBER ─────────────────────────────────────────────────────
+        add(year, 11, 1, "🌿","Rhododendron: apply anti-desiccant","task","Spray Wilt-Pruf on foliage before hard freeze — protects from winter desiccation");
+        add(year, 11, 1, "🌿","Apply anti-desiccant to all broadleaf evergreens","task","Japanese Holly, Loropetalum (both), Aucuba, Euonymus — Wilt-Pruf spray");
+        add(year, 11, 5, "🌱","Finish spring bulb planting","plant","Last chance before ground freezes");
+        add(year, 11, 8, "🌿","Autumn Joy Sedum: seed heads standing for birds","task","Leave standing all winter — goldfinches love the dried seed heads; cut back in early spring only");
+        add(year, 11, 10,"✂️","Prune roses for winter","prune","Reduce to 18–24 inches; mound mulch over crown");
+        add(year, 11, 15,"🌿","Rake leaves from around Japanese maples","task","Prevent fungal issues at root crown; leaves from diseased plants should be bagged, not composted");
+        add(year, 11, 20,"🌿","Mulch Japanese maple roots deeply","task","3–4 inch mulch ring keeps roots insulated — keep mulch away from trunk");
+        add(year, 11, 22,"🌿","Climbing Hydrangea: leave alone for winter","task","No fall pruning — blooms on old wood; any pruning now removes next year's flowers");
+
+        // ── DECEMBER / JANUARY ───────────────────────────────────────────
+        add(year, 12, 1, "📋","Review garden & plan for next year","task","Update plant list, order seeds, plan new beds");
+        add(year, 12, 10,"📋","Order Allium bulbs for fall planting next year","plant","Good varieties: Globemaster, Purple Sensation, Mount Everest");
+        add(year, 12, 15,"🌿","Check anti-desiccant on evergreens","task","Reapply if we got a lot of wind/sun since November");
+        add(year, 1,  10,"📋","Plan spring fertilizer schedule","task","Map out pre-emergent timing for Mar/Apr — first app when forsythia blooms");
+        add(year, 1,  15,"🌱","Order tomato/pepper seeds","plant","Start shopping now for best selection");
+        add(year, 1,  20,"📋","Grapevine: plan pruning approach","task","Review this year's growth; decide which canes to keep as next year's fruiting wood");
+      }
+
+      // ── SPECIFIC 2026 LOG-BASED EVENTS ──────────────────────────────
+      // Pre-emergent applied 2026-03-26 → reapplication due ~2026-05-21
+      events["2026-05-21"] = events["2026-05-21"] || [];
+      events["2026-05-21"].push({ icon: "🌿", label: "Pre-emergent reapplication due", type: "task", note: "~8 weeks after 2026-03-26 Pendimethalin application" });
+
+      return events;
+    }
+
+    // ─── CALENDAR RENDER ────────────────────────────────────────────────────
+
+    const allEvents = buildEvents();
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    const today = new Date();
+    const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-    const today = new Date();
-    let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth();
+    const grid = document.getElementById("calendar-grid");
+    const monthLabel = document.getElementById("month-label");
+    const detailPanel = document.getElementById("detail-panel");
+    const detailTitle = document.getElementById("detail-title");
+    const eventList  = document.getElementById("event-list");
 
-    const monthLabel = document.getElementById('month-label');
-    const calendarGrid = document.getElementById('calendar-grid');
-    const detailPanel = document.getElementById('detail-panel');
-    const detailTitle = document.getElementById('detail-title');
-    const eventList = document.getElementById('event-list');
-    const logContainer = document.getElementById('log-container');
-    const wxStrip = document.getElementById('wx-strip');
+    function renderCalendar(year, month) {
+      // Remove day cells (keep headers)
+      const headers = grid.querySelectorAll(".day-header");
+      grid.innerHTML = "";
+      headers.forEach(h => grid.appendChild(h.cloneNode(true)));
 
-    function formatDateKey(y, m, d) {
-      return `${y}-${String(m + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    }
+      monthLabel.textContent = `${monthNames[month - 1]} ${year}`;
 
-    function renderCalendar() {
-      monthLabel.textContent = `${monthNames[currentMonth]} ${currentYear}`;
-      const existing = [...calendarGrid.querySelectorAll('.day-cell')];
-      existing.forEach(el => el.remove());
+      const firstDay = new Date(year, month - 1, 1).getDay();
+      const daysInMonth = new Date(year, month, 0).getDate();
 
-      const first = new Date(currentYear, currentMonth, 1);
-      const last = new Date(currentYear, currentMonth + 1, 0);
-      const firstDay = first.getDay();
-      const daysInMonth = last.getDate();
-
+      // Empty leading cells
       for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement('div');
-        empty.className = 'day-cell empty';
-        calendarGrid.appendChild(empty);
+        const empty = document.createElement("div");
+        empty.className = "day-cell empty";
+        grid.appendChild(empty);
       }
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const key = formatDateKey(currentYear, currentMonth, day);
-        const cell = document.createElement('div');
-        cell.className = 'day-cell';
-        if (events[key]?.length) cell.classList.add('has-event');
-        if (currentYear === today.getFullYear() && currentMonth === today.getMonth() && day === today.getDate()) {
-          cell.classList.add('today');
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = `${year}-${String(month).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+        const dayEvents = allEvents[key] || [];
+        const cell = document.createElement("div");
+        cell.className = "day-cell" + (dayEvents.length ? " has-event" : "") + (key === todayKey ? " today" : "");
+        cell.dataset.key = key;
+        if (dayEvents.length) cell.dataset.hasEvents = "1";
+
+        const numEl = document.createElement("div");
+        numEl.className = "day-num";
+        numEl.textContent = d;
+        cell.appendChild(numEl);
+
+        if (dayEvents.length) {
+          const tags = document.createElement("div");
+          tags.className = "day-tags";
+          // Show up to 3 tags
+          dayEvents.slice(0, 3).forEach(ev => {
+            const tag = document.createElement("span");
+            tag.className = `tag tag-${ev.type === "fert" ? "fert" : ev.type === "water" ? "water" : ev.type === "prune" ? "prune" : ev.type === "plant" ? "plant" : ev.type === "pest" ? "pest" : ev.type === "harvest" ? "harvest" : "task"}`;
+            tag.textContent = ev.icon;
+            tags.appendChild(tag);
+          });
+          if (dayEvents.length > 3) {
+            const more = document.createElement("span");
+            more.className = "tag tag-task";
+            more.textContent = `+${dayEvents.length - 3}`;
+            tags.appendChild(more);
+          }
+          cell.appendChild(tags);
+          cell.addEventListener("click", () => showDetail(key, dayEvents));
+        } else if (wxData[key]) {
+          // Clickable even with no garden events if there's weather
+          cell.style.cursor = "pointer";
+          cell.addEventListener("click", () => showDetail(key, []));
         }
 
-        const tags = (events[key] || []).map(ev => `<span class="tag tag-${ev.type}">${ev.icon} ${ev.type}</span>`).join('');
-        cell.innerHTML = `<div class="day-num">${day}</div><div class="day-tags">${tags}</div>`;
-        cell.addEventListener('click', () => showDetails(key, day));
-        calendarGrid.appendChild(cell);
+        grid.appendChild(cell);
       }
+
+      applyWeatherBadges();
     }
 
-    function showDetails(key, day) {
-      detailPanel.classList.add('visible');
-      detailTitle.textContent = `${monthNames[currentMonth]} ${day}, ${currentYear}`;
-      const items = events[key] || [{ icon: '🍂', text: 'No saved tasks for this day yet.' }];
-      eventList.innerHTML = items.map(ev => `<li><span class="event-icon">${ev.icon}</span><span>${ev.text}</span></li>`).join('');
+    function showDetail(key, events) {
+      const [y, m, d] = key.split("-");
+      detailTitle.textContent = `${monthNames[parseInt(m)-1]} ${parseInt(d)}, ${y}`;
+      eventList.innerHTML = "";
+
+      // Weather row if available
+      const wx = wxData[key];
+      if (wx) {
+        const li = document.createElement("li");
+        li.style.borderBottom = "1px solid var(--border)";
+        li.innerHTML = `<span class="event-icon">${wx.icon}</span><div><strong>${wx.desc || "Weather"}</strong><br><span style="color:var(--muted);font-size:12px">High ${wx.high}°F · Low ${wx.low}°F · 💧 Rain ${wx.rain}%${wx.rain >= 40 ? " — <em>skip outdoor tasks if heavy</em>" : ""}</span></div>`;
+        eventList.appendChild(li);
+      }
+
+      if (events.length === 0 && !wx) {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="event-icon">📅</span><div style="color:var(--muted)">No garden tasks scheduled</div>`;
+        eventList.appendChild(li);
+      }
+
+      events.forEach(ev => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="event-icon">${ev.icon}</span><div><strong>${ev.label}</strong>${ev.note ? `<br><span style="color:var(--muted);font-size:12px">${ev.note}</span>` : ""}</div>`;
+        eventList.appendChild(li);
+      });
+      detailPanel.classList.add("visible");
+      detailPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    document.getElementById('close-detail').addEventListener('click', () => {
-      detailPanel.classList.remove('visible');
-    });
-    document.getElementById('prev-btn').addEventListener('click', () => {
-      currentMonth -= 1;
-      if (currentMonth < 0) { currentMonth = 11; currentYear -= 1; }
-      renderCalendar();
-    });
-    document.getElementById('next-btn').addEventListener('click', () => {
-      currentMonth += 1;
-      if (currentMonth > 11) { currentMonth = 0; currentYear += 1; }
-      renderCalendar();
+    document.getElementById("close-detail").addEventListener("click", () => {
+      detailPanel.classList.remove("visible");
     });
 
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+      renderCalendar(currentYear, currentMonth);
+      detailPanel.classList.remove("visible");
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+      renderCalendar(currentYear, currentMonth);
+      detailPanel.classList.remove("visible");
+    });
+
+    // ─── LOG RENDER ─────────────────────────────────────────────────────────
     function renderLog() {
-      logContainer.innerHTML = appLog.map(item => `
-        <div class="log-card">
-          <div class="log-date">${item.date}</div>
-          <div class="log-text">${item.text}</div>
-        </div>
-      `).join('');
+      const container = document.getElementById("log-container");
+      const sorted = [...appLog].sort((a,b) => b.date.localeCompare(a.date));
+      sorted.forEach(entry => {
+        const card = document.createElement("div");
+        card.className = "log-card";
+        card.innerHTML = `<div class="log-date">${entry.date}</div><div class="log-text">${entry.text}</div>`;
+        container.appendChild(card);
+      });
     }
+
+    // ─── WEATHER ────────────────────────────────────────────────────────────
+    // wttr.in weather codes → emoji
+    const WX_CODE = {
+      113:"☀️", 116:"⛅", 119:"☁️", 122:"☁️",
+      143:"🌫️", 176:"🌦️", 179:"🌨️", 182:"🌧️", 185:"🌧️",
+      200:"⛈️", 227:"🌨️", 230:"❄️",
+      248:"🌫️", 260:"🌫️",
+      263:"🌦️", 266:"🌧️", 281:"🌧️", 284:"🌧️",
+      293:"🌦️", 296:"🌧️", 299:"🌧️", 302:"🌧️", 305:"🌧️", 308:"🌧️",
+      311:"🌧️", 314:"🌧️", 317:"🌨️", 320:"🌨️", 323:"🌨️", 326:"🌨️",
+      329:"❄️", 332:"❄️", 335:"❄️", 338:"❄️", 350:"🌧️",
+      353:"🌦️", 356:"🌧️", 359:"🌧️", 362:"🌨️", 365:"🌨️",
+      368:"🌨️", 371:"❄️", 374:"🌨️", 377:"🌨️",
+      386:"⛈️", 389:"⛈️", 392:"⛈️", 395:"⛈️"
+    };
+
+    let wxData = {}; // key: "YYYY-MM-DD" → { icon, rain, high, low }
 
     async function loadWeather() {
+      const strip = document.getElementById("wx-strip");
       try {
-        const res = await fetch('https://wttr.in/Philadelphia?format=j1');
-        const data = await res.json();
-        const todayWx = data.weather?.[0];
-        if (!todayWx) throw new Error('No weather');
-        const desc = todayWx.hourly?.[4]?.weatherDesc?.[0]?.value || 'Current conditions';
-        const hi = todayWx.maxtempF;
-        const lo = todayWx.mintempF;
-        const rain = todayWx.hourly?.[4]?.chanceofrain;
-        wxStrip.innerHTML = `🌤️ <span>${desc}</span> · High ${hi}°F / Low ${lo}°F · Rain chance ${rain || '?'}%`;
-      } catch {
-        wxStrip.textContent = '🌤️ Weather unavailable right now.';
+        const r = await fetch("https://wttr.in/Philadelphia?format=j1");
+        const j = await r.json();
+        const today2 = new Date();
+
+        j.weather.forEach((day, i) => {
+          const d = new Date(today2);
+          d.setDate(today2.getDate() + i);
+          const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+          const code = parseInt(day.hourly[4]?.weatherCode || day.hourly[0]?.weatherCode || 113);
+          const rainPct = Math.max(...day.hourly.map(h => parseInt(h.chanceofrain || 0)));
+          wxData[key] = {
+            icon: WX_CODE[code] || "🌤️",
+            rain: rainPct,
+            high: Math.round(parseInt(day.maxtempF)),
+            low:  Math.round(parseInt(day.mintempF)),
+            desc: day.hourly[4]?.weatherDesc?.[0]?.value || ""
+          };
+        });
+
+        // Update strip with today summary
+        const todayWx = wxData[todayKey];
+        if (todayWx) {
+          strip.innerHTML = `${todayWx.icon} Philadelphia today — <span>${todayWx.high}°F / ${todayWx.low}°F</span>&nbsp;&nbsp;💧 Rain <span>${todayWx.rain}%</span>&nbsp;&nbsp;<span style="color:var(--muted)">${todayWx.desc}</span>`;
+        } else {
+          strip.innerHTML = "🌤️ Philadelphia — weather unavailable";
+        }
+
+        // Re-render to paint weather badges
+        renderCalendar(currentYear, currentMonth);
+      } catch(e) {
+        strip.innerHTML = "🌤️ Weather unavailable";
       }
     }
 
-    renderCalendar();
+    function applyWeatherBadges() {
+      document.querySelectorAll(".day-cell:not(.empty)").forEach(cell => {
+        const key = cell.dataset.key;
+        if (!key || !wxData[key]) return;
+        const w = wxData[key];
+        const badge = document.createElement("div");
+        badge.className = "wx-badge";
+        badge.innerHTML = `<span class="wx-icon">${w.icon}</span>${w.rain > 0 ? `<span class="wx-rain">💧${w.rain}%</span>` : ""}<span class="wx-temp">${w.high}°/${w.low}°</span>`;
+        cell.appendChild(badge);
+
+        // Add weather to click detail if it has events
+        if (cell.dataset.hasEvents) {
+          const origClick = cell.onclick;
+        }
+      });
+    }
+
+    renderCalendar(currentYear, currentMonth);
     renderLog();
     loadWeather();
   </script>
