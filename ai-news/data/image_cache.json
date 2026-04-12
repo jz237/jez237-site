@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-12T11:46:57.448230+00:00",
+  "updatedAt": "2026-04-12T13:00:01.927694+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3388,6 +3388,10 @@
     "https://www.marktechpost.com/2026/04/12/minimax-just-open-sourced-minimax-m2-7-a-self-evolving-agent-model-that-scores-56-22-on-swe-pro-and-57-0-on-terminal-bench-2": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-28.png",
       "checkedAt": "2026-04-12T10:00:01.854986+00:00"
+    },
+    "https://www.theverge.com/column/910019/ai-coding-wars-openai-google-anthropic": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268441_AI_CODING_RACE_CVIRGINIA.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-12T13:00:01.927694+00:00"
     }
   }
 }
