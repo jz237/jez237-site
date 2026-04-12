@@ -1,6 +1,6 @@
 {
   "date": "2026-04-12",
-  "updatedAt": "2026-04-12T11:46:57.448230+00:00",
+  "updatedAt": "2026-04-12T13:00:01.927694+00:00",
   "items": [
     {
       "title": "MiniMax Just Open Sourced MiniMax M2.7: A Self-Evolving Agent Model that Scores 56.22% on SWE-Pro and 57.0% on Terminal Bench 2",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-28.png",
       "published": "2026-04-12T09:20:15+00:00",
       "firstSeen": "2026-04-12T10:00:01.854986+00:00",
-      "lastSeen": "2026-04-12T11:46:57.448230+00:00",
+      "lastSeen": "2026-04-12T13:00:01.927694+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.9478
+      "score": 14.9136
     },
     {
       "title": "Liquid AI Releases LFM2.5-VL-450M: a 450M-Parameter Vision-Language Model with Bounding Box Prediction, Multilingual Support, and Sub-250ms Edge Inference",
@@ -30,10 +30,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/HFZP3rGWoAAGZAm-1-150x150.jpeg",
       "published": "2026-04-12T02:41:10+00:00",
       "firstSeen": "2026-04-12T05:00:01.891703+00:00",
-      "lastSeen": "2026-04-12T11:46:57.448230+00:00",
+      "lastSeen": "2026-04-12T13:00:01.927694+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1744
+      "score": 7.146
+    },
+    {
+      "title": "The AI code wars are heating up",
+      "url": "https://www.theverge.com/column/910019/ai-coding-wars-openai-google-anthropic",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more on the AI coding and vibe-coding booms, follow David Pierce. The Stepback arrives in our subscribers' inboxes at 8AM ET. Opt in for The Stepback here. How it started Writing code was a killer app for AI [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268441_AI_CODING_RACE_CVIRGINIA.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-12T12:00:00+00:00",
+      "firstSeen": "2026-04-12T13:00:01.927694+00:00",
+      "lastSeen": "2026-04-12T13:00:01.927694+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8298
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -44,9 +60,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-12T11:47:05.572226+00:00",
+      "published": "2026-04-12T13:00:07.426556+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-12T11:46:57.448230+00:00",
+      "lastSeen": "2026-04-12T13:00:01.927694+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
