@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-12T21:00:01.992771+00:00",
+  "updatedAt": "2026-04-12T20:51:11.817106+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3407,7 +3407,7 @@
     },
     "https://www.marktechpost.com/2026/04/12/a-coding-implementation-of-molmoact-for-depth-aware-spatial-reasoning-visual-trajectory-tracing-and-robotic-action-prediction": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-29-1024x731.png",
-      "checkedAt": "2026-04-12T21:00:01.992771+00:00"
+      "checkedAt": "2026-04-12T20:51:11.817106+00:00"
     }
   }
 }
