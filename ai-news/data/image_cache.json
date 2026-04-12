@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-12T09:00:02.134096+00:00",
+  "updatedAt": "2026-04-12T10:00:01.854986+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3384,6 +3384,10 @@
     "https://simonwillison.net/2026/Apr/11/sqlite-qrf": {
       "image": "",
       "checkedAt": "2026-04-11T20:49:56.362722+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/12/minimax-just-open-sourced-minimax-m2-7-a-self-evolving-agent-model-that-scores-56-22-on-swe-pro-and-57-0-on-terminal-bench-2": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-28.png",
+      "checkedAt": "2026-04-12T10:00:01.854986+00:00"
     }
   }
 }
