@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Climbing Hydrangea — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1d1712;
+      --earth-panel: #2a211a;
+      --earth-border: #594533;
+      --earth-text: #efe3d5;
+      --earth-muted: #c9b7a1;
+      --earth-accent: #8ea66a;
+      --earth-accent-2: #d39a68;
+    }
+    body { background: radial-gradient(circle at top, #3f3024 0%, #1d1712 56%, #120e0b 100%); color: var(--earth-text); }
+    header { background: rgba(29,23,18,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #dcc58f; }
+    .hero, .panel, .entry-card {
+      border: 1px solid var(--earth-border);
+      border-radius: 18px;
+      box-shadow: 0 14px 32px rgba(0,0,0,.18);
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(68,54,39,.95), rgba(37,54,35,.92));
+      padding: 24px;
+    }
+    .panel, .entry-card {
+      background: linear-gradient(180deg, rgba(50,39,31,.97), rgba(32,25,20,.97));
+      padding: 18px;
+    }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .shell { display:grid; gap:18px; margin-top:18px; }
+    .split { display:grid; grid-template-columns: 1.1fr .9fr; gap:18px; }
+    .photo {
+      width:100%; display:block; border-radius:16px; aspect-ratio:4/3; object-fit:cover;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 16px 34px rgba(0,0,0,.24);
+    }
+    .section-title, .entry-title { margin:0 0 8px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-copy { line-height:1.7; }
+    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent-2);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../">Plant Progress</a>
+        <a href="../../photos/garden/">Garden Timeline</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Hydrangea anomala subsp. petiolaris</div>
+      <h1 class="title">Climbing Hydrangea</h1>
+      <p class="muted">A patient wall-claimer, slower to start, then suddenly full of intent.</p>
+    </section>
+
+    <div class="shell">
+      <section class="panel split">
+        <div>
+          <h2 class="section-title">Early spring climb</h2>
+          <p class="note">This one feels quiet in the best way. The fresh foliage is clean, the line upward is clear, and the whole plant has that steady, deliberate energy of something settling in and beginning to claim space.</p>
+          <div class="meta-row">
+            <span class="meta-pill">strong upward reach</span>
+            <span class="meta-pill">healthy foliage</span>
+            <span class="meta-pill">training well</span>
+          </div>
+        </div>
+        <div>
+          <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="Climbing hydrangea on trellis" />
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="split">
+          <div>
+            <div class="entry-date">April 12, 2026</div>
+            <h2 class="entry-title">Finding its path</h2>
+            <div class="entry-copy">
+              The climbing hydrangea is in that satisfying early push phase, clearly established enough to start reaching, but still young enough that every bit of new length feels like progress. The foliage looks clean and bright, and the vine is tracking nicely up the support with good energy from the base all the way to the tip.
+              <div class="quote">Fresh green against weathered wood and rusted metal, neat, calm, and full of future promise.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="Climbing hydrangea spring update" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>active spring leaf-out</li>
+          <li>good vertical extension</li>
+          <li>clean foliage with no visible stress</li>
+          <li>support structure is working well</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

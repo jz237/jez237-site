@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rising Sun Redbud — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1f1711;
+      --earth-panel: #2b2018;
+      --earth-border: #5e4733;
+      --earth-text: #f1e6d8;
+      --earth-muted: #ccb9a2;
+      --earth-accent: #d88c63;
+      --earth-leaf: #a8ba73;
+    }
+    body { background: radial-gradient(circle at top, #4c3325 0%, #201710 55%, #130e0b 100%); color: var(--earth-text); }
+    header { background: rgba(31,23,17,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e4c695; }
+    .hero {
+      background: linear-gradient(135deg, rgba(94,60,43,.96), rgba(78,49,36,.92));
+      border: 1px solid var(--earth-border);
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
+    }
+    .hero-grid, .entry-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:18px; }
+    .panel {
+      background: linear-gradient(180deg, rgba(50,37,28,.97), rgba(35,26,20,.97));
+      border: 1px solid var(--earth-border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.16);
+    }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .hero-photo, .entry-photo {
+      width: 100%; border-radius: 16px; display:block; object-fit: cover;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 16px 34px rgba(0,0,0,.25);
+    }
+    .hero-photo { aspect-ratio: 4/3; }
+    .section-shell { display:grid; gap:18px; margin-top:18px; }
+    .section-title { margin:0 0 8px; font-size:24px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-card {
+      background: linear-gradient(180deg, rgba(59,43,33,.96), rgba(34,26,20,.96));
+      border: 1px solid rgba(216,140,99,.22);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .entry-title { margin: 0 0 6px; font-size: 22px; }
+    .entry-copy { line-height: 1.7; }
+    .bullet-list { margin: 12px 0 0; padding-left: 18px; line-height: 1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent);
+      padding-left: 14px;
+      margin-top: 14px;
+      color: var(--earth-text);
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .hero-grid, .entry-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../">Plant Progress</a>
+        <a href="../../photos/garden/">Garden Timeline</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Cercis canadensis 'The Rising Sun'</div>
+      <h1 class="title">Rising Sun Redbud</h1>
+      <p class="muted">A spring flare plant, all neon leaves and electric bloom, dramatic in exactly the right way.</p>
+    </section>
+
+    <div class="section-shell">
+      <section class="panel hero-grid">
+        <div>
+          <h2 class="section-title">April pulse</h2>
+          <p class="note">This is one of its best windows of the year, flowers still glowing while the new leaves are just starting to unfurl in apricot-gold. For a few days, it looks almost backlit.</p>
+          <div class="meta-row">
+            <span class="meta-pill">spring highlight</span>
+            <span class="meta-pill">bloom + leaf overlap</span>
+            <span class="meta-pill">strong vigor</span>
+          </div>
+        </div>
+        <div>
+          <img class="hero-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Rising Sun redbud in bloom with golden new leaves" />
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="entry-grid">
+          <div>
+            <div class="entry-date">April 12, 2026</div>
+            <h2 class="entry-title">Spring ignition</h2>
+            <div class="entry-copy">
+              The Rising Sun redbud is really showing off here, bright magenta flowers still running up the stems while the new foliage is just starting to open in that soft golden-apricot stage. This is one of the best moments for this tree, when bloom and fresh leaf color overlap and the whole thing looks almost lit from inside.
+              <div class="quote">Hot pink bloom, golden new leaves, blue sky, brick behind it. Hard to ask for a better spring entrance.</div>
+            </div>
+          </div>
+          <div>
+            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Rising Sun redbud spring update" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>peak to near-peak bloom</li>
+          <li>fresh leaf-out underway</li>
+          <li>upright structure looks strong</li>
+          <li>great color contrast against the brick</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
