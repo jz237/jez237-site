@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-12T14:55:36.144539+00:00",
+  "updatedAt": "2026-04-12T15:49:45.484700+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3392,6 +3392,14 @@
     "https://www.theverge.com/column/910019/ai-coding-wars-openai-google-anthropic": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268441_AI_CODING_RACE_CVIRGINIA.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-12T13:00:01.927694+00:00"
+    },
+    "https://techcrunch.com/2026/04/12/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
+      "checkedAt": "2026-04-12T15:49:45.484700+00:00"
+    },
+    "https://techcrunch.com/2026/04/12/at-the-humanx-conference-everyone-was-talking-about-claude": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/12/Claude-ad-e1733259907871.jpg?resize=1200,800",
+      "checkedAt": "2026-04-12T15:49:45.484700+00:00"
     }
   }
 }
