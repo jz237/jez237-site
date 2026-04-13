@@ -7,277 +7,256 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <style>
     :root {
-      --earth-bg: #201811;
-      --earth-panel: #2c2218;
-      --earth-panel-2: #382a1f;
-      --earth-border: #5d4732;
-      --earth-text: #f0e6d8;
-      --earth-muted: #c7b59e;
-      --earth-accent: #9bb168;
-      --earth-accent-2: #d88d52;
+      --earth-bg: #1e1712;
+      --earth-panel: #2d2219;
+      --earth-panel-2: #3a2b1f;
+      --earth-border: #624a35;
+      --earth-text: #f2e7d9;
+      --earth-muted: #cdb9a3;
+      --earth-accent: #9eb176;
+      --earth-accent-2: #d29461;
+      --earth-accent-3: #b46173;
+      --earth-shadow: rgba(0,0,0,0.24);
     }
     body {
-      background: radial-gradient(circle at top, #433022 0%, var(--earth-bg) 48%, #16100c 100%);
+      background:
+        radial-gradient(circle at top, #463226 0%, var(--earth-bg) 52%, #140f0c 100%);
       color: var(--earth-text);
     }
     header {
-      background: rgba(32, 24, 17, 0.82);
+      background: rgba(30, 23, 18, 0.84);
       border-bottom: 1px solid var(--earth-border);
     }
-    a { color: #d8c493; }
+    a { color: #e0c892; }
+    .page-shell {
+      display: grid;
+      gap: 20px;
+      margin-top: 22px;
+    }
     .hero {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(92, 67, 42, 0.95), rgba(45, 63, 33, 0.92));
+      min-height: 430px;
+      border-radius: 24px;
       border: 1px solid var(--earth-border);
-      box-shadow: 0 18px 48px rgba(0,0,0,0.25);
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: auto -8% -35% auto;
-      width: 340px;
-      height: 340px;
-      background: radial-gradient(circle, rgba(216,141,82,0.28) 0%, rgba(216,141,82,0.08) 38%, transparent 68%);
-      filter: blur(6px);
-      animation: glowDrift 9s ease-in-out infinite;
-      pointer-events: none;
+      box-shadow: 0 22px 54px var(--earth-shadow);
+      background:
+        linear-gradient(115deg, rgba(34,25,20,0.30), rgba(34,25,20,0.55)),
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.35)),
+        url('../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: end;
     }
     .hero::after {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(155,177,104,0.16), transparent 20%),
-        radial-gradient(circle at 75% 30%, rgba(255,255,255,0.06), transparent 18%),
-        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
-      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(12,9,8,0.10) 45%, rgba(12,9,8,0.68) 100%);
     }
-    .hero .muted, .kicker, .section-copy, .plant-note, .timeline-note { color: var(--earth-muted); }
-    .hero-aurora {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 18% 40%, rgba(155,177,104,0.14), transparent 22%),
-        radial-gradient(circle at 70% 28%, rgba(216,141,82,0.12), transparent 18%);
-      animation: auroraShift 8s ease-in-out infinite;
-      pointer-events: none;
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      padding: 28px;
+      max-width: 760px;
     }
-    .hero-lines {
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, rgba(216,141,82,0.6), rgba(155,177,104,0.6), transparent);
-      background-size: 200% 100%;
-      animation: lineSweep 5s linear infinite;
-      opacity: 0.8;
-      pointer-events: none;
+    .hero .kicker,
+    .section-copy,
+    .meta-copy,
+    .label,
+    .strip-item span,
+    .aside-note,
+    .timeline-note,
+    .mini-date {
+      color: var(--earth-muted);
     }
-    .reveal {
-      opacity: 1;
-      transform: none;
-      transition: opacity 0.8s ease, transform 0.8s ease;
+    .hero .title {
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      margin: 6px 0 10px;
+      line-height: 1.04;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
     }
     .btn-earth {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(155, 177, 104, 0.16);
-      border: 1px solid rgba(155, 177, 104, 0.45);
+      background: rgba(30, 23, 18, 0.58);
+      border: 1px solid rgba(242,231,217,0.18);
       color: var(--earth-text);
       border-radius: 999px;
       padding: 10px 16px;
       text-decoration: none;
-      margin-top: 12px;
+      backdrop-filter: blur(4px);
     }
-    .section-shell {
-      margin-top: 18px;
-      display: grid;
-      gap: 18px;
+    .btn-earth.alt {
+      background: rgba(158,177,118,0.16);
+      border-color: rgba(158,177,118,0.35);
     }
     .section-card {
-      position: relative;
-      background: linear-gradient(180deg, rgba(56,42,31,0.96), rgba(40,30,22,0.96));
+      background: linear-gradient(180deg, rgba(57,42,31,0.96), rgba(39,29,22,0.96));
       border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.16);
     }
     .section-title {
       margin: 0 0 8px;
-      font-size: 24px;
+      font-size: 25px;
     }
-    .story-grid {
+    .intro-grid,
+    .editorial-grid,
+    .roadmap-grid,
+    .timeline-grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
       gap: 18px;
     }
-    .feature-panel {
-      min-height: 260px;
-      border-radius: 16px;
-      padding: 22px;
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(18, 44, 25, 0.18), rgba(0,0,0,0.12)),
-        radial-gradient(circle at top left, rgba(216,141,82,0.22), transparent 42%),
-        #2a2018;
-      border: 1px solid rgba(216,141,82,0.18);
+    .intro-grid {
+      grid-template-columns: 1.2fr 0.8fr;
     }
-    .feature-panel::after {
-      content: "";
-      position: absolute;
-      left: 22px;
-      right: 22px;
-      bottom: 18px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(216,141,82,0.55), rgba(155,177,104,0.45), transparent);
-      background-size: 200% 100%;
-      animation: lineSweep 6s linear infinite;
-      opacity: 0.85;
-      pointer-events: none;
+    .editorial-grid {
+      grid-template-columns: 1.25fr 0.75fr;
+      align-items: start;
     }
-    .plant-chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .plant-chip {
-      border: 1px solid rgba(216,141,82,0.35);
-      background: rgba(255,255,255,0.04);
-      color: var(--earth-text);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 14px;
-    }
-    .plant-grid {
-      display: grid;
+    .roadmap-grid,
+    .timeline-grid {
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
     }
-    .plant-card {
-      background: linear-gradient(180deg, rgba(52,39,28,0.98), rgba(36,28,21,0.98));
+    .lead-panel {
+      border-radius: 18px;
+      padding: 22px;
+      background:
+        linear-gradient(180deg, rgba(18,44,25,0.14), rgba(0,0,0,0.10)),
+        radial-gradient(circle at top left, rgba(216,148,97,0.16), transparent 36%),
+        #2a2018;
+      border: 1px solid rgba(216,148,97,0.18);
+    }
+    .mini-stack {
+      display: grid;
+      gap: 12px;
+    }
+    .mini-card,
+    .roadmap-card,
+    .timeline-card {
+      border-radius: 18px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(64,48,36,0.92), rgba(37,28,22,0.92));
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
+    }
+    .mini-card h3,
+    .roadmap-card h3,
+    .timeline-card h3,
+    .feature-copy h3,
+    .feature-card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .featured-stack {
+      display: grid;
+      gap: 16px;
+    }
+    .feature-card {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(60,45,34,0.96), rgba(35,27,21,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
       overflow: hidden;
-      position: relative;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .plant-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 35%, transparent 65%, rgba(155,177,104,0.08));
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      pointer-events: none;
-    }
-    .plant-card:hover {
-      transform: translateY(-5px) scale(1.01);
-      box-shadow: 0 16px 28px rgba(0,0,0,0.26);
-      border-color: rgba(216,141,82,0.35);
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 28px rgba(0,0,0,0.22);
       text-decoration: none;
     }
-    .plant-card:hover::before {
-      opacity: 1;
+    .feature-media {
+      min-height: 220px;
+      background-size: cover;
+      background-position: center;
     }
-    .plant-art {
-      aspect-ratio: 4 / 3;
+    .feature-copy {
+      padding: 20px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      font-size: 58px;
-      background: linear-gradient(135deg, rgba(155,177,104,0.25), rgba(216,141,82,0.18));
-      animation: breathe 2.8s ease-in-out infinite;
     }
-    .plant-copy {
-      padding: 16px;
-    }
-    .plant-copy h3 {
-      margin: 0 0 6px;
-      color: var(--earth-text);
-    }
-    .meta-row {
+    .meta-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 12px;
     }
-    .meta-pill {
+    .pill {
       font-size: 12px;
-      color: var(--earth-muted);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 999px;
       padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.09);
       background: rgba(255,255,255,0.04);
+      color: var(--earth-muted);
     }
-    .timeline-grid {
+    .season-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
     }
-    .timeline-card {
+    .strip-item {
+      padding: 14px 16px;
       border-radius: 16px;
-      background: linear-gradient(180deg, rgba(59,45,33,0.95), rgba(36,27,21,0.95));
-      border: 1px solid rgba(216,141,82,0.24);
-      padding: 16px;
+      background: linear-gradient(180deg, rgba(61,46,35,0.95), rgba(37,28,22,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    .timeline-card h3 {
-      margin-top: 0;
-      margin-bottom: 8px;
+    .strip-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+      color: var(--earth-text);
+    }
+    .aside-visual {
+      border-radius: 20px;
+      min-height: 100%;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.34)),
+        url('../photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg') center/cover no-repeat;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 20px;
+      display: flex;
+      align-items: end;
+      box-shadow: inset 0 -60px 80px rgba(0,0,0,0.28);
+    }
+    .aside-note {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .roadmap-card p,
+    .timeline-card p,
+    .feature-copy p,
+    .lead-panel p,
+    .mini-card p,
+    .section-copy {
+      line-height: 1.6;
     }
     .timeline-card ul {
       margin: 0;
       padding-left: 18px;
       color: var(--earth-muted);
-      line-height: 1.6;
+      line-height: 1.65;
     }
-    .timeline-note code {
-      background: rgba(255,255,255,0.06);
-      padding: 2px 6px;
-      border-radius: 6px;
-    }
-    @keyframes glowDrift {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(-22px, -16px, 0) scale(1.09); }
-    }
-    @keyframes auroraShift {
-      0%, 100% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.03); }
-    }
-    @keyframes lineSweep {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.09); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .hero::before,
-      .feature-panel::after,
-      .plant-art,
-      .hero-aurora,
-      .hero-lines {
-        animation: none;
+    @media (max-width: 900px) {
+      .intro-grid,
+      .editorial-grid,
+      .feature-card,
+      .season-strip {
+        grid-template-columns: 1fr;
       }
-      .plant-card,
-      .plant-card::before,
-      .reveal {
-        transition: none;
-        opacity: 1;
-        transform: none;
+      .hero {
+        min-height: 360px;
       }
-    }
-    @media (max-width: 800px) {
-      .story-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -301,156 +280,154 @@
   </header>
 
   <main class="container">
-    <section class="hero reveal"><div class="hero-aurora" aria-hidden="true"></div><div class="hero-lines" aria-hidden="true"></div>
-      <div class="kicker">Seasonal Storytelling</div>
-      <h1 class="title">Plant Progress</h1>
-      <p class="muted">A warm, month-by-month journal for the plants that make the yard feel alive.</p>
-    </section>
-
-    <div class="section-shell">
-      <section class="section-card story-grid reveal">
-        <div class="feature-panel">
-          <h2 class="section-title">How it should feel</h2>
-          <p class="section-copy">Not just a gallery. More like a living field journal, where each plant gets its own little chapter and every two weeks or so becomes part of the season’s story.</p>
-          <div class="plant-chip-row">
-            <span class="plant-chip">bud break</span>
-            <span class="plant-chip">first bloom</span>
-            <span class="plant-chip">leaf color</span>
-            <span class="plant-chip">stress + recovery</span>
-            <span class="plant-chip">late-season glow</span>
+    <div class="page-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="kicker">Seasonal Storytelling</div>
+          <h1 class="title">Plant Progress</h1>
+          <p class="section-copy">A warmer, more editorial garden journal, part record, part beauty, part practical memory. Not just uploads. A season-by-season story of what the yard is becoming.</p>
+          <div class="hero-actions">
+            <a class="btn-earth alt" href="../garden/">Open Garden Calendar</a>
+            <a class="btn-earth" href="#featured">Jump to live pages</a>
           </div>
         </div>
-        <div class="section-card" style="margin:0; background:rgba(25,19,14,0.55);">
-          <h2 class="section-title">Update rhythm</h2>
-          <p class="section-copy">Each plant page is meant to become a real timeline, one page, many dated entries, added week by week or every two weeks as the season moves.</p>
-          <p class="timeline-note">Best practice: keep adding entries to the same plant page instead of making a new page for every photo.</p>
-          <p class="timeline-note">Suggested photo path: <code>photos/garden/plants/&lt;slug&gt;/YYYY/MM/</code></p>
-          <p class="timeline-note">Suggested note fields: date, caption, what changed, what you did, what to watch next.</p>
+      </section>
+
+      <section class="section-card intro-grid">
+        <div class="lead-panel">
+          <h2 class="section-title">How this should feel</h2>
+          <p>Like a field journal you actually want to read again. Every plant page can carry multiple dated entries over time, while full-bed pages hold design ideas, experiments, and changes worth remembering.</p>
+          <div class="season-strip" style="margin-top:18px;">
+            <div class="strip-item"><strong>Spring</strong><span>bud break, bloom overlap, first flushes</span></div>
+            <div class="strip-item"><strong>Summer</strong><span>heat, fullness, flowers, stress and recovery</span></div>
+            <div class="strip-item"><strong>Fall</strong><span>color shift, seedheads, structure, lessons</span></div>
+            <div class="strip-item"><strong>Winter</strong><span>framework, pruning notes, plans for next year</span></div>
+          </div>
+        </div>
+        <div class="mini-stack">
+          <article class="mini-card">
+            <h3>Plant timelines</h3>
+            <p>One page per plant, many entries over time. Best for maples, hydrangeas, shrubs, vines, and fruit trees.</p>
+          </article>
+          <article class="mini-card">
+            <h3>Bed journals</h3>
+            <p>Use full-bed pages for design records, before-and-after ideas, and places where multiple plants matter together.</p>
+          </article>
+          <article class="mini-card">
+            <h3>Editorial over clutter</h3>
+            <p>The good photos get stronger writing. Repeat shots go into existing timelines instead of becoming random one-off pages.</p>
+          </article>
         </div>
       </section>
 
-      <section class="section-card reveal">
-        <h2 class="section-title">Featured plants</h2>
-        <p class="section-copy">A creative plant section works best when each plant has a distinct identity and its own timeline page.</p>
-        <p class="timeline-note">Live pages below. Every card here should lead somewhere real, with photos and writing, not dead ends.</p>
-        <div class="plant-grid">
-          <a class="plant-card" href="./rising-sun-redbud/">
-            <div class="plant-art">🌄</div>
-            <div class="plant-copy">
-              <h3>Rising Sun Redbud</h3>
-              <div class="plant-note">Electric spring overlap, hot bloom and golden leaf-out together.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live page</span>
-                <span class="meta-pill">spring flare</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="./climbing-hydrangea/">
-            <div class="plant-art">🌿</div>
-            <div class="plant-copy">
-              <h3>Climbing Hydrangea</h3>
-              <div class="plant-note">Calm upward growth, fresh green foliage, and a wall story just beginning.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live page</span>
-                <span class="meta-pill">vertical grower</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="./mixed-perennial-bed/">
-            <div class="plant-art">🧅</div>
-            <div class="plant-copy">
-              <h3>Mixed Perennial Bed</h3>
-              <div class="plant-note">Ornamental onions up first, astilbe behind, hydrangea waking, daylilies just starting at the edges.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live page</span>
-                <span class="meta-pill">layered bed story</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="#">
-            <div class="plant-art">🌸</div>
-            <div class="plant-copy">
-              <h3>Hydrangea</h3>
-              <div class="plant-note">Bud swell, bloom set, color change, pruning results.</div>
-              <div class="meta-row">
-                <span class="meta-pill">coming next</span>
-                <span class="meta-pill">big visual changes</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="./forsythia/">
-            <div class="plant-art">🌼</div>
-            <div class="plant-copy">
-              <h3>Forsythia</h3>
-              <div class="plant-note">A bright trained spring structure, all yellow bloom and long sculptural lines.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live page</span>
-                <span class="meta-pill">peak bloom</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="./twomblys-red-sentinel/">
-            <div class="plant-art">🍁</div>
-            <div class="plant-copy">
-              <h3>Twombly's Red Sentinel</h3>
-              <div class="plant-note">Bright red spring leaf-out, upright structure, and a killer backdrop from the gold dust aucuba behind it.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live page</span>
-                <span class="meta-pill">contrast planting</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="./side-house-bed/">
-            <div class="plant-art">🧱</div>
-            <div class="plant-copy">
-              <h3>Side House Bed</h3>
-              <div class="plant-note">Planning page for the long side foundation bed, anchored by rhododendron and gold euonymus with room to build a cleaner layered composition.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live page</span>
-                <span class="meta-pill">planning record</span>
-              </div>
-            </div>
-          </a>
-          <a class="plant-card" href="./dwarf-peach-tree/">
-            <div class="plant-art">🍑</div>
-            <div class="plant-copy">
+      <section id="featured" class="section-card">
+        <h2 class="section-title">Featured live pages</h2>
+        <p class="section-copy">These are the pages already carrying the season forward, with real photos, real notes, and clearer stories.</p>
+        <div class="featured-stack">
+          <a class="feature-card" href="./dwarf-peach-tree/">
+            <div class="feature-media" style="background-image:url('../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg')"></div>
+            <div class="feature-copy">
+              <div class="mini-date">multi-entry timeline</div>
               <h3>Dwarf Peach Tree</h3>
-              <div class="plant-note">The first true multi-entry timeline page, from swelling buds to full pink bloom.</div>
-              <div class="meta-row">
-                <span class="meta-pill">live timeline</span>
-                <span class="meta-pill">fruit tree</span>
+              <p>The first true timeline page, moving from swelling buds into full pink bloom, exactly the kind of progression this section is meant to hold.</p>
+              <div class="meta-pills">
+                <span class="pill">fruit tree</span>
+                <span class="pill">spring sequence</span>
+                <span class="pill">live page</span>
+              </div>
+            </div>
+          </a>
+
+          <a class="feature-card" href="./rising-sun-redbud/">
+            <div class="feature-media" style="background-image:url('../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
+            <div class="feature-copy">
+              <div class="mini-date">color study</div>
+              <h3>Rising Sun Redbud</h3>
+              <p>That brief electric overlap where hot bloom and golden new leaves happen at once, one of the best spring moments in the yard.</p>
+              <div class="meta-pills">
+                <span class="pill">spring flare</span>
+                <span class="pill">live page</span>
+              </div>
+            </div>
+          </a>
+
+          <a class="feature-card" href="./twomblys-red-sentinel/">
+            <div class="feature-media" style="background-image:url('../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg')"></div>
+            <div class="feature-copy">
+              <div class="mini-date">structure + contrast</div>
+              <h3>Twombly's Red Sentinel</h3>
+              <p>Upright red spring growth against the gold-speckled backdrop of aucuba, one of the cleanest contrast pairings in the garden.</p>
+              <div class="meta-pills">
+                <span class="pill">japanese maple</span>
+                <span class="pill">contrast planting</span>
+                <span class="pill">live page</span>
               </div>
             </div>
           </a>
         </div>
       </section>
 
-      <section class="section-card reveal">
-        <h2 class="section-title">How this will grow</h2>
-        <p class="section-copy">The goal is to keep Plant Progress readable even when the photo count gets large. Best entries become part of a longer seasonal story instead of floating around as one-offs.</p>
+      <section class="section-card editorial-grid">
+        <div>
+          <h2 class="section-title">The page types that make sense</h2>
+          <div class="roadmap-grid">
+            <article class="roadmap-card">
+              <h3>Plant pages</h3>
+              <p>For plants worth following over time. Add new dated entries to the same page so the year builds naturally.</p>
+            </article>
+            <article class="roadmap-card">
+              <h3>Planning pages</h3>
+              <p>For undecided spots, layout changes, bed renovations, and planting ideas that need a visual record.</p>
+            </article>
+            <article class="roadmap-card">
+              <h3>Seasonal archive later</h3>
+              <p>Once the volume grows, add seasonal index pages so Spring, Summer, and Fall can each have their own memory lane.</p>
+            </article>
+            <article class="roadmap-card">
+              <h3>Calendar stays practical</h3>
+              <p>The Garden Calendar remains the working tool, while Plant Progress becomes the more beautiful record of what actually happened.</p>
+            </article>
+          </div>
+        </div>
+        <aside class="aside-visual">
+          <div class="aside-note">The goal is not to prove every photo exists. It’s to make the garden feel legible, memorable, and worth revisiting when the season has moved on.</div>
+        </aside>
+      </section>
+
+      <section class="section-card">
+        <h2 class="section-title">Already live</h2>
+        <p class="section-copy">More pages are already in place beyond the featured set above, including climbing hydrangea, forsythia, mixed perennial bed, and side house planning.</p>
         <div class="timeline-grid">
           <article class="timeline-card">
-            <h3>Plant timelines</h3>
+            <h3>Climbing Hydrangea</h3>
             <ul>
-              <li>one plant page, many dated entries</li>
-              <li>best for maples, hydrangeas, shrubs, vines, and long-season perennials</li>
-              <li>lets you actually watch change instead of just storing pictures</li>
+              <li>early upward training</li>
+              <li>fresh green spring push</li>
+              <li>quiet wall story beginning</li>
             </ul>
           </article>
           <article class="timeline-card">
-            <h3>Bed journals</h3>
+            <h3>Forsythia</h3>
             <ul>
-              <li>track full beds when multiple plants matter together</li>
-              <li>save layout ideas, revisions, and before-and-after plans</li>
-              <li>good for side-yard beds and mixed borders</li>
+              <li>peak yellow bloom</li>
+              <li>trained form on lattice</li>
+              <li>architectural spring color</li>
             </ul>
           </article>
           <article class="timeline-card">
-            <h3>Seasonal archive later</h3>
+            <h3>Mixed Perennial Bed</h3>
             <ul>
-              <li>Spring, Summer, and Fall views can come later</li>
-              <li>lets the site scale without turning messy</li>
-              <li>keeps the strongest entries easy to find</li>
+              <li>ornamental onions leading</li>
+              <li>astilbe and hydrangea emerging</li>
+              <li>daylilies just beginning</li>
+            </ul>
+          </article>
+          <article class="timeline-card">
+            <h3>Side House Bed</h3>
+            <ul>
+              <li>planning record page</li>
+              <li>rhododendron and euonymus anchors</li>
+              <li>future composition notes saved</li>
             </ul>
           </article>
         </div>
