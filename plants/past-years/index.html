@@ -56,7 +56,7 @@
     }
     .lightbox.active { display: flex; }
     .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    .entry img { cursor: zoom-in; }
+    .gallery-card img { cursor: zoom-in; }
     @media (max-width: 900px) {
       .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .gallery-card.featured { grid-column: span 2; }
@@ -118,7 +118,7 @@
   <script>
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('.entry img').forEach((img) => {
+    document.querySelectorAll('.gallery-card img').forEach((img) => {
       img.addEventListener('click', () => {
         lightboxImg.src = img.src;
         lightbox.classList.add('active');
