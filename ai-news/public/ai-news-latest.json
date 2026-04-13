@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T08:00:01.611370+00:00",
+  "updatedAt": "2026-04-13T09:00:01.791158+00:00",
   "items": [
     {
       "title": "Hanna Lee, Tan Dat Nguyen, Jaehoon Kang, Kyuhong Shim",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-13T08:00:07.720942+00:00",
+      "published": "2026-04-13T09:00:10.725313+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Basic-Fit hit by hack affecting members across multiple countries, including 200,000 in the Netherlands",
+      "url": "https://thenextweb.com/news/basic-fit-hit-by-hack-affecting-members-across-multiple-countries-including-200000-in-the-netherlands",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The breach exposed names, addresses, email addresses, phone numbers, dates of birth, and bank account details. No passwords or identity documents were accessed. The Dutch Data Protection Authority has been notified. Basic-Fit operates over 1,300 clubs across seven European countries. Basic-Fit, Europe’s largest budget fitness chain by club count, has disclosed a data breach affecting [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Basic-Fit-hit-by-hack.png",
+      "published": "2026-04-13T08:07:45+00:00",
+      "firstSeen": "2026-04-13T09:00:01.791158+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1237
+    },
+    {
+      "title": "Round raises $6M to automate the finance workflows that still require a human to press a button",
+      "url": "https://thenextweb.com/news/round-6m-seed-ai-finance-automation-treasury-payroll",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The London fintech, used by Cleo and PostHog, has closed a seed round led by Alstin Capital, with Backed VC and Love Ventures participating. The co-founder of Indeed also joined as an angel. Passion Capital, an early backer of Monzo, Tide, and GoCardless, doubled its investment. Round, a London fintech that automates treasury management, payments, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Round.png",
+      "published": "2026-04-13T07:48:48+00:00",
+      "firstSeen": "2026-04-13T09:00:01.791158+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8143
+    },
+    {
+      "title": "Europe is dismantling its own rulebook to compete with America",
+      "url": "https://thenextweb.com/news/europe-is-dismantling-its-own-rulebook-to-compete-with-america",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "On 19 November 2025, the European Commission published its Digital Omnibus package, a legislative proposal to amend the AI Act, the GDPR, the ePrivacy Directive, the Data Act, and several cybersecurity frameworks in a single stroke. The word “simplification” appeared 23 times in the accompanying press release. Six days earlier, a coalition of 127 civil [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/EU.png",
+      "published": "2026-04-13T07:41:28+00:00",
+      "firstSeen": "2026-04-13T09:00:01.791158+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.8107
+    },
+    {
+      "title": "UK impact VC Eka Ventures closes second fund at $107M",
+      "url": "https://thenextweb.com/news/eka-ventures-fund-two-80m-impact-vc",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "When Eka Ventures held the final close of its first fund at £68 million in 2021, the London-based firm staked a claim that few UK VCs were willing to make at the time: that impact investing and venture-scale returns were not a trade-off but a thesis. Five years later, it is doubling down. Eka has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Eka-Ventures.png",
+      "published": "2026-04-13T07:38:09+00:00",
+      "firstSeen": "2026-04-13T09:00:01.791158+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1091
     },
     {
       "title": "An Implementation Guide to Building a DuckDB-Python Analytics Pipeline with SQL, DataFrames, Parquet, UDFs, and Performance Profiling",
@@ -28,10 +92,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-33.png",
       "published": "2026-04-13T07:38:06+00:00",
       "firstSeen": "2026-04-13T08:00:01.611370+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3089
+      "score": 3.2791
     },
     {
       "title": "The largest orbital compute cluster is open for business",
@@ -44,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/KEPLER-T1-.jpg?w=800",
       "published": "2026-04-13T07:01:00+00:00",
       "firstSeen": "2026-04-13T08:00:01.611370+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5603
+      "score": 2.531
     },
     {
       "title": "MiniMax Releases MMX-CLI: A Command-Line Interface That Gives AI Agents Native Access to Image, Video, Speech, Music, Vision, and Search",
@@ -60,10 +124,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-32.png",
       "published": "2026-04-13T05:17:40+00:00",
       "firstSeen": "2026-04-13T07:00:01.256791+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.4403
+      "score": 15.4124
     },
     {
       "title": "Quoting Bryan Cantrill",
@@ -76,10 +140,10 @@
       "image": "",
       "published": "2026-04-13T02:44:24+00:00",
       "firstSeen": "2026-04-13T03:00:01.638751+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2405
+      "score": 3.2144
     },
     {
       "title": "A Hands-On Coding Tutorial for Microsoft VibeVoice Covering Speaker-Aware ASR, Real-Time TTS, and Speech-to-Speech Pipelines",
@@ -92,10 +156,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-31.png",
       "published": "2026-04-13T01:22:15+00:00",
       "firstSeen": "2026-04-13T02:00:01.526824+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.935
+      "score": 6.9099
     },
     {
       "title": "Gemma 4 audio with MLX",
@@ -108,10 +172,10 @@
       "image": "",
       "published": "2026-04-12T23:57:53+00:00",
       "firstSeen": "2026-04-13T01:00:01.946878+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8699
+      "score": 4.8458
     },
     {
       "title": "Meta AI and KAUST Researchers Propose Neural Computers That Fold Computation, Memory, and I/O Into One Learned Model",
@@ -124,10 +188,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-12-at-2.47.35-PM-1-150x150.png",
       "published": "2026-04-12T21:52:24+00:00",
       "firstSeen": "2026-04-12T22:00:02.052316+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.7503
+      "score": 7.7275
     },
     {
       "title": "Trump officials may be encouraging banks to test Anthropic’s Mythos model",
@@ -140,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-12T21:14:38+00:00",
       "firstSeen": "2026-04-12T21:48:32.105529+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.9059
+      "score": 1.8835
     },
     {
       "title": "A Coding Implementation of MolmoAct for Depth-Aware Spatial Reasoning, Visual Trajectory Tracing, and Robotic Action Prediction",
@@ -156,10 +220,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-29-1024x731.png",
       "published": "2026-04-12T20:17:15+00:00",
       "firstSeen": "2026-04-12T20:51:11.817106+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1145
+      "score": 8.0927
     },
     {
       "title": "Apple reportedly testing four designs for upcoming smart glasses",
@@ -172,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2224174932.jpg?w=1024",
       "published": "2026-04-12T19:58:42+00:00",
       "firstSeen": "2026-04-12T20:51:11.817106+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7777
+      "score": 3.7561
     },
     {
       "title": "Mac mini and Mac Studio go out of stock – is it the RAM crisis or an M5 refresh?",
@@ -188,10 +252,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/mac-mini-mac-studio-out-of-stock-dram-shortage-m5-refresh.png",
       "published": "2026-04-12T18:37:18+00:00",
       "firstSeen": "2026-04-12T19:49:33.673919+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9086
+      "score": 2.8878
     },
     {
       "title": "OpenAI’s new $100 ChatGPT Pro plan targets Claude Max with five times the Codex access",
@@ -204,10 +268,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-chatgpt-pro-100-codex-claude-max.png",
       "published": "2026-04-12T18:11:22+00:00",
       "firstSeen": "2026-04-12T19:00:02.089863+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4995
+      "score": 16.479
     },
     {
       "title": "The Netherlands becomes the first European country to approve Tesla’s FSD Supervised",
@@ -220,10 +284,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/tesla-fsd-supervised-netherlands-europe.png",
       "published": "2026-04-12T17:55:05+00:00",
       "firstSeen": "2026-04-12T19:00:02.089863+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8939
+      "score": 2.8735
     },
     {
       "title": "Anthropic brings Claude into Microsoft Word, and legal contract review leads its use cases",
@@ -236,10 +300,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-claude-word-lawyers-legal-ai.png",
       "published": "2026-04-12T15:35:28+00:00",
       "firstSeen": "2026-04-12T16:55:55.232905+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5473
+      "score": 12.5282
     },
     {
       "title": "From LLMs to hallucinations, here’s a simple guide to common AI terms",
@@ -252,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
       "published": "2026-04-12T15:07:08+00:00",
       "firstSeen": "2026-04-12T15:49:45.484700+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8782
+      "score": 1.8594
     },
     {
       "title": "At the HumanX conference, everyone was talking about Claude",
@@ -268,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/Claude-ad-e1733259907871.jpg?resize=1200%2C800",
       "published": "2026-04-12T15:00:00+00:00",
       "firstSeen": "2026-04-12T15:49:45.484700+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.876
+      "score": 9.8572
     },
     {
       "title": "Why data quality matters when working with data at scale",
@@ -284,10 +348,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/data-quality.png",
       "published": "2026-04-12T14:48:56+00:00",
       "firstSeen": "2026-04-12T15:49:45.484700+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7325
+      "score": 1.7138
     },
     {
       "title": "The AI code wars are heating up",
@@ -300,10 +364,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268441_AI_CODING_RACE_CVIRGINIA.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-12T12:00:00+00:00",
       "firstSeen": "2026-04-12T13:00:01.927694+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3911
+      "score": 4.3738
     },
     {
       "title": "MiniMax Just Open Sourced MiniMax M2.7: A Self-Evolving Agent Model that Scores 56.22% on SWE-Pro and 57.0% on Terminal Bench 2",
@@ -316,11 +380,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-28.png",
       "published": "2026-04-12T09:20:15+00:00",
       "firstSeen": "2026-04-12T10:00:01.854986+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.5061
+      "score": 14.4901
     },
     {
       "title": "Liquid AI Releases LFM2.5-VL-450M: a 450M-Parameter Vision-Language Model with Bounding Box Prediction, Multilingual Support, and Sub-250ms Edge Inference",
@@ -333,10 +397,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/HFZP3rGWoAAGZAm-1-150x150.jpeg",
       "published": "2026-04-12T02:41:10+00:00",
       "firstSeen": "2026-04-12T05:00:01.891703+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8073
+      "score": 6.7939
     },
     {
       "title": "Researchers from MIT, NVIDIA, and Zhejiang University Propose TriAttention: A KV Cache Compression Method That Matches Full Attention at 2.5× Higher Throughput",
@@ -349,11 +413,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-11-at-1.01.15-PM-1-150x150.png",
       "published": "2026-04-11T20:10:41+00:00",
       "firstSeen": "2026-04-11T22:00:01.199677+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.0267
+      "score": 17.0155
     },
     {
       "title": "SQLite 3.53.0",
@@ -366,10 +430,10 @@
       "image": "",
       "published": "2026-04-11T19:56:53+00:00",
       "firstSeen": "2026-04-11T20:49:56.362722+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.5941
+      "score": 4.583
     },
     {
       "title": "SQLite Query Result Formatter Demo",
@@ -382,10 +446,10 @@
       "image": "",
       "published": "2026-04-11T19:35:31+00:00",
       "firstSeen": "2026-04-11T20:49:56.362722+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.5099
+      "score": -1.5209
     },
     {
       "title": "How to Build a Secure Local-First Agent Runtime with OpenClaw Gateway, Skills, and Controlled Tool Execution",
@@ -398,10 +462,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-2.png",
       "published": "2026-04-11T18:10:59+00:00",
       "firstSeen": "2026-04-11T19:00:01.239788+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3047
+      "score": 5.2942
     },
     {
       "title": "Sam Altman responds to ‘incendiary’ New Yorker article after attack on his home",
@@ -414,10 +478,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544077.jpg?resize=1200%2C800",
       "published": "2026-04-11T17:18:22+00:00",
       "firstSeen": "2026-04-11T17:47:31.026381+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6655
+      "score": 4.6552
     },
     {
       "title": "Your article about AI doesn’t need AI art",
@@ -430,10 +494,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268452_New_Yorker_AI_art_CVirginia3.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-11T15:00:00+00:00",
       "firstSeen": "2026-04-11T15:46:17.018387+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6122
+      "score": 3.6025
     },
     {
       "title": "My baby deer plushie told me that Mitski&#8217;s dad was a CIA operative",
@@ -446,10 +510,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268430_AI_deer_plushie_AKrales_0012.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-11T14:00:00+00:00",
       "firstSeen": "2026-04-11T14:52:37.894857+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6025
+      "score": 1.5932
     },
     {
       "title": "The inevitable need for an open model consortium",
@@ -462,10 +526,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/18174b65-ddde-40ad-a82b-55467fecbc10_3182x1790.png",
       "published": "2026-04-11T13:02:06+00:00",
       "firstSeen": "2026-04-11T13:20:35.417101+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5935
+      "score": 1.5843
     },
     {
       "title": "How Iran out-shitposted the White House",
@@ -478,10 +542,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Vrg_illo_k_radtke_shitpost_iran_white_house.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C6.369982547993%2C100%2C87.260034904014&amp%3Bw=1200",
       "published": "2026-04-11T13:00:00+00:00",
       "firstSeen": "2026-04-11T13:20:35.417101+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6932
+      "score": 2.684
     },
     {
       "title": "Your Push Notifications Aren’t Safe From the FBI",
@@ -494,10 +558,10 @@
       "image": "https://media.wired.com/photos/69d99028b8bdc021bdac9df6/master/pass/Security-News-This-Week-Your-Push-Notifications-Arent-Safe-From-the-FBI-Security.jpg",
       "published": "2026-04-11T10:30:00+00:00",
       "firstSeen": "2026-04-11T10:53:45.879592+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5008
+      "score": 1.4923
     },
     {
       "title": "How the Internet Broke Everyone’s Bullshit Detectors",
@@ -510,10 +574,10 @@
       "image": "https://media.wired.com/clips/69d8f8b670354d7c78851625/master/pass/Fake_lead_1%20(1).mp4",
       "published": "2026-04-11T09:30:00+00:00",
       "firstSeen": "2026-04-11T09:54:15.487375+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4923
+      "score": 1.484
     },
     {
       "title": "SaaS on the Beach returns to Barcelona with a founder-only format",
@@ -526,10 +590,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/SaaS-on-the-beach.png",
       "published": "2026-04-11T08:38:48+00:00",
       "firstSeen": "2026-04-11T09:54:15.487375+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3452
+      "score": 1.3371
     },
     {
       "title": "UK startup Altilium bags £18.5m to build Britain’s first commercial EV battery refinery",
@@ -545,7 +609,7 @@
       "lastSeen": "2026-04-13T08:00:01.611370+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3443
+      "score": 1.3362
     },
     {
       "title": "Estonia is the rare EU country opposing bans on children’s social media use",
@@ -561,7 +625,7 @@
       "lastSeen": "2026-04-13T08:00:01.611370+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.442
+      "score": 2.434
     },
     {
       "title": "How Knowledge Distillation Compresses Ensemble Intelligence into a Single Deployable AI Model",
@@ -574,74 +638,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-23-150x150.png",
       "published": "2026-04-11T07:33:41+00:00",
       "firstSeen": "2026-04-11T08:00:01.537842+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5064
-    },
-    {
-      "title": "AI is making us faster, more productive, and worse at thinking",
-      "url": "https://thenextweb.com/news/ai-intelligence-losing-our-own",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AI is everywhere, the pressure to adopt it is relentless, and the evidence that it’s making us smarter is getting thinner by the quarter. On New Year’s Day 2026, a programmer named Steve Yegge launched an open-source platform called Gas Town. It lets users orchestrate swarms of AI coding agents simultaneously, assembling software at speeds [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/artificial-intelligence-hype.png",
-      "published": "2026-04-11T07:30:27+00:00",
-      "firstSeen": "2026-04-11T08:59:30.395606+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.136
-    },
-    {
-      "title": "AI can screen 15 million molecules in a day. It still can’t cure Alzheimer’s.",
-      "url": "https://thenextweb.com/news/ai-healthcare-drug-discovery-chatbots-reality",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The drug discovery revolution is real but radically overstated, the health chatbots are a documented hazard, and the diseases that matter most remain stubbornly unsolved. At Novartis, sometime in late 2025, a team of researchers working on Huntington’s disease used generative AI to computationally design 15 million potential compounds for a type of molecule called [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-health-tech.png",
-      "published": "2026-04-11T06:00:30+00:00",
-      "firstSeen": "2026-04-11T07:00:01.403525+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 2.7243
-    },
-    {
-      "title": "Alibaba’s Tongyi Lab Releases VimRAG: a Multimodal RAG Framework that Uses a Memory Graph to Navigate Massive Visual Contexts",
-      "url": "https://www.marktechpost.com/2026/04/10/alibabas-tongyi-lab-releases-vimrag-a-multimodal-rag-framework-that-uses-a-memory-graph-to-navigate-massive-visual-contexts",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Retrieval-Augmented Generation (RAG) has become a standard technique for grounding large language models in external knowledge — but the moment you move beyond plain text and start mixing in images and videos, the whole approach starts to buckle. Visual data is token-heavy, semantically sparse relative to a specific query, and grows unwieldy fast during multi-step [&#8230;]\nThe post Alibaba&#8217;s Tongyi Lab Releases VimRAG: a Multimodal RAG Framework that Uses a Memory Graph to Navigate Massive Visual Contexts appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-10-at-4.04.36-PM-1-150x150.png",
-      "published": "2026-04-10T23:06:41+00:00",
-      "firstSeen": "2026-04-10T23:49:35.091380+00:00",
-      "lastSeen": "2026-04-13T07:00:01.256791+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.8465
-    },
-    {
-      "title": "France orders all government ministries to ditch Windows for Linux in digital sovereignty push",
-      "url": "https://thenextweb.com/news/france-linux-windows-migration-digital-sovereignty",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: France’s Interministerial Digital Directorate (DINUM) announced on 8 April 2026 that it is migrating its own workstations from Windows to Linux and has ordered every government ministry to formalise a plan to eliminate extra-European digital dependencies by autumn 2026. The directive covers operating systems, collaborative tools, cloud infrastructure, and artificial intelligence platforms. It follows [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/france-linux-windows-migration-digital-sovereignty.png",
-      "published": "2026-04-10T21:21:12+00:00",
-      "firstSeen": "2026-04-10T21:52:41.039489+00:00",
-      "lastSeen": "2026-04-12T19:05:54.526588+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.2657
+      "score": 2.4986
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1404
+      "score": 1.1399
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9044
+      "score": 1.904
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
@@ -686,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-03-30T20:00:00+00:00",
       "firstSeen": "2026-03-30T21:00:01.943887+00:00",
-      "lastSeen": "2026-04-13T08:00:01.611370+00:00",
+      "lastSeen": "2026-04-13T09:00:01.791158+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 3.2901
