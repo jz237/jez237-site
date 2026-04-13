@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T06:00:01.885474+00:00",
+  "updatedAt": "2026-04-13T07:00:01.256791+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3424,6 +3424,10 @@
     "https://simonwillison.net/2026/Apr/13/bryan-cantrill": {
       "image": "",
       "checkedAt": "2026-04-13T03:00:01.638751+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/12/minimax-releases-mmx-cli-a-command-line-interface-that-gives-ai-agents-native-access-to-image-video-speech-music-vision-and-search": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-32.png",
+      "checkedAt": "2026-04-13T07:00:01.256791+00:00"
     }
   }
 }
