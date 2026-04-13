@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T21:00:01.618817+00:00",
+  "updatedAt": "2026-04-13T21:06:46.059988+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3496,6 +3496,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/911267/ai-influencers-coachella": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/ai-label-10.png?quality=90&amp;strip=all&amp;crop=0%2C0%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-13T21:00:01.618817+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/13/steve-yegge": {
+      "image": "",
+      "checkedAt": "2026-04-13T21:06:46.059988+00:00"
     }
   }
 }
