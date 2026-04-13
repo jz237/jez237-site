@@ -16,15 +16,26 @@
     header { background: rgba(28,22,17,.84); border-bottom: 1px solid var(--earth-border); }
     a { color: #dfc790; }
     .hero, .entry {
+      width: 100%;
+      display: block;
       border: 1px solid var(--earth-border);
       border-radius: 22px;
       background: linear-gradient(180deg, rgba(57,42,31,0.96), rgba(39,29,22,0.96));
       box-shadow: 0 14px 30px rgba(0,0,0,.18);
+      box-sizing: border-box;
     }
-    .hero { padding: 24px; }
-    .grid { display:grid; gap:18px; margin-top:18px; }
-    .entry { padding: 18px; }
-    .entry img { width: 100%; max-width: 760px; display: block; border-radius: 16px; object-fit: cover; border: 1px solid rgba(255,255,255,.08); margin-bottom: 16px; }
+    .hero { padding: 24px; margin-bottom: 18px; }
+    .entries { width: 100%; display: block; }
+    .entry { padding: 18px; margin-bottom: 18px; }
+    .entry img {
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      margin: 0 0 16px 0;
+    }
     .muted, .mini-date { color: var(--earth-muted); }
     .meta-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
     .pill { font-size:12px; padding:5px 9px; border-radius:999px; border:1px solid rgba(255,255,255,0.09); background:rgba(255,255,255,0.04); color: var(--earth-muted); }
@@ -54,7 +65,8 @@
       <h1 class="title">Interesting Insects & Wildlife</h1>
       <p class="muted">Pollinators, beneficials, and little moments of life that make the garden feel active and real, including the occasional wild visitor passing through.</p>
     </section>
-    <div class="grid">
+
+    <div class="entries">
       <article class="entry">
         <img src="../../photos/garden/images/2026/04/bumblebee-on-catmint.jpg" alt="Bumblebee on catmint" />
         <div class="mini-date">pollinator moment</div>
@@ -62,6 +74,7 @@
         <p>A fuzzy bumblebee working purple catmint blooms, exactly the kind of small pollinator moment that makes the garden feel alive instead of merely planted.</p>
         <div class="meta-pills"><span class="pill">pollinator</span><span class="pill">catmint / nepeta</span><span class="pill">nature detail</span></div>
       </article>
+
       <article class="entry">
         <img src="../../photos/garden/images/2025/eastern-black-swallowtail-butterfly-bush-close.jpg" alt="Male eastern black swallowtail on butterfly bush" />
         <div class="mini-date">past-years pollinator</div>
@@ -69,6 +82,7 @@
         <p>A sharper close-up of the same kind of summer pollinator moment, the black swallowtail showing off those cream spots, blue wash, and orange hindwing markings while feeding on the butterfly bush.</p>
         <div class="meta-pills"><span class="pill">black swallowtail</span><span class="pill">butterfly bush</span><span class="pill">2025 reference</span></div>
       </article>
+
       <article class="entry">
         <img src="../../photos/garden/images/2026/04/garter-snake-yard-2.jpg" alt="Eastern gartersnake in mulch" />
         <div class="mini-date">yard wildlife</div>
