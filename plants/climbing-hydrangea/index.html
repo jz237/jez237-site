@@ -57,6 +57,21 @@
       font-style: italic;
     }
     @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+  
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    img, .feature-media { cursor: zoom-in; }
   </style>
 </head>
 <body>
@@ -124,5 +139,31 @@
       </section>
     </div>
   </main>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.feature-media').forEach((card) => {
+      const bg = card.style.backgroundImage;
+      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
+      if (match && match[1]) {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          lightboxImg.src = match[1];
+          lightbox.classList.add('active');
+        });
+      }
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
 </body>
 </html>
