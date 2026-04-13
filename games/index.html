@@ -6,6 +6,35 @@
   <title>Jez237 — Game Experiments</title>
   <link rel="stylesheet" href="../assets/styles.css" />
   <style>
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(128, 74, 255, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(0, 196, 255, 0.18), transparent 24%),
+        linear-gradient(180deg, #0b0f14 0%, #111629 46%, #120f22 100%);
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 105, 180, 0.28), transparent 26%),
+        radial-gradient(circle at 88% 10%, rgba(0, 220, 255, 0.24), transparent 24%),
+        radial-gradient(circle at 70% 75%, rgba(255, 170, 0, 0.18), transparent 30%),
+        linear-gradient(135deg, #2b1450 0%, #111a35 52%, #0d1322 100%);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+    }
+
+    .hero .kicker {
+      color: #f3b7ff;
+    }
+
+    .hero .title {
+      color: #ffffff;
+      text-shadow: 0 0 24px rgba(149, 115, 255, 0.25);
+    }
+
+    .hero .muted {
+      color: #d8e3ff;
+    }
+
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -14,18 +43,24 @@
     }
 
     .game-card {
-      background: #0e1620;
-      border: 1px solid #1e2d40;
-      border-radius: 10px;
+      background:
+        radial-gradient(circle at top right, rgba(0, 210, 255, 0.12), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(255, 90, 175, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(31, 22, 54, 0.96), rgba(14, 20, 36, 0.98));
+      border: 1px solid rgba(120, 139, 255, 0.22);
+      border-radius: 16px;
       padding: 22px 22px 18px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      transition: border-color 0.15s;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
     }
 
     .game-card:hover {
-      border-color: #3a5070;
+      transform: translateY(-4px);
+      border-color: rgba(126, 190, 255, 0.5);
+      box-shadow: 0 22px 44px rgba(40, 18, 86, 0.36);
     }
 
     .game-card-top {
@@ -40,24 +75,25 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: #b0c8e8;
-      background: rgba(80, 140, 220, 0.12);
-      border: 1px solid rgba(80, 140, 220, 0.3);
-      border-radius: 4px;
-      padding: 2px 8px;
+      color: #eef4ff;
+      background: linear-gradient(135deg, rgba(110, 115, 255, 0.4), rgba(0, 196, 255, 0.26));
+      border: 1px solid rgba(139, 203, 255, 0.36);
+      border-radius: 999px;
+      padding: 4px 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
     .game-card-title {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #e8edf4;
+      color: #f7f8ff;
       margin: 0;
       line-height: 1.3;
     }
 
     .game-card-desc {
       font-size: 0.88rem;
-      color: #8fa0b8;
+      color: #c5d1ee;
       line-height: 1.55;
       flex: 1;
     }
@@ -67,25 +103,29 @@
       align-items: center;
       justify-content: space-between;
       margin-top: 6px;
+      gap: 12px;
     }
 
     .game-play-btn {
       display: inline-block;
-      background: #1a3a5c;
-      color: #cce4ff;
-      border: 1px solid #2a5080;
-      border-radius: 6px;
-      padding: 7px 18px;
+      background: linear-gradient(135deg, #ff4fb0, #7d6dff 56%, #38c8ff);
+      color: #fff;
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 18px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
+      box-shadow: 0 10px 24px rgba(105, 94, 255, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
     }
 
     .game-play-btn:hover {
-      background: #1e4a74;
-      border-color: #4080b0;
-      color: #e4f2ff;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(105, 94, 255, 0.42);
+      color: #fff;
+      filter: saturate(1.08);
+      text-decoration: none;
     }
 
     .showdown-label {
@@ -96,22 +136,23 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: #f0c060;
-      opacity: 0.8;
+      color: #ffd36f;
+      text-shadow: 0 0 14px rgba(255, 183, 0, 0.22);
     }
 
     .showdown-banner {
-      background: rgba(255, 180, 0, 0.06);
-      border: 1px solid rgba(255, 180, 0, 0.18);
-      border-radius: 8px;
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      color: #d4aa50;
+      background: linear-gradient(135deg, rgba(255, 170, 0, 0.14), rgba(255, 87, 51, 0.12));
+      border: 1px solid rgba(255, 190, 92, 0.34);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: #ffd896;
       margin-bottom: 4px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
     }
 
     #games-empty {
-      color: #8fa0b8;
+      color: #b9c8e8;
       margin-top: 24px;
     }
   </style>
