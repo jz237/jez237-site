@@ -54,6 +54,33 @@
       pointer-events: none;
     }
     .hero .muted, .kicker, .section-copy, .plant-note, .timeline-note { color: var(--earth-muted); }
+    .hero-leaves {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-leaves span {
+      position: absolute;
+      font-size: 22px;
+      opacity: 0.22;
+      animation: driftDown linear infinite;
+      filter: blur(0.2px);
+    }
+    .hero-leaves span:nth-child(1) { left: 8%; top: -8%; animation-duration: 14s; animation-delay: -2s; }
+    .hero-leaves span:nth-child(2) { left: 28%; top: -12%; animation-duration: 18s; animation-delay: -7s; }
+    .hero-leaves span:nth-child(3) { left: 52%; top: -10%; animation-duration: 16s; animation-delay: -4s; }
+    .hero-leaves span:nth-child(4) { left: 74%; top: -15%; animation-duration: 20s; animation-delay: -9s; }
+    .hero-leaves span:nth-child(5) { left: 88%; top: -9%; animation-duration: 15s; animation-delay: -5s; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .btn-earth {
       display: inline-flex;
       align-items: center;
@@ -214,9 +241,15 @@
       padding: 2px 6px;
       border-radius: 6px;
     }
+    @keyframes driftDown {
+      0% { transform: translate3d(0, -10px, 0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.2; }
+      50% { transform: translate3d(18px, 110px, 0) rotate(90deg); opacity: 0.28; }
+      100% { transform: translate3d(-14px, 235px, 0) rotate(180deg); opacity: 0; }
+    }
     @keyframes glowDrift {
       0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(-12px, -10px, 0) scale(1.06); }
+      50% { transform: translate3d(-22px, -16px, 0) scale(1.09); }
     }
     @keyframes floatPetals {
       0%, 100% { transform: translateY(0); opacity: 0.55; }
@@ -229,12 +262,16 @@
     @media (prefers-reduced-motion: reduce) {
       .hero::before,
       .feature-panel::after,
-      .plant-art {
+      .plant-art,
+      .hero-leaves span {
         animation: none;
       }
       .plant-card,
-      .plant-card::before {
+      .plant-card::before,
+      .reveal {
         transition: none;
+        opacity: 1;
+        transform: none;
       }
     }
     @media (max-width: 800px) {
@@ -262,14 +299,14 @@
   </header>
 
   <main class="container">
-    <section class="hero">
+    <section class="hero reveal"><div class="hero-leaves" aria-hidden="true"><span>🍂</span><span>🍃</span><span>❋</span><span>🍁</span><span>✿</span></div>
       <div class="kicker">Seasonal Storytelling</div>
       <h1 class="title">Plant Progress</h1>
       <p class="muted">A warm, month-by-month journal for the plants that make the yard feel alive.</p>
     </section>
 
     <div class="section-shell">
-      <section class="section-card story-grid">
+      <section class="section-card story-grid reveal">
         <div class="feature-panel">
           <h2 class="section-title">How it should feel</h2>
           <p class="section-copy">Not just a gallery. More like a living field journal, where each plant gets its own little chapter and every two weeks or so becomes part of the season’s story.</p>
@@ -290,7 +327,7 @@
         </div>
       </section>
 
-      <section class="section-card">
+      <section class="section-card reveal">
         <h2 class="section-title">Featured plants</h2>
         <p class="section-copy">A creative plant section works best when each plant has a distinct identity and its own timeline page.</p>
         <p class="timeline-note">Live pages below. Every card here should lead somewhere real, with photos and writing, not dead ends.</p>
@@ -386,7 +423,7 @@
         </div>
       </section>
 
-      <section class="section-card">
+      <section class="section-card reveal">
         <h2 class="section-title">How this will grow</h2>
         <p class="section-copy">The goal is to keep Plant Progress readable even when the photo count gets large. Best entries become part of a longer seasonal story instead of floating around as one-offs.</p>
         <div class="timeline-grid">
@@ -418,5 +455,14 @@
       </section>
     </div>
   </main>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    document.querySelector('.hero')?.classList.add('visible');
+  </script>
 </body>
 </html>
