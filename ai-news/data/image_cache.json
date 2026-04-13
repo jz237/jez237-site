@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T17:00:01.826775+00:00",
+  "updatedAt": "2026-04-13T17:17:23.457096+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3472,6 +3472,10 @@
     "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/state-ai-algo1.jpg?resize=1200,600",
       "checkedAt": "2026-04-13T17:00:01.826775+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/13/a-step-by-step-coding-tutorial-on-nvidia-physicsnemo-darcy-flow-fnos-pinns-surrogate-models-and-inference-benchmarking": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-8.png",
+      "checkedAt": "2026-04-13T17:17:23.457096+00:00"
     }
   }
 }
