@@ -1,6 +1,6 @@
 {
   "date": "2026-04-13",
-  "updatedAt": "2026-04-13T19:36:22.994541+00:00",
+  "updatedAt": "2026-04-13T21:00:01.618817+00:00",
   "items": [
     {
       "title": "Enterprises power agentic workflows in Cloudflare Agent Cloud with OpenAI",
@@ -13,11 +13,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6g5hzhOoHM68zGjNYQ5H1D/344bc6c2f06a8b0793e9becffd4c8bc9/Cloudflare_OpenAI_art_card_1x1.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-04-13T06:00:00+00:00",
       "firstSeen": "2026-04-13T14:00:01.692003+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1538
+      "score": 18.1252
     },
     {
       "title": "MiniMax Releases MMX-CLI: A Command-Line Interface That Gives AI Agents Native Access to Image, Video, Speech, Music, Vision, and Search",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-32.png",
       "published": "2026-04-13T05:17:40+00:00",
       "firstSeen": "2026-04-13T07:00:01.256791+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.1592
+      "score": 15.1311
     },
     {
       "title": "Exploring the new `servo` crate",
@@ -46,11 +46,27 @@
       "image": "https://static.simonwillison.net/static/2026/servo-hn.png",
       "published": "2026-04-13T15:04:00+00:00",
       "firstSeen": "2026-04-13T19:00:01.888861+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8597
+      "score": 14.8228
+    },
+    {
+      "title": "Vercel CEO Guillermo Rauch signals IPO readiness as AI agents fuel revenue surge",
+      "url": "https://techcrunch.com/2026/04/13/vercel-ceo-guillermo-rauch-signals-ipo-readiness-as-ai-agents-fuel-revenue-surge",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "While many startups founded prior to the emergence of ChatGPT are struggling to position themselves for the AI era, Vercel, a 10-year-old dev tool and website hosting platform, is benefiting from the explosion of AI-generated apps and agents.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Vercel-founder-Guillermo-Rauch.jpg?resize=1200%2C800",
+      "published": "2026-04-13T15:22:29+00:00",
+      "firstSeen": "2026-04-13T15:42:38.577379+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.9309
     },
     {
       "title": "Read OpenAI&#8217;s latest internal memo about beating the competition — including Anthropic",
@@ -63,26 +79,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK_414_AI_CHATBOT_R2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-13T16:21:08+00:00",
       "firstSeen": "2026-04-13T17:00:01.826775+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2649
-    },
-    {
-      "title": "Microsoft is working on yet another OpenClaw-like agent",
-      "url": "https://techcrunch.com/2026/04/13/microsoft-is-working-on-yet-another-openclaw-like-agent",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The company has also previously introduced agents that are able to complete tasks, Cowork and Copilot Tasks.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Windows-Claw.png?resize=1200%2C800",
-      "published": "2026-04-13T19:05:19+00:00",
-      "firstSeen": "2026-04-13T19:36:22.994541+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.9743
+      "score": 8.2268
     },
     {
       "title": "A Hands-On Coding Tutorial for Microsoft VibeVoice Covering Speaker-Aware ASR, Real-Time TTS, and Speech-to-Speech Pipelines",
@@ -95,10 +95,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-31.png",
       "published": "2026-04-13T01:22:15+00:00",
       "firstSeen": "2026-04-13T02:00:01.526824+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.6828
+      "score": 6.6577
     },
     {
       "title": "Microsoft is testing OpenClaw-like AI bots for Copilot",
@@ -111,10 +111,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STKB382_OPEN_CLAW_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-13T15:41:09+00:00",
       "firstSeen": "2026-04-13T15:42:38.577379+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3465
+      "score": 6.309
     },
     {
       "title": "A Step-by-Step Coding Tutorial on NVIDIA PhysicsNeMo: Darcy Flow, FNOs, PINNs, Surrogate Models, and Inference Benchmarking",
@@ -127,26 +127,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-8.png",
       "published": "2026-04-13T17:07:34+00:00",
       "firstSeen": "2026-04-13T17:17:23.457096+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2968
+      "score": 6.2578
     },
     {
-      "title": "Vercel CEO Guillermo Rauch signals IPO readiness as AI agents fuel revenue surge",
-      "url": "https://techcrunch.com/2026/04/13/vercel-ceo-guillermo-rauch-signals-ipo-readiness-as-ai-agents-fuel-revenue-surge",
+      "title": "Microsoft is working on yet another OpenClaw-like agent",
+      "url": "https://techcrunch.com/2026/04/13/microsoft-is-working-on-yet-another-openclaw-like-agent",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "\"The company is ready and getting more ready for every day,\" Rauch said about an IPO at the HumanX conference.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Vercel-founder-Guillermo-Rauch.jpg?resize=1200%2C800",
-      "published": "2026-04-13T15:22:29+00:00",
-      "firstSeen": "2026-04-13T15:42:38.577379+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "summary": "The new features would be geared toward enterprise customers, with better security controls than the famously risky open source OpenClaw agent.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Windows-Claw.png?resize=1200%2C800",
+      "published": "2026-04-13T19:05:19+00:00",
+      "firstSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6331
+    },
+    {
+      "title": "The Trump administration blacklisted Anthropic – and is now telling banks to use its AI",
+      "url": "https://thenextweb.com/news/trump-administration-banks-anthropic-mythos-pentagon-paradox",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Treasury Secretary Scott Bessent and Fed Chair Jerome Powell are urging Wall Street’s biggest banks to test Anthropic’s Mythos AI model for cybersecurity vulnerabilities, even as the Pentagon fights Anthropic in court after branding it a supply chain risk for refusing to remove safety guardrails on autonomous weapons and mass surveillance. JPMorgan Chase, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/trump-administration-banks-anthropic-mythos-pentagon-paradox.png",
+      "published": "2026-04-13T19:52:10+00:00",
+      "firstSeen": "2026-04-13T21:00:01.618817+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.868
+      "score": 5.116
     },
     {
       "title": "AI Agents Are Coming for Your Dating Life",
@@ -159,42 +175,26 @@
       "image": "https://media.wired.com/photos/69cd210dfdbcdf48a7c7710a/master/pass/Business_CananAIAgentDateOnYourBehalf_2400x1350.gif",
       "published": "2026-04-13T10:00:00+00:00",
       "firstSeen": "2026-04-13T10:54:29.036167+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7324
+      "score": 4.7004
     },
     {
-      "title": "Two arrested after gunfire near Sam Altman’s home, days after Molotov attack",
-      "url": "https://thenextweb.com/news/sam-altman-home-shooting-arrest-molotov-openai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "GrafanaGhost: The AI That Leaked Everything Without Being Hacked",
+      "url": "https://www.techrepublic.com/article/news-grafanaghost-ai-data-exfiltration-security-risk",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Two people were arrested after shots were fired near Sam Altman’s San Francisco home on Sunday, two days after a separate suspect threw a Molotov cocktail at the property and threatened to burn down OpenAI’s headquarters. The attacks coincided with a critical New Yorker profile of the OpenAI CEO, who responded with a blog post [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/sam-altman-home-shooting-arrest-molotov-openai.png",
-      "published": "2026-04-13T18:10:57+00:00",
-      "firstSeen": "2026-04-13T19:00:01.888861+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
+      "summary": "A newly disclosed vulnerability reveals how AI assistants can become invisible channels for data exfiltration — and why security enforcement must shift to the data layer.\nThe post GrafanaGhost: The AI That Leaked Everything Without Being Hacked appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/04/AdobeStock_297345586.jpg",
+      "published": "2026-04-13T20:28:21+00:00",
+      "firstSeen": "2026-04-13T21:00:01.618817+00:00",
+      "lastSeen": "2026-04-13T21:00:01.618817+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1073
-    },
-    {
-      "title": "Apple testing four frame designs for AI smart glasses ahead of 2027 launch",
-      "url": "https://thenextweb.com/news/apple-smart-glasses-four-frame-designs-testing-2027",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Apple is testing at least four frame styles for its upcoming AI-powered smart glasses, according to a Bloomberg report by Mark Gurman published 12 April 2026. The designs include a large rectangular style similar to Wayfarer frames, a slimmer rectangular style comparable to those worn by CEO Tim Cook, a larger oval or circular [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/apple-smart-glasses-four-frame-designs-testing-2027.png",
-      "published": "2026-04-13T13:05:25+00:00",
-      "firstSeen": "2026-04-13T14:00:01.692003+00:00",
-      "lastSeen": "2026-04-13T19:36:22.994541+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.7679
+      "score": 4.334
     }
   ],
   "errors": []
