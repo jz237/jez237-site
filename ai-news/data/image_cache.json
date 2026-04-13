@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-12T23:49:16.559985+00:00",
+  "updatedAt": "2026-04-13T01:00:01.946878+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3412,6 +3412,10 @@
     "https://techcrunch.com/2026/04/12/trump-officials-may-be-encouraging-banks-to-test-anthropics-mythos-model": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/anthropic-image-jagmeet-singh-techcrunch.jpg?resize=1200,800",
       "checkedAt": "2026-04-12T21:48:32.105529+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/12/mlx-audio": {
+      "image": "",
+      "checkedAt": "2026-04-13T01:00:01.946878+00:00"
     }
   }
 }
