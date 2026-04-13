@@ -130,6 +130,25 @@
       box-shadow: inset 0 -60px 80px rgba(0,0,0,0.28);
     }
     .aside-note, .roadmap-card p, .timeline-card p, .feature-copy p, .lead-panel p, .mini-card p, .section-copy { line-height: 1.6; }
+    .archive-callout {
+      min-height: 220px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: end;
+    }
+    .archive-callout::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.62));
+    }
+    .archive-callout .inner {
+      position: relative;
+      z-index: 1;
+    }
     @media (max-width: 900px) {
       .intro-grid, .editorial-grid, .feature-card, .season-strip { grid-template-columns: 1fr; }
       .hero { min-height: 360px; }
@@ -301,18 +320,20 @@
       </section>
 
       <section class="section-card editorial-grid">
-        <div>
-          <h2 class="section-title">Past years</h2>
-          <p class="section-copy">Historical photos, older comparisons, and useful references from seasons before the current journal.</p>
-          <p><a class="btn-earth alt" href="./past-years/">Open Past Years →</a></p>
-        </div>
-        <div class="mini-stack">
-          <article class="mini-card">
+        <article class="mini-card archive-callout" style="background-image:url('../photos/garden/images/2025/rising-sun-redbud-summer-reference.jpg')">
+          <div class="inner">
+            <h2 class="section-title">Past years</h2>
+            <p class="section-copy">Historical photos, older comparisons, and useful references from seasons before the current journal.</p>
+            <p><a class="btn-earth alt" href="./past-years/">Open Past Years →</a></p>
+          </div>
+        </article>
+        <article class="mini-card archive-callout" style="background-image:url('../photos/garden/images/2025/eastern-black-swallowtail-butterfly-bush-close.jpg')">
+          <div class="inner">
             <h3>Interesting insects</h3>
-            <p>Pollinator and insect moments will have their own page too, so they can grow without crowding the main Plant Progress hub.</p>
+            <p>Pollinator and insect moments have their own page too, so they can grow without crowding the main Plant Progress hub.</p>
             <p><a class="btn-earth alt" href="./interesting-insects/">Open Interesting Insects →</a></p>
-          </article>
-        </div>
+          </div>
+        </article>
       </section>
     </div>
   </main>
