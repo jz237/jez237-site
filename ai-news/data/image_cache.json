@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T06:25:02.050196+00:00",
+  "updatedAt": "2026-04-13T08:00:01.611370+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3428,6 +3428,14 @@
     "https://www.marktechpost.com/2026/04/12/minimax-releases-mmx-cli-a-command-line-interface-that-gives-ai-agents-native-access-to-image-video-speech-music-vision-and-search": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-32.png",
       "checkedAt": "2026-04-13T07:00:01.256791+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/13/an-implementation-guide-to-building-a-duckdb-python-analytics-pipeline-with-sql-dataframes-parquet-udfs-and-performance-profiling": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-33.png",
+      "checkedAt": "2026-04-13T08:00:01.611370+00:00"
+    },
+    "https://techcrunch.com/2026/04/13/the-largest-orbital-compute-cluster-is-open-for-business": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/KEPLER-T1-.jpg?w=800",
+      "checkedAt": "2026-04-13T08:00:01.611370+00:00"
     }
   }
 }
