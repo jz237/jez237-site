@@ -56,14 +56,21 @@
     .hero .muted, .kicker, .section-copy, .plant-note, .timeline-note { color: var(--earth-muted); }
     .hero-aurora {
       position: absolute;
-      inset: -20% -10% auto -10%;
-      height: 180px;
+      inset: 0;
       background:
-        radial-gradient(circle at 18% 50%, rgba(155,177,104,0.22), transparent 28%),
-        radial-gradient(circle at 52% 30%, rgba(216,141,82,0.22), transparent 24%),
-        radial-gradient(circle at 82% 45%, rgba(255,255,255,0.10), transparent 18%);
-      filter: blur(16px);
+        radial-gradient(circle at 18% 40%, rgba(155,177,104,0.14), transparent 22%),
+        radial-gradient(circle at 70% 28%, rgba(216,141,82,0.12), transparent 18%);
       animation: auroraShift 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-lines {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(216,141,82,0.6), rgba(155,177,104,0.6), transparent);
+      background-size: 200% 100%;
+      animation: lineSweep 5s linear infinite;
+      opacity: 0.8;
       pointer-events: none;
     }
     .reveal {
@@ -124,13 +131,14 @@
     .feature-panel::after {
       content: "";
       position: absolute;
-      inset: auto 10% 14px auto;
-      width: 140px;
-      height: 36px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(216,141,82,0.16), rgba(155,177,104,0.08), rgba(255,255,255,0.02));
-      filter: blur(6px);
-      animation: shimmerSlide 4.5s ease-in-out infinite;
+      left: 22px;
+      right: 22px;
+      bottom: 18px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(216,141,82,0.55), rgba(155,177,104,0.45), transparent);
+      background-size: 200% 100%;
+      animation: lineSweep 6s linear infinite;
+      opacity: 0.85;
       pointer-events: none;
     }
     .plant-chip-row {
@@ -240,13 +248,13 @@
       0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
       50% { transform: translate3d(-22px, -16px, 0) scale(1.09); }
     }
-    @keyframes shimmerSlide {
-      0%, 100% { transform: translateX(0) scaleX(1); opacity: 0.55; }
-      50% { transform: translateX(-18px) scaleX(1.08); opacity: 0.95; }
-    }
     @keyframes auroraShift {
-      0%, 100% { transform: translateX(0) translateY(0); opacity: 0.85; }
-      50% { transform: translateX(20px) translateY(8px); opacity: 1; }
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+    @keyframes lineSweep {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
     @keyframes breathe {
       0%, 100% { transform: scale(1); }
@@ -256,7 +264,8 @@
       .hero::before,
       .feature-panel::after,
       .plant-art,
-      .hero-aurora {
+      .hero-aurora,
+      .hero-lines {
         animation: none;
       }
       .plant-card,
@@ -292,7 +301,7 @@
   </header>
 
   <main class="container">
-    <section class="hero reveal"><div class="hero-aurora" aria-hidden="true"></div>
+    <section class="hero reveal"><div class="hero-aurora" aria-hidden="true"></div><div class="hero-lines" aria-hidden="true"></div>
       <div class="kicker">Seasonal Storytelling</div>
       <h1 class="title">Plant Progress</h1>
       <p class="muted">A warm, month-by-month journal for the plants that make the yard feel alive.</p>
