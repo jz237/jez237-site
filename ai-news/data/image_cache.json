@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T21:06:46.059988+00:00",
+  "updatedAt": "2026-04-13T21:59:37.070164+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3500,6 +3500,10 @@
     "https://simonwillison.net/2026/Apr/13/steve-yegge": {
       "image": "",
       "checkedAt": "2026-04-13T21:06:46.059988+00:00"
+    },
+    "https://www.together.ai/blog/einsteinarena": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69dc6159d235651a3ed1c10c_20260412_EinsteinArena_1200x630.png",
+      "checkedAt": "2026-04-13T21:59:37.070164+00:00"
     }
   }
 }
