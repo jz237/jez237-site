@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grapevine — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1d1512;
+      --earth-panel: #2c201d;
+      --earth-border: #61463e;
+      --earth-text: #f2e5db;
+      --earth-muted: #ccb8ab;
+      --earth-accent: #b85152;
+      --earth-accent-2: #d0b06c;
+    }
+    body { background: radial-gradient(circle at top, #4e2c2d 0%, #1d1512 58%, #120d0b 100%); color: var(--earth-text); }
+    header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e3c89f; }
+    .hero, .panel, .entry-card {
+      border: 1px solid var(--earth-border);
+      border-radius: 18px;
+      box-shadow: 0 14px 32px rgba(0,0,0,.18);
+    }
+    .hero { background: linear-gradient(135deg, rgba(88,41,43,.95), rgba(72,42,33,.92)); padding: 24px; }
+    .panel, .entry-card { background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97)); padding: 18px; }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .shell { display:grid; gap:18px; margin-top:18px; }
+    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
+    .photo {
+      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 16px 34px rgba(0,0,0,.24);
+    }
+    .section-title, .entry-title { margin:0 0 8px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-copy { line-height:1.7; }
+    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    img, .feature-media { cursor: zoom-in; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../../index.html#projects">Projects</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="https://jz237.github.io/games/">Games</a>
+        <a href="../../photos/">Photos</a>
+        <a href="../../plants/">Plant Progress</a>
+        <a href="../../ai-news/">AI News</a>
+        <a href="../../plex/">Plex</a>
+        <a href="../../ops/">Ops Center</a>
+        <a href="../../garden/">Garden Calendar</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Grapevine</div>
+      <h1 class="title">Grapevine</h1>
+      <p class="muted">Clusters setting in, leaves pushing, and the whole vine turning into a green canopy over the fence line.</p>
+    </section>
+
+    <div class="shell">
+      <section class="panel split">
+        <div>
+          <h2 class="section-title">Green clusters and summer structure</h2>
+          <p class="note">The vine is loaded with developing grape clusters, with the foliage filling in around them and throwing a strong vertical drape over the trellis. It has that productive, slightly wild garden look that comes from a vine doing exactly what a vine wants to do.</p>
+          <div class="meta-row">
+            <span class="meta-pill">spring fruit set</span>
+            <span class="meta-pill">trellis-grown</span>
+            <span class="meta-pill">productive canopy</span>
+          </div>
+        </div>
+        <div>
+          <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-12.jpg" alt="Grapevine with green clusters and daylilies" />
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="split">
+          <div>
+            <div class="entry-date">April 12, 2026</div>
+            <h2 class="entry-title">Clusters forming in bright spring light</h2>
+            <div class="entry-copy">
+              The grapevine is already carrying little green clusters, tucked under broad leaves and reaching across the lattice with real momentum. It’s one of those moments where the vine starts to feel less decorative and more like a living crop, with structure, shade, and fruit all happening at once.
+              <div class="quote">The vine is making its own roof again, and the clusters are already there under the leaves.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-12.jpg" alt="Grapevine update" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>clusters are visible and developing well</li>
+          <li>leaves are filling in strongly over the trellis</li>
+          <li>great early-season structure and shade for the fence line</li>
+          <li>worth tracking through the season as fruit matures</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.feature-media').forEach((card) => {
+      const bg = card.style.backgroundImage;
+      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
+      if (match && match[1]) {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          lightboxImg.src = match[1];
+          lightbox.classList.add('active');
+        });
+      }
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
+</body>
+</html>
