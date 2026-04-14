@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T11:17:43.279876+00:00",
+  "updatedAt": "2026-04-14T13:00:01.571968+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3524,6 +3524,10 @@
     "https://www.technologyreview.com/2026/04/14/1135298/coming-soon-10-things-that-matter-in-ai-right-now": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Maxomatic-MIT-AI-Right-Now-Teaser-FINAL.jpg?resize=1200,600",
       "checkedAt": "2026-04-14T12:00:01.867904+00:00"
+    },
+    "https://www.techrepublic.com/article/1minai-pro-plan-lifetime-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2024/07/tr_20240703-1minai-pro-plan-lifetime-subscription.jpg",
+      "checkedAt": "2026-04-14T13:00:01.571968+00:00"
     }
   }
 }
