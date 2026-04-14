@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T17:00:01.223225+00:00",
+  "updatedAt": "2026-04-14T15:36:04.503593+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3551,23 +3551,7 @@
     },
     "https://techcrunch.com/2026/04/14/join-the-first-strictlyvc-of-2026-in-sf-with-leaders-from-tdk-ventures-and-replits-co-founder": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/54963244981_66492e96cc_6k.jpg?resize=1200,800",
-      "checkedAt": "2026-04-14T16:00:01.741493+00:00"
-    },
-    "https://www.techrepublic.com/article/news-toyota-cue7-basketball-robot-apac": {
-      "image": "https://assets.techrepublic.com/uploads/2026/04/Toyota-CUE7.png",
-      "checkedAt": "2026-04-14T16:00:01.741493+00:00"
-    },
-    "https://www.techrepublic.com/article/ai-search-optimization-seo": {
-      "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-28.png",
-      "checkedAt": "2026-04-14T17:00:01.223225+00:00"
-    },
-    "https://www.techrepublic.com/article/hubspot-launches-aeo-tool": {
-      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04142026-hubspot-aeo-tool.jpg",
-      "checkedAt": "2026-04-14T17:00:01.223225+00:00"
-    },
-    "https://www.anthropic.com/news/narasimhan-board": {
-      "image": "https://cdn.sanity.io/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
-      "checkedAt": "2026-04-14T17:00:01.223225+00:00"
+      "checkedAt": "2026-04-14T15:36:04.503593+00:00"
     }
   }
 }
