@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T11:00:01.458719+00:00",
+  "updatedAt": "2026-04-14T12:00:01.867904+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3520,6 +3520,10 @@
     "http://www.bbc.co.uk/programmes/m002sn3m": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "checkedAt": "2026-04-14T09:00:01.417790+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/14/1135298/coming-soon-10-things-that-matter-in-ai-right-now": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Maxomatic-MIT-AI-Right-Now-Teaser-FINAL.jpg?resize=1200,600",
+      "checkedAt": "2026-04-14T12:00:01.867904+00:00"
     }
   }
 }
