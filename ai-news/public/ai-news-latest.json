@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T20:00:02.058710+00:00",
+  "updatedAt": "2026-04-14T19:39:29.890237+00:00",
   "items": [
     {
       "title": "AHC: Meta-Learned Adaptive Compression for Continual Object Detection on Memory-Constrained Microcontrollers",
@@ -10,28 +10,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-14T20:00:07.316456+00:00",
+      "published": "2026-04-14T19:39:33.860607+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
-    },
-    {
-      "title": "Cybersecurity Looks Like Proof of Work Now",
-      "url": "https://simonwillison.net/2026/Apr/14/cybersecurity-proof-of-work",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Cybersecurity Looks Like Proof of Work Now\nThe UK's AI Safety Institute recently published Our evaluation of Claude Mythos Preview’s cyber capabilities, their own independent analysis of Claude Mythos which backs up Anthropic's claims that it is exceptionally effective at identifying security vulnerabilities.\nDrew Breunig notes that AISI's report shows that the more tokens (and hence money) they spent the better the result they got, which leads to a strong economic incentive to spend as much as possible on security reviews:\n\nIf Mythos continues to find exploits so long as you keep throwing mon",
-      "image": "",
-      "published": "2026-04-14T19:41:48+00:00",
-      "firstSeen": "2026-04-14T20:00:02.058710+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.6308
     },
     {
       "title": "YouTube will now pause livestream ads when chat engagement peaks",
@@ -43,11 +27,11 @@
       "summary": "YouTube will now automatically hold back advertisements during livestreams when its systems detect that chat engagement has peaked, a change that prioritises collective viewer experience over ad impressions in real time. The platform announced the feature on Monday alongside a suite of updates to its live-streaming tools, including personal ad-free windows for viewers who purchase [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/TNW-Article-Banner-1.png",
       "published": "2026-04-14T19:24:09+00:00",
-      "firstSeen": "2026-04-14T20:00:02.058710+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "firstSeen": "2026-04-14T19:39:29.890237+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1319
+      "score": 2.1422
     },
     {
       "title": "AppDirect buys PartnerStack to complete its ‘everything store’ for B2B software distribution",
@@ -59,11 +43,11 @@
       "summary": "In short: AppDirect has acquired Toronto-based PartnerStack, the partner relationship management platform with 138,000+ B2B partners and ~50% market share in the PRM category. Terms were not disclosed. The deal is AppDirect’s sixth acquisition in 12 months, following Tackle.io (cloud go-to-market, $20B+ in hyperscaler transactions), vCom Solutions ($100M+, network/mobility), and DNE Resources (energy). AppDirect has [&hellip;]\nThis story continues at The Next Web",
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/appdirect-acquires-partnerstack-partner-led-growth-b2b-commerce.png",
       "published": "2026-04-14T18:57:56+00:00",
-      "firstSeen": "2026-04-14T20:00:02.058710+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "firstSeen": "2026-04-14T19:39:29.890237+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2188
+      "score": 3.229
     },
     {
       "title": "TinyFish AI Releases Full Web Infrastructure Platform for AI Agents: Search, Fetch, Browser, and Agent Under One API Key",
@@ -76,10 +60,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-30-150x150.png",
       "published": "2026-04-14T18:53:27+00:00",
       "firstSeen": "2026-04-14T19:00:01.937392+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9866
+      "score": 5.9968
     },
     {
       "title": "Hexagon pays $1.45 billion for Baker Hughes’ inspection tech unit in biggest European industrial deal of 2026",
@@ -95,7 +79,7 @@
       "lastSeen": "2026-04-14T19:00:01.937392+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1044
+      "score": 2.1145
     },
     {
       "title": "X Cuts Clickbait Payouts and Exposes a Creator Program Problem",
@@ -108,10 +92,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/11/berke-citak-0cpyFsSUiSc-unsplash.jpg",
       "published": "2026-04-14T18:11:34+00:00",
       "firstSeen": "2026-04-14T19:00:01.937392+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1961
+      "score": 3.2061
     },
     {
       "title": "Anthropic co-founder confirms the company briefed the Trump administration on Mythos",
@@ -124,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/jack-clark-GettyImages-2271201349.jpg?w=1024",
       "published": "2026-04-14T18:09:12+00:00",
       "firstSeen": "2026-04-14T19:00:01.937392+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.235
+      "score": 5.245
     },
     {
       "title": "The attacks on Sam Altman are a warning for the AI world",
@@ -140,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/12/STK201_SAM_ALTMAN_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-14T18:04:42+00:00",
       "firstSeen": "2026-04-14T19:00:01.937392+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4028
+      "score": 5.4128
     },
     {
       "title": "Redefining the future of software engineering",
@@ -156,10 +140,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MITTR-softserve-SM-card1-1200.png?resize=1200%2C600",
       "published": "2026-04-14T18:00:00+00:00",
       "firstSeen": "2026-04-14T19:00:01.937392+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9305
+      "score": 2.9405
     },
     {
       "title": "Max Hodak’s Science Corp. is preparing to place its first sensor in a human brain",
@@ -172,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/science-illo.jpg?resize=1200%2C675",
       "published": "2026-04-14T17:13:03+00:00",
       "firstSeen": "2026-04-14T17:20:55.766077+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.8918
+      "score": -0.8821
     },
     {
       "title": "Chrome now lets you turn AI prompts into repeatable &#8216;Skills&#8217;",
@@ -188,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK114_Google_Chrome_03.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-14T17:00:00+00:00",
       "firstSeen": "2026-04-14T17:20:55.766077+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.772
+      "score": 9.7817
     },
     {
       "title": "Google adds AI Skills to Chrome to help you save favorite workflows",
@@ -204,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-chrome-GettyImages-2151457378.jpg?w=1024",
       "published": "2026-04-14T17:00:00+00:00",
       "firstSeen": "2026-04-14T17:20:55.766077+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.602
+      "score": 7.6117
     },
     {
       "title": "How to Use Google Chrome’s New AI-Powered ‘Skills’",
@@ -220,10 +204,10 @@
       "image": "https://media.wired.com/photos/69de127eafcadeb88c9c4080/master/pass/GettyImages-2253795269.jpg",
       "published": "2026-04-14T17:00:00+00:00",
       "firstSeen": "2026-04-14T17:20:55.766077+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.202
+      "score": 6.2117
     },
     {
       "title": "Turn your best AI prompts into one-click tools in Chrome",
@@ -236,10 +220,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleChrome_RR_Skills_KeywordH.max-600x600.format-webp.webp",
       "published": "2026-04-14T17:00:00+00:00",
       "firstSeen": "2026-04-14T17:20:55.766077+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.342
+      "score": 2.3517
     },
     {
       "title": "In just a couple weeks, StrictlyVC San Francisco brings leaders from TDK Ventures, Replit, and more together",
@@ -252,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/54963244981_66492e96cc_6k.jpg?resize=1200%2C800",
       "published": "2026-04-14T15:30:49+00:00",
       "firstSeen": "2026-04-14T16:00:01.741493+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1611
+      "score": 2.1704
     },
     {
       "title": "What is AEO SEO? Why Answer Engine Optimization Is the Next Evolution of SEO",
@@ -268,10 +252,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-28.png",
       "published": "2026-04-14T15:30:43+00:00",
       "firstSeen": "2026-04-14T17:00:01.223225+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5211
+      "score": 5.5303
     },
     {
       "title": "HubSpot Launches AEO Tool to Help Brands Compete in AI Search",
@@ -284,10 +268,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04142026-hubspot-aeo-tool.jpg",
       "published": "2026-04-14T15:30:40+00:00",
       "firstSeen": "2026-04-14T17:00:01.223225+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.321
+      "score": 7.3303
     },
     {
       "title": "Anthropic Opposes the Extreme AI Liability Bill That OpenAI Backed",
@@ -300,10 +284,10 @@
       "image": "https://media.wired.com/photos/69dd8619b4b829c8406ebf0d/master/pass/Anthropic-Fighting-Extreme-AI-Liability-Bill-Business.jpg",
       "published": "2026-04-14T15:21:44+00:00",
       "firstSeen": "2026-04-14T16:00:01.741493+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.157
+      "score": 8.1663
     },
     {
       "title": "Toyota Unveils Basketball-Shooting Robot With Vision Tech",
@@ -316,10 +300,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Toyota-CUE7.png",
       "published": "2026-04-14T15:17:52+00:00",
       "firstSeen": "2026-04-14T16:00:01.741493+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5153
+      "score": 5.5245
     },
     {
       "title": "Google brings its Gemini Personal Intelligence feature to India",
@@ -332,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-14T14:48:34+00:00",
       "firstSeen": "2026-04-14T15:00:01.968736+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1423
+      "score": 8.1514
     },
     {
       "title": "How vibe-coding app Anything is rebuilding after getting booted from the App Store twice",
@@ -348,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/dhruv_marcus.png?resize=1200%2C800",
       "published": "2026-04-14T14:22:44+00:00",
       "firstSeen": "2026-04-14T15:00:01.968736+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.331
+      "score": 6.34
     },
     {
       "title": "Has Google’s AI watermarking system been reverse-engineered?",
@@ -364,11 +348,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK419_DEEPFAKE_3_CVIRGINIA_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-14T13:53:53+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4885
+      "score": 14.4974
     },
     {
       "title": "Synera raises $40M to bring agentic AI into engineering workflows at NASA, BMW, Airbus, and Hyundai",
@@ -381,10 +365,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Synera.png",
       "published": "2026-04-14T13:01:35+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6563
+      "score": 8.6649
     },
     {
       "title": "Turn Your Expertise Into Published Books Using Advanced AI Technology",
@@ -397,11 +381,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/tra-02182026-aivolut-ai-book-creator-lifetime-subscription.png",
       "published": "2026-04-14T13:00:25+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.3558
+      "score": 17.3644
     },
     {
       "title": "Apple’s Mac mini 2026: New Leak Teases M5 Upgrade, Release Timeline",
@@ -414,10 +398,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04142026-apple-mac-mini-2026.jpg",
       "published": "2026-04-14T12:51:36+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1521
+      "score": 5.1607
     },
     {
       "title": "Amazon agrees to acquire Globalstar in an $11.6B deal",
@@ -430,10 +414,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Globalstar.png",
       "published": "2026-04-14T12:40:10+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7473
+      "score": 3.7559
     },
     {
       "title": "Hexagon acquires Waygate Technologies from Baker Hughes for $1.45 billion",
@@ -446,10 +430,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Hexagon.png",
       "published": "2026-04-14T12:17:57+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4381
+      "score": 4.4466
     },
     {
       "title": "Helical closes $10M seed to turn bio foundation models into systems",
@@ -462,11 +446,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Helical-team.png",
       "published": "2026-04-14T12:00:36+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.231
+      "score": 10.2395
     },
     {
       "title": "This $30 Subscription Will Bring AI Into Your Business",
@@ -479,10 +463,10 @@
       "image": "https://assets.techrepublic.com/uploads/2024/07/tr_20240703-1minai-pro-plan-lifetime-subscription.jpg",
       "published": "2026-04-14T12:00:36+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.031
+      "score": 5.0395
     },
     {
       "title": "France bets €500 million that quantum computing is the tech race Europe can finally win",
@@ -495,10 +479,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/france-quantum-computing-alice-bob-proqcima-europe.png",
       "published": "2026-04-14T11:46:34+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3253
+      "score": 3.3337
     },
     {
       "title": "Stanford’s annual AI report finds a widening gap between AI insiders and everyone else",
@@ -511,10 +495,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AI-anxiety.png",
       "published": "2026-04-14T11:21:16+00:00",
       "firstSeen": "2026-04-14T12:00:01.867904+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.0151
+      "score": 1.0234
     },
     {
       "title": "The future of work includes better water: why offices are rethinking hydration",
@@ -527,10 +511,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/pexels-karola-g-8547630.jpg",
       "published": "2026-04-14T11:13:43+00:00",
       "firstSeen": "2026-04-14T12:00:01.867904+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9121
+      "score": 1.9204
     },
     {
       "title": "The Wallenberg family rescues Europe’s flagship green steel project with a €1.4 billion financing round",
@@ -543,10 +527,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Stegra.png",
       "published": "2026-04-14T11:05:15+00:00",
       "firstSeen": "2026-04-14T12:00:01.867904+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9088
+      "score": 1.917
     },
     {
       "title": "Coming soon: 10 Things That Matter in AI Right Now",
@@ -559,10 +543,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Maxomatic-MIT-AI-Right-Now-Teaser-FINAL.jpg?resize=1200%2C600",
       "published": "2026-04-14T11:00:00+00:00",
       "firstSeen": "2026-04-14T12:00:01.867904+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0533
+      "score": -1.0451
     },
     {
       "title": "OpenAI’s $852 billion valuation is under scrutiny from its own investors as the company pivots to enterprise",
@@ -578,7 +562,7 @@
       "lastSeen": "2026-04-14T19:00:01.937392+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9027
+      "score": 6.9108
     },
     {
       "title": "Silicon Valley Is Spending Millions to Stop One of Its Own",
@@ -591,10 +575,10 @@
       "image": "https://media.wired.com/photos/69dd3923d295d33b0cbbe7c1/master/pass/Big-Interview-UV-Solo-Alex-Bores-Politics-2259873774.jpg",
       "published": "2026-04-14T10:30:00+00:00",
       "firstSeen": "2026-04-14T11:00:01.458719+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0349
+      "score": 2.0429
     },
     {
       "title": "Bringing people together at AI for the Economy Forum",
@@ -607,10 +591,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AI_for_the_Economy_Forum_2026.max-600x600.format-webp.webp",
       "published": "2026-04-14T09:00:00+00:00",
       "firstSeen": "2026-04-14T09:46:52.787721+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1404
+      "score": 2.1481
     },
     {
       "title": "NVIDIA and the University of Maryland Researchers Released Audio Flamingo Next (AF-Next): A Super Powerful and Open Large Audio-Language Model",
@@ -623,10 +607,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-1.22.32-AM-1-150x150.png",
       "published": "2026-04-14T08:24:23+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6171
+      "score": 9.6247
     },
     {
       "title": "OpenAI acquires Hiro, an AI personal finance startup",
@@ -642,7 +626,23 @@
       "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8446
+      "score": 8.8522
+    },
+    {
+      "title": "Uber and Nuro begin employee testing of a Lucid Gravity robotaxi in San Francisco",
+      "url": "https://thenextweb.com/news/uber-nuro-lucid-gravity-robotaxi",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Lucid Gravity SUV runs Nuro’s autonomous driving system, powered by Nvidia Drive AGX Thor. A human safety operator sits behind the wheel. Uber has committed to buying at least 20,000 of these vehicles over the next six years. Uber and Nuro have begun employee test rides of a premium robotaxi service in San Francisco, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Robotaxi-Nuro.png",
+      "published": "2026-04-14T08:04:34+00:00",
+      "firstSeen": "2026-04-14T09:00:01.417790+00:00",
+      "lastSeen": "2026-04-14T13:00:01.571968+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.8474
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6192
+      "score": 2.6268
     },
     {
       "title": "Dark Breath",
@@ -671,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1047
+      "score": 2.1101
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -687,10 +687,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1275
+      "score": 1.1276
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -703,10 +703,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-14T20:00:02.058710+00:00",
+      "lastSeen": "2026-04-14T19:39:29.890237+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8953
+      "score": 1.8954
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
