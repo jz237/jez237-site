@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T13:00:01.571968+00:00",
+  "updatedAt": "2026-04-14T14:00:01.538265+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3528,6 +3528,18 @@
     "https://www.techrepublic.com/article/1minai-pro-plan-lifetime-subscription": {
       "image": "https://assets.techrepublic.com/uploads/2024/07/tr_20240703-1minai-pro-plan-lifetime-subscription.jpg",
       "checkedAt": "2026-04-14T13:00:01.571968+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/911579/google-synthid-ai-watermarking-system-reverse-engineered": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK419_DEEPFAKE_3_CVIRGINIA_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-14T14:00:01.538265+00:00"
+    },
+    "https://www.techrepublic.com/article/aivolut-ai-book-creator-lifetime-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/02/tra-02182026-aivolut-ai-book-creator-lifetime-subscription.png",
+      "checkedAt": "2026-04-14T14:00:01.538265+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-mac-mini-2026-m5-rumors-stock-shortage": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04142026-apple-mac-mini-2026.jpg",
+      "checkedAt": "2026-04-14T14:00:01.538265+00:00"
     }
   }
 }
