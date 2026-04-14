@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pugster Butterfly Bushes — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1c1612;
+      --earth-panel: #2b211a;
+      --earth-border: #5f4835;
+      --earth-text: #f0e6d8;
+      --earth-muted: #cab8a4;
+      --earth-accent: #a67c52;
+      --earth-accent-2: #8ea56c;
+    }
+    body { background: radial-gradient(circle at top, #433126 0%, #1c1612 56%, #120d0a 100%); color: var(--earth-text); }
+    header { background: rgba(28,22,18,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e1c690; }
+    .hero, .panel, .entry-card {
+      border: 1px solid var(--earth-border);
+      border-radius: 18px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+    }
+    .hero { background: linear-gradient(135deg, rgba(74,56,40,.95), rgba(45,58,40,.92)); padding: 24px; }
+    .panel, .entry-card { background: linear-gradient(180deg, rgba(50,39,31,.97), rgba(33,25,20,.97)); padding: 18px; }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .shell { display:grid; gap:18px; margin-top:18px; }
+    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
+    .photo {
+      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 16px 34px rgba(0,0,0,.24);
+    }
+    .section-title, .entry-title { margin:0 0 8px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-copy { line-height:1.7; }
+    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    img { cursor: zoom-in; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../../index.html#projects">Projects</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="https://jz237.github.io/games/">Games</a>
+        <a href="../../photos/">Photos</a>
+        <a href="../../plants/">Plant Progress</a>
+        <a href="../../ai-news/">AI News</a>
+        <a href="../../plex/">Plex</a>
+        <a href="../../ops/">Ops Center</a>
+        <a href="../../garden/">Garden Calendar</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Pugster Butterfly Bushes</div>
+      <h1 class="title">Pugster Butterfly Bushes</h1>
+      <p class="muted">Early spring wake-up, woody structure first, then fresh green pushing back in around the cut-back framework.</p>
+    </section>
+
+    <div class="shell">
+      <section class="panel split">
+        <div>
+          <h2 class="section-title">Starting to push again</h2>
+          <p class="note">This is the early-season stage where the butterfly bushes still look more like framework than fullness, but the fresh green is there if you look for it. New growth is breaking low and along the stems, with the bed still mostly mulch and structure for now.</p>
+          <div class="meta-row">
+            <span class="meta-pill">early spring growth</span>
+            <span class="meta-pill">cut-back structure visible</span>
+            <span class="meta-pill">Pugster bed</span>
+          </div>
+        </div>
+        <div>
+          <img class="photo" src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-14.jpg" alt="Pugster butterfly bushes pushing new spring growth in a mulched bed" />
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="split">
+          <div>
+            <div class="entry-date">April 14, 2026</div>
+            <h2 class="entry-title">Fresh growth on the old framework</h2>
+            <div class="entry-copy">
+              The Pugsters are waking up in that unmistakable early-spring way, old woody stems still fully visible while fresh green breaks out low and along the remaining framework. It is not the showy phase yet, but it is exactly the stage that matters if you want to remember how hard they reset before filling back in.
+              <div class="quote">Right now they look half asleep and half determined, which is usually how the good spring rebounds start.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-14.jpg" alt="Pugster butterfly bushes early spring progress" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>new growth is emerging cleanly from the woody structure</li>
+          <li>bed is still in early-season framework mode</li>
+          <li>useful checkpoint before the shrubs leaf out and bulk up</li>
+          <li>worth tracking again once the bushes start throwing stronger length and flower growth</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
+</body>
+</html>
