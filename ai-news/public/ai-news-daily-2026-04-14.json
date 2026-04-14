@@ -1,6 +1,6 @@
 {
   "date": "2026-04-14",
-  "updatedAt": "2026-04-14T15:36:04.503593+00:00",
+  "updatedAt": "2026-04-14T17:20:55.766077+00:00",
   "items": [
     {
       "title": "Turn Your Expertise Into Published Books Using Advanced AI Technology",
@@ -13,11 +13,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/tra-02182026-aivolut-ai-book-creator-lifetime-subscription.png",
       "published": "2026-04-14T13:00:25+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.4735
+      "score": 17.425
     },
     {
       "title": "Has Google’s AI watermarking system been reverse-engineered?",
@@ -30,11 +30,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK419_DEEPFAKE_3_CVIRGINIA_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-14T13:53:53+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.6092
+      "score": 14.5595
     },
     {
       "title": "Helical closes $10M seed to turn bio foundation models into systems",
@@ -47,11 +47,27 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Helical-team.png",
       "published": "2026-04-14T12:00:36+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.3456
+      "score": 10.2984
+    },
+    {
+      "title": "Chrome now lets you turn AI prompts into repeatable &#8216;Skills&#8217;",
+      "url": "https://www.theverge.com/tech/911658/google-chrome-gemini-ai-skills-availability-launch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Google is launching a new Chrome workflow feature that allows you to reuse your favorite Gemini commands across multiple webpages. Any AI prompts can now be saved as \"Skills\" in the Chrome desktop browser, letting you instantly run them across any tabs you select. \"Until now, repeating an AI task - like asking for ingredient [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK114_Google_Chrome_03.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-14T17:00:00+00:00",
+      "firstSeen": "2026-04-14T17:20:55.766077+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.8494
     },
     {
       "title": "NVIDIA and the University of Maryland Researchers Released Audio Flamingo Next (AF-Next): A Super Powerful and Open Large Audio-Language Model",
@@ -64,10 +80,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-1.22.32-AM-1-150x150.png",
       "published": "2026-04-14T08:24:23+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7207
+      "score": 9.6781
     },
     {
       "title": "OpenAI acquires Hiro, an AI personal finance startup",
@@ -80,10 +96,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Hiro-founders.png",
       "published": "2026-04-14T08:17:35+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9479
+      "score": 8.9054
     },
     {
       "title": "OpenAI has bought AI personal finance startup Hiro",
@@ -96,10 +112,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2021258442.jpg?resize=1200%2C800",
       "published": "2026-04-14T00:23:33+00:00",
       "firstSeen": "2026-04-14T01:00:01.948633+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.911
+      "score": 8.8768
     },
     {
       "title": "Synera raises $40M to bring agentic AI into engineering workflows at NASA, BMW, Airbus, and Hyundai",
@@ -112,10 +128,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Synera.png",
       "published": "2026-04-14T13:01:35+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7741
+      "score": 8.7255
     },
     {
       "title": "Anthropic Opposes the Extreme AI Liability Bill That OpenAI Backed",
@@ -127,11 +143,11 @@
       "summary": "Anthropic and OpenAI are clashing over a proposed Illinois law that would let AI labs largely off the hook for mass deaths and financial disasters.",
       "image": "https://media.wired.com/photos/69dd8619b4b829c8406ebf0d/master/pass/Anthropic-Fighting-Extreme-AI-Liability-Bill-Business.jpg",
       "published": "2026-04-14T15:21:44+00:00",
-      "firstSeen": "2026-04-14T15:36:04.503593+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "firstSeen": "2026-04-14T16:00:01.741493+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2827
+      "score": 8.2309
     },
     {
       "title": "Google brings its Gemini Personal Intelligence feature to India",
@@ -144,58 +160,42 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-14T14:48:34+00:00",
       "firstSeen": "2026-04-14T15:00:01.968736+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2661
+      "score": 8.2151
     },
     {
-      "title": "OpenAI’s $852 billion valuation is under scrutiny from its own investors as the company pivots to enterprise",
-      "url": "https://thenextweb.com/news/openai-852-billion-valuation-investor-scrutiny-anthropic-revenue",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "Google adds AI Skills to Chrome to help you save favorite workflows",
+      "url": "https://techcrunch.com/2026/04/14/google-adds-ai-skills-to-chrome-to-help-you-save-favorite-workflows",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google is adding “Skills” to Chrome, letting users save and reuse AI prompts across websites. The feature builds on Gemini’s browser integration.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-chrome-GettyImages-2151457378.jpg?w=1024",
+      "published": "2026-04-14T17:00:00+00:00",
+      "firstSeen": "2026-04-14T17:20:55.766077+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.6794
+    },
+    {
+      "title": "HubSpot Launches AEO Tool to Help Brands Compete in AI Search",
+      "url": "https://www.techrepublic.com/article/hubspot-launches-aeo-tool",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Some backers say OpenAI has revised its product roadmap twice in six months and risks losing focus ahead of an IPO expected as early as Q4 2026. OpenAI’s new CRO has accused Anthropic of overstating its $30B run rate by $8B through gross accounting on cloud partner revenue. Both companies say they follow standard accounting [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/03/Sam-Altman-OpenAI.png",
-      "published": "2026-04-14T10:49:55+00:00",
-      "firstSeen": "2026-04-14T12:00:01.867904+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
+      "summary": "HubSpot launches an AEO tool inside Marketing Hub to track AI visibility, citations, and competitors. See what this HubSpot news means for marketers.\nThe post HubSpot Launches AEO Tool to Help Brands Compete in AI Search appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04142026-hubspot-aeo-tool.jpg",
+      "published": "2026-04-14T15:30:40+00:00",
+      "firstSeen": "2026-04-14T17:00:01.223225+00:00",
+      "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.0135
-    },
-    {
-      "title": "How vibe coding app Anything is rebuilding after getting booted from the App Store twice",
-      "url": "https://techcrunch.com/2026/04/14/how-vibe-coding-app-anything-is-rebuilding-after-getting-booted-from-the-app-store-twice",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anything is planning to launch a desktop companion app to aid mobile app development after its App Store removal.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/09/dhruv_marcus.png?resize=1200%2C800",
-      "published": "2026-04-14T14:22:44+00:00",
-      "firstSeen": "2026-04-14T15:00:01.968736+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.4533
-    },
-    {
-      "title": "How vibe-coding app Anything is rebuilding after getting booted from the App Store twice",
-      "url": "https://techcrunch.com/2026/04/14/how-vibe-coding-app-anything-is-rebuilding-after-getting-booted-from-the-app-store-twice",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "In this tutorial, we build an advanced data analysis pipeline using Google ADK and organize it as a practical multi-agent system for real analytical work. We set up the environment, configure secure API access, create a centralized data store, and define specialized tools for loading data, exploring datasets, running statistical tests, transforming tables, generating visualizations, [&#8230;]\nThe post Google ADK Multi-Agent Pipeline Tutorial: Data Loading, Statistical Testing, Visualization, and Report Generation in Python appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-35.png",
-      "published": "2026-04-14T03:23:29+00:00",
-      "firstSeen": "2026-04-14T03:37:36.939015+00:00",
-      "lastSeen": "2026-04-14T15:36:04.503593+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.4036
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.3953
     }
   ],
   "errors": []
