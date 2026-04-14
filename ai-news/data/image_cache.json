@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T19:00:01.937392+00:00",
+  "updatedAt": "2026-04-14T20:00:02.058710+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3584,6 +3584,10 @@
     "https://www.technologyreview.com/2026/04/14/1134397/redefining-the-future-of-software-engineering": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/MITTR-softserve-SM-card1-1200.png?resize=1200,600",
       "checkedAt": "2026-04-14T19:00:01.937392+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/14/cybersecurity-proof-of-work": {
+      "image": "",
+      "checkedAt": "2026-04-14T20:00:02.058710+00:00"
     }
   }
 }
