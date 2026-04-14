@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T23:56:35.023560+00:00",
+  "updatedAt": "2026-04-14T01:00:01.948633+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3504,6 +3504,14 @@
     "https://www.together.ai/blog/einsteinarena": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69dc6159d235651a3ed1c10c_20260412_EinsteinArena_1200x630.png",
       "checkedAt": "2026-04-13T21:59:37.070164+00:00"
+    },
+    "https://techcrunch.com/2026/04/13/openai-has-bought-ai-personal-finance-startup-hiro": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2021258442.jpg?resize=1200,800",
+      "checkedAt": "2026-04-14T01:00:01.948633+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/911423/openai-sam-altman-attack": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/screenshot_2026-04-13_161515_0.jpg?quality=90&amp;strip=all&amp;crop=0.18825561312608,0,99.623488773748,100",
+      "checkedAt": "2026-04-14T01:00:01.948633+00:00"
     }
   }
 }
