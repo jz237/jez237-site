@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T14:00:01.538265+00:00",
+  "updatedAt": "2026-04-14T15:00:01.968736+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3540,6 +3540,14 @@
     "https://www.techrepublic.com/article/news-apple-mac-mini-2026-m5-rumors-stock-shortage": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04142026-apple-mac-mini-2026.jpg",
       "checkedAt": "2026-04-14T14:00:01.538265+00:00"
+    },
+    "https://techcrunch.com/2026/04/14/google-brings-its-gemini-personal-intelligence-feature-to-india": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200,800",
+      "checkedAt": "2026-04-14T15:00:01.968736+00:00"
+    },
+    "https://techcrunch.com/2026/04/14/how-vibe-coding-app-anything-is-rebuilding-after-getting-booted-from-the-app-store-twice": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/dhruv_marcus.png?resize=1200,800",
+      "checkedAt": "2026-04-14T15:00:01.968736+00:00"
     }
   }
 }
