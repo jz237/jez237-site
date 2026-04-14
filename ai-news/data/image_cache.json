@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T21:00:01.716928+00:00",
+  "updatedAt": "2026-04-14T22:00:01.895095+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3592,6 +3592,10 @@
     "https://openai.com/index/scaling-trusted-access-for-cyber-defense": {
       "image": "",
       "checkedAt": "2026-04-14T21:00:01.716928+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/14/trusted-access-openai": {
+      "image": "",
+      "checkedAt": "2026-04-14T22:00:01.895095+00:00"
     }
   }
 }
