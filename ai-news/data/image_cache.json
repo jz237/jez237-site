@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T14:07:58.869864+00:00",
+  "updatedAt": "2026-04-14T15:36:04.503593+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3548,6 +3548,10 @@
     "https://techcrunch.com/2026/04/14/how-vibe-coding-app-anything-is-rebuilding-after-getting-booted-from-the-app-store-twice": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/dhruv_marcus.png?resize=1200,800",
       "checkedAt": "2026-04-14T15:00:01.968736+00:00"
+    },
+    "https://techcrunch.com/2026/04/14/join-the-first-strictlyvc-of-2026-in-sf-with-leaders-from-tdk-ventures-and-replits-co-founder": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/54963244981_66492e96cc_6k.jpg?resize=1200,800",
+      "checkedAt": "2026-04-14T15:36:04.503593+00:00"
     }
   }
 }
