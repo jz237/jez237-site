@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T03:00:02.115029+00:00",
+  "updatedAt": "2026-04-14T03:37:36.939015+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3512,6 +3512,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/911423/openai-sam-altman-attack": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/screenshot_2026-04-13_161515_0.jpg?quality=90&amp;strip=all&amp;crop=0.18825561312608,0,99.623488773748,100",
       "checkedAt": "2026-04-14T01:00:01.948633+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/13/google-adk-multi-agent-pipeline-tutorial-data-loading-statistical-testing-visualization-and-report-generation-in-python": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-35.png",
+      "checkedAt": "2026-04-14T03:37:36.939015+00:00"
     }
   }
 }
