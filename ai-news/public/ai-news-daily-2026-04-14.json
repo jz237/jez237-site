@@ -1,6 +1,6 @@
 {
   "date": "2026-04-14",
-  "updatedAt": "2026-04-14T21:00:01.716928+00:00",
+  "updatedAt": "2026-04-14T21:05:32.787268+00:00",
   "items": [
     {
       "title": "Turn Your Expertise Into Published Books Using Advanced AI Technology",
@@ -13,11 +13,11 @@
       "image": "https://assets.techrepublic.com/uploads/2026/02/tra-02182026-aivolut-ai-book-creator-lifetime-subscription.png",
       "published": "2026-04-14T13:00:25+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.331
+      "score": 17.3287
     },
     {
       "title": "Has Google’s AI watermarking system been reverse-engineered?",
@@ -30,11 +30,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK419_DEEPFAKE_3_CVIRGINIA_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-14T13:53:53+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.463
+      "score": 14.4607
     },
     {
       "title": "Trusted access for the next era of cyber defense",
@@ -47,11 +47,11 @@
       "image": "",
       "published": "2026-04-14T00:00:00+00:00",
       "firstSeen": "2026-04-14T21:00:01.716928+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.3138
+      "score": 14.3123
     },
     {
       "title": "Helical closes $10M seed to turn bio foundation models into systems",
@@ -64,11 +64,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Helical-team.png",
       "published": "2026-04-14T12:00:36+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.2069
+      "score": 10.2047
     },
     {
       "title": "Chrome now lets you turn AI prompts into repeatable &#8216;Skills&#8217;",
@@ -81,10 +81,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK114_Google_Chrome_03.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-14T17:00:00+00:00",
       "firstSeen": "2026-04-14T17:20:55.766077+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7443
+      "score": 9.7418
     },
     {
       "title": "NVIDIA and the University of Maryland Researchers Released Audio Flamingo Next (AF-Next): A Super Powerful and Open Large Audio-Language Model",
@@ -97,10 +97,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-1.22.32-AM-1-150x150.png",
       "published": "2026-04-14T08:24:23+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.5953
+      "score": 9.5933
     },
     {
       "title": "OpenAI acquires Hiro, an AI personal finance startup",
@@ -116,7 +116,7 @@
       "lastSeen": "2026-04-14T17:20:55.766077+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8228
+      "score": 8.8209
     },
     {
       "title": "OpenAI has bought AI personal finance startup Hiro",
@@ -129,10 +129,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2021258442.jpg?resize=1200%2C800",
       "published": "2026-04-14T00:23:33+00:00",
       "firstSeen": "2026-04-14T01:00:01.948633+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8106
+      "score": 8.809
     },
     {
       "title": "Synera raises $40M to bring agentic AI into engineering workflows at NASA, BMW, Airbus, and Hyundai",
@@ -145,10 +145,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Synera.png",
       "published": "2026-04-14T13:01:35+00:00",
       "firstSeen": "2026-04-14T14:00:01.538265+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6314
+      "score": 8.6292
     },
     {
       "title": "Cybersecurity Looks Like Proof of Work Now",
@@ -161,10 +161,10 @@
       "image": "",
       "published": "2026-04-14T19:41:48+00:00",
       "firstSeen": "2026-04-14T21:00:01.716928+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6009
+      "score": 8.5982
     },
     {
       "title": "Anthropic Opposes the Extreme AI Liability Bill That OpenAI Backed",
@@ -177,10 +177,10 @@
       "image": "https://media.wired.com/photos/69dd8619b4b829c8406ebf0d/master/pass/Anthropic-Fighting-Extreme-AI-Liability-Bill-Business.jpg",
       "published": "2026-04-14T15:21:44+00:00",
       "firstSeen": "2026-04-14T16:00:01.741493+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1305
+      "score": 8.1281
     },
     {
       "title": "Google brings its Gemini Personal Intelligence feature to India",
@@ -193,10 +193,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-14T14:48:34+00:00",
       "firstSeen": "2026-04-14T15:00:01.968736+00:00",
-      "lastSeen": "2026-04-14T21:00:01.716928+00:00",
+      "lastSeen": "2026-04-14T21:05:32.787268+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1162
+      "score": 8.1138
     }
   ],
   "errors": []
