@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T15:20:22.159063+00:00",
+  "updatedAt": "2026-04-15T17:00:01.394049+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3668,6 +3668,18 @@
     "https://simonwillison.net/2026/Apr/15/kyle-kingsbury": {
       "image": "",
       "checkedAt": "2026-04-15T16:00:01.333137+00:00"
+    },
+    "https://www.theverge.com/news/912484/allbirds-ai-hyperscale": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1253153052.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.752607989199%2C100%2C78.494784021602&amp;w=1200",
+      "checkedAt": "2026-04-15T17:00:01.394049+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/15/datasette-ports": {
+      "image": "",
+      "checkedAt": "2026-04-15T17:00:01.394049+00:00"
+    },
+    "https://www.techrepublic.com/article/news-chatgpt-cheat-sheet": {
+      "image": "https://assets.techrepublic.com/uploads/2025/03/tim-witzdam-wq9YiAxN0sQ-unsplash-1.jpg",
+      "checkedAt": "2026-04-15T17:00:01.394049+00:00"
     }
   }
 }
