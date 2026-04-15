@@ -1,6 +1,6 @@
 {
   "date": "2026-04-15",
-  "updatedAt": "2026-04-15T08:02:25.415450+00:00",
+  "updatedAt": "2026-04-15T10:00:01.494500+00:00",
   "items": [
     {
       "title": "Google DeepMind Releases Gemini Robotics-ER 1.6: Bringing Enhanced Embodied Reasoning and Instrument Reading to Physical AI",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-15-at-12.12.16-AM-1-150x150.png",
       "published": "2026-04-15T07:13:56+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 27.3956
+      "score": 27.3386
     },
     {
       "title": "Google Launches ‘Skills’ in Chrome: Turning Reusable AI Prompts into One-Click Browser Workflows",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-3-1024x731.png",
       "published": "2026-04-15T03:54:17+00:00",
       "firstSeen": "2026-04-15T04:00:01.118549+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.4006
+      "score": 20.3487
     },
     {
       "title": "Anthropic, OpenAI, and the Pentagon: a cautionary tale for democratic AI governance",
@@ -47,10 +47,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/democratic-AI-governance.png",
       "published": "2026-04-15T07:02:09+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.2197
+      "score": 9.163
     },
     {
       "title": "Anthropic’s rise is giving some OpenAI investors second thoughts",
@@ -63,10 +63,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200%2C783",
       "published": "2026-04-15T02:31:04+00:00",
       "firstSeen": "2026-04-15T03:00:01.898558+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1336
+      "score": 8.0836
     },
     {
       "title": "A Coding Implementation of Crawl4AI for Web Crawling, Markdown Generation, JavaScript Execution, and LLM-Based Structured Extraction",
@@ -79,10 +79,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-38.png",
       "published": "2026-04-15T00:39:12+00:00",
       "firstSeen": "2026-04-15T01:00:01.796585+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9159
+      "score": 6.8685
+    },
+    {
+      "title": "Meet HoloTab by HCompany. Your AI browser companion.",
+      "url": "https://huggingface.co/blog/Hcompany/holotab",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holotab.png",
+      "published": "2026-04-15T09:25:20+00:00",
+      "firstSeen": "2026-04-15T10:00:01.494500+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8125
     },
     {
       "title": "FluidStack is in talks to raise $1B at an $18B valuation",
@@ -95,10 +111,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Fluidstack.png",
       "published": "2026-04-15T07:14:43+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.126
+      "score": 4.069
+    },
+    {
+      "title": "AliveCor brings its pocket-sized 12-lead ECG to Europe after detecting more than 4,000 heart attacks in the US",
+      "url": "https://thenextweb.com/news/alivecor-kardia-12l-ce-mark-europe-launch",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Kardia 12L, which uses five electrodes and a single cable to replace bulky 10-lead ECG carts, has received CE Mark. It launches first in France, Germany, Italy, Spain, and the UK, with its AI system detecting 35 cardiac conditions including acute myocardial infarction. AliveCor, the US medtech company specialising in AI-powered cardiac diagnostics, has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AliveCor.png",
+      "published": "2026-04-15T08:00:28+00:00",
+      "firstSeen": "2026-04-15T10:00:01.494500+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.8908
     },
     {
       "title": "Building trust in the AI era with privacy-led UX",
@@ -111,10 +143,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/MITTR-Usercentrics-SM-card1-1200.png?resize=1200%2C600",
       "published": "2026-04-15T06:00:00+00:00",
       "firstSeen": "2026-04-15T07:00:02.051673+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3294
+      "score": 3.2743
     },
     {
       "title": "Zig 0.16.0 release notes: \"Juicy Main\"",
@@ -127,10 +159,26 @@
       "image": "",
       "published": "2026-04-15T01:59:21+00:00",
       "firstSeen": "2026-04-15T03:00:01.898558+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8198
+      "score": 2.7705
+    },
+    {
+      "title": "Polynomial Expansion Rank Adaptation: Enhancing Low-Rank Fine-Tuning with High-Order Interactions",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-15T10:00:13.405906+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "Meta and Broadcom extend their AI chip deal to 2029",
@@ -139,30 +187,14 @@
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-15T08:02:32.639455+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-15T08:02:25.415450+00:00",
+      "summary": "The expanded partnership covers several generations of Meta’s custom MTIA processors, starts with over a gigawatt of computing capacity, and is described as the ‘first phase of a sustained, multi-gigawatt rollout.’ The new chips will be the first custom AI silicon to use a 2-nanometer process. Meta has expanded its partnership with chip designer Broadcom [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Meta-Broadcom.png",
+      "published": "2026-04-15T07:44:36+00:00",
+      "firstSeen": "2026-04-15T09:00:01.308649+00:00",
+      "lastSeen": "2026-04-15T10:00:01.494500+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1123
-    },
-    {
-      "title": "Agriodor raises €15M led by Crédit Mutuel Impact to scale its insect-repelling fragrances",
-      "url": "https://thenextweb.com/news/agriodor-15m-credit-mutuel-impact-olfactory-biocontrol",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Rennes-based INRAE spin-off uses blends of volatile organic compounds to repel or attract pest insects without harming pollinators, soil, or human health. Its first product, for sugar beet aphids, received French regulatory authorisation in March 2026 and is distributed by Syngenta. Agriodor, a French deeptech startup specialising in olfactory biocontrol, has raised €15 million [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Agriodor.png",
-      "published": "2026-04-15T07:58:07+00:00",
-      "firstSeen": "2026-04-15T09:00:01.308649+00:00",
-      "lastSeen": "2026-04-15T09:00:01.308649+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.9811
+      "score": 2.0832
     }
   ],
   "errors": []
