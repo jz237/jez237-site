@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T17:17:26.244670+00:00",
+  "updatedAt": "2026-04-15T19:00:01.231713+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3692,6 +3692,50 @@
     "https://openai.com/index/the-next-evolution-of-the-agents-sdk": {
       "image": "",
       "checkedAt": "2026-04-15T17:17:26.244670+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/hightouch-reaches-100m-arr-fueled-by-marketing-tools-powered-by-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/founders-photo.webp?resize=1200,1200",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/linkedin-data-shows-ai-isnt-to-blame-for-hiring-decline-yet": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/job-search-GettyImages-2161243486.jpg?resize=1200,800",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/ai-learning-app-gizmo-levels-up-with-13m-users-and-a-22m-investment": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1263424631.jpg?resize=1200,800",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/can-ai-judge-journalism-a-thiel-backed-startup-says-yes-even-if-it-risks-chilling-whistleblowers": {
+      "image": "",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/google-rolls-out-a-native-gemini-app-for-mac": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200,800",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://www.theverge.com/tech/912638/google-gemini-mac-app": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Gemini-for-MacOS_03_Capsule-Image_16x9.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://www.techrepublic.com/article/news-youtube-livestream-ads-update": {
+      "image": "https://assets.techrepublic.com/uploads/2022/02/AdobeStock_192565042-scaled.jpeg",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/podcast/the-musician-turned-biotech-founder-waiting-to-fundraise": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Copy-of-Stand-Together-Photo-By-Zach-Bell.jpg?resize=1200,1200",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/indias-vibe-coding-startup-emergent-enters-openclaw-like-ai-agent-space": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/emergent-wingman.jpg?resize=1200,800",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/15/john-gruber": {
+      "image": "",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/15/gemini-flash-tts": {
+      "image": "",
+      "checkedAt": "2026-04-15T19:00:01.231713+00:00"
     }
   }
 }
