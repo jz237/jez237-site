@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T10:00:01.494500+00:00",
+  "updatedAt": "2026-04-15T09:47:18.880658+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3623,7 +3623,7 @@
     },
     "https://huggingface.co/blog/Hcompany/holotab": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holotab.png",
-      "checkedAt": "2026-04-15T10:00:01.494500+00:00"
+      "checkedAt": "2026-04-15T09:47:18.880658+00:00"
     }
   }
 }
