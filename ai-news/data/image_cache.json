@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T14:02:10.818618+00:00",
+  "updatedAt": "2026-04-15T16:00:01.333137+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3664,6 +3664,10 @@
     "https://www.techrepublic.com/article/news-openai-stargate-pullback-microsoft-data-centers": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04152026-openai-stargate-pullback.jpg",
       "checkedAt": "2026-04-15T15:00:01.852905+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/15/kyle-kingsbury": {
+      "image": "",
+      "checkedAt": "2026-04-15T16:00:01.333137+00:00"
     }
   }
 }
