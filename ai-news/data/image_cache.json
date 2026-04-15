@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T19:00:01.231713+00:00",
+  "updatedAt": "2026-04-15T19:41:27.010212+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3736,6 +3736,10 @@
     "https://simonwillison.net/2026/Apr/15/gemini-flash-tts": {
       "image": "",
       "checkedAt": "2026-04-15T19:00:01.231713+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/openai-updates-its-agents-sdk-to-help-enterprises-build-safer-more-capable-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
+      "checkedAt": "2026-04-15T19:41:27.010212+00:00"
     }
   }
 }
