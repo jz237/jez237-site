@@ -1,6 +1,6 @@
 {
   "date": "2026-04-15",
-  "updatedAt": "2026-04-15T14:02:10.818618+00:00",
+  "updatedAt": "2026-04-15T15:20:22.159063+00:00",
   "items": [
     {
       "title": "Google DeepMind Releases Gemini Robotics-ER 1.6: Bringing Enhanced Embodied Reasoning and Instrument Reading to Physical AI",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-15-at-12.12.16-AM-1-150x150.png",
       "published": "2026-04-15T07:13:56+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 27.2306
+      "score": 27.1982
     },
     {
       "title": "Google Launches ‘Skills’ in Chrome: Turning Reusable AI Prompts into One-Click Browser Workflows",
@@ -30,11 +30,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-3-1024x731.png",
       "published": "2026-04-15T03:54:17+00:00",
       "firstSeen": "2026-04-15T04:00:01.118549+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2502
+      "score": 20.2207
+    },
+    {
+      "title": "Adobe’s new Firefly AI assistant turns Creative Cloud into a single conversational interface",
+      "url": "https://thenextweb.com/news/adobe-firefly-ai-assistant-creative-cloud-agentic-workflows",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Adobe launched the Firefly AI Assistant, a conversational agent that orchestrates tasks across Photoshop, Premiere, Lightroom, Illustrator, Express, and Frame.io using natural language. Previously codenamed Project Moonlight, it enters public beta in coming weeks, integrates with third-party models including Anthropic’s Claude, and maintains context across sessions. Adobe also announced Firefly Image Model 5, Custom Models, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/adobe-firefly-ai-assistant-creative-cloud-agentic-workflows.png",
+      "published": "2026-04-15T14:31:31+00:00",
+      "firstSeen": "2026-04-15T15:00:01.852905+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.7254
     },
     {
       "title": "Grok’s sexual deepfakes almost got it banned from Apple’s App Store. Almost.",
@@ -47,10 +63,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK468_APPLE_ANTITRUST_CVIRGINIA_G.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-15T10:55:22+00:00",
       "firstSeen": "2026-04-15T11:00:01.733391+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3689
+      "score": 9.333
     },
     {
       "title": "Anthropic, OpenAI, and the Pentagon: a cautionary tale for democratic AI governance",
@@ -66,7 +82,7 @@
       "lastSeen": "2026-04-15T14:02:10.818618+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.0556
+      "score": 9.0234
     },
     {
       "title": "Anthropic’s rise is giving some OpenAI investors second thoughts",
@@ -79,10 +95,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200%2C783",
       "published": "2026-04-15T02:31:04+00:00",
       "firstSeen": "2026-04-15T03:00:01.898558+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9888
+      "score": 7.9604
     },
     {
       "title": "A Coding Implementation of Crawl4AI for Web Crawling, Markdown Generation, JavaScript Execution, and LLM-Based Structured Extraction",
@@ -95,10 +111,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-38.png",
       "published": "2026-04-15T00:39:12+00:00",
       "firstSeen": "2026-04-15T01:00:01.796585+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7785
+      "score": 6.7515
+    },
+    {
+      "title": "Microsoft Takes Over Key Stargate Site in Latest OpenAI Pullback",
+      "url": "https://www.techrepublic.com/article/news-openai-stargate-pullback-microsoft-data-centers",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft has taken over Norway data center capacity once earmarked for OpenAI’s Stargate project, adding 30,000 Nvidia Vera Rubin chips.\nThe post Microsoft Takes Over Key Stargate Site in Latest OpenAI Pullback appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04152026-openai-stargate-pullback.jpg",
+      "published": "2026-04-15T14:08:38+00:00",
+      "firstSeen": "2026-04-15T15:00:01.852905+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2141
     },
     {
       "title": "Gitar, a startup that uses agents to secure code, emerges from stealth with $9 million",
@@ -111,10 +143,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Founders-Headshot90.png?resize=1200%2C800",
       "published": "2026-04-15T13:00:00+00:00",
       "firstSeen": "2026-04-15T14:00:01.966781+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9588
+      "score": 4.9208
     },
     {
       "title": "Meet HoloTab by HCompany. Your AI browser companion.",
@@ -127,10 +159,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holotab.png",
       "published": "2026-04-15T09:25:20+00:00",
       "firstSeen": "2026-04-15T09:47:18.880658+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6977
+      "score": 4.6633
     },
     {
       "title": "Adobe embraces conversational AI editing, marking a ‘fundamental shift’ in creative work",
@@ -143,10 +175,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Adobe-Firefly-Innovations-Visual-Asset.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-04-15T13:00:00+00:00",
       "firstSeen": "2026-04-15T14:00:01.966781+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5288
+      "score": 4.4908
     },
     {
       "title": "Adobe’s new Firefly AI assistant can use Creative Cloud apps to complete tasks",
@@ -159,42 +191,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Adobe-Firefly-Innovations-Visual-Asset.jpeg?resize=1200%2C675",
       "published": "2026-04-15T13:01:00+00:00",
       "firstSeen": "2026-04-15T14:00:01.966781+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
+      "lastSeen": "2026-04-15T15:20:22.159063+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4593
-    },
-    {
-      "title": "This $60 AI Assistant Aims to Consolidate Your Daily Work Tools",
-      "url": "https://www.techrepublic.com/article/chaton-ai-assistant-premium-subscription",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Instead of bouncing between AI tools, this platform puts models, file features, and creative tools together.\nThe post This $60 AI Assistant Aims to Consolidate Your Daily Work Tools appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/tra-04062026-chaton.jpg",
-      "published": "2026-04-15T13:00:49+00:00",
-      "firstSeen": "2026-04-06T09:21:38.497180+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3192
-    },
-    {
-      "title": "FluidStack is in talks to raise $1B at an $18B valuation",
-      "url": "https://thenextweb.com/news/fluidstack-is-in-talks-to-raise-1b-at-an-18b-valuation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Jane Street and Situational Awareness are in discussions to co-lead the round, Bloomberg reports. The Oxford-founded neocloud, which relocated from the UK to the US after landing a $50 billion data centre partnership with Anthropic, has grown its revenue from $1.8M in 2022 to $66.2M in 2024. FluidStack, the AI data centre startup that builds [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Fluidstack.png",
-      "published": "2026-04-15T07:14:43+00:00",
-      "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T14:02:10.818618+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9609
+      "score": 4.4213
     }
   ],
   "errors": []
