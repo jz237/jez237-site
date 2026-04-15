@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T14:00:01.966781+00:00",
+  "updatedAt": "2026-04-15T15:00:01.852905+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3656,6 +3656,14 @@
     "https://www.theverge.com/tech/912287/adobe-firefly-ai-assistant-announcement-editing": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Adobe-Firefly-Innovations-Visual-Asset.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
       "checkedAt": "2026-04-15T14:00:01.966781+00:00"
+    },
+    "https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/09/allbirds-pacer-front-three-quarters.jpg?resize=1200,675",
+      "checkedAt": "2026-04-15T15:00:01.852905+00:00"
+    },
+    "https://www.techrepublic.com/article/news-openai-stargate-pullback-microsoft-data-centers": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04152026-openai-stargate-pullback.jpg",
+      "checkedAt": "2026-04-15T15:00:01.852905+00:00"
     }
   }
 }
