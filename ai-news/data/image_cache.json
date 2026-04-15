@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-14T23:56:20.489604+00:00",
+  "updatedAt": "2026-04-15T01:00:01.796585+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3596,6 +3596,14 @@
     "https://simonwillison.net/2026/Apr/14/trusted-access-openai": {
       "image": "",
       "checkedAt": "2026-04-14T22:00:01.895095+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/14/a-coding-implementation-of-crawl4ai-for-web-crawling-markdown-generation-javascript-execution-and-llm-based-structured-extraction": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-38.png",
+      "checkedAt": "2026-04-15T01:00:01.796585+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/14/replace-token-based-csrf": {
+      "image": "",
+      "checkedAt": "2026-04-15T01:00:01.796585+00:00"
     }
   }
 }
