@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T03:00:01.898558+00:00",
+  "updatedAt": "2026-04-15T04:00:01.118549+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3612,6 +3612,10 @@
     "https://simonwillison.net/2026/Apr/15/juicy-main": {
       "image": "",
       "checkedAt": "2026-04-15T03:00:01.898558+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/14/google-launches-skills-in-chrome-turning-reusable-ai-prompts-into-one-click-browser-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-3-1024x731.png",
+      "checkedAt": "2026-04-15T04:00:01.118549+00:00"
     }
   }
 }
