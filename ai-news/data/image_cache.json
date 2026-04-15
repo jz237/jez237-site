@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T22:59:05.818931+00:00",
+  "updatedAt": "2026-04-15T23:56:37.200188+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3752,6 +3752,14 @@
     "https://www.techrepublic.com/article/dealcentre-ai-vs-datasite": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/technology-meets-humanity-background-modern-remak-2026-01-07-07-37-57-utc-1.jpg",
       "checkedAt": "2026-04-15T21:00:02.005887+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/15/datasette-export-database": {
+      "image": "",
+      "checkedAt": "2026-04-15T23:56:37.200188+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/15/datasette": {
+      "image": "",
+      "checkedAt": "2026-04-15T23:56:37.200188+00:00"
     }
   }
 }
