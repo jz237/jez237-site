@@ -1,6 +1,6 @@
 {
   "date": "2026-04-15",
-  "updatedAt": "2026-04-15T12:00:01.807203+00:00",
+  "updatedAt": "2026-04-15T11:14:46.970200+00:00",
   "items": [
     {
       "title": "Google DeepMind Releases Gemini Robotics-ER 1.6: Bringing Enhanced Embodied Reasoning and Instrument Reading to Physical AI",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-15-at-12.12.16-AM-1-150x150.png",
       "published": "2026-04-15T07:13:56+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 27.2835
+      "score": 27.3039
     },
     {
       "title": "Google Launches ‘Skills’ in Chrome: Turning Reusable AI Prompts into One-Click Browser Workflows",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-3-1024x731.png",
       "published": "2026-04-15T03:54:17+00:00",
       "firstSeen": "2026-04-15T04:00:01.118549+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2985
+      "score": 20.3171
     },
     {
       "title": "Grok’s sexual deepfakes almost got it banned from Apple’s App Store. Almost.",
@@ -47,10 +47,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK468_APPLE_ANTITRUST_CVIRGINIA_G.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-15T10:55:22+00:00",
       "firstSeen": "2026-04-15T11:00:01.733391+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4276
+      "score": 9.4502
     },
     {
       "title": "Anthropic, OpenAI, and the Pentagon: a cautionary tale for democratic AI governance",
@@ -63,10 +63,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/democratic-AI-governance.png",
       "published": "2026-04-15T07:02:09+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.1083
+      "score": 9.1286
     },
     {
       "title": "Anthropic’s rise is giving some OpenAI investors second thoughts",
@@ -79,10 +79,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200%2C783",
       "published": "2026-04-15T02:31:04+00:00",
       "firstSeen": "2026-04-15T03:00:01.898558+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0353
+      "score": 8.0532
     },
     {
       "title": "A Coding Implementation of Crawl4AI for Web Crawling, Markdown Generation, JavaScript Execution, and LLM-Based Structured Extraction",
@@ -95,10 +95,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-38.png",
       "published": "2026-04-15T00:39:12+00:00",
       "firstSeen": "2026-04-15T01:00:01.796585+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.8226
+      "score": 6.8396
     },
     {
       "title": "Meet HoloTab by HCompany. Your AI browser companion.",
@@ -111,10 +111,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holotab.png",
       "published": "2026-04-15T09:25:20+00:00",
       "firstSeen": "2026-04-15T09:47:18.880658+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.754
+      "score": 4.7757
     },
     {
       "title": "FluidStack is in talks to raise $1B at an $18B valuation",
@@ -127,10 +127,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Fluidstack.png",
       "published": "2026-04-15T07:14:43+00:00",
       "firstSeen": "2026-04-15T08:00:01.812677+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0139
+      "score": 4.0343
     },
     {
       "title": "AliveCor brings its pocket-sized 12-lead ECG to Europe after detecting more than 4,000 heart attacks in the US",
@@ -143,10 +143,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AliveCor.png",
       "published": "2026-04-15T08:00:28+00:00",
       "firstSeen": "2026-04-15T09:47:18.880658+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8345
+      "score": 3.8554
     },
     {
       "title": "This simple change stops robot swarms from getting stuck",
@@ -159,10 +159,10 @@
       "image": "https://www.sciencedaily.com/images/1920/wheeled-robots-used-in-crowd-density-experiment.webp",
       "published": "2026-04-15T07:45:51+00:00",
       "firstSeen": "2026-04-15T11:00:01.733391+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4979
+      "score": 3.5186
     },
     {
       "title": "AI Slop Is Making the Internet Fake-Happy",
@@ -174,11 +174,11 @@
       "summary": "A new study examines the impact of the rise of AI-generated websites on the internet—and found some surprising results.",
       "image": "https://media.wired.com/photos/69de82bee716e7137086c443/master/pass/Business_Upto35PercentoftheInternetIsAISlop.jpg",
       "published": "2026-04-15T11:00:00+00:00",
-      "firstSeen": "2026-04-15T12:00:01.807203+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "firstSeen": "2026-04-15T11:14:46.970200+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3599
+      "score": 3.3825
     },
     {
       "title": "Building trust in the AI era with privacy-led UX",
@@ -191,10 +191,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/MITTR-Usercentrics-SM-card1-1200.png?resize=1200%2C600",
       "published": "2026-04-15T06:00:00+00:00",
       "firstSeen": "2026-04-15T07:00:02.051673+00:00",
-      "lastSeen": "2026-04-15T12:00:01.807203+00:00",
+      "lastSeen": "2026-04-15T11:14:46.970200+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2211
+      "score": 3.2408
     }
   ],
   "errors": []
