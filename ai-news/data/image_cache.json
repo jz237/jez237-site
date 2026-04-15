@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-15T08:02:25.415450+00:00",
+  "updatedAt": "2026-04-15T09:47:18.880658+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3620,6 +3620,10 @@
     "https://www.technologyreview.com/2026/04/15/1135530/building-trust-in-the-ai-era-with-privacy-led-ux": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/MITTR-Usercentrics-SM-card1-1200.png?resize=1200,600",
       "checkedAt": "2026-04-15T07:00:02.051673+00:00"
+    },
+    "https://huggingface.co/blog/Hcompany/holotab": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Hcompany/holotab.png",
+      "checkedAt": "2026-04-15T09:47:18.880658+00:00"
     }
   }
 }
