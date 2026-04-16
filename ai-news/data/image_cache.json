@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T21:00:01.611767+00:00",
+  "updatedAt": "2026-04-16T22:00:01.429339+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3912,6 +3912,18 @@
     "https://techcrunch.com/2026/04/16/physical-intelligence-a-hot-robotics-startup-says-its-new-robot-brain-can-figure-out-tasks-it-was-never-taught": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-12.22.07-PM.png?resize=1200,589",
       "checkedAt": "2026-04-16T21:00:01.611767+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/luma-launches-ai-powered-production-studio-with-faith-focused-wonder-project": {
+      "image": "",
+      "checkedAt": "2026-04-16T22:00:01.429339+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/16/transformer-nqs-netket-j1j2-guide": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-45.png",
+      "checkedAt": "2026-04-16T22:00:01.429339+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/upscale-ai-in-talks-to-raise-at-2b-valuation-says-report": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/11/GettyImages-182414392.jpg?resize=1200,800",
+      "checkedAt": "2026-04-16T22:00:01.429339+00:00"
     }
   }
 }
