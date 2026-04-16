@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T14:00:01.584750+00:00",
+  "updatedAt": "2026-04-16T15:00:01.460831+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3816,6 +3816,22 @@
     "https://huggingface.co/blog/train-multimodal-sentence-transformers": {
       "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
       "checkedAt": "2026-04-16T14:00:01.584750+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/runway-ceo-says-ai-could-help-hollywood-make-50-films-instead-of-one-100m-blockbuster": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Cristobal-Valenzuela-GettyImages-2271505604.jpg?w=1024",
+      "checkedAt": "2026-04-16T15:00:01.460831+00:00"
+    },
+    "https://www.theverge.com/podcast/911753/sam-altman-openai-ronan-farrow-new-yorker-feature-trust-liar-ai-industry": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/altman_illo.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-16T15:00:01.460831+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/912997/character-ai-books-mode": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/c.aiBooks-Header-Image.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-04-16T15:00:01.460831+00:00"
+    },
+    "https://huggingface.co/blog/transformers-to-mlx": {
+      "image": "https://huggingface.co/blog/assets/transformers-to-mlx/thumbnail.jpg",
+      "checkedAt": "2026-04-16T15:00:01.460831+00:00"
     }
   }
 }
