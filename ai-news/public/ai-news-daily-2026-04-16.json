@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T11:18:17.011930+00:00",
+  "updatedAt": "2026-04-16T13:00:01.364993+00:00",
   "items": [
     {
       "title": "Accelerating the cyber defense ecosystem that protects us all",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2036
+      "score": 15.1666
     },
     {
       "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
@@ -30,11 +30,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
       "published": "2026-04-16T10:28:08+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.3248
+      "score": 13.2753
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.2427
+      "score": 11.2003
     },
     {
       "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
@@ -63,10 +63,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
       "published": "2026-04-16T09:13:23+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1882
+      "score": 11.1404
     },
     {
       "title": "UK banks get their Mythos briefing within days",
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-16T09:45:09+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2036
+      "score": 10.1551
     },
     {
       "title": "datasette.io news preview",
@@ -95,10 +95,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4003
+      "score": 7.363
     },
     {
       "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
@@ -111,10 +111,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
       "published": "2026-04-16T08:30:30+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6378
+      "score": 6.591
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -127,10 +127,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5341
+      "score": 6.4921
+    },
+    {
+      "title": "Spektr raises $20M to replace the compliance analyst’s copy-paste workflow with AI agents",
+      "url": "https://thenextweb.com/news/spektr-20m-series-a-ai-compliance",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Copenhagen fintech has built a platform of specialised AI agents that handle KYC and KYB work, document reviews, ownership mapping, risk rationale, in minutes rather than hours. NEA led the Series A; Northzone, Seedcamp, and PSV Tech participated. Spektr, a Copenhagen-based startup building AI infrastructure for financial compliance, has raised $20 million in a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Spektr.png",
+      "published": "2026-04-16T10:53:26+00:00",
+      "firstSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8874
     },
     {
       "title": "Musk is asking chip suppliers to move at ‘light speed’ for his Terafab AI chip plant",
@@ -143,58 +159,42 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2024/07/Untitled-design-17.jpg",
       "published": "2026-04-16T08:06:33+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5566
+      "score": 4.5103
     },
     {
-      "title": "Exclusive: Make opens a mentorship office at STATION F",
-      "url": "https://thenextweb.com/news/make-automation-station-f-mentorship-office-paris",
+      "title": "The EU has told Google what it must do to share search data with rivals",
+      "url": "https://thenextweb.com/news/eu-google-dma-search-data-ai-chatbots-measures",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The Celonis-owned visual automation platform, which already has more than 200 STATION F startups on its programme, is putting a permanent on-campus presence in Paris as it targets France as a strategic growth market. One-on-onementorship, workshops, and hackathon participation are all part of the offer. Make, the visual automation and AI agents platform owned by [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Station-F-x-Make.png",
-      "published": "2026-04-16T10:00:21+00:00",
-      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "summary": "The European Commission today sent Google its preliminary findings under the Digital Markets Act, proposing six specific measures governing how Google must share search ranking, query, click, and view data with competing search engines. AI chatbots with search functionalities are explicitly included as potential data beneficiaries. A public consultation opens tomorrow. The European Commission has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Google-EU.png",
+      "published": "2026-04-16T10:41:56+00:00",
+      "firstSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.811
+      "score": 4.4819
     },
     {
-      "title": "The Italian deeptech making graphene-based optical chips gets €211M",
-      "url": "https://thenextweb.com/news/camgraphic-2d-photonics-graphene-photonics-eu-grant",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "Why having “humans in the loop” in an AI war is an illusion",
+      "url": "https://www.technologyreview.com/2026/04/16/1136029/humans-in-the-loop-ai-war-illusion",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "CamGraPhIC, a subsidiary of Milan-based 2D Photonics, has received European Commission approval for €211M in Italian state funding to industrialise its graphene photonic interconnect technology and build a pilot manufacturing line near Milan. CamGraPhIC, the graphene photonics subsidiary of 2D Photonics, has received European Commission approval for €211 million in Italian state aid funding under [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/CamGraphic-team.png",
-      "published": "2026-04-16T06:53:00+00:00",
-      "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
+      "summary": "The availability of artificial intelligence for use in warfare is at the center of a legal battle between Anthropic and the Pentagon. This debate has become urgent, with AI playing a bigger role than ever before in the current conflict with Iran. AI is no longer just helping humans analyze intelligence. It is now an&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/human-war-loop2.jpg?resize=1200%2C600",
+      "published": "2026-04-16T12:00:00+00:00",
+      "firstSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1229
-    },
-    {
-      "title": "Quantum computing pioneer Chad Rigetti is back",
-      "url": "https://thenextweb.com/news/sygaldry-139m-quantum-accelerated-ai-servers-rigetti",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sygaldry Technologies has raised $105M in a Series A led by Breakthrough Energy Ventures, following a $34M seed from Initialized Capital. Its quantum-classical hybrid servers target the $5.2T in AI infrastructure investment projected through 2030. Sygaldry Technologies, an Ann Arbor-based startup building quantum-accelerated AI servers, has raised $139 million across a $34 million seed round [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sygaldry-Technologies.png",
-      "published": "2026-04-16T07:16:11+00:00",
-      "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7334
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2599
     }
   ],
   "errors": []
