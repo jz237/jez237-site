@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T09:45:08.131850+00:00",
+  "updatedAt": "2026-04-16T11:00:01.347770+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3776,6 +3776,14 @@
     "https://techcrunch.com/2026/04/16/deepl-known-for-text-translation-now-wants-to-translate-your-voice": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/DeepL_Voice2Voice_Conversations_2.png?resize=1200,804",
       "checkedAt": "2026-04-16T08:02:24.553361+00:00"
+    },
+    "https://www.techrepublic.com/article/news-eia-data-center-energy-pilot": {
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03262026-ai-data-centers-atmospheric-water-harvesting.jpg",
+      "checkedAt": "2026-04-16T11:00:01.347770+00:00"
+    },
+    "https://openai.com/index/accelerating-cyber-defense-ecosystem": {
+      "image": "",
+      "checkedAt": "2026-04-16T11:00:01.347770+00:00"
     }
   }
 }
