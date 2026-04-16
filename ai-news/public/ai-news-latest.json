@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-16T13:00:01.364993+00:00",
+  "updatedAt": "2026-04-16T14:00:01.584750+00:00",
   "items": [
     {
-      "title": "Text-as-Signal: Quantitative Semantic Scoring with Embeddings, Logprobs, and Noise Reduction",
+      "title": "KMMMU: Evaluation of Massive Multi-discipline Multimodal Understanding in Korean Language and Context",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,125 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-16T13:00:12.220255+00:00",
+      "published": "2026-04-16T14:00:10.186150+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.11
+    },
+    {
+      "title": "Anthropic Plots Major London Expansion",
+      "url": "https://www.wired.com/story/anthropic-plots-major-london-expansion",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As tensions with the US government mount, Anthropic has leased a new office with enough space to quadruple its 200-person headcount in London.",
+      "image": "https://media.wired.com/photos/69e0da3dae2b670940bc0783/master/pass/GettyImages-2261514586.jpg",
+      "published": "2026-04-16T13:49:35+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2847
+    },
+    {
+      "title": "Meta raises Quest 3 and Quest 3S prices due to RAM shortage",
+      "url": "https://techcrunch.com/2026/04/16/meta-raises-quest-3-and-quest-3s-prices-due-to-ram-shortage",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Starting April 19, the price of the Meta Quest 3S (128GB) and Meta Quest 3S (256GB) will go up by $50 to $349.99 and $449.99, respectively. The price of the Meta Quest 3 is going up by $100 to $599.99.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/09/Oculus-Quest-3-10.jpg?w=1200",
+      "published": "2026-04-16T13:49:32+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.2847
+    },
+    {
+      "title": "Canva’s AI 2.0 update goes all in on prompt-powered design tools",
+      "url": "https://www.theverge.com/tech/913068/canva-ai-2-update-prompt-based-editing-availability",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Canva has overhauled its design and workspace suite as it attempts to become the ultimate centralized hub for AI-powered content creation. The platform announced its Canva AI 2.0 update today, introducing updated tools and new prompt-based editing capabilities that allow users to make or adjust their work by describing what they want to create to [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Canva-AI-2.0.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
+      "published": "2026-04-16T13:07:09+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3334
+    },
+    {
+      "title": "No Need for Space Gear — Capcom’s ‘PRAGMATA’ Joins GeForce NOW on Launch Day",
+      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-pragmata",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Head straight for orbit with GeForce NOW — no space helmet required.  PRAGMATA, Capcom’s long-awaited sci-fi action adventure, touches down on GeForce NOW the same day it launches worldwide. The futuristic journey through a cold lunar station in the near future can be streamed instantly from the cloud to almost any device, no console or [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/GFN_Thursday-PRAGMATA.jpg",
+      "published": "2026-04-16T13:00:11+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.9599
+    },
+    {
+      "title": "Treating enterprise AI as an operating layer",
+      "url": "https://www.technologyreview.com/2026/04/16/1135554/treating-enterprise-ai-as-an-operating-layer",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "There’s a fault line running through enterprise AI, and it’s not the one getting the most attention. The public conversation still tracks foundation models and benchmarks — GPT versus Gemini, reasoning scores, and marginal capability gains. But in practice, the more durable advantage is structural: who owns the operating layer where intelligence is applied, governed,&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Ensemble-article-iStock-2213998103.jpg?resize=1200%2C600",
+      "published": "2026-04-16T13:00:00+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.7099
+    },
+    {
+      "title": "Canva’s AI assistant can now call various tools to make designs for you",
+      "url": "https://techcrunch.com/2026/04/16/canvas-ai-assistant-can-now-call-various-tools-to-make-designs-for-you",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The latest version of Canva's AI assistant lets users create editable designs with text prompts.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Canva-AI-2.0.jpeg?resize=1200%2C675",
+      "published": "2026-04-16T13:00:00+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7599
+    },
+    {
+      "title": "Making AI operational in constrained public sector environments",
+      "url": "https://www.technologyreview.com/2026/04/16/1135216/making-ai-operational-in-constrained-public-sector-environments",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The AI boom has hit across industries, and public sector organizations are facing pressure to accelerate adoption. At the same time, government institutions face distinct constraints around security, governance, and operations that set them apart from their business counterparts. For this reason, purpose-built small language models (SLMs) offer a promising path to operationalize AI in&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Elastic-article-iStock-2148123501.jpg?resize=1200%2C600",
+      "published": "2026-04-16T13:00:00+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
     },
     {
       "title": "This simulation startup wants to be the Cursor for physical AI",
@@ -28,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Antioch-Team.jpg?resize=1200%2C900",
       "published": "2026-04-16T12:30:00+00:00",
       "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2748
+      "score": 2.2451
     },
     {
       "title": "Why having “humans in the loop” in an AI war is an illusion",
@@ -44,10 +157,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/human-war-loop2.jpg?resize=1200%2C600",
       "published": "2026-04-16T12:00:00+00:00",
       "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2599
+      "score": 4.2305
     },
     {
       "title": "Cambridge biotech STORM Therapeutics raises $56M",
@@ -60,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/STORM-Therapeutics.png",
       "published": "2026-04-16T11:25:01+00:00",
       "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1027
+      "score": 2.0738
     },
     {
       "title": "This Beanie Is Designed to Read Your Thoughts",
@@ -76,10 +189,10 @@
       "image": "https://media.wired.com/photos/69df9cc95ba8ba60af0b1ac8/master/pass/Sabi-3.jpeg",
       "published": "2026-04-16T11:00:00+00:00",
       "firstSeen": "2026-04-16T11:18:17.011930+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.202
     },
     {
       "title": "Spektr raises $20M to replace the compliance analyst’s copy-paste workflow with AI agents",
@@ -92,10 +205,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Spektr.png",
       "published": "2026-04-16T10:53:26+00:00",
       "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8874
+      "score": 5.859
     },
     {
       "title": "The EU has told Google what it must do to share search data with rivals",
@@ -108,10 +221,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Google-EU.png",
       "published": "2026-04-16T10:41:56+00:00",
       "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4819
+      "score": 4.4536
     },
     {
       "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
@@ -124,11 +237,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
       "published": "2026-04-16T10:28:08+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2753
+      "score": 13.2472
     },
     {
       "title": "US Moves Toward Mandatory Data Center Energy Reporting as EIA Pilot Expands",
@@ -141,10 +254,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03262026-ai-data-centers-atmospheric-water-harvesting.jpg",
       "published": "2026-04-16T10:21:21+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2721
+      "score": 2.2441
     },
     {
       "title": "Exclusive: Make opens a mentorship office at STATION F",
@@ -157,10 +270,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Station-F-x-Make.png",
       "published": "2026-04-16T10:00:21+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7622
+      "score": 3.7345
     },
     {
       "title": "UK banks get their Mythos briefing within days",
@@ -173,10 +286,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-16T09:45:09+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1551
+      "score": 10.1276
     },
     {
       "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
@@ -189,10 +302,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
       "published": "2026-04-16T09:13:23+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1404
+      "score": 11.1133
     },
     {
       "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
@@ -205,10 +318,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
       "published": "2026-04-16T08:30:30+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.591
+      "score": 6.5644
     },
     {
       "title": "Musk is asking chip suppliers to move at ‘light speed’ for his Terafab AI chip plant",
@@ -221,10 +334,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2024/07/Untitled-design-17.jpg",
       "published": "2026-04-16T08:06:33+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5103
+      "score": 4.4839
     },
     {
       "title": "DeepL, known for text translation, now wants to translate your voice",
@@ -237,10 +350,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/DeepL_Voice2Voice_Conversations_2.png?resize=1200%2C804",
       "published": "2026-04-16T08:00:00+00:00",
       "firstSeen": "2026-04-16T08:02:24.553361+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "Cadence and Nvidia are bridging the simulation gap that’s slowing down robotics",
@@ -253,10 +366,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Cadence-and-Nvidia.png",
       "published": "2026-04-16T07:24:56+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2919
+      "score": 2.2661
     },
     {
       "title": "Quantum computing pioneer Chad Rigetti is back",
@@ -269,10 +382,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sygaldry-Technologies.png",
       "published": "2026-04-16T07:16:11+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6881
+      "score": 2.6624
     },
     {
       "title": "Amazon-backed nuclear startup X-energy files for an IPO that could raise up to $814M",
@@ -288,7 +401,7 @@
       "lastSeen": "2026-04-16T11:18:17.011930+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9834
+      "score": 1.9579
     },
     {
       "title": "The Italian deeptech making graphene-based optical chips gets €211M",
@@ -304,7 +417,7 @@
       "lastSeen": "2026-04-16T11:18:17.011930+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0781
+      "score": 3.0527
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -317,10 +430,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.2003
+      "score": 11.1762
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -333,10 +446,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4921
+      "score": 6.4682
     },
     {
       "title": "datasette.io news preview",
@@ -349,10 +462,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.363
+      "score": 7.3418
     },
     {
       "title": "Accelerating the cyber defense ecosystem that protects us all",
@@ -365,11 +478,27 @@
       "image": "",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1666
+      "score": 15.1456
+    },
+    {
+      "title": "Training and Finetuning Multimodal Embedding & Reranker Models with Sentence Transformers",
+      "url": "https://huggingface.co/blog/train-multimodal-sentence-transformers",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+      "published": "2026-04-16T00:00:00+00:00",
+      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7756
     },
     {
       "title": "datasette-export-database 0.3a1",
@@ -382,10 +511,10 @@
       "image": "",
       "published": "2026-04-15T23:52:35+00:00",
       "firstSeen": "2026-04-15T23:56:37.200188+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.654
+      "score": 2.633
     },
     {
       "title": "datasette 1.0a27",
@@ -398,10 +527,10 @@
       "image": "",
       "published": "2026-04-15T23:16:34+00:00",
       "firstSeen": "2026-04-15T23:56:37.200188+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1413
+      "score": 5.1207
     },
     {
       "title": "Tech Layoffs Continue: Snap Cuts 1,000 Jobs, Citing ‘Rapid Advancements’ in AI",
@@ -414,10 +543,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/souvik-banerjee-PQXlYuQeX4c-unsplash-1.jpg",
       "published": "2026-04-15T20:00:21+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5361
+      "score": 3.5173
     },
     {
       "title": "Trump’s posting even more AI-generated Trump-Jesus fan art",
@@ -430,10 +559,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/trump-jesus-altered.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C31.744282171397%2C100%2C36.511435657206",
       "published": "2026-04-15T19:50:31+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.943
+      "score": 1.9243
     },
     {
       "title": "SS&C Intralinks DealCentre AI vs. Datasite: Which platform is built for the future of dealmaking?",
@@ -446,10 +575,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/technology-meets-humanity-background-modern-remak-2026-01-07-07-37-57-utc-1.jpg",
       "published": "2026-04-15T19:31:07+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8269
+      "score": 2.8083
     },
     {
       "title": "OpenAI updates its Agents SDK to help enterprises build safer, more capable agents",
@@ -462,10 +591,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
       "published": "2026-04-15T19:28:36+00:00",
       "firstSeen": "2026-04-15T19:41:27.010212+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.3661
+      "score": 1.3475
     },
     {
       "title": "Hightouch reaches $100M ARR fueled by marketing tools powered by AI",
@@ -478,10 +607,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/founders-photo.webp?resize=1200%2C1200",
       "published": "2026-04-15T18:55:12+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2557
+      "score": 4.2375
     },
     {
       "title": "LinkedIn data shows AI isn’t to blame for hiring decline… yet",
@@ -494,10 +623,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/job-search-GettyImages-2161243486.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:51:54+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8547
+      "score": 1.8365
     },
     {
       "title": "AI learning app Gizmo levels up with 13M users and a $22M investment",
@@ -510,139 +639,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1263424631.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:38:10+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9505
-    },
-    {
-      "title": "Can AI judge journalism? A Thiel-backed startup says yes, even if it risks chilling whistleblowers",
-      "url": "https://techcrunch.com/2026/04/15/can-ai-judge-journalism-a-thiel-backed-startup-says-yes-even-if-it-risks-chilling-whistleblowers",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Objection, a Thiel-backed startup, aims to use AI to judge journalism, letting users pay to challenge stories. Critics warn it could chill whistleblowers and reshape how media accountability works.",
-      "image": "",
-      "published": "2026-04-15T18:33:20+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.849
-    },
-    {
-      "title": "Google rolls out a native Gemini app for Mac",
-      "url": "https://techcrunch.com/2026/04/15/google-rolls-out-a-native-gemini-app-for-mac",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "You can share anything on their screen with Gemini to get help with what they're looking at in the moment, including local files.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
-      "published": "2026-04-15T18:22:13+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.9456
-    },
-    {
-      "title": "My bets on open models, mid-2026",
-      "url": "https://www.interconnects.ai/p/my-bets-on-open-models-mid-2026",
-      "source": "Interconnects AI",
-      "sourceUrl": "https://www.interconnects.ai/feed",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "What I expect to come next and why, focused on the open-closed gap.",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/8be08b29-d70a-43f3-8422-6b952816ddab_3182x1790.png",
-      "published": "2026-04-15T18:20:00+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9149
-    },
-    {
-      "title": "Google launches a Gemini AI app on Mac",
-      "url": "https://www.theverge.com/tech/912638/google-gemini-mac-app",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Google is launching a new Gemini app on Mac that allows you to interact with the AI assistant without switching windows on your desktop. With the app, you can use the Option + Space shortcut to pull up a floating chat bubble, where you can ask Gemini questions and share your window. Before sharing your [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Gemini-for-MacOS_03_Capsule-Image_16x9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
-      "published": "2026-04-15T18:10:15+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 20.212
-    },
-    {
-      "title": "YouTube Will Show Fewer Livestream Ads During Purchases and Chat Spikes",
-      "url": "https://www.techrepublic.com/article/news-youtube-livestream-ads-update",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "YouTube is changing livestream ad timing to avoid interrupting purchases and peak chat moments, giving creators a clearer view of where automated monetization is headed.\nThe post YouTube Will Show Fewer Livestream Ads During Purchases and Chat Spikes appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2022/02/AdobeStock_192565042-scaled.jpeg",
-      "published": "2026-04-15T18:06:32+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8009
-    },
-    {
-      "title": "Accel raises $5 billion for AI as venture capital bets reach infrastructure scale",
-      "url": "https://thenextweb.com/news/accel-5-billion-fund-ai-anthropic-cursor-venture-capital",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Accel has raised $5 billion in new capital, comprising a $4 billion Leaders Fund V and a $650 million sidecar, targeting 20-25 late-stage AI investments at an average cheque size of $200 million. The raise follows standout returns from its Anthropic stake (invested at $183B, now valued near $800B) and Cursor (backed at [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/accel-5-billion-fund-ai-anthropic-cursor-venture-capital.png",
-      "published": "2026-04-15T18:00:37+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T11:18:17.011930+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.2991
-    },
-    {
-      "title": "AI Could Democratize One of Tech's Most Valuable Resources",
-      "url": "https://www.wired.com/story/ai-could-democratize-one-of-techs-most-valuable-resources",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AI is making it easier to design chips and optimize software for different silicon. Some startups envision a revolution in chipmaking.",
-      "image": "https://media.wired.com/photos/69dea084bbe4a9ff56b3014b/master/pass/AL-Lab-AI-Could-Democratize-One-of-Techs-Most-Valuable-Resources-Business.jpg",
-      "published": "2026-04-15T18:00:00+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.2389
-    },
-    {
-      "title": "The musician-turned-biotech-founder waiting to fundraise",
-      "url": "https://techcrunch.com/podcast/the-musician-turned-biotech-founder-waiting-to-fundraise",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "When Grammy-nominated singer-songwriter&#160;Aloe Blacc&#160;got COVID despite being vaccinated and boosted, he tried to fund research for a better solution.&#160;What&#160;he&#160;quickly&#160;found&#160;out? You&#160;can&#8217;t&#160;just write a check in biotech. Regulators require a commercialization plan, and philanthropy&#160;doesn&#8217;t&#160;move science through clinical trials or get you a license on university IP. Now,&#160;he&#8217;s&#160;bootstrapping a cancer drug platform targeting pancreatic cancer, a disease that [&#8230;]",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Copy-of-Stand-Together-Photo-By-Zach-Bell.jpg?resize=1200%2C1200",
-      "published": "2026-04-15T17:58:28+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3384
+      "score": 2.9324
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0759
+      "score": 2.0689
     },
     {
       "title": "Dark Breath",
@@ -671,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7208
+      "score": 1.7159
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -687,10 +687,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1224
+      "score": 1.1223
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -703,7 +703,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-16T13:00:01.364993+00:00",
+      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8917
