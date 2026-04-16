@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T08:00:01.415942+00:00",
+  "updatedAt": "2026-04-16T09:00:01.664999+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3772,6 +3772,10 @@
     "https://www.marktechpost.com/2026/04/15/a-coding-implementation-to-build-multi-agent-ai-systems-with-smolagents-using-code-execution-tool-calling-and-dynamic-orchestration": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "checkedAt": "2026-04-16T05:00:01.814597+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/deepl-known-for-text-translation-now-wants-to-translate-your-voice": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/DeepL_Voice2Voice_Conversations_2.png?resize=1200,804",
+      "checkedAt": "2026-04-16T09:00:01.664999+00:00"
     }
   }
 }
