@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T19:36:10.442326+00:00",
+  "updatedAt": "2026-04-16T21:00:01.611767+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3904,6 +3904,14 @@
     "https://openai.com/index/introducing-gpt-rosalind": {
       "image": "",
       "checkedAt": "2026-04-16T19:36:10.442326+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/16/llm-anthropic": {
+      "image": "",
+      "checkedAt": "2026-04-16T21:00:01.611767+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/physical-intelligence-a-hot-robotics-startup-says-its-new-robot-brain-can-figure-out-tasks-it-was-never-taught": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-12.22.07-PM.png?resize=1200,589",
+      "checkedAt": "2026-04-16T21:00:01.611767+00:00"
     }
   }
 }
