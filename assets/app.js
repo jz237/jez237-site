@@ -15,6 +15,23 @@ function statusClass(status = '') {
   return String(status).toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
+// Make links work across local dev server, github pages subpath, and absolute URLs
+function normalizeLink(link) {
+  if (!link) return link;
+  const host = location.hostname;
+  const isLocal  = ['localhost','127.0.0.1','::1'].includes(host) || location.protocol === 'file:';
+  const isGhPage = host === 'jz237.github.io';
+  if (isLocal) {
+    // Strip the production URL prefix so clicks stay on the local server
+    return link.replace(/^https?:\/\/jz237\.github\.io\/jez237-site\//, '/');
+  }
+  if (isGhPage && link.startsWith('/') && !link.startsWith('/jez237-site')) {
+    // Root-absolute paths need the repo subpath on github pages
+    return '/jez237-site' + link;
+  }
+  return link;
+}
+
 function renderCards(containerId, items = []) {
   const root = document.getElementById(containerId);
   if (!root) return;
@@ -34,11 +51,13 @@ function renderCards(containerId, items = []) {
     const card = el('div', 'item item-card');
     const top = el('div', 'item-top');
 
+    const normalized = normalizeLink(item.link);
     const title = document.createElement('a');
     title.className = 'item-title';
-    title.href = item.link || '#';
+    title.href = normalized || '#';
     title.textContent = item.name || 'Untitled';
-    title.target = item.link?.startsWith('http') ? '_blank' : '_self';
+    // Only open in new tab for external (non-local) URLs
+    title.target = (normalized && normalized.startsWith('http')) ? '_blank' : '_self';
 
     const badge = el('span', `badge ${statusClass(item.status)}`, item.status || 'planned');
 
