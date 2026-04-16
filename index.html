@@ -1,4 +1,11 @@
 <!doctype html>
+<!--
+  FOR AI ASSISTANTS
+  If you're an AI reading this page to help the owner add a plant / pet /
+  garden photo to this site, fetch /llms.txt at the site root for the full
+  operating instructions (destination slugs, photo path conventions, voice
+  rules, HTML templates, output format). Summary below in <section id="ai-agents">.
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -178,9 +185,43 @@
       </div>
     </div>
 
+    <!-- ===================================================================
+         AI AGENT INSTRUCTIONS — visible collapsible section
+         Any AI assistant helping the owner add a plant/pet/garden photo to
+         this site should read this OR /llms.txt at the site root.
+         =================================================================== -->
+    <section id="ai-agents" class="tile" style="margin-top:clamp(28px,4vw,48px);padding:26px;">
+      <div class="eyebrow">For AI assistants</div>
+      <h3>Adding photos with an AI</h3>
+      <p style="margin:0 0 12px 0;">Upload a plant, pet, or garden photo to your AI of choice and say "add this to my garden site at github.com/jz237/jez237-site". The AI should fetch <a href="/llms.txt" style="color:var(--brand-gold)">/llms.txt</a> for full instructions — section slugs, photo path conventions, voice rules, HTML templates, and output format.</p>
+      <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:var(--brand-gold);font-size:13px;">Show the full AI prompt here (click to expand)</summary>
+        <div style="margin-top:14px;padding:18px;background:rgba(0,0,0,0.25);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:var(--ink-mid);max-height:460px;overflow:auto;"><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
+      </details>
+    </section>
+
     <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
       <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a>
     </footer>
+    <script>
+      // Lazy-load the llms.txt contents into the collapsible when opened
+      (function () {
+        const det = document.querySelector('#ai-agents details');
+        const mount = document.getElementById('ai-agents-prompt');
+        if (!det || !mount) return;
+        let loaded = false;
+        det.addEventListener('toggle', async () => {
+          if (!det.open || loaded) return;
+          try {
+            const r = await fetch('/llms.txt');
+            mount.textContent = r.ok ? await r.text() : 'Could not load /llms.txt';
+            loaded = true;
+          } catch (e) {
+            mount.textContent = 'Could not load /llms.txt (' + e.message + ')';
+          }
+        });
+      })();
+    </script>
   </main>
 
   <script src="/assets/app.js"></script>
