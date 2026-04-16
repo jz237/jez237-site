@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T15:53:31.137022+00:00",
+  "updatedAt": "2026-04-16T16:38:09.069329+00:00",
   "items": [
     {
       "title": "Anthropic releases a new Opus model amid Mythos Preview buzz",
@@ -12,12 +12,12 @@
       "summary": "Anthropic has released its most powerful \"generally available\" model to date: Claude Opus 4.7. The company called it a step up from Opus 4.6 for advanced software engineering tasks, particularly in complex coding areas that in the past required more hand-holding. It's also supposed to be better at analyzing images and following instructions, and it [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-16T15:59:24+00:00",
-      "firstSeen": "2026-04-16T16:00:01.506124+00:00",
-      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
+      "firstSeen": "2026-04-16T16:38:09.069329+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.8597
+      "score": 20.8404
     },
     {
       "title": "Treating enterprise AI as an operating layer",
@@ -30,11 +30,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Ensemble-article-iStock-2213998103.jpg?resize=1200%2C600",
       "published": "2026-04-16T13:00:00+00:00",
       "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.6551
+      "score": 17.6343
     },
     {
       "title": "Introducing Claude Opus 4.7",
@@ -47,11 +47,11 @@
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/96ea2509a90e527642c822303e56296a07bcfce4-1920x1080.png",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T15:53:31.137022+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.4074
+      "score": 16.393
     },
     {
       "title": "Accelerating the cyber defense ecosystem that protects us all",
@@ -64,11 +64,27 @@
       "image": "",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1074
+      "score": 15.093
+    },
+    {
+      "title": "Gemini can now pull from Google Photos to generate personalized images",
+      "url": "https://www.theverge.com/tech/913202/gemini-personal-intelligence-images-nano-banana",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Google's Personal Intelligence feature, which lets Gemini pull data from apps like Google Photos to offer responses tailored to you, can now use that data and its Nano Banana 2 image model to create images based on your personal context. With the feature, you can use prompts like \"Design my dream house\" or \"Create a [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-16-at-8.32.59AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.2902166102043%2C100%2C93.419566779591&amp%3Bw=1200",
+      "published": "2026-04-16T16:00:00+00:00",
+      "firstSeen": "2026-04-16T16:38:09.069329+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.8407
     },
     {
       "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
@@ -81,11 +97,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
       "published": "2026-04-16T10:28:08+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.1962
+      "score": 13.1768
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -98,10 +114,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.1323
+      "score": 11.1157
     },
     {
       "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
@@ -114,10 +130,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
       "published": "2026-04-16T09:13:23+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.064
+      "score": 11.0453
     },
     {
       "title": "UK banks get their Mythos briefing within days",
@@ -130,10 +146,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-16T09:45:09+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0775
+      "score": 10.0586
+    },
+    {
+      "title": "New ways to create personalized images in the Gemini app",
+      "url": "https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence-nano-banana",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Example images made with Personal Intelligence",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Blog_post_header.max-600x600.format-webp.webp",
+      "published": "2026-04-16T16:00:00+00:00",
+      "firstSeen": "2026-04-16T16:38:09.069329+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.5107
     },
     {
       "title": "datasette.io news preview",
@@ -146,10 +178,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3034
+      "score": 7.2888
     },
     {
       "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
@@ -162,58 +194,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
       "published": "2026-04-16T08:30:30+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
+      "lastSeen": "2026-04-16T16:38:09.069329+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.516
-    },
-    {
-      "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
-      "url": "https://www.marktechpost.com/2026/04/15/a-coding-implementation-to-build-multi-agent-ai-systems-with-smolagents-using-code-execution-tool-calling-and-dynamic-orchestration",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build an advanced, production-ready agentic system using SmolAgents and demonstrate how modern, lightweight AI agents can reason, execute code, dynamically manage tools, and collaborate across multiple agents. We start by installing dependencies and configuring a powerful yet efficient LLM backend, and then progressively design custom tools, including mathematical utilities, memory storage, [&#8230;]\nThe post A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
-      "published": "2026-04-16T04:38:31+00:00",
-      "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.4248
-    },
-    {
-      "title": "Adobe Expands Firefly Into AI-Powered Editing Assistant Across Creative Apps",
-      "url": "https://www.techrepublic.com/article/news-adobe-agentic-firefly-workflows",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Adobe unveils Firefly AI Assistant, new editing tools, and adds partner models as it turns Firefly into a hub for agentic creative workflows.\nThe post Adobe Expands Firefly Into AI-Powered Editing Assistant Across Creative Apps appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-04-16T14:58:37+00:00",
-      "firstSeen": "2026-04-16T15:53:31.137022+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 6.0224
-    },
-    {
-      "title": "Adobe Expands Firefly Into AI-Powered Editing Assistant Across Creative Apps",
-      "url": "https://www.techrepublic.com/article/news-adobe-agentic-firefly-workflows",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Copenhagen fintech has built a platform of specialised AI agents that handle KYC and KYB work, document reviews, ownership mapping, risk rationale, in minutes rather than hours. NEA led the Series A; Northzone, Seedcamp, and PSV Tech participated. Spektr, a Copenhagen-based startup building AI infrastructure for financial compliance, has raised $20 million in a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Spektr.png",
-      "published": "2026-04-16T10:53:26+00:00",
-      "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T15:53:31.137022+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8073
+      "score": 6.4977
     }
   ],
   "errors": []
