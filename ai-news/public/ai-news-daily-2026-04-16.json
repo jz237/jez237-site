@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T08:02:24.553361+00:00",
+  "updatedAt": "2026-04-16T09:45:08.131850+00:00",
   "items": [
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.3303
+      "score": 11.2834
+    },
+    {
+      "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
+      "url": "https://thenextweb.com/news/apple-grok-app-store-threat-deepfakes-xai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A letter Apple sent to US senators, obtained by NBC News, reveals that Apple rejected an initial Grok update and warned the app could be removed unless xAI made further changes. Only a second submission passed. Apple privately threatened to remove Grok, xAI’s AI chatbot, from the App Store in January after Elon Musk’s company [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
+      "published": "2026-04-16T09:13:23+00:00",
+      "firstSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2339
     },
     {
       "title": "datasette.io news preview",
@@ -29,10 +45,26 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4772
+      "score": 7.436
+    },
+    {
+      "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
+      "url": "https://www.marktechpost.com/2026/04/16/ucsd-and-together-ai-research-introduces-parcae-a-stable-architecture-for-looped-language-models-that-achieves-the-quality-of-a-transformer-twice-the-size",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The dominant recipe for building better language models has not changed much since the Chinchilla era: spend more FLOPs, add more parameters, train on more tokens. But as inference deployments consume an ever-growing share of compute and model deployments push toward the edge, researchers are increasingly asking a harder question — can you scale quality [&#8230;]\nThe post UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
+      "published": "2026-04-16T08:30:30+00:00",
+      "firstSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.6826
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -45,10 +77,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6209
+      "score": 6.5744
+    },
+    {
+      "title": "Musk is asking chip suppliers to move at ‘light speed’ for his Terafab AI chip plant",
+      "url": "https://thenextweb.com/news/musk-is-asking-chip-suppliers-to-move-at-light-speed-for-his-terafab-ai-chip-plant",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "According to Bloomberg, teams from SpaceX and Tesla have approached Applied Materials, Tokyo Electron, Lam Research, and Samsung for price quotes and delivery times on chipmaking equipment.  Teams working for Elon Musk have reached out to major chip industry suppliers including Applied Materials, Tokyo Electron, and Lam Research, as well as chip manufacturing partner Samsung [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2024/07/Untitled-design-17.jpg",
+      "published": "2026-04-16T08:06:33+00:00",
+      "firstSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6009
     },
     {
       "title": "The Italian deeptech making graphene-based optical chips gets €211M",
@@ -61,10 +109,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/CamGraphic-team.png",
       "published": "2026-04-16T06:53:00+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2152
+      "score": 3.1657
     },
     {
       "title": "Quantum computing pioneer Chad Rigetti is back",
@@ -77,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sygaldry-Technologies.png",
       "published": "2026-04-16T07:16:11+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8267
+      "score": 2.7767
     },
     {
       "title": "Cadence and Nvidia are bridging the simulation gap that’s slowing down robotics",
@@ -93,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Cadence-and-Nvidia.png",
       "published": "2026-04-16T07:24:56+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4311
+      "score": 2.3809
     },
     {
       "title": "Md. Naim Molla, Md Muhtasim Munif Fahim, Md. Binyamin, Md Jahid Hasan Imran, Tonmoy Shil, Nura Rayhan, Md Rezaul Karim",
@@ -107,9 +155,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-16T08:02:29.057986+00:00",
+      "published": "2026-04-16T09:45:11.705341+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -125,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/DeepL_Voice2Voice_Conversations_2.png?resize=1200%2C804",
       "published": "2026-04-16T08:00:00+00:00",
       "firstSeen": "2026-04-16T08:02:24.553361+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2888
+      "score": 2.2377
     },
     {
       "title": "Amazon-backed nuclear startup X-energy files for an IPO that could raise up to $814M",
@@ -141,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-backed-nuclear-startup-X-energy.png",
       "published": "2026-04-16T07:05:22+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1213
+      "score": 2.0716
     }
   ],
   "errors": []
