@@ -1,7 +1,24 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T14:09:36.646618+00:00",
+  "updatedAt": "2026-04-16T16:00:01.506124+00:00",
   "items": [
+    {
+      "title": "Anthropic releases a new Opus model amid Mythos Preview buzz",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/913184/anthropic-claude-opus-4-7-cybersecurity",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Anthropic has released its most powerful \"generally available\" model to date: Claude Opus 4.7. The company called it a step up from Opus 4.6 for advanced software engineering tasks, particularly in complex coding areas that in the past required more hand-holding. It's also supposed to be better at analyzing images and following instructions, and it [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-16T15:59:24+00:00",
+      "firstSeen": "2026-04-16T16:00:01.506124+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 20.8597
+    },
     {
       "title": "Treating enterprise AI as an operating layer",
       "url": "https://www.technologyreview.com/2026/04/16/1135554/treating-enterprise-ai-as-an-operating-layer",
@@ -9,15 +26,32 @@
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "There’s a fault line running through enterprise AI, and it’s not the one getting the most attention. The public conversation still tracks foundation models and benchmarks — GPT versus Gemini, reasoning scores, and marginal capability gains. But in practice, the more durable advantage is structural: who owns the operating layer where intelligence is applied, governed,&#8230;",
+      "summary": "There’s a fault line running through enterprise AI, and it’s not the one getting the most attention. The public conversation still tracks foundation models and benchmarks—GPT versus Gemini, reasoning scores, and marginal capability gains. But in practice, the more durable advantage is structural: who owns the operating layer where intelligence is applied, governed, and improved.&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Ensemble-article-iStock-2213998103.jpg?resize=1200%2C600",
       "published": "2026-04-16T13:00:00+00:00",
       "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7051
+      "score": 17.652
+    },
+    {
+      "title": "Introducing Claude Opus 4.7",
+      "url": "https://www.anthropic.com/news/claude-opus-4-7",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Introducing Claude Opus 4.7",
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/96ea2509a90e527642c822303e56296a07bcfce4-1920x1080.png",
+      "published": "2026-04-16T00:00:00+00:00",
+      "firstSeen": "2026-04-16T16:00:01.506124+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 16.4053
     },
     {
       "title": "Accelerating the cyber defense ecosystem that protects us all",
@@ -30,11 +64,11 @@
       "image": "",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1423
+      "score": 15.1053
     },
     {
       "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
@@ -47,11 +81,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
       "published": "2026-04-16T10:28:08+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2428
+      "score": 13.1933
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -64,10 +98,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.1724
+      "score": 11.1299
     },
     {
       "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
@@ -80,10 +114,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
       "published": "2026-04-16T09:13:23+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.109
+      "score": 11.0612
     },
     {
       "title": "UK banks get their Mythos briefing within days",
@@ -96,10 +130,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-16T09:45:09+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1232
+      "score": 10.0747
     },
     {
       "title": "datasette.io news preview",
@@ -112,10 +146,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3385
+      "score": 7.3012
     },
     {
       "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
@@ -128,10 +162,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
       "published": "2026-04-16T08:30:30+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5602
+      "score": 6.5133
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -144,58 +178,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4644
+      "score": 6.4224
     },
     {
-      "title": "Spektr raises $20M to replace the compliance analyst’s copy-paste workflow with AI agents",
-      "url": "https://thenextweb.com/news/spektr-20m-series-a-ai-compliance",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "Adobe Expands Firefly Into AI-Powered Editing Assistant Across Creative Apps",
+      "url": "https://www.techrepublic.com/article/news-adobe-agentic-firefly-workflows",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The Copenhagen fintech has built a platform of specialised AI agents that handle KYC and KYB work, document reviews, ownership mapping, risk rationale, in minutes rather than hours. NEA led the Series A; Northzone, Seedcamp, and PSV Tech participated. Spektr, a Copenhagen-based startup building AI infrastructure for financial compliance, has raised $20 million in a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Spektr.png",
-      "published": "2026-04-16T10:53:26+00:00",
-      "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
+      "summary": "Adobe unveils Firefly AI Assistant, new editing tools, and adds partner models as it turns Firefly into a hub for agentic creative workflows.\nThe post Adobe Expands Firefly Into AI-Powered Editing Assistant Across Creative Apps appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04162026-adobe-agentic-firefly-workflows.jpg",
+      "published": "2026-04-16T14:58:37+00:00",
+      "firstSeen": "2026-04-16T16:00:01.506124+00:00",
+      "lastSeen": "2026-04-16T16:00:01.506124+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8545
-    },
-    {
-      "title": "Canva’s AI assistant can now call various tools to make designs for you",
-      "url": "https://techcrunch.com/2026/04/16/canvas-ai-assistant-can-now-call-various-tools-to-make-designs-for-you",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The latest version of Canva's AI assistant lets users create editable designs with text prompts.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Canva-AI-2.0.jpeg?resize=1200%2C675",
-      "published": "2026-04-16T13:00:00+00:00",
-      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.7551
-    },
-    {
-      "title": "Anthropic Plots Major London Expansion",
-      "url": "https://www.wired.com/story/anthropic-plots-major-london-expansion",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As tensions with the US government mount, Anthropic has leased a new office with enough space to quadruple its 200-person head count in London.",
-      "image": "https://media.wired.com/photos/69e0da3dae2b670940bc0783/master/pass/GettyImages-2261514586.jpg",
-      "published": "2026-04-16T13:49:35+00:00",
-      "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T14:09:36.646618+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2798
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.0192
     }
   ],
   "errors": []
