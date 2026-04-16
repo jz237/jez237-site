@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Garden Beds — Plant Progress</title>
   <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/plant-page.css" />
   <link rel="stylesheet" href="../../assets/plant-enhance.css" />
   <style>
     :root {
@@ -82,23 +83,7 @@
   </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../../index.html">Home</a>
-        <a href="../../index.html#projects">Projects</a>
-        <a href="../../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../../photos/">Photos</a>
-        <a href="../../plants/">Plant Progress</a>
-        <a href="../../ai-news/">AI News</a>
-        <a href="../../plex/">Plex</a>
-        <a href="../../ops/">Ops Center</a>
-        <a href="../../garden/">Garden Calendar</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
     <section class="hero">
@@ -122,7 +107,7 @@
             </div>
           </div>
           <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-shaina-angle.jpg" alt="Side house bed with Shaina maple and companion shrubs" />
+            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-shaina-angle.jpg" alt="Side house bed with Shaina maple and companion shrubs" / loading="lazy" decoding="async">
           </div>
         </div>
         <ul class="bullet-list">
@@ -143,7 +128,7 @@
           </div>
         </div>
         <div>
-          <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Side house bed — barberry with salvia, heuchera, and holly" />
+          <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Side house bed — barberry with salvia, heuchera, and holly" / loading="lazy" decoding="async">
         </div>
       </section>
 
@@ -158,7 +143,7 @@
             </div>
           </div>
           <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-12.jpg" alt="Side house bed planning photo" />
+            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-12.jpg" alt="Side house bed planning photo" / loading="lazy" decoding="async">
           </div>
         </div>
         <ul class="bullet-list">
@@ -184,7 +169,7 @@
             </div>
           </div>
           <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg" alt="Mixed perennial bed — Orange Rocket barberry with companions" />
+            <img class="photo" src="../../photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg" alt="Mixed perennial bed — Orange Rocket barberry with companions" / loading="lazy" decoding="async">
           </div>
         </div>
         <ul class="bullet-list">
@@ -215,7 +200,7 @@
             </div>
           </div>
           <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Mixed perennial bed — spring emergence" />
+            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Mixed perennial bed — spring emergence" / loading="lazy" decoding="async">
           </div>
         </div>
         <ul class="bullet-list">
@@ -228,7 +213,7 @@
 
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
   <script>
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -255,5 +240,6 @@
     });
   </script>
   <script src="../../assets/plant-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
 </body>
 </html>
