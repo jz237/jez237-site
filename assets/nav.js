@@ -67,8 +67,28 @@
       linkBox.appendChild(a);
     });
 
+    // Theme toggle
+    const saved = (function(){ try { return localStorage.getItem('theme') || ''; } catch(_) { return ''; } })();
+    if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    const toggle = document.createElement('button');
+    toggle.className = 'theme-toggle';
+    toggle.type = 'button';
+    toggle.setAttribute('aria-label', 'Toggle color theme');
+    function updateToggleLabel() {
+      toggle.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '🌙' : '☀';
+    }
+    updateToggleLabel();
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? '' : 'light';
+      if (next) document.documentElement.setAttribute('data-theme', next);
+      else document.documentElement.removeAttribute('data-theme');
+      try { localStorage.setItem('theme', next); } catch(_) {}
+      updateToggleLabel();
+    });
+
     nav.appendChild(brand);
     nav.appendChild(linkBox);
+    nav.appendChild(toggle);
     mount.appendChild(nav);
   }
 
