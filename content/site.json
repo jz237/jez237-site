@@ -50,30 +50,40 @@
   ],
   "games": [
     {
-      "name": "⚔️ Missile Command: Aurora Siege",
-      "desc": "Built by Claude Opus 4.6. Defend the skyline from waves of missiles — tap to fire interceptors, chain explosions, earn combos. Shifting aurora sky, detailed cityscape, synthesized audio. Mobile-first.",
+      "name": "👷 Hard Hat Mac",
+      "desc": "Classic 1983 Apple II remake — 3 construction levels.",
       "status": "live",
-      "link": "https://jz237.github.io/jez237-site/games/missile-command-aurora/",
-      "model": "Claude Opus 4.6"
+      "link": "https://jz237.github.io/games/hard-hat-mac/"
     },
     {
-      "name": "⚔️ Missile Command: GPT Build",
-      "desc": "Same brief. Different model. Built from scratch by GPT-5.4. Same concept, totally different execution — tap to compare how two frontier models interpret the same classic. Mobile-first.",
+      "name": "💎 Crystal Cavern",
+      "desc": "Descend through dark crystal caves with dynamic lighting.",
       "status": "live",
-      "link": "https://jz237.github.io/jez237-site/games/missile-command-gpt/",
-      "model": "GPT-5.4"
+      "link": "https://jz237.github.io/games/2026-03-16/crystal-cavern/"
     },
     {
-      "name": "🪨 Boulder Dash",
-      "desc": "Dig through caves, collect diamonds, dodge falling boulders and enemies. Classic arcade puzzler rebuilt from scratch.",
+      "name": "🖖 Super Star Trek",
+      "desc": "The 70s computer classic — reborn with LCARS visuals.",
       "status": "live",
-      "link": "https://jz237.github.io/jez237-site/games/boulder-dash/"
+      "link": "https://jz237.github.io/games/2026-03-27/star-trek/"
     },
     {
-      "name": "☄️ Asteroids HD",
-      "desc": "Neon vector-style Asteroids. Destroy rocks, dodge debris, survive as long as you can.",
+      "name": "🏮 Lantern Creek",
+      "desc": "Guide glowing lanterns down a moonlit stream.",
       "status": "live",
-      "link": "https://jz237.github.io/jez237-site/games/asteroids-hd/"
+      "link": "https://jz237.github.io/games/2026-03-29/lantern-creek/"
+    },
+    {
+      "name": "⚡ Neon Qix",
+      "desc": "Modernized Qix with neon field capture.",
+      "status": "live",
+      "link": "https://jz237.github.io/games/2026-04-09/quix-modern/"
+    },
+    {
+      "name": "🎮 See all 25 games →",
+      "desc": "The full GameMaster Arcade — featured, classic, and experimental builds.",
+      "status": "live",
+      "link": "/games/"
     }
   ],
   "photos": [
