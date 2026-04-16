@@ -7,19 +7,13 @@
       "name": "How AI Works",
       "desc": "Interactive explainer covering neural networks, LLMs, training, hallucinations, and more. Built with React + Framer Motion.",
       "status": "live",
-      "link": "./experiments/ai-explainer/"
+      "link": "/experiments/ai-explainer/"
     },
     {
       "name": "AI News Feed",
       "desc": "Curated AI model releases, tooling updates, and notable research.",
       "status": "live",
-      "link": "./news.html"
-    },
-    {
-      "name": "Top 4 AI Models",
-      "desc": "Opinionated standalone page: best picks for coding, conversation, voice-native commercial work, and cheap practical use.",
-      "status": "live",
-      "link": "./ai-models/"
+      "link": "/news.html"
     },
     {
       "name": "Game Experiments",
@@ -31,7 +25,7 @@
       "name": "Photo Gallery",
       "desc": "Personal photos, edits, and restoration showcases.",
       "status": "live",
-      "link": "./photos/"
+      "link": "/photos/"
     }
   ],
   "tools": [
@@ -87,13 +81,13 @@
       "name": "🐱 Cat Corner",
       "desc": "Luca, Cosmo, Taco & Marty — 26 photos and counting.",
       "status": "live",
-      "link": "./photos/cats/"
+      "link": "/photos/cats/"
     },
     {
       "name": "🌿 Garden",
       "desc": "Small-space growing, seasonal progress, and green experiments.",
       "status": "coming-soon",
-      "link": "./photos/garden/"
+      "link": "/photos/garden/"
     }
   ],
   "homelab": [
