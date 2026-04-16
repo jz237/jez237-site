@@ -82,24 +82,110 @@
     .game-card .icon-wrap > span {
       display: inline-block;
       transform-origin: center center;
-      will-change: transform;
+      will-change: transform, filter, opacity;
       filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
     }
-    /* Five gentle animation styles cycled across cards via nth-child */
-    @keyframes g-bob      { 0%,100% { transform: translateY(0) rotate(-2deg); }   50% { transform: translateY(-5px) rotate(2deg); } }
-    @keyframes g-wobble   { 0%,100% { transform: rotate(-7deg) scale(1); }         50% { transform: rotate(7deg) scale(1.04); } }
-    @keyframes g-pulse    { 0%,100% { transform: scale(1); }                       50% { transform: scale(1.18); } }
-    @keyframes g-drift    { 0%,100% { transform: translate(-2px, 0) rotate(0deg); } 50% { transform: translate(2px, -2px) rotate(4deg); } }
-    @keyframes g-orbit    { 0% { transform: rotate(0) translateY(0); } 50% { transform: rotate(180deg) translateY(-2px); } 100% { transform: rotate(360deg) translateY(0); } }
-    .game-card:nth-child(5n+1) .icon-wrap > span { animation: g-bob    3.2s ease-in-out infinite; }
-    .game-card:nth-child(5n+2) .icon-wrap > span { animation: g-wobble 2.6s ease-in-out infinite; }
-    .game-card:nth-child(5n+3) .icon-wrap > span { animation: g-pulse  2.2s ease-in-out infinite; }
-    .game-card:nth-child(5n+4) .icon-wrap > span { animation: g-drift  3.6s ease-in-out infinite; }
-    .game-card:nth-child(5n+5) .icon-wrap > span { animation: g-orbit  9s linear infinite; }
-    .game-card:hover .icon-wrap > span { animation-play-state: paused; transform: scale(1.25) rotate(0); transition: transform 0.3s var(--ease-out); }
-    /* User asked for animations explicitly — reduced-motion is softened, not disabled */
+
+    /* Appropriate per-icon animations. Type picked by JS from emoji. */
+    @keyframes g-thrust {
+      0%   { transform: translateY(0) rotate(-2deg); }
+      30%  { transform: translateY(-6px) rotate(0deg); }
+      40%  { transform: translateY(-10px) translateX(1px) rotate(2deg); }
+      60%  { transform: translateY(-3px) translateX(-1px) rotate(-1deg); }
+      100% { transform: translateY(0) rotate(-2deg); }
+    }
+    @keyframes g-twinkle {
+      0%,100% { transform: scale(1) rotate(0); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
+      40%     { transform: scale(1.25) rotate(15deg); filter: drop-shadow(0 0 14px rgba(255,240,170,0.85)) brightness(1.5); }
+      60%     { transform: scale(0.92) rotate(-10deg); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(0.9); }
+    }
+    @keyframes g-burst {
+      0%,100% { transform: scale(1) rotate(0); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
+      40%     { transform: scale(1.35) rotate(10deg); filter: drop-shadow(0 0 18px rgba(255,180,100,0.9)) brightness(1.4); }
+      55%     { transform: scale(0.95) rotate(-8deg); }
+    }
+    @keyframes g-swing {
+      0%,100% { transform: rotate(-18deg); }
+      50%     { transform: rotate(18deg); }
+    }
+    @keyframes g-sway {
+      0%,100% { transform: rotate(-6deg) translateY(0); }
+      50%     { transform: rotate(6deg) translateY(-2px); }
+    }
+    @keyframes g-spin {
+      0%   { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes g-chug {
+      0%,100% { transform: translateX(0) translateY(0); }
+      25%     { transform: translateX(-2px) translateY(-1px); }
+      50%     { transform: translateX(2px) translateY(0); }
+      75%     { transform: translateX(-1px) translateY(1px); }
+    }
+    @keyframes g-wave {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      25%     { transform: translateY(-2px) rotate(2deg); }
+      50%     { transform: translateY(-4px) rotate(-2deg); }
+      75%     { transform: translateY(-2px) rotate(3deg); }
+    }
+    @keyframes g-flash {
+      0%,100% { transform: scale(1); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
+      10%     { transform: scale(1.2); filter: drop-shadow(0 0 18px rgba(255,255,120,1)) brightness(2); }
+      15%     { transform: scale(0.95); filter: drop-shadow(0 0 6px rgba(255,255,120,0.5)) brightness(0.8); }
+      25%     { transform: scale(1.1); filter: drop-shadow(0 0 14px rgba(255,255,120,0.9)) brightness(1.6); }
+      35%     { transform: scale(1); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
+    }
+    @keyframes g-streak {
+      0%   { transform: translateX(-6px) rotate(-10deg); opacity: 0.6; }
+      50%  { transform: translateX(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateX(6px) rotate(10deg); opacity: 0.6; }
+    }
+    @keyframes g-rotate-slow {
+      0%   { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes g-float {
+      0%,100% { transform: translateY(0) rotate(-1deg); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)); }
+      50%     { transform: translateY(-4px) rotate(1deg); filter: drop-shadow(0 6px 14px rgba(160,120,220,0.5)); }
+    }
+    @keyframes g-shake {
+      0%,100% { transform: translate(0,0) rotate(0); }
+      10% { transform: translate(-1px,1px) rotate(-2deg); }
+      20% { transform: translate(1px,-1px) rotate(2deg); }
+      30% { transform: translate(-1px,-1px) rotate(-1deg); }
+      40% { transform: translate(1px,1px) rotate(1deg); }
+      50% { transform: translate(-1px,1px) rotate(-2deg); }
+      60% { transform: translate(0,0) rotate(0); }
+    }
+    @keyframes g-hammer {
+      0%,100% { transform: rotate(-10deg) translateY(0); }
+      30%     { transform: rotate(12deg) translateY(-2px); }
+      40%     { transform: rotate(15deg) translateY(0); }
+      50%     { transform: rotate(10deg) translateY(1px); }
+    }
+    @keyframes g-slither {
+      0%,100% { transform: translateX(-4px) skewX(-6deg); }
+      50%     { transform: translateX(4px) skewX(6deg); }
+    }
+
+    .game-card .icon-wrap > span[data-anim="thrust"]      { animation: g-thrust      2.0s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="twinkle"]     { animation: g-twinkle     2.6s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="burst"]       { animation: g-burst       1.8s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="swing"]       { animation: g-swing       1.6s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="sway"]        { animation: g-sway        3.2s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="spin"]        { animation: g-spin        4s linear infinite; }
+    .game-card .icon-wrap > span[data-anim="chug"]        { animation: g-chug        0.4s steps(4) infinite; }
+    .game-card .icon-wrap > span[data-anim="wave"]        { animation: g-wave        2.8s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="flash"]       { animation: g-flash       2.2s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="streak"]      { animation: g-streak      3s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="rotate-slow"] { animation: g-rotate-slow 16s linear infinite; }
+    .game-card .icon-wrap > span[data-anim="float"]       { animation: g-float       3.4s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="shake"]       { animation: g-shake       1.4s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="hammer"]      { animation: g-hammer      0.9s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="slither"]     { animation: g-slither     2.2s ease-in-out infinite; }
+    /* Reduced-motion: keep animations but slow them way down so nothing strobes */
     @media (prefers-reduced-motion: reduce) {
-      .game-card .icon-wrap > span { animation-duration: 6s !important; }
+      .game-card .icon-wrap > span { animation-duration: 8s !important; }
     }
     /* Color variety so the grid feels playful without clashing with the site */
     .game-card:nth-child(6n+1) .icon-wrap { background: linear-gradient(135deg, rgba(77,150,255,.32), rgba(127,107,255,.2)); }
@@ -228,13 +314,42 @@
            : '🧪 Experimental';
     }
 
+    // Map each emoji to an appropriate motion
+    const EMOJI_ANIM = {
+      '👷': 'hammer',   // construction worker
+      '💎': 'twinkle',  // crystal
+      '🧱': 'shake',    // brick shatter
+      '🏓': 'swing',    // pong paddle
+      '🚀': 'thrust',   // rocket
+      '🎆': 'burst',    // firework
+      '🎇': 'burst',
+      '✨': 'twinkle',  // sparkles
+      '🏮': 'sway',     // lantern
+      '🖖': 'float',    // vulcan salute — steady, intentional
+      '☄️': 'streak',   // comet
+      '🌕': 'rotate-slow', // moon
+      '⚡': 'flash',    // lightning
+      '🌊': 'wave',
+      '🐍': 'slither',  // snake
+      '⚔️': 'swing',    // sword
+      '🚂': 'chug',     // train
+      '🌪️': 'spin',    // tornado
+      '🧙': 'float',    // wizard
+      '⬡':  'spin',     // hexagon
+      '🌌': 'float',    // void
+      '🕸️': 'sway'      // web
+    };
+    function animForEmoji(e) {
+      return EMOJI_ANIM[e] || 'float';
+    }
+
     function render() {
       const list = currentFilter === 'all'
         ? games
         : games.filter(g => g.tag === currentFilter || g.cat === currentFilter);
       grid.innerHTML = list.map(g => `
         <a class="game-card" href="${BASE}${g.path}" target="_blank" rel="noopener">
-          <span class="icon-wrap"><span>${g.emoji}</span></span>
+          <span class="icon-wrap"><span data-anim="${animForEmoji(g.emoji)}">${g.emoji}</span></span>
           <span class="title">${g.title}</span>
           ${g.desc ? `<span class="desc">${g.desc}</span>` : ''}
           <span class="date">${g.date}</span>
