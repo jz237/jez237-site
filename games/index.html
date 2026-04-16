@@ -77,6 +77,29 @@
       background: linear-gradient(135deg, rgba(232,197,122,0.25), rgba(122,179,98,0.18));
       border: 1px solid rgba(255,255,255,0.08);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: visible;
+    }
+    .game-card .icon-wrap > span {
+      display: inline-block;
+      transform-origin: center center;
+      will-change: transform;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
+    }
+    /* Five gentle animation styles cycled across cards via nth-child */
+    @keyframes g-bob      { 0%,100% { transform: translateY(0) rotate(-2deg); }   50% { transform: translateY(-5px) rotate(2deg); } }
+    @keyframes g-wobble   { 0%,100% { transform: rotate(-7deg) scale(1); }         50% { transform: rotate(7deg) scale(1.04); } }
+    @keyframes g-pulse    { 0%,100% { transform: scale(1); }                       50% { transform: scale(1.18); } }
+    @keyframes g-drift    { 0%,100% { transform: translate(-2px, 0) rotate(0deg); } 50% { transform: translate(2px, -2px) rotate(4deg); } }
+    @keyframes g-orbit    { 0% { transform: rotate(0) translateY(0); } 50% { transform: rotate(180deg) translateY(-2px); } 100% { transform: rotate(360deg) translateY(0); } }
+    .game-card:nth-child(5n+1) .icon-wrap > span { animation: g-bob    3.2s ease-in-out infinite; }
+    .game-card:nth-child(5n+2) .icon-wrap > span { animation: g-wobble 2.6s ease-in-out infinite; }
+    .game-card:nth-child(5n+3) .icon-wrap > span { animation: g-pulse  2.2s ease-in-out infinite; }
+    .game-card:nth-child(5n+4) .icon-wrap > span { animation: g-drift  3.6s ease-in-out infinite; }
+    .game-card:nth-child(5n+5) .icon-wrap > span { animation: g-orbit  9s linear infinite; }
+    .game-card:hover .icon-wrap > span { animation-play-state: paused; transform: scale(1.25) rotate(0); transition: transform 0.3s var(--ease-out); }
+    /* User asked for animations explicitly — reduced-motion is softened, not disabled */
+    @media (prefers-reduced-motion: reduce) {
+      .game-card .icon-wrap > span { animation-duration: 6s !important; }
     }
     /* Color variety so the grid feels playful without clashing with the site */
     .game-card:nth-child(6n+1) .icon-wrap { background: linear-gradient(135deg, rgba(77,150,255,.32), rgba(127,107,255,.2)); }
@@ -230,6 +253,16 @@
     });
 
     render();
+
+    // Randomize animation-delay per icon so the grid doesn't pulse in unison
+    function jitterIconDelays() {
+      document.querySelectorAll('.game-card .icon-wrap > span').forEach(el => {
+        el.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's';
+      });
+    }
+    jitterIconDelays();
+    // Re-jitter after each filter change (re-renders new cards)
+    filters.addEventListener('click', jitterIconDelays);
   </script>
   <script src="/assets/site-enhance.js" defer></script>
   <script src="/assets/nav.js" defer></script>
