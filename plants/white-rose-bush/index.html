@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>White Rose Bush — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <style>
+    :root {
+      --earth-bg: #1f1711;
+      --earth-panel: #2b2018;
+      --earth-border: #5e4733;
+      --earth-text: #f1e6d8;
+      --earth-muted: #ccb9a2;
+      --earth-accent: #d88c63;
+    }
+    body { background: radial-gradient(circle at top, #4c3325 0%, #201710 55%, #130e0b 100%); color: var(--earth-text); }
+    header { background: rgba(31,23,17,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e4c695; }
+    .hero {
+      background: linear-gradient(135deg, rgba(94,60,43,.96), rgba(78,49,36,.92));
+      border: 1px solid var(--earth-border);
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
+    }
+    .hero-grid, .entry-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:18px; }
+    .panel {
+      background: linear-gradient(180deg, rgba(50,37,28,.97), rgba(35,26,20,.97));
+      border: 1px solid var(--earth-border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.16);
+    }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .hero-photo, .entry-photo {
+      width: 100%; border-radius: 16px; display:block; object-fit: cover;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 16px 34px rgba(0,0,0,.25);
+    }
+    .hero-photo { aspect-ratio: 4/3; }
+    .section-shell { display:grid; gap:18px; margin-top:18px; }
+    .section-title { margin:0 0 8px; font-size:24px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-card {
+      background: linear-gradient(180deg, rgba(59,43,33,.96), rgba(34,26,20,.96));
+      border: 1px solid rgba(216,140,99,.22);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .entry-title { margin: 0 0 6px; font-size: 22px; }
+    .entry-copy { line-height: 1.7; }
+    .bullet-list { margin: 12px 0 0; padding-left: 18px; line-height: 1.7; color: var(--earth-muted); }
+    .quote { border-left: 3px solid var(--earth-accent); padding-left: 14px; margin-top: 14px; color: var(--earth-text); font-style: italic; }
+    @media (max-width: 860px) { .hero-grid, .entry-grid { grid-template-columns: 1fr; } }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; align-items: center; justify-content: center; padding: 24px; cursor: pointer; }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    img, .feature-media { cursor: zoom-in; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">jez237-site</div>
+      <div class="links">
+        <a href="../../index.html">Home</a>
+        <a href="../../index.html#projects">Projects</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="https://jz237.github.io/games/">Games</a>
+        <a href="../../photos/">Photos</a>
+        <a href="../../plants/">Plant Progress</a>
+        <a href="../../ai-news/">AI News</a>
+        <a href="../../plex/">Plex</a>
+        <a href="../../ops/">Ops Center</a>
+        <a href="../../garden/">Garden Calendar</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · White Rose Bush</div>
+      <h1 class="title">White Rose Bush</h1>
+      <p class="muted">An old, vigorous white rose bush in the yard, full of fresh spring leaves and already pushing hard for the season.</p>
+    </section>
+
+    <div class="section-shell">
+      <section class="panel hero-grid">
+        <div>
+          <h2 class="section-title">Spring growth after a hard reset</h2>
+          <p class="note">This rose is all leaf and cane right now, with the old structure filling back in and the new season starting to push from every direction. It looks vigorous, a little wild, and very much alive.</p>
+          <div class="meta-row">
+            <span class="meta-pill">spring growth</span>
+            <span class="meta-pill">vigorous old shrub</span>
+            <span class="meta-pill">unknown cultivar</span>
+          </div>
+        </div>
+        <div>
+          <img class="hero-photo" src="../../photos/garden/images/2026/04/white-rose-bush-2026-04-16.jpg" alt="White rose bush in spring growth" />
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="entry-grid">
+          <div>
+            <div class="entry-date">April 16, 2026</div>
+            <h2 class="entry-title">The old white rose pushing back</h2>
+            <div class="entry-copy">
+              This white rose bush is in its spring rebound stage, with dense green shoots filling the space where the canes have hardened over time. It may not be a named cultivar anyone can call out easily, but it’s clearly an old established plant that knows how to come back.
+              <div class="quote">A tough old rose that looks like it has outlived a lot of plans and is still deciding not to leave.</div>
+            </div>
+          </div>
+          <div>
+            <img class="entry-photo" src="../../photos/garden/images/2026/04/white-rose-bush-2026-04-16.jpg" alt="White rose bush spring update" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>old established white rose bush</li>
+          <li>heavy spring leaf-out</li>
+          <li>cultivar still unknown</li>
+          <li>vigorous growth, likely very resilient</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
+</body>
+</html>
