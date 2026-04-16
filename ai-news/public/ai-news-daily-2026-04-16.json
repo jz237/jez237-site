@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T14:00:01.584750+00:00",
+  "updatedAt": "2026-04-16T15:00:01.460831+00:00",
   "items": [
     {
       "title": "Treating enterprise AI as an operating layer",
@@ -13,11 +13,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Ensemble-article-iStock-2213998103.jpg?resize=1200%2C600",
       "published": "2026-04-16T13:00:00+00:00",
       "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7099
+      "score": 17.6805
     },
     {
       "title": "Accelerating the cyber defense ecosystem that protects us all",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1456
+      "score": 15.1252
     },
     {
       "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
@@ -47,11 +47,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
       "published": "2026-04-16T10:28:08+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.2472
+      "score": 13.2199
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -64,10 +64,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.1762
+      "score": 11.1527
     },
     {
       "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
@@ -80,10 +80,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
       "published": "2026-04-16T09:13:23+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1133
+      "score": 11.0869
     },
     {
       "title": "UK banks get their Mythos briefing within days",
@@ -96,10 +96,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
       "published": "2026-04-16T09:45:09+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1276
+      "score": 10.1008
     },
     {
       "title": "datasette.io news preview",
@@ -112,10 +112,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3418
+      "score": 7.3212
     },
     {
       "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
@@ -128,10 +128,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
       "published": "2026-04-16T08:30:30+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5644
+      "score": 6.5385
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -144,10 +144,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4682
+      "score": 6.445
     },
     {
       "title": "Spektr raises $20M to replace the compliance analyst’s copy-paste workflow with AI agents",
@@ -160,10 +160,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Spektr.png",
       "published": "2026-04-16T10:53:26+00:00",
       "firstSeen": "2026-04-16T13:00:01.364993+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.859
+      "score": 5.8313
     },
     {
       "title": "Canva’s AI assistant can now call various tools to make designs for you",
@@ -176,10 +176,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Canva-AI-2.0.jpeg?resize=1200%2C675",
       "published": "2026-04-16T13:00:00+00:00",
       "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7599
+      "score": 5.7305
     },
     {
       "title": "Anthropic Plots Major London Expansion",
@@ -188,14 +188,14 @@
       "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "As tensions with the US government mount, Anthropic has leased a new office with enough space to quadruple its 200-person headcount in London.",
+      "summary": "As tensions with the US government mount, Anthropic has leased a new office with enough space to quadruple its 200-person head count in London.",
       "image": "https://media.wired.com/photos/69e0da3dae2b670940bc0783/master/pass/GettyImages-2261514586.jpg",
       "published": "2026-04-16T13:49:35+00:00",
       "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T14:00:01.584750+00:00",
+      "lastSeen": "2026-04-16T15:00:01.460831+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2847
+      "score": 5.2547
     }
   ],
   "errors": []
