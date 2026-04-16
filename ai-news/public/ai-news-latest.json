@@ -1,6 +1,22 @@
 {
-  "updatedAt": "2026-04-15T22:59:05.818931+00:00",
+  "updatedAt": "2026-04-16T00:00:01.151166+00:00",
   "items": [
+    {
+      "title": "datasette 1.0a27",
+      "url": "https://simonwillison.net/2026/Apr/15/datasette",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette 1.0a27\n    Two major changes in this new Datasette alpha. I covered the first of those in detail yesterday - Datasette no longer uses Django-style CSRF form tokens, instead using modern browser headers as described by Filippo Valsorda.\nThe second big change is that Datasette now fires a new RenameTableEvent any time a table is renamed during a SQLite transaction. This is useful because some plugins (like datasette-comments) attach additional data to table records by name, so a renamed table requires them to react in appropriate ways.\nHere are the rest of the changes in the a",
+      "image": "",
+      "published": "2026-04-15T23:16:34+00:00",
+      "firstSeen": "2026-04-16T00:00:01.151166+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4681
+    },
     {
       "title": "Wenhao Zhang, Lin Mu, Li Ni, Peiquan Jin, Yiwen Zhang",
       "url": "https://llm-stats.com/ai-news",
@@ -15,7 +31,7 @@
       "lastSeen": "2026-04-15T22:59:05.818931+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.3295
     },
     {
       "title": "Tech Layoffs Continue: Snap Cuts 1,000 Jobs, Citing ‘Rapid Advancements’ in AI",
@@ -28,10 +44,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/souvik-banerjee-PQXlYuQeX4c-unsplash-1.jpg",
       "published": "2026-04-15T20:00:21+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8626
+      "score": 3.8345
     },
     {
       "title": "Trump’s posting even more AI-generated Trump-Jesus fan art",
@@ -44,10 +60,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/trump-jesus-altered.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C31.744282171397%2C100%2C36.511435657206",
       "published": "2026-04-15T19:50:31+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.268
+      "score": 2.24
     },
     {
       "title": "SS&C Intralinks DealCentre AI vs. Datasite: Which platform is built for the future of dealmaking?",
@@ -60,10 +76,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/technology-meets-humanity-background-modern-remak-2026-01-07-07-37-57-utc-1.jpg",
       "published": "2026-04-15T19:31:07+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.149
+      "score": 3.1212
     },
     {
       "title": "OpenAI updates its Agents SDK to help enterprises build safer, more capable agents",
@@ -76,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
       "published": "2026-04-15T19:28:36+00:00",
       "firstSeen": "2026-04-15T19:41:27.010212+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.6879
+      "score": 1.6601
     },
     {
       "title": "Hightouch reaches $100M ARR fueled by marketing tools powered by AI",
@@ -92,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/founders-photo.webp?resize=1200%2C1200",
       "published": "2026-04-15T18:55:12+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5725
+      "score": 4.5452
     },
     {
       "title": "LinkedIn data shows AI isn’t to blame for hiring decline… yet",
@@ -108,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/job-search-GettyImages-2161243486.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:51:54+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.171
+      "score": 2.1438
     },
     {
       "title": "AI learning app Gizmo levels up with 13M users and a $22M investment",
@@ -124,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1263424631.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:38:10+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2648
+      "score": 3.2377
     },
     {
       "title": "Can AI judge journalism? A Thiel-backed startup says yes, even if it risks chilling whistleblowers",
@@ -140,10 +156,10 @@
       "image": "",
       "published": "2026-04-15T18:33:20+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1627
+      "score": 2.1356
     },
     {
       "title": "Google rolls out a native Gemini app for Mac",
@@ -156,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:22:13+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2577
+      "score": 9.2307
     },
     {
       "title": "My bets on open models, mid-2026",
@@ -172,10 +188,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/8be08b29-d70a-43f3-8422-6b952816ddab_3182x1790.png",
       "published": "2026-04-15T18:20:00+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2267
+      "score": 2.1998
     },
     {
       "title": "Google launches a Gemini AI app on Mac",
@@ -188,11 +204,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Gemini-for-MacOS_03_Capsule-Image_16x9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-04-15T18:10:15+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.5223
+      "score": 20.4956
     },
     {
       "title": "YouTube Will Show Fewer Livestream Ads During Purchases and Chat Spikes",
@@ -205,10 +221,10 @@
       "image": "https://assets.techrepublic.com/uploads/2022/02/AdobeStock_192565042-scaled.jpeg",
       "published": "2026-04-15T18:06:32+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1107
+      "score": 3.0839
     },
     {
       "title": "Accel raises $5 billion for AI as venture capital bets reach infrastructure scale",
@@ -221,10 +237,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/accel-5-billion-fund-ai-anthropic-cursor-venture-capital.png",
       "published": "2026-04-15T18:00:37+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.608
+      "score": 1.5814
     },
     {
       "title": "AI Could Democratize One of Tech's Most Valuable Resources",
@@ -237,10 +253,10 @@
       "image": "https://media.wired.com/photos/69dea084bbe4a9ff56b3014b/master/pass/AL-Lab-AI-Could-Democratize-One-of-Techs-Most-Valuable-Resources-Business.jpg",
       "published": "2026-04-15T18:00:00+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5478
+      "score": 3.5211
     },
     {
       "title": "The musician-turned-biotech-founder waiting to fundraise",
@@ -253,10 +269,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Copy-of-Stand-Together-Photo-By-Zach-Bell.jpg?resize=1200%2C1200",
       "published": "2026-04-15T17:58:28+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6471
+      "score": 4.6205
     },
     {
       "title": "Anthropic attracts $800 billion valuation offers as revenue hits $30 billion annualised run rate",
@@ -269,10 +285,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-800-billion-valuation-revenue-30-billion-ipo.png",
       "published": "2026-04-15T17:50:28+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1035
+      "score": 6.077
     },
     {
       "title": "Athena launches FabOrchestrator, an agentic AI platform for manufacturing execution systems",
@@ -285,10 +301,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/athena-faborchestrator-agentic-ai-mes-semiconductor-manufacturing.png",
       "published": "2026-04-15T17:33:15+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.896
+      "score": 7.8697
     },
     {
       "title": "India’s vibe-coding startup Emergent enters OpenClaw-like AI agent space",
@@ -301,10 +317,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/emergent-wingman.jpg?resize=1200%2C800",
       "published": "2026-04-15T17:24:18+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3321
+      "score": 8.3059
     },
     {
       "title": "A Technical Deep Dive into the Essential Stages of Modern Large Language Model Training, Alignment, and Deployment",
@@ -317,10 +333,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-32-150x150.png",
       "published": "2026-04-15T17:21:06+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1607
+      "score": 5.1345
     },
     {
       "title": "Jane Street commits $6 billion to CoreWeave and takes a $1 billion equity stake",
@@ -333,10 +349,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/jane-street-coreweave-6-billion-cloud-1-billion-equity-ai.png",
       "published": "2026-04-15T17:17:07+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9889
+      "score": 1.9628
     },
     {
       "title": "Quoting John Gruber",
@@ -349,10 +365,10 @@
       "image": "",
       "published": "2026-04-15T17:13:57+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2276
+      "score": 3.2015
     },
     {
       "title": "Gemini 3.1 Flash TTS",
@@ -365,11 +381,11 @@
       "image": "https://static.simonwillison.net/static/2026/gemini-flash-tts.jpg",
       "published": "2026-04-15T17:13:14+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.8272
+      "score": 17.8012
     },
     {
       "title": "Google AI Launches Gemini 3.1 Flash TTS: A New Benchmark in Expressive and Controllable AI Voice",
@@ -382,11 +398,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-40.png",
       "published": "2026-04-15T17:06:17+00:00",
       "firstSeen": "2026-04-15T17:17:26.244670+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.3042
+      "score": 20.2783
     },
     {
       "title": "Accenture bets on General Robotics to unify factory AI across robot brands",
@@ -399,10 +415,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/accenture-general-robotics-grid-physical-ai-manufacturing.png",
       "published": "2026-04-15T16:52:27+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9783
+      "score": 1.9525
     },
     {
       "title": "Gemini 3.1 Flash TTS",
@@ -415,11 +431,11 @@
       "image": "",
       "published": "2026-04-15T16:41:46+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.4137
+      "score": 16.388
     },
     {
       "title": "Astroport and Vermeer want to bring heavy construction equipment to the Moon",
@@ -432,10 +448,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/astroport-vermeer-lunar-iron-autonomous-construction-moon-base.png",
       "published": "2026-04-15T16:36:55+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9716
+      "score": 1.946
     },
     {
       "title": "OpenAI opens its cybersecurity model to thousands of defenders in race with Anthropic’s Mythos",
@@ -448,11 +464,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-gpt-5-4-cyber-trusted-access-defenders-mythos.png",
       "published": "2026-04-15T16:22:30+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.2655
+      "score": 18.24
     },
     {
       "title": "Allbirds announced a switch from shoes to AI and its stock jumped 600 percent",
@@ -465,10 +481,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-1253153052.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-04-15T16:13:30+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1717
+      "score": 2.1463
     },
     {
       "title": "Spotify is selling physical books now, and it makes more sense than you think",
@@ -481,10 +497,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/spotify-selling-books-bookshop-page-match-audiobooks.png",
       "published": "2026-04-15T16:10:05+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7602
+      "score": 3.7349
     },
     {
       "title": "Gemini 3.1 Flash TTS: the next generation of expressive AI speech",
@@ -497,11 +513,11 @@
       "image": "https://lh3.googleusercontent.com/O9K0a0MXOACPhUzvThQiyTaWdZ95b_hS-foyHQcYMiCQCB5HKoBXYGyEjnsqcQEjHYjwfNVyqg4Ipk0G-fLiP9hd6JfbD9S-jx7ndLgImfZankCY-9I=w528-h297-n-nu-rw-lo",
       "published": "2026-04-15T16:03:19+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.2374
+      "score": 17.2122
     },
     {
       "title": "Anthropic, Google, and Microsoft paid AI agent bug bounties, then kept quiet about the flaws",
@@ -514,10 +530,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/ai-agents-hijacked-prompt-injection-bug-bounties-no-cve.png",
       "published": "2026-04-15T15:51:17+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7524
+      "score": 9.7273
     },
     {
       "title": "Quoting Kyle Kingsbury",
@@ -530,10 +546,10 @@
       "image": "",
       "published": "2026-04-15T15:36:02+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.486
+      "score": 3.4611
     },
     {
       "title": "Google classifies back button hijacking as spam, enforcement starts June 2026",
@@ -546,10 +562,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-search-back-button-hijacking-spam-policy-june.png",
       "published": "2026-04-15T15:29:48+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0434
+      "score": 4.0186
     },
     {
       "title": "Snap cuts 1,000 jobs as Spiegel bets AI can do the work of a bigger workforce",
@@ -565,7 +581,7 @@
       "lastSeen": "2026-04-15T17:17:26.244670+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6352
+      "score": 2.6105
     },
     {
       "title": "A US judge ruled that a fraud defendant’s AI chats with Claude are not privileged",
@@ -581,7 +597,7 @@
       "lastSeen": "2026-04-15T17:17:26.244670+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9318
+      "score": 9.9073
     },
     {
       "title": "Rethinking AI TCO: Why Cost per Token Is the Only Metric That Matters",
@@ -594,10 +610,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/inference-blogheader-token-1920x1080-5144600_HEADLINE.jpg.jpg",
       "published": "2026-04-15T15:00:26+00:00",
       "firstSeen": "2026-04-15T15:20:22.159063+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0714
+      "score": 4.0468
     },
     {
       "title": "Gemini 3.1 Flash TTS: the next generation of expressive AI speech",
@@ -610,11 +626,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.1-flash-tts_blog_keywo.max-600x600.format-webp.webp",
       "published": "2026-04-15T15:00:00+00:00",
       "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5112
+      "score": 16.4867
     },
     {
       "title": "Allbirds Is Pivoting to AI Compute. Sure, Why Not",
@@ -627,26 +643,10 @@
       "image": "https://media.wired.com/photos/69df97b621acbf548f6fdef0/master/pass/GettyImages-1134284112.jpg",
       "published": "2026-04-15T14:58:08+00:00",
       "firstSeen": "2026-04-15T15:20:22.159063+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4704
-    },
-    {
-      "title": "HBO Max comes to India through exclusive JioHotstar deal at 50 cents a month",
-      "url": "https://thenextweb.com/news/hbo-max-india-jiohotstar-exclusive-deal-streaming",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "HBO Max has launched in India through an exclusive partnership with JioHotstar, the streaming platform born from Reliance Industries’ $8.5 billion merger with Walt Disney’s Indian operations. The deal brings a dedicated HBO Max-branded hub to JioHotstar’s 100 million-plus paid subscribers, available as an add-on starting at ₹49 per month,  roughly 50 US cents, making [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/hbo-max-india-jiohotstar-exclusive-deal-streaming.png",
-      "published": "2026-04-15T14:48:38+00:00",
-      "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-15T17:17:26.244670+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6266
+      "score": 3.4459
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -659,10 +659,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1977
+      "score": 2.1872
     },
     {
       "title": "Dark Breath",
@@ -675,10 +675,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8069
+      "score": 1.7995
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -691,10 +691,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1236
+      "score": 1.1235
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -707,10 +707,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-15T22:59:05.818931+00:00",
+      "lastSeen": "2026-04-16T00:00:01.151166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8925
+      "score": 1.8924
     },
     {
       "title": "Superbugs: Resistance rising, part 2",
