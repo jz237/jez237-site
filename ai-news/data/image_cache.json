@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T15:53:31.137022+00:00",
+  "updatedAt": "2026-04-16T16:38:09.069329+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3844,6 +3844,26 @@
     "https://www.anthropic.com/news/claude-opus-4-7": {
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/96ea2509a90e527642c822303e56296a07bcfce4-1920x1080.png",
       "checkedAt": "2026-04-16T15:53:31.137022+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/insightfinder-raises-15m-to-help-companies-figure-out-where-ai-agents-go-wrong": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/12/GettyImages-1306628638.jpg?resize=1200,800",
+      "checkedAt": "2026-04-16T16:38:09.069329+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/ai-traffic-to-us-retailers-rose-393-in-q1-and-its-boosting-their-revenue-too": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/04/GettyImages-1390536487.jpg?resize=1200,800",
+      "checkedAt": "2026-04-16T16:38:09.069329+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/robloxs-ai-assistant-gets-new-agentic-tools-to-plan-build-and-test-games": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/roblox-header.jpg?resize=1200,800",
+      "checkedAt": "2026-04-16T16:38:09.069329+00:00"
+    },
+    "https://www.theverge.com/tech/913202/gemini-personal-intelligence-images-nano-banana": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-16-at-8.32.59AM.png?quality=90&amp;strip=all&amp;crop=0%2C3.2902166102043%2C100%2C93.419566779591&amp;w=1200",
+      "checkedAt": "2026-04-16T16:38:09.069329+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/913184/anthropic-claude-opus-4-7-cybersecurity": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-16T16:38:09.069329+00:00"
     }
   }
 }
