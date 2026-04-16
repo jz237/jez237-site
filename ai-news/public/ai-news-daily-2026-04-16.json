@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T07:00:01.478216+00:00",
+  "updatedAt": "2026-04-16T06:11:48.532875+00:00",
   "items": [
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T07:00:01.478216+00:00",
+      "lastSeen": "2026-04-16T06:11:48.532875+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.3599
+      "score": 11.3834
     },
     {
       "title": "datasette.io news preview",
@@ -29,10 +29,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T07:00:01.478216+00:00",
+      "lastSeen": "2026-04-16T06:11:48.532875+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5032
+      "score": 7.5238
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T07:00:01.478216+00:00",
+      "lastSeen": "2026-04-16T06:11:48.532875+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6502
+      "score": 6.6735
     },
     {
       "title": "Text-as-Signal: Quantitative Semantic Scoring with Embeddings, Logprobs, and Noise Reduction",
@@ -59,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-16T07:00:19.544905+00:00",
+      "published": "2026-04-16T06:11:55.955863+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-16T07:00:01.478216+00:00",
+      "lastSeen": "2026-04-16T06:11:48.532875+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
