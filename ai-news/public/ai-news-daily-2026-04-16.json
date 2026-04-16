@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T08:00:01.415942+00:00",
+  "updatedAt": "2026-04-16T08:02:24.553361+00:00",
   "items": [
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.3314
+      "score": 11.3303
     },
     {
       "title": "datasette.io news preview",
@@ -29,10 +29,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4782
+      "score": 7.4772
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.622
+      "score": 6.6209
     },
     {
       "title": "The Italian deeptech making graphene-based optical chips gets €211M",
@@ -61,10 +61,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/CamGraphic-team.png",
       "published": "2026-04-16T06:53:00+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2164
+      "score": 3.2152
     },
     {
       "title": "Quantum computing pioneer Chad Rigetti is back",
@@ -77,10 +77,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sygaldry-Technologies.png",
       "published": "2026-04-16T07:16:11+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8279
+      "score": 2.8267
     },
     {
       "title": "Cadence and Nvidia are bridging the simulation gap that’s slowing down robotics",
@@ -93,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Cadence-and-Nvidia.png",
       "published": "2026-04-16T07:24:56+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4323
+      "score": 2.4311
     },
     {
       "title": "Md. Naim Molla, Md Muhtasim Munif Fahim, Md. Binyamin, Md Jahid Hasan Imran, Tonmoy Shil, Nura Rayhan, Md Rezaul Karim",
@@ -107,12 +107,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-16T08:00:11.309419+00:00",
+      "published": "2026-04-16T08:02:29.057986+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "DeepL, known for text translation, now wants to translate your voice",
+      "url": "https://techcrunch.com/2026/04/16/deepl-known-for-text-translation-now-wants-to-translate-your-voice",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "DeepL says its tech could be used for real-time translation with meeting tools like Zoom and Microsoft Teams",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/DeepL_Voice2Voice_Conversations_2.png?resize=1200%2C804",
+      "published": "2026-04-16T08:00:00+00:00",
+      "firstSeen": "2026-04-16T08:02:24.553361+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2888
     },
     {
       "title": "Amazon-backed nuclear startup X-energy files for an IPO that could raise up to $814M",
@@ -125,10 +141,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-backed-nuclear-startup-X-energy.png",
       "published": "2026-04-16T07:05:22+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T08:00:01.415942+00:00",
+      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1225
+      "score": 2.1213
     }
   ],
   "errors": []
