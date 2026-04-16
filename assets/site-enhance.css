@@ -1,0 +1,78 @@
+/* === site-enhance.css — lighter ambient layer for non-plant pages (no leaves, no tree) === */
+
+:root {
+  --se-accent-primary: #7ab362;
+  --se-accent-secondary: #f4a7b9;
+  --se-accent-warm: #e8c57a;
+  --se-accent-glow: rgba(122,179,98,0.38);
+  --se-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body { position: relative; overflow-x: hidden; }
+
+/* Ambient drifting gradient */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -15%;
+  background:
+    radial-gradient(ellipse at 15% 10%, var(--se-accent-glow), transparent 45%),
+    radial-gradient(ellipse at 85% 80%, rgba(244,167,185,0.12), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(232,197,122,0.08), transparent 55%);
+  z-index: -3;
+  animation: se-drift 32s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes se-drift {
+  0%   { transform: translate(-2%, -2%) scale(1); }
+  50%  { transform: translate(2%, 1%) scale(1.04); }
+  100% { transform: translate(-1%, 3%) scale(1); }
+}
+
+/* Shining hero title */
+h1.title, .hero h1, .hero .title {
+  background: linear-gradient(110deg, #fff 0%, var(--se-accent-warm) 55%, var(--se-accent-secondary) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  background-size: 200% auto;
+  animation: se-shine 14s linear infinite;
+}
+@keyframes se-shine {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Image hover tilt — applied to common image/card classes */
+img.photo, img.hero-photo, .feature-media, .card-media {
+  transition: transform 0.5s var(--se-ease), box-shadow 0.5s var(--se-ease), filter 0.5s ease;
+  will-change: transform;
+}
+img.photo:hover, img.hero-photo:hover, .feature-media:hover, .card-media:hover {
+  transform: perspective(900px) translateY(-4px) rotateX(var(--se-rx,0deg)) rotateY(var(--se-ry,0deg)) scale(1.02);
+  box-shadow: 0 24px 50px rgba(0,0,0,0.4);
+  filter: saturate(1.08) brightness(1.02);
+}
+
+/* Gentle scroll reveal — opt-in via .se-reveal or attribute data-reveal */
+.se-reveal, [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--se-ease), transform 0.8s var(--se-ease);
+}
+.se-reveal.se-in, [data-reveal].se-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section-title underline accent (only if the class exists) */
+.section-title::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  border-radius: 3px;
+  margin-top: 7px;
+  background: linear-gradient(90deg, var(--se-accent-primary), var(--se-accent-warm));
+  opacity: 0.85;
+}

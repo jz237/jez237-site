@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Side House Bed — Plant Progress</title>
+  <title>Garden Beds — Plant Progress</title>
   <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
   <style>
     :root {
       --earth-bg: #1d1612;
@@ -39,6 +40,21 @@
       padding: 6px 10px;
       font-size: 12px;
     }
+    .bed-divider {
+      display:flex; align-items:center; gap:12px;
+      color: var(--earth-accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 6px 2px 0;
+    }
+    .bed-divider::before, .bed-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--earth-border), transparent);
+    }
     .entry-copy { line-height:1.7; }
     .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
     .quote {
@@ -48,7 +64,7 @@
       font-style: italic;
     }
     @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
-  
+
     .lightbox {
       display: none;
       position: fixed;
@@ -86,13 +102,15 @@
 
   <main class="container">
     <section class="hero">
-      <div class="kicker">Plant Progress · Side House Bed Planning</div>
-      <h1 class="title">Side House Bed</h1>
-      <p class="muted">A planning record for the long foundation bed on the side of the house, with existing anchors already in place and room to build out the middle layer.</p>
+      <div class="kicker">Plant Progress · Garden Beds</div>
+      <h1 class="title">Garden Beds</h1>
+      <p class="muted">A working record of the garden's mixed beds — the long side-house foundation line and the layered perennial bed in back — tracked together because they share plants, light, and design decisions.</p>
     </section>
 
     <div class="shell">
-    <div class="shell">
+
+      <div class="bed-divider">Side-house foundation bed</div>
+
       <section class="entry-card">
         <div class="split">
           <div>
@@ -114,32 +132,9 @@
         </ul>
       </section>
 
-    <div class="shell">
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 16, 2026</div>
-            <h2 class="entry-title">Sunshine ligustrum and purple loropetalums</h2>
-            <div class="entry-copy">
-              The side bed is settling into its spring color balance here, with the bright chartreuse Sunshine ligustrum carrying the center and the purple loropetalums making a low burgundy frame at the edge. The pipework and brick keep the geometry rigid, but the plants are already softening it.
-              <div class="quote">A strong contrast bed, with the lime shrub doing the heavy lifting and the purple shrubs holding the line.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-ligustrum-loropetalum.jpg" alt="Side house bed with Sunshine ligustrum and purple loropetalum" />
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>Sunshine ligustrum is the bright center anchor</li>
-          <li>purple loropetalums are low and spreading at the front</li>
-          <li>hardscape and utility lines make the bed feel narrow and linear</li>
-        </ul>
-      </section>
-
-    <div class="shell">
       <section class="panel split">
         <div>
-          <h2 class="section-title">What’s already working</h2>
+          <h2 class="section-title">What's already working</h2>
           <p class="note">The rhododendron already owns the right side of the bed, and the gold euonymus gives you one bright accent. The space between them still has room to become more intentional, but the structure is there.</p>
           <div class="meta-row">
             <span class="meta-pill">foundation bed</span>
@@ -148,7 +143,7 @@
           </div>
         </div>
         <div>
-          <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-12.jpg" alt="Side house bed with rhododendron and gold euonymus" />
+          <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Side house bed — barberry with salvia, heuchera, and holly" />
         </div>
       </section>
 
@@ -159,7 +154,7 @@
             <h2 class="entry-title">Planting direction</h2>
             <div class="entry-copy">
               This bed wants layering more than it wants more shrubs. The big rhododendron on the right already acts as the anchor, and the gold euonymus gives you a bright focal note. From here, the cleanest move is to add one deeper contrasting shrub and then repeat a lower plant across the front so the whole bed starts to read as one composition instead of separate islands.
-              <div class="quote">The easiest way to make this bed feel finished is contrast plus repetition, one dark shrub, one bright accent, one repeating front layer.</div>
+              <div class="quote">The easiest way to make this bed feel finished is contrast plus repetition — one dark shrub, one bright accent, one repeating front layer.</div>
             </div>
           </div>
           <div>
@@ -172,9 +167,65 @@
           <li>add one purple loropetalum for contrast, not multiple bright shrubs</li>
           <li>use heuchera in grouped drifts along the front and in gaps</li>
           <li>if you want another texture layer, add hosta or astilbe in the shadier sections</li>
-          <li>skip loading the middle with too many medium shrubs, the bed is too shallow for that</li>
+          <li>skip loading the middle with too many medium shrubs — the bed is too shallow for that</li>
         </ul>
       </section>
+
+      <div class="bed-divider">Mixed perennial bed</div>
+
+      <section class="entry-card">
+        <div class="split">
+          <div>
+            <div class="entry-date">April 16, 2026</div>
+            <h2 class="entry-title">Orange Rocket barberry in the backyard bed</h2>
+            <div class="entry-copy">
+              The Orange Rocket barberry is settling into the bed with salvia, heuchera, and the nearby holly making a crisp low layer around it. This is one of those plantings that looks small from a distance but really holds the composition together once you get closer.
+              <div class="quote">Sharp color, tight form, and just enough contrast to keep the whole bed from going flat.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg" alt="Mixed perennial bed — Orange Rocket barberry with companions" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>Orange Rocket barberry is the upright focal point</li>
+          <li>salvia and heuchera soften the front edge</li>
+          <li>holly gives the bed a stronger evergreen anchor</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">First layer first</h2>
+        <p class="note">This bed reads in stages right now. The ornamental onions are carrying the front, the astilbe is pushing behind them, and the hydrangea is just beginning to leaf out in the center while the daylilies are only barely arriving at the edges.</p>
+        <div class="meta-row">
+          <span class="meta-pill">layered spring emergence</span>
+          <span class="meta-pill">ornamental onion front edge</span>
+          <span class="meta-pill">hydrangea waking up</span>
+        </div>
+      </section>
+
+      <section class="entry-card">
+        <div class="split">
+          <div>
+            <div class="entry-date">April 12, 2026</div>
+            <h2 class="entry-title">Spring in waves</h2>
+            <div class="entry-copy">
+              The ornamental onions are carrying this bed right now, already up in dense blue-green clumps and giving the whole front edge a strong shape. Behind them, the astilbe is pushing fresh spring growth, while the hydrangea in the center is just beginning to leaf out along its bare branching frame. The daylilies are later to the party here, only just starting to show at the right and left edges.
+              <div class="quote">Not full yet, but already well-composed — the kind of spring moment that promises a lot without needing to bloom yet.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Mixed perennial bed — spring emergence" />
+          </div>
+        </div>
+        <ul class="bullet-list">
+          <li>ornamental onions are the dominant front layer</li>
+          <li>astilbe is emerging behind them</li>
+          <li>hydrangea is leafing out in the center</li>
+          <li>daylilies are just beginning at the edges</li>
+        </ul>
+      </section>
+
     </div>
   </main>
   <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
@@ -203,5 +254,6 @@
       lightboxImg.src = '';
     });
   </script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>
