@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T13:00:01.364993+00:00",
+  "updatedAt": "2026-04-16T14:00:01.584750+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3792,6 +3792,30 @@
     "https://www.technologyreview.com/2026/04/16/1136029/humans-in-the-loop-ai-war-illusion": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/human-war-loop2.jpg?resize=1200,600",
       "checkedAt": "2026-04-16T13:00:01.364993+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/meta-raises-quest-3-and-quest-3s-prices-due-to-ram-shortage": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/09/Oculus-Quest-3-10.jpg?w=1200",
+      "checkedAt": "2026-04-16T14:00:01.584750+00:00"
+    },
+    "https://www.theverge.com/tech/913068/canva-ai-2-update-prompt-based-editing-availability": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Canva-AI-2.0.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-04-16T14:00:01.584750+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/16/1135216/making-ai-operational-in-constrained-public-sector-environments": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Elastic-article-iStock-2148123501.jpg?resize=1200,600",
+      "checkedAt": "2026-04-16T14:00:01.584750+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/16/1135554/treating-enterprise-ai-as-an-operating-layer": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Ensemble-article-iStock-2213998103.jpg?resize=1200,600",
+      "checkedAt": "2026-04-16T14:00:01.584750+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/canvas-ai-assistant-can-now-call-various-tools-to-make-designs-for-you": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Canva-AI-2.0.jpeg?resize=1200,675",
+      "checkedAt": "2026-04-16T14:00:01.584750+00:00"
+    },
+    "https://huggingface.co/blog/train-multimodal-sentence-transformers": {
+      "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+      "checkedAt": "2026-04-16T14:00:01.584750+00:00"
     }
   }
 }
