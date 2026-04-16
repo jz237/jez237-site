@@ -205,6 +205,17 @@
       return (s || 'planned').toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
 
+    // Make links work across local dev server, github pages subpath, and absolute URLs
+    function normalizeLink(link) {
+      if (!link) return link;
+      const host = location.hostname;
+      const isLocal  = ['localhost','127.0.0.1','::1'].includes(host) || location.protocol === 'file:';
+      const isGhPage = host === 'jz237.github.io';
+      if (isLocal) return link.replace(/^https?:\/\/jz237\.github\.io\/jez237-site\//, '/');
+      if (isGhPage && link.startsWith('/') && !link.startsWith('/jez237-site')) return '/jez237-site' + link;
+      return link;
+    }
+
     function renderGames(games) {
       const grid = document.getElementById('games-grid');
       const empty = document.getElementById('games-empty');
@@ -254,8 +265,10 @@
 
         const btn = document.createElement('a');
         btn.className = 'game-play-btn';
-        btn.href = g.link;
-        btn.target = '_blank';
+        btn.href = normalizeLink(g.link);
+        // Open in same tab when running locally so navigation stays in-site
+        const isLocal = ['localhost','127.0.0.1','::1'].includes(location.hostname) || location.protocol === 'file:';
+        btn.target = isLocal ? '_self' : '_blank';
         btn.rel = 'noopener';
         btn.textContent = '▶ Play';
 
