@@ -18,21 +18,21 @@
     body { background: radial-gradient(circle at top, #4e2c2d 0%, #1d1512 58%, #120d0b 100%); color: var(--earth-text); }
     header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
     a { color: #e3c89f; }
-    .hero, .panel, .entry-card {
+    .hero, .entry-card {
       border: 1px solid var(--earth-border);
       border-radius: 18px;
       box-shadow: 0 14px 32px rgba(0,0,0,.18);
+      background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97));
     }
     .hero { background: linear-gradient(135deg, rgba(88,41,43,.95), rgba(72,42,33,.92)); padding: 24px; }
-    .panel, .entry-card { background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97)); padding: 18px; }
+    .hero-grid, .entry-grid { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
     .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .shell { display:grid; gap:18px; margin-top:18px; }
-    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
     .photo {
       width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 16px 34px rgba(0,0,0,.24);
     }
+    .section-shell { display:grid; gap:18px; margin-top:18px; }
     .section-title, .entry-title { margin:0 0 8px; }
     .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
     .meta-pill {
@@ -42,29 +42,15 @@
       padding: 6px 10px;
       font-size: 12px;
     }
+    .entry-card { padding: 18px; }
     .entry-copy { line-height:1.7; }
     .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote {
-      border-left: 3px solid var(--earth-accent);
-      padding-left: 14px;
-      margin-top: 14px;
-      font-style: italic;
-    }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
+    .quote { border-left: 3px solid var(--earth-accent); padding-left: 14px; margin-top: 14px; font-style: italic; }
+    @media (max-width: 860px) { .hero-grid, .entry-grid { grid-template-columns:1fr; } }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; align-items: center; justify-content: center; padding: 24px; cursor: pointer; }
     .lightbox.active { display: flex; }
     .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img, .feature-media { cursor: zoom-in; }
+    img { cursor: zoom-in; }
   </style>
 </head>
 <body>
@@ -90,38 +76,29 @@
     <section class="hero">
       <div class="kicker">Plant Progress · Grapevine</div>
       <h1 class="title">Grapevine</h1>
-      <p class="muted">Clusters setting in, leaves pushing, and the whole vine turning into a green canopy over the fence line.</p>
+      <p class="muted">A current-year record of the arch and its spring training, with the vine beginning to push and the structure still visible.</p>
     </section>
 
-    <div class="shell">
-      <section class="panel split">
-        <div>
-          <h2 class="section-title">Training the vine on the lattice</h2>
-          <p class="note">A fresh spring view of the grapevine trained across the white lattice, with pruned canes tied out and buds beginning to push. The structure is still bare enough to read clearly, which makes the training work visible.</p>
-          <div class="meta-row">
-            <span class="meta-pill">training year</span>
-            <span class="meta-pill">spring pruning</span>
-            <span class="meta-pill">fence-line vine</span>
+    <div class="section-shell">
+      <section class="entry-card">
+        <div class="entry-grid">
+          <div>
+            <div class="entry-date">April 12, 2026</div>
+            <h2 class="entry-title">Grape arch in spring training</h2>
+            <div class="entry-copy">
+              The grape arch is still in its early-season framework stage, with pruned canes tied out and fresh growth just starting to fill the lattice. It’s the moment where the structure matters most, before the canopy closes in and the whole thing turns into shade.
+              <div class="quote">A grapevine always looks strongest right before it disappears into itself.</div>
+            </div>
+          </div>
+          <div>
+            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-12-training.jpg" alt="Grapevine trained on lattice in spring" />
           </div>
         </div>
-        <div>
-          <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-12-training.jpg" alt="Grapevine trained on lattice in spring" />
-        </div>
-      </section>
-
-    <div class="shell">
-      <section class="entry-card">
-        <div class="entry-date">April 12, 2026</div>
-        <h2 class="entry-title">Clusters forming in bright spring light</h2>
-        <div class="entry-copy">
-          The grapevine is just starting to build momentum again, with fresh growth pushing across the support and the training structure still easy to read. This page works best as the current-year record of how the vine is being shaped, what it is doing now, and how the season develops from here.
-          <div class="quote">This is the part of the year where the framework matters, before the whole vine turns into a wall of green.</div>
-        </div>
         <ul class="bullet-list">
-          <li>fresh growth is pushing across the support</li>
-          <li>training structure is still visible and useful to document</li>
-          <li>good early-season checkpoint before full canopy takes over</li>
-          <li>worth tracking later for fruit set, density, and shade</li>
+          <li>spring training on the arch</li>
+          <li>pruned canes are still visible</li>
+          <li>fresh growth just starting to fill in</li>
+          <li>good year-to-year reference point</li>
         </ul>
       </section>
     </div>
@@ -135,17 +112,6 @@
         lightboxImg.src = img.src;
         lightbox.classList.add('active');
       });
-    });
-    document.querySelectorAll('.feature-media').forEach((card) => {
-      const bg = card.style.backgroundImage;
-      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
-      if (match && match[1]) {
-        card.addEventListener('click', (e) => {
-          e.preventDefault();
-          lightboxImg.src = match[1];
-          lightbox.classList.add('active');
-        });
-      }
     });
     lightbox.addEventListener('click', () => {
       lightbox.classList.remove('active');
