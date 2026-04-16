@@ -48,6 +48,92 @@
 }
 
 /* --------------------------------------------------------------
+   Light theme — warm paper, not stark white.
+   Activated by <html data-theme="light">. Toggle lives in the nav.
+   -------------------------------------------------------------- */
+:root[data-theme="light"] {
+  --surf-0: #f6efdf;
+  --surf-1: #eee3cc;
+  --surf-2: #e4d7bb;
+  --surf-3: #d9c9a8;
+  --ink-hi:  #2a1f14;
+  --ink-mid: #5a4a34;
+  --ink-lo:  #8a7a62;
+  --brand-bark: #6b4a2f;
+  --shadow-sm: 0 2px 8px rgba(80,55,30,0.10);
+  --shadow-md: 0 12px 28px rgba(80,55,30,0.14);
+  --shadow-lg: 0 24px 52px rgba(80,55,30,0.20);
+}
+:root[data-theme="light"] body {
+  background: radial-gradient(circle at top, #f9f3e4 0%, #eee3cc 55%, #dfd0b0 100%) !important;
+  color: var(--ink-hi) !important;
+}
+:root[data-theme="light"] header#site-nav {
+  background: rgba(246,239,223,0.85);
+  border-bottom: 1px solid rgba(107,74,47,0.18);
+}
+:root[data-theme="light"] header#site-nav .links a { color: var(--ink-mid); }
+:root[data-theme="light"] header#site-nav .links a:hover,
+:root[data-theme="light"] header#site-nav .links a[aria-current="page"] {
+  background: rgba(107,74,47,0.10);
+  color: var(--brand-bark);
+}
+:root[data-theme="light"] .tile,
+:root[data-theme="light"] .feature,
+:root[data-theme="light"] .surface {
+  background: rgba(255,251,240,0.85);
+  color: var(--ink-hi);
+}
+:root[data-theme="light"] .tile p,
+:root[data-theme="light"] .feature p { color: var(--ink-mid); }
+:root[data-theme="light"] .pullquote { color: var(--ink-hi); }
+:root[data-theme="light"] .pullquote em { color: var(--brand-bark); }
+:root[data-theme="light"] .archive {
+  background: rgba(255,251,240,0.5);
+  color: var(--ink-mid);
+}
+:root[data-theme="light"] .archive:hover {
+  background: rgba(255,251,240,0.9);
+  color: var(--ink-hi);
+}
+:root[data-theme="light"] .hero-editorial {
+  background:
+    radial-gradient(ellipse at 85% -10%, rgba(224,102,126,0.12), transparent 55%),
+    radial-gradient(ellipse at 0% 110%, rgba(122,179,98,0.18), transparent 50%),
+    linear-gradient(160deg, #f9f3e4, #eee3cc 60%, #e4d7bb);
+}
+:root[data-theme="light"] .hero-editorial h1 {
+  background: linear-gradient(110deg, var(--brand-bark) 0%, #c47a4f 55%, #d44e7a 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+:root[data-theme="light"] .hero-editorial .lede,
+:root[data-theme="light"] .section-head .section-sub { color: var(--ink-mid); }
+
+/* Theme toggle chip */
+.theme-toggle {
+  background: none;
+  border: 1px solid rgba(232,197,122,0.3);
+  color: var(--ink-mid);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  margin-left: 8px;
+}
+.theme-toggle:hover { background: rgba(232,197,122,0.12); color: var(--brand-gold); }
+:root[data-theme="light"] .theme-toggle {
+  border-color: rgba(107,74,47,0.3);
+  color: var(--ink-mid);
+}
+:root[data-theme="light"] .theme-toggle:hover {
+  background: rgba(107,74,47,0.1);
+  color: var(--brand-bark);
+}
+
+/* --------------------------------------------------------------
    Brand mark — inline SVG monogram rendered by nav.js
    -------------------------------------------------------------- */
 .brand-mark {
