@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T19:00:01.237555+00:00",
+  "updatedAt": "2026-04-16T20:00:01.357329+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3892,6 +3892,18 @@
     "https://www.techrepublic.com/article/news-google-gemini-cheat-sheet": {
       "image": "https://assets.techrepublic.com/uploads/2026/02/Gemini_Generated_Image_czdjcuczdjcuczdj.jpg",
       "checkedAt": "2026-04-16T19:00:01.237555+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/openai-takes-aim-at-anthropic-with-beefed-up-codex-that-gives-it-more-power-over-your-desktop": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-8.39.23-AM.png?resize=1200,670",
+      "checkedAt": "2026-04-16T20:00:01.357329+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ntt-research-scale-academy": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/ntt-research.jpg",
+      "checkedAt": "2026-04-16T20:00:01.357329+00:00"
+    },
+    "https://openai.com/index/introducing-gpt-rosalind": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/47Nrk4vhqfDQphKzpWC3Ha/42dcbf0138bdf0e4fe78196319bccb79/OAI_GPT-Rosaling_SEO_16x9_Alt.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-16T20:00:01.357329+00:00"
     }
   }
 }
