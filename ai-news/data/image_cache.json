@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T17:40:49.851220+00:00",
+  "updatedAt": "2026-04-16T19:00:01.237555+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3880,6 +3880,18 @@
     "https://openai.com/index/codex-for-almost-everything": {
       "image": "",
       "checkedAt": "2026-04-16T17:40:49.851220+00:00"
+    },
+    "https://techcrunch.com/2026/04/16/anthropic-cpo-leaves-figmas-board-after-reports-he-will-offer-a-competing-product": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/09/1704678804.jpg?resize=1200,799",
+      "checkedAt": "2026-04-16T19:00:01.237555+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-macbook-pro-redesign-oled-touch-m6": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/macbook-oled.jpg",
+      "checkedAt": "2026-04-16T19:00:01.237555+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-gemini-cheat-sheet": {
+      "image": "https://assets.techrepublic.com/uploads/2026/02/Gemini_Generated_Image_czdjcuczdjcuczdj.jpg",
+      "checkedAt": "2026-04-16T19:00:01.237555+00:00"
     }
   }
 }
