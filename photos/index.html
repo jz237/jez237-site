@@ -50,22 +50,7 @@
   <link rel="stylesheet" href="../assets/site-enhance.css" />
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../index.html">Home</a>
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../photos/">Photos</a>
-        <a href="../plants/">Plant Progress</a>
-        <a href="../ai-news/">AI News</a>
-        <a href="../plex/">Plex</a>
-        <a href="../ops/">Ops Center</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
     <section class="hero">
@@ -76,7 +61,7 @@
 
     <div class="section-grid">
       <a class="section-card" href="./cats/">
-        <img class="thumb" src="./cats/images/marty-closeup.jpg" alt="Cat Corner" />
+        <img class="thumb" src="./cats/images/marty-closeup.jpg" alt="Cat Corner" / loading="lazy" decoding="async">
         <div class="info">
           <h2>🐱 Cat Corner</h2>
           <p>Luca, Cosmo, Taco & Marty in their natural habitat.</p>
@@ -97,5 +82,6 @@
     </footer>
   </main>
   <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
 </body>
 </html>

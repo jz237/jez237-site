@@ -106,22 +106,7 @@
   <link rel="stylesheet" href="../../assets/site-enhance.css" />
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../../index.html">Home</a>
-        <a href="../../index.html#projects">Projects</a>
-        <a href="../../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../../photos/">Photos</a>
-        <a href="../../plants/">Plant Progress</a>
-        <a href="../../ai-news/">AI News</a>
-        <a href="../../plex/">Plex</a>
-        <a href="../../ops/">Ops Center</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
     <section class="hero">
@@ -145,7 +130,7 @@
 
   <!-- Lightbox -->
   <div class="lightbox-overlay" id="lightbox">
-    <img id="lightbox-img" src="" alt="" />
+    <img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async">
     <div class="lightbox-caption" id="lightbox-cap"></div>
   </div>
 
@@ -194,7 +179,7 @@
         const div = document.createElement('div');
         div.className = 'masonry-item';
         div.dataset.caption = p.caption;
-        div.innerHTML = `<img src="${p.src}" alt="${p.alt}" loading="lazy" /><div class="caption">${p.caption}</div>`;
+        div.innerHTML = `<img src="${p.src}" alt="${p.alt}" loading="lazy" / decoding="async"><div class="caption">${p.caption}</div>`;
         div.addEventListener('click', () => openLightbox(p.src, p.caption));
         gallery.appendChild(div);
       }
@@ -236,5 +221,6 @@
     btn.addEventListener('click', () => { loadBatch(); showTopBtn(); });
   </script>
   <script src="../../assets/site-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
 </body>
 </html>

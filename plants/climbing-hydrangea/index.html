@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Climbing Hydrangea — Plant Progress</title>
   <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/plant-page.css" />
   <link rel="stylesheet" href="../../assets/plant-enhance.css" />
   <style>
     :root {
@@ -76,23 +77,7 @@
   </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../../index.html">Home</a>
-        <a href="../../index.html#projects">Projects</a>
-        <a href="../../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../../photos/">Photos</a>
-        <a href="../../plants/">Plant Progress</a>
-        <a href="../../ai-news/">AI News</a>
-        <a href="../../plex/">Plex</a>
-        <a href="../../ops/">Ops Center</a>
-        <a href="../../garden/">Garden Calendar</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
     <section class="hero">
@@ -125,7 +110,7 @@
             </div>
           </div>
           <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="Climbing hydrangea spring update" />
+            <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="Climbing hydrangea spring update" / loading="lazy" decoding="async">
           </div>
         </div>
         <ul class="bullet-list">
@@ -137,7 +122,7 @@
       </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
   <script>
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -164,5 +149,6 @@
     });
   </script>
   <script src="../../assets/plant-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
 </body>
 </html>
