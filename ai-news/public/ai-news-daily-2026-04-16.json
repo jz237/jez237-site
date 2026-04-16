@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T04:00:01.819754+00:00",
+  "updatedAt": "2026-04-16T03:44:26.011717+00:00",
   "items": [
     {
       "title": "When Reasoning Models Hurt Behavioral Simulation: A Solver-Sampler Mismatch in Multi-Agent LLM Negotiation",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-16T04:00:09.621465+00:00",
+      "published": "2026-04-16T03:44:32.581442+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-16T04:00:01.819754+00:00",
+      "lastSeen": "2026-04-16T03:44:26.011717+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 7.76
@@ -29,10 +29,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T04:00:01.819754+00:00",
+      "lastSeen": "2026-04-16T03:44:26.011717+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5826
+      "score": 7.5898
     }
   ],
   "errors": []
