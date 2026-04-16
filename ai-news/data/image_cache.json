@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T18:00:01.869009+00:00",
+  "updatedAt": "2026-04-16T17:40:49.851220+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3867,19 +3867,19 @@
     },
     "https://techcrunch.com/2026/04/16/google-now-lets-you-explore-the-web-side-by-side-with-ai-mode": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200,800",
-      "checkedAt": "2026-04-16T18:00:01.869009+00:00"
+      "checkedAt": "2026-04-16T17:40:49.851220+00:00"
     },
     "https://www.theverge.com/ai-artificial-intelligence/913034/openai-codex-updates-use-macos": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-16-at-13.01.11.png?quality=90&amp;strip=all&amp;crop=0%2C8.7994481637149%2C100%2C83.384081972391&amp;w=1200",
-      "checkedAt": "2026-04-16T18:00:01.869009+00:00"
+      "checkedAt": "2026-04-16T17:40:49.851220+00:00"
     },
     "https://www.theverge.com/tech/913109/google-ai-mode-tabs-sources": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/google-ai-mode-side-by-side.png?quality=90&amp;strip=all&amp;crop=0%2C15.573644440406%2C100%2C68.852711119189&amp;w=1200",
-      "checkedAt": "2026-04-16T18:00:01.869009+00:00"
+      "checkedAt": "2026-04-16T17:40:49.851220+00:00"
     },
     "https://openai.com/index/codex-for-almost-everything": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/3kzRaZHk3LsNCB1rF3btFd/f210774dba646ae91ead20a46d89d364/Codex_Blog_SEO.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-04-16T18:00:01.869009+00:00"
+      "image": "",
+      "checkedAt": "2026-04-16T17:40:49.851220+00:00"
     }
   }
 }
