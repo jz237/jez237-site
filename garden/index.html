@@ -81,16 +81,89 @@
       min-height: 80px;
       padding: 6px 7px;
       cursor: pointer;
-      transition: border-color .15s, background .15s;
+      transition: transform .28s cubic-bezier(0.23,1,0.32,1),
+                  border-color .2s ease,
+                  background .2s ease,
+                  box-shadow .3s ease;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
+      will-change: transform;
     }
-    .day-cell:hover { border-color: var(--earth-accent-2); background: var(--earth-panel-2); }
+    .day-cell:not(.empty):hover {
+      transform: translateY(-3px) scale(1.05);
+      background: var(--earth-panel-2);
+      border-color: var(--earth-accent-2);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.38),
+                  0 0 0 1px rgba(232,197,122,0.22),
+                  0 0 22px rgba(209,148,99,0.18);
+      z-index: 5;
+    }
     .day-cell.today { border-color: var(--earth-accent); }
     .day-cell.today .day-num { color: var(--earth-accent); font-weight: 700; }
+    .day-cell.today:hover {
+      box-shadow: 0 14px 28px rgba(0,0,0,0.4),
+                  0 0 0 1px rgba(158,176,119,0.45),
+                  0 0 26px rgba(158,176,119,0.3);
+    }
+    .day-cell.has-event:hover {
+      box-shadow: 0 14px 30px rgba(0,0,0,0.4),
+                  0 0 0 1px rgba(158,176,119,0.4),
+                  0 0 22px rgba(158,176,119,0.22);
+    }
     .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
-    .day-cell.empty:hover { background: transparent; border-color: transparent; }
+    .day-cell.empty:hover { background: transparent; border-color: transparent; transform: none; box-shadow: none; }
     .day-cell.has-event { border-color: #5a6e42; }
+
+    /* Floating tooltip for day details */
+    .day-tooltip {
+      position: fixed;
+      z-index: 2000;
+      max-width: 280px;
+      min-width: 200px;
+      pointer-events: none;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(69,53,40,0.97), rgba(40,31,24,0.97));
+      border: 1px solid var(--earth-accent-2);
+      border-radius: 12px;
+      box-shadow: 0 22px 50px rgba(0,0,0,0.55), 0 0 0 1px rgba(232,197,122,0.18);
+      color: var(--earth-text);
+      font-size: 12.5px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(6px) scale(0.96);
+      transition: opacity .18s ease, transform .22s cubic-bezier(0.23,1,0.32,1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .day-tooltip.in { opacity: 1; transform: translateY(0) scale(1); }
+    .day-tooltip .dt-date {
+      font-weight: 700;
+      color: var(--earth-accent-3);
+      letter-spacing: .02em;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .day-tooltip .dt-wx {
+      color: var(--earth-water);
+      font-size: 11px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .day-tooltip .dt-event {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 4px 0;
+    }
+    .day-tooltip .dt-event .dt-icon { font-size: 15px; line-height: 1.2; flex-shrink: 0; }
+    .day-tooltip .dt-event strong { display: block; font-size: 12.5px; color: var(--earth-text); font-weight: 600; }
+    .day-tooltip .dt-event .dt-note { color: var(--earth-muted); font-size: 11.5px; margin-top: 2px; }
+    .day-tooltip .dt-empty {
+      color: var(--earth-muted);
+      font-style: italic;
+      font-size: 11.5px;
+    }
     .day-num { font-size: 12px; color: var(--earth-muted); margin-bottom: 4px; }
     .day-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
     .tag {
@@ -212,23 +285,7 @@
   <link rel="stylesheet" href="../assets/site-enhance.css" />
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../index.html">Home</a>
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../photos/">Photos</a>
-        <a href="../plants/">Plant Progress</a>
-        <a href="../ai-news/">AI News</a>
-        <a href="../plex/">Plex</a>
-        <a href="../ops/">Ops Center</a>
-        <a href="./">Garden Calendar</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
     <div class="garden-hero">
@@ -675,7 +732,77 @@
     renderCalendar(currentYear, currentMonth);
     renderLog();
     loadWeather();
+
+    // ---- Floating tooltip on day-cell hover ----
+    (function setupDayTooltip() {
+      const tt = document.createElement('div');
+      tt.className = 'day-tooltip';
+      document.body.appendChild(tt);
+
+      function suggestionFor(key, events, wx) {
+        if (events && events.length) return null;  // Events take precedence
+        // Light, pleasant fallback suggestion based on weather + season
+        if (!wx) return 'Nothing scheduled — a quiet day in the garden.';
+        if (wx.rain >= 60)  return 'Heavy rain expected — skip watering, let the garden drink naturally.';
+        if (wx.rain >= 30)  return 'Showers likely — check drainage and take the day off.';
+        if (wx.high >= 90)  return 'Hot day — water deeply in the morning and keep pots shaded.';
+        if (wx.high >= 80)  return 'Warm and clear — a great day to weed or deadhead.';
+        if (wx.high <= 45)  return 'Cool day — good for pruning or planning next month.';
+        return 'Clear skies — walk the beds and note what needs attention.';
+      }
+
+      function tooltipHtml(key) {
+        const events = allEvents[key] || [];
+        const wx = wxData[key];
+        const [y, m, d] = key.split('-');
+        const dateLabel = `${monthNames[parseInt(m,10)-1]} ${parseInt(d,10)}, ${y}`;
+        let html = `<div class="dt-date">${dateLabel}</div>`;
+        if (wx) {
+          html += `<div class="dt-wx">${wx.icon} ${wx.high}°/${wx.low}°F · 💧 ${wx.rain}%${wx.desc ? ' · ' + wx.desc : ''}</div>`;
+        }
+        if (events.length === 0) {
+          html += `<div class="dt-empty">${suggestionFor(key, events, wx)}</div>`;
+        } else {
+          events.forEach(ev => {
+            const note = ev.note ? `<div class="dt-note">${ev.note}</div>` : '';
+            html += `<div class="dt-event"><span class="dt-icon">${ev.icon || '•'}</span><div><strong>${ev.label || ''}</strong>${note}</div></div>`;
+          });
+        }
+        return html;
+      }
+
+      function position(cell) {
+        const r = cell.getBoundingClientRect();
+        const ttR = tt.getBoundingClientRect();
+        let left = r.left + (r.width - ttR.width) / 2;
+        let top  = r.top - ttR.height - 10;
+        if (left < 8) left = 8;
+        if (left + ttR.width > window.innerWidth - 8) left = window.innerWidth - ttR.width - 8;
+        if (top < 8) top = r.bottom + 10;    // flip below if no room above
+        tt.style.left = left + 'px';
+        tt.style.top  = top  + 'px';
+      }
+
+      // Delegate from the grid so dynamically re-rendered cells still work
+      grid.addEventListener('mouseover', (e) => {
+        const cell = e.target.closest('.day-cell');
+        if (!cell || cell.classList.contains('empty') || !cell.dataset.key) return;
+        tt.innerHTML = tooltipHtml(cell.dataset.key);
+        tt.classList.remove('in');
+        // Reflow, then measure + show
+        requestAnimationFrame(() => { position(cell); tt.classList.add('in'); });
+      });
+      grid.addEventListener('mouseout', (e) => {
+        const cell = e.target.closest('.day-cell');
+        if (!cell) return;
+        if (e.relatedTarget && cell.contains(e.relatedTarget)) return;
+        tt.classList.remove('in');
+      });
+      // Hide on scroll — the fixed-position tooltip looks stale otherwise
+      window.addEventListener('scroll', () => tt.classList.remove('in'), { passive: true });
+    })();
   </script>
   <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
 </body>
 </html>
