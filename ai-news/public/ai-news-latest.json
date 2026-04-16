@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-16T09:45:08.131850+00:00",
+  "updatedAt": "2026-04-16T11:00:01.347770+00:00",
   "items": [
     {
-      "title": "Md. Naim Molla, Md Muhtasim Munif Fahim, Md. Binyamin, Md Jahid Hasan Imran, Tonmoy Shil, Nura Rayhan, Md Rezaul Karim",
+      "title": "Text-as-Signal: Quantitative Semantic Scoring with Embeddings, Logprobs, and Noise Reduction",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,77 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-16T09:45:11.705341+00:00",
+      "published": "2026-04-16T11:00:10.736216+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
+      "url": "https://thenextweb.com/news/amazon-launches-ai-bio-platform",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amazon Web Services (AWS)  announced this Tuesday the launch of its AI bio tool, Amazon Bio Discovery, to accelerate the early-stage process of drug discovery in the pharmaceutical industry. The application aims to help scientists design and test novel drugs in a fast and secure way. Amazon Bio Discovery enables scientists to run complex computational [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
+      "published": "2026-04-16T10:28:08+00:00",
+      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 13.3339
+    },
+    {
+      "title": "US Moves Toward Mandatory Data Center Energy Reporting as EIA Pilot Expands",
+      "url": "https://www.techrepublic.com/article/news-eia-data-center-energy-pilot",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The EIA’s pilot survey offers the clearest look yet at how the US government plans to measure data center power use as AI strains the grid.\nThe post US Moves Toward Mandatory Data Center Energy Reporting as EIA Pilot Expands appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/03/tr-03262026-ai-data-centers-atmospheric-water-harvesting.jpg",
+      "published": "2026-04-16T10:21:21+00:00",
+      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3305
+    },
+    {
+      "title": "Exclusive: Make opens a mentorship office at STATION F",
+      "url": "https://thenextweb.com/news/make-automation-station-f-mentorship-office-paris",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Celonis-owned visual automation platform, which already has more than 200 STATION F startups on its programme, is putting a permanent on-campus presence in Paris as it targets France as a strategic growth market. One-on-onementorship, workshops, and hackathon participation are all part of the offer. Make, the visual automation and AI agents platform owned by [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Station-F-x-Make.png",
+      "published": "2026-04-16T10:00:21+00:00",
+      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.82
+    },
+    {
+      "title": "UK banks get their Mythos briefing within days",
+      "url": "https://thenextweb.com/news/anthropic-mythos-uk-banks",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Bank of England’s Cross Market Operational Resilience Group will convene within days to brief major UK banks, insurers, and exchanges about Anthropic’s Claude Mythos Preview. This unreleased AI model regulators say can autonomously identify and exploit vulnerabilities across every major operating system and web browser. The US Treasury, the Federal Reserve, and the Bank [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
+      "published": "2026-04-16T09:45:09+00:00",
+      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.2125
     },
     {
       "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
@@ -28,10 +93,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
       "published": "2026-04-16T09:13:23+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2339
+      "score": 11.197
     },
     {
       "title": "UCSD and Together AI Research Introduces Parcae: A Stable Architecture for Looped Language Models That Achieves the Quality of a Transformer Twice the Size",
@@ -44,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-16-at-1.29.40-AM-1-150x150.png",
       "published": "2026-04-16T08:30:30+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6826
+      "score": 6.6464
     },
     {
       "title": "Musk is asking chip suppliers to move at ‘light speed’ for his Terafab AI chip plant",
@@ -60,10 +125,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2024/07/Untitled-design-17.jpg",
       "published": "2026-04-16T08:06:33+00:00",
       "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6009
+      "score": 4.5651
     },
     {
       "title": "DeepL, known for text translation, now wants to translate your voice",
@@ -76,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/DeepL_Voice2Voice_Conversations_2.png?resize=1200%2C804",
       "published": "2026-04-16T08:00:00+00:00",
       "firstSeen": "2026-04-16T08:02:24.553361+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2377
+      "score": 2.202
     },
     {
       "title": "Cadence and Nvidia are bridging the simulation gap that’s slowing down robotics",
@@ -92,10 +157,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Cadence-and-Nvidia.png",
       "published": "2026-04-16T07:24:56+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3809
+      "score": 2.3457
     },
     {
       "title": "Quantum computing pioneer Chad Rigetti is back",
@@ -108,10 +173,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sygaldry-Technologies.png",
       "published": "2026-04-16T07:16:11+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7767
+      "score": 2.7417
     },
     {
       "title": "Amazon-backed nuclear startup X-energy files for an IPO that could raise up to $814M",
@@ -124,10 +189,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-backed-nuclear-startup-X-energy.png",
       "published": "2026-04-16T07:05:22+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0716
+      "score": 2.0368
     },
     {
       "title": "The Italian deeptech making graphene-based optical chips gets €211M",
@@ -140,10 +205,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/CamGraphic-team.png",
       "published": "2026-04-16T06:53:00+00:00",
       "firstSeen": "2026-04-16T08:00:01.415942+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1657
+      "score": 3.1311
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -156,10 +221,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.2834
+      "score": 11.2506
     },
     {
       "title": "A Coding Implementation to Build Multi-Agent AI Systems with SmolAgents Using Code Execution, Tool Calling, and Dynamic Orchestration",
@@ -172,10 +237,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-42.png",
       "published": "2026-04-16T04:38:31+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5744
+      "score": 6.5419
     },
     {
       "title": "datasette.io news preview",
@@ -188,10 +253,27 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-io-preview.jpg",
       "published": "2026-04-16T00:18:03+00:00",
       "firstSeen": "2026-04-16T01:00:01.386590+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.436
+      "score": 7.4072
+    },
+    {
+      "title": "Accelerating the cyber defense ecosystem that protects us all",
+      "url": "https://openai.com/index/accelerating-cyber-defense-ecosystem",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Leading security firms and enterprises join OpenAI’s Trusted Access for Cyber, using GPT-5.4-Cyber and $10M in API grants to strengthen global cyber defense.",
+      "image": "",
+      "published": "2026-04-16T00:00:00+00:00",
+      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 15.2104
     },
     {
       "title": "datasette-export-database 0.3a1",
@@ -204,10 +286,10 @@
       "image": "",
       "published": "2026-04-15T23:52:35+00:00",
       "firstSeen": "2026-04-15T23:56:37.200188+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7261
+      "score": 2.6976
     },
     {
       "title": "datasette 1.0a27",
@@ -220,10 +302,10 @@
       "image": "",
       "published": "2026-04-15T23:16:34+00:00",
       "firstSeen": "2026-04-15T23:56:37.200188+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2123
+      "score": 5.1842
     },
     {
       "title": "Tech Layoffs Continue: Snap Cuts 1,000 Jobs, Citing ‘Rapid Advancements’ in AI",
@@ -236,10 +318,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/souvik-banerjee-PQXlYuQeX4c-unsplash-1.jpg",
       "published": "2026-04-15T20:00:21+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6009
+      "score": 3.5753
     },
     {
       "title": "Trump’s posting even more AI-generated Trump-Jesus fan art",
@@ -252,10 +334,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/trump-jesus-altered.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C31.744282171397%2C100%2C36.511435657206",
       "published": "2026-04-15T19:50:31+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0075
+      "score": 1.982
     },
     {
       "title": "SS&C Intralinks DealCentre AI vs. Datasite: Which platform is built for the future of dealmaking?",
@@ -268,10 +350,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/technology-meets-humanity-background-modern-remak-2026-01-07-07-37-57-utc-1.jpg",
       "published": "2026-04-15T19:31:07+00:00",
       "firstSeen": "2026-04-15T21:00:02.005887+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8908
+      "score": 2.8655
     },
     {
       "title": "OpenAI updates its Agents SDK to help enterprises build safer, more capable agents",
@@ -284,10 +366,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
       "published": "2026-04-15T19:28:36+00:00",
       "firstSeen": "2026-04-15T19:41:27.010212+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.4299
+      "score": 1.4047
     },
     {
       "title": "Hightouch reaches $100M ARR fueled by marketing tools powered by AI",
@@ -300,10 +382,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/founders-photo.webp?resize=1200%2C1200",
       "published": "2026-04-15T18:55:12+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3186
+      "score": 4.2937
     },
     {
       "title": "LinkedIn data shows AI isn’t to blame for hiring decline… yet",
@@ -316,10 +398,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/job-search-GettyImages-2161243486.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:51:54+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9174
+      "score": 1.8927
     },
     {
       "title": "AI learning app Gizmo levels up with 13M users and a $22M investment",
@@ -332,10 +414,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/01/GettyImages-1263424631.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:38:10+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0128
+      "score": 2.9882
     },
     {
       "title": "Can AI judge journalism? A Thiel-backed startup says yes, even if it risks chilling whistleblowers",
@@ -348,10 +430,10 @@
       "image": "",
       "published": "2026-04-15T18:33:20+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9112
+      "score": 1.8866
     },
     {
       "title": "Google rolls out a native Gemini app for Mac",
@@ -364,10 +446,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-15T18:22:13+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0075
+      "score": 8.9831
     },
     {
       "title": "My bets on open models, mid-2026",
@@ -380,10 +462,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/8be08b29-d70a-43f3-8422-6b952816ddab_3182x1790.png",
       "published": "2026-04-15T18:20:00+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9768
+      "score": 1.9524
     },
     {
       "title": "Google launches a Gemini AI app on Mac",
@@ -396,11 +478,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Gemini-for-MacOS_03_Capsule-Image_16x9.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-04-15T18:10:15+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2735
+      "score": 20.2492
     },
     {
       "title": "YouTube Will Show Fewer Livestream Ads During Purchases and Chat Spikes",
@@ -413,10 +495,10 @@
       "image": "https://assets.techrepublic.com/uploads/2022/02/AdobeStock_192565042-scaled.jpeg",
       "published": "2026-04-15T18:06:32+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8623
+      "score": 2.838
     },
     {
       "title": "Accel raises $5 billion for AI as venture capital bets reach infrastructure scale",
@@ -429,10 +511,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/accel-5-billion-fund-ai-anthropic-cursor-venture-capital.png",
       "published": "2026-04-15T18:00:37+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.3604
+      "score": 1.3362
     },
     {
       "title": "AI Could Democratize One of Tech's Most Valuable Resources",
@@ -445,10 +527,10 @@
       "image": "https://media.wired.com/photos/69dea084bbe4a9ff56b3014b/master/pass/AL-Lab-AI-Could-Democratize-One-of-Techs-Most-Valuable-Resources-Business.jpg",
       "published": "2026-04-15T18:00:00+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3002
+      "score": 3.276
     },
     {
       "title": "The musician-turned-biotech-founder waiting to fundraise",
@@ -461,10 +543,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Copy-of-Stand-Together-Photo-By-Zach-Bell.jpg?resize=1200%2C1200",
       "published": "2026-04-15T17:58:28+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3997
+      "score": 4.3755
     },
     {
       "title": "Anthropic attracts $800 billion valuation offers as revenue hits $30 billion annualised run rate",
@@ -480,7 +562,7 @@
       "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.857
+      "score": 5.8329
     },
     {
       "title": "Athena launches FabOrchestrator, an agentic AI platform for manufacturing execution systems",
@@ -496,7 +578,7 @@
       "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.6514
+      "score": 7.6275
     },
     {
       "title": "India’s vibe-coding startup Emergent enters OpenClaw-like AI agent space",
@@ -509,10 +591,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/emergent-wingman.jpg?resize=1200%2C800",
       "published": "2026-04-15T17:24:18+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0885
+      "score": 8.0647
     },
     {
       "title": "A Technical Deep Dive into the Essential Stages of Modern Large Language Model Training, Alignment, and Deployment",
@@ -525,10 +607,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-32-150x150.png",
       "published": "2026-04-15T17:21:06+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9175
+      "score": 4.8937
     },
     {
       "title": "Jane Street commits $6 billion to CoreWeave and takes a $1 billion equity stake",
@@ -544,7 +626,7 @@
       "lastSeen": "2026-04-16T09:45:08.131850+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7462
+      "score": 1.7225
     },
     {
       "title": "Quoting John Gruber",
@@ -557,93 +639,10 @@
       "image": "",
       "published": "2026-04-15T17:13:57+00:00",
       "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9852
-    },
-    {
-      "title": "Gemini 3.1 Flash TTS",
-      "url": "https://simonwillison.net/2026/Apr/15/gemini-31-flash-tts",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Gemini 3.1 Flash TTS\nGoogle released Gemini 3.1 Flash TTS today, a new text-to-speech model that can be directed using prompts.\nIt's presented via the standard Gemini API using gemini-3.1-flash-tts-preview as the model ID, but can only output audio files.\nThe prompting guide is surprising, to say the least. Here's their example prompt to generate just a few short sentences of audio:\n# AUDIO PROFILE: Jaz R.\n## \"The Morning Hype\"\n\n## THE SCENE: The London Studio\nIt is 10:00 PM in a glass-walled studio overlooking the moonlit London skyline, but inside, it is blindingly bright. The red \"ON AIR\" t",
-      "image": "https://static.simonwillison.net/static/2026/gemini-flash-tts.jpg",
-      "published": "2026-04-15T17:13:14+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 17.585
-    },
-    {
-      "title": "Google AI Launches Gemini 3.1 Flash TTS: A New Benchmark in Expressive and Controllable AI Voice",
-      "url": "https://www.marktechpost.com/2026/04/15/google-ai-launches-gemini-3-1-flash-tts-a-new-benchmark-in-expressive-and-controllable-ai-voice",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Google has introduced Gemini 3.1 Flash TTS, a preview text-to-speech model focused on improving speech quality, expressive control, and multilingual generation. Unlike previous iterations that prioritized simple conversion, this release emphasizes natural-language audio tags, native support for more than 70 languages, and native multi-speaker dialogue. This release signals a shift from &#8216;black-box&#8217; audio generation toward [&#8230;]\nThe post Google AI Launches Gemini 3.1 Flash TTS: A New Benchmark in Expressive and Controllable AI Voice appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-40.png",
-      "published": "2026-04-15T17:06:17+00:00",
-      "firstSeen": "2026-04-15T17:17:26.244670+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 20.0627
-    },
-    {
-      "title": "Accenture bets on General Robotics to unify factory AI across robot brands",
-      "url": "https://thenextweb.com/news/accenture-general-robotics-grid-physical-ai-manufacturing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Accenture Ventures has invested in General Robotics, whose GRID platform provides a unified AI intelligence layer across 40+ robots from different manufacturers including FANUC, Flexiv, and Ghost Robotics. The deal extends Accenture’s physical AI strategy alongside its NVIDIA-powered Physical AI Orchestrator and prior investments in Sanctuary AI and Schaeffler humanoid robotics partnerships. Accenture [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/accenture-general-robotics-grid-physical-ai-manufacturing.png",
-      "published": "2026-04-15T16:52:27+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7383
-    },
-    {
-      "title": "Gemini 3.1 Flash TTS",
-      "url": "https://simonwillison.net/2026/Apr/15/gemini-flash-tts",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tool: Gemini 3.1 Flash TTS\n    See my notes on Google's new Gemini 3.1 Flash TTS text-to-speech model.\n    \n        Tags: gemini, google",
-      "image": "",
-      "published": "2026-04-15T16:41:46+00:00",
-      "firstSeen": "2026-04-15T19:00:01.231713+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 16.1749
-    },
-    {
-      "title": "Astroport and Vermeer want to bring heavy construction equipment to the Moon",
-      "url": "https://thenextweb.com/news/astroport-vermeer-lunar-iron-autonomous-construction-moon-base",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Astroport Space Technologies and Vermeer Corporation have announced a collaboration to adapt industrial surface mining equipment for autonomous lunar construction, a partnership that both companies frame as delivering the heavy machinery, or “Lunar Iron,” needed to build a permanent human presence on the Moon. The announcement, made at the 20th International Conference on Engineering, Science, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/astroport-vermeer-lunar-iron-autonomous-construction-moon-base.png",
-      "published": "2026-04-15T16:36:55+00:00",
-      "firstSeen": "2026-04-15T17:00:01.394049+00:00",
-      "lastSeen": "2026-04-16T08:02:24.553361+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7334
+      "score": 2.9615
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -656,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1
+      "score": 2.0905
     },
     {
       "title": "Dark Breath",
@@ -672,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7379
+      "score": 1.7311
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -688,10 +687,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1226
+      "score": 1.1225
     },
     {
       "title": "Superbugs: Resistance Rising Part 3",
@@ -704,7 +703,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-16T09:45:08.131850+00:00",
+      "lastSeen": "2026-04-16T11:00:01.347770+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8918
