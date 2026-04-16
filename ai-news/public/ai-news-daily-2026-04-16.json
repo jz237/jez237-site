@@ -1,6 +1,6 @@
 {
   "date": "2026-04-16",
-  "updatedAt": "2026-04-16T17:00:02.032471+00:00",
+  "updatedAt": "2026-04-16T18:00:01.869009+00:00",
   "items": [
     {
       "title": "Anthropic releases Claude Opus 4.7 with benchmark-leading coding and agentic performance",
@@ -13,11 +13,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.png",
       "published": "2026-04-16T15:49:26+00:00",
       "firstSeen": "2026-04-16T17:00:02.032471+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 29.3646
+      "score": 29.3355
     },
     {
       "title": "Anthropic releases a new Opus model amid Mythos Preview buzz",
@@ -30,11 +30,44 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-16T15:59:24+00:00",
       "firstSeen": "2026-04-16T16:38:09.069329+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.8296
+      "score": 20.8003
+    },
+    {
+      "title": "OpenAI’s big Codex update is a direct shot at Anthropic’s Claude Code",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/913034/openai-codex-updates-use-macos",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "OpenAI is beefing up its agentic coding and development system Codex with a suite of updates that let it use your computer, generate images, and remember from past experiences. Codex will now be able to operate desktop apps on your computer, OpenAI says in a blog post announcing the update. It can work in the [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-16-at-13.01.11.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C8.7994481637149%2C100%2C83.384081972391&amp%3Bw=1200",
+      "published": "2026-04-16T17:00:00+00:00",
+      "firstSeen": "2026-04-16T18:00:01.869009+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 19.9298
+    },
+    {
+      "title": "Qwen3.6-35B-A3B on my laptop drew me a better pelican than Claude Opus 4.7",
+      "url": "https://simonwillison.net/2026/Apr/16/qwen-beats-opus",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "For anyone who has been taking my pelican riding a bicycle benchmark seriously as a robust way to test models, here are pelicans from this morning's two big model releases - Qwen3.6-35B-A3B from Alibaba and Claude Opus 4.7 from Anthropic.\nHere's the Qwen 3.6 pelican, generated using this 20.9GB Qwen3.6-35B-A3B-UD-Q4_K_S.gguf quantized model by Unsloth, running on my MacBook Pro M5 via LM Studio (and the llm-lmstudio plugin) - transcript here:\n\nAnd here's one I got from Anthropic's brand new Claude Opus 4.7 (transcript):\n\nI'm giving this one to Qwen 3.6. Opus managed to mess up the bicycle fram",
+      "image": "https://static.simonwillison.net/static/2026/Qwen3.6-35B-A3B-UD-Q4_K_S-pelican.png",
+      "published": "2026-04-16T17:16:52+00:00",
+      "firstSeen": "2026-04-16T18:00:01.869009+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 19.6182
     },
     {
       "title": "Treating enterprise AI as an operating layer",
@@ -47,11 +80,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Ensemble-article-iStock-2213998103.jpg?resize=1200%2C600",
       "published": "2026-04-16T13:00:00+00:00",
       "firstSeen": "2026-04-16T14:00:01.584750+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.6243
+      "score": 17.5973
     },
     {
       "title": "Introducing Claude Opus 4.7",
@@ -64,11 +97,11 @@
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/96ea2509a90e527642c822303e56296a07bcfce4-1920x1080.png",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T15:53:31.137022+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.386
+      "score": 16.3672
     },
     {
       "title": "Accelerating the cyber defense ecosystem that protects us all",
@@ -81,11 +114,11 @@
       "image": "",
       "published": "2026-04-16T00:00:00+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.086
+      "score": 15.0672
     },
     {
       "title": "Gemini can now pull from Google Photos to generate personalized images",
@@ -98,10 +131,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-16-at-8.32.59AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.2902166102043%2C100%2C93.419566779591&amp%3Bw=1200",
       "published": "2026-04-16T16:00:00+00:00",
       "firstSeen": "2026-04-16T16:38:09.069329+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.8298
+      "score": 14.8005
     },
     {
       "title": "Amazon launches AI Bio platform to accelerate early-stage drug discovery",
@@ -114,11 +147,28 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Amazon-Bio-discovery.png",
       "published": "2026-04-16T10:28:08+00:00",
       "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.1675
+      "score": 13.1423
+    },
+    {
+      "title": "The UK Launches Its $675 Million Sovereign AI Fund",
+      "url": "https://www.wired.com/story/the-uk-launches-its-dollar675-million-sovereign-ai-fund",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In a bid to minimize dependence on technology from other countries, the UK government is plowing resources into homegrown AI startups.",
+      "image": "https://media.wired.com/photos/69dff76f67d3fd19de3c134e/master/pass/Business_UKLaunchesSovereignAIFund_03.jpg",
+      "published": "2026-04-16T17:30:00+00:00",
+      "firstSeen": "2026-04-16T18:00:01.869009+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 12.3748
     },
     {
       "title": "Google gives Gemini image generation that knows your life",
@@ -131,10 +181,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-gemini-nano-banana-personal-intelligence-image-generation.png",
       "published": "2026-04-16T16:33:20+00:00",
       "firstSeen": "2026-04-16T17:00:02.032471+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3365
+      "score": 12.3067
     },
     {
       "title": "How to Build a Universal Long-Term Memory Layer for AI Agents Using Mem0 and OpenAI",
@@ -147,58 +197,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-43-1024x731.png",
       "published": "2026-04-16T04:58:44+00:00",
       "firstSeen": "2026-04-16T05:00:01.814597+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
+      "lastSeen": "2026-04-16T18:00:01.869009+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.1077
-    },
-    {
-      "title": "Apple secretly threatened to pull Grok from the App Store over deepfake nudes",
-      "url": "https://thenextweb.com/news/apple-grok-app-store-threat-deepfakes-xai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A letter Apple sent to US senators, obtained by NBC News, reveals that Apple rejected an initial Grok update and warned the app could be removed unless xAI made further changes. Only a second submission passed. Apple privately threatened to remove Grok, xAI’s AI chatbot, from the App Store in January after Elon Musk’s company [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Grok.png",
-      "published": "2026-04-16T09:13:23+00:00",
-      "firstSeen": "2026-04-16T09:45:08.131850+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.0363
-    },
-    {
-      "title": "UK banks get their Mythos briefing within days",
-      "url": "https://thenextweb.com/news/anthropic-mythos-uk-banks",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Bank of England’s Cross Market Operational Resilience Group will convene within days to brief major UK banks, insurers, and exchanges about Anthropic’s Claude Mythos Preview. This unreleased AI model regulators say can autonomously identify and exploit vulnerabilities across every major operating system and web browser. The US Treasury, the Federal Reserve, and the Bank [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/workday-cto-bailis-anthropic-member-technical-staff.png",
-      "published": "2026-04-16T09:45:09+00:00",
-      "firstSeen": "2026-04-16T11:00:01.347770+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.0494
-    },
-    {
-      "title": "New ways to create personalized images in the Gemini app",
-      "url": "https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence-nano-banana",
-      "source": "Google AI Blog",
-      "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "Example images made with Personal Intelligence",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Blog_post_header.max-600x600.format-webp.webp",
-      "published": "2026-04-16T16:00:00+00:00",
-      "firstSeen": "2026-04-16T16:38:09.069329+00:00",
-      "lastSeen": "2026-04-16T17:00:02.032471+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.4998
+      "score": 11.0861
     }
   ],
   "errors": []
