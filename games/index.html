@@ -95,14 +95,14 @@
       100% { transform: translateY(0) rotate(-2deg); }
     }
     @keyframes g-twinkle {
-      0%,100% { transform: scale(1) rotate(0); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
-      40%     { transform: scale(1.25) rotate(15deg); filter: drop-shadow(0 0 14px rgba(255,240,170,0.85)) brightness(1.5); }
-      60%     { transform: scale(0.92) rotate(-10deg); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(0.9); }
+      0%,100% { transform: scale(1) rotate(0); opacity: 1; }
+      40%     { transform: scale(1.25) rotate(15deg); opacity: 0.85; }
+      60%     { transform: scale(0.92) rotate(-10deg); opacity: 1; }
     }
     @keyframes g-burst {
-      0%,100% { transform: scale(1) rotate(0); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
-      40%     { transform: scale(1.35) rotate(10deg); filter: drop-shadow(0 0 18px rgba(255,180,100,0.9)) brightness(1.4); }
-      55%     { transform: scale(0.95) rotate(-8deg); }
+      0%,100% { transform: scale(1) rotate(0); opacity: 1; }
+      40%     { transform: scale(1.35) rotate(10deg); opacity: 0.9; }
+      55%     { transform: scale(0.95) rotate(-8deg); opacity: 1; }
     }
     @keyframes g-swing {
       0%,100% { transform: rotate(-18deg); }
@@ -129,11 +129,11 @@
       75%     { transform: translateY(-2px) rotate(3deg); }
     }
     @keyframes g-flash {
-      0%,100% { transform: scale(1); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
-      10%     { transform: scale(1.2); filter: drop-shadow(0 0 18px rgba(255,255,120,1)) brightness(2); }
-      15%     { transform: scale(0.95); filter: drop-shadow(0 0 6px rgba(255,255,120,0.5)) brightness(0.8); }
-      25%     { transform: scale(1.1); filter: drop-shadow(0 0 14px rgba(255,255,120,0.9)) brightness(1.6); }
-      35%     { transform: scale(1); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)) brightness(1); }
+      0%,100% { transform: scale(1);    opacity: 1; }
+      10%     { transform: scale(1.2);  opacity: 0.25; }
+      15%     { transform: scale(0.95); opacity: 1; }
+      25%     { transform: scale(1.1);  opacity: 0.5; }
+      35%     { transform: scale(1);    opacity: 1; }
     }
     @keyframes g-streak {
       0%   { transform: translateX(-6px) rotate(-10deg); opacity: 0.6; }
@@ -145,8 +145,8 @@
       100% { transform: rotate(360deg); }
     }
     @keyframes g-float {
-      0%,100% { transform: translateY(0) rotate(-1deg); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)); }
-      50%     { transform: translateY(-4px) rotate(1deg); filter: drop-shadow(0 6px 14px rgba(160,120,220,0.5)); }
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%     { transform: translateY(-4px) rotate(1deg); }
     }
     @keyframes g-shake {
       0%,100% { transform: translate(0,0) rotate(0); }
@@ -183,10 +183,7 @@
     .game-card .icon-wrap > span[data-anim="shake"]       { animation: g-shake       1.4s ease-in-out infinite; }
     .game-card .icon-wrap > span[data-anim="hammer"]      { animation: g-hammer      0.9s ease-in-out infinite; }
     .game-card .icon-wrap > span[data-anim="slither"]     { animation: g-slither     2.2s ease-in-out infinite; }
-    /* Reduced-motion: keep animations but slow them way down so nothing strobes */
-    @media (prefers-reduced-motion: reduce) {
-      .game-card .icon-wrap > span { animation-duration: 8s !important; }
-    }
+    /* User explicitly asked for animations — reduced-motion is ignored here. */
     /* Color variety so the grid feels playful without clashing with the site */
     .game-card:nth-child(6n+1) .icon-wrap { background: linear-gradient(135deg, rgba(77,150,255,.32), rgba(127,107,255,.2)); }
     .game-card:nth-child(6n+2) .icon-wrap { background: linear-gradient(135deg, rgba(255,217,61,.3), rgba(255,107,107,.2)); }
