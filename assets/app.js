@@ -72,9 +72,10 @@ function renderCards(containerId, items = []) {
 }
 
 function renderSiteContent(data) {
-  document.getElementById('hero-title').textContent = `${data.name} — personal site`;
-  document.getElementById('hero-tagline').textContent = data.tagline;
-  document.getElementById('hero-about').textContent = data.about;
+  const setText = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+  setText('hero-title',   `${data.name} — personal site`);
+  setText('hero-tagline', data.tagline);
+  setText('hero-about',   data.about);
 
   renderCards('projects-list', data.projects || []);
   renderCards('tools-list', data.tools || []);
