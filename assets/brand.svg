@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34291f"/>
+      <stop offset="100%" stop-color="#1d1811"/>
+    </linearGradient>
+    <linearGradient id="leaf-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#e8c57a"/>
+      <stop offset="50%"  stop-color="#7ab362"/>
+      <stop offset="100%" stop-color="#4a6274"/>
+    </linearGradient>
+  </defs>
+  <circle cx="20" cy="20" r="19" fill="url(#bg-grad)" stroke="rgba(232,197,122,0.35)" stroke-width="0.8"/>
+  <path d="M20 7 C 29 12 29 26 20 33 C 11 26 11 12 20 7 Z" fill="url(#leaf-grad)" opacity="0.92"/>
+  <path d="M20 9 L20 32" stroke="rgba(0,0,0,0.38)" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M20 14 Q16 15 13 17 M20 14 Q24 15 27 17 M20 20 Q15 21 11 24 M20 20 Q25 21 29 24 M20 26 Q17 27 15 29 M20 26 Q23 27 25 29"
+        stroke="rgba(0,0,0,0.28)" stroke-width="0.6" stroke-linecap="round" fill="none"/>
+</svg>
