@@ -1,6 +1,6 @@
 {
   "date": "2026-04-17",
-  "updatedAt": "2026-04-17T12:01:39.326303+00:00",
+  "updatedAt": "2026-04-17T13:56:13.360283+00:00",
   "items": [
     {
       "title": "OpenAI Launches GPT-Rosalind: Its First Life Sciences AI Model Built to Accelerate Drug Discovery and Genomics Research",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-4.png",
       "published": "2026-04-17T00:00:01+00:00",
       "firstSeen": "2026-04-17T01:00:01.768917+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2076
+      "score": 20.1669
     },
     {
       "title": "OpenAI launches GPT-Rosalind, a specialised AI model for drug discovery and life sciences research",
@@ -30,11 +30,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/GPT-Rosalind.png",
       "published": "2026-04-17T07:51:49+00:00",
       "firstSeen": "2026-04-17T08:51:58.641067+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.2298
+      "score": 19.1792
     },
     {
       "title": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-10-150x150.png",
       "published": "2026-04-17T06:18:32+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.6584
+      "score": 10.61
     },
     {
       "title": "Dropbox brings its files, Dash search, and Reclaim calendar into ChatGPT with three new apps",
@@ -63,10 +63,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Dropbox.png",
       "published": "2026-04-17T10:44:53+00:00",
       "firstSeen": "2026-04-17T12:00:01.814998+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2116
+      "score": 9.1567
     },
     {
       "title": "DeepL launches real-time voice-to-voice translation in 40+ languages",
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/DeepL.png",
       "published": "2026-04-17T09:11:42+00:00",
       "firstSeen": "2026-04-17T10:00:01.547989+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.5668
+      "score": 4.5142
     },
     {
       "title": "GIC-backed battery maker Envision AESC is considering a $2 billion Hong Kong IPO",
@@ -95,10 +95,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Envision-AESC.png",
       "published": "2026-04-17T07:22:04+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4164
+      "score": 4.3665
     },
     {
       "title": "Sequoia raises $7 billion for its biggest-ever late-stage fund",
@@ -111,10 +111,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sequoia.png",
       "published": "2026-04-17T07:07:06+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8098
+      "score": 3.7602
     },
     {
       "title": "How robots learn: A brief, contemporary history",
@@ -127,10 +127,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/robot.jpg?resize=1200%2C600",
       "published": "2026-04-17T10:00:00+00:00",
       "firstSeen": "2026-04-17T11:00:01.461737+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6298
+      "score": 3.576
     },
     {
       "title": "datasette 1.0a28",
@@ -143,10 +143,10 @@
       "image": "",
       "published": "2026-04-17T04:01:56+00:00",
       "firstSeen": "2026-04-17T05:00:01.723013+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7709
+      "score": 2.7254
     },
     {
       "title": "Stockholm’s BioLamina secures €20M EIB loan to scale the protein matrices that make cell therapies possible",
@@ -159,10 +159,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/BioLamina.png",
       "published": "2026-04-17T07:34:12+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7219
+      "score": 2.6717
     },
     {
       "title": "Xingyu Xiao, Jiejuan Tong, Jun Sun, Zhe Sui, Peng Chen, Jingang Liang, Haitao Wang",
@@ -173,28 +173,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-17T12:01:46.951619+00:00",
+      "published": "2026-04-17T13:56:17.959512+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     },
     {
-      "title": "Recent advances push Big Tech closer to the Q-Day danger zone",
-      "url": "https://arstechnica.com/security/2026/04/while-some-big-tech-players-accelerate-pqc-readiness-others-stay-the-course",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
+      "title": "The ‘AI is inevitable’ trap",
+      "url": "https://www.theverge.com/podcast/913792/ai-divide-sam-altman-vergecast",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "The Eindhoven neurotechnology company is using the proceeds to fund its Empower BP pivotal trial, which tests whether its implantable ARC-IM® system can treat blood pressure instability after spinal cord injury, while expanding commercial rollout of its already-cleared ARC-EX® external therapy system. Cash runway now extends to Q1 2028. ONWARD Medical has raised €40.6 million [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Onward-Medical.png",
-      "published": "2026-04-17T10:28:22+00:00",
-      "firstSeen": "2026-04-17T11:00:01.461737+00:00",
-      "lastSeen": "2026-04-17T12:01:39.326303+00:00",
+      "summary": "In the latest sign of AI silly season, Allbirds, the shoe company, told the world it was now an AI company and briefly managed to septuple its stock price. The Newbird AI story is really just one of a bunch of things this week that made us wonder: have we reached the peak of AI, [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0417_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-17T13:24:34+00:00",
+      "firstSeen": "2026-04-17T13:56:13.360283+00:00",
+      "lastSeen": "2026-04-17T13:56:13.360283+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1035
+      "score": 2.344
     }
   ],
   "errors": []
