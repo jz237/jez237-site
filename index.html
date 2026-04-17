@@ -213,7 +213,7 @@
         det.addEventListener('toggle', async () => {
           if (!det.open || loaded) return;
           try {
-            const r = await fetch('/llms.txt');
+            const r = await fetch('llms.txt');
             mount.textContent = r.ok ? await r.text() : 'Could not load /llms.txt';
             loaded = true;
           } catch (e) {
