@@ -10,7 +10,7 @@
   const LINKS = [
     { href: ROOT + '/index.html',          label: 'Home' },
     { href: ROOT + '/plants/',             label: 'Garden' },
-    { href: ROOT + '/garden/',             label: 'Garden Calendar' },
+    { href: ROOT + '/garden/',             label: 'Calendar' },
     { href: ROOT + '/photos/',             label: 'Photos' },
     { href: ROOT + '/games/',              label: 'Games' },
     { href: ROOT + '/ai-news/',            label: 'AI News' },
