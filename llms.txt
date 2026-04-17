@@ -65,6 +65,29 @@ Cat photos live at: `photos/cats/images/<descriptive-name>.jpg`
 
 Use the actual date the photo was taken when known; otherwise today's date.
 
+### CRITICAL — path conventions in HTML
+
+The site is served at the repo root locally AND at
+`https://jz237.github.io/jez237-site/` on GitHub Pages. There is **no
+`<base>` tag**, so every relative URL in HTML resolves against the
+CURRENT DOCUMENT's URL. Use depth-aware relative paths, not
+root-absolute.
+
+| Page depth              | Example page path                | Asset prefix          |
+| ----------------------- | -------------------------------- | --------------------- |
+| 0 (site root)           | `/index.html`, `/404.html`       | `assets/styles.css`   |
+| 1 (section)             | `/plants/index.html`             | `../assets/styles.css`|
+| 2 (sub-page — most plant pages) | `/plants/<slug>/index.html` | `../../assets/styles.css` |
+
+NEVER use root-absolute paths (`/assets/...`, `/photos/...`, `/plants/...`) in
+`href`, `src`, `<link>`, `<script>`, or `background-image: url(...)` —
+they break on GitHub Pages because the site lives at the `/jez237-site/`
+subpath. The only exceptions: fully qualified `https://...` URLs (fine),
+and nav.js-generated links (which construct the subpath themselves).
+
+Plant sub-pages are **depth 2** — every asset or photo reference must
+start with `../../`. Check your paths before outputting.
+
 ## 4. Write in the site's voice
 
 Entries are editorial, observational, specific, and a bit reflective —
