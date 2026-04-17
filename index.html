@@ -10,12 +10,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script>(function(){try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}document.write('<base href="'+(location.hostname==="jz237.github.io"?"/jez237-site/":"/")+'">');})();</script>
   <title>Jez237 — Home</title>
-  <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-  <link rel="stylesheet" href="/assets/styles.css" />
-  <link rel="stylesheet" href="/assets/site-enhance.css" />
-  <link rel="stylesheet" href="/assets/design.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand.svg" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/site-enhance.css" />
+  <link rel="stylesheet" href="assets/design.css" />
   <style>
     main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
     .hero-editorial .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
@@ -61,9 +61,9 @@
       <h1>A garden journal and a workbench.</h1>
       <p class="lede">Seasonal plant progress, weather-aware garden tasks, photo archives, playable prototypes, and a daily AI news feed — all kept in one place, grown slowly and on purpose.</p>
       <div class="actions">
-        <a class="primary" href="/plants/">Open Garden Center →</a>
-        <a class="secondary" href="/garden/">Garden Calendar</a>
-        <a class="secondary" href="/ai-news/">AI News</a>
+        <a class="primary" href="plants/">Open Garden Center →</a>
+        <a class="secondary" href="garden/">Garden Calendar</a>
+        <a class="secondary" href="ai-news/">AI News</a>
       </div>
       <div class="hero-meta">
         <span>📍 <strong>Philadelphia · Zone 7a</strong></span>
@@ -79,8 +79,8 @@
     </div>
 
     <div class="stack-lg">
-      <a class="feature" href="/plants/">
-        <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
+      <a class="feature" href="plants/">
+        <div class="feature-media" style="background-image:url('photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
         <div class="feature-copy">
           <div class="eyebrow">Living journal</div>
           <h3>Garden Center</h3>
@@ -89,16 +89,16 @@
       </a>
 
       <div class="row-2">
-        <a class="feature" href="/garden/">
-          <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg')"></div>
+        <a class="feature" href="garden/">
+          <div class="feature-media" style="background-image:url('photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg')"></div>
           <div class="feature-copy">
             <div class="eyebrow">Practical</div>
             <h3>Garden Calendar</h3>
             <p>Weather-aware daily tasks for Philadelphia zone 7a — hover any date to see what to do that day.</p>
           </div>
         </a>
-        <a class="feature" href="/ai-news/">
-          <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg');filter:saturate(0.7) hue-rotate(-15deg)"></div>
+        <a class="feature" href="ai-news/">
+          <div class="feature-media" style="background-image:url('photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg');filter:saturate(0.7) hue-rotate(-15deg)"></div>
           <div class="feature-copy">
             <div class="eyebrow">Daily refresh</div>
             <h3>AI News Feed</h3>
@@ -120,17 +120,17 @@
     </div>
 
     <div class="row-3">
-      <a class="tile" href="/photos/">
+      <a class="tile" href="photos/">
         <div class="eyebrow">Gallery</div>
         <h3>Photos</h3>
         <p>Cats, garden, restorations. Casual corner.</p>
       </a>
-      <a class="tile" href="/games/">
+      <a class="tile" href="games/">
         <div class="eyebrow">Prototypes</div>
         <h3>Game Experiments</h3>
         <p>Playable AI-built games — Missile Command, Asteroids HD, Boulder Dash.</p>
       </a>
-      <a class="tile" href="/experiments/ai-explainer/">
+      <a class="tile" href="experiments/ai-explainer/">
         <div class="eyebrow">Interactive</div>
         <h3>How AI Works</h3>
         <p>Neural networks, LLMs, training, hallucinations — built with React + Framer Motion.</p>
@@ -193,7 +193,7 @@
     <section id="ai-agents" class="tile" style="margin-top:clamp(28px,4vw,48px);padding:26px;">
       <div class="eyebrow">For AI assistants</div>
       <h3>Adding photos with an AI</h3>
-      <p style="margin:0 0 12px 0;">Upload a plant, pet, or garden photo to your AI of choice and say "add this to my garden site at github.com/jz237/jez237-site". The AI should fetch <a href="/llms.txt" style="color:var(--brand-gold)">/llms.txt</a> for full instructions — section slugs, photo path conventions, voice rules, HTML templates, and output format.</p>
+      <p style="margin:0 0 12px 0;">Upload a plant, pet, or garden photo to your AI of choice and say "add this to my garden site at github.com/jz237/jez237-site". The AI should fetch <a href="llms.txt" style="color:var(--brand-gold)">/llms.txt</a> for full instructions — section slugs, photo path conventions, voice rules, HTML templates, and output format.</p>
       <details style="margin-top:10px;">
         <summary style="cursor:pointer;color:var(--brand-gold);font-size:13px;">Show the full AI prompt here (click to expand)</summary>
         <div style="margin-top:14px;padding:18px;background:rgba(0,0,0,0.25);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:var(--ink-mid);max-height:460px;overflow:auto;"><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
@@ -224,8 +224,8 @@
     </script>
   </main>
 
-  <script src="/assets/app.js"></script>
-  <script src="/assets/site-enhance.js" defer></script>
-  <script src="/assets/nav.js" defer></script>
+  <script src="assets/app.js"></script>
+  <script src="assets/site-enhance.js" defer></script>
+  <script src="assets/nav.js" defer></script>
 </body>
 </html>
