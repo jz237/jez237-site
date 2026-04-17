@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T12:00:01.814998+00:00",
+  "updatedAt": "2026-04-17T13:00:01.411335+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3940,6 +3940,10 @@
     "https://www.technologyreview.com/2026/04/17/1135416/how-robots-learn-brief-contemporary-history": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/robot.jpg?resize=1200,600",
       "checkedAt": "2026-04-17T11:00:01.461737+00:00"
+    },
+    "https://huggingface.co/blog/ecom-rlve": {
+      "image": "https://huggingface.co/blog/assets/ecom-rlve/thumbnail.png",
+      "checkedAt": "2026-04-17T13:00:01.411335+00:00"
     }
   }
 }
