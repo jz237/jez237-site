@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T03:41:47.291001+00:00",
+  "updatedAt": "2026-04-17T05:00:01.723013+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3932,6 +3932,10 @@
     "https://www.marktechpost.com/2026/04/16/openai-launches-gpt-rosalind-life-sciences-ai": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-4.png",
       "checkedAt": "2026-04-17T01:00:01.768917+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/17/datasette": {
+      "image": "",
+      "checkedAt": "2026-04-17T05:00:01.723013+00:00"
     }
   }
 }
