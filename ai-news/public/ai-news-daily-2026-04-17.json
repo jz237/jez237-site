@@ -1,6 +1,6 @@
 {
   "date": "2026-04-17",
-  "updatedAt": "2026-04-17T06:12:22.162554+00:00",
+  "updatedAt": "2026-04-17T08:00:01.840186+00:00",
   "items": [
     {
       "title": "OpenAI Launches GPT-Rosalind: Its First Life Sciences AI Model Built to Accelerate Drug Discovery and Genomics Research",
@@ -13,11 +13,59 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-4.png",
       "published": "2026-04-17T00:00:01+00:00",
       "firstSeen": "2026-04-17T01:00:01.768917+00:00",
-      "lastSeen": "2026-04-17T06:12:22.162554+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.3458
+      "score": 20.3008
+    },
+    {
+      "title": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities",
+      "url": "https://www.marktechpost.com/2026/04/16/qwen-team-open-sources-qwen3-6-35b-a3b-a-sparse-moe-vision-language-model-with-3b-active-parameters-and-agentic-coding-capabilities",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities\nThe post Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-10-150x150.png",
+      "published": "2026-04-17T06:18:32+00:00",
+      "firstSeen": "2026-04-17T08:00:01.840186+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 10.7695
+    },
+    {
+      "title": "GIC-backed battery maker Envision AESC is considering a $2 billion Hong Kong IPO",
+      "url": "https://thenextweb.com/news/envision-aesc-hong-kong-ipo-2-billion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Japan-headquartered EV battery manufacturer, controlled by China’s Envision Group and backed by Singapore’s sovereign wealth fund GIC, is mulling an IPO in Hong Kong that could raise up to $2 billion, Bloomberg reported on Thursday. The move marks a significant change from earlier plans to list in the US. Envision AESC, the electric vehicle [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Envision-AESC.png",
+      "published": "2026-04-17T07:22:04+00:00",
+      "firstSeen": "2026-04-17T08:00:01.840186+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5308
+    },
+    {
+      "title": "Sequoia raises $7 billion for its biggest-ever late-stage fund",
+      "url": "https://thenextweb.com/news/sequoia-7-billion-expansion-fund-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Silicon Valley institution has closed roughly $7 billion for its expansion strategy fund, nearly doubling its comparable 2022 vehicle. Alfred Lin and Pat Grady, who took over as co-stewards in November 2025, are making the raise their opening statement on the AI era. Sequoia Capital has raised approximately $7 billion for a new fund, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sequoia.png",
+      "published": "2026-04-17T07:07:06+00:00",
+      "firstSeen": "2026-04-17T08:00:01.840186+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9234
     },
     {
       "title": "datasette 1.0a28",
@@ -30,10 +78,26 @@
       "image": "",
       "published": "2026-04-17T04:01:56+00:00",
       "firstSeen": "2026-04-17T05:00:01.723013+00:00",
-      "lastSeen": "2026-04-17T06:12:22.162554+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9255
+      "score": 2.8752
+    },
+    {
+      "title": "Stockholm’s BioLamina secures €20M EIB loan to scale the protein matrices that make cell therapies possible",
+      "url": "https://thenextweb.com/news/biolamina-20m-eib-loan-laminin-cell-therapy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Investment Bank is lending €20 million to BioLamina, the Swedish biotech that supplies the laminin-based cell culture matrices used by stem cell therapy developers worldwide. The funding will support expanded production of laminin technologies and animal-free drug safety testing methods. BioLamina, the Stockholm-based biotechnology company that produces the protein scaffolding used to grow [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/BioLamina.png",
+      "published": "2026-04-17T07:34:12+00:00",
+      "firstSeen": "2026-04-17T08:00:01.840186+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8369
     },
     {
       "title": "Can Large Language Models Detect Methodological Flaws? Evidence from Gesture Recognition for UAV-Based Rescue Operation Based on Deep Learning",
@@ -44,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-17T06:12:30.288416+00:00",
+      "published": "2026-04-17T08:00:27.360250+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-17T06:12:22.162554+00:00",
+      "lastSeen": "2026-04-17T08:00:01.840186+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
