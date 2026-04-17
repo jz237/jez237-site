@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T17:00:02.043032+00:00",
+  "updatedAt": "2026-04-17T18:00:01.284885+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3980,6 +3980,10 @@
     "https://www.anthropic.com/news/claude-design-anthropic-labs": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Quill&amp;backgroundColor=cactus",
       "checkedAt": "2026-04-17T17:00:02.043032+00:00"
+    },
+    "https://www.theverge.com/gadgets/913981/poetry-camera-ai-hands-on": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268467_Poetry_Camera_AJohnson_0002.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-04-17T18:00:01.284885+00:00"
     }
   }
 }
