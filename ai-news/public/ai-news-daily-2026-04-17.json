@@ -1,6 +1,6 @@
 {
   "date": "2026-04-17",
-  "updatedAt": "2026-04-17T11:00:01.461737+00:00",
+  "updatedAt": "2026-04-17T10:22:00.185033+00:00",
   "items": [
     {
       "title": "OpenAI Launches GPT-Rosalind: Its First Life Sciences AI Model Built to Accelerate Drug Discovery and Genomics Research",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-4.png",
       "published": "2026-04-17T00:00:01+00:00",
       "firstSeen": "2026-04-17T01:00:01.768917+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2304
+      "score": 20.2448
     },
     {
       "title": "OpenAI launches GPT-Rosalind, a specialised AI model for drug discovery and life sciences research",
@@ -30,11 +30,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/GPT-Rosalind.png",
       "published": "2026-04-17T07:51:49+00:00",
       "firstSeen": "2026-04-17T08:51:58.641067+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.2582
+      "score": 19.2761
     },
     {
       "title": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-10-150x150.png",
       "published": "2026-04-17T06:18:32+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.6856
+      "score": 10.7027
     },
     {
       "title": "DeepL launches real-time voice-to-voice translation in 40+ languages",
@@ -63,10 +63,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/DeepL.png",
       "published": "2026-04-17T09:11:42+00:00",
       "firstSeen": "2026-04-17T10:00:01.547989+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.5962
+      "score": 4.6148
     },
     {
       "title": "GIC-backed battery maker Envision AESC is considering a $2 billion Hong Kong IPO",
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Envision-AESC.png",
       "published": "2026-04-17T07:22:04+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4444
+      "score": 4.4621
     },
     {
       "title": "Sequoia raises $7 billion for its biggest-ever late-stage fund",
@@ -95,26 +95,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sequoia.png",
       "published": "2026-04-17T07:07:06+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8376
-    },
-    {
-      "title": "How robots learn: A brief, contemporary history",
-      "url": "https://www.technologyreview.com/2026/04/17/1135416/how-robots-learn-brief-contemporary-history",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Roboticists used to dream big but build small. They’d hope to match or exceed the extraordinary complexity of the human body, and then they’d spend their career refining robotic arms for auto plants. Aim for C-3P0; end up with the Roomba.&#160; The real ambition for many of these researchers was the robot of science fiction—one&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/robot.jpg?resize=1200%2C600",
-      "published": "2026-04-17T10:00:00+00:00",
-      "firstSeen": "2026-04-17T11:00:01.461737+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.6599
+      "score": 3.8551
     },
     {
       "title": "datasette 1.0a28",
@@ -127,10 +111,10 @@
       "image": "",
       "published": "2026-04-17T04:01:56+00:00",
       "firstSeen": "2026-04-17T05:00:01.723013+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7964
+      "score": 2.8125
     },
     {
       "title": "Stockholm’s BioLamina secures €20M EIB loan to scale the protein matrices that make cell therapies possible",
@@ -143,10 +127,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/BioLamina.png",
       "published": "2026-04-17T07:34:12+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.75
+      "score": 2.7678
     },
     {
       "title": "Xingyu Xiao, Jiejuan Tong, Jun Sun, Zhe Sui, Peng Chen, Jingang Liang, Haitao Wang",
@@ -157,9 +141,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-17T11:00:05.760029+00:00",
+      "published": "2026-04-17T10:22:06.389458+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -191,10 +175,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AlixLabs.png",
       "published": "2026-04-17T08:56:30+00:00",
       "firstSeen": "2026-04-17T10:00:01.547989+00:00",
-      "lastSeen": "2026-04-17T11:00:01.461737+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0889
+      "score": 2.1073
+    },
+    {
+      "title": "Ericsson narrowly misses Q1 profit forecasts as North America unwind",
+      "url": "https://thenextweb.com/news/ericsson-q1-2026-results-north-america",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Swedish telecoms equipment maker narrowly missed profit forecasts, with adjusted EBITA falling 20% year-on-year to SEK 5.6 billion. North America, which drove a 20%+ surge in Q1 2025, declined sharply as prior-year pull-forward investment unwinds. CEO Ekholm blames rising semiconductor input costs, partly driven by AI demand. Ericsson reported a sharp fall in profitability [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Ericsson.png",
+      "published": "2026-04-17T08:09:15+00:00",
+      "firstSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:22:00.185033+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0844
     }
   ],
   "errors": []
