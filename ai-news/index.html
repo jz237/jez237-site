@@ -3,33 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Jez237 — AI News Feed</title>
   <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../index.html">Home</a>
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../photos/">Photos</a>
-        <a href="../plants/">Plant Progress</a>
-        <a href="../ai-news/">AI News</a>
-        <a href="../plex/">Plex</a>
-        <a href="../ops/">Ops Center</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
-    <section class="hero">
-      <div class="kicker">AI News Feed</div>
-      <h1 class="title">AI model + tooling stream</h1>
-      <p class="muted">Two-column feed with source filter, search, and article thumbnails when available.</p>
+    <section class="hero-editorial">
+      <div class="eyebrow">Daily refresh</div>
+      <h1>AI model &amp; tooling stream.</h1>
+      <p class="lede">A curated feed of model releases, developer tooling, and notable research — rebuilt from scratch every morning. Filter by source, search headlines, sort by recency or score.</p>
     </section>
 
     <section class="card col-12" style="margin-top:16px;">
@@ -56,5 +43,6 @@
 
   <script src="../assets/news.js"></script>
   <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
 </body>
 </html>
