@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T15:00:01.405769+00:00",
+  "updatedAt": "2026-04-17T15:12:25.264204+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3952,6 +3952,10 @@
     "https://www.techrepublic.com/article/news-ai-use-readiness-gap-study": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04172026-ai-use-readiness-gap.jpg",
       "checkedAt": "2026-04-17T15:00:01.405769+00:00"
+    },
+    "https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Claude-Design-2-Press-Logo-Claude-1920x1080-1.png?resize=1200,675",
+      "checkedAt": "2026-04-17T15:12:25.264204+00:00"
     }
   }
 }
