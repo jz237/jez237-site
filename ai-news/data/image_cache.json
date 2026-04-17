@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T15:12:25.264204+00:00",
+  "updatedAt": "2026-04-17T17:00:02.043032+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3956,6 +3956,30 @@
     "https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Claude-Design-2-Press-Logo-Claude-1920x1080-1.png?resize=1200,675",
       "checkedAt": "2026-04-17T15:12:25.264204+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/nemotron-ocr-v2": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-ocr-v2.png",
+      "checkedAt": "2026-04-17T17:00:02.043032+00:00"
+    },
+    "https://techcrunch.com/podcast/tokenmaxxing-openais-shopping-spree-and-the-ai-anxiety-gap": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544077.jpg?resize=1200,800",
+      "checkedAt": "2026-04-17T17:00:02.043032+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/913928/dairy-queen-ai-drive-thru-presto": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2236326005.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.663064393431%2C100%2C78.673871213138&amp;w=1200",
+      "checkedAt": "2026-04-17T17:00:02.043032+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-upgrades-security-breaches-and-industry-shifts-define-this-week-in-tech-2": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/ChatGPT-Image-Apr-17-2026-10_41_00-AM-1024x588.png",
+      "checkedAt": "2026-04-17T17:00:02.043032+00:00"
+    },
+    "https://techcrunch.com/video/are-we-tokenmaxxing-our-way-to-nowhere": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/code-on-a-screen.jpg?resize=1200,675",
+      "checkedAt": "2026-04-17T17:00:02.043032+00:00"
+    },
+    "https://www.anthropic.com/news/claude-design-anthropic-labs": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Quill&amp;backgroundColor=cactus",
+      "checkedAt": "2026-04-17T17:00:02.043032+00:00"
     }
   }
 }
