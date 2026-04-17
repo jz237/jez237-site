@@ -3,292 +3,381 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Jez237 — Game Experiments</title>
-  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/design.css" />
+  <link rel="stylesheet" href="/assets/site-enhance.css" />
   <style>
-    body {
-      background:
-        radial-gradient(circle at top left, rgba(128, 74, 255, 0.22), transparent 28%),
-        radial-gradient(circle at top right, rgba(0, 196, 255, 0.18), transparent 24%),
-        linear-gradient(180deg, #0b0f14 0%, #111629 46%, #120f22 100%);
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+
+    .game-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 24px 0 26px;
+    }
+    .game-filters button {
+      background: rgba(40,33,26,0.6);
+      border: 1px solid rgba(232,197,122,0.2);
+      color: var(--ink-mid);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .game-filters button:hover {
+      background: rgba(232,197,122,0.12);
+      border-color: rgba(232,197,122,0.4);
+      color: var(--brand-gold);
+      transform: translateY(-1px);
+    }
+    .game-filters button.active {
+      background: linear-gradient(120deg, rgba(232,197,122,0.22), rgba(224,102,126,0.2));
+      border-color: rgba(232,197,122,0.55);
+      color: var(--ink-hi);
     }
 
-    .hero {
-      background:
-        radial-gradient(circle at 12% 18%, rgba(255, 105, 180, 0.28), transparent 26%),
-        radial-gradient(circle at 88% 10%, rgba(0, 220, 255, 0.24), transparent 24%),
-        radial-gradient(circle at 70% 75%, rgba(255, 170, 0, 0.18), transparent 30%),
-        linear-gradient(135deg, #2b1450 0%, #111a35 52%, #0d1322 100%);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-    }
-
-    .hero .kicker {
-      color: #f3b7ff;
-    }
-
-    .hero .title {
-      color: #ffffff;
-      text-shadow: 0 0 24px rgba(149, 115, 255, 0.25);
-    }
-
-    .hero .muted {
-      color: #d8e3ff;
-    }
-
-    .games-grid {
+    .game-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
     }
 
     .game-card {
-      background:
-        radial-gradient(circle at top right, rgba(0, 210, 255, 0.12), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(255, 90, 175, 0.12), transparent 30%),
-        linear-gradient(180deg, rgba(31, 22, 54, 0.96), rgba(14, 20, 36, 0.98));
-      border: 1px solid rgba(120, 139, 255, 0.22);
-      border-radius: 16px;
-      padding: 22px 22px 18px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+      gap: 8px;
+      padding: 20px 18px;
+      border-radius: var(--r-md);
+      background: var(--surf-2);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
     }
-
     .game-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(126, 190, 255, 0.5);
-      box-shadow: 0 22px 44px rgba(40, 18, 86, 0.36);
+      box-shadow: var(--shadow-md);
+      text-decoration: none;
     }
-
-    .game-card-top {
+    .game-card .icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 1.8em;
+      background: linear-gradient(135deg, rgba(232,197,122,0.25), rgba(122,179,98,0.18));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: visible;
+    }
+    .game-card .icon-wrap > span {
+      display: inline-block;
+      transform-origin: center center;
+      will-change: transform, filter, opacity;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
     }
 
-    .game-model-badge {
-      font-size: 0.68rem;
+    /* Appropriate per-icon animations. Type picked by JS from emoji. */
+    @keyframes g-thrust {
+      0%   { transform: translateY(0) rotate(-2deg); }
+      30%  { transform: translateY(-6px) rotate(0deg); }
+      40%  { transform: translateY(-10px) translateX(1px) rotate(2deg); }
+      60%  { transform: translateY(-3px) translateX(-1px) rotate(-1deg); }
+      100% { transform: translateY(0) rotate(-2deg); }
+    }
+    @keyframes g-twinkle {
+      0%,100% { transform: scale(1) rotate(0); opacity: 1; }
+      40%     { transform: scale(1.25) rotate(15deg); opacity: 0.85; }
+      60%     { transform: scale(0.92) rotate(-10deg); opacity: 1; }
+    }
+    @keyframes g-burst {
+      0%,100% { transform: scale(1) rotate(0); opacity: 1; }
+      40%     { transform: scale(1.35) rotate(10deg); opacity: 0.9; }
+      55%     { transform: scale(0.95) rotate(-8deg); opacity: 1; }
+    }
+    @keyframes g-swing {
+      0%,100% { transform: rotate(-18deg); }
+      50%     { transform: rotate(18deg); }
+    }
+    @keyframes g-sway {
+      0%,100% { transform: rotate(-6deg) translateY(0); }
+      50%     { transform: rotate(6deg) translateY(-2px); }
+    }
+    @keyframes g-spin {
+      0%   { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes g-chug {
+      0%,100% { transform: translateX(0) translateY(0); }
+      25%     { transform: translateX(-2px) translateY(-1px); }
+      50%     { transform: translateX(2px) translateY(0); }
+      75%     { transform: translateX(-1px) translateY(1px); }
+    }
+    @keyframes g-wave {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      25%     { transform: translateY(-2px) rotate(2deg); }
+      50%     { transform: translateY(-4px) rotate(-2deg); }
+      75%     { transform: translateY(-2px) rotate(3deg); }
+    }
+    @keyframes g-flash {
+      0%,100% { transform: scale(1);    opacity: 1; }
+      10%     { transform: scale(1.2);  opacity: 0.25; }
+      15%     { transform: scale(0.95); opacity: 1; }
+      25%     { transform: scale(1.1);  opacity: 0.5; }
+      35%     { transform: scale(1);    opacity: 1; }
+    }
+    @keyframes g-streak {
+      0%   { transform: translateX(-6px) rotate(-10deg); opacity: 0.6; }
+      50%  { transform: translateX(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateX(6px) rotate(10deg); opacity: 0.6; }
+    }
+    @keyframes g-rotate-slow {
+      0%   { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes g-float {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%     { transform: translateY(-4px) rotate(1deg); }
+    }
+    @keyframes g-shake {
+      0%,100% { transform: translate(0,0) rotate(0); }
+      10% { transform: translate(-1px,1px) rotate(-2deg); }
+      20% { transform: translate(1px,-1px) rotate(2deg); }
+      30% { transform: translate(-1px,-1px) rotate(-1deg); }
+      40% { transform: translate(1px,1px) rotate(1deg); }
+      50% { transform: translate(-1px,1px) rotate(-2deg); }
+      60% { transform: translate(0,0) rotate(0); }
+    }
+    @keyframes g-hammer {
+      0%,100% { transform: rotate(-10deg) translateY(0); }
+      30%     { transform: rotate(12deg) translateY(-2px); }
+      40%     { transform: rotate(15deg) translateY(0); }
+      50%     { transform: rotate(10deg) translateY(1px); }
+    }
+    @keyframes g-slither {
+      0%,100% { transform: translateX(-4px) skewX(-6deg); }
+      50%     { transform: translateX(4px) skewX(6deg); }
+    }
+
+    .game-card .icon-wrap > span[data-anim="thrust"]      { animation: g-thrust      2.0s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="twinkle"]     { animation: g-twinkle     2.6s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="burst"]       { animation: g-burst       1.8s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="swing"]       { animation: g-swing       1.6s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="sway"]        { animation: g-sway        3.2s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="spin"]        { animation: g-spin        4s linear infinite; }
+    .game-card .icon-wrap > span[data-anim="chug"]        { animation: g-chug        0.4s steps(4) infinite; }
+    .game-card .icon-wrap > span[data-anim="wave"]        { animation: g-wave        2.8s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="flash"]       { animation: g-flash       2.2s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="streak"]      { animation: g-streak      3s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="rotate-slow"] { animation: g-rotate-slow 16s linear infinite; }
+    .game-card .icon-wrap > span[data-anim="float"]       { animation: g-float       3.4s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="shake"]       { animation: g-shake       1.4s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="hammer"]      { animation: g-hammer      0.9s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="slither"]     { animation: g-slither     2.2s ease-in-out infinite; }
+    /* User explicitly asked for animations — reduced-motion is ignored here. */
+    /* Color variety so the grid feels playful without clashing with the site */
+    .game-card:nth-child(6n+1) .icon-wrap { background: linear-gradient(135deg, rgba(77,150,255,.32), rgba(127,107,255,.2)); }
+    .game-card:nth-child(6n+2) .icon-wrap { background: linear-gradient(135deg, rgba(255,217,61,.3), rgba(255,107,107,.2)); }
+    .game-card:nth-child(6n+3) .icon-wrap { background: linear-gradient(135deg, rgba(107,203,119,.3), rgba(68,209,255,.2)); }
+    .game-card:nth-child(6n+4) .icon-wrap { background: linear-gradient(135deg, rgba(198,107,255,.3), rgba(255,95,162,.2)); }
+    .game-card:nth-child(6n+5) .icon-wrap { background: linear-gradient(135deg, rgba(255,122,0,.28), rgba(255,217,61,.2)); }
+    .game-card:nth-child(6n+6) .icon-wrap { background: linear-gradient(135deg, rgba(68,209,255,.28), rgba(107,107,255,.22)); }
+
+    .game-card .title {
+      font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+      font-weight: 500;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      letter-spacing: -0.005em;
+      color: var(--ink-hi);
+    }
+    .game-card .desc {
+      font-size: 12.5px;
+      color: var(--ink-mid);
+      line-height: 1.45;
+    }
+    .game-card .date {
+      font-size: 11px;
+      color: var(--ink-lo);
+      letter-spacing: 0.03em;
+    }
+    .game-card .tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      width: fit-content;
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: #eef4ff;
-      background: linear-gradient(135deg, rgba(110, 115, 255, 0.4), rgba(0, 196, 255, 0.26));
-      border: 1px solid rgba(139, 203, 255, 0.36);
-      border-radius: 999px;
-      padding: 4px 10px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      margin-top: 4px;
     }
+    .game-card .tag.featured     { background: rgba(127,149,255,0.18); color: #c8d1ff; border: 1px solid rgba(127,149,255,0.4); }
+    .game-card .tag.classic      { background: rgba(255,217,61,0.18);  color: #ffe38a; border: 1px solid rgba(255,217,61,0.4); }
+    .game-card .tag.experimental { background: rgba(198,107,255,0.16); color: #d7b8ff; border: 1px solid rgba(163,119,217,0.4); }
 
-    .game-card-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #f7f8ff;
-      margin: 0;
-      line-height: 1.3;
-    }
-
-    .game-card-desc {
-      font-size: 0.88rem;
-      color: #c5d1ee;
-      line-height: 1.55;
-      flex: 1;
-    }
-
-    .game-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 6px;
-      gap: 12px;
-    }
-
-    .game-play-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #ff4fb0, #7d6dff 56%, #38c8ff);
-      color: #fff;
-      border: 0;
-      border-radius: 999px;
-      padding: 8px 18px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 10px 24px rgba(105, 94, 255, 0.35);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
-    }
-
-    .game-play-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 28px rgba(105, 94, 255, 0.42);
-      color: #fff;
-      filter: saturate(1.08);
-      text-decoration: none;
-    }
-
-    .showdown-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #ffd36f;
-      text-shadow: 0 0 14px rgba(255, 183, 0, 0.22);
-    }
-
-    .showdown-banner {
-      background: linear-gradient(135deg, rgba(255, 170, 0, 0.14), rgba(255, 87, 51, 0.12));
-      border: 1px solid rgba(255, 190, 92, 0.34);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 0.9rem;
-      color: #ffd896;
-      margin-bottom: 4px;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-    }
-
-    #games-empty {
-      color: #b9c8e8;
-      margin-top: 24px;
+    .game-count {
+      text-align: center;
+      color: var(--ink-lo);
+      font-size: 13px;
+      margin-top: 28px;
+      letter-spacing: 0.02em;
     }
   </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../index.html">Home</a>
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../photos/">Photos</a>
-        <a href="../plants/">Plant Progress</a>
-        <a href="../ai-news/">AI News</a>
-        <a href="../plex/">Plex</a>
-        <a href="../ops/">Ops Center</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
-    <section class="hero">
-      <div class="kicker">Game Experiments</div>
-      <h1 class="title">Playable prototypes</h1>
-      <p class="muted">Games built by AI agents — model showdowns, mechanics tests, and experiments from GameMaster sessions. All playable on mobile.</p>
+
+    <section class="hero-editorial">
+      <div class="eyebrow">Playable prototypes</div>
+      <h1>GameMaster Arcade.</h1>
+      <p class="lede">Mobile-first HTML5 games — built by AI agents, tuned for touch, playable right here. Model showdowns, mechanics experiments, and rebuilds of 70s classics.</p>
     </section>
 
-    <div id="showdown-banner" class="showdown-banner" style="display:none">
-      ⚔️ <strong>Model Showdown:</strong> Same brief, different models. Play both and compare.
+    <div class="game-filters" id="game-filters">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="featured">⭐ Featured</button>
+      <button data-filter="classic">🎮 Classic</button>
+      <button data-filter="experimental">🧪 Experimental</button>
+      <button data-filter="arcade">🕹️ Arcade</button>
+      <button data-filter="puzzle">🧩 Puzzle</button>
+      <button data-filter="adventure">🗺️ Adventure</button>
+      <button data-filter="retro70s">📺 70s Classics</button>
     </div>
 
-    <div id="games-grid" class="games-grid"></div>
-    <div id="games-empty" style="display:none">No games yet — check back soon.</div>
+    <div class="game-grid" id="game-grid"></div>
+    <p class="game-count" id="game-count"></p>
 
-    <footer>
-      Built by GameMaster · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">jez237/jez237-site</a>
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
+      <a href="/index.html" style="color:var(--brand-gold)">← Back to Home</a>
     </footer>
   </main>
 
   <script>
-    async function loadJson(path) {
-      const r = await fetch(path);
-      if (!r.ok) throw new Error('Failed: ' + path);
-      return r.json();
+    const BASE = 'https://jz237.github.io/games/';
+    const games = [
+      // Featured (polished)
+      { title: 'Hard Hat Mac',                  path: 'hard-hat-mac/',                         emoji: '👷', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: 'Classic 1983 Apple II remake — 3 construction levels' },
+      { title: 'Crystal Cavern',                path: '2026-03-16/crystal-cavern/',            emoji: '💎', date: 'Mar 16', cat: 'arcade',   tag: 'featured',     desc: 'Descend through dark crystal caves with dynamic lighting' },
+      { title: 'Shatter Storm',                 path: '2026-03-11/shatter-storm/',             emoji: '🧱', date: 'Mar 11', cat: 'arcade',   tag: 'featured',     desc: 'Stained-glass breakout' },
+      { title: 'Plasma Pong',                   path: '2026-03-10/plasma-pong/',               emoji: '🏓', date: 'Mar 10', cat: 'arcade',   tag: 'featured',     desc: 'Neon pong with plasma trails' },
+      { title: 'Asteroids HD',                  path: '2026-03-09/asteroids-hd/',              emoji: '🚀', date: 'Mar 9',  cat: 'arcade',   tag: 'featured',     desc: '3D asteroids, powerups, boost' },
+      { title: 'Missile Command: Aurora Siege', path: '2026-03-08/missile-command/',           emoji: '🎆', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Defend cities from the sky' },
+      { title: 'Missile Command (GPT)',         path: 'gpt-missile-command/',                  emoji: '🎇', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: "GPT's take on Missile Command" },
+      { title: 'Missile Command 3D',            path: '2026-03-17/missile-command-3d/',        emoji: '🚀', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: '3D perspective with destructible cities' },
+      { title: 'Stellar Drift',                 path: '2026-03-25/stellar-drift/',             emoji: '✨', date: 'Mar 25', cat: 'arcade',   tag: 'featured',     desc: 'One-finger auto-fire space shooter' },
+      { title: 'Lantern Creek',                 path: '2026-03-29/lantern-creek/',             emoji: '🏮', date: 'Mar 29', cat: 'puzzle',   tag: 'featured',     desc: 'Guide glowing lanterns down a moonlit stream' },
+      { title: 'SUPER STAR TREK',               path: '2026-03-27/star-trek/',                 emoji: '🖖', date: 'Mar 27', cat: 'retro70s', tag: 'featured',     desc: 'The 70s computer classic — reborn with LCARS visuals' },
+      { title: 'Asteroids',                     path: '2026-03-08/asteroids/',                 emoji: '☄️', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Classic asteroids, mobile controls' },
+      { title: 'Lunar Lander',                  path: 'lunar-lander/lunar-lander.html',        emoji: '🌕', date: 'Apr 7',  cat: 'arcade',   tag: 'featured',     desc: 'Precision moon landing with retro vibes' },
+      { title: 'Neon Qix',                      path: '2026-04-09/quix-modern/',               emoji: '⚡', date: 'Apr 9',  cat: 'arcade',   tag: 'featured',     desc: 'Modernized Qix with neon field capture' },
+
+      // Classic
+      { title: 'Depth Charge',                  path: '2026-03-08/depth-charge/',              emoji: '🌊', date: 'Mar 8',  cat: 'arcade',   tag: 'classic',      desc: 'Sonar submarine hunt' },
+      { title: 'Boulder Dash',                  path: '2026-03-05/boulder-dash/',              emoji: '💎', date: 'Mar 5',  cat: 'puzzle',   tag: 'classic',      desc: 'Diamond mine classic' },
+      { title: 'Neon Serpent',                  path: '2026-03-05/neon-serpent/',              emoji: '🐍', date: 'Mar 5',  cat: 'arcade',   tag: 'classic',      desc: 'Snake with neon style' },
+      { title: 'Ember Knight',                  path: '2026-03-06/ember-knight/',              emoji: '⚔️', date: 'Mar 6',  cat: 'adventure',tag: 'classic',      desc: 'Dungeon crawler' },
+      { title: 'Glassrail Bastion',             path: '2026-03-06/glassrail-bastion/',         emoji: '🚂', date: 'Mar 6',  cat: 'arcade',   tag: 'classic',      desc: 'Rail defense' },
+
+      // Experimental
+      { title: 'Vortex: Storm Eater',           path: '2026-03-04/vortex/',                    emoji: '🌪️', date: 'Mar 4', cat: 'arcade',   tag: 'experimental', desc: 'Early-build storm shooter' },
+      { title: 'Runecaster',                    path: '2026-03-04/runecaster/',                emoji: '🧙', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Magic-mechanic prototype' },
+      { title: 'Tessera',                       path: '2026-03-04/tessera/',                   emoji: '⬡',  date: 'Mar 4',  cat: 'puzzle',   tag: 'experimental', desc: 'Hex-grid puzzle experiment' },
+      { title: 'Slash',                         path: '2026-03-04/slash/',                     emoji: '⚡', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Reflex swipe-action test' },
+      { title: 'Void Echo',                     path: '2026-03-03/void-echo/',                 emoji: '🌌', date: 'Mar 3',  cat: 'arcade',   tag: 'experimental', desc: 'Space-ambient exploration' },
+      { title: 'Gravity Weaver',                path: '2026-03-03/gravity-weaver/',            emoji: '🕸️', date: 'Mar 3', cat: 'puzzle',   tag: 'experimental', desc: 'Gravity-puzzle prototype' }
+    ];
+
+    const grid   = document.getElementById('game-grid');
+    const count  = document.getElementById('game-count');
+    const filters= document.getElementById('game-filters');
+
+    let currentFilter = 'all';
+
+    function tagLabel(t) {
+      return t === 'featured' ? '⭐ Featured'
+           : t === 'classic'  ? '🎮 Classic'
+           : '🧪 Experimental';
     }
 
-    function statusClass(s) {
-      return (s || 'planned').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    // Map each emoji to an appropriate motion
+    const EMOJI_ANIM = {
+      '👷': 'hammer',   // construction worker
+      '💎': 'twinkle',  // crystal
+      '🧱': 'shake',    // brick shatter
+      '🏓': 'swing',    // pong paddle
+      '🚀': 'thrust',   // rocket
+      '🎆': 'burst',    // firework
+      '🎇': 'burst',
+      '✨': 'twinkle',  // sparkles
+      '🏮': 'sway',     // lantern
+      '🖖': 'float',    // vulcan salute — steady, intentional
+      '☄️': 'streak',   // comet
+      '🌕': 'rotate-slow', // moon
+      '⚡': 'flash',    // lightning
+      '🌊': 'wave',
+      '🐍': 'slither',  // snake
+      '⚔️': 'swing',    // sword
+      '🚂': 'chug',     // train
+      '🌪️': 'spin',    // tornado
+      '🧙': 'float',    // wizard
+      '⬡':  'spin',     // hexagon
+      '🌌': 'float',    // void
+      '🕸️': 'sway'      // web
+    };
+    function animForEmoji(e) {
+      return EMOJI_ANIM[e] || 'float';
     }
 
-    // Make links work across local dev server, github pages subpath, and absolute URLs
-    function normalizeLink(link) {
-      if (!link) return link;
-      const host = location.hostname;
-      const isLocal  = ['localhost','127.0.0.1','::1'].includes(host) || location.protocol === 'file:';
-      const isGhPage = host === 'jz237.github.io';
-      if (isLocal) return link.replace(/^https?:\/\/jz237\.github\.io\/jez237-site\//, '/');
-      if (isGhPage && link.startsWith('/') && !link.startsWith('/jez237-site')) return '/jez237-site' + link;
-      return link;
+    function render() {
+      const list = currentFilter === 'all'
+        ? games
+        : games.filter(g => g.tag === currentFilter || g.cat === currentFilter);
+      grid.innerHTML = list.map(g => `
+        <a class="game-card" href="${BASE}${g.path}" target="_blank" rel="noopener">
+          <span class="icon-wrap"><span data-anim="${animForEmoji(g.emoji)}">${g.emoji}</span></span>
+          <span class="title">${g.title}</span>
+          ${g.desc ? `<span class="desc">${g.desc}</span>` : ''}
+          <span class="date">${g.date}</span>
+          <span class="tag ${g.tag}">${tagLabel(g.tag)}</span>
+        </a>
+      `).join('');
+      count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}${currentFilter === 'all' ? '' : ' · ' + currentFilter}`;
     }
 
-    function renderGames(games) {
-      const grid = document.getElementById('games-grid');
-      const empty = document.getElementById('games-empty');
-      const banner = document.getElementById('showdown-banner');
+    filters.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-filter]');
+      if (!btn) return;
+      currentFilter = btn.dataset.filter;
+      filters.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    });
 
-      const live = games.filter(g => g.link && g.link !== '#');
-      if (!live.length) { empty.style.display = ''; return; }
+    render();
 
-      const hasShowdown = live.some(g => g.name && g.name.includes('⚔️'));
-      if (hasShowdown) banner.style.display = '';
-
-      live.forEach(g => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-
-        const top = document.createElement('div');
-        top.className = 'game-card-top';
-
-        if (g.model) {
-          const modelBadge = document.createElement('span');
-          modelBadge.className = 'game-model-badge';
-          modelBadge.textContent = g.model;
-          top.appendChild(modelBadge);
-        }
-
-        if (g.name && g.name.includes('⚔️')) {
-          const sl = document.createElement('span');
-          sl.className = 'showdown-label';
-          sl.textContent = 'Showdown';
-          top.appendChild(sl);
-        }
-
-        const title = document.createElement('h3');
-        title.className = 'game-card-title';
-        title.textContent = g.name || 'Untitled';
-
-        const desc = document.createElement('p');
-        desc.className = 'game-card-desc';
-        desc.textContent = g.desc || '';
-
-        const footer = document.createElement('div');
-        footer.className = 'game-card-footer';
-
-        const badge = document.createElement('span');
-        badge.className = `badge ${statusClass(g.status)}`;
-        badge.textContent = g.status || 'planned';
-
-        const btn = document.createElement('a');
-        btn.className = 'game-play-btn';
-        btn.href = normalizeLink(g.link);
-        // Open in same tab when running locally so navigation stays in-site
-        const isLocal = ['localhost','127.0.0.1','::1'].includes(location.hostname) || location.protocol === 'file:';
-        btn.target = isLocal ? '_self' : '_blank';
-        btn.rel = 'noopener';
-        btn.textContent = '▶ Play';
-
-        footer.appendChild(badge);
-        footer.appendChild(btn);
-
-        card.appendChild(top);
-        card.appendChild(title);
-        card.appendChild(desc);
-        card.appendChild(footer);
-        grid.appendChild(card);
+    // Randomize animation-delay per icon so the grid doesn't pulse in unison
+    function jitterIconDelays() {
+      document.querySelectorAll('.game-card .icon-wrap > span').forEach(el => {
+        el.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's';
       });
     }
-
-    loadJson('../content/site.json')
-      .then(data => renderGames(data.games || []))
-      .catch(e => {
-        document.getElementById('games-empty').textContent = 'Could not load games: ' + e.message;
-        document.getElementById('games-empty').style.display = '';
-      });
+    jitterIconDelays();
+    // Re-jitter after each filter change (re-renders new cards)
+    filters.addEventListener('click', jitterIconDelays);
   </script>
+  <script src="/assets/site-enhance.js" defer></script>
+  <script src="/assets/nav.js" defer></script>
 </body>
 </html>
