@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T17:04:45.985862+00:00",
+  "updatedAt": "2026-04-17T19:00:01.942877+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3984,6 +3984,14 @@
     "https://www.theverge.com/gadgets/913981/poetry-camera-ai-hands-on": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268467_Poetry_Camera_AJohnson_0002.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
       "checkedAt": "2026-04-17T18:00:01.284885+00:00"
+    },
+    "https://techcrunch.com/2026/04/17/tokenmaxxing-is-making-developers-less-productive-than-they-think": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/code-on-a-screen.jpg?resize=1200,675",
+      "checkedAt": "2026-04-17T19:00:01.942877+00:00"
+    },
+    "https://www.techrepublic.com/article/news-china-robotics-canton-fair-2026-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/china-robotics.jpg",
+      "checkedAt": "2026-04-17T19:00:01.942877+00:00"
     }
   }
 }
