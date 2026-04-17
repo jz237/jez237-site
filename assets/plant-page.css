@@ -1,0 +1,110 @@
+/* === plant-page.css — shared base for all plant sub-pages ===
+   Each page's inline <style> may override these values (accent colors,
+   hero gradient, photo aspect) by redefining CSS variables in :root. */
+
+:root {
+  /* Earth palette defaults — pages override individual vars in their own :root */
+  --earth-bg: #1e1712;
+  --earth-panel: #2d2219;
+  --earth-panel-2: #3a2b1f;
+  --earth-border: #624a35;
+  --earth-text: #f2e7d9;
+  --earth-muted: #cdb9a3;
+  --earth-accent: #9eb077;
+  --earth-accent-2: #d29463;
+  --earth-accent-3: #d8c07b;
+  --earth-water: #8fc8df;
+
+  /* Per-page customizables (override in page's :root) */
+  --hero-bg: linear-gradient(135deg, rgba(80,58,40,.95), rgba(46,63,38,.92));
+  --photo-aspect: 4/5;
+}
+
+body {
+  background: radial-gradient(circle at top, #453226 0%, var(--earth-bg) 52%, #120d0a 100%);
+  color: var(--earth-text);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+}
+
+header { background: rgba(30,23,18,.84); border-bottom: 1px solid var(--earth-border); }
+a { color: #dfc791; }
+
+/* Editorial serif for titles (opt-in) */
+h1.title, .hero .title, .entry-title, .section-title, h2.entry-title, h2.section-title {
+  font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Common containers */
+.hero, .panel, .entry-card, .timeline-entry {
+  border: 1px solid var(--earth-border);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.18);
+}
+.hero { background: var(--hero-bg); padding: 24px; }
+.panel, .entry-card, .timeline-entry {
+  background: linear-gradient(180deg, rgba(50,39,31,.97), rgba(33,25,20,.97));
+  padding: 18px;
+}
+
+.muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+
+.shell { display: grid; gap: 18px; margin-top: 18px; }
+.split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px; }
+.entry-grid, .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px; }
+
+.photo {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  aspect-ratio: var(--photo-aspect);
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 16px 34px rgba(0,0,0,.24);
+}
+.hero-photo {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  aspect-ratio: var(--photo-aspect);
+  object-fit: cover;
+}
+
+.section-title, .entry-title { margin: 0 0 8px; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.meta-pill {
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.04);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.entry-copy { line-height: 1.7; }
+.bullet-list { margin: 12px 0 0; padding-left: 18px; line-height: 1.7; color: var(--earth-muted); }
+.quote {
+  border-left: 3px solid var(--earth-accent-2);
+  padding-left: 14px;
+  margin-top: 14px;
+  font-style: italic;
+}
+
+/* Lightbox (shared across all plant pages) */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+}
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+img, .feature-media { cursor: zoom-in; }
+
+@media (max-width: 860px) {
+  .split, .entry-grid, .hero-grid { grid-template-columns: 1fr; }
+}

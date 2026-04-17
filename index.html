@@ -1,125 +1,231 @@
 <!doctype html>
+<!--
+  FOR AI ASSISTANTS
+  If you're an AI reading this page to help the owner add a plant / pet /
+  garden photo to this site, fetch /llms.txt at the site root for the full
+  operating instructions (destination slugs, photo path conventions, voice
+  rules, HTML templates, output format). Summary below in <section id="ai-agents">.
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Jez237 — Home</title>
-  <link rel="stylesheet" href="./assets/styles.css" />
-  <link rel="stylesheet" href="assets/site-enhance.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/site-enhance.css" />
+  <link rel="stylesheet" href="/assets/design.css" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .hero-editorial .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .hero-editorial .actions a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: transform 0.3s var(--ease-out), box-shadow 0.3s ease;
+    }
+    .hero-editorial .actions a:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.3); }
+    .hero-editorial .actions a.primary {
+      background: linear-gradient(120deg, rgba(232,197,122,0.9), rgba(224,102,126,0.85));
+      color: #1d1811;
+    }
+    .hero-editorial .actions a.secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--ink-hi);
+      border: 1px solid rgba(232,197,122,0.25);
+    }
+    /* Weather strip into hero */
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--ink-lo);
+      letter-spacing: 0.02em;
+    }
+    .hero-meta span strong { color: var(--ink-mid); font-weight: 500; }
+  </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="./index.html">Home</a>
-        <a href="./index.html#projects">Projects</a>
-        <a href="./index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="./photos/">Photos</a>
-        <a href="./plants/">Plant Progress</a>
-        <a href="./ai-news/">AI News</a>
-        <a href="./plex/">Plex</a>
-        <a href="./ops/">Ops Center</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
-    <section class="hero">
-      <div class="kicker">Personal + Projects + News</div>
-      <h1 id="hero-title" class="title">Jez — personal site</h1>
-      <p id="hero-tagline" class="muted">Builder, experimenter, curious human.</p>
-      <p id="hero-about" class="muted"></p>
-      <p><a class="btn" href="./ai-news/">Open AI News Feed →</a></p>
+
+    <section class="hero-editorial">
+      <div class="eyebrow">A living journal</div>
+      <h1>A garden journal and a workbench.</h1>
+      <p class="lede">Seasonal plant progress, weather-aware garden tasks, photo archives, playable prototypes, and a daily AI news feed — all kept in one place, grown slowly and on purpose.</p>
+      <div class="actions">
+        <a class="primary" href="/plants/">Open Plant Progress →</a>
+        <a class="secondary" href="/garden/">Garden Calendar</a>
+        <a class="secondary" href="/ai-news/">AI News</a>
+      </div>
+      <div class="hero-meta">
+        <span>📍 <strong>Philadelphia · Zone 7a</strong></span>
+        <span>🪴 <strong>~20 plants tracked</strong></span>
+        <span>📅 <strong>Daily feeds</strong></span>
+      </div>
     </section>
 
-    <section id="projects" class="grid">
-      <article class="card col-6">
-        <h2>Projects</h2>
-        <div id="projects-list" class="list"></div>
-      </article>
+    <!-- Featured pieces -->
+    <div class="section-head">
+      <h2>Now</h2>
+      <span class="section-sub">What's currently alive on the site</span>
+    </div>
 
-      <article id="tools" class="card col-6">
-        <h2>Tools & Utilities</h2>
-        <p class="muted">Vibecoded helpers for real work.</p>
-        <div id="tools-list" class="list"></div>
-      </article>
-
-      <article id="games" class="card col-6">
-        <h2>Game Experiments</h2>
-        <p class="muted">Playable prototypes from GameMaster sessions — including model showdowns where two AI models build the same game from the same brief.</p>
-        <div id="games-list" class="list"></div>
-        <p><a class="btn" href="https://jz237.github.io/games/">Open Game Experiments →</a></p>
-      </article>
-
-      <article id="photos" class="card col-6">
-        <h2>Photos</h2>
-        <p class="muted">Gallery and restoration showcase.</p>
-        <div id="photos-list" class="list">
-          <a href="./photos/cats/">🐱 Cat Corner</a>
-          <a href="./photos/garden/">🌿 Garden</a>
-          <a href="./plants/">🍂 Plant Progress</a>
+    <div class="stack-lg">
+      <a class="feature" href="/plants/">
+        <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
+        <div class="feature-copy">
+          <div class="eyebrow">Living journal</div>
+          <h3>Plant Progress</h3>
+          <p>A season-by-season record of the yard — each plant kept as a dated timeline with notes, photos, and the occasional pull quote. Spring is currently in full swing.</p>
         </div>
-        <p><a class="btn" href="./photos/">Browse Photos →</a></p>
-      </article>
+      </a>
 
-      <article id="plant-progress" class="card col-6">
-        <h2>🍂 Plant Progress</h2>
-        <p class="muted">Earthtone plant journals with month-by-month progress, creative sections, and photo check-ins every week or two.</p>
-        <p><a class="btn" href="./plants/">Open Plant Progress →</a></p>
-      </article>
-
-      <article id="site-roadmap" class="card col-12">
-        <h2>🪴 Where the site is going</h2>
-        <p class="muted">The plan is to make this feel less like a pile of uploads and more like a living garden journal with practical tools underneath it.</p>
-        <div class="list">
-          <div class="item">
-            <strong>Plant Progress</strong><br />
-            The main storytelling section. Each plant gets an earthtone journal page with multiple dated entries over the season, instead of a brand new page for every single photo.
+      <div class="row-2">
+        <a class="feature" href="/garden/">
+          <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg')"></div>
+          <div class="feature-copy">
+            <div class="eyebrow">Practical</div>
+            <h3>Garden Calendar</h3>
+            <p>Weather-aware daily tasks for Philadelphia zone 7a — hover any date to see what to do that day.</p>
           </div>
-          <div class="item">
-            <strong>Garden Calendar</strong><br />
-            The practical side of the garden, seasonal tasks, timing, applications, and reminders tied to this actual yard in Philadelphia.
+        </a>
+        <a class="feature" href="/ai-news/">
+          <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg');filter:saturate(0.7) hue-rotate(-15deg)"></div>
+          <div class="feature-copy">
+            <div class="eyebrow">Daily refresh</div>
+            <h3>AI News Feed</h3>
+            <p>Curated model releases, tooling updates, and notable research — rebuilt from scratch every morning.</p>
           </div>
-          <div class="item">
-            <strong>Bed and planning pages</strong><br />
-            Some pages will track full beds, layout ideas, before-and-after decisions, and experiments when a single-plant page is not the right fit.
-          </div>
-          <div class="item">
-            <strong>Seasonal archives later</strong><br />
-            As photos build up, the site can add Spring, Summer, and Fall archive views so you can browse the garden by season as well as by plant.
-          </div>
-          <div class="item">
-            <strong>Photos stay lighter</strong><br />
-            The Photos section can stay more casual, while Plant Progress becomes the polished record of how the yard changes over time.
-          </div>
-        </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pull quote -->
+    <div class="pullquote">
+      Not a pile of uploads. A <em>living garden journal</em> with practical tools underneath.
+    </div>
+
+    <!-- Photos + Games row -->
+    <div class="section-head">
+      <h2>Also here</h2>
+      <span class="section-sub">Side projects, experiments, collections</span>
+    </div>
+
+    <div class="row-3">
+      <a class="tile" href="/photos/">
+        <div class="eyebrow">Gallery</div>
+        <h3>Photos</h3>
+        <p>Cats, garden, restorations. Casual corner.</p>
+      </a>
+      <a class="tile" href="/games/">
+        <div class="eyebrow">Prototypes</div>
+        <h3>Game Experiments</h3>
+        <p>Playable AI-built games — Missile Command, Asteroids HD, Boulder Dash.</p>
+      </a>
+      <a class="tile" href="/experiments/ai-explainer/">
+        <div class="eyebrow">Interactive</div>
+        <h3>How AI Works</h3>
+        <p>Neural networks, LLMs, training, hallucinations — built with React + Framer Motion.</p>
+      </a>
+    </div>
+
+    <!-- Lists from site.json -->
+    <div class="section-head">
+      <h2>Workbench</h2>
+      <span class="section-sub">Tools and home-lab visibility</span>
+    </div>
+
+    <div class="row-2">
+      <article class="tile" style="padding:24px;">
+        <div class="eyebrow">Tools &amp; utilities</div>
+        <h3>Small helpers</h3>
+        <div id="tools-list" class="list" style="margin-top:10px"></div>
       </article>
-
-      <article id="garden" class="card col-6">
-        <h2>🌱 Garden</h2>
-        <p class="muted">Zone 7a · Philadelphia · ~20 plants. Seasonal tasks, application log, and planting calendar tailored to this yard.</p>
-        <p><a class="btn" href="./garden/">Open Garden Calendar →</a></p>
+      <article class="tile" style="padding:24px;">
+        <div class="eyebrow">Home lab</div>
+        <h3>System visibility</h3>
+        <div id="homelab-list" class="list" style="margin-top:10px"></div>
       </article>
+    </div>
 
-      <article id="homelab" class="card col-6">
-        <h2>Local AI / Home Lab</h2>
-        <p class="muted">Runtime and system visibility panels.</p>
-        <div id="homelab-list" class="list"></div>
-      </article>
+    <!-- Roadmap -->
+    <div class="section-head">
+      <h2>Where this is going</h2>
+      <span class="section-sub">The direction, not a decided roadmap</span>
+    </div>
 
+    <div class="row-2">
+      <div class="tile">
+        <div class="eyebrow">Plant Progress</div>
+        <h3>The main storytelling section</h3>
+        <p>Each plant gets its own dated timeline so the season builds over time, instead of a brand new page for every photo.</p>
+      </div>
+      <div class="tile">
+        <div class="eyebrow">Garden Calendar</div>
+        <h3>Working tool for the actual yard</h3>
+        <p>Seasonal tasks, timing, applications, and reminders tied to Philadelphia zone 7a.</p>
+      </div>
+      <div class="tile">
+        <div class="eyebrow">Bed &amp; planning pages</div>
+        <h3>Where single-plant pages don't fit</h3>
+        <p>Full-bed records, layout ideas, before-and-after decisions, experiments.</p>
+      </div>
+      <div class="tile">
+        <div class="eyebrow">Seasonal archives later</div>
+        <h3>Browse by season, not just by plant</h3>
+        <p>As photos build up, add Spring, Summer, Fall archive views.</p>
+      </div>
+    </div>
 
-
-
+    <!-- ===================================================================
+         AI AGENT INSTRUCTIONS — visible collapsible section
+         Any AI assistant helping the owner add a plant/pet/garden photo to
+         this site should read this OR /llms.txt at the site root.
+         =================================================================== -->
+    <section id="ai-agents" class="tile" style="margin-top:clamp(28px,4vw,48px);padding:26px;">
+      <div class="eyebrow">For AI assistants</div>
+      <h3>Adding photos with an AI</h3>
+      <p style="margin:0 0 12px 0;">Upload a plant, pet, or garden photo to your AI of choice and say "add this to my garden site at github.com/jz237/jez237-site". The AI should fetch <a href="/llms.txt" style="color:var(--brand-gold)">/llms.txt</a> for full instructions — section slugs, photo path conventions, voice rules, HTML templates, and output format.</p>
+      <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:var(--brand-gold);font-size:13px;">Show the full AI prompt here (click to expand)</summary>
+        <div style="margin-top:14px;padding:18px;background:rgba(0,0,0,0.25);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:var(--ink-mid);max-height:460px;overflow:auto;"><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
+      </details>
     </section>
 
-    <footer>
-      Built in public · Repo: <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">https://github.com/jz237/jez237-site</a>
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
+      <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a>
     </footer>
+    <script>
+      // Lazy-load the llms.txt contents into the collapsible when opened
+      (function () {
+        const det = document.querySelector('#ai-agents details');
+        const mount = document.getElementById('ai-agents-prompt');
+        if (!det || !mount) return;
+        let loaded = false;
+        det.addEventListener('toggle', async () => {
+          if (!det.open || loaded) return;
+          try {
+            const r = await fetch('/llms.txt');
+            mount.textContent = r.ok ? await r.text() : 'Could not load /llms.txt';
+            loaded = true;
+          } catch (e) {
+            mount.textContent = 'Could not load /llms.txt (' + e.message + ')';
+          }
+        });
+      })();
+    </script>
   </main>
 
-  <script src="./assets/app.js"></script>
-  <script src="assets/site-enhance.js" defer></script>
+  <script src="/assets/app.js"></script>
+  <script src="/assets/site-enhance.js" defer></script>
+  <script src="/assets/nav.js" defer></script>
 </body>
 </html>

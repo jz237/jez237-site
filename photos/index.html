@@ -3,99 +3,90 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Jez237 — Photos</title>
-  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/design.css" />
+  <link rel="stylesheet" href="/assets/site-enhance.css" />
   <style>
-    .section-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .section-card {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      color: inherit;
-    }
-    .section-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-    .section-card .thumb {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-    }
-    .section-card .info {
-      padding: 16px;
-    }
-    .section-card h2 {
-      margin: 0 0 4px;
-      font-size: 20px;
-    }
-    .section-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    @media (max-width: 640px) {
-      .section-grid { grid-template-columns: 1fr; }
-    }
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
   </style>
-  <link rel="stylesheet" href="../assets/site-enhance.css" />
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">jez237-site</div>
-      <div class="links">
-        <a href="../index.html">Home</a>
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#tools">Tools</a>
-        <a href="https://jz237.github.io/games/">Games</a>
-        <a href="../photos/">Photos</a>
-        <a href="../plants/">Plant Progress</a>
-        <a href="../ai-news/">AI News</a>
-        <a href="../plex/">Plex</a>
-        <a href="../ops/">Ops Center</a>
-      </div>
-    </nav>
-  </header>
+  <header id="site-nav"></header>
 
   <main class="container">
-    <section class="hero">
-      <div class="kicker">Photos</div>
-      <h1 class="title">Photo Gallery</h1>
-      <p class="muted">Pick a section to browse.</p>
+
+    <section class="hero-editorial">
+      <div class="eyebrow">Collections</div>
+      <h1>Photos, kept casual.</h1>
+      <p class="lede">Cats, the garden, and the occasional restoration. The polished chronicle lives in Plant Progress — this is the looser feed.</p>
     </section>
 
-    <div class="section-grid">
-      <a class="section-card" href="./cats/">
-        <img class="thumb" src="./cats/images/marty-closeup.jpg" alt="Cat Corner" />
-        <div class="info">
-          <h2>🐱 Cat Corner</h2>
-          <p>Luca, Cosmo, Taco & Marty in their natural habitat.</p>
-        </div>
-      </a>
-
-      <a class="section-card" href="../plants/">
-        <div class="thumb" style="background: linear-gradient(135deg, #5a3e2b, #7c5b3c); display:flex; align-items:center; justify-content:center; font-size:64px;">🍂</div>
-        <div class="info">
-          <h2>🍂 Plant Progress</h2>
-          <p>Earthtone plant journals with creative sections and month-by-month updates.</p>
-        </div>
-      </a>
+    <div class="photostrip" style="margin-top: 36px;">
+      <img loading="lazy" decoding="async" src="/photos/cats/images/cosmo-golden-eyes.jpg" alt="Cosmo" />
+      <img loading="lazy" decoding="async" src="/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Redbud" />
+      <img loading="lazy" decoding="async" src="/photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Peach" />
+      <img loading="lazy" decoding="async" src="/photos/cats/images/luca-cosmo-synchronized-nap.jpg" alt="Luca and Cosmo" />
     </div>
 
-    <footer>
-      <a href="../index.html">← Back to Home</a>
+    <div class="section-head">
+      <h2>Sections</h2>
+      <span class="section-sub">Pick a corner</span>
+    </div>
+
+    <div class="stack-lg">
+      <a class="feature" href="/plants/">
+        <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
+        <div class="feature-copy">
+          <div class="eyebrow">The polished record</div>
+          <h3>Plant Progress</h3>
+          <p>Each plant kept as a dated journal with multiple entries, notes, and seasonal reference photos. Currently following a spring full of bloom.</p>
+        </div>
+      </a>
+
+      <div class="row-2">
+        <a class="feature" href="/photos/cats/">
+          <div class="feature-media" style="background-image:url('/photos/cats/images/cosmo-throne.jpg')"></div>
+          <div class="feature-copy">
+            <div class="eyebrow">Daily life</div>
+            <h3>🐱 Cat Corner</h3>
+            <p>Luca, Cosmo, Taco &amp; Marty in their natural habitat — 26 photos and counting.</p>
+          </div>
+        </a>
+        <a class="feature" href="/photos/garden/">
+          <div class="feature-media" style="background-image:url('/photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg')"></div>
+          <div class="feature-copy">
+            <div class="eyebrow">Seasonal</div>
+            <h3>🌿 Garden Photos</h3>
+            <p>Raw garden shots, seasonal progress, and reference images before they become journal entries.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      The good photos earn <em>stronger writing</em>. The rest stay a feed.
+    </div>
+
+    <div class="section-head">
+      <h2>Related</h2>
+      <span class="section-sub">Adjacent corners of the site</span>
+    </div>
+
+    <div class="stack-md">
+      <a class="archive" href="/plants/past-years/">Past years — older comparisons and reference</a>
+      <a class="archive" href="/plants/interesting-insects/">Interesting insects — pollinators and visitors</a>
+      <a class="archive" href="/garden/">Garden calendar — seasonal tasks and timing</a>
+    </div>
+
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
+      <a href="/index.html" style="color:var(--brand-gold)">← Back to Home</a>
     </footer>
   </main>
-  <script src="../assets/site-enhance.js" defer></script>
+
+  <script src="/assets/site-enhance.js" defer></script>
+  <script src="/assets/nav.js" defer></script>
 </body>
 </html>
