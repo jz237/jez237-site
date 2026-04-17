@@ -1,6 +1,6 @@
 {
   "date": "2026-04-17",
-  "updatedAt": "2026-04-17T08:51:58.641067+00:00",
+  "updatedAt": "2026-04-17T10:00:01.547989+00:00",
   "items": [
     {
       "title": "OpenAI Launches GPT-Rosalind: Its First Life Sciences AI Model Built to Accelerate Drug Discovery and Genomics Research",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-4.png",
       "published": "2026-04-17T00:00:01+00:00",
       "firstSeen": "2026-04-17T01:00:01.768917+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.2799
+      "score": 20.2532
     },
     {
       "title": "OpenAI launches GPT-Rosalind, a specialised AI model for drug discovery and life sciences research",
@@ -30,11 +30,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/GPT-Rosalind.png",
       "published": "2026-04-17T07:51:49+00:00",
       "firstSeen": "2026-04-17T08:51:58.641067+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.3198
+      "score": 19.2866
     },
     {
       "title": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities",
@@ -47,10 +47,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-10-150x150.png",
       "published": "2026-04-17T06:18:32+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7446
+      "score": 10.7128
+    },
+    {
+      "title": "DeepL launches real-time voice-to-voice translation in 40+ languages",
+      "url": "https://thenextweb.com/news/deepl-voice-to-voice-real-time-spoken-translation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Cologne-based translation company best known for its text tools has unveiled a full voice product suite covering meetings, conversations, group settings, and an API for enterprise integration. A live demo in Seoul showed one-to-two sentence delays, and DeepL’s CPO acknowledged word order differences between languages remain a fundamental challenge. DeepL, the Cologne-based language AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/DeepL.png",
+      "published": "2026-04-17T09:11:42+00:00",
+      "firstSeen": "2026-04-17T10:00:01.547989+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.6257
     },
     {
       "title": "GIC-backed battery maker Envision AESC is considering a $2 billion Hong Kong IPO",
@@ -63,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Envision-AESC.png",
       "published": "2026-04-17T07:22:04+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5052
+      "score": 4.4724
     },
     {
       "title": "Sequoia raises $7 billion for its biggest-ever late-stage fund",
@@ -79,10 +95,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Sequoia.png",
       "published": "2026-04-17T07:07:06+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8979
+      "score": 3.8654
     },
     {
       "title": "datasette 1.0a28",
@@ -95,10 +111,10 @@
       "image": "",
       "published": "2026-04-17T04:01:56+00:00",
       "firstSeen": "2026-04-17T05:00:01.723013+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8518
+      "score": 2.822
     },
     {
       "title": "Stockholm’s BioLamina secures €20M EIB loan to scale the protein matrices that make cell therapies possible",
@@ -111,13 +127,13 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/BioLamina.png",
       "published": "2026-04-17T07:34:12+00:00",
       "firstSeen": "2026-04-17T08:00:01.840186+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8111
+      "score": 2.7782
     },
     {
-      "title": "Can Large Language Models Detect Methodological Flaws? Evidence from Gesture Recognition for UAV-Based Rescue Operation Based on Deep Learning",
+      "title": "Xingyu Xiao, Jiejuan Tong, Jun Sun, Zhe Sui, Peng Chen, Jingang Liang, Haitao Wang",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -125,12 +141,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-17T08:52:05.126608+00:00",
+      "published": "2026-04-17T10:00:05.558795+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "AlixLabs closes €15M Series A to commercialise the atomic etching technology",
+      "url": "https://thenextweb.com/news/alixlabs-15m-series-a-aps-atomic-etching-semiconductor",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AlixLabs, the Lund-based semiconductor process startup developing Atomic Pitch Splitting (APS™), has completed its €15M Series A with a strategic top-up from Finnish investor Stephen Industries. The company is targeting beta testing with chipmakers in 2026 and manufacturing deployment by 2027. AlixLabs, a deep-tech semiconductor startup based in Lund, Sweden, has closed its €15 million [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AlixLabs.png",
+      "published": "2026-04-17T08:56:30+00:00",
+      "firstSeen": "2026-04-17T10:00:01.547989+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1181
     },
     {
       "title": "Ericsson narrowly misses Q1 profit forecasts as North America unwind",
@@ -143,10 +175,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Ericsson.png",
       "published": "2026-04-17T08:09:15+00:00",
       "firstSeen": "2026-04-17T08:51:58.641067+00:00",
-      "lastSeen": "2026-04-17T08:51:58.641067+00:00",
+      "lastSeen": "2026-04-17T10:00:01.547989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1285
+      "score": 2.095
     }
   ],
   "errors": []
