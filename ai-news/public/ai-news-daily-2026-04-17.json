@@ -1,6 +1,6 @@
 {
   "date": "2026-04-17",
-  "updatedAt": "2026-04-17T06:00:01.144141+00:00",
+  "updatedAt": "2026-04-17T07:00:01.540286+00:00",
   "items": [
     {
       "title": "OpenAI Launches GPT-Rosalind: Its First Life Sciences AI Model Built to Accelerate Drug Discovery and Genomics Research",
@@ -13,11 +13,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-4.png",
       "published": "2026-04-17T00:00:01+00:00",
       "firstSeen": "2026-04-17T01:00:01.768917+00:00",
-      "lastSeen": "2026-04-17T06:00:01.144141+00:00",
+      "lastSeen": "2026-04-17T07:00:01.540286+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.3511
+      "score": 20.3256
+    },
+    {
+      "title": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities",
+      "url": "https://www.marktechpost.com/2026/04/16/qwen-team-open-sources-qwen3-6-35b-a3b-a-sparse-moe-vision-language-model-with-3b-active-parameters-and-agentic-coding-capabilities",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities\nThe post Qwen Team Open-Sources Qwen3.6-35B-A3B: A Sparse MoE Vision-Language Model with 3B Active Parameters and Agentic Coding Capabilities appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-10-150x150.png",
+      "published": "2026-04-17T06:18:32+00:00",
+      "firstSeen": "2026-04-17T07:00:01.540286+00:00",
+      "lastSeen": "2026-04-17T07:00:01.540286+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 10.7991
     },
     {
       "title": "datasette 1.0a28",
@@ -30,10 +46,10 @@
       "image": "",
       "published": "2026-04-17T04:01:56+00:00",
       "firstSeen": "2026-04-17T05:00:01.723013+00:00",
-      "lastSeen": "2026-04-17T06:00:01.144141+00:00",
+      "lastSeen": "2026-04-17T07:00:01.540286+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9315
+      "score": 2.9029
     },
     {
       "title": "Can Large Language Models Detect Methodological Flaws? Evidence from Gesture Recognition for UAV-Based Rescue Operation Based on Deep Learning",
@@ -44,12 +60,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-17T05:00:15.124266+00:00",
+      "published": "2026-04-17T07:00:09.922262+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-17T05:00:01.723013+00:00",
+      "lastSeen": "2026-04-17T07:00:01.540286+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.33
+      "score": 2.36
     }
   ],
   "errors": []
