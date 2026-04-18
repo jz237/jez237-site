@@ -1,7 +1,23 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T03:00:02.099302+00:00",
+  "updatedAt": "2026-04-18T03:27:57.389321+00:00",
   "items": [
+    {
+      "title": "Adding a new content type to my blog-to-newsletter tool",
+      "url": "https://simonwillison.net/guides/agentic-engineering-patterns/adding-a-new-content-type",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Agentic Engineering Patterns &gt;\n    Here's an example of a deceptively short prompt that got a lot of work done in a single shot.\nFirst, some background. I send out a free Substack newsletter around once a week containing content copied-and-pasted from my blog. I'm effectively using Substack as a lightweight way to allow people to subscribe to my blog via email.\nI generate the newsletter with my blog-to-newsletter tool - an HTML and JavaScript app that fetches my latest content from this Datasette instance and formats it as rich text HTML, which I can then copy to my clipboard and paste into",
+      "image": "",
+      "published": "2026-04-18T03:15:36+00:00",
+      "firstSeen": "2026-04-18T03:27:57.389321+00:00",
+      "lastSeen": "2026-04-18T03:27:57.389321+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0837
+    },
     {
       "title": "Can Large Language Models Detect Methodological Flaws? Evidence from Gesture Recognition for UAV-Based Rescue Operation Based on Deep Learning",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T03:00:08.137321+00:00",
+      "published": "2026-04-18T03:28:03.417910+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T03:00:02.099302+00:00",
+      "lastSeen": "2026-04-18T03:27:57.389321+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
