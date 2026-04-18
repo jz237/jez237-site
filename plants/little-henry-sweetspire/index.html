@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Little Henry Sweetspire — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/design.css" />
+  <link rel="stylesheet" href="../../assets/plant-page.css" />
+  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <style>
+    :root {
+      --earth-bg: #1b1711;
+      --earth-panel: #282118;
+      --earth-border: #59603a;
+      --earth-text: #f1eadb;
+      --earth-muted: #c5bfa8;
+      --earth-accent: #9ebc5a;
+      --earth-accent-2: #d9c27b;
+      --earth-accent-3: #6f8f46;
+    }
+    body { background: radial-gradient(circle at top, #334022 0%, #1b1711 56%, #100d09 100%); color: var(--earth-text); }
+    header { background: rgba(27,23,17,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #e2cf93; }
+    .hero, .panel, .timeline-entry { border: 1px solid var(--earth-border); border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,.18); }
+    .hero { background: linear-gradient(135deg, rgba(72,92,42,.95), rgba(57,43,28,.92)); padding: 24px; }
+    .panel, .timeline-entry { background: linear-gradient(180deg, rgba(46,40,28,.97), rgba(31,26,20,.97)); padding: 18px; }
+    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
+    .shell { display:grid; gap:18px; margin-top:18px; }
+    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
+    .photo {
+      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 16px 34px rgba(0,0,0,.24);
+    }
+    .section-title, .entry-title { margin:0 0 8px; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .entry-copy { line-height:1.7; }
+    .timeline-stack { display:grid; gap:18px; }
+    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
+    .quote {
+      border-left: 3px solid var(--earth-accent-2);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    img, .feature-media { cursor: zoom-in; }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Plant Progress · Itea virginica 'Little Henry'</div>
+      <h1 class="title">Little Henry Sweetspire</h1>
+      <p class="muted">A compact native shrub, waking up in clean bright green and starting the season low, dense, and quietly promising.</p>
+    </section>
+
+    <div class="shell">
+      <section class="panel split">
+        <div>
+          <h2 class="section-title">Small shrub, good structure</h2>
+          <p class="note">Little Henry is one of those plants that reads modest early, then earns its keep as the season builds. Right now the value is in the clean spring push, fresh foliage packed close to the crown, and the sense that it is setting up for a denser, more mounded shape.</p>
+          <div class="meta-row">
+            <span class="meta-pill">native shrub</span>
+            <span class="meta-pill">compact habit</span>
+            <span class="meta-pill">spring leaf-out</span>
+          </div>
+        </div>
+        <div>
+          <img class="photo" src="../../photos/garden/images/2026/04/little-henry-sweetspire-2026-04-17.jpg" alt="Little Henry sweetspire leafing out in mulch bed" loading="lazy" decoding="async" />
+        </div>
+      </section>
+
+      <section class="timeline-stack">
+        <article class="timeline-entry">
+          <div class="split">
+            <div>
+              <div class="entry-date">April 17, 2026</div>
+              <h2 class="entry-title">Fresh green at the base</h2>
+              <div class="entry-copy">
+                The Little Henry sweetspire is in that early spring stage where the whole shrub still sits low to the ground, but every stem is waking up at once. The new growth is bright, clean, and evenly distributed, which makes the plant feel less tentative than young shrubs sometimes do and more like it already knows the shape it wants to make.
+                <div class="quote">Not flashy yet, just quietly gathering itself into a real shrub.</div>
+              </div>
+            </div>
+            <div>
+              <img class="photo" src="../../photos/garden/images/2026/04/little-henry-sweetspire-2026-04-17.jpg" alt="Little Henry sweetspire pushing fresh spring growth" loading="lazy" decoding="async" />
+            </div>
+          </div>
+          <ul class="bullet-list">
+            <li>bright spring leaf-out across the whole plant</li>
+            <li>compact habit still holding close to the ground</li>
+            <li>multiple stems pushing evenly from the base</li>
+            <li>healthy early growth with good density for this stage</li>
+          </ul>
+        </article>
+      </section>
+    </div>
+  </main>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" loading="lazy" decoding="async"></div>
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.feature-media').forEach((card) => {
+      const bg = card.style.backgroundImage;
+      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
+      if (match && match[1]) {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          lightboxImg.src = match[1];
+          lightbox.classList.add('active');
+        });
+      }
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
+  <script src="../../assets/plant-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
+</body>
+</html>
