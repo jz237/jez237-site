@@ -1,6 +1,6 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T09:00:01.553162+00:00",
+  "updatedAt": "2026-04-18T10:00:01.623816+00:00",
   "items": [
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T09:00:01.553162+00:00",
+      "lastSeen": "2026-04-18T10:00:01.623816+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1684
+      "score": 9.1424
     },
     {
       "title": "Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-17-at-11.00.24-PM-1-150x150.png",
       "published": "2026-04-18T06:00:41+00:00",
       "firstSeen": "2026-04-18T07:00:01.866030+00:00",
-      "lastSeen": "2026-04-18T09:00:01.553162+00:00",
+      "lastSeen": "2026-04-18T10:00:01.623816+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3324
+      "score": 5.3046
     },
     {
       "title": "Adding a new content type to my blog-to-newsletter tool",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-04-18T03:15:36+00:00",
       "firstSeen": "2026-04-18T03:27:57.389321+00:00",
-      "lastSeen": "2026-04-18T09:00:01.553162+00:00",
+      "lastSeen": "2026-04-18T10:00:01.623816+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9279
+      "score": 4.9022
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -59,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T09:00:05.502569+00:00",
+      "published": "2026-04-18T10:00:05.657923+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T09:00:01.553162+00:00",
+      "lastSeen": "2026-04-18T10:00:01.623816+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
