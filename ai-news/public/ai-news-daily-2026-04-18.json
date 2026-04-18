@@ -1,7 +1,24 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T20:51:28.862941+00:00",
+  "updatedAt": "2026-04-18T21:48:48.556745+00:00",
   "items": [
+    {
+      "title": "Anthropic Releases Claude Opus 4.7: A Major Upgrade for Agentic Coding, High-Resolution Vision, and Long-Horizon Autonomous Tasks",
+      "url": "https://www.marktechpost.com/2026/04/18/anthropic-releases-claude-opus-4-7-a-major-upgrade-for-agentic-coding-high-resolution-vision-and-long-horizon-autonomous-tasks",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Anthropic has launched Claude Opus 4.7, it&#8217;s latest frontier model and a direct successor to Claude Opus 4.6. The release is positioned as a focused improvement rather than a full generational leap, but the gains it delivers are substantial in the areas that matter most to developers building real-world AI-powered applications: agentic software engineering, multimodal [&#8230;]\nThe post Anthropic Releases Claude Opus 4.7: A Major Upgrade for Agentic Coding, High-Resolution Vision, and Long-Horizon Autonomous Tasks appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-2.39.41-PM-1-150x150.png",
+      "published": "2026-04-18T21:40:03+00:00",
+      "firstSeen": "2026-04-18T21:48:48.556745+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 27.5155
+    },
     {
       "title": "Claude Opus 4.7: Benchmarks, Pricing, Context & What's New",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +28,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T20:51:34.538990+00:00",
+      "published": "2026-04-18T21:48:54.281135+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -30,11 +47,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Jensen-Huang.png",
       "published": "2026-04-18T11:14:03+00:00",
       "firstSeen": "2026-04-18T12:00:01.532693+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.892
+      "score": 13.8699
     },
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
@@ -47,10 +64,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9023
+      "score": 8.8844
     },
     {
       "title": "Anthropic’s relationship with the Trump administration seems to be thawing",
@@ -63,10 +80,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
       "published": "2026-04-18T14:56:48+00:00",
       "firstSeen": "2026-04-18T15:00:01.105739+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1234
+      "score": 5.099
     },
     {
       "title": "Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale",
@@ -79,10 +96,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-17-at-11.00.24-PM-1-150x150.png",
       "published": "2026-04-18T06:00:41+00:00",
       "firstSeen": "2026-04-18T07:00:01.866030+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0483
+      "score": 5.0292
     },
     {
       "title": "Schematik Is ‘Cursor for Hardware.’ Anthropic Wants In",
@@ -95,26 +112,10 @@
       "image": "https://media.wired.com/photos/69e261f2c08b65b67742964b/master/pass/IMG_0608%202.jpeg",
       "published": "2026-04-18T10:30:00+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.015
-    },
-    {
-      "title": "The App Store is booming again, and AI may be why",
-      "url": "https://techcrunch.com/2026/04/18/the-app-store-is-booming-again-and-ai-may-be-why",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "New data from Appfigures shows a swell of new app launches in 2026, suggesting AI tools could be fueling a mobile software boom.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/app-store-with-badge-GettyImages-2193151739.jpg?w=1024",
-      "published": "2026-04-18T13:00:00+00:00",
-      "firstSeen": "2026-04-18T13:33:53.820080+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9743
+      "score": 4.9934
     },
     {
       "title": "Cursor is raising $2 billion at a $50 billion valuation as AI coding tools become the fastest-growing software category",
@@ -127,10 +128,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/cursor-anysphere-2-billion-funding-50-billion-valuation-ai-coding.png",
       "published": "2026-04-18T10:26:13+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9735
+      "score": 4.952
+    },
+    {
+      "title": "The App Store is booming again, and AI may be why",
+      "url": "https://techcrunch.com/2026/04/18/the-app-store-is-booming-again-and-ai-may-be-why",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "New data from Appfigures shows a swell of new app launches in 2026, suggesting AI tools could be fueling a mobile software boom.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/app-store-with-badge-GettyImages-2193151739.jpg?w=1024",
+      "published": "2026-04-18T13:00:00+00:00",
+      "firstSeen": "2026-04-18T13:33:53.820080+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9511
     },
     {
       "title": "Anthropic’s Amodei meets Wiles and Bessent at the White House in first step toward resolving Mythos standoff",
@@ -143,10 +160,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-amodei-wiles-mythos-white-house-pentagon-cybersecurity-1.png",
       "published": "2026-04-18T10:54:22+00:00",
       "firstSeen": "2026-04-18T12:00:01.532693+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8843
+      "score": 4.8625
     },
     {
       "title": "Three more senior executives leave OpenAI as the company kills its side quests",
@@ -159,10 +176,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-departures-kevin-weil-sora-peebles-enterprise-pivot.png",
       "published": "2026-04-18T10:13:18+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8686
+      "score": 4.8472
     },
     {
       "title": "Adding a new content type to my blog-to-newsletter tool",
@@ -175,26 +192,10 @@
       "image": "",
       "published": "2026-04-18T03:15:36+00:00",
       "firstSeen": "2026-04-18T03:27:57.389321+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
+      "lastSeen": "2026-04-18T21:48:48.556745+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6647
-    },
-    {
-      "title": "Quantum AI just got shockingly good at predicting chaos",
-      "url": "https://www.sciencedaily.com/releases/2026/04/260417224455.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Researchers have shown that blending quantum computing with AI can dramatically improve predictions of complex, chaotic systems. By letting a quantum computer identify hidden patterns in data, the AI becomes more accurate and stable over time. The method outperformed standard models while using far less memory. This could have big implications for fields like climate science, energy, and medicine.",
-      "image": "https://www.sciencedaily.com/images/1920/ai-machine-learning-big-data-analytics-neural-network-data-flow.webp",
-      "published": "2026-04-18T03:51:09+00:00",
-      "firstSeen": "2026-04-18T16:56:33.084178+00:00",
-      "lastSeen": "2026-04-18T20:51:28.862941+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6059
+      "score": 4.647
     }
   ],
   "errors": []
