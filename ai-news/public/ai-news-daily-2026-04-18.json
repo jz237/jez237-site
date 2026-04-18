@@ -1,7 +1,24 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T10:57:45.395436+00:00",
+  "updatedAt": "2026-04-18T12:00:01.532693+00:00",
   "items": [
+    {
+      "title": "Nvidia’s Huang warns DeepSeek running on Huawei chips would be ‘horrible’ for the US",
+      "url": "https://thenextweb.com/news/nvidia-huang-deepseek-huawei-chips-horrible-outcome",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Nvidia CEO Jensen Huang warned on the Dwarkesh Podcast that DeepSeek optimising its AI models for Huawei’s Ascend chips instead of American hardware would be “a horrible outcome” for the United States, as the Chinese AI lab prepares to launch its V4 foundation model on Huawei’s Ascend 950PR processor. The migration from Nvidia’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Jensen-Huang.png",
+      "published": "2026-04-18T11:14:03+00:00",
+      "firstSeen": "2026-04-18T12:00:01.532693+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.1268
+    },
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
       "url": "https://www.marktechpost.com/2026/04/17/a-end-to-end-coding-guide-to-running-openai-gpt-oss-open-weight-models-with-advanced-inference-workflows",
@@ -13,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1181
+      "score": 9.0926
     },
     {
       "title": "Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale",
@@ -29,10 +46,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-17-at-11.00.24-PM-1-150x150.png",
       "published": "2026-04-18T06:00:41+00:00",
       "firstSeen": "2026-04-18T07:00:01.866030+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2787
+      "score": 5.2514
     },
     {
       "title": "Schematik Is ‘Cursor for Hardware.’ Anthropic Wants In",
@@ -45,10 +62,10 @@
       "image": "https://media.wired.com/photos/69e261f2c08b65b67742964b/master/pass/IMG_0608%202.jpeg",
       "published": "2026-04-18T10:30:00+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.276
+      "score": 5.2451
     },
     {
       "title": "Cursor is raising $2 billion at a $50 billion valuation as AI coding tools become the fastest-growing software category",
@@ -61,10 +78,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/cursor-anysphere-2-billion-funding-50-billion-valuation-ai-coding.png",
       "published": "2026-04-18T10:26:13+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2341
+      "score": 5.2032
+    },
+    {
+      "title": "Anthropic’s Amodei meets Wiles and Bessent at the White House in first step toward resolving Mythos standoff",
+      "url": "https://thenextweb.com/news/anthropic-amodei-wiles-mythos-white-house-pentagon-cybersecurity-2",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Anthropic CEO Dario Amodei met White House Chief of Staff Susie Wiles and Treasury Secretary Scott Bessent on Friday in what the White House called “productive and constructive” talks over access to Mythos, the frontier AI model capable of finding thousands of zero-day vulnerabilities. The meeting signals a thaw in the standoff that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-amodei-wiles-mythos-white-house-pentagon-cybersecurity-1.png",
+      "published": "2026-04-18T10:54:22+00:00",
+      "firstSeen": "2026-04-18T12:00:01.532693+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1171
     },
     {
       "title": "Three more senior executives leave OpenAI as the company kills its side quests",
@@ -77,10 +110,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-departures-kevin-weil-sora-peebles-enterprise-pivot.png",
       "published": "2026-04-18T10:13:18+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1276
+      "score": 5.097
     },
     {
       "title": "Adding a new content type to my blog-to-newsletter tool",
@@ -89,14 +122,14 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Agentic Engineering Patterns &gt;\n    Here's an example of a deceptively short prompt that got a lot of work done in a single shot.\nFirst, some background. I send out a free Substack newsletter around once a week containing content copied-and-pasted from my blog. I'm effectively using Substack as a lightweight way to allow people to subscribe to my blog via email.\nI generate the newsletter with my blog-to-newsletter tool - an HTML and JavaScript app that fetches my latest content from this Datasette instance and formats it as rich text HTML, which I can then copy to my clipboard and paste into",
+      "summary": "Agentic Engineering Patterns &gt;\n    Here's an example of a deceptively short prompt that got a quite a lot of work done in a single shot.\nFirst, some background. I send out a free Substack newsletter around once a week containing content copied-and-pasted from my blog. I'm effectively using Substack as a lightweight way to allow people to subscribe to my blog via email.\nI generate the newsletter with my blog-to-newsletter tool - an HTML and JavaScript app that fetches my latest content from this Datasette instance and formats it as rich text HTML, which I can then copy to my clipboard and pa",
       "image": "",
       "published": "2026-04-18T03:15:36+00:00",
       "firstSeen": "2026-04-18T03:27:57.389321+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8781
+      "score": 4.8529
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -107,9 +140,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T10:57:48.815406+00:00",
+      "published": "2026-04-18T12:00:05.416627+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -125,10 +158,10 @@
       "image": "https://media.wired.com/photos/69e297a5b6d175715986c107/master/pass/security_EU_Age_Getty_1.jpg",
       "published": "2026-04-18T10:30:00+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.376
+      "score": 3.3451
     },
     {
       "title": "NVIDIA didn’t invest in Xanadu, but it made its CEO a billionaire anyway",
@@ -141,26 +174,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/nvidia-xanadu-quantum-computing-ceo-billionaire-stock-surge.png",
       "published": "2026-04-18T09:58:26+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2202
+      "score": 3.1898
     },
     {
-      "title": "Palantir, Thales, and a startup are competing to build the FAA’s predictive air traffic AI",
-      "url": "https://thenextweb.com/news/palantir-thales-air-space-intelligence-faa-smart-ai-air-traffic",
+      "title": "Europe is pouring tens of billions of public money into VC. The hard part is making it work",
+      "url": "https://thenextweb.com/news/europe-public-money-vc-scaleups-growth-problems",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "In short: The FAA is developing SMART (Strategic Management of Airspace Routing Trajectories), an AI system that would extend air traffic conflict prediction from 15 minutes to two hours, with Palantir, Thales, and Air Space Intelligence competing for the contract. The project follows the LaGuardia crash that exposed controller overwork and aging systems, and sits [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/palantir-thales-air-space-intelligence-faa-smart-ai-air-traffic.png",
-      "published": "2026-04-18T10:38:42+00:00",
-      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "summary": "The European Investment Fund is raising a €15 billion fund of funds called ETCI 2 that aims to unlock up to €80 billion in scaleup funding across Europe. Germany’s WIN initiative is targeting €12 billion by 2030. France’s Tibi programme has pledged €7 billion in private capital and labelled 92 VC and growth funds with [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/europe-public-money-vc-scaleups-growth-problems.png",
+      "published": "2026-04-18T11:31:44+00:00",
+      "firstSeen": "2026-04-18T12:00:01.532693+00:00",
+      "lastSeen": "2026-04-18T12:00:01.532693+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1403
+      "score": 2.8357
     }
   ],
   "errors": []
