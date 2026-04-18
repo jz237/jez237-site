@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-18T03:27:57.389321+00:00",
+  "updatedAt": "2026-04-18T05:00:01.821827+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4036,6 +4036,10 @@
     "https://simonwillison.net/guides/agentic-engineering-patterns/adding-a-new-content-type": {
       "image": "",
       "checkedAt": "2026-04-18T03:27:57.389321+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/17/a-end-to-end-coding-guide-to-running-openai-gpt-oss-open-weight-models-with-advanced-inference-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
+      "checkedAt": "2026-04-18T05:00:01.821827+00:00"
     }
   }
 }
