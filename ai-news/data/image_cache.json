@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-18T13:33:53.820080+00:00",
+  "updatedAt": "2026-04-18T15:00:01.105739+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4044,6 +4044,10 @@
     "https://techcrunch.com/2026/04/18/the-app-store-is-booming-again-and-ai-may-be-why": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/app-store-with-badge-GettyImages-2193151739.jpg?w=1024",
       "checkedAt": "2026-04-18T13:33:53.820080+00:00"
+    },
+    "https://techcrunch.com/2026/04/18/anthropics-relationship-with-the-trump-administration-seems-to-be-thawing": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
+      "checkedAt": "2026-04-18T15:00:01.105739+00:00"
     }
   }
 }
