@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-18T14:56:01.584097+00:00",
+  "updatedAt": "2026-04-18T16:00:01.669814+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4048,6 +4048,14 @@
     "https://techcrunch.com/2026/04/18/anthropics-relationship-with-the-trump-administration-seems-to-be-thawing": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
       "checkedAt": "2026-04-18T15:00:01.105739+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/04/260417225020.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/aerosol-jet-printing.webp",
+      "checkedAt": "2026-04-18T16:00:01.669814+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/04/260417224455.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/ai-machine-learning-big-data-analytics-neural-network-data-flow.webp",
+      "checkedAt": "2026-04-18T16:00:01.669814+00:00"
     }
   }
 }
