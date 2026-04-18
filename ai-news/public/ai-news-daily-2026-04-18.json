@@ -1,6 +1,6 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T05:48:29.666461+00:00",
+  "updatedAt": "2026-04-18T07:00:01.866030+00:00",
   "items": [
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T05:48:29.666461+00:00",
+      "lastSeen": "2026-04-18T07:00:01.866030+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2564
+      "score": 9.2226
+    },
+    {
+      "title": "Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale",
+      "url": "https://www.marktechpost.com/2026/04/17/google-ai-releases-auto-diagnose-an-large-language-model-llm-based-system-to-diagnose-integration-test-failures-at-scale",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "If you have ever stared at thousands of lines of integration test logs wondering which of the sixteen log files actually contains your bug, you are not alone — and Google now has data to prove it. A team of Google researchers introduced Auto-Diagnose, an LLM-powered tool that automatically reads the failure logs from a [&#8230;]\nThe post Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-17-at-11.00.24-PM-1-150x150.png",
+      "published": "2026-04-18T06:00:41+00:00",
+      "firstSeen": "2026-04-18T07:00:01.866030+00:00",
+      "lastSeen": "2026-04-18T07:00:01.866030+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3902
     },
     {
       "title": "Adding a new content type to my blog-to-newsletter tool",
@@ -29,13 +45,13 @@
       "image": "",
       "published": "2026-04-18T03:15:36+00:00",
       "firstSeen": "2026-04-18T03:27:57.389321+00:00",
-      "lastSeen": "2026-04-18T05:48:29.666461+00:00",
+      "lastSeen": "2026-04-18T07:00:01.866030+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0148
+      "score": 4.9814
     },
     {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
+      "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,12 +59,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T05:48:36.323401+00:00",
+      "published": "2026-04-18T07:00:07.341198+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T05:48:29.666461+00:00",
+      "lastSeen": "2026-04-18T07:00:01.866030+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.76
     }
   ],
   "errors": []
