@@ -1,6 +1,6 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T09:59:19.948248+00:00",
+  "updatedAt": "2026-04-18T10:57:45.395436+00:00",
   "items": [
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T09:59:19.948248+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1427
+      "score": 9.1181
     },
     {
       "title": "Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale",
@@ -29,10 +29,58 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-17-at-11.00.24-PM-1-150x150.png",
       "published": "2026-04-18T06:00:41+00:00",
       "firstSeen": "2026-04-18T07:00:01.866030+00:00",
-      "lastSeen": "2026-04-18T09:59:19.948248+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3049
+      "score": 5.2787
+    },
+    {
+      "title": "Schematik Is ‘Cursor for Hardware.’ Anthropic Wants In",
+      "url": "https://www.wired.com/story/schematik-is-cursor-for-hardware-anthropic-wants-in-on-it",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Schematik is a program that aims to help people vibe code for physical devices. Hopefully, it won’t blow anything up.",
+      "image": "https://media.wired.com/photos/69e261f2c08b65b67742964b/master/pass/IMG_0608%202.jpeg",
+      "published": "2026-04-18T10:30:00+00:00",
+      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.276
+    },
+    {
+      "title": "Cursor is raising $2 billion at a $50 billion valuation as AI coding tools become the fastest-growing software category",
+      "url": "https://thenextweb.com/news/cursor-anysphere-2-billion-funding-50-billion-valuation-ai-coding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: AI coding startup Cursor (Anysphere) is in talks to raise at least $2 billion at a $50 billion valuation, co-led by Andreessen Horowitz, Thrive Capital, and Nvidia, nearly doubling its November 2025 valuation of $29.3 billion. The company has grown from zero to $2 billion ARR in three years – the fastest B2B [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/cursor-anysphere-2-billion-funding-50-billion-valuation-ai-coding.png",
+      "published": "2026-04-18T10:26:13+00:00",
+      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2341
+    },
+    {
+      "title": "Three more senior executives leave OpenAI as the company kills its side quests",
+      "url": "https://thenextweb.com/news/openai-departures-kevin-weil-sora-peebles-enterprise-pivot",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Summary: Three senior OpenAI executives, former CPO Kevin Weil, Sora head Bill Peebles, and enterprise CTO Srinivas Narayanan – departed on the same day as the company shuts down “side quests” including Sora (discontinuing 26 April) and dismantles OpenAI for Science. The exits continue a two-year pattern that has seen only 2 of 11 co-founders [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-departures-kevin-weil-sora-peebles-enterprise-pivot.png",
+      "published": "2026-04-18T10:13:18+00:00",
+      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1276
     },
     {
       "title": "Adding a new content type to my blog-to-newsletter tool",
@@ -45,10 +93,10 @@
       "image": "",
       "published": "2026-04-18T03:15:36+00:00",
       "firstSeen": "2026-04-18T03:27:57.389321+00:00",
-      "lastSeen": "2026-04-18T09:59:19.948248+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9025
+      "score": 4.8781
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -59,12 +107,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T09:59:25.482950+00:00",
+      "published": "2026-04-18T10:57:48.815406+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T09:59:19.948248+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
+    },
+    {
+      "title": "It Takes 2 Minutes to Hack the EU’s New Age-Verification App",
+      "url": "https://www.wired.com/story/security-news-this-week-it-takes-2-minutes-to-hack-the-eus-new-age-verification-app",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Plus: Major data breaches at a gym chain and hotel giant, a disruptive DDoS attack against Bluesky, dubious ICE hires, and more.",
+      "image": "https://media.wired.com/photos/69e297a5b6d175715986c107/master/pass/security_EU_Age_Getty_1.jpg",
+      "published": "2026-04-18T10:30:00+00:00",
+      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.376
+    },
+    {
+      "title": "NVIDIA didn’t invest in Xanadu, but it made its CEO a billionaire anyway",
+      "url": "https://thenextweb.com/news/nvidia-xanadu-quantum-computing-ceo-billionaire-stock-surge",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Christian Weedbrook, the founder and CEO of Toronto-based Xanadu Quantum Technologies, became a billionaire this week without NVIDIA investing a single dollar in his company. His 46.4 million multiple-voting shares were worth approximately $1.5 billion as of midday Friday, after Xanadu’s stock surged nearly fivefold in six trading sessions. The catalyst was not anything Xanadu [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/nvidia-xanadu-quantum-computing-ceo-billionaire-stock-surge.png",
+      "published": "2026-04-18T09:58:26+00:00",
+      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2202
+    },
+    {
+      "title": "Palantir, Thales, and a startup are competing to build the FAA’s predictive air traffic AI",
+      "url": "https://thenextweb.com/news/palantir-thales-air-space-intelligence-faa-smart-ai-air-traffic",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: The FAA is developing SMART (Strategic Management of Airspace Routing Trajectories), an AI system that would extend air traffic conflict prediction from 15 minutes to two hours, with Palantir, Thales, and Air Space Intelligence competing for the contract. The project follows the LaGuardia crash that exposed controller overwork and aging systems, and sits [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/palantir-thales-air-space-intelligence-faa-smart-ai-air-traffic.png",
+      "published": "2026-04-18T10:38:42+00:00",
+      "firstSeen": "2026-04-18T10:57:45.395436+00:00",
+      "lastSeen": "2026-04-18T10:57:45.395436+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1403
     }
   ],
   "errors": []
