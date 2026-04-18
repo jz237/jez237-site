@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-18T21:48:48.556745+00:00",
+  "updatedAt": "2026-04-18T23:00:01.621896+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4068,6 +4068,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/914672/the-ram-shortage-could-last-years": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/12/STKS523_RAM_SHORTAGE_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-18T21:48:48.556745+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/18/a-coding-guide-for-property-based-testing-using-hypothesis-with-stateful-differential-and-metamorphic-test-design": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-51.png",
+      "checkedAt": "2026-04-18T23:00:01.621896+00:00"
     }
   }
 }
