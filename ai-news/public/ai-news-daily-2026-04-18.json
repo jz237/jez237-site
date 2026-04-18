@@ -1,6 +1,6 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T06:00:01.128781+00:00",
+  "updatedAt": "2026-04-18T05:48:29.666461+00:00",
   "items": [
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T06:00:01.128781+00:00",
+      "lastSeen": "2026-04-18T05:48:29.666461+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2508
+      "score": 9.2564
     },
     {
       "title": "Adding a new content type to my blog-to-newsletter tool",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-04-18T03:15:36+00:00",
       "firstSeen": "2026-04-18T03:27:57.389321+00:00",
-      "lastSeen": "2026-04-18T06:00:01.128781+00:00",
+      "lastSeen": "2026-04-18T05:48:29.666461+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0094
+      "score": 5.0148
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -43,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T06:00:12.634454+00:00",
+      "published": "2026-04-18T05:48:36.323401+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T06:00:01.128781+00:00",
+      "lastSeen": "2026-04-18T05:48:29.666461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
