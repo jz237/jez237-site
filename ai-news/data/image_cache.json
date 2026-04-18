@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T23:54:03.857129+00:00",
+  "updatedAt": "2026-04-18T01:00:01.465540+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4028,6 +4028,10 @@
     "https://techcrunch.com/2026/04/17/sam-altmans-project-world-looks-to-scale-its-human-verification-empire-first-stop-tinder": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2224158119.jpg?resize=1200,837",
       "checkedAt": "2026-04-17T22:58:53.907247+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/17/pycon-us-2026": {
+      "image": "https://static.simonwillison.net/static/2026/pycon-us-card.jpg",
+      "checkedAt": "2026-04-18T01:00:01.465540+00:00"
     }
   }
 }
