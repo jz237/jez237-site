@@ -1,6 +1,6 @@
 {
   "date": "2026-04-18",
-  "updatedAt": "2026-04-18T23:00:01.621896+00:00",
+  "updatedAt": "2026-04-18T22:53:45.069366+00:00",
   "items": [
     {
       "title": "Anthropic Releases Claude Opus 4.7: A Major Upgrade for Agentic Coding, High-Resolution Vision, and Long-Horizon Autonomous Tasks",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-2.39.41-PM-1-150x150.png",
       "published": "2026-04-18T21:40:03+00:00",
       "firstSeen": "2026-04-18T21:48:48.556745+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 27.48
+      "score": 27.4831
     },
     {
       "title": "Claude Opus 4.7: Benchmarks, Pricing, Context & What's New",
@@ -28,9 +28,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-18T23:00:06.837800+00:00",
+      "published": "2026-04-18T22:53:49.250405+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -47,11 +47,11 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Jensen-Huang.png",
       "published": "2026-04-18T11:14:03+00:00",
       "firstSeen": "2026-04-18T12:00:01.532693+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.8433
+      "score": 13.8456
     },
     {
       "title": "A End-to-End Coding Guide to Running OpenAI GPT-OSS Open-Weight Models with Advanced Inference Workflows",
@@ -64,10 +64,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-48.png",
       "published": "2026-04-18T03:39:46+00:00",
       "firstSeen": "2026-04-18T05:00:01.821827+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.8628
+      "score": 8.8647
     },
     {
       "title": "A Coding Guide for Property-Based Testing Using Hypothesis with Stateful, Differential, and Metamorphic Test Design",
@@ -79,11 +79,11 @@
       "summary": "In this tutorial, we explore property-based testing using Hypothesis and build a rigorous testing pipeline that goes far beyond traditional unit testing. We implement invariants, differential testing, metamorphic testing, targeted exploration, and stateful testing to validate both functional correctness and behavioral guarantees of our systems. Instead of manually crafting edge cases, we let Hypothesis generate [&#8230;]\nThe post A Coding Guide for Property-Based Testing Using Hypothesis with Stateful, Differential, and Metamorphic Test Design appeared first on MarkTechPost.",
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-51.png",
       "published": "2026-04-18T21:55:25+00:00",
-      "firstSeen": "2026-04-18T23:00:01.621896+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "firstSeen": "2026-04-18T22:53:45.069366+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6876
+      "score": 5.6907
     },
     {
       "title": "Anthropic’s relationship with the Trump administration seems to be thawing",
@@ -96,10 +96,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-.jpg?w=1024",
       "published": "2026-04-18T14:56:48+00:00",
       "firstSeen": "2026-04-18T15:00:01.105739+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0695
+      "score": 5.0721
     },
     {
       "title": "Google AI Releases Auto-Diagnose: An Large Language Model LLM-Based System to Diagnose Integration Test Failures at Scale",
@@ -112,10 +112,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-17-at-11.00.24-PM-1-150x150.png",
       "published": "2026-04-18T06:00:41+00:00",
       "firstSeen": "2026-04-18T07:00:01.866030+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0062
+      "score": 5.0082
     },
     {
       "title": "Schematik Is ‘Cursor for Hardware.’ Anthropic Wants In",
@@ -128,10 +128,10 @@
       "image": "https://media.wired.com/photos/69e261f2c08b65b67742964b/master/pass/IMG_0608%202.jpeg",
       "published": "2026-04-18T10:30:00+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9673
+      "score": 4.9696
     },
     {
       "title": "Cursor is raising $2 billion at a $50 billion valuation as AI coding tools become the fastest-growing software category",
@@ -144,10 +144,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/cursor-anysphere-2-billion-funding-50-billion-valuation-ai-coding.png",
       "published": "2026-04-18T10:26:13+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9259
+      "score": 4.9282
     },
     {
       "title": "The App Store is booming again, and AI may be why",
@@ -160,10 +160,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/app-store-with-badge-GettyImages-2193151739.jpg?w=1024",
       "published": "2026-04-18T13:00:00+00:00",
       "firstSeen": "2026-04-18T13:33:53.820080+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9232
+      "score": 4.9256
     },
     {
       "title": "Anthropic’s Amodei meets Wiles and Bessent at the White House in first step toward resolving Mythos standoff",
@@ -176,10 +176,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/anthropic-amodei-wiles-mythos-white-house-pentagon-cybersecurity-1.png",
       "published": "2026-04-18T10:54:22+00:00",
       "firstSeen": "2026-04-18T12:00:01.532693+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8361
+      "score": 4.8384
     },
     {
       "title": "Three more senior executives leave OpenAI as the company kills its side quests",
@@ -192,10 +192,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/openai-departures-kevin-weil-sora-peebles-enterprise-pivot.png",
       "published": "2026-04-18T10:13:18+00:00",
       "firstSeen": "2026-04-18T10:57:45.395436+00:00",
-      "lastSeen": "2026-04-18T23:00:01.621896+00:00",
+      "lastSeen": "2026-04-18T22:53:45.069366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8213
+      "score": 4.8236
     }
   ],
   "errors": []
