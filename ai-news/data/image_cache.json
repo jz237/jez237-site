@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T17:51:19.564842+00:00",
+  "updatedAt": "2026-04-19T19:00:01.830435+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4100,6 +4100,10 @@
     "https://techcrunch.com/2026/04/19/techcrunch-mobility-uber-enters-its-assetmaxxing-era": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/2603112-01_LEAF_robotaxi_01.jpg?w=1200",
       "checkedAt": "2026-04-19T16:56:26.187201+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/19/a-coding-implementation-to-build-an-ai-powered-file-type-detection-and-security-analysis-pipeline-with-magika-and-openai": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-11.png",
+      "checkedAt": "2026-04-19T19:00:01.830435+00:00"
     }
   }
 }
