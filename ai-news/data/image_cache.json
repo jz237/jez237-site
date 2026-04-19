@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T13:00:01.359480+00:00",
+  "updatedAt": "2026-04-19T14:00:01.703442+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4088,6 +4088,10 @@
     "https://www.marktechpost.com/2026/04/19/nvidia-releases-ising": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-54.png",
       "checkedAt": "2026-04-19T08:00:01.128724+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/04/260417224505.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/ai-robot-confused-questions.webp",
+      "checkedAt": "2026-04-19T14:00:01.703442+00:00"
     }
   }
 }
