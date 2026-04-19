@@ -1,6 +1,6 @@
 {
   "date": "2026-04-19",
-  "updatedAt": "2026-04-19T15:51:28.981844+00:00",
+  "updatedAt": "2026-04-19T16:56:26.187201+00:00",
   "items": [
     {
       "title": "xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-10.28.16-PM-1-150x150.png",
       "published": "2026-04-19T05:28:57+00:00",
       "firstSeen": "2026-04-19T06:00:01.404393+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.5446
+      "score": 23.5201
     },
     {
       "title": "NVIDIA Releases Ising: the First Open Quantum AI Model Family for Hybrid Quantum-Classical Systems",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-54.png",
       "published": "2026-04-19T07:54:42+00:00",
       "firstSeen": "2026-04-19T08:00:01.128724+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2021
+      "score": 14.176
     },
     {
       "title": "A Coding Tutorial for Running PrismML Bonsai 1-Bit LLM on CUDA with GGUF, Benchmarking, Chat, JSON, and RAG",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "published": "2026-04-19T04:33:41+00:00",
       "firstSeen": "2026-04-19T05:00:01.639553+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.2737
+      "score": 5.2499
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -61,9 +61,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-19T15:51:32.934846+00:00",
+      "published": "2026-04-19T16:56:34.338042+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -79,10 +79,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-marvell-ai-chips-inference-tpu-broadcom.png",
       "published": "2026-04-19T15:17:39+00:00",
       "firstSeen": "2026-04-19T16:00:01.402727+00:00",
-      "lastSeen": "2026-04-19T16:00:01.402727+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8286
+      "score": 3.8008
     },
     {
       "title": "Meta targets 20 May for 8,000 layoffs as it redirects billions toward AI infrastructure",
@@ -95,10 +95,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meta-layoffs-may-2026-ai-restructuring-thousands.png",
       "published": "2026-04-19T14:05:35+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1974
+      "score": 3.1663
     },
     {
       "title": "Threads is redesigning its website and finally adding direct messages to the desktop",
@@ -111,10 +111,58 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/threads-website-redesign-direct-messages-desktop.png",
       "published": "2026-04-19T14:14:54+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8019
+      "score": 2.7707
+    },
+    {
+      "title": "Palantir posts mini-manifesto denouncing inclusivity and ‘regressive’ cultures",
+      "url": "https://techcrunch.com/2026/04/19/palantir-posts-mini-manifesto-denouncing-regressive-and-harmful-cultures",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Palantir's ideological bent has come under more scrutiny as it's worked with ICE and positioned itself as a defender of \"the West.\"",
+      "image": "https://techcrunch.com/wp-content/uploads/2019/05/palantir.jpg?resize=1200%2C640",
+      "published": "2026-04-19T16:30:00+00:00",
+      "firstSeen": "2026-04-19T16:56:26.187201+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2766
+    },
+    {
+      "title": "TechCrunch Mobility: Uber enters its assetmaxxing era",
+      "url": "https://techcrunch.com/2026/04/19/techcrunch-mobility-uber-enters-its-assetmaxxing-era",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Welcome back to TechCrunch Mobility, your hub for the future of transportation and now, more than ever, how AI is playing a part.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/2603112-01_LEAF_robotaxi_01.jpg?w=1200",
+      "published": "2026-04-19T16:01:00+00:00",
+      "firstSeen": "2026-04-19T16:56:26.187201+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2621
+    },
+    {
+      "title": "Stanford’s AI Index finds China has nearly closed the performance gap with the US despite spending 23 times less",
+      "url": "https://thenextweb.com/news/stanford-ai-index-2026-china-us-performance-gap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Stanford’s 2026 AI Index Report finds the performance gap between the best American and Chinese AI models has collapsed to 2.7%, down from 17.5-31.6 percentage points in May 2023, despite the US spending 23 times more on private AI investment ($285.9 billion vs $12.4 billion). China leads in AI patents (69.7% of global [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/china-us.png",
+      "published": "2026-04-19T14:55:20+00:00",
+      "firstSeen": "2026-04-19T16:00:01.402727+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.09
     },
     {
       "title": "Think AI \"knows\" what it’s doing? Scientists say think again",
@@ -127,10 +175,26 @@
       "image": "https://www.sciencedaily.com/images/1920/ai-robot-confused-questions.webp",
       "published": "2026-04-19T08:02:23+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T15:51:28.981844+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0053
+      "score": 1.979
+    },
+    {
+      "title": "Trump wants to stop states from regulating AI. States and Congress keep saying no.",
+      "url": "https://thenextweb.com/news/trump-ai-national-standard-preempt-state-regulation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: The Trump administration is waging a multi-front campaign to prevent states from regulating AI, using a DOJ litigation task force, Commerce Department evaluations of “burdensome” state laws, and a legislative framework urging Congress to preempt state-level regulation with a “minimally burdensome national standard.” But states have accelerated in the opposite direction – 1,208 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/trump-ai-national-standard-preempt-state-regulation.png",
+      "published": "2026-04-19T15:40:53+00:00",
+      "firstSeen": "2026-04-19T16:00:01.402727+00:00",
+      "lastSeen": "2026-04-19T16:56:26.187201+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.6378
     }
   ],
   "errors": []
