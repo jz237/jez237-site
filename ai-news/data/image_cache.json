@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T00:00:01.595451+00:00",
+  "updatedAt": "2026-04-18T23:49:20.264456+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4075,7 +4075,7 @@
     },
     "https://simonwillison.net/2026/Apr/18/extract-system-prompts": {
       "image": "",
-      "checkedAt": "2026-04-19T00:00:01.595451+00:00"
+      "checkedAt": "2026-04-18T23:49:20.264456+00:00"
     }
   }
 }
