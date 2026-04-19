@@ -1,6 +1,6 @@
 {
   "date": "2026-04-19",
-  "updatedAt": "2026-04-19T23:00:01.817715+00:00",
+  "updatedAt": "2026-04-19T22:54:14.816504+00:00",
   "items": [
     {
       "title": "xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-10.28.16-PM-1-150x150.png",
       "published": "2026-04-19T05:28:57+00:00",
       "firstSeen": "2026-04-19T06:00:01.404393+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.3962
+      "score": 23.398
     },
     {
       "title": "Head-to-head comparison of Claude Opus 4.7 vs Opus 4.6: benchmark deltas, pricing, effort levels, vision, tokenizer, and a migration checklist. Opus 4.7 wins 12 of 14 reported benchmarks at the same $5/$25 price.",
@@ -28,9 +28,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-19T23:00:08.589940+00:00",
+      "published": "2026-04-19T22:54:20.693855+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -47,11 +47,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-54.png",
       "published": "2026-04-19T07:54:42+00:00",
       "firstSeen": "2026-04-19T08:00:01.128724+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.0434
+      "score": 14.0453
     },
     {
       "title": "Meet OpenMythos: An Open-Source PyTorch Reconstruction of Claude Mythos Where 770M Parameters Match a 1.3B Transformer",
@@ -64,10 +64,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-55.png",
       "published": "2026-04-19T19:47:49+00:00",
       "firstSeen": "2026-04-19T19:50:35.605755+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.6763
+      "score": 13.679
     },
     {
       "title": "The 12-month window",
@@ -80,11 +80,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Elad-Gil.jpg?resize=1200%2C800",
       "published": "2026-04-19T19:30:00+00:00",
       "firstSeen": "2026-04-19T19:50:35.605755+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.4881
+      "score": 10.4908
     },
     {
       "title": "A Coding Implementation to Build an AI-Powered File Type Detection and Security Analysis Pipeline with Magika and OpenAI",
@@ -97,10 +97,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-11.png",
       "published": "2026-04-19T18:38:58+00:00",
       "firstSeen": "2026-04-19T19:00:01.830435+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2948
+      "score": 9.2974
     },
     {
       "title": "Headless everything for personal AI",
@@ -112,11 +112,11 @@
       "summary": "Headless everything for personal AI\nMatt Webb thinks headless services are about to become much more common:\n\nWhy? Because using personal AIs is a better experience for users than using services directly (honestly); and headless services are quicker and more dependable for the personal AIs than having them click round a GUI with a bot-controlled mouse.\n\nEvidently Marc Benioff thinks so too:\n\nWelcome Salesforce Headless 360: No Browser Required!  Our API is the UI. Entire Salesforce &amp; Agentforce &amp; Slack platforms are now exposed as APIs, MCP, &amp; CLI. All AI agents can access data, wo",
       "image": "",
       "published": "2026-04-19T21:46:38+00:00",
-      "firstSeen": "2026-04-19T23:00:01.817715+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "firstSeen": "2026-04-19T22:54:14.816504+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0532
+      "score": 6.0561
     },
     {
       "title": "OpenAI’s existential questions",
@@ -129,10 +129,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266645295.jpg?w=1024",
       "published": "2026-04-19T21:24:06+00:00",
       "firstSeen": "2026-04-19T21:49:50.667199+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2422
+      "score": 5.245
     },
     {
       "title": "A Coding Tutorial for Running PrismML Bonsai 1-Bit LLM on CUDA with GGUF, Benchmarking, Chat, JSON, and RAG",
@@ -145,10 +145,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "published": "2026-04-19T04:33:41+00:00",
       "firstSeen": "2026-04-19T05:00:01.639553+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.1291
+      "score": 5.1309
     },
     {
       "title": "Google is in talks with Marvell to build custom AI inference chips as it diversifies beyond Broadcom",
@@ -161,10 +161,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-marvell-ai-chips-inference-tpu-broadcom.png",
       "published": "2026-04-19T15:17:39+00:00",
       "firstSeen": "2026-04-19T16:00:01.402727+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.638
+      "score": 3.6404
     },
     {
       "title": "Cloud development platform Vercel was hacked",
@@ -177,10 +177,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-19-at-3.53.46PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.355779531361%2C100%2C79.288440937278&amp%3Bw=1200",
       "published": "2026-04-19T19:54:52+00:00",
       "firstSeen": "2026-04-19T20:52:00.437693+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3696
+      "score": 3.3723
     },
     {
       "title": "Meta targets 20 May for 8,000 layoffs as it redirects billions toward AI infrastructure",
@@ -193,10 +193,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meta-layoffs-may-2026-ai-restructuring-thousands.png",
       "published": "2026-04-19T14:05:35+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T23:00:01.817715+00:00",
+      "lastSeen": "2026-04-19T22:54:14.816504+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0089
+      "score": 3.0112
     }
   ],
   "errors": []
