@@ -1,6 +1,6 @@
 {
   "date": "2026-04-19",
-  "updatedAt": "2026-04-19T06:00:01.404393+00:00",
+  "updatedAt": "2026-04-19T07:00:01.329050+00:00",
   "items": [
     {
       "title": "xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-10.28.16-PM-1-150x150.png",
       "published": "2026-04-19T05:28:57+00:00",
       "firstSeen": "2026-04-19T06:00:01.404393+00:00",
-      "lastSeen": "2026-04-19T06:00:01.404393+00:00",
+      "lastSeen": "2026-04-19T07:00:01.329050+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.8043
+      "score": 23.7746
     },
     {
       "title": "A Coding Tutorial for Running PrismML Bonsai 1-Bit LLM on CUDA with GGUF, Benchmarking, Chat, JSON, and RAG",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "published": "2026-04-19T04:33:41+00:00",
       "firstSeen": "2026-04-19T05:00:01.639553+00:00",
-      "lastSeen": "2026-04-19T06:00:01.404393+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5269
+      "lastSeen": "2026-04-19T07:00:01.329050+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 5.4979
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -44,9 +44,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-19T06:00:08.725234+00:00",
+      "published": "2026-04-19T07:00:10.133223+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-19T06:00:01.404393+00:00",
+      "lastSeen": "2026-04-19T07:00:01.329050+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
