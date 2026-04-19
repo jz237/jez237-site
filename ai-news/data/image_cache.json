@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T06:06:16.799859+00:00",
+  "updatedAt": "2026-04-19T08:00:01.128724+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4084,6 +4084,10 @@
     "https://www.marktechpost.com/2026/04/18/a-coding-tutorial-for-running-prismml-bonsai-1-bit-llm-on-cuda-with-gguf-benchmarking-chat-json-and-rag": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "checkedAt": "2026-04-19T05:00:01.639553+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/19/nvidia-releases-ising": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-54.png",
+      "checkedAt": "2026-04-19T08:00:01.128724+00:00"
     }
   }
 }
