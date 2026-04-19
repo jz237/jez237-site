@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T19:06:47.073059+00:00",
+  "updatedAt": "2026-04-19T19:50:35.605755+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4104,6 +4104,14 @@
     "https://www.marktechpost.com/2026/04/19/a-coding-implementation-to-build-an-ai-powered-file-type-detection-and-security-analysis-pipeline-with-magika-and-openai": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-11.png",
       "checkedAt": "2026-04-19T19:00:01.830435+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/19/meet-openmythos-an-open-source-pytorch-reconstruction-of-claude-mythos-where-770m-parameters-match-a-1-3b-transformer": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-55.png",
+      "checkedAt": "2026-04-19T19:50:35.605755+00:00"
+    },
+    "https://techcrunch.com/2026/04/19/the-12-month-window": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/Elad-Gil.jpg?resize=1200,800",
+      "checkedAt": "2026-04-19T19:50:35.605755+00:00"
     }
   }
 }
