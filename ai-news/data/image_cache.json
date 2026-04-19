@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T21:00:01.224118+00:00",
+  "updatedAt": "2026-04-19T20:52:00.437693+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4115,7 +4115,7 @@
     },
     "https://www.theverge.com/tech/914723/vercel-hacked": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-19-at-3.53.46PM.png?quality=90&amp;strip=all&amp;crop=0%2C10.355779531361%2C100%2C79.288440937278&amp;w=1200",
-      "checkedAt": "2026-04-19T21:00:01.224118+00:00"
+      "checkedAt": "2026-04-19T20:52:00.437693+00:00"
     }
   }
 }
