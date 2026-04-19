@@ -1,6 +1,6 @@
 {
   "date": "2026-04-19",
-  "updatedAt": "2026-04-19T19:00:01.830435+00:00",
+  "updatedAt": "2026-04-19T20:00:02.013885+00:00",
   "items": [
     {
       "title": "xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-10.28.16-PM-1-150x150.png",
       "published": "2026-04-19T05:28:57+00:00",
       "firstSeen": "2026-04-19T06:00:01.404393+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.4756
+      "score": 23.4549
     },
     {
       "title": "NVIDIA Releases Ising: the First Open Quantum AI Model Family for Hybrid Quantum-Classical Systems",
@@ -30,11 +30,44 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-54.png",
       "published": "2026-04-19T07:54:42+00:00",
       "firstSeen": "2026-04-19T08:00:01.128724+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1284
+      "score": 14.1062
+    },
+    {
+      "title": "Meet OpenMythos: An Open-Source PyTorch Reconstruction of Claude Mythos Where 770M Parameters Match a 1.3B Transformer",
+      "url": "https://www.marktechpost.com/2026/04/19/meet-openmythos-an-open-source-pytorch-reconstruction-of-claude-mythos-where-770m-parameters-match-a-1-3b-transformer",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Anthropic has never published a technical paper on Claude Mythos. That has not stopped the research community from theorizing. A new open-source project called OpenMythos, released on GitHub by Kye Gomez, attempts something ambitious: a first-principles theoretical reconstruction of what the Claude Mythos architecture might actually be, built entirely in PyTorch and grounded in peer-reviewed [&#8230;]\nThe post Meet OpenMythos: An Open-Source PyTorch Reconstruction of Claude Mythos Where 770M Parameters Match a 1.3B Transformer appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-55.png",
+      "published": "2026-04-19T19:47:49+00:00",
+      "firstSeen": "2026-04-19T20:00:02.013885+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.7638
+    },
+    {
+      "title": "The 12-month window",
+      "url": "https://techcrunch.com/2026/04/19/the-12-month-window",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A lot of AI startups exist partly because the foundation models haven't expanded into their category yet. As many jokingly acknowledge, that won't last forever.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/Elad-Gil.jpg?resize=1200%2C800",
+      "published": "2026-04-19T19:30:00+00:00",
+      "firstSeen": "2026-04-19T20:00:02.013885+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 10.5748
     },
     {
       "title": "A Coding Implementation to Build an AI-Powered File Type Detection and Security Analysis Pipeline with Magika and OpenAI",
@@ -47,10 +80,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-11.png",
       "published": "2026-04-19T18:38:58+00:00",
       "firstSeen": "2026-04-19T19:00:01.830435+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.4093
+      "score": 9.3795
     },
     {
       "title": "A Coding Tutorial for Running PrismML Bonsai 1-Bit LLM on CUDA with GGUF, Benchmarking, Chat, JSON, and RAG",
@@ -63,10 +96,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "published": "2026-04-19T04:33:41+00:00",
       "firstSeen": "2026-04-19T05:00:01.639553+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.2066
+      "score": 5.1864
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -77,9 +110,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-19T19:00:09.172841+00:00",
+      "published": "2026-04-19T20:00:07.685530+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -95,10 +128,26 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/google-marvell-ai-chips-inference-tpu-broadcom.png",
       "published": "2026-04-19T15:17:39+00:00",
       "firstSeen": "2026-04-19T16:00:01.402727+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7424
+      "score": 3.7152
+    },
+    {
+      "title": "Cloud development platform Vercel was hacked",
+      "url": "https://www.theverge.com/tech/914723/vercel-hacked",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Vercel, a major development platform that hosts and deploys web apps, was compromised, and the hackers are attempting to sell stolen data. A person claiming to be a member of ShinyHunters, which was behind the recent hack of Rockstar Games, posted some data online, including employee names, email addresses, and activity time stamps. Vercel confirmed [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-19-at-3.53.46PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.355779531361%2C100%2C79.288440937278&amp%3Bw=1200",
+      "published": "2026-04-19T19:54:52+00:00",
+      "firstSeen": "2026-04-19T20:00:02.013885+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4574
     },
     {
       "title": "Meta targets 20 May for 8,000 layoffs as it redirects billions toward AI infrastructure",
@@ -111,10 +160,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meta-layoffs-may-2026-ai-restructuring-thousands.png",
       "published": "2026-04-19T14:05:35+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1098
+      "score": 3.0835
     },
     {
       "title": "Threads is redesigning its website and finally adding direct messages to the desktop",
@@ -127,10 +176,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/threads-website-redesign-direct-messages-desktop.png",
       "published": "2026-04-19T14:14:54+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.714
+      "score": 2.6876
     },
     {
       "title": "Palantir posts mini-manifesto denouncing inclusivity and ‘regressive’ cultures",
@@ -143,58 +192,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/palantir.jpg?resize=1200%2C640",
       "published": "2026-04-19T16:30:00+00:00",
       "firstSeen": "2026-04-19T16:56:26.187201+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
+      "lastSeen": "2026-04-19T20:00:02.013885+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2162
-    },
-    {
-      "title": "TechCrunch Mobility: Uber enters its assetmaxxing era",
-      "url": "https://techcrunch.com/2026/04/19/techcrunch-mobility-uber-enters-its-assetmaxxing-era",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Welcome back to TechCrunch Mobility, your hub for the future of transportation and now, more than ever, how AI is playing a part.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/2603112-01_LEAF_robotaxi_01.jpg?w=1200",
-      "published": "2026-04-19T16:01:00+00:00",
-      "firstSeen": "2026-04-19T16:56:26.187201+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2025
-    },
-    {
-      "title": "Stanford’s AI Index finds China has nearly closed the performance gap with the US despite spending 23 times less",
-      "url": "https://thenextweb.com/news/stanford-ai-index-2026-china-us-performance-gap",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Stanford’s 2026 AI Index Report finds the performance gap between the best American and Chinese AI models has collapsed to 2.7%, down from 17.5-31.6 percentage points in May 2023, despite the US spending 23 times more on private AI investment ($285.9 billion vs $12.4 billion). China leads in AI patents (69.7% of global [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/china-us.png",
-      "published": "2026-04-19T14:55:20+00:00",
-      "firstSeen": "2026-04-19T16:00:01.402727+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0322
-    },
-    {
-      "title": "Think AI \"knows\" what it’s doing? Scientists say think again",
-      "url": "https://www.sciencedaily.com/releases/2026/04/260417224505.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Calling AI things like “smart” or saying it “knows” something might sound harmless, but it can quietly mislead people about what AI actually does. A new study shows that news writers are more careful than expected, rarely using strongly human-like language. When they do, it often falls on a spectrum—sometimes describing simple requirements, other times hinting at human traits.",
-      "image": "https://www.sciencedaily.com/images/1920/ai-robot-confused-questions.webp",
-      "published": "2026-04-19T08:02:23+00:00",
-      "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-19T19:00:01.830435+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9313
+      "score": 2.1881
     }
   ],
   "errors": []
