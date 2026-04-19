@@ -1,7 +1,24 @@
 {
   "date": "2026-04-19",
-  "updatedAt": "2026-04-19T05:00:01.639553+00:00",
+  "updatedAt": "2026-04-19T06:00:01.404393+00:00",
   "items": [
+    {
+      "title": "xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers",
+      "url": "https://www.marktechpost.com/2026/04/18/xai-launches-standalone-grok-speech-to-text-and-text-to-speech-apis-targeting-enterprise-voice-developers",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Elon Musk&#8217;s AI company xAI has launched two standalone audio APIs — a Speech-to-Text (STT) API and a Text-to-Speech (TTS) API — both built on the same infrastructure that powers Grok Voice on mobile apps, Tesla vehicles, and Starlink customer support. The release moves xAI squarely into the competitive speech API market currently occupied by [&#8230;]\nThe post xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-10.28.16-PM-1-150x150.png",
+      "published": "2026-04-19T05:28:57+00:00",
+      "firstSeen": "2026-04-19T06:00:01.404393+00:00",
+      "lastSeen": "2026-04-19T06:00:01.404393+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 23.8043
+    },
     {
       "title": "A Coding Tutorial for Running PrismML Bonsai 1-Bit LLM on CUDA with GGUF, Benchmarking, Chat, JSON, and RAG",
       "url": "https://www.marktechpost.com/2026/04/18/a-coding-tutorial-for-running-prismml-bonsai-1-bit-llm-on-cuda-with-gguf-benchmarking-chat-json-and-rag",
@@ -13,13 +30,13 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "published": "2026-04-19T04:33:41+00:00",
       "firstSeen": "2026-04-19T05:00:01.639553+00:00",
-      "lastSeen": "2026-04-19T05:00:01.639553+00:00",
+      "lastSeen": "2026-04-19T06:00:01.404393+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5567
+      "score": 5.5269
     },
     {
-      "title": "Live model battles across chat, coding, image, video, and audio modalities",
+      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,12 +44,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-19T05:00:07.488080+00:00",
+      "published": "2026-04-19T06:00:08.725234+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-19T05:00:01.639553+00:00",
+      "lastSeen": "2026-04-19T06:00:01.404393+00:00",
       "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
     }
   ],
   "errors": []
