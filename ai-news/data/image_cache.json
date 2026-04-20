@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T14:08:22.161016+00:00",
+  "updatedAt": "2026-04-20T16:00:01.906038+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4144,6 +4144,10 @@
     "https://openai.com/index/hyatt-advances-ai-with-chatgpt-enterprise": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1MeERIeoNc82SnZJ2iRVos/58f1b56cd3df77da092ed3ef877e5bf7/Frame__2_.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-20T14:00:01.284732+00:00"
+    },
+    "https://techcrunch.com/2026/04/20/fermi-ceo-and-cfo-depart-texas-nuclear-power-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/fermi-Getty.jpg?resize=1200,800",
+      "checkedAt": "2026-04-20T16:00:01.906038+00:00"
     }
   }
 }
