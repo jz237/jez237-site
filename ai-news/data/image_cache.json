@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T19:00:01.637033+00:00",
+  "updatedAt": "2026-04-20T20:00:01.460258+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4160,6 +4160,14 @@
     "https://www.techrepublic.com/article/news-amazon-slimmest-ever-fire-tv-stick-hd": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/amazon-srtreaming.jpg",
       "checkedAt": "2026-04-20T18:00:01.159514+00:00"
+    },
+    "https://techcrunch.com/2026/04/20/ai-writing-its-not-just-this-its-that-barrons": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-1680577745.jpg?resize=1200,704",
+      "checkedAt": "2026-04-20T20:00:01.460258+00:00"
+    },
+    "https://www.techrepublic.com/article/news-mcp-ai-security-vulnerability-data-layer-governance": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/AdobeStock_322491435.jpg",
+      "checkedAt": "2026-04-20T20:00:01.460258+00:00"
     }
   }
 }
