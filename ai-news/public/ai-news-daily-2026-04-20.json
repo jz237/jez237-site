@@ -1,6 +1,6 @@
 {
   "date": "2026-04-20",
-  "updatedAt": "2026-04-20T14:08:22.161016+00:00",
+  "updatedAt": "2026-04-20T15:42:09.520687+00:00",
   "items": [
     {
       "title": "OpenAI helps Hyatt advance AI among colleagues",
@@ -13,11 +13,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1MeERIeoNc82SnZJ2iRVos/58f1b56cd3df77da092ed3ef877e5bf7/Frame__2_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-04-20T00:00:00+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.4427
+      "score": 19.4111
     },
     {
       "title": "Claude Token Counter, now with model comparisons",
@@ -30,11 +30,11 @@
       "image": "https://static.simonwillison.net/static/2026/claude-token-count.jpg",
       "published": "2026-04-20T00:50:45+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.9504
+      "score": 18.9181
     },
     {
       "title": "OpenAI Scales Trusted Access for Cyber Defense With GPT-5.4-Cyber: a Fine-Tuned Model Built for Verified Security Defenders",
@@ -47,11 +47,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-57-1024x731.png",
       "published": "2026-04-20T08:26:41+00:00",
       "firstSeen": "2026-04-20T09:00:01.773060+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.4591
+      "score": 17.4192
     },
     {
       "title": "The question AI providers hope VPs of Engineering never ask",
@@ -64,10 +64,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Alex-Circei-CEO-Waydev.png",
       "published": "2026-04-20T10:00:33+00:00",
       "firstSeen": "2026-04-20T11:00:01.658017+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.1308
+      "score": 9.0891
     },
     {
       "title": "Moonshot AI and Tsinghua Researchers Propose PrfaaS: A Cross-Datacenter KVCache Architecture that Rethinks How LLMs are Served at Scale",
@@ -80,10 +80,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-19-at-5.50.12-PM-1-150x150.png",
       "published": "2026-04-20T00:51:27+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6806
+      "score": 5.6483
     },
     {
       "title": "Chinese tech workers are starting to train their AI doubles–and pushing back",
@@ -96,10 +96,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/rice-bowl-claw.jpg?resize=1200%2C600",
       "published": "2026-04-20T09:00:00+00:00",
       "firstSeen": "2026-04-20T10:00:01.670142+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2437
+      "score": 5.2031
     },
     {
       "title": "Autonomous AI at Scale: Adobe Agents Unlock Breakthrough Creative Intelligence With NVIDIA and WPP",
@@ -112,10 +112,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/adobe-ai-agents-wpp-nvidia.jpg",
       "published": "2026-04-20T13:00:50+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9561
+      "score": 4.9108
     },
     {
       "title": "Australia’s NEXTDC launches A$2.2 billion capital plan",
@@ -128,10 +128,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Australias-NEXTDC.png",
       "published": "2026-04-20T07:43:28+00:00",
       "firstSeen": "2026-04-20T08:00:01.323194+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.4705
+      "score": 4.4313
     },
     {
       "title": "SQL functions in Google Sheets to fetch data from Datasette",
@@ -144,10 +144,10 @@
       "image": "",
       "published": "2026-04-20T02:33:58+00:00",
       "firstSeen": "2026-04-20T03:00:01.568418+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7876
+      "score": 3.7537
     },
     {
       "title": "Tech CEOs Think AI Will Let Them Be Everywhere at Once",
@@ -160,10 +160,26 @@
       "image": "https://media.wired.com/photos/69e1401ea5e5befd53e0b86f/master/pass/Culture_TechCEOsThinkAIWillLetThemBeEverywhereatOnce.jpg",
       "published": "2026-04-20T11:00:00+00:00",
       "firstSeen": "2026-04-20T11:40:28.158372+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5981
+      "score": 3.5553
+    },
+    {
+      "title": "Op-Ed: SaaS is not dead. You are just being sold the funeral",
+      "url": "https://thenextweb.com/news/saas-not-dead-ai-hype-enterprise-software",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The “AI has killed software” narrative has a handful of very loud beneficiaries and a lot of quiet evidence against it. The companies that will survive the next five years are the ones that refuse to treat the hyperscalers as the new gods. Whenever I make an affirmation, I like to do my research first, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/SaaS.png",
+      "published": "2026-04-20T14:47:37+00:00",
+      "firstSeen": "2026-04-20T15:00:01.250569+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5226
     },
     {
       "title": "Meta Plans Up to 8,000 Job Cuts in New Round of Layoffs",
@@ -176,26 +192,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04202026-meta-8000-jobs-layoff-wave.jpg",
       "published": "2026-04-20T13:29:51+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
+      "lastSeen": "2026-04-20T15:42:09.520687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2306
-    },
-    {
-      "title": "Prego Has a Dinner-Conversation-Recording Device, Capisce?",
-      "url": "https://www.wired.com/story/prego-has-a-dinner-recording-device-capiche",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The pasta-sauce company has partnered with the nonprofit StoryCorps on a device designed to record family conversations around the table and save them for all time.",
-      "image": "https://media.wired.com/photos/69e162684f4f8c52a7b1a820/master/pass/Prego-AI-Dinner-Bot-Gear-Prego_ConnectionKeeper-5.jpg",
-      "published": "2026-04-20T13:00:00+00:00",
-      "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:08:22.161016+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9557
+      "score": 3.1846
     }
   ],
   "errors": []
