@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T08:00:01.323194+00:00",
+  "updatedAt": "2026-04-20T09:00:01.773060+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4128,6 +4128,10 @@
     "https://simonwillison.net/2026/Apr/20/datasette-sql": {
       "image": "",
       "checkedAt": "2026-04-20T03:00:01.568418+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/20/openai-scales-trusted-access-for-cyber-defense-with-gpt-5-4-cyber-a-fine-tuned-model-built-for-verified-security-defenders": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-57-1024x731.png",
+      "checkedAt": "2026-04-20T09:00:01.773060+00:00"
     }
   }
 }
