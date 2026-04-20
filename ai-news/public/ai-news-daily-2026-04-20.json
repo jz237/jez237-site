@@ -1,6 +1,6 @@
 {
   "date": "2026-04-20",
-  "updatedAt": "2026-04-20T06:25:54.325312+00:00",
+  "updatedAt": "2026-04-20T08:00:01.323194+00:00",
   "items": [
     {
       "title": "Claude Token Counter, now with model comparisons",
@@ -13,11 +13,11 @@
       "image": "https://static.simonwillison.net/static/2026/claude-token-count.jpg",
       "published": "2026-04-20T00:50:45+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T06:25:54.325312+00:00",
+      "lastSeen": "2026-04-20T08:00:01.323194+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.1319
+      "score": 19.0917
     },
     {
       "title": "Moonshot AI and Tsinghua Researchers Propose PrfaaS: A Cross-Datacenter KVCache Architecture that Rethinks How LLMs are Served at Scale",
@@ -30,10 +30,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-19-at-5.50.12-PM-1-150x150.png",
       "published": "2026-04-20T00:51:27+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T06:25:54.325312+00:00",
+      "lastSeen": "2026-04-20T08:00:01.323194+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8622
+      "score": 5.822
+    },
+    {
+      "title": "Australia’s NEXTDC launches A$2.2 billion capital plan",
+      "url": "https://thenextweb.com/news/australias-nextdc-launches-a2-2-billion-capital-plan",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The ASX-listed data centre operator is raising A$1.5 billion in a fully underwritten equity offering and expanding its hybrid securities programme by A$700 million, with La Caisse de dépôt et placement du Québec now committed to a total of A$1.7 billion. The raise will fund accelerated development of the S4 Western Sydney campus, where contracted [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Australias-NEXTDC.png",
+      "published": "2026-04-20T07:43:28+00:00",
+      "firstSeen": "2026-04-20T08:00:01.323194+00:00",
+      "lastSeen": "2026-04-20T08:00:01.323194+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.6416
     },
     {
       "title": "SQL functions in Google Sheets to fetch data from Datasette",
@@ -46,13 +62,29 @@
       "image": "",
       "published": "2026-04-20T02:33:58+00:00",
       "firstSeen": "2026-04-20T03:00:01.568418+00:00",
-      "lastSeen": "2026-04-20T06:25:54.325312+00:00",
+      "lastSeen": "2026-04-20T08:00:01.323194+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.978
+      "score": 3.9359
     },
     {
-      "title": "Kang An, Chenhao Si, Shiqian Ma, Ming Yan",
+      "title": "Revolut’s IPO is two years away and it’ll be in the US",
+      "url": "https://thenextweb.com/news/revolut-ipo-two-years-storonsky",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The CEO of Europe’s most valuable startup gave his clearest IPO timeline yet in a Bloomberg interview, narrowing his December ‘two to three years’ estimate to ‘two years.’ It came as Revolut marked the biggest regulatory milestone in its history and filed for a US bank charter, both developments that make an eventual listing meaningfully [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Nik-storonsky.png",
+      "published": "2026-04-20T07:07:04+00:00",
+      "firstSeen": "2026-04-20T08:00:01.323194+00:00",
+      "lastSeen": "2026-04-20T08:00:01.323194+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1234
+    },
+    {
+      "title": "Python library supporting Discrete Variational Formulations and training solutions with Collocation-based Robust Variational Physics Informed Neural Networks (DVF-CRVPINN)",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -60,12 +92,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-20T06:25:59.453622+00:00",
+      "published": "2026-04-20T08:00:07.153148+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-20T06:25:54.325312+00:00",
+      "lastSeen": "2026-04-20T08:00:01.323194+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.44
     }
   ],
   "errors": []
