@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T23:00:54.513241+00:00",
+  "updatedAt": "2026-04-20T23:56:10.324490+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4180,6 +4180,10 @@
     "https://techcrunch.com/2026/04/20/google-rolls-out-gemini-in-chrome-in-seven-new-countries": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Chrome_Hero.png?resize=1200,677",
       "checkedAt": "2026-04-20T23:00:02.095565+00:00"
+    },
+    "https://techcrunch.com/2026/04/20/anthropic-takes-5b-from-amazon-and-pledges-100b-in-cloud-spending-in-return": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1445867611.jpg?w=1024",
+      "checkedAt": "2026-04-20T23:56:10.324490+00:00"
     }
   }
 }
