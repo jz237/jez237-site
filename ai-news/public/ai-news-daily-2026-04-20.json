@@ -1,7 +1,24 @@
 {
   "date": "2026-04-20",
-  "updatedAt": "2026-04-20T13:00:02.087395+00:00",
+  "updatedAt": "2026-04-20T14:00:01.284732+00:00",
   "items": [
+    {
+      "title": "OpenAI helps Hyatt advance AI among colleagues",
+      "url": "https://openai.com/index/hyatt-advances-ai-with-chatgpt-enterprise",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Hyatt deploys ChatGPT Enterprise across its global workforce, using GPT-5.4 and Codex to improve productivity, operations, and guest experiences.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1MeERIeoNc82SnZJ2iRVos/58f1b56cd3df77da092ed3ef877e5bf7/Frame__2_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-04-20T00:00:00+00:00",
+      "firstSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 19.4456
+    },
     {
       "title": "Claude Token Counter, now with model comparisons",
       "url": "https://simonwillison.net/2026/Apr/20/claude-token-counts",
@@ -13,11 +30,11 @@
       "image": "https://static.simonwillison.net/static/2026/claude-token-count.jpg",
       "published": "2026-04-20T00:50:45+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.9748
+      "score": 18.9533
     },
     {
       "title": "OpenAI Scales Trusted Access for Cyber Defense With GPT-5.4-Cyber: a Fine-Tuned Model Built for Verified Security Defenders",
@@ -30,11 +47,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-57-1024x731.png",
       "published": "2026-04-20T08:26:41+00:00",
       "firstSeen": "2026-04-20T09:00:01.773060+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.4892
+      "score": 17.4627
     },
     {
       "title": "The question AI providers hope VPs of Engineering never ask",
@@ -47,10 +64,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Alex-Circei-CEO-Waydev.png",
       "published": "2026-04-20T10:00:33+00:00",
       "firstSeen": "2026-04-20T11:00:01.658017+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.1623
+      "score": 9.1346
     },
     {
       "title": "Moonshot AI and Tsinghua Researchers Propose PrfaaS: A Cross-Datacenter KVCache Architecture that Rethinks How LLMs are Served at Scale",
@@ -63,10 +80,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-19-at-5.50.12-PM-1-150x150.png",
       "published": "2026-04-20T00:51:27+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7051
+      "score": 5.6836
     },
     {
       "title": "Chinese tech workers are starting to train their AI doubles–and pushing back",
@@ -79,10 +96,26 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/rice-bowl-claw.jpg?resize=1200%2C600",
       "published": "2026-04-20T09:00:00+00:00",
       "firstSeen": "2026-04-20T10:00:01.670142+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2743
+      "score": 5.2473
+    },
+    {
+      "title": "Autonomous AI at Scale: Adobe Agents Unlock Breakthrough Creative Intelligence With NVIDIA and WPP",
+      "url": "https://blogs.nvidia.com/blog/adobe-ai-agents-nvidia-wpp",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI agents are transforming how work gets done across all industries, accelerating everything from content creation to decision-making. NVIDIA’s expanded strategic collaborations with Adobe and WPP are bringing agentic AI to the center of enterprise marketing operations across creative production and customer experience orchestration.  As demand for personalized customer experiences surges, brands require intelligent systems [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/adobe-ai-agents-wpp-nvidia.jpg",
+      "published": "2026-04-20T13:00:50+00:00",
+      "firstSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9603
     },
     {
       "title": "Australia’s NEXTDC launches A$2.2 billion capital plan",
@@ -95,10 +128,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Australias-NEXTDC.png",
       "published": "2026-04-20T07:43:28+00:00",
       "firstSeen": "2026-04-20T08:00:01.323194+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.5
+      "score": 4.474
     },
     {
       "title": "SQL functions in Google Sheets to fetch data from Datasette",
@@ -111,10 +144,10 @@
       "image": "",
       "published": "2026-04-20T02:33:58+00:00",
       "firstSeen": "2026-04-20T03:00:01.568418+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8132
+      "score": 3.7907
     },
     {
       "title": "Tech CEOs Think AI Will Let Them Be Everywhere at Once",
@@ -127,74 +160,42 @@
       "image": "https://media.wired.com/photos/69e1401ea5e5befd53e0b86f/master/pass/Culture_TechCEOsThinkAIWillLetThemBeEverywhereatOnce.jpg",
       "published": "2026-04-20T11:00:00+00:00",
       "firstSeen": "2026-04-20T11:40:28.158372+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6305
+      "score": 3.602
     },
     {
-      "title": "AirTrunk acquires Lumina CloudInfra to enter India with 600MW of planned capacity",
-      "url": "https://thenextweb.com/news/airtrunk-lumina-cloudinfra-india-data-centre-acquisition",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "Meta Plans Up to 8,000 Job Cuts in New Round of Layoffs",
+      "url": "https://www.techrepublic.com/article/news-meta-8000-jobs-layoff-wave",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The deal is an internal Blackstone consolidation, both AirTrunk (acquired for A$24 billion in 2024) and Lumina CloudInfra (launched by Blackstone in 2022) sit within the same portfolio. By folding Lumina into AirTrunk, Blackstone gives its Asia-Pacific data centre platform a foothold in India’s hyperscale market without a third-party acquisition. Terms were not disclosed. AirTrunk, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AirTrunk.png",
-      "published": "2026-04-20T10:47:23+00:00",
-      "firstSeen": "2026-04-20T11:00:01.658017+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "summary": "Meta is preparing a major round of layoffs that could cut up to 8,000 jobs as the company restructures and leans further into AI-driven operations.\nThe post Meta Plans Up to 8,000 Job Cuts in New Round of Layoffs appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04202026-meta-8000-jobs-layoff-wave.jpg",
+      "published": "2026-04-20T13:29:51+00:00",
+      "firstSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7845
+      "score": 3.2347
     },
     {
-      "title": "ASIC joins global regulators monitoring Anthropic’s Mythos AI for banking system risks",
-      "url": "https://thenextweb.com/news/asic-joins-global-regulators-monitoring-anthropics-mythos-ai-for-banking-system-risks",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Australia’s markets regulator has publicly confirmed it is watching the development of Anthropic’s Mythos model alongside peer regulators worldwide, adding to a rapidly expanding international regulatory response that began with the Bank of England, the US Federal Reserve, and the Treasury Department. ECB President Lagarde has warned no governance framework is yet in place. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Anthropic.png",
-      "published": "2026-04-20T09:26:49+00:00",
-      "firstSeen": "2026-04-20T10:00:01.670142+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 2.6466
-    },
-    {
-      "title": "Sanjeev Panta, Rhett M Morvant, Xu Yuan, Li Chen, Nian-Feng Tzeng",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-20T13:00:10.035568+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "NVIDIA and Partners Showcase the Future of AI-Driven Manufacturing at Hannover Messe 2026",
-      "url": "https://blogs.nvidia.com/blog/ai-manufacturing-hannover-messe",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "title": "Prego Has a Dinner-Conversation-Recording Device, Capisce?",
+      "url": "https://www.wired.com/story/prego-has-a-dinner-recording-device-capiche",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Manufacturing is at an inflection point. Across every major industrial economy, the pressure to do more with less — due to faster design cycles, leaner operations and strain on skilled labor pools — is accelerating the shift to AI-driven production.  The question is no longer whether to adopt AI, but how fast and at what [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/hmi-1920x1080-1.jpg",
-      "published": "2026-04-20T08:30:55+00:00",
-      "firstSeen": "2026-04-20T09:00:01.773060+00:00",
-      "lastSeen": "2026-04-20T13:00:02.087395+00:00",
+      "summary": "The pasta-sauce company has partnered with the nonprofit StoryCorps on a device designed to record family conversations around the table and save them for all time.",
+      "image": "https://media.wired.com/photos/69e162684f4f8c52a7b1a820/master/pass/Prego-AI-Dinner-Bot-Gear-Prego_ConnectionKeeper-5.jpg",
+      "published": "2026-04-20T13:00:00+00:00",
+      "firstSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1611
+      "score": 2.9599
     }
   ],
   "errors": []
