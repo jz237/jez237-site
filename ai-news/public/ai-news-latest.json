@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T14:00:01.284732+00:00",
+  "updatedAt": "2026-04-20T15:00:01.250569+00:00",
   "items": [
     {
       "title": "Sanjeev Panta, Rhett M Morvant, Xu Yuan, Li Chen, Nian-Feng Tzeng",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-20T14:00:14.680455+00:00",
+      "published": "2026-04-20T15:00:05.923524+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Op-Ed: SaaS is not dead. You are just being sold the funeral",
+      "url": "https://thenextweb.com/news/saas-not-dead-ai-hype-enterprise-software",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The “AI has killed software” narrative has a handful of very loud beneficiaries and a lot of quiet evidence against it. The companies that will survive the next five years are the ones that refuse to treat the hyperscalers as the new gods. Whenever I make an affirmation, I like to do my research first, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/SaaS.png",
+      "published": "2026-04-20T14:47:37+00:00",
+      "firstSeen": "2026-04-20T15:00:01.250569+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5437
     },
     {
       "title": "Meta Plans Up to 8,000 Job Cuts in New Round of Layoffs",
@@ -28,10 +44,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04202026-meta-8000-jobs-layoff-wave.jpg",
       "published": "2026-04-20T13:29:51+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2347
+      "score": 3.205
     },
     {
       "title": "Autonomous AI at Scale: Adobe Agents Unlock Breakthrough Creative Intelligence With NVIDIA and WPP",
@@ -44,10 +60,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/adobe-ai-agents-wpp-nvidia.jpg",
       "published": "2026-04-20T13:00:50+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9603
+      "score": 4.9309
     },
     {
       "title": "Prego Has a Dinner-Conversation-Recording Device, Capisce?",
@@ -60,10 +76,10 @@
       "image": "https://media.wired.com/photos/69e162684f4f8c52a7b1a820/master/pass/Prego-AI-Dinner-Bot-Gear-Prego_ConnectionKeeper-5.jpg",
       "published": "2026-04-20T13:00:00+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9599
+      "score": 2.9305
     },
     {
       "title": "Coral raises $12.5M to automate healthcare’s administrative back office",
@@ -76,10 +92,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Coral-team.png",
       "published": "2026-04-20T12:00:00+00:00",
       "firstSeen": "2026-04-20T13:00:02.087395+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0905
+      "score": 2.062
     },
     {
       "title": "Tech CEOs Think AI Will Let Them Be Everywhere at Once",
@@ -92,10 +108,10 @@
       "image": "https://media.wired.com/photos/69e1401ea5e5befd53e0b86f/master/pass/Culture_TechCEOsThinkAIWillLetThemBeEverywhereatOnce.jpg",
       "published": "2026-04-20T11:00:00+00:00",
       "firstSeen": "2026-04-20T11:40:28.158372+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.602
+      "score": 3.5743
     },
     {
       "title": "AirTrunk acquires Lumina CloudInfra to enter India with 600MW of planned capacity",
@@ -108,10 +124,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/AirTrunk.png",
       "published": "2026-04-20T10:47:23+00:00",
       "firstSeen": "2026-04-20T11:00:01.658017+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7561
+      "score": 2.7286
     },
     {
       "title": "A humanoid robot passed an eight-hour factory shift at Siemens’ Erlangen plant",
@@ -124,10 +140,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Siemens-Nvidia-and-UK-robotics-startup-Humanoid.png",
       "published": "2026-04-20T10:17:07+00:00",
       "firstSeen": "2026-04-20T11:00:01.658017+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0421
+      "score": 2.015
     },
     {
       "title": "The question AI providers hope VPs of Engineering never ask",
@@ -140,10 +156,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Alex-Circei-CEO-Waydev.png",
       "published": "2026-04-20T10:00:33+00:00",
       "firstSeen": "2026-04-20T11:00:01.658017+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.1346
+      "score": 9.1076
     },
     {
       "title": "ASIC joins global regulators monitoring Anthropic’s Mythos AI for banking system risks",
@@ -156,10 +172,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Anthropic.png",
       "published": "2026-04-20T09:26:49+00:00",
       "firstSeen": "2026-04-20T10:00:01.670142+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.6193
+      "score": 2.5928
     },
     {
       "title": "Chinese tech workers are starting to train their AI doubles–and pushing back",
@@ -172,10 +188,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/rice-bowl-claw.jpg?resize=1200%2C600",
       "published": "2026-04-20T09:00:00+00:00",
       "firstSeen": "2026-04-20T10:00:01.670142+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2473
+      "score": 5.2211
     },
     {
       "title": "NVIDIA and Partners Showcase the Future of AI-Driven Manufacturing at Hannover Messe 2026",
@@ -188,10 +204,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/hmi-1920x1080-1.jpg",
       "published": "2026-04-20T08:30:55+00:00",
       "firstSeen": "2026-04-20T09:00:01.773060+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1345
+      "score": 2.1087
     },
     {
       "title": "OpenAI Scales Trusted Access for Cyber Defense With GPT-5.4-Cyber: a Fine-Tuned Model Built for Verified Security Defenders",
@@ -204,11 +220,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-57-1024x731.png",
       "published": "2026-04-20T08:26:41+00:00",
       "firstSeen": "2026-04-20T09:00:01.773060+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.4627
+      "score": 17.4369
     },
     {
       "title": "Australia’s NEXTDC launches A$2.2 billion capital plan",
@@ -221,10 +237,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Australias-NEXTDC.png",
       "published": "2026-04-20T07:43:28+00:00",
       "firstSeen": "2026-04-20T08:00:01.323194+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.474
+      "score": 4.4487
     },
     {
       "title": "Revolut’s IPO is two years away and it’ll be in the US",
@@ -237,10 +253,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Nik-storonsky.png",
       "published": "2026-04-20T07:07:04+00:00",
       "firstSeen": "2026-04-20T08:00:01.323194+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9586
+      "score": 1.9337
     },
     {
       "title": "SQL functions in Google Sheets to fetch data from Datasette",
@@ -253,10 +269,10 @@
       "image": "",
       "published": "2026-04-20T02:33:58+00:00",
       "firstSeen": "2026-04-20T03:00:01.568418+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7907
+      "score": 3.7687
     },
     {
       "title": "Moonshot AI and Tsinghua Researchers Propose PrfaaS: A Cross-Datacenter KVCache Architecture that Rethinks How LLMs are Served at Scale",
@@ -269,10 +285,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-19-at-5.50.12-PM-1-150x150.png",
       "published": "2026-04-20T00:51:27+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6836
+      "score": 5.6626
     },
     {
       "title": "Claude Token Counter, now with model comparisons",
@@ -285,11 +301,11 @@
       "image": "https://static.simonwillison.net/static/2026/claude-token-count.jpg",
       "published": "2026-04-20T00:50:45+00:00",
       "firstSeen": "2026-04-20T01:00:01.935823+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.9533
+      "score": 18.9324
     },
     {
       "title": "OpenAI helps Hyatt advance AI among colleagues",
@@ -302,11 +318,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1MeERIeoNc82SnZJ2iRVos/58f1b56cd3df77da092ed3ef877e5bf7/Frame__2_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-04-20T00:00:00+00:00",
       "firstSeen": "2026-04-20T14:00:01.284732+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.4456
+      "score": 19.4252
     },
     {
       "title": "Headless everything for personal AI",
@@ -319,10 +335,10 @@
       "image": "",
       "published": "2026-04-19T21:46:38+00:00",
       "firstSeen": "2026-04-19T22:54:14.816504+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6909
+      "score": 5.6717
     },
     {
       "title": "OpenAI’s existential questions",
@@ -335,10 +351,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266645295.jpg?w=1024",
       "published": "2026-04-19T21:24:06+00:00",
       "firstSeen": "2026-04-19T21:49:50.667199+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8837
+      "score": 4.8647
     },
     {
       "title": "Cloud development platform Vercel was hacked",
@@ -351,10 +367,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Screenshot-2026-04-19-at-3.53.46PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.355779531361%2C100%2C79.288440937278&amp%3Bw=1200",
       "published": "2026-04-19T19:54:52+00:00",
       "firstSeen": "2026-04-19T20:52:00.437693+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0256
+      "score": 3.0074
     },
     {
       "title": "Meet OpenMythos: An Open-Source PyTorch Reconstruction of Claude Mythos Where 770M Parameters Match a 1.3B Transformer",
@@ -367,10 +383,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-55.png",
       "published": "2026-04-19T19:47:49+00:00",
       "firstSeen": "2026-04-19T19:50:35.605755+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.3334
+      "score": 13.3152
     },
     {
       "title": "The 12-month window",
@@ -383,11 +399,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/Elad-Gil.jpg?resize=1200%2C800",
       "published": "2026-04-19T19:30:00+00:00",
       "firstSeen": "2026-04-19T19:50:35.605755+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.148
+      "score": 10.1299
     },
     {
       "title": "How TabPFN Leverages In-Context Learning to Achieve Superior Accuracy on Tabular Datasets Compared to Random Forest and CatBoost",
@@ -400,10 +416,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-39-150x150.png",
       "published": "2026-04-19T19:11:03+00:00",
       "firstSeen": "2026-04-19T19:50:35.605755+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.2278
+      "score": -0.2456
     },
     {
       "title": "A humanoid robot just beat the human half-marathon world record by seven minutes in Beijing",
@@ -416,10 +432,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/humanoid-robot-half-marathon-beijing-world-record.png",
       "published": "2026-04-19T18:56:44+00:00",
       "firstSeen": "2026-04-19T20:52:00.437693+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6979
+      "score": 1.6802
     },
     {
       "title": "A Coding Implementation to Build an AI-Powered File Type Detection and Security Analysis Pipeline with Magika and OpenAI",
@@ -432,10 +448,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-11.png",
       "published": "2026-04-19T18:38:58+00:00",
       "firstSeen": "2026-04-19T19:00:01.830435+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9626
+      "score": 8.945
     },
     {
       "title": "Palantir posts mini-manifesto denouncing inclusivity and ‘regressive’ cultures",
@@ -448,10 +464,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/05/palantir.jpg?resize=1200%2C640",
       "published": "2026-04-19T16:30:00+00:00",
       "firstSeen": "2026-04-19T16:56:26.187201+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7954
+      "score": 1.7788
     },
     {
       "title": "TechCrunch Mobility: Uber enters its assetmaxxing era",
@@ -464,10 +480,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/2603112-01_LEAF_robotaxi_01.jpg?w=1200",
       "published": "2026-04-19T16:01:00+00:00",
       "firstSeen": "2026-04-19T16:56:26.187201+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7873
+      "score": 1.7709
     },
     {
       "title": "Trump wants to stop states from regulating AI. States and Congress keep saying no.",
@@ -480,10 +496,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/trump-ai-national-standard-preempt-state-regulation.png",
       "published": "2026-04-19T15:40:53+00:00",
       "firstSeen": "2026-04-19T16:00:01.402727+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1082
+      "score": -1.1245
     },
     {
       "title": "Google is in talks with Marvell to build custom AI inference chips as it diversifies beyond Broadcom",
@@ -499,7 +515,7 @@
       "lastSeen": "2026-04-20T14:00:01.284732+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3354
+      "score": 3.3194
     },
     {
       "title": "Stanford’s AI Index finds China has nearly closed the performance gap with the US despite spending 23 times less",
@@ -515,7 +531,7 @@
       "lastSeen": "2026-04-20T11:40:28.158372+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6294
+      "score": 1.6135
     },
     {
       "title": "Threads is redesigning its website and finally adding direct messages to the desktop",
@@ -531,7 +547,7 @@
       "lastSeen": "2026-04-20T09:16:55.293196+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3187
+      "score": 2.3031
     },
     {
       "title": "Meta targets 20 May for 8,000 layoffs as it redirects billions toward AI infrastructure",
@@ -547,7 +563,7 @@
       "lastSeen": "2026-04-20T09:16:55.293196+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7162
+      "score": 2.7007
     },
     {
       "title": "Think AI \"knows\" what it’s doing? Scientists say think again",
@@ -560,10 +576,10 @@
       "image": "https://www.sciencedaily.com/images/1920/ai-robot-confused-questions.webp",
       "published": "2026-04-19T08:02:23+00:00",
       "firstSeen": "2026-04-19T14:56:27.343023+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5986
+      "score": 1.5855
     },
     {
       "title": "NVIDIA Releases Ising: the First Open Quantum AI Model Family for Hybrid Quantum-Classical Systems",
@@ -576,11 +592,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-54.png",
       "published": "2026-04-19T07:54:42+00:00",
       "firstSeen": "2026-04-19T08:00:01.128724+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.7969
+      "score": 13.7838
     },
     {
       "title": "xAI Launches Standalone Grok Speech-to-Text and Text-to-Speech APIs, Targeting Enterprise Voice Developers",
@@ -593,11 +609,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-18-at-10.28.16-PM-1-150x150.png",
       "published": "2026-04-19T05:28:57+00:00",
       "firstSeen": "2026-04-19T06:00:01.404393+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.1658
+      "score": 23.1536
     },
     {
       "title": "A Coding Tutorial for Running PrismML Bonsai 1-Bit LLM on CUDA with GGUF, Benchmarking, Chat, JSON, and RAG",
@@ -610,10 +626,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-52.png",
       "published": "2026-04-19T04:33:41+00:00",
       "firstSeen": "2026-04-19T05:00:01.639553+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.9045
+      "score": 4.8926
     },
     {
       "title": "Changes in the system prompt between Claude Opus 4.6 and 4.7",
@@ -626,27 +642,11 @@
       "image": "",
       "published": "2026-04-18T23:59:40+00:00",
       "firstSeen": "2026-04-19T01:00:01.203296+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.5727
-    },
-    {
-      "title": "A Coding Guide for Property-Based Testing Using Hypothesis with Stateful, Differential, and Metamorphic Test Design",
-      "url": "https://www.marktechpost.com/2026/04/18/a-coding-guide-for-property-based-testing-using-hypothesis-with-stateful-differential-and-metamorphic-test-design",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we explore property-based testing using Hypothesis and build a rigorous testing pipeline that goes far beyond traditional unit testing. We implement invariants, differential testing, metamorphic testing, targeted exploration, and stateful testing to validate both functional correctness and behavioral guarantees of our systems. Instead of manually crafting edge cases, we let Hypothesis generate [&#8230;]\nThe post A Coding Guide for Property-Based Testing Using Hypothesis with Stateful, Differential, and Metamorphic Test Design appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-51.png",
-      "published": "2026-04-18T21:55:25+00:00",
-      "firstSeen": "2026-04-18T22:53:45.069366+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9813
+      "score": 18.5623
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -659,10 +659,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8373
+      "score": 1.8368
     },
     {
       "title": "Dark Breath",
@@ -675,10 +675,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5522
+      "score": 1.5519
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
@@ -691,7 +691,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-07T08:30:00+00:00",
       "firstSeen": "2026-04-07T09:00:01.251081+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1202
@@ -707,7 +707,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-06T20:00:00+00:00",
       "firstSeen": "2026-04-06T20:52:55.504986+00:00",
-      "lastSeen": "2026-04-20T14:00:01.284732+00:00",
+      "lastSeen": "2026-04-20T15:00:01.250569+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8901
