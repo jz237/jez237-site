@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T21:59:31.450851+00:00",
+  "updatedAt": "2026-04-20T23:00:02.095565+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4176,6 +4176,10 @@
     "http://www.bbc.co.uk/programmes/w3ct8js7": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "checkedAt": "2026-04-20T20:59:22.286116+00:00"
+    },
+    "https://techcrunch.com/2026/04/20/google-rolls-out-gemini-in-chrome-in-seven-new-countries": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Chrome_Hero.png?resize=1200,677",
+      "checkedAt": "2026-04-20T23:00:02.095565+00:00"
     }
   }
 }
