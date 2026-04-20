@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T13:00:02.087395+00:00",
+  "updatedAt": "2026-04-20T14:00:01.284732+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4136,6 +4136,14 @@
     "https://www.technologyreview.com/2026/04/20/1136149/chinese-tech-workers-ai-colleagues": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/rice-bowl-claw.jpg?resize=1200,600",
       "checkedAt": "2026-04-20T10:00:01.670142+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-8000-jobs-layoff-wave": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04202026-meta-8000-jobs-layoff-wave.jpg",
+      "checkedAt": "2026-04-20T14:00:01.284732+00:00"
+    },
+    "https://openai.com/index/hyatt-advances-ai-with-chatgpt-enterprise": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1MeERIeoNc82SnZJ2iRVos/58f1b56cd3df77da092ed3ef877e5bf7/Frame__2_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-20T14:00:01.284732+00:00"
     }
   }
 }
