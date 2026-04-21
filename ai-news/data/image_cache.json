@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T21:00:02.068430+00:00",
+  "updatedAt": "2026-04-21T22:00:01.736973+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4324,6 +4324,46 @@
     "https://www.together.ai/blog/multi-tenant-gpu-cluster-design-for-ai-native-teams": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69e7cd63e0d87f736fd3c8d7_OG-image_20260421_BLOG_Multi-tenantGPUclusters.png",
       "checkedAt": "2026-04-21T21:00:02.068430+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135643/10-ai-artificial-intelligence-trends-technologies-research-2026": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/MIT-TR_10-things-that-matter-in-AI-right-now_Social_1200x628.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135645/llm-large-language-models-ai": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/llm-plusC-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135647/supercharged-scams-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/superchargedC-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135650/world-models-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/world-models2C-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135652/weaponized-deepfakes-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/weaponizedC-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135654/agent-orchestration-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/orchestrationC-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135656/humanoid-data-robot-training-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/humanoid-dataC2-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135658/china-open-source-models-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/open-sourceC-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135663/artificial-scientists-ai-artificial-intelligence": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/artificial-scientistC_thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/21/1135665/resistance-ai-artificial-intelligence-backlash-protests": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/resistance3C-thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-04-21T22:00:01.736973+00:00"
     }
   }
 }
