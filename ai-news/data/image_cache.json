@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-20T23:56:10.324490+00:00",
+  "updatedAt": "2026-04-21T01:00:01.886540+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4184,6 +4184,14 @@
     "https://techcrunch.com/2026/04/20/anthropic-takes-5b-from-amazon-and-pledges-100b-in-cloud-spending-in-return": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1445867611.jpg?w=1024",
       "checkedAt": "2026-04-20T23:56:10.324490+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/build-korean-agents-with-nemotron-personas": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/build-korean-agents-with-nemotron-personas.png",
+      "checkedAt": "2026-04-21T01:00:01.886540+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/20/a-coding-implementation-on-microsofts-phi-4-mini-for-quantized-inference-reasoning-tool-use-rag-and-lora-fine-tuning": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-58-1024x731.png",
+      "checkedAt": "2026-04-21T01:00:01.886540+00:00"
     }
   }
 }

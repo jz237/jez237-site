@@ -1,9 +1,42 @@
 {
   "date": "2026-04-21",
-  "updatedAt": "2026-04-21T00:00:01.294377+00:00",
+  "updatedAt": "2026-04-21T01:00:01.886540+00:00",
   "items": [
     {
-      "title": "Python library supporting Discrete Variational Formulations and training solutions with Collocation-based Robust Variational Physics Informed Neural Networks (DVF-CRVPINN)",
+      "title": "A Coding Implementation on Microsoft’s Phi-4-Mini for Quantized Inference Reasoning Tool Use RAG and LoRA Fine-Tuning",
+      "url": "https://www.marktechpost.com/2026/04/20/a-coding-implementation-on-microsofts-phi-4-mini-for-quantized-inference-reasoning-tool-use-rag-and-lora-fine-tuning",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build a pipeline on Phi-4-mini to explore how a compact yet highly capable language model can handle a full range of modern LLM workflows within a single notebook. We begin by setting up a stable environment, loading Microsoft’s Phi-4-mini-instruct in efficient 4-bit quantization, and then move step by step through streaming [&#8230;]\nThe post A Coding Implementation on Microsoft’s Phi-4-Mini for Quantized Inference Reasoning Tool Use RAG and LoRA Fine-Tuning appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-58-1024x731.png",
+      "published": "2026-04-21T00:13:51+00:00",
+      "firstSeen": "2026-04-21T01:00:01.886540+00:00",
+      "lastSeen": "2026-04-21T01:00:01.886540+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 16.5967
+    },
+    {
+      "title": "How to Ground a Korean AI Agent in Real Demographics with Synthetic Personas",
+      "url": "https://huggingface.co/blog/nvidia/build-korean-agents-with-nemotron-personas",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/build-korean-agents-with-nemotron-personas.png",
+      "published": "2026-04-21T00:40:10+00:00",
+      "firstSeen": "2026-04-21T01:00:01.886540+00:00",
+      "lastSeen": "2026-04-21T01:00:01.886540+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1199
+    },
+    {
+      "title": "Tomasz S{\\l}u\\.zalec, Marcin {\\L}o\\'s, Askold Vilkha, Maciej Paszy\\'nski",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +44,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-21T00:00:17.051624+00:00",
+      "published": "2026-04-21T01:00:13.129536+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-21T00:00:01.294377+00:00",
+      "lastSeen": "2026-04-21T01:00:01.886540+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.44
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     }
   ],
   "errors": []
