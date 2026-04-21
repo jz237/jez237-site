@@ -1,6 +1,6 @@
 {
   "date": "2026-04-21",
-  "updatedAt": "2026-04-21T19:00:01.702834+00:00",
+  "updatedAt": "2026-04-21T19:35:12.426653+00:00",
   "items": [
     {
       "title": "Moonshot AI Releases Kimi K2.6 with Long-Horizon Coding, Agent Swarm Scaling to 300 Sub-Agents and 4,000 Coordinated Steps",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-20-at-6.58.20-PM-1-150x150.png",
       "published": "2026-04-21T01:58:50+00:00",
       "firstSeen": "2026-04-21T02:00:01.433991+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.5056
+      "score": 19.4945
     },
     {
       "title": "A Coding Implementation on Microsoft’s Phi-4-Mini for Quantized Inference Reasoning Tool Use RAG and LoRA Fine-Tuning",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-58-1024x731.png",
       "published": "2026-04-21T00:13:51+00:00",
       "firstSeen": "2026-04-21T01:00:01.886540+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.1731
+      "score": 16.1625
     },
     {
       "title": "Google’s AI Overviews Produce Hundreds of Millions of Inaccurate Answers Every Day, Analysis Suggests",
@@ -47,11 +47,27 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-3-1.png",
       "published": "2026-04-21T13:48:21+00:00",
       "firstSeen": "2026-04-21T15:40:19.069170+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.4022
+      "score": 15.3868
+    },
+    {
+      "title": "OpenAI’s updated image generator can now pull information from the web",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/916166/openai-chatgpt-images-2",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "OpenAI is rolling out the latest version of its AI-powered image generator with new \"thinking capabilities,\" allowing it to search the web to help it create multiple images from a single prompt. On Tuesday, OpenAI announced that ChatGPT Images 2.0 can now create more \"sophisticated\" images, with improvements to its ability to follow instructions, preserve [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/chatgpt-images-2-magazine.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-21T19:00:00+00:00",
+      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.2422
     },
     {
       "title": "Scaling Codex to enterprises worldwide",
@@ -64,11 +80,27 @@
       "image": "",
       "published": "2026-04-21T00:00:00+00:00",
       "firstSeen": "2026-04-21T13:00:01.405831+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1489
+      "score": 14.1384
+    },
+    {
+      "title": "OpenAI Beefs Up ChatGPT's Image Generation Model",
+      "url": "https://www.wired.com/story/openai-beefs-up-chatgpts-image-generation-model",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The ChatGPT Images 2.0 model is here. Our testing shows it's better at creating more detailed images and rendering text, but it still struggles with languages other than English.",
+      "image": "https://media.wired.com/photos/69e7aa26e71e88c4e31ef5d8/master/pass/GettyImages-2271722472.jpg",
+      "published": "2026-04-21T19:00:00+00:00",
+      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.6722
     },
     {
       "title": "European Commission Moving to Classify ChatGPT as ‘Very Large Online Search Engine’ Under Digital Services Act",
@@ -81,10 +113,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-4.png",
       "published": "2026-04-21T05:32:25+00:00",
       "firstSeen": "2026-04-21T06:00:01.960481+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.3069
+      "score": 13.2946
     },
     {
       "title": "OpenAI recruits Cognizant and CGI to take Codex into enterprise software shops worldwide",
@@ -97,10 +129,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Codex-Labs.png",
       "published": "2026-04-21T14:45:15+00:00",
       "firstSeen": "2026-04-21T15:40:19.069170+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1276
+      "score": 12.1118
     },
     {
       "title": "Amazon Deepens Anthropic Partnership, Eyeing Up to $25B as Claude Demand Surges",
@@ -113,10 +145,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-2.png",
       "published": "2026-04-21T13:09:18+00:00",
       "firstSeen": "2026-04-21T14:00:01.714363+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0851
+      "score": 12.07
     },
     {
       "title": "A Coding Implementation on Qwen 3.6-35B-A3B Covering Multimodal Inference, Thinking Control, Tool Calling, MoE Routing, RAG, and Session Persistence",
@@ -129,11 +161,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-59.png",
       "published": "2026-04-21T07:54:34+00:00",
       "firstSeen": "2026-04-21T08:00:01.659097+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9283
+      "score": 11.9153
     },
     {
       "title": "Amazon puts up to $25 billion more into Anthropic and secures 10-year cloud commitment in return",
@@ -149,55 +181,23 @@
       "lastSeen": "2026-04-21T09:49:39.898398+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8417
+      "score": 10.8289
     },
     {
-      "title": "Ordering with the Starbucks ChatGPT app was a true coffee nightmare",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/915821/starbucks-chatgpt-app-testing",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
+      "title": "ChatGPT’s new Images 2.0 model is surprisingly good at generating text",
+      "url": "https://techcrunch.com/2026/04/21/chatgpts-new-images-2-0-model-is-surprisingly-good-at-generating-text",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Venti iced coffee, light skim milk. That's what I get at Starbucks. It is what I have gotten at Starbucks every time I've been to Starbucks for as long as I can remember, other than a brief love affair with the caffe misto a few years ago. In person, my brain barely needs to activate [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Starbucks-App-in-ChatGPT.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-21T16:19:40+00:00",
-      "firstSeen": "2026-04-21T17:00:02.028349+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
+      "summary": "ChatGPT Images 2.0, the newest image-generation model from OpenAI, shows just how much AI capabilities have evolved over the last few years.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/openAI-spiral-color-v2.jpg?resize=1200%2C675",
+      "published": "2026-04-21T19:00:00+00:00",
+      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
+      "lastSeen": "2026-04-21T19:35:12.426653+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3813
-    },
-    {
-      "title": "GitHub freezes new Copilot sign-ups as agentic AI breaks the economics of flat-rate developer subscriptions",
-      "url": "https://thenextweb.com/news/github-copilot-signup-pause-agentic-ai-usage-limits",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Agentic coding workflows are now routinely generating costs that exceed what users pay per month. GitHub’s response, pausing new sign-ups for Pro, Pro+, and Student plans and tightening usage caps, signals that the era of unlimited AI assistance at fixed prices is ending. GitHub has paused new sign-ups for its Copilot Pro, Pro+, and Student [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/GitHub.png",
-      "published": "2026-04-21T10:07:49+00:00",
-      "firstSeen": "2026-04-21T11:00:01.611161+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 9.0098
-    },
-    {
-      "title": "Trump says Anthropic Pentagon deal is ‘possible’, weeks after blacklisting the company as a national security risk",
-      "url": "https://thenextweb.com/news/trump-anthropic-pentagon-deal-possible-mythos",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The US president told CNBC on Tuesday that Anthropic is ‘shaping up’ following a White House meeting last Friday at which the company’s CEO Dario Amodei discussed its Mythos AI model with Chief of Staff Susie Wiles and Treasury Secretary Scott Bessent. The Pentagon’s blacklisting of Anthropic remains in legal limbo, with a federal appeals [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Annthopic-Pentagon.png",
-      "published": "2026-04-21T15:15:11+00:00",
-      "firstSeen": "2026-04-21T17:00:02.028349+00:00",
-      "lastSeen": "2026-04-21T19:00:01.702834+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.8413
+      "score": 10.2722
     }
   ],
   "errors": []
