@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T03:43:21.019993+00:00",
+  "updatedAt": "2026-04-21T05:00:01.394883+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4192,6 +4192,10 @@
     "https://www.marktechpost.com/2026/04/20/a-coding-implementation-on-microsofts-phi-4-mini-for-quantized-inference-reasoning-tool-use-rag-and-lora-fine-tuning": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-58-1024x731.png",
       "checkedAt": "2026-04-21T01:00:01.886540+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/04/260420014748.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/ai-bot-voting-human-voter-election.webp",
+      "checkedAt": "2026-04-21T05:00:01.394883+00:00"
     }
   }
 }
