@@ -39,7 +39,8 @@
     .entry-copy { line-height:1.7; }
     .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
     .quote { border-left: 3px solid var(--earth-accent); padding-left: 14px; margin-top: 14px; font-style: italic; }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+    .photo-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:16px; }
+    @media (max-width: 860px) { .split { grid-template-columns:1fr; } .photo-grid { grid-template-columns:1fr; } }
     .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; align-items: center; justify-content: center; padding: 24px; cursor: pointer; }
     .lightbox.active { display: flex; }
     .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
@@ -57,6 +58,29 @@
     </section>
 
     <div class="shell">
+      <section class="entry-card">
+        <div>
+          <div class="entry-date">April 21, 2026</div>
+          <h2 class="entry-title">Winter loss, then a cleaner reset</h2>
+          <div class="entry-copy">
+            This sequence tells the story clearly, the left side of the Shaina died back over winter, leaving the plant lopsided and a little awkward just as the spring flush started. Once that dead side was cut away, the surviving right side read much better, still smaller than it should be, but healthy, leafing out well, and no longer wasting the eye on wood that was never coming back.
+            <div class="quote">Sometimes the spring job is not saving every branch. It is clearing the dead so the living part can read honestly again.</div>
+          </div>
+        </div>
+        <div class="photo-grid">
+          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-1.jpg" alt="Shaina Japanese maple with left side winter dieback visible" loading="lazy" decoding="async">
+          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-2.jpg" alt="Shaina Japanese maple showing dead left side and healthy right side" loading="lazy" decoding="async">
+          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-3.jpg" alt="Shaina Japanese maple after dead side was cut off" loading="lazy" decoding="async">
+          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-4.jpg" alt="Shaina Japanese maple with healthy right side after cleanup" loading="lazy" decoding="async">
+        </div>
+        <ul class="bullet-list">
+          <li>left side suffered clear winter dieback</li>
+          <li>dead wood was removed instead of left in place</li>
+          <li>right side is healthy and leafing out well</li>
+          <li>overall shape is reduced, but cleaner and more honest after the cutback</li>
+        </ul>
+      </section>
+
       <section class="entry-card">
         <div class="split">
           <div>
