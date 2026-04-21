@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T21:56:50.176808+00:00",
+  "updatedAt": "2026-04-21T23:00:01.876755+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4364,6 +4364,14 @@
     "https://www.technologyreview.com/2026/04/21/1135665/resistance-ai-artificial-intelligence-backlash-protests": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/resistance3C-thumb.jpg?resize=1200,600",
       "checkedAt": "2026-04-21T21:56:50.176808+00:00"
+    },
+    "https://techcrunch.com/2026/04/21/spacex-is-working-with-cursor-and-has-an-option-to-buy-the-startup-for-60-billion": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2256968212.jpg?w=1024",
+      "checkedAt": "2026-04-21T23:00:01.876755+00:00"
+    },
+    "https://www.theverge.com/science/916427/spacex-cursor-potential-deal-acquisition": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKB355_SPACEX_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-04-21T23:00:01.876755+00:00"
     }
   }
 }
