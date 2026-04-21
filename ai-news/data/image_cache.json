@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T11:21:46.104911+00:00",
+  "updatedAt": "2026-04-21T13:00:01.405831+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4216,6 +4216,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/915626/yelp-ai-assistant-chatbot-major-upgrade": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Yelp-Assistant_-Making-Beauty-Appointments-via-Vagaro.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
       "checkedAt": "2026-04-21T11:21:46.104911+00:00"
+    },
+    "https://openai.com/index/scaling-codex-to-enterprises-worldwide": {
+      "image": "",
+      "checkedAt": "2026-04-21T13:00:01.405831+00:00"
     }
   }
 }
