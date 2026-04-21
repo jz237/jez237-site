@@ -1,6 +1,6 @@
 {
   "date": "2026-04-21",
-  "updatedAt": "2026-04-21T11:00:01.611161+00:00",
+  "updatedAt": "2026-04-21T12:00:02.084351+00:00",
   "items": [
     {
       "title": "Moonshot AI Releases Kimi K2.6 with Long-Horizon Coding, Agent Swarm Scaling to 300 Sub-Agents and 4,000 Coordinated Steps",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-20-at-6.58.20-PM-1-150x150.png",
       "published": "2026-04-21T01:58:50+00:00",
       "firstSeen": "2026-04-21T02:00:01.433991+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.6762
+      "score": 19.6527
     },
     {
       "title": "A Coding Implementation on Microsoft’s Phi-4-Mini for Quantized Inference Reasoning Tool Use RAG and LoRA Fine-Tuning",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-58-1024x731.png",
       "published": "2026-04-21T00:13:51+00:00",
       "firstSeen": "2026-04-21T01:00:01.886540+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.3356
+      "score": 16.3132
     },
     {
       "title": "European Commission Moving to Classify ChatGPT as ‘Very Large Online Search Engine’ Under Digital Services Act",
@@ -47,10 +47,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-4.png",
       "published": "2026-04-21T05:32:25+00:00",
       "firstSeen": "2026-04-21T06:00:01.960481+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.4952
+      "score": 13.4693
     },
     {
       "title": "A Coding Implementation on Qwen 3.6-35B-A3B Covering Multimodal Inference, Thinking Control, Tool Calling, MoE Routing, RAG, and Session Persistence",
@@ -63,11 +63,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-59.png",
       "published": "2026-04-21T07:54:34+00:00",
       "firstSeen": "2026-04-21T08:00:01.659097+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.1295
+      "score": 12.1018
     },
     {
       "title": "Amazon puts up to $25 billion more into Anthropic and secures 10-year cloud commitment in return",
@@ -83,7 +83,7 @@
       "lastSeen": "2026-04-21T09:49:39.898398+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0387
+      "score": 11.0116
     },
     {
       "title": "GitHub freezes new Copilot sign-ups as agentic AI breaks the economics of flat-rate developer subscriptions",
@@ -96,10 +96,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/GitHub.png",
       "published": "2026-04-21T10:07:49+00:00",
       "firstSeen": "2026-04-21T11:00:01.611161+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2237
+      "score": 9.1943
     },
     {
       "title": "How to Ground a Korean AI Agent in Real Demographics with Synthetic Personas",
@@ -112,10 +112,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/build-korean-agents-with-nemotron-personas.png",
       "published": "2026-04-21T00:40:10+00:00",
       "firstSeen": "2026-04-21T01:00:01.886540+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8556
+      "score": 4.833
     },
     {
       "title": "Meta has hired five founding members of Mira Murati’s Thinking Machines Lab in a systematic talent raid",
@@ -128,10 +128,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/meta-thinking-machines-lab-talent-raid.png",
       "published": "2026-04-21T08:57:27+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0893
+      "score": 4.0608
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -144,10 +144,26 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5462
+      "score": 3.5181
+    },
+    {
+      "title": "Yelp is making its AI chatbot way more useful",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/915626/yelp-ai-assistant-chatbot-major-upgrade",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Yelp is giving its chatbot assistant a major upgrade, turning the platform into something closer to a digital concierge with a suite of new features designed for \"getting things done.\" The move, one of several AI-focused updates in recent months, is part of a broader industry push to make AI more relevant and practically useful [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Yelp-Assistant_-Making-Beauty-Appointments-via-Vagaro.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
+      "published": "2026-04-21T11:00:00+00:00",
+      "firstSeen": "2026-04-21T12:00:02.084351+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4298
     },
     {
       "title": "SpaceX’s public IPO filing confirms Musk and insiders retain dominant voting control",
@@ -160,10 +176,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/Elon-Musk.png",
       "published": "2026-04-21T09:19:45+00:00",
       "firstSeen": "2026-04-21T10:00:02.030399+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2001
+      "score": 3.1713
     },
     {
       "title": "John Ternus built Apple’s hardware for 24 years and now he has to figure out AI",
@@ -176,26 +192,10 @@
       "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/john-ternus-apple-ceo-profile-hardware-ai.png",
       "published": "2026-04-21T08:48:38+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-21T11:00:01.611161+00:00",
+      "lastSeen": "2026-04-21T12:00:02.084351+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1851
-    },
-    {
-      "title": "Clarifai says it deleted 3 million OkCupid user photos and the facial-recognition models trained on them",
-      "url": "https://thenextweb.com/news/clarifai-okcupid-photos-deleted-ftc-settlement",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AI company received the photos from OkCupid in 2014 without users’ knowledge, in a data transfer that breached OkCupid’s own privacy policy. The FTC’s late March settlement with OkCupid and Match Group brought no financial penalties. Clarifai was not accused of wrongdoing. Clarifai, a Delaware-based facial-recognition AI company, has confirmed that it deleted approximately [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2026/04/FTC-settles-OkCupid-data-scandal.png",
-      "published": "2026-04-21T07:20:48+00:00",
-      "firstSeen": "2026-04-21T08:00:01.659097+00:00",
-      "lastSeen": "2026-04-21T09:49:39.898398+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1438
+      "score": 3.1567
     }
   ],
   "errors": []
