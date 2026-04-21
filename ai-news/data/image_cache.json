@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T06:11:59.516114+00:00",
+  "updatedAt": "2026-04-21T08:00:01.659097+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4200,6 +4200,10 @@
     "https://www.techrepublic.com/article/chatgpt-digital-services-act-vlose-classification": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-4.png",
       "checkedAt": "2026-04-21T06:00:01.960481+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/21/a-coding-implementation-on-qwen-3-6-35b-a3b-covering-multimodal-inference-thinking-control-tool-calling-moe-routing-rag-and-session-persistence": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-59.png",
+      "checkedAt": "2026-04-21T08:00:01.659097+00:00"
     }
   }
 }
