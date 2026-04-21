@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T05:00:01.394883+00:00",
+  "updatedAt": "2026-04-21T06:00:01.960481+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4196,6 +4196,10 @@
     "https://www.sciencedaily.com/releases/2026/04/260420014748.htm": {
       "image": "https://www.sciencedaily.com/images/1920/ai-bot-voting-human-voter-election.webp",
       "checkedAt": "2026-04-21T05:00:01.394883+00:00"
+    },
+    "https://www.techrepublic.com/article/chatgpt-digital-services-act-vlose-classification": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-4.png",
+      "checkedAt": "2026-04-21T06:00:01.960481+00:00"
     }
   }
 }
