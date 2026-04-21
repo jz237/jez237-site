@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T19:35:12.426653+00:00",
+  "updatedAt": "2026-04-21T21:00:02.068430+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4316,6 +4316,14 @@
     "https://www.techrepublic.com/article/best-ai-courses": {
       "image": "",
       "checkedAt": "2026-04-21T19:35:12.426653+00:00"
+    },
+    "https://techcrunch.com/2026/04/21/apples-john-ternus-will-run-one-of-the-worlds-most-powerful-companies-the-job-is-a-minefield": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2271736494.jpg?resize=1200,800",
+      "checkedAt": "2026-04-21T21:00:02.068430+00:00"
+    },
+    "https://www.together.ai/blog/multi-tenant-gpu-cluster-design-for-ai-native-teams": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69e7cd63e0d87f736fd3c8d7_OG-image_20260421_BLOG_Multi-tenantGPUclusters.png",
+      "checkedAt": "2026-04-21T21:00:02.068430+00:00"
     }
   }
 }
