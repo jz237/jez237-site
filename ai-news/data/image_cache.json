@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T17:00:02.028349+00:00",
+  "updatedAt": "2026-04-21T17:14:41.997498+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4264,6 +4264,10 @@
     "https://techcrunch.com/2026/04/21/voyage-is-an-ai-rpg-platform-for-creating-custom-gaming-worlds-with-ai-generated-npc-interactions": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Voyage-Promo-Art-3.jpg?w=1200",
       "checkedAt": "2026-04-21T17:00:02.028349+00:00"
+    },
+    "https://techcrunch.com/2026/04/21/clarifai-okcupid-facial-recognition-ai-ftc-settlement": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-1968296977.jpg?resize=1200,800",
+      "checkedAt": "2026-04-21T17:14:41.997498+00:00"
     }
   }
 }
