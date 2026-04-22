@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T04:00:01.481690+00:00",
+  "updatedAt": "2026-04-22T03:37:53.749175+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4391,7 +4391,7 @@
     },
     "https://simonwillison.net/2026/Apr/22/changes-to-github-copilot": {
       "image": "",
-      "checkedAt": "2026-04-22T04:00:01.481690+00:00"
+      "checkedAt": "2026-04-22T03:37:53.749175+00:00"
     }
   }
 }
