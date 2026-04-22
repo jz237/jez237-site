@@ -1,6 +1,6 @@
 {
   "date": "2026-04-22",
-  "updatedAt": "2026-04-22T07:00:01.385447+00:00",
+  "updatedAt": "2026-04-22T06:08:11.004233+00:00",
   "items": [
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.0881
+      "score": 18.1123
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.0501
+      "score": 11.0751
     },
     {
       "title": "Quoting Bobby Holley",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-04-22T05:40:56+00:00",
       "firstSeen": "2026-04-22T06:00:01.519833+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4005
+      "score": 10.4262
     },
     {
       "title": "Is Claude Code going to cost $100/month? Probably not - it's all very confusing",
@@ -62,10 +62,10 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-x.jpg",
       "published": "2026-04-22T02:07:34+00:00",
       "firstSeen": "2026-04-22T03:00:01.623910+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1507
+      "score": 10.174
     },
     {
       "title": "A Coding Implementation to Build a Conditional Bayesian Hyperparameter Optimization Pipeline with Hyperopt, TPE, and Early Stopping",
@@ -78,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-61-1024x731.png",
       "published": "2026-04-22T00:04:34+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1275
+      "score": 6.1496
     },
     {
       "title": "Hugging Face Releases ml-intern: An Open-Source AI Agent that Automates the LLM Post-Training Workflow",
@@ -94,10 +94,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-13.png",
       "published": "2026-04-22T00:43:53+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 5.4942
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5166
     },
     {
       "title": "Pronob Kumar Barman, Pronoy Kumar Barman, Plaban Kumar Barman, Rohan Mandar Salvi",
@@ -108,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-22T07:00:05.620149+00:00",
+      "published": "2026-04-22T06:08:16.895797+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-22T07:00:01.385447+00:00",
+      "lastSeen": "2026-04-22T06:08:11.004233+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
