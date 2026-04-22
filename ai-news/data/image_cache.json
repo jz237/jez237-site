@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T21:07:49.629820+00:00",
+  "updatedAt": "2026-04-22T23:00:01.814585+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4516,6 +4516,18 @@
     "https://openai.com/index/introducing-chatgpt-images-2-0": {
       "image": "",
       "checkedAt": "2026-04-22T22:00:01.721490+00:00"
+    },
+    "https://techcrunch.com/2026/04/22/google-updates-workspace-to-make-ai-your-new-office-intern": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200,800",
+      "checkedAt": "2026-04-22T23:00:01.814585+00:00"
+    },
+    "https://techcrunch.com/2026/04/22/hands-on-with-xs-new-ai-powered-custom-feeds": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/08/twitter-x-logo-musk-1.jpg?resize=1200,675",
+      "checkedAt": "2026-04-22T23:00:01.814585+00:00"
+    },
+    "https://openai.com/index/making-chatgpt-better-for-clinicians": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/3K1xu2uaPseQ2Zk6CbuLgc/268ce2e65a514126104c1b6550db955b/SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-22T23:00:01.814585+00:00"
     }
   }
 }
