@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T19:00:01.645191+00:00",
+  "updatedAt": "2026-04-22T19:37:17.550724+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4484,6 +4484,22 @@
     "https://techcrunch.com/2026/04/22/google-cloud-next-new-tpu-ai-chips-compete-with-nvidia": {
       "image": "",
       "checkedAt": "2026-04-22T19:00:01.645191+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-data-center-power-cooling-infrastructure-dcw": {
+      "image": "",
+      "checkedAt": "2026-04-22T19:37:17.550724+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/22/a-detailed-implementation-on-equinox-with-jax-native-modules-filtered-transforms-stateful-layers-and-end-to-end-training-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-63-1024x731.png",
+      "checkedAt": "2026-04-22T19:37:17.550724+00:00"
+    },
+    "https://www.techrepublic.com/article/news-vonage-girls-who-code-ai-talent-pipeline": {
+      "image": "",
+      "checkedAt": "2026-04-22T19:37:17.550724+00:00"
+    },
+    "https://www.techrepublic.com/article/news-mozilla-firefox-150-patched-271-security-flaws": {
+      "image": "",
+      "checkedAt": "2026-04-22T19:37:17.550724+00:00"
     }
   }
 }
