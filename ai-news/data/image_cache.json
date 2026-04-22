@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T09:48:29.812722+00:00",
+  "updatedAt": "2026-04-22T11:00:02.115440+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4408,6 +4408,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/916501/anthropic-mythos-unauthorized-users-access-security": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469782/STK269_ANTHROPIC_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-22T09:48:29.812722+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/22/1135295/ai-needs-a-strong-data-fabric-to-deliver-business-value": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/SAP-article-iStock-480794780.jpg?resize=1200,600",
+      "checkedAt": "2026-04-22T11:00:02.115440+00:00"
     }
   }
 }
