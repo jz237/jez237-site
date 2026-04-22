@@ -1,7 +1,24 @@
 {
   "date": "2026-04-22",
-  "updatedAt": "2026-04-22T19:37:17.550724+00:00",
+  "updatedAt": "2026-04-22T21:00:01.148330+00:00",
   "items": [
+    {
+      "title": "Alibaba Qwen Team Releases Qwen3.6-27B: A Dense Open-Weight Model Outperforming 397B MoE on Agentic Coding Benchmarks",
+      "url": "https://www.marktechpost.com/2026/04/22/alibaba-qwen-team-releases-qwen3-6-27b-a-dense-open-weight-model-outperforming-397b-moe-on-agentic-coding-benchmarks",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Alibaba&#8217;s Qwen Team has released Qwen3.6-27B, the first dense open-weight model in the Qwen3.6 family — and arguably the most capable 27-billion-parameter model available today for coding agents. It brings substantial improvements in agentic coding, a novel Thinking Preservation mechanism, and a hybrid architecture that blends Gated DeltaNet linear attention with traditional self-attention — all [&#8230;]\nThe post Alibaba Qwen Team Releases Qwen3.6-27B: A Dense Open-Weight Model Outperforming 397B MoE on Agentic Coding Benchmarks appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-12.39.13-PM-1-150x150.png",
+      "published": "2026-04-22T19:40:51+00:00",
+      "firstSeen": "2026-04-22T21:00:01.148330+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 18.8304
+    },
     {
       "title": "Mozilla patched 271 Firefox bugs found by Anthropic’s Mythos, and says the zero-day era has an expiration date",
       "url": "https://thenextweb.com/news/mozilla-firefox-claude-mythos-271-vulnerabilities",
@@ -13,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/04/mozilla-firefox-claude-mythos-271-vulnerabilities.avif",
       "published": "2026-04-22T18:35:06+00:00",
       "firstSeen": "2026-04-22T19:37:17.550724+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1188
+      "score": 18.0786
     },
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -30,11 +47,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7929
+      "score": 17.7665
     },
     {
       "title": "Google just launched its agentic enterprise play, and it runs from chip to inbox",
@@ -47,10 +64,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-next-ai-agents-agentic-era.avif",
       "published": "2026-04-22T14:26:39+00:00",
       "firstSeen": "2026-04-22T15:37:52.274706+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.4027
+      "score": 15.3669
     },
     {
       "title": "Pichai opens Cloud Next 2026 with $240B backlog, 750M Gemini users, and a plan to turn Search into an agent manager",
@@ -63,10 +80,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-next-pichai-agentic-era-scale.avif",
       "published": "2026-04-22T17:46:27+00:00",
       "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.995
+      "score": 14.9557
     },
     {
       "title": "OpenAI’s ChatGPT ads just went cost-per-click, and the AI advertising war has its battle lines",
@@ -79,10 +96,10 @@
       "image": "https://media.thenextweb.com/2026/04/openai-chatgpt-cpc-ads-launch.avif",
       "published": "2026-04-22T09:55:08+00:00",
       "firstSeen": "2026-04-22T11:00:02.115440+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5901
+      "score": 13.5586
     },
     {
       "title": "Florida launches criminal investigation into OpenAI over ChatGPT’s alleged role in Florida State University shooting",
@@ -95,10 +112,26 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
       "published": "2026-04-22T09:43:11+00:00",
       "firstSeen": "2026-04-22T11:00:02.115440+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6855
+      "score": 12.6541
+    },
+    {
+      "title": "OpenAI now lets teams make custom bots that can do work on their own",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/917065/openai-chatgpt-workspace-agents-custom-teams-bots",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "OpenAI is giving users of its Business, Enterprise, Edu, and Teachers plans access to cloud-based \"workspace\" agents available in ChatGPT that can perform business tasks. In its blog post, OpenAI gives examples of agents like one that finds product feedback on the web and sends a report in Slack and a sales agent that can [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STK155_OPEN_AI_4_CVirginia_B.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742221417566%2C100%2C78.515557164868&amp%3Bw=1200",
+      "published": "2026-04-22T20:09:02+00:00",
+      "firstSeen": "2026-04-22T21:00:01.148330+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.1343
     },
     {
       "title": "Introducing workspace agents in ChatGPT",
@@ -111,10 +144,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5VOBXAok5WCGbcXubvIGSn/c6ec67af102f0537ff2a526fca45ff47/OAI_Blog_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-04-22T10:00:00+00:00",
       "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.042
+      "score": 12.0104
     },
     {
       "title": "Google splits its next TPU in two, and the AI chip war just became a design philosophy fight",
@@ -127,11 +160,11 @@
       "image": "https://media.thenextweb.com/2026/04/google-tpu-8i.avif",
       "published": "2026-04-22T13:32:00+00:00",
       "firstSeen": "2026-04-22T15:37:52.274706+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9789
+      "score": 11.9439
     },
     {
       "title": "A Japanese TV shopping company bet on Anthropic in 2021, and now it is quadrupling its fund",
@@ -147,7 +180,7 @@
       "lastSeen": "2026-04-22T19:37:17.550724+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.0318
+      "score": 11.0006
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -160,42 +193,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
+      "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7455
-    },
-    {
-      "title": "Quoting Bobby Holley",
-      "url": "https://simonwillison.net/2026/Apr/22/bobby-holley",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As part of our continued collaboration with Anthropic, we had the opportunity to apply an early version of Claude Mythos Preview to Firefox. This week’s release of Firefox 150 includes fixes for 271 vulnerabilities identified during this initial evaluation. [...]\nOur experience is a hopeful one for teams who shake off the vertigo and get to work. You may need to reprioritize everything else to bring relentless and single-minded focus to the task, but there is light at the end of the tunnel. We are extremely proud of how our team rose to meet this challenge, and others will too. Our work isn’t ",
-      "image": "",
-      "published": "2026-04-22T05:40:56+00:00",
-      "firstSeen": "2026-04-22T06:00:01.519833+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.0868
-    },
-    {
-      "title": "Workspace agents",
-      "url": "https://openai.com/academy/workspace-agents",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Learn how to build, use, and scale workspace agents in ChatGPT to automate repeatable workflows, connect tools, and streamline team operations.",
-      "image": "",
-      "published": "2026-04-22T10:00:00+00:00",
-      "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-22T19:37:17.550724+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.042
+      "score": 10.7182
     }
   ],
   "errors": []
