@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T03:37:53.749175+00:00",
+  "updatedAt": "2026-04-22T05:00:01.265966+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4392,6 +4392,10 @@
     "https://simonwillison.net/2026/Apr/22/changes-to-github-copilot": {
       "image": "",
       "checkedAt": "2026-04-22T03:37:53.749175+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/21/openai-open-sources-euphony-a-browser-based-visualization-tool-for-harmony-chat-data-and-codex-session-logs": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
+      "checkedAt": "2026-04-22T05:00:01.265966+00:00"
     }
   }
 }
