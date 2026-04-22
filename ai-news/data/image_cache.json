@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T17:00:01.464618+00:00",
+  "updatedAt": "2026-04-22T18:00:02.122650+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4464,6 +4464,22 @@
     "https://openai.com/index/speeding-up-agentic-workflows-with-websockets": {
       "image": "",
       "checkedAt": "2026-04-22T17:00:01.464618+00:00"
+    },
+    "https://www.theverge.com/tech/916800/sony-ai-ace-ping-pong-table-tennis-robot-cameras": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/sony_ace_robot.jpg?quality=90&amp;strip=all&amp;crop=0,10.798320425817,100,78.403359148365",
+      "checkedAt": "2026-04-22T18:00:02.122650+00:00"
+    },
+    "https://techcrunch.com/2026/04/22/google-turns-chrome-into-an-ai-coworker-for-the-workplace": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-chrome-GettyImages-2151457378.jpg?w=1024",
+      "checkedAt": "2026-04-22T18:00:02.122650+00:00"
+    },
+    "https://openai.com/academy/workspace-agents": {
+      "image": "",
+      "checkedAt": "2026-04-22T18:00:02.122650+00:00"
+    },
+    "https://openai.com/index/introducing-workspace-agents-in-chatgpt": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5VOBXAok5WCGbcXubvIGSn/c6ec67af102f0537ff2a526fca45ff47/OAI_Blog_SEO_16x9.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-22T18:00:02.122650+00:00"
     }
   }
 }
