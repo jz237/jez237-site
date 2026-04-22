@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T08:04:00.830741+00:00",
+  "updatedAt": "2026-04-22T10:00:01.232633+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4404,6 +4404,10 @@
     "https://www.marktechpost.com/2026/04/22/photon-releases-spectrum-an-open-source-typescript-framework-that-deploys-ai-agents-directly-to-imessage-whatsapp-and-telegram": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-62.png",
       "checkedAt": "2026-04-22T08:00:01.961652+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/916501/anthropic-mythos-unauthorized-users-access-security": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469782/STK269_ANTHROPIC_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-22T10:00:01.232633+00:00"
     }
   }
 }
