@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T23:49:42.255166+00:00",
+  "updatedAt": "2026-04-22T01:00:01.656322+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4380,6 +4380,14 @@
     "https://techcrunch.com/2026/04/21/spacex-is-working-with-cursor-and-has-an-option-to-buy-the-startup-for-60-billion": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2256968212.jpg?w=1024",
       "checkedAt": "2026-04-21T23:49:42.255166+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/21/hugging-face-releases-ml-intern-an-open-source-ai-agent-that-automates-the-llm-post-training-workflow": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-13.png",
+      "checkedAt": "2026-04-22T01:00:01.656322+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/21/a-coding-implementation-to-build-a-conditional-bayesian-hyperparameter-optimization-pipeline-with-hyperopt-tpe-and-early-stopping": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-61-1024x731.png",
+      "checkedAt": "2026-04-22T01:00:01.656322+00:00"
     }
   }
 }
