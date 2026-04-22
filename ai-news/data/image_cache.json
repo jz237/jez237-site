@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T06:08:11.004233+00:00",
+  "updatedAt": "2026-04-22T08:00:01.961652+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4400,6 +4400,10 @@
     "https://simonwillison.net/2026/Apr/22/bobby-holley": {
       "image": "",
       "checkedAt": "2026-04-22T06:00:01.519833+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/22/photon-releases-spectrum-an-open-source-typescript-framework-that-deploys-ai-agents-directly-to-imessage-whatsapp-and-telegram": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-62.png",
+      "checkedAt": "2026-04-22T08:00:01.961652+00:00"
     }
   }
 }
