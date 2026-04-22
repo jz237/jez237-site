@@ -1,6 +1,6 @@
 {
   "date": "2026-04-22",
-  "updatedAt": "2026-04-22T17:13:41.699425+00:00",
+  "updatedAt": "2026-04-22T19:00:01.645191+00:00",
   "items": [
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.8413
+      "score": 17.8052
     },
     {
       "title": "Google just launched its agentic enterprise play, and it runs from chip to inbox",
@@ -30,10 +30,26 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-next-ai-agents-agentic-era.avif",
       "published": "2026-04-22T14:26:39+00:00",
       "firstSeen": "2026-04-22T15:37:52.274706+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.4681
+      "score": 15.4192
+    },
+    {
+      "title": "Pichai opens Cloud Next 2026 with $240B backlog, 750M Gemini users, and a plan to turn Search into an agent manager",
+      "url": "https://thenextweb.com/news/google-cloud-next-pichai-agentic-era-scale",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Summary: Sundar Pichai opened Cloud Next 2026 with Google Cloud at $70 billion in annual revenue, 48% growth, a $240 billion backlog that doubled in a year, and $175-185 billion in planned capital expenditure. The Gemini app has 750 million monthly users, AI Overviews reach two billion, and the Gemini API processed 85 billion requests [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/google-cloud-next-pichai-agentic-era-scale.avif",
+      "published": "2026-04-22T17:46:27+00:00",
+      "firstSeen": "2026-04-22T19:00:01.645191+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 15.0132
     },
     {
       "title": "OpenAI’s ChatGPT ads just went cost-per-click, and the AI advertising war has its battle lines",
@@ -46,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/04/openai-chatgpt-cpc-ads-launch.avif",
       "published": "2026-04-22T09:55:08+00:00",
       "firstSeen": "2026-04-22T11:00:02.115440+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.6479
+      "score": 13.6047
     },
     {
       "title": "Florida launches criminal investigation into OpenAI over ChatGPT’s alleged role in Florida State University shooting",
@@ -62,10 +78,26 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
       "published": "2026-04-22T09:43:11+00:00",
       "firstSeen": "2026-04-22T11:00:02.115440+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7429
+      "score": 12.7
+    },
+    {
+      "title": "Introducing workspace agents in ChatGPT",
+      "url": "https://openai.com/index/introducing-workspace-agents-in-chatgpt",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Workspace agents in ChatGPT are Codex-powered agents that automate complex workflows, run in the cloud, and help teams scale work across tools securely.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5VOBXAok5WCGbcXubvIGSn/c6ec67af102f0537ff2a526fca45ff47/OAI_Blog_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-04-22T10:00:00+00:00",
+      "firstSeen": "2026-04-22T19:00:01.645191+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.0567
     },
     {
       "title": "Google splits its next TPU in two, and the AI chip war just became a design philosophy fight",
@@ -78,11 +110,11 @@
       "image": "https://media.thenextweb.com/2026/04/google-tpu-8i.avif",
       "published": "2026-04-22T13:32:00+00:00",
       "firstSeen": "2026-04-22T15:37:52.274706+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.0427
+      "score": 11.995
     },
     {
       "title": "A Japanese TV shopping company bet on Anthropic in 2021, and now it is quadrupling its fund",
@@ -95,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/04/japanet-vc-fund-anthropic-xai-ai.avif",
       "published": "2026-04-22T09:33:45+00:00",
       "firstSeen": "2026-04-22T11:00:02.115440+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.089
+      "score": 11.0463
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -111,10 +143,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T18:00:02.122650+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7954
+      "score": 10.7581
     },
     {
       "title": "Quoting Bobby Holley",
@@ -127,81 +159,43 @@
       "image": "",
       "published": "2026-04-22T05:40:56+00:00",
       "firstSeen": "2026-04-22T06:00:01.519833+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1382
+      "score": 10.0998
     },
     {
-      "title": "Google makes an interesting choice with its new agent building tool for enterprises",
+      "title": "Workspace agents",
+      "url": "https://openai.com/academy/workspace-agents",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Learn how to build, use, and scale workspace agents in ChatGPT to automate repeatable workflows, connect tools, and streamline team operations.",
+      "image": "",
+      "published": "2026-04-22T10:00:00+00:00",
+      "firstSeen": "2026-04-22T19:00:01.645191+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.0567
+    },
+    {
+      "title": "Google makes an interesting choice with its new agent-building tool for enterprises",
       "url": "https://techcrunch.com/2026/04/22/google-makes-an-interesting-choice-with-its-new-agent-building-tool-for-enterprises",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Gemini Enterprise Agent Platform takes an interesting approach: it is geared for IT and technical users.",
+      "summary": "Gemini Enterprise Agent Platform takes an interesting approach: It is geared for IT and technical users.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2266466589.jpg?w=1024",
       "published": "2026-04-22T16:58:27+00:00",
       "firstSeen": "2026-04-22T17:00:01.464618+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
+      "lastSeen": "2026-04-22T19:00:01.645191+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0823
-    },
-    {
-      "title": "Is Claude Code going to cost $100/month? Probably not - it's all very confusing",
-      "url": "https://simonwillison.net/2026/Apr/22/claude-code-confusion",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic today quietly (as in silently, no announcement anywhere at all) updated their claude.com/pricing page (but not their Choosing a Claude plan page, which shows up first for me on Google) to add this tiny but significant detail (arrow is mine, and it's already reverted):\n\nThe Internet Archive copy from yesterday shows a checkbox there. Claude Code used to be a feature of the $20/month Pro plan, but according to the new pricing page it is now exclusive to the $100/month or $200/month Max plans.\nUpdate: don't miss the update to this post, they've already changed course a few hours after t",
-      "image": "https://static.simonwillison.net/static/2026/anthropic-x.jpg",
-      "published": "2026-04-22T02:07:34+00:00",
-      "firstSeen": "2026-04-22T03:00:01.623910+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.9131
-    },
-    {
-      "title": "Unauthorized users gained access to Anthropic’s restricted Mythos AI model on launch day via a third-party contractor’s environment",
-      "url": "https://thenextweb.com/news/anthropic-mythos-unauthorized-access-vendor-breach",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A small group communicating via a private Discord channel accessed Claude Mythos Preview by guessing the model’s URL on the same day Anthropic announced Project Glasswing. Anthropic says it is investigating and has found no evidence of impact to its core systems. The breach highlights the risks of restricting access to frontier AI capabilities through [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
-      "published": "2026-04-22T07:27:50+00:00",
-      "firstSeen": "2026-04-22T09:48:29.812722+00:00",
-      "lastSeen": "2026-04-22T11:20:02.498533+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.5887
-    },
-    {
-      "title": "Bond wants AI to cure your doomscrolling, then monetise your memories",
-      "url": "https://thenextweb.com/news/bond-social-media-ai-memories-doomscrolling",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Bond, a new “post-feed” social network founded by former Index Ventures principal Dino Becirovic and ex-Google DeepMind researcher Arthur Brazinskas, launched on 21 April with no infinite scroll and no algorithmic feed, instead using AI trained on users’ photos, videos, and audio to recommend real-world activities. The app enters a growing “healthier social [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/bond-social-media-ai-memories-doomscrolling.avif",
-      "published": "2026-04-22T09:24:50+00:00",
-      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
-      "lastSeen": "2026-04-22T17:13:41.699425+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 9.1354
+      "score": 10.0298
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
