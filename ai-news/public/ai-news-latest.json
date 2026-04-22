@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T09:48:29.812722+00:00",
+  "updatedAt": "2026-04-22T11:00:02.115440+00:00",
   "items": [
     {
       "title": "On Solving the Multiple Variable Gapped Longest Common Subsequence Problem",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-22T09:48:34.861178+00:00",
+      "published": "2026-04-22T11:00:07.891162+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.46
+    },
+    {
+      "title": "AI needs a strong data fabric to deliver business value",
+      "url": "https://www.technologyreview.com/2026/04/22/1135295/ai-needs-a-strong-data-fabric-to-deliver-business-value",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Artificial intelligence is moving quickly in the enterprise, from experimentation to everyday use. Organizations are deploying copilots, agents, and predictive systems across finance, supply chains, human resources, and customer operations. By the end of 2025, half of companies used AI in at least three business functions, according to a recent survey. But as AI becomes&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/SAP-article-iStock-480794780.jpg?resize=1200%2C600",
+      "published": "2026-04-22T10:05:06+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0624
+    },
+    {
+      "title": "Join Our Livestream: Musk v. Altman and the Future of OpenAI",
+      "url": "https://www.wired.com/story/livestream-musk-v-altman-trial",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "On May 8, we’re going live to answer your questions about the Musk v. Altman trial that could determine the fate of OpenAI.",
+      "image": "https://media.wired.com/photos/69e7bb297bc055b07603a318/master/pass/livestream_q&a_MuskVSAltman-Business.jpg",
+      "published": "2026-04-22T10:00:00+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2598
+    },
+    {
+      "title": "OpenAI’s ChatGPT ads just went cost-per-click, and the AI advertising war has its battle lines",
+      "url": "https://thenextweb.com/news/openai-chatgpt-cpc-ads-launch",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Summary: OpenAI has shifted ChatGPT’s advertising from CPM to cost-per-click pricing, with bids between $3 and $5, after the $60 CPM it charged at launch in February eroded to as low as $25 within ten weeks. The move puts OpenAI in direct competition with Google and Meta for performance ad budgets, while Perplexity and Anthropic [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/openai-chatgpt-cpc-ads-launch.avif",
+      "published": "2026-04-22T09:55:08+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.8174
+    },
+    {
+      "title": "Florida launches criminal investigation into OpenAI over ChatGPT’s alleged role in Florida State University shooting",
+      "url": "https://thenextweb.com/news/florida-criminal-investigation-openai-chatgpt",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Attorney General James Uthmeier said prosecutors reviewed chat logs showing ChatGPT advised the suspect on weapons, ammunition, and timing. The probe is the first criminal investigation into an AI company over an alleged role in a mass shooting in the US. Florida Attorney General James Uthmeier announced on Tuesday that the state’s Office of Statewide [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
+      "published": "2026-04-22T09:43:11+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.9116
+    },
+    {
+      "title": "A Japanese TV shopping company bet on Anthropic in 2021, and now it is quadrupling its fund",
+      "url": "https://thenextweb.com/news/japanet-vc-fund-anthropic-xai-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Summary: Japanet Holdings, the Japanese TV shopping company based in Nagasaki, has quadrupled its venture capital fund to $200 million after early investments through Pegasus Tech Ventures in Anthropic, xAI, SpaceX, and OpenAI generated extraordinary paper returns. Anthropic alone has appreciated from a $550 million valuation in 2021 to $380 billion in 2026. The expansion [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/japanet-vc-fund-anthropic-xai-ai.avif",
+      "published": "2026-04-22T09:33:45+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 11.2569
     },
     {
       "title": "The Pope’s Warnings About AI Were AI-Generated, a Detection Tool Claims",
@@ -28,10 +108,42 @@
       "image": "https://media.wired.com/photos/69e7e52ddbc7ae33ffd93e6a/master/pass/042126-ai-written-content.jpg",
       "published": "2026-04-22T09:30:00+00:00",
       "firstSeen": "2026-04-22T09:48:29.812722+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2806
+      "score": 2.2451
+    },
+    {
+      "title": "Meta is installing tracking software on employees’ computers to capture mouse movements and keystrokes for AI agent training",
+      "url": "https://thenextweb.com/news/meta-employee-keystrokes-mouse-movements-ai-training",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The move, disclosed in an internal memo seen by Reuters, is framed as a way to teach AI agents how humans navigate software. Critics say it is workplace surveillance under a different name. Meta is installing new tracking software on US-based employees’ work computers to capture mouse movements, clicks, keystrokes, and occasional screenshots, which will [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-04-22T09:28:47+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1045
+    },
+    {
+      "title": "Bond wants AI to cure your doomscrolling, then monetise your memories",
+      "url": "https://thenextweb.com/news/bond-social-media-ai-memories-doomscrolling",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Bond, a new “post-feed” social network founded by former Index Ventures principal Dino Becirovic and ex-Google DeepMind researcher Arthur Brazinskas, launched on 21 April with no infinite scroll and no algorithmic feed, instead using AI trained on users’ photos, videos, and audio to recommend real-world activities. The app enters a growing “healthier social [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/bond-social-media-ai-memories-doomscrolling.avif",
+      "published": "2026-04-22T09:24:50+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 9.3026
     },
     {
       "title": "Anthropic’s most dangerous AI model just fell into the wrong hands",
@@ -44,10 +156,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469782/STK269_ANTHROPIC_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-22T09:18:40+00:00",
       "firstSeen": "2026-04-22T09:48:29.812722+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3449
+      "score": 5.3096
+    },
+    {
+      "title": "Meta projected $16 billion in scam ad revenue. Now the lawsuits are piling up.",
+      "url": "https://thenextweb.com/news/meta-sued-scam-ads-facebook-instagram",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In short: Meta faces a convergence of lawsuits across the US, Australia, and the UK alleging the company knowingly profited from scam ads on Facebook and Instagram, with its own internal documents projecting that 10% of 2024 revenue, roughly $16 billion, came from fraudulent advertising. The cases span a $500 million pump-and-dump scheme, deepfake celebrity [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta-faces-lawsuits-across-the-US-Australia-and-UK-over-scam-ads.-Internal-documents-show-the-company-projected-10-of-2024-revenue-came-from-fraudulent-advertising.avif",
+      "published": "2026-04-22T09:14:55+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0977
+    },
+    {
+      "title": "OpenAI to commit up to $1.5B of its own capital to DeployCo, a joint venture with PE firms valued at $10B",
+      "url": "https://thenextweb.com/news/openai-deployco-pe-joint-venture-15-billion-enterprise",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The FT reports that OpenAI’s $500M initial equity stake, with an option for $1B more, will go into a Delaware LLC designed to accelerate AI adoption across PE portfolio companies. OpenAI is guaranteeing backers a 17.5% annual return. A close is expected in early May. OpenAI is set to commit up to $1.5 billion of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
+      "published": "2026-04-22T09:11:50+00:00",
+      "firstSeen": "2026-04-22T11:00:02.115440+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7963
     },
     {
       "title": "NeoCognition raises $40M seed to build AI agents that specialise through experience rather than pre-training",
@@ -60,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/NeoCognition.avif",
       "published": "2026-04-22T08:41:28+00:00",
       "firstSeen": "2026-04-22T09:00:01.939220+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1164
+      "score": 5.0816
     },
     {
       "title": "ATMOS Space Cargo raises €25.7M to build Europe’s first routine orbital return service",
@@ -76,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/04/ATMOS-Space-Cargo.avif",
       "published": "2026-04-22T08:13:01+00:00",
       "firstSeen": "2026-04-22T09:00:01.939220+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1024
+      "score": 2.0681
     },
     {
       "title": "Photon Releases Spectrum: An Open-Source TypeScript Framework that Deploys AI Agents Directly to iMessage, WhatsApp, and Telegram",
@@ -92,10 +236,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-62.png",
       "published": "2026-04-22T07:43:10+00:00",
       "firstSeen": "2026-04-22T08:00:01.961652+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.558
+      "score": 3.5242
     },
     {
       "title": "Unauthorized users gained access to Anthropic’s restricted Mythos AI model on launch day via a third-party contractor’s environment",
@@ -108,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-04-22T07:27:50+00:00",
       "firstSeen": "2026-04-22T09:48:29.812722+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7806
+      "score": 9.7471
     },
     {
       "title": "Quoting Bobby Holley",
@@ -124,10 +268,10 @@
       "image": "",
       "published": "2026-04-22T05:40:56+00:00",
       "firstSeen": "2026-04-22T06:00:01.519833+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3209
+      "score": 10.2889
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -140,10 +284,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.9728
+      "score": 10.9418
     },
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -156,11 +300,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.0132
+      "score": 17.9831
     },
     {
       "title": "Is Claude Code going to cost $100/month? Probably not - it's all very confusing",
@@ -173,10 +317,10 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-x.jpg",
       "published": "2026-04-22T02:07:34+00:00",
       "firstSeen": "2026-04-22T03:00:01.623910+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0786
+      "score": 10.0497
     },
     {
       "title": "Hugging Face Releases ml-intern: An Open-Source AI Agent that Automates the LLM Post-Training Workflow",
@@ -189,10 +333,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-13.png",
       "published": "2026-04-22T00:43:53+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.4249
+      "score": 5.397
     },
     {
       "title": "A Coding Implementation to Build a Conditional Bayesian Hyperparameter Optimization Pipeline with Hyperopt, TPE, and Early Stopping",
@@ -205,10 +349,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-61-1024x731.png",
       "published": "2026-04-22T00:04:34+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0594
+      "score": 6.0321
     },
     {
       "title": "Meta will record employees’ keystrokes and use it to train its AI models",
@@ -221,10 +365,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/zuckerberg-LA-trial-2026-GettyImages-2261841364.jpg?w=1024",
       "published": "2026-04-21T23:45:21+00:00",
       "firstSeen": "2026-04-21T23:49:42.255166+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.022
+      "score": 1.9949
     },
     {
       "title": "Unauthorized group has gained access to Anthropic’s exclusive cyber tool Mythos, report claims",
@@ -237,10 +381,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2153561878.jpg?w=1024",
       "published": "2026-04-21T23:26:45+00:00",
       "firstSeen": "2026-04-21T23:49:42.255166+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0149
+      "score": 4.988
     },
     {
       "title": "SpaceX is working with Cursor and has an option to buy the startup for $60B",
@@ -253,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2256968212.jpg?w=1024",
       "published": "2026-04-21T22:58:22+00:00",
       "firstSeen": "2026-04-21T23:49:42.255166+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0041
+      "score": 7.9776
     },
     {
       "title": "SpaceX cuts a deal to maybe buy Cursor for $60 billion",
@@ -269,10 +413,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKB355_SPACEX_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-04-21T22:45:37+00:00",
       "firstSeen": "2026-04-21T22:56:10.190277+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4693
+      "score": 5.4429
     },
     {
       "title": "LLMs+",
@@ -285,10 +429,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/llm-plusC-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7554
+      "score": 9.7304
     },
     {
       "title": "Agent orchestration",
@@ -301,10 +445,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/orchestrationC-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6554
+      "score": 8.6304
     },
     {
       "title": "Supercharged scams",
@@ -317,10 +461,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/superchargedC-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6554
+      "score": 6.6304
     },
     {
       "title": "World models",
@@ -333,10 +477,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/world-models2C-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0554
+      "score": 3.0304
     },
     {
       "title": "Humanoid data",
@@ -349,10 +493,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/humanoid-dataC2-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0554
+      "score": 3.0304
     },
     {
       "title": "Resistance",
@@ -368,7 +512,7 @@
       "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0554
+      "score": 3.0304
     },
     {
       "title": "China’s open-source bet",
@@ -381,10 +525,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/open-sourceC-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6554
+      "score": 2.6304
     },
     {
       "title": "10 Things That Matter in AI Right Now",
@@ -397,10 +541,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/MIT-TR_10-things-that-matter-in-AI-right-now_Social_1200x628.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9554
+      "score": 1.9304
     },
     {
       "title": "Weaponized deepfakes",
@@ -413,10 +557,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/weaponizedC-thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9554
+      "score": 1.9304
     },
     {
       "title": "Artificial scientists",
@@ -429,10 +573,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/artificial-scientistC_thumb.jpg?resize=1200%2C600",
       "published": "2026-04-21T20:45:00+00:00",
       "firstSeen": "2026-04-21T21:56:50.176808+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9554
+      "score": 1.9304
     },
     {
       "title": "Where's the raccoon with the ham radio? (ChatGPT Images 2.0)",
@@ -445,11 +589,11 @@
       "image": "https://static.simonwillison.net/static/2026/image_crop_1402x1122_w1402_q0.3.jpg",
       "published": "2026-04-21T20:32:24+00:00",
       "firstSeen": "2026-04-21T21:00:02.068430+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.3509
+      "score": 22.3261
     },
     {
       "title": "Apple’s John Ternus will run one of the world’s most powerful companies; the job is a minefield",
@@ -462,10 +606,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2271736494.jpg?resize=1200%2C800",
       "published": "2026-04-21T20:23:24+00:00",
       "firstSeen": "2026-04-21T21:00:02.068430+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0477
+      "score": 3.0231
     },
     {
       "title": "Apple is betting John Ternus will bring back Jobs-era decisiveness at the worst possible time to be behind on AI",
@@ -481,7 +625,7 @@
       "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8959
+      "score": 2.8716
     },
     {
       "title": "AI research lab NeoCognition lands $40M seed to build agents that learn like humans",
@@ -494,154 +638,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/DSC09615-3.jpg?resize=1200%2C796",
       "published": "2026-04-21T19:11:29+00:00",
       "firstSeen": "2026-04-21T19:35:12.426653+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0229
-    },
-    {
-      "title": "AI backlash is coming for elections",
-      "url": "https://www.theverge.com/policy/916210/ai-midterm-elections-data-centers-jobs",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Ask Americans how they feel about AI and most say they have concerns. Communities have mounted resistance to data center projects, stalling them across the US. On social media, anger at AI companies and executives is unrestrained - sometimes to the point of condoning violence. But look at the issues that most campaigns are focused [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25334821/STK466_ELECTION_2024_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
-      "published": "2026-04-21T19:00:05+00:00",
-      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9891
-    },
-    {
-      "title": "OpenAI’s updated image generator can now pull information from the web",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/916166/openai-chatgpt-images-2",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "OpenAI is rolling out the latest version of its AI-powered image generator with new \"thinking capabilities,\" allowing it to search the web to help it create multiple images from a single prompt. On Tuesday, OpenAI announced that ChatGPT Images 2.0 can now create more \"sophisticated\" images, with improvements to its ability to follow instructions, preserve [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/chatgpt-images-2-magazine.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-21T19:00:00+00:00",
-      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.889
-    },
-    {
-      "title": "OpenAI Beefs Up ChatGPT’s Image Generation Model",
-      "url": "https://www.wired.com/story/openai-beefs-up-chatgpts-image-generation-model",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The ChatGPT Images 2.0 model is here. Our testing shows it’s better at creating more detailed images and rendering text, but it still struggles with languages other than English.",
-      "image": "https://media.wired.com/photos/69e7aa26e71e88c4e31ef5d8/master/pass/GettyImages-2271722472.jpg",
-      "published": "2026-04-21T19:00:00+00:00",
-      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.319
-    },
-    {
-      "title": "ChatGPT’s new Images 2.0 model is surprisingly good at generating text",
-      "url": "https://techcrunch.com/2026/04/21/chatgpts-new-images-2-0-model-is-surprisingly-good-at-generating-text",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "ChatGPT Images 2.0, the newest image-generation model from OpenAI, shows just how much AI capabilities have evolved over the last few years.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/05/openAI-spiral-color-v2.jpg?resize=1200%2C675",
-      "published": "2026-04-21T19:00:00+00:00",
-      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.919
-    },
-    {
-      "title": "MacBook Neo Cheat Sheet: Everything to Know About Apple’s Budget Mac",
-      "url": "https://www.techrepublic.com/article/news-macbook-neo-cheat-sheet",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "MacBook Neo starts at $599 with an A18 Pro chip, a bright 13-inch display, and clear trade-offs in ports, battery claims, and premium features.\nThe post MacBook Neo Cheat Sheet: Everything to Know About Apple’s Budget Mac appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-04-21T18:53:01+00:00",
-      "firstSeen": "2026-04-21T19:35:12.426653+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8767
-    },
-    {
-      "title": "Sam Altman throws shade at Anthropic’s cyber model, Mythos: ‘fear-based marketing’",
-      "url": "https://techcrunch.com/2026/04/21/sam-altman-throws-shade-at-anthropics-cyber-model-mythos-fear-based-marketing",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "This week, during a podcast appearance, OpenAI CEO Sam Altman called out his competitor's new cybersecurity model, noting that the company was using fear to make its product sound more impressive than it actually is.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2208831528.jpg?resize=1200%2C800",
-      "published": "2026-04-21T18:51:52+00:00",
-      "firstSeen": "2026-04-21T19:00:01.702834+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 8.0163
-    },
-    {
-      "title": "Mozilla Used Anthropic’s Mythos to Find and Fix 271 Bugs in Firefox",
-      "url": "https://www.wired.com/story/mozilla-used-anthropics-mythos-to-find-271-bugs-in-firefox",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The Firefox team doesn’t think emerging AI capabilities will upend cybersecurity long term, but they warn that software developers are likely in for a rocky transition.",
-      "image": "https://media.wired.com/photos/69e6df06b405035df7b7ce2e/master/pass/security_GettyImages-2214075816.jpg",
-      "published": "2026-04-21T18:30:00+00:00",
-      "firstSeen": "2026-04-21T19:00:01.702834+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.909
-    },
-    {
-      "title": "Framework’s first eGPUs turn its laptop into a desktop PC",
-      "url": "https://www.theverge.com/gadgets/915328/framework-oculink-egpu-dev-kit-laptop-16",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Remember when Framework made the first laptop where you can easily upgrade its entire internal video card in three minutes flat? The company's getting into the external graphics game, too. As promised last August, you'll be able to turn the Framework Laptop 16's GPU modules into external ones instead. Or, you can plug in a [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/eGPU_Install_02.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-21T18:07:24+00:00",
-      "firstSeen": "2026-04-21T19:00:01.702834+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.8285
-    },
-    {
-      "title": "China Deploys Robot Dogs, Drones, and Humanoids to Run a ‘Full-Space’ Metro System",
-      "url": "https://www.techrepublic.com/article/news-china-robot-dogs-drones-apac",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "China’s Hefei metro is testing robot dogs, drones, and humanoids to inspect trains, patrol platforms, and assist passengers during busy travel periods.\nThe post China Deploys Robot Dogs, Drones, and Humanoids to Run a ‘Full-Space’ Metro System appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/china-robotics-1.jpg",
-      "published": "2026-04-21T18:03:03+00:00",
-      "firstSeen": "2026-04-21T19:00:01.702834+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8601
+      "score": 6.999
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.0646
+      "score": 3.0469
     },
     {
       "title": "Inside Universe 25",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3248
+      "score": 3.3123
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -686,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8251
+      "score": 1.825
     },
     {
       "title": "Dark Breath",
@@ -702,10 +702,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T11:00:02.115440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5436
+      "score": 1.5435
     },
     {
       "title": "Jim Ashworth-Beaumont on how a near-fatal accident made him a better clinician",
