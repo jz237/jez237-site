@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T03:00:01.623910+00:00",
+  "updatedAt": "2026-04-22T04:00:01.481690+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4388,6 +4388,10 @@
     "https://www.marktechpost.com/2026/04/21/a-coding-implementation-to-build-a-conditional-bayesian-hyperparameter-optimization-pipeline-with-hyperopt-tpe-and-early-stopping": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-61-1024x731.png",
       "checkedAt": "2026-04-22T01:00:01.656322+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/22/changes-to-github-copilot": {
+      "image": "",
+      "checkedAt": "2026-04-22T04:00:01.481690+00:00"
     }
   }
 }
