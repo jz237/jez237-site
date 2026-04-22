@@ -1,6 +1,6 @@
 {
   "date": "2026-04-22",
-  "updatedAt": "2026-04-22T22:00:01.721490+00:00",
+  "updatedAt": "2026-04-22T21:07:49.629820+00:00",
   "items": [
     {
       "title": "Alibaba Qwen Team Releases Qwen3.6-27B: A Dense Open-Weight Model Outperforming 397B MoE on Agentic Coding Benchmarks",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-12.39.13-PM-1-150x150.png",
       "published": "2026-04-22T19:40:51+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.8014
+      "score": 18.8266
     },
     {
       "title": "Mozilla patched 271 Firefox bugs found by Anthropic’s Mythos, and says the zero-day era has an expiration date",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/04/mozilla-firefox-claude-mythos-271-vulnerabilities.avif",
       "published": "2026-04-22T18:35:06+00:00",
       "firstSeen": "2026-04-22T19:37:17.550724+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.0504
+      "score": 18.0749
     },
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -47,11 +47,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.748
+      "score": 17.7641
     },
     {
       "title": "Google just launched its agentic enterprise play, and it runs from chip to inbox",
@@ -64,10 +64,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-next-ai-agents-agentic-era.avif",
       "published": "2026-04-22T14:26:39+00:00",
       "firstSeen": "2026-04-22T15:37:52.274706+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.3417
+      "score": 15.3635
     },
     {
       "title": "Pichai opens Cloud Next 2026 with $240B backlog, 750M Gemini users, and a plan to turn Search into an agent manager",
@@ -80,10 +80,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-next-pichai-agentic-era-scale.avif",
       "published": "2026-04-22T17:46:27+00:00",
       "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.9282
+      "score": 14.9521
     },
     {
       "title": "OpenAI’s ChatGPT ads just went cost-per-click, and the AI advertising war has its battle lines",
@@ -99,7 +99,7 @@
       "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5364
+      "score": 13.5556
     },
     {
       "title": "Florida launches criminal investigation into OpenAI over ChatGPT’s alleged role in Florida State University shooting",
@@ -115,7 +115,7 @@
       "lastSeen": "2026-04-22T21:00:01.148330+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6321
+      "score": 12.6512
     },
     {
       "title": "OpenAI now lets teams make custom bots that can do work on their own",
@@ -128,10 +128,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STK155_OPEN_AI_4_CVirginia_B.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742221417566%2C100%2C78.515557164868&amp%3Bw=1200",
       "published": "2026-04-22T20:09:02+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1049
+      "score": 12.1305
     },
     {
       "title": "Introducing workspace agents in ChatGPT",
@@ -144,10 +144,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5VOBXAok5WCGbcXubvIGSn/c6ec67af102f0537ff2a526fca45ff47/OAI_Blog_SEO_16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-04-22T10:00:00+00:00",
       "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9882
+      "score": 12.0075
     },
     {
       "title": "Google splits its next TPU in two, and the AI chip war just became a design philosophy fight",
@@ -160,11 +160,11 @@
       "image": "https://media.thenextweb.com/2026/04/google-tpu-8i.avif",
       "published": "2026-04-22T13:32:00+00:00",
       "firstSeen": "2026-04-22T15:37:52.274706+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.9195
+      "score": 11.9407
     },
     {
       "title": "A Japanese TV shopping company bet on Anthropic in 2021, and now it is quadrupling its fund",
@@ -180,7 +180,7 @@
       "lastSeen": "2026-04-22T19:37:17.550724+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.9787
+      "score": 10.9977
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -193,10 +193,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T22:00:01.721490+00:00",
+      "lastSeen": "2026-04-22T21:07:49.629820+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.6991
+      "score": 10.7157
     }
   ],
   "errors": []
