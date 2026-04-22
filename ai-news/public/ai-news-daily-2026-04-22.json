@@ -1,6 +1,6 @@
 {
   "date": "2026-04-22",
-  "updatedAt": "2026-04-22T10:00:01.232633+00:00",
+  "updatedAt": "2026-04-22T09:48:29.812722+00:00",
   "items": [
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -13,43 +13,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.0083
-    },
-    {
-      "title": "Florida launches criminal investigation into OpenAI over ChatGPT’s alleged role in Florida State University shooting",
-      "url": "https://thenextweb.com/news/florida-criminal-investigation-openai-chatgpt",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Attorney General James Uthmeier said prosecutors reviewed chat logs showing ChatGPT advised the suspect on weapons, ammunition, and timing. The probe is the first criminal investigation into an AI company over an alleged role in a mass shooting in the US. Florida Attorney General James Uthmeier announced on Tuesday that the state’s Office of Statewide [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
-      "published": "2026-04-22T09:43:11+00:00",
-      "firstSeen": "2026-04-22T10:00:01.232633+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.9415
-    },
-    {
-      "title": "A Japanese TV shopping company bet on Anthropic in 2021, and now it is quadrupling its fund",
-      "url": "https://thenextweb.com/news/japanet-vc-fund-anthropic-xai-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Summary: Japanet Holdings, the Japanese TV shopping company based in Nagasaki, has quadrupled its venture capital fund to $200 million after early investments through Pegasus Tech Ventures in Anthropic, xAI, SpaceX, and OpenAI generated extraordinary paper returns. Anthropic alone has appreciated from a $550 million valuation in 2021 to $380 billion in 2026. The expansion [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/japanet-vc-fund-anthropic-xai-ai.avif",
-      "published": "2026-04-22T09:33:45+00:00",
-      "firstSeen": "2026-04-22T10:00:01.232633+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 11.2867
+      "score": 18.0132
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -62,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.9677
+      "score": 10.9728
     },
     {
       "title": "Quoting Bobby Holley",
@@ -78,10 +46,10 @@
       "image": "",
       "published": "2026-04-22T05:40:56+00:00",
       "firstSeen": "2026-04-22T06:00:01.519833+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3157
+      "score": 10.3209
     },
     {
       "title": "Is Claude Code going to cost $100/month? Probably not - it's all very confusing",
@@ -94,10 +62,10 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-x.jpg",
       "published": "2026-04-22T02:07:34+00:00",
       "firstSeen": "2026-04-22T03:00:01.623910+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0739
+      "score": 10.0786
     },
     {
       "title": "Unauthorized users gained access to Anthropic’s restricted Mythos AI model on launch day via a third-party contractor’s environment",
@@ -109,27 +77,11 @@
       "summary": "A small group communicating via a private Discord channel accessed Claude Mythos Preview by guessing the model’s URL on the same day Anthropic announced Project Glasswing. Anthropic says it is investigating and has found no evidence of impact to its core systems. The breach highlights the risks of restricting access to frontier AI capabilities through [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-04-22T07:27:50+00:00",
-      "firstSeen": "2026-04-22T10:00:01.232633+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "firstSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7752
-    },
-    {
-      "title": "Bond wants AI to cure your doomscrolling, then monetise your memories",
-      "url": "https://thenextweb.com/news/bond-social-media-ai-memories-doomscrolling",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In short: Bond, a new “post-feed” social network founded by former Index Ventures principal Dino Becirovic and ex-Google DeepMind researcher Arthur Brazinskas, launched on 21 April with no infinite scroll and no algorithmic feed, instead using AI trained on users’ photos, videos, and audio to recommend real-world activities. The app enters a growing “healthier social [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/bond-social-media-ai-memories-doomscrolling.avif",
-      "published": "2026-04-22T09:24:50+00:00",
-      "firstSeen": "2026-04-22T10:00:01.232633+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 9.3322
+      "score": 9.7806
     },
     {
       "title": "A Coding Implementation to Build a Conditional Bayesian Hyperparameter Optimization Pipeline with Hyperopt, TPE, and Early Stopping",
@@ -142,26 +94,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-61-1024x731.png",
       "published": "2026-04-22T00:04:34+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.055
-    },
-    {
-      "title": "OpenAI to commit up to $1.5B of its own capital to DeployCo, a joint venture with PE firms valued at $10B",
-      "url": "https://thenextweb.com/news/openai-deployco-pe-joint-venture-15-billion-enterprise",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The FT reports that OpenAI’s $500M initial equity stake, with an option for $1B more, will go into a Delaware LLC designed to accelerate AI adoption across PE portfolio companies. OpenAI is guaranteeing backers a 17.5% annual return. A close is expected in early May. OpenAI is set to commit up to $1.5 billion of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
-      "published": "2026-04-22T09:11:50+00:00",
-      "firstSeen": "2026-04-22T10:00:01.232633+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8257
+      "score": 6.0594
     },
     {
       "title": "Hugging Face Releases ml-intern: An Open-Source AI Agent that Automates the LLM Post-Training Workflow",
@@ -174,10 +110,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-13.png",
       "published": "2026-04-22T00:43:53+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.4203
+      "score": 5.4249
     },
     {
       "title": "Anthropic’s most dangerous AI model just fell into the wrong hands",
@@ -189,11 +125,75 @@
       "summary": "Anthropic's Mythos AI model, a powerful cybersecurity tool that the company said could be dangerous in the wrong hands, has been accessed by a \"small group of unauthorized users,\" Bloomberg reports. An unnamed member of the group, identified only as \"a third-party contractor for Anthropic,\" told the publication that members of a private online forum [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469782/STK269_ANTHROPIC_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-22T09:18:40+00:00",
-      "firstSeen": "2026-04-22T10:00:01.232633+00:00",
-      "lastSeen": "2026-04-22T10:00:01.232633+00:00",
+      "firstSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3391
+      "score": 5.3449
+    },
+    {
+      "title": "NeoCognition raises $40M seed to build AI agents that specialise through experience rather than pre-training",
+      "url": "https://thenextweb.com/news/neocognition-40m-seed-self-learning-ai-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Palo Alto startup, spun out of Ohio State University by Yu Su, argues that current agents complete tasks as intended only half the time, a reliability gap it plans to close by giving agents a mechanism to build world models of the domains they operate in, learning on the job as a specialist rather [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/NeoCognition.avif",
+      "published": "2026-04-22T08:41:28+00:00",
+      "firstSeen": "2026-04-22T09:00:01.939220+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1164
+    },
+    {
+      "title": "Photon Releases Spectrum: An Open-Source TypeScript Framework that Deploys AI Agents Directly to iMessage, WhatsApp, and Telegram",
+      "url": "https://www.marktechpost.com/2026/04/22/photon-releases-spectrum-an-open-source-typescript-framework-that-deploys-ai-agents-directly-to-imessage-whatsapp-and-telegram",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "For all the progress made in AI agent development over the past few years, one fundamental problem has remained largely unsolved: most people never actually interact with agents. They live behind developer dashboards, inside specialized apps that users are asked to download, and within chat interfaces that the majority of the world&#8217;s population will never [&#8230;]\nThe post Photon Releases Spectrum: An Open-Source TypeScript Framework that Deploys AI Agents Directly to iMessage, WhatsApp, and Telegram appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-62.png",
+      "published": "2026-04-22T07:43:10+00:00",
+      "firstSeen": "2026-04-22T08:00:01.961652+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 3.558
+    },
+    {
+      "title": "On Solving the Multiple Variable Gapped Longest Common Subsequence Problem",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-22T09:48:34.861178+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.46
+    },
+    {
+      "title": "The Pope’s Warnings About AI Were AI-Generated, a Detection Tool Claims",
+      "url": "https://www.wired.com/story/pope-tweets-ai-generated-pangram-chrome-extension",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Pangram Labs’ updated Chrome extension puts warning labels on AI slop as you scroll your social feeds.",
+      "image": "https://media.wired.com/photos/69e7e52ddbc7ae33ffd93e6a/master/pass/042126-ai-written-content.jpg",
+      "published": "2026-04-22T09:30:00+00:00",
+      "firstSeen": "2026-04-22T09:48:29.812722+00:00",
+      "lastSeen": "2026-04-22T09:48:29.812722+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2806
     }
   ],
   "errors": []
