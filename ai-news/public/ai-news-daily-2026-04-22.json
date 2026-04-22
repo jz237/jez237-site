@@ -1,6 +1,6 @@
 {
   "date": "2026-04-22",
-  "updatedAt": "2026-04-22T05:00:01.265966+00:00",
+  "updatedAt": "2026-04-22T06:00:01.519833+00:00",
   "items": [
     {
       "title": "Changes to GitHub Copilot Individual plans",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-22T03:30:02+00:00",
       "firstSeen": "2026-04-22T03:37:53.749175+00:00",
-      "lastSeen": "2026-04-22T05:00:01.265966+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1451
+      "score": 18.1162
     },
     {
       "title": "OpenAI Open-Sources Euphony: A Browser-Based Visualization Tool for Harmony Chat Data and Codex Session Logs",
@@ -30,10 +30,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-2-6.png",
       "published": "2026-04-22T04:38:14+00:00",
       "firstSeen": "2026-04-22T05:00:01.265966+00:00",
-      "lastSeen": "2026-04-22T05:00:01.265966+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.109
+      "score": 11.0791
+    },
+    {
+      "title": "Quoting Bobby Holley",
+      "url": "https://simonwillison.net/2026/Apr/22/bobby-holley",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As part of our continued collaboration with Anthropic, we had the opportunity to apply an early version of Claude Mythos Preview to Firefox. This week’s release of Firefox 150 includes fixes for 271 vulnerabilities identified during this initial evaluation. [...]\nOur experience is a hopeful one for teams who shake off the vertigo and get to work. You may need to reprioritize everything else to bring relentless and single-minded focus to the task, but there is light at the end of the tunnel. We are extremely proud of how our team rose to meet this challenge, and others will too. Our work isn’t ",
+      "image": "",
+      "published": "2026-04-22T05:40:56+00:00",
+      "firstSeen": "2026-04-22T06:00:01.519833+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.4303
     },
     {
       "title": "Is Claude Code going to cost $100/month? Probably not - it's all very confusing",
@@ -46,10 +62,10 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-x.jpg",
       "published": "2026-04-22T02:07:34+00:00",
       "firstSeen": "2026-04-22T03:00:01.623910+00:00",
-      "lastSeen": "2026-04-22T05:00:01.265966+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.2056
+      "score": 10.1778
     },
     {
       "title": "A Coding Implementation to Build a Conditional Bayesian Hyperparameter Optimization Pipeline with Hyperopt, TPE, and Early Stopping",
@@ -62,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-61-1024x731.png",
       "published": "2026-04-22T00:04:34+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T05:00:01.265966+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1794
+      "score": 6.1531
     },
     {
       "title": "Hugging Face Releases ml-intern: An Open-Source AI Agent that Automates the LLM Post-Training Workflow",
@@ -78,10 +94,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-13.png",
       "published": "2026-04-22T00:43:53+00:00",
       "firstSeen": "2026-04-22T01:00:01.656322+00:00",
-      "lastSeen": "2026-04-22T05:00:01.265966+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.547
+      "score": 5.5202
     },
     {
       "title": "Curiosity-Critic: Cumulative Prediction Error Improvement as a Tractable Intrinsic Reward for World Model Training",
@@ -92,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-22T05:00:06.806180+00:00",
+      "published": "2026-04-22T06:00:07.279006+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-22T05:00:01.265966+00:00",
+      "lastSeen": "2026-04-22T06:00:01.519833+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.66
