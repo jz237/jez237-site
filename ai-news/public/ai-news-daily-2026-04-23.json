@@ -1,7 +1,24 @@
 {
   "date": "2026-04-23",
-  "updatedAt": "2026-04-23T10:43:38.991281+00:00",
+  "updatedAt": "2026-04-23T12:00:01.818380+00:00",
   "items": [
+    {
+      "title": "Microsoft launches ‘vibe working’ in Word, Excel, and PowerPoint",
+      "url": "https://www.theverge.com/news/917328/microsoft-agent-mode-vibe-working-office-word-excel-powerpoint",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Microsoft is rolling out a new Agent Mode inside Office apps like Word, Excel, and PowerPoint this week. Previously described by Microsoft as \"vibe working,\" the Agent Mode is a more powerful version of the Copilot experience in Office that Microsoft has been trying to sell to businesses. \"When we first shipped Copilot, foundation models [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/excelagentmode.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.477724691513%2C100%2C93.044550616974&amp%3Bw=1200",
+      "published": "2026-04-23T11:34:18+00:00",
+      "firstSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 18.347
+    },
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
       "url": "https://www.marktechpost.com/2026/04/22/xiaomi-releases-mimo-v2-5-pro-and-mimo-v2-5-matching-frontier-model-benchmarks-at-significantly-lower-token-cost",
@@ -13,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-8.34.28-PM-150x150.png",
       "published": "2026-04-23T03:46:24+00:00",
       "firstSeen": "2026-04-23T04:00:02.064662+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8768
+      "score": 14.8453
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -30,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-12.25.00-AM-1-150x150.png",
       "published": "2026-04-23T07:26:06+00:00",
       "firstSeen": "2026-04-23T08:00:01.267795+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.6239
+      "score": 9.589
     },
     {
       "title": "Belfast’s Cloudsmith raises $72M Series C to secure the AI-generated software supply chain",
@@ -46,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/04/Cloudsmith-team.avif",
       "published": "2026-04-23T09:18:23+00:00",
       "firstSeen": "2026-04-23T10:43:38.991281+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2074
+      "score": 5.1707
     },
     {
       "title": "Tesla raises 2026 capex to $25 billion",
@@ -62,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/04/Tesla.avif",
       "published": "2026-04-23T08:29:38+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4838
+      "score": 3.4479
     },
     {
       "title": "Microsoft commits A$25 billion to Australia by 2029",
@@ -78,10 +95,10 @@
       "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
       "published": "2026-04-23T07:58:25+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.469
+      "score": 3.4336
     },
     {
       "title": "India’s app market is booming — but global platforms are capturing most of the gains",
@@ -94,10 +111,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200%2C800",
       "published": "2026-04-23T04:38:45+00:00",
       "firstSeen": "2026-04-23T05:00:01.698238+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.219
+      "score": 3.1867
     },
     {
       "title": "Bain Capital seeks buyer for stake in Bridge Data Centres at $5 billion valuation",
@@ -110,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/04/Bain-Capital.avif",
       "published": "2026-04-23T07:47:19+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7638
+      "score": 2.7285
     },
     {
       "title": "Norway’s $2.2 trillion sovereign wealth fund posts a 1.9% loss in Q1 2026",
@@ -126,10 +143,26 @@
       "image": "https://media.thenextweb.com/2026/04/Trond-Grande.avif",
       "published": "2026-04-23T09:36:27+00:00",
       "firstSeen": "2026-04-23T10:43:38.991281+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4663
+      "score": 2.4293
+    },
+    {
+      "title": "Exploring Data Augmentation and Resampling Strategies for Transformer-Based Models to Address Class Imbalance in AI Scoring of Scientific Explanations in NGSS Classroom",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-23T12:00:28.557011+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "Elevating Austria: Google invests in its first data center in the Alps.",
@@ -142,26 +175,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Kronstorf_Data_Center_1.max-600x600.format-webp.webp",
       "published": "2026-04-23T09:00:00+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3785
-    },
-    {
-      "title": "Exploring Data Augmentation and Resampling Strategies for Transformer-Based Models to Address Class Imbalance in AI Scoring of Scientific Explanations in NGSS Classroom",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-23T10:43:45.059785+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.342
     },
     {
       "title": "BT, Nscale, and Nvidia announce UK sovereign AI partnership",
@@ -174,33 +191,11 @@
       "image": "https://media.thenextweb.com/2026/04/Nscale-partnership-with-BT-and-NVIDIA.avif",
       "published": "2026-04-23T08:47:19+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0923
-    },
-    {
-      "title": "Decade Energy raises €22M to build power infrastructure for electric truck depots across Europe",
-      "url": "https://thenextweb.com/news/decade-energy-22m-electric-trucks-europe",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The round is split between €16M from Eiffel Investment Group for project deployment and €6M led by SET Ventures for product and expansion, alongside existing investors Ananda Impact Ventures and Contrarian Ventures. The company targets 100MW+ of BESS projects across France, with Germany, the Nordics, and Poland to follow. Decade Energy, the Paris-based company building [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Decade-Energy.avif",
-      "published": "2026-04-23T07:34:37+00:00",
-      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0578
+      "score": 2.0561
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
