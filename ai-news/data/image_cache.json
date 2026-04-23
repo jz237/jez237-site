@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-22T22:01:48.741172+00:00",
+  "updatedAt": "2026-04-23T00:00:01.517787+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4528,6 +4528,14 @@
     "https://openai.com/index/making-chatgpt-better-for-clinicians": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/3K1xu2uaPseQ2Zk6CbuLgc/268ce2e65a514126104c1b6550db955b/SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-22T23:00:01.814585+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/22/how-to-design-a-production-grade-camel-multi-agent-system-with-planning-tool-use-self-consistency-and-critique-driven-refinement": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2025/06/a-lively-futuristic-scene-where-ai-inspi_TQfHRXyNSLeIVMuLcBHc4Q_C0VZ9Y7YSluKroilcFdxeQ.png",
+      "checkedAt": "2026-04-23T00:00:01.517787+00:00"
+    },
+    "https://techcrunch.com/2026/04/22/tesla-just-increased-its-capex-to-25b-heres-where-the-money-is-going": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/tesla-opitmus-Getty.jpg?resize=1200,800",
+      "checkedAt": "2026-04-23T00:00:01.517787+00:00"
     }
   }
 }
