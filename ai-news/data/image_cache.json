@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T18:00:01.761779+00:00",
+  "updatedAt": "2026-04-23T18:08:46.632172+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4584,6 +4584,14 @@
     "https://www.techrepublic.com/article/news-tiktok-second-finland-data-center-project-clover": {
       "image": "",
       "checkedAt": "2026-04-23T17:42:29.139246+00:00"
+    },
+    "https://openai.com/index/introducing-gpt-5-5": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2Bh47W4cA48dvG5FbDtNQH/5897109fb0de6fc3125c0c35c4f60001/Hero_Art_Card_16x9.jpg?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-23T18:08:46.632172+00:00"
+    },
+    "https://openai.com/index/gpt-5-5-bio-bug-bounty": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/3dibW4TSEOQpjByxBjnpr2/8cefbfd6ae3b56e540fbd8e54fabbc64/Frame__16_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-23T18:08:46.632172+00:00"
     }
   }
 }
