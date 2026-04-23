@@ -1,6 +1,6 @@
 {
   "date": "2026-04-23",
-  "updatedAt": "2026-04-23T16:05:04.426649+00:00",
+  "updatedAt": "2026-04-23T17:42:29.139246+00:00",
   "items": [
     {
       "title": "Microsoft launches ‘vibe working’ in Word, Excel, and PowerPoint",
@@ -13,11 +13,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/excelagentmode.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.477724691513%2C100%2C93.044550616974&amp%3Bw=1200",
       "published": "2026-04-23T11:34:18+00:00",
       "firstSeen": "2026-04-23T12:00:01.818380+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.2304
+      "score": 18.1876
     },
     {
       "title": "OpenAI’s new image model reasons before it draws",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/04/ChatGPT-Images-2.avif",
       "published": "2026-04-23T13:24:59+00:00",
       "firstSeen": "2026-04-23T14:08:10.960209+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.1714
+      "score": 16.1264
     },
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
@@ -51,7 +51,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.7514
+      "score": 14.7169
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -67,7 +67,23 @@
       "lastSeen": "2026-04-23T16:05:04.426649+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.4851
+      "score": 9.4469
+    },
+    {
+      "title": "The EU is about to tell Google that Gemini cannot have Android to itself",
+      "url": "https://thenextweb.com/news/google-eu-android-gemini-rivals-dma",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Commission is preparing to tell Google exactly how it must open Android to rival AI assistants, escalating a regulatory confrontation that will determine whether artificial intelligence becomes the next great platform lock-in or the first to be broken before it sets. EU watchdogs are poised to lay out what Alphabet must do to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/google-eu-android-gemini-rivals-dma.avif",
+      "published": "2026-04-23T16:21:18+00:00",
+      "firstSeen": "2026-04-23T17:42:29.139246+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2094
     },
     {
       "title": "Anthropic reportedly hits $1 trillion implied valuation on secondary markets",
@@ -80,10 +96,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-04-23T12:12:56+00:00",
       "firstSeen": "2026-04-23T14:00:01.696355+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.1379
+      "score": 8.0943
     },
     {
       "title": "You’re about to feel the AI money squeeze",
@@ -96,10 +112,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/vincentkilbride-theverge-ai-monetisation.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-23T13:45:00+00:00",
       "firstSeen": "2026-04-23T14:00:01.696355+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9909
+      "score": 5.9455
     },
     {
       "title": "Belfast’s Cloudsmith raises $72M Series C to secure the AI-generated software supply chain",
@@ -112,10 +128,10 @@
       "image": "https://media.thenextweb.com/2026/04/Cloudsmith-team.avif",
       "published": "2026-04-23T09:18:23+00:00",
       "firstSeen": "2026-04-23T10:43:38.991281+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0612
+      "score": 5.021
     },
     {
       "title": "Another customer of troubled startup Delve suffered a big security incident",
@@ -128,10 +144,42 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_1542.jpeg?w=1170",
       "published": "2026-04-23T14:00:00+00:00",
       "firstSeen": "2026-04-23T16:00:02.070177+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2281
+      "score": 4.1823
+    },
+    {
+      "title": "UK Biobank’s 500,000 genomes were listed for sale on Alibaba. The breach came from inside the system.",
+      "url": "https://thenextweb.com/news/uk-biobank-health-data-alibaba-breach",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Summary: Genetic, medical, and lifestyle data from all 500,000 UK Biobank volunteers was listed for sale on Alibaba after three Chinese research institutions with legitimate access violated their data-sharing agreements. The data was de-identified but includes genome sequences, hospital diagnoses, and biological measures that experts say can be re-identified. Alibaba removed the listings before any [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/uk-biobank-health-data-alibaba-breach.avif",
+      "published": "2026-04-23T16:39:23+00:00",
+      "firstSeen": "2026-04-23T17:42:29.139246+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5183
+    },
+    {
+      "title": "New Pentagon Plan Would Pour $54B Into Drones, AI Combat Systems",
+      "url": "https://www.techrepublic.com/article/news-pentagon-54-billion-ai-autonomous-warfare",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Pentagon is seeking about $54 billion for autonomous warfare and drone systems, a huge bet that is raising concerns about doctrine, training, and oversight.\nThe post New Pentagon Plan Would Pour $54B Into Drones, AI Combat Systems appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/04/ai-war.jpg",
+      "published": "2026-04-23T16:13:09+00:00",
+      "firstSeen": "2026-04-23T17:42:29.139246+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.5054
     },
     {
       "title": "Tesla raises 2026 capex to $25 billion",
@@ -144,59 +192,17 @@
       "image": "https://media.thenextweb.com/2026/04/Tesla.avif",
       "published": "2026-04-23T08:29:38+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
+      "lastSeen": "2026-04-23T17:42:29.139246+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3409
-    },
-    {
-      "title": "Microsoft commits A$25 billion to Australia by 2029",
-      "url": "https://thenextweb.com/news/microsoft-a25-billion-australia-ai-investment",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The investment is Microsoft’s largest-ever in Australia and builds on an A$5 billion commitment from October 2023. It includes expanding Azure AI supercomputing capacity by more than 140%, extending the Microsoft-ASD Cyber-Shield to additional government agencies, and training three million Australians in AI skills by 2028. Microsoft has announced A$25 billion (approximately USD 18 billion) [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
-      "published": "2026-04-23T07:58:25+00:00",
-      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3281
-    },
-    {
-      "title": "Quoting Maggie Appleton",
-      "url": "https://simonwillison.net/2026/Apr/23/maggie-appleton",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "[...] if you ever needed another reason to learn in public by digital gardening or podcasting or streaming or whathaveyou, add on that people will assume you’re more competent than you are. This will get you invites to very cool exclusive events filled with high-achieving, interesting people, even though you have no right to be there. A+ side benefit.\n&mdash; Maggie Appleton, Gathering Structures (via)\n\n    Tags: blogging, maggie-appleton",
-      "image": "",
-      "published": "2026-04-23T13:35:37+00:00",
-      "firstSeen": "2026-04-23T14:00:01.696355+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3165
-    },
-    {
-      "title": "Netflix authorises $25 billion share buyback after stock falls 10% on Q1 earnings",
-      "url": "https://thenextweb.com/news/netflix-25-billion-share-buyback",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The $25B programme has no expiration date and sits on top of a December 2024 authorisation that still had $6.8B remaining. Netflix’s board approved it on 22 April. Shares rose 1.5% in premarket trading on the news, after falling as much as 10.8% following the Q1 report on 16 April. Netflix’s board authorised an additional [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Netflix.avif",
-      "published": "2026-04-23T12:02:45+00:00",
-      "firstSeen": "2026-04-23T12:07:02.771158+00:00",
-      "lastSeen": "2026-04-23T16:05:04.426649+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1333
+      "score": 3.3016
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
