@@ -1,6 +1,6 @@
 {
   "date": "2026-04-23",
-  "updatedAt": "2026-04-23T09:00:01.633915+00:00",
+  "updatedAt": "2026-04-23T09:01:05.239461+00:00",
   "items": [
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-8.34.28-PM-150x150.png",
       "published": "2026-04-23T03:46:24+00:00",
       "firstSeen": "2026-04-23T04:00:02.064662+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.9213
+      "score": 14.9209
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-12.25.00-AM-1-150x150.png",
       "published": "2026-04-23T07:26:06+00:00",
       "firstSeen": "2026-04-23T08:00:01.267795+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.6732
+      "score": 9.6727
     },
     {
       "title": "Microsoft commits A$25 billion to Australia by 2029",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
       "published": "2026-04-23T07:58:25+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5191
+      "score": 3.5185
     },
     {
       "title": "India’s app market is booming — but global platforms are capturing most of the gains",
@@ -62,10 +62,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200%2C800",
       "published": "2026-04-23T04:38:45+00:00",
       "firstSeen": "2026-04-23T05:00:01.698238+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2647
+      "score": 3.2642
     },
     {
       "title": "Bain Capital seeks buyer for stake in Bridge Data Centres at $5 billion valuation",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/04/Bain-Capital.avif",
       "published": "2026-04-23T07:47:19+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8136
+      "score": 2.8131
     },
     {
       "title": "Prudence Djagba, Kevin Haudek, Clare G. C. Franovic, Leonora Kaldaras",
@@ -92,9 +92,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-23T09:00:07.326895+00:00",
+      "published": "2026-04-23T09:01:09.443277+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/04/Decade-Energy.avif",
       "published": "2026-04-23T07:34:37+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1074
+      "score": 2.1068
     },
     {
       "title": "French satellite startup Univity raises €27M Series A",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/04/Univity.avif",
       "published": "2026-04-23T07:23:02+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1017
+      "score": 2.1012
     }
   ],
   "errors": []
