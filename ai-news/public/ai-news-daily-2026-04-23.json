@@ -1,6 +1,6 @@
 {
   "date": "2026-04-23",
-  "updatedAt": "2026-04-23T09:01:05.239461+00:00",
+  "updatedAt": "2026-04-23T11:00:01.740720+00:00",
   "items": [
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-8.34.28-PM-150x150.png",
       "published": "2026-04-23T03:46:24+00:00",
       "firstSeen": "2026-04-23T04:00:02.064662+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.9209
+      "score": 14.8699
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -30,10 +30,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-12.25.00-AM-1-150x150.png",
       "published": "2026-04-23T07:26:06+00:00",
       "firstSeen": "2026-04-23T08:00:01.267795+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.6727
+      "score": 9.6163
+    },
+    {
+      "title": "Belfast’s Cloudsmith raises $72M Series C to secure the AI-generated software supply chain",
+      "url": "https://thenextweb.com/news/cloudsmith-72m-series-c-tcv-ai-software-supply-chain",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "TCV led the Series B one year ago and now doubles down on the Series C. Insight Partners also returns. The thesis: AI coding agents are generating software so fast and at such volume that human code review is no longer sufficient, and enterprise artifact management must function as the primary control and security layer. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Cloudsmith-team.avif",
+      "published": "2026-04-23T09:18:23+00:00",
+      "firstSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1994
+    },
+    {
+      "title": "Tesla raises 2026 capex to $25 billion",
+      "url": "https://thenextweb.com/news/tesla-25-billion-capex-2026-optimus-robotaxi-ai-chip-fab",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The company will go negative on free cash flow for the rest of 2026, CFO Vaibhav Taneja confirmed. But Q1 delivered an unexpected $1.4 billion positive free cash flow beat, and Tesla ended the quarter with $44.7 billion in cash. The capex uplift from $20B to $25B is a $5 billion revision to guidance issued [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Tesla.avif",
+      "published": "2026-04-23T08:29:38+00:00",
+      "firstSeen": "2026-04-23T10:00:01.761358+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.476
     },
     {
       "title": "Microsoft commits A$25 billion to Australia by 2029",
@@ -46,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
       "published": "2026-04-23T07:58:25+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5185
+      "score": 3.4613
     },
     {
       "title": "India’s app market is booming — but global platforms are capturing most of the gains",
@@ -62,10 +94,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200%2C800",
       "published": "2026-04-23T04:38:45+00:00",
       "firstSeen": "2026-04-23T05:00:01.698238+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2642
+      "score": 3.212
     },
     {
       "title": "Bain Capital seeks buyer for stake in Bridge Data Centres at $5 billion valuation",
@@ -78,13 +110,45 @@
       "image": "https://media.thenextweb.com/2026/04/Bain-Capital.avif",
       "published": "2026-04-23T07:47:19+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8131
+      "score": 2.7561
     },
     {
-      "title": "Prudence Djagba, Kevin Haudek, Clare G. C. Franovic, Leonora Kaldaras",
+      "title": "Norway’s $2.2 trillion sovereign wealth fund posts a 1.9% loss in Q1 2026",
+      "url": "https://thenextweb.com/news/norway-sovereign-wealth-fund-1-9-percent-loss",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The world’s largest sovereign wealth fund lost NOK636 billion ($68 billion) in investment returns in the first quarter, driven by the equity slide among large US technology companies. The S&amp;P 500 posted its deepest quarterly decline since 2022. The fund marginally outperformed its benchmark. Norges Bank Investment Management (NBIM), which manages Norway’s Government Pension Fund [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Trond-Grande.avif",
+      "published": "2026-04-23T09:36:27+00:00",
+      "firstSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4582
+    },
+    {
+      "title": "Elevating Austria: Google invests in its first data center in the Alps.",
+      "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/google-data-center-austria",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Aerial image of the data center",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Kronstorf_Data_Center_1.max-600x600.format-webp.webp",
+      "published": "2026-04-23T09:00:00+00:00",
+      "firstSeen": "2026-04-23T10:00:01.761358+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3705
+    },
+    {
+      "title": "Exploring Data Augmentation and Resampling Strategies for Transformer-Based Models to Address Class Imbalance in AI Scoring of Scientific Explanations in NGSS Classroom",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -92,9 +156,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-23T09:01:09.443277+00:00",
+      "published": "2026-04-23T11:00:27.058962+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -110,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/04/Nscale-partnership-with-BT-and-NVIDIA.avif",
       "published": "2026-04-23T08:47:19+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T10:00:01.761358+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1136
+      "score": 2.0844
     },
     {
       "title": "Decade Energy raises €22M to build power infrastructure for electric truck depots across Europe",
@@ -126,26 +190,10 @@
       "image": "https://media.thenextweb.com/2026/04/Decade-Energy.avif",
       "published": "2026-04-23T07:34:37+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
+      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1068
-    },
-    {
-      "title": "French satellite startup Univity raises €27M Series A",
-      "url": "https://thenextweb.com/news/french-satellite-startup-univity-raises-e27m-series-a",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Founded in 2022 and formerly called Constellation Technologies &amp; Operations, Univity is targeting a constellation of at least 1,600 satellites in very low Earth orbit, using telecom operators’ own 5G mmWave spectrum rather than competing with them. The Series A takes total financing to €68M across equity, debt, subsidies and contract revenues. Univity, the Paris-based [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Univity.avif",
-      "published": "2026-04-23T07:23:02+00:00",
-      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T09:01:05.239461+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1012
+      "score": 2.0502
     }
   ],
   "errors": []
