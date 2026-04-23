@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T10:43:38.991281+00:00",
+  "updatedAt": "2026-04-23T12:00:01.818380+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4540,6 +4540,10 @@
     "https://techcrunch.com/2026/04/22/indias-app-market-is-booming-but-global-platforms-are-capturing-most-of-the-gains": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200,800",
       "checkedAt": "2026-04-23T05:00:01.698238+00:00"
+    },
+    "https://www.theverge.com/news/917328/microsoft-agent-mode-vibe-working-office-word-excel-powerpoint": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/excelagentmode.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.477724691513%2C100%2C93.044550616974&amp;w=1200",
+      "checkedAt": "2026-04-23T12:00:01.818380+00:00"
     }
   }
 }
