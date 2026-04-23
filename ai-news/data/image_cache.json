@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T21:00:01.711154+00:00",
+  "updatedAt": "2026-04-23T22:00:01.222056+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4652,6 +4652,14 @@
     "https://techcrunch.com/2026/04/23/meet-noscroll-an-ai-bot-that-does-your-doomscrolling-for-you": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/doomscrolling-GettyImages-2195349954.jpg?resize=1200,800",
       "checkedAt": "2026-04-23T21:00:01.711154+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/23/a-coding-tutorial-on-openmythos-on-recurrent-depth-transformers-with-depth-extrapolation-adaptive-computation-and-mixture-of-experts-routing": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-15.png",
+      "checkedAt": "2026-04-23T22:00:01.222056+00:00"
+    },
+    "https://techcrunch.com/2026/04/23/bret-taylors-sierra-buys-yc-backed-ai-startup-fragment": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/10/AP22166762615783.jpg?resize=1200,800",
+      "checkedAt": "2026-04-23T22:00:01.222056+00:00"
     }
   }
 }
