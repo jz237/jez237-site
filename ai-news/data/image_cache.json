@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T14:00:01.696355+00:00",
+  "updatedAt": "2026-04-23T14:08:10.960209+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4560,6 +4560,14 @@
     "https://techcrunch.com/2026/04/23/ai-galaxy-hunters-are-adding-to-the-global-gpu-crunch": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/z14-galaxy.jpg?resize=1200,500",
       "checkedAt": "2026-04-23T14:00:01.696355+00:00"
+    },
+    "https://techcrunch.com/2026/04/23/grab-a-ticket-today-the-first-strictlyvc-of-2026-kicks-off-in-just-a-week-in-san-francisco": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/12/Disrupt-2024-StrictlyVC-Session.jpg?resize=1200,800",
+      "checkedAt": "2026-04-23T14:08:10.960209+00:00"
+    },
+    "https://www.theverge.com/podcast/917029/software-brain-ai-backlash-databases-automation": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_DCD_Software_Brain.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-23T14:08:10.960209+00:00"
     }
   }
 }
