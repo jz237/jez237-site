@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T21:58:59.429091+00:00",
+  "updatedAt": "2026-04-23T23:00:01.710007+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4660,6 +4660,14 @@
     "https://techcrunch.com/2026/04/23/bret-taylors-sierra-buys-yc-backed-ai-startup-fragment": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/10/AP22166762615783.jpg?resize=1200,800",
       "checkedAt": "2026-04-23T21:58:59.429091+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/23/mend-io-releases-ai-security-governance-framework-covering-asset-inventory-risk-tiering-ai-supply-chain-security-and-maturity-model": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-16-1024x731.png",
+      "checkedAt": "2026-04-23T23:00:01.710007+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/917871/anthropic-claude-personal-app-connectors": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/anthropic-claude-personal-apps.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-04-23T23:00:01.710007+00:00"
     }
   }
 }
