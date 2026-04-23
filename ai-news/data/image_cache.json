@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T19:38:28.523148+00:00",
+  "updatedAt": "2026-04-23T21:00:01.711154+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4644,6 +4644,14 @@
     "https://openai.com/academy/codex-how-to-start": {
       "image": "",
       "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://www.theverge.com/tech/917690/meta-is-laying-off-10-percent-of-its-staff": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2235448475.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-04-23T21:00:01.711154+00:00"
+    },
+    "https://techcrunch.com/2026/04/23/meet-noscroll-an-ai-bot-that-does-your-doomscrolling-for-you": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/doomscrolling-GettyImages-2195349954.jpg?resize=1200,800",
+      "checkedAt": "2026-04-23T21:00:01.711154+00:00"
     }
   }
 }
