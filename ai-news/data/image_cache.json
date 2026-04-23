@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T19:00:01.283181+00:00",
+  "updatedAt": "2026-04-23T19:38:28.523148+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4612,6 +4612,38 @@
     "https://openai.com/index/gpt-5-5-system-card": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4qBEDs71GX4NIuRrjXfZpA/8e5c587702a354616d4d99b1489a49b1/System_Card_Card_SEO_16x9.jpg?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-23T19:00:01.283181+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-retirement-buyouts-ai-workforce-shift": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/codex-settings": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/working-with-codex": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/what-is-codex": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/codex-automations": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/codex-plugins-and-skills": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/top-10-use-cases-codex-for-work": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
+    },
+    "https://openai.com/academy/codex-how-to-start": {
+      "image": "",
+      "checkedAt": "2026-04-23T19:38:28.523148+00:00"
     }
   }
 }
