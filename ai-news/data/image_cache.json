@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T16:00:02.070177+00:00",
+  "updatedAt": "2026-04-23T17:00:01.644689+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4572,6 +4572,14 @@
     "https://techcrunch.com/2026/04/23/another-customer-of-troubled-startup-delve-suffered-a-big-security-incident": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_1542.jpeg?w=1170",
       "checkedAt": "2026-04-23T16:00:02.070177+00:00"
+    },
+    "https://www.techrepublic.com/article/news-pentagon-54-billion-ai-autonomous-warfare": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/ai-war.jpg",
+      "checkedAt": "2026-04-23T17:00:01.644689+00:00"
+    },
+    "https://techcrunch.com/2026/04/23/era-computer-raises-11m-to-build-a-software-platform-for-ai-gadgets": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/IMG_2200.jpeg?resize=1200,800",
+      "checkedAt": "2026-04-23T17:00:01.644689+00:00"
     }
   }
 }
