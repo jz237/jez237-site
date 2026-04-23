@@ -1,6 +1,6 @@
 {
   "date": "2026-04-23",
-  "updatedAt": "2026-04-23T08:00:01.267795+00:00",
+  "updatedAt": "2026-04-23T09:00:01.633915+00:00",
   "items": [
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-8.34.28-PM-150x150.png",
       "published": "2026-04-23T03:46:24+00:00",
       "firstSeen": "2026-04-23T04:00:02.064662+00:00",
-      "lastSeen": "2026-04-23T08:00:01.267795+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.9481
+      "score": 14.9213
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -30,10 +30,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-12.25.00-AM-1-150x150.png",
       "published": "2026-04-23T07:26:06+00:00",
       "firstSeen": "2026-04-23T08:00:01.267795+00:00",
-      "lastSeen": "2026-04-23T08:00:01.267795+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.7029
+      "score": 9.6732
+    },
+    {
+      "title": "Microsoft commits A$25 billion to Australia by 2029",
+      "url": "https://thenextweb.com/news/microsoft-a25-billion-australia-ai-investment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The investment is Microsoft’s largest-ever in Australia and builds on an A$5 billion commitment from October 2023. It includes expanding Azure AI supercomputing capacity by more than 140%, extending the Microsoft-ASD Cyber-Shield to additional government agencies, and training three million Australians in AI skills by 2028. Microsoft has announced A$25 billion (approximately USD 18 billion) [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
+      "published": "2026-04-23T07:58:25+00:00",
+      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.5191
     },
     {
       "title": "India’s app market is booming — but global platforms are capturing most of the gains",
@@ -46,10 +62,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200%2C800",
       "published": "2026-04-23T04:38:45+00:00",
       "firstSeen": "2026-04-23T05:00:01.698238+00:00",
-      "lastSeen": "2026-04-23T08:00:01.267795+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2921
+      "score": 3.2647
+    },
+    {
+      "title": "Bain Capital seeks buyer for stake in Bridge Data Centres at $5 billion valuation",
+      "url": "https://thenextweb.com/news/bain-capital-bridge-data-centres-5-billion-stake-sale",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sources tell Reuters that Bain is looking to sell a stake in BDC, Singapore-headquartered, with nine data centres across Malaysia, Thailand, and India, at a $5 billion valuation. Citi and JPMorgan are running the process. ByteDance is the anchor tenant. No deal has been agreed and talks are preliminary. Bain Capital is seeking a buyer [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Bain-Capital.avif",
+      "published": "2026-04-23T07:47:19+00:00",
+      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8136
     },
     {
       "title": "Prudence Djagba, Kevin Haudek, Clare G. C. Franovic, Leonora Kaldaras",
@@ -60,12 +92,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-23T08:00:15.755058+00:00",
+      "published": "2026-04-23T09:00:07.326895+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-23T08:00:01.267795+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Decade Energy raises €22M to build power infrastructure for electric truck depots across Europe",
+      "url": "https://thenextweb.com/news/decade-energy-22m-electric-trucks-europe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The round is split between €16M from Eiffel Investment Group for project deployment and €6M led by SET Ventures for product and expansion, alongside existing investors Ananda Impact Ventures and Contrarian Ventures. The company targets 100MW+ of BESS projects across France, with Germany, the Nordics, and Poland to follow. Decade Energy, the Paris-based company building [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Decade-Energy.avif",
+      "published": "2026-04-23T07:34:37+00:00",
+      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1074
+    },
+    {
+      "title": "French satellite startup Univity raises €27M Series A",
+      "url": "https://thenextweb.com/news/french-satellite-startup-univity-raises-e27m-series-a",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Founded in 2022 and formerly called Constellation Technologies &amp; Operations, Univity is targeting a constellation of at least 1,600 satellites in very low Earth orbit, using telecom operators’ own 5G mmWave spectrum rather than competing with them. The Series A takes total financing to €68M across equity, debt, subsidies and contract revenues. Univity, the Paris-based [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Univity.avif",
+      "published": "2026-04-23T07:23:02+00:00",
+      "firstSeen": "2026-04-23T09:00:01.633915+00:00",
+      "lastSeen": "2026-04-23T09:00:01.633915+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1017
     }
   ],
   "errors": []
