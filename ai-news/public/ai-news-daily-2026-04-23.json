@@ -1,6 +1,6 @@
 {
   "date": "2026-04-23",
-  "updatedAt": "2026-04-23T11:00:01.740720+00:00",
+  "updatedAt": "2026-04-23T10:43:38.991281+00:00",
   "items": [
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8699
+      "score": 14.8768
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-04-23T11:00:01.740720+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.6163
+      "score": 9.6239
     },
     {
       "title": "Belfast’s Cloudsmith raises $72M Series C to secure the AI-generated software supply chain",
@@ -45,11 +45,11 @@
       "summary": "TCV led the Series B one year ago and now doubles down on the Series C. Insight Partners also returns. The thesis: AI coding agents are generating software so fast and at such volume that human code review is no longer sufficient, and enterprise artifact management must function as the primary control and security layer. [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/Cloudsmith-team.avif",
       "published": "2026-04-23T09:18:23+00:00",
-      "firstSeen": "2026-04-23T11:00:01.740720+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "firstSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1994
+      "score": 5.2074
     },
     {
       "title": "Tesla raises 2026 capex to $25 billion",
@@ -62,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/04/Tesla.avif",
       "published": "2026-04-23T08:29:38+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.476
+      "score": 3.4838
     },
     {
       "title": "Microsoft commits A$25 billion to Australia by 2029",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
       "published": "2026-04-23T07:58:25+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4613
+      "score": 3.469
     },
     {
       "title": "India’s app market is booming — but global platforms are capturing most of the gains",
@@ -94,10 +94,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200%2C800",
       "published": "2026-04-23T04:38:45+00:00",
       "firstSeen": "2026-04-23T05:00:01.698238+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.212
+      "score": 3.219
     },
     {
       "title": "Bain Capital seeks buyer for stake in Bridge Data Centres at $5 billion valuation",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/04/Bain-Capital.avif",
       "published": "2026-04-23T07:47:19+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7561
+      "score": 2.7638
     },
     {
       "title": "Norway’s $2.2 trillion sovereign wealth fund posts a 1.9% loss in Q1 2026",
@@ -125,11 +125,11 @@
       "summary": "The world’s largest sovereign wealth fund lost NOK636 billion ($68 billion) in investment returns in the first quarter, driven by the equity slide among large US technology companies. The S&amp;P 500 posted its deepest quarterly decline since 2022. The fund marginally outperformed its benchmark. Norges Bank Investment Management (NBIM), which manages Norway’s Government Pension Fund [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/Trond-Grande.avif",
       "published": "2026-04-23T09:36:27+00:00",
-      "firstSeen": "2026-04-23T11:00:01.740720+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "firstSeen": "2026-04-23T10:43:38.991281+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4582
+      "score": 2.4663
     },
     {
       "title": "Elevating Austria: Google invests in its first data center in the Alps.",
@@ -142,10 +142,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Kronstorf_Data_Center_1.max-600x600.format-webp.webp",
       "published": "2026-04-23T09:00:00+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3705
+      "score": 2.3785
     },
     {
       "title": "Exploring Data Augmentation and Resampling Strategies for Transformer-Based Models to Address Class Imbalance in AI Scoring of Scientific Explanations in NGSS Classroom",
@@ -156,9 +156,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-23T11:00:27.058962+00:00",
+      "published": "2026-04-23T10:43:45.059785+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -174,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/04/Nscale-partnership-with-BT-and-NVIDIA.avif",
       "published": "2026-04-23T08:47:19+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0844
+      "score": 2.0923
     },
     {
       "title": "Decade Energy raises €22M to build power infrastructure for electric truck depots across Europe",
@@ -190,11 +190,17 @@
       "image": "https://media.thenextweb.com/2026/04/Decade-Energy.avif",
       "published": "2026-04-23T07:34:37+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T11:00:01.740720+00:00",
+      "lastSeen": "2026-04-23T10:43:38.991281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0502
+      "score": 2.0578
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
