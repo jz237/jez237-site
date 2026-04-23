@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T12:00:01.818380+00:00",
+  "updatedAt": "2026-04-23T13:00:01.532981+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4544,6 +4544,10 @@
     "https://www.theverge.com/news/917328/microsoft-agent-mode-vibe-working-office-word-excel-powerpoint": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/excelagentmode.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.477724691513%2C100%2C93.044550616974&amp;w=1200",
       "checkedAt": "2026-04-23T12:00:01.818380+00:00"
+    },
+    "https://techcrunch.com/2026/04/23/beehiiv-rolls-out-new-creator-tools-including-webinars-and-customizable-paywalls": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/06/GettyImages-155283357.jpg?resize=1200,808",
+      "checkedAt": "2026-04-23T13:00:01.532981+00:00"
     }
   }
 }
