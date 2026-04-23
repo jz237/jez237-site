@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-23T12:07:02.771158+00:00",
+  "updatedAt": "2026-04-23T14:00:01.696355+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4548,6 +4548,18 @@
     "https://techcrunch.com/2026/04/23/beehiiv-rolls-out-new-creator-tools-including-webinars-and-customizable-paywalls": {
       "image": "https://techcrunch.com/wp-content/uploads/2018/06/GettyImages-155283357.jpg?resize=1200,808",
       "checkedAt": "2026-04-23T13:00:01.532981+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/917380/ai-monetization-anthropic-openai-token-economics-revenue": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/vincentkilbride-theverge-ai-monetisation.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-23T14:00:01.696355+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/23/maggie-appleton": {
+      "image": "",
+      "checkedAt": "2026-04-23T14:00:01.696355+00:00"
+    },
+    "https://techcrunch.com/2026/04/23/ai-galaxy-hunters-are-adding-to-the-global-gpu-crunch": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/z14-galaxy.jpg?resize=1200,500",
+      "checkedAt": "2026-04-23T14:00:01.696355+00:00"
     }
   }
 }
