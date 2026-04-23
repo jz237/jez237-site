@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-23T12:00:01.818380+00:00",
+  "updatedAt": "2026-04-23T13:00:01.532981+00:00",
   "items": [
     {
-      "title": "Exploring Data Augmentation and Resampling Strategies for Transformer-Based Models to Address Class Imbalance in AI Scoring of Scientific Explanations in NGSS Classroom",
+      "title": "Prudence Djagba, Kevin Haudek, Clare G. C. Franovic, Leonora Kaldaras",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-23T12:00:28.557011+00:00",
+      "published": "2026-04-23T13:00:17.555485+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Netflix authorises $25 billion share buyback after stock falls 10% on Q1 earnings",
+      "url": "https://thenextweb.com/news/netflix-25-billion-share-buyback",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The $25B programme has no expiration date and sits on top of a December 2024 authorisation that still had $6.8B remaining. Netflix’s board approved it on 22 April. Shares rose 1.5% in premarket trading on the news, after falling as much as 10.8% following the Q1 report on 16 April. Netflix’s board authorised an additional [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Netflix.avif",
+      "published": "2026-04-23T12:02:45+00:00",
+      "firstSeen": "2026-04-23T13:00:01.532981+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2212
+    },
+    {
+      "title": "Beehiiv rolls out new creator tools, including webinars and customizable paywalls",
+      "url": "https://techcrunch.com/2026/04/23/beehiiv-rolls-out-new-creator-tools-including-webinars-and-customizable-paywalls",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Beehiiv is clearly done being just a newsletter platform based on today's launch of a new webinar feature, customizable paywalls, and more.",
+      "image": "https://techcrunch.com/wp-content/uploads/2018/06/GettyImages-155283357.jpg?resize=1200%2C808",
+      "published": "2026-04-23T12:00:00+00:00",
+      "firstSeen": "2026-04-23T13:00:01.532981+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9599
     },
     {
       "title": "Microsoft launches ‘vibe working’ in Word, Excel, and PowerPoint",
@@ -28,11 +60,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/excelagentmode.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.477724691513%2C100%2C93.044550616974&amp%3Bw=1200",
       "published": "2026-04-23T11:34:18+00:00",
       "firstSeen": "2026-04-23T12:00:01.818380+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.347
+      "score": 18.3172
     },
     {
       "title": "Norway’s $2.2 trillion sovereign wealth fund posts a 1.9% loss in Q1 2026",
@@ -45,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/04/Trond-Grande.avif",
       "published": "2026-04-23T09:36:27+00:00",
       "firstSeen": "2026-04-23T10:43:38.991281+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4293
+      "score": 2.4011
     },
     {
       "title": "Belfast’s Cloudsmith raises $72M Series C to secure the AI-generated software supply chain",
@@ -61,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/Cloudsmith-team.avif",
       "published": "2026-04-23T09:18:23+00:00",
       "firstSeen": "2026-04-23T10:43:38.991281+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1707
+      "score": 5.1427
     },
     {
       "title": "Elevating Austria: Google invests in its first data center in the Alps.",
@@ -77,10 +109,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Kronstorf_Data_Center_1.max-600x600.format-webp.webp",
       "published": "2026-04-23T09:00:00+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.342
+      "score": 2.3143
     },
     {
       "title": "BT, Nscale, and Nvidia announce UK sovereign AI partnership",
@@ -93,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/04/Nscale-partnership-with-BT-and-NVIDIA.avif",
       "published": "2026-04-23T08:47:19+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0561
+      "score": 2.0285
     },
     {
       "title": "Tesla raises 2026 capex to $25 billion",
@@ -109,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/04/Tesla.avif",
       "published": "2026-04-23T08:29:38+00:00",
       "firstSeen": "2026-04-23T10:00:01.761358+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4479
+      "score": 3.4206
     },
     {
       "title": "Microsoft commits A$25 billion to Australia by 2029",
@@ -125,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/04/Microsoft-investment-in-Australia.avif",
       "published": "2026-04-23T07:58:25+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4336
+      "score": 3.4066
     },
     {
       "title": "Bain Capital seeks buyer for stake in Bridge Data Centres at $5 billion valuation",
@@ -141,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/04/Bain-Capital.avif",
       "published": "2026-04-23T07:47:19+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7285
+      "score": 2.7017
     },
     {
       "title": "Decade Energy raises €22M to build power infrastructure for electric truck depots across Europe",
@@ -157,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/04/Decade-Energy.avif",
       "published": "2026-04-23T07:34:37+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0228
+      "score": 1.9962
     },
     {
       "title": "Google Cloud AI Research Introduces ReasoningBank: A Memory Framework that Distills Reasoning Strategies from Agent Successes and Failures",
@@ -173,10 +205,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-12.25.00-AM-1-150x150.png",
       "published": "2026-04-23T07:26:06+00:00",
       "firstSeen": "2026-04-23T08:00:01.267795+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.589
+      "score": 9.5624
     },
     {
       "title": "French satellite startup Univity raises €27M Series A",
@@ -189,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/04/Univity.avif",
       "published": "2026-04-23T07:23:02+00:00",
       "firstSeen": "2026-04-23T09:00:01.633915+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0176
+      "score": 1.9911
     },
     {
       "title": "India’s app market is booming — but global platforms are capturing most of the gains",
@@ -205,10 +237,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/03/GettyImages-1230168738.jpg?resize=1200%2C800",
       "published": "2026-04-23T04:38:45+00:00",
       "firstSeen": "2026-04-23T05:00:01.698238+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1867
+      "score": 3.1622
     },
     {
       "title": "Xiaomi Releases MiMo-V2.5-Pro and MiMo-V2.5: Matching Frontier Model Benchmarks at Significantly Lower Token Cost",
@@ -221,11 +253,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-8.34.28-PM-150x150.png",
       "published": "2026-04-23T03:46:24+00:00",
       "firstSeen": "2026-04-23T04:00:02.064662+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8453
+      "score": 14.8213
     },
     {
       "title": "How to Design a Production-Grade CAMEL Multi-Agent System with Planning, Tool Use, Self-Consistency, and Critique-Driven Refinement",
@@ -238,10 +270,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2025/06/a-lively-futuristic-scene-where-ai-inspi_TQfHRXyNSLeIVMuLcBHc4Q_C0VZ9Y7YSluKroilcFdxeQ.png",
       "published": "2026-04-22T23:59:51+00:00",
       "firstSeen": "2026-04-23T01:00:01.867663+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7081
+      "score": 6.6865
     },
     {
       "title": "Tesla just increased its spending plan to $25B — here’s where the money is going",
@@ -254,10 +286,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/tesla-opitmus-Getty.jpg?resize=1200%2C800",
       "published": "2026-04-22T23:56:52+00:00",
       "firstSeen": "2026-04-22T23:58:01.101306+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.977
+      "score": 1.9555
     },
     {
       "title": "Google updates Workspace to make AI your new office intern",
@@ -270,10 +302,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
       "published": "2026-04-22T22:44:26+00:00",
       "firstSeen": "2026-04-22T23:00:01.814585+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9511
+      "score": 1.9302
     },
     {
       "title": "Hands on with X’s new AI-powered custom feeds",
@@ -286,10 +318,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/twitter-x-logo-musk-1.jpg?resize=1200%2C675",
       "published": "2026-04-22T22:25:53+00:00",
       "firstSeen": "2026-04-22T23:00:01.814585+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9446
+      "score": 5.9239
     },
     {
       "title": "Sam Altman’s Orb Company Promoted a Bruno Mars Partnership That Doesn't Exist",
@@ -302,10 +334,10 @@
       "image": "https://media.wired.com/photos/69e9205d27d28cd206268af9/master/pass/Sam-Altman-Orb-Company-Invented-Partnership-with-Bruno-Mars-Business.jpg",
       "published": "2026-04-22T22:11:15+00:00",
       "firstSeen": "2026-04-22T23:00:01.814585+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0395
+      "score": 3.0189
     },
     {
       "title": "AI failure could trigger the next financial crisis, warns Elizabeth Warren",
@@ -318,10 +350,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25563184/2160975539.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-22T20:29:05+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9748
+      "score": 1.9553
     },
     {
       "title": "SpaceX’s IPO filing says its orbital data centres may never work. Three months ago, Musk called them a no-brainer.",
@@ -334,10 +366,10 @@
       "image": "https://media.thenextweb.com/2026/04/spacex-orbital-data-centres-ipo-risk-disclosure.avif",
       "published": "2026-04-22T20:21:15+00:00",
       "firstSeen": "2026-04-22T21:07:49.629820+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7623
+      "score": 1.7428
     },
     {
       "title": "OpenAI now lets teams make custom bots that can do work on their own",
@@ -350,10 +382,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STK155_OPEN_AI_4_CVirginia_B.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742221417566%2C100%2C78.515557164868&amp%3Bw=1200",
       "published": "2026-04-22T20:09:02+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7682
+      "score": 11.7488
     },
     {
       "title": "VAST Data’s $30 billion valuation is a bet that the data layer is the real bottleneck in AI",
@@ -369,7 +401,7 @@
       "lastSeen": "2026-04-23T12:00:01.818380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4565
+      "score": 2.4371
     },
     {
       "title": "How SpaceX preempted a $2B fundraise with a $60B buyout offer",
@@ -382,10 +414,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/12/Anysphere-Cursor-Michael-Truell-.png?resize=1200%2C745",
       "published": "2026-04-22T19:51:51+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8926
+      "score": 1.8734
     },
     {
       "title": "Alibaba Qwen Team Releases Qwen3.6-27B: A Dense Open-Weight Model Outperforming 397B MoE on Agentic Coding Benchmarks",
@@ -398,11 +430,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-22-at-12.39.13-PM-1-150x150.png",
       "published": "2026-04-22T19:40:51+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.4691
+      "score": 18.4499
     },
     {
       "title": "Microsoft issues emergency update for macOS and Linux ASP.NET threat",
@@ -415,10 +447,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/07/exploit-vulnerability-security.jpg",
       "published": "2026-04-22T19:32:56+00:00",
       "firstSeen": "2026-04-22T21:00:01.148330+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7465
+      "score": 1.7274
     },
     {
       "title": "Google wants Chrome to be your AI colleague, and it is betting 3.8 billion users agree",
@@ -434,7 +466,7 @@
       "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.1434
+      "score": 8.1244
     },
     {
       "title": "AI Demand Is Forcing a Rethink of Data Center Power, Cooling",
@@ -447,10 +479,10 @@
       "image": "",
       "published": "2026-04-22T19:20:49+00:00",
       "firstSeen": "2026-04-22T19:37:17.550724+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2426
+      "score": 5.2236
     },
     {
       "title": "A Detailed Implementation on Equinox with JAX Native Modules, Filtered Transforms, Stateful Layers, and End-to-End Training Workflows",
@@ -463,10 +495,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-63-1024x731.png",
       "published": "2026-04-22T19:13:14+00:00",
       "firstSeen": "2026-04-22T19:37:17.550724+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1102
+      "score": 0.0913
     },
     {
       "title": "BMW’s i7 gets Rimac batteries, rare-earth-free motors, and drops Level 3 driving",
@@ -482,7 +514,7 @@
       "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7378
+      "score": 1.719
     },
     {
       "title": "Vonage, Girls Who Code Show What ‘Responsible AI’ Looks Like",
@@ -495,10 +527,10 @@
       "image": "",
       "published": "2026-04-22T18:57:37+00:00",
       "firstSeen": "2026-04-22T19:37:17.550724+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8352
+      "score": 2.8164
     },
     {
       "title": "Mozilla Fixes 271 Firefox Bugs Using Anthropic’s Mythos AI",
@@ -511,10 +543,10 @@
       "image": "",
       "published": "2026-04-22T18:50:45+00:00",
       "firstSeen": "2026-04-22T19:37:17.550724+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.833
+      "score": 5.8143
     },
     {
       "title": "Google Cloud launches two new AI chips to compete with Nvidia",
@@ -527,10 +559,10 @@
       "image": "",
       "published": "2026-04-22T18:39:27+00:00",
       "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6695
+      "score": 3.6509
     },
     {
       "title": "Mozilla patched 271 Firefox bugs found by Anthropic’s Mythos, and says the zero-day era has an expiration date",
@@ -547,7 +579,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7281
+      "score": 17.7095
     },
     {
       "title": "5 AI Models Tried to Scam Me. Some of Them Were Scary Good",
@@ -560,10 +592,10 @@
       "image": "https://media.wired.com/photos/69e80107d6f72fef368f93fe/master/pass/AI-Lab-Headed-for-Superhuman-AI-Scams-Business.jpg",
       "published": "2026-04-22T18:00:00+00:00",
       "firstSeen": "2026-04-22T19:00:01.645191+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8572
+      "score": 1.8389
     },
     {
       "title": "Pichai opens Cloud Next 2026 with $240B backlog, 750M Gemini users, and a plan to turn Search into an agent manager",
@@ -579,7 +611,7 @@
       "lastSeen": "2026-04-23T09:01:05.239461+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.613
+      "score": 14.5948
     },
     {
       "title": "Watch Sony’s elite ping-pong robot beat top-ranked players",
@@ -592,10 +624,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/sony_ace_robot.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.798320425817%2C100%2C78.403359148365",
       "published": "2026-04-22T17:43:38+00:00",
       "firstSeen": "2026-04-22T18:00:02.122650+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3221
+      "score": 3.304
     },
     {
       "title": "Google turns Chrome into an AI co-worker for the workplace",
@@ -608,42 +640,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-chrome-GettyImages-2151457378.jpg?w=1024",
       "published": "2026-04-22T17:30:00+00:00",
       "firstSeen": "2026-04-22T18:00:02.122650+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.248
-    },
-    {
-      "title": "Google makes an interesting choice with its new agent-building tool for enterprises",
-      "url": "https://techcrunch.com/2026/04/22/google-makes-an-interesting-choice-with-its-new-agent-building-tool-for-enterprises",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Gemini Enterprise Agent Platform takes an interesting approach: It is geared for IT and technical users.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2266466589.jpg?w=1024",
-      "published": "2026-04-22T16:58:27+00:00",
-      "firstSeen": "2026-04-22T17:00:01.464618+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.6384
-    },
-    {
-      "title": "Anthropic&#8217;s Mythos rollout has missed America’s cybersecurity agency",
-      "url": "https://www.theverge.com/policy/916758/anthropic-mythos-preview-cisa-left-out",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Several US federal agencies are taking up Anthropic's new cybersecurity model to find vulnerabilities, but one is reportedly not getting in on the action: the nation's central cybersecurity coordinator. On Tuesday, Axios reported that the Cybersecurity and Infrastructure Security Agency (CISA) didn't have access to Mythos Preview, which Anthropic has touted as a powerful tool [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/verge-placeholder_f212b3.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.13712291199202%2C100%2C99.725754176016",
-      "published": "2026-04-22T16:57:36+00:00",
-      "firstSeen": "2026-04-22T17:00:01.464618+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9082
+      "score": 7.2299
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -656,10 +656,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.7831
+      "score": 2.7759
     },
     {
       "title": "Inside Universe 25",
@@ -672,10 +672,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1259
+      "score": 3.1208
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -688,10 +688,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8225
+      "score": 1.8224
     },
     {
       "title": "Dark Breath",
@@ -704,7 +704,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-23T12:00:01.818380+00:00",
+      "lastSeen": "2026-04-23T13:00:01.532981+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.5417
