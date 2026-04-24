@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T14:03:40.108598+00:00",
+  "updatedAt": "2026-04-24T16:00:01.229785+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4736,6 +4736,10 @@
     "https://techcrunch.com/2026/04/24/uber-cto-praveen-neppalli-naga-joins-stacked-strictlyvc-sf-lineup-for-april-30-event": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/StrictlyVC-NYC-2024.jpg?resize=1200,800",
       "checkedAt": "2026-04-24T14:03:40.108598+00:00"
+    },
+    "https://www.anthropic.com/news/election-safeguards-update": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Vote&amp;backgroundColor=olive",
+      "checkedAt": "2026-04-24T16:00:01.229785+00:00"
     }
   }
 }
