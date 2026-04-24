@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T15:00:01.515943+00:00",
+  "updatedAt": "2026-04-24T14:03:40.108598+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4733,17 +4733,9 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2272184430.jpg?w=1024",
       "checkedAt": "2026-04-24T14:00:01.388527+00:00"
     },
-    "https://www.theverge.com/podcast/917965/apple-ceo-cook-ternus-transition": {
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0424_Site.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
-      "checkedAt": "2026-04-24T15:00:01.515943+00:00"
-    },
     "https://techcrunch.com/2026/04/24/uber-cto-praveen-neppalli-naga-joins-stacked-strictlyvc-sf-lineup-for-april-30-event": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/StrictlyVC-NYC-2024.jpg?resize=1200,800",
-      "checkedAt": "2026-04-24T15:00:01.515943+00:00"
-    },
-    "https://www.anthropic.com/news/election-safeguards-update": {
-      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Vote&amp;backgroundColor=olive",
-      "checkedAt": "2026-04-24T15:00:01.515943+00:00"
+      "checkedAt": "2026-04-24T14:03:40.108598+00:00"
     }
   }
 }
