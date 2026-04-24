@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T16:00:01.229785+00:00",
+  "updatedAt": "2026-04-24T15:22:08.587431+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4739,7 +4739,7 @@
     },
     "https://www.anthropic.com/news/election-safeguards-update": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Vote&amp;backgroundColor=olive",
-      "checkedAt": "2026-04-24T16:00:01.229785+00:00"
+      "checkedAt": "2026-04-24T15:22:08.587431+00:00"
     }
   }
 }
