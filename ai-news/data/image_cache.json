@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T05:00:01.178079+00:00",
+  "updatedAt": "2026-04-24T06:00:01.820554+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4688,6 +4688,10 @@
     "https://simonwillison.net/2026/Apr/24/weekly": {
       "image": "",
       "checkedAt": "2026-04-24T05:00:01.178079+00:00"
+    },
+    "https://www.anthropic.com/news/anthropic-nec": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20NodeGlobe&amp;backgroundColor=heather",
+      "checkedAt": "2026-04-24T06:00:01.820554+00:00"
     }
   }
 }
