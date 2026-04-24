@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T12:03:19.276523+00:00",
+  "updatedAt": "2026-04-24T14:00:01.388527+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4724,6 +4724,14 @@
     "https://www.theverge.com/ai-artificial-intelligence/917755/musk-altman-openai-xai-gossip": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-24T12:03:19.276523+00:00"
+    },
+    "https://techcrunch.com/2026/04/24/nothing-introduces-an-ai-powered-dictation-tool": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_2376-rotated.jpeg?resize=900,1200",
+      "checkedAt": "2026-04-24T14:00:01.388527+00:00"
+    },
+    "https://techcrunch.com/2026/04/24/deepseek-previews-new-ai-model-that-closes-the-gap-with-frontier-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2272184430.jpg?w=1024",
+      "checkedAt": "2026-04-24T14:00:01.388527+00:00"
     }
   }
 }
