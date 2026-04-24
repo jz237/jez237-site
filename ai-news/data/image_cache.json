@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T19:00:02.036742+00:00",
+  "updatedAt": "2026-04-24T20:00:01.550348+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4772,6 +4772,10 @@
     "https://techcrunch.com/2026/04/24/google-to-invest-up-to-40b-in-anthropic-in-cash-and-compute": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "checkedAt": "2026-04-24T19:00:02.036742+00:00"
+    },
+    "https://techcrunch.com/2026/04/24/comfyui-hits-500m-valuation-as-creators-seek-more-control-over-ai-generated-media": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/05/fall-guys.png?resize=1200,675",
+      "checkedAt": "2026-04-24T20:00:01.550348+00:00"
     }
   }
 }
