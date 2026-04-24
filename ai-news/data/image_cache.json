@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T21:59:02.013026+00:00",
+  "updatedAt": "2026-04-24T23:00:01.461071+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4784,6 +4784,14 @@
     "https://www.techrepublic.com/article/news-apac-deepseek-v4-ai-model-huawei-ascend-chips-support": {
       "image": "",
       "checkedAt": "2026-04-24T21:59:02.013026+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/24/the-people-do-not-yearn-for-automation": {
+      "image": "",
+      "checkedAt": "2026-04-24T23:00:01.461071+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/24/1136422/why-deepseeks-v4-matters": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/260424_deepseek.jpg?resize=1200,600",
+      "checkedAt": "2026-04-24T23:00:01.461071+00:00"
     }
   }
 }
