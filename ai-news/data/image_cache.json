@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T17:59:00.113262+00:00",
+  "updatedAt": "2026-04-24T19:00:02.036742+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4768,6 +4768,10 @@
     "https://www.techrepublic.com/article/news-white-house-china-ai-theft-apac": {
       "image": "",
       "checkedAt": "2026-04-24T17:59:00.113262+00:00"
+    },
+    "https://techcrunch.com/2026/04/24/google-to-invest-up-to-40b-in-anthropic-in-cash-and-compute": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
+      "checkedAt": "2026-04-24T19:00:02.036742+00:00"
     }
   }
 }
