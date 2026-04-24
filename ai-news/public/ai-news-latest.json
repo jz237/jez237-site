@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T12:00:01.585718+00:00",
+  "updatedAt": "2026-04-24T13:00:01.892350+00:00",
   "items": [
     {
       "title": "Do Masked Autoencoders Improve Downhole Prediction? An Empirical Study on Real Well Drilling Data",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-24T12:00:09.167175+00:00",
+      "published": "2026-04-24T13:00:07.146134+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Elon Musk and Sam Altman’s court showdown will dish the dirt",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/917755/musk-altman-openai-xai-gossip",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Elon Musk cofounded OpenAI, and then flounced off in a huff when he wasn't anointed CEO, leaving Sam Altman as the last power-hungry man standing. Now, Musk is back with a lawsuit, and a trial is scheduled to start in Oakland, California, on April 27th. Theoretically, it's a legal case about whether OpenAI defrauded Musk. [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-24T12:00:00+00:00",
+      "firstSeen": "2026-04-24T13:00:01.892350+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.3298
+    },
+    {
+      "title": "In another wild turn for AI chips, Meta signs deal for millions of Amazon AI CPUs",
+      "url": "https://techcrunch.com/2026/04/24/in-another-wild-turn-for-ai-chips-meta-signs-deal-for-millions-of-amazon-ai-cpus",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Meta has commandeered a big chunk of Amazon's homegrown CPUs (not GPUs) for AI agentic workloads, signaling that a new kind of chip race has begun.",
+      "image": "https://techcrunch.com/wp-content/uploads/2022/09/GettyImages-1415078085.jpg?resize=1200%2C721",
+      "published": "2026-04-24T12:00:00+00:00",
+      "firstSeen": "2026-04-24T13:00:01.892350+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2598
+    },
+    {
+      "title": "Turkey’s parliament passes social media ban for under-15s, one week after a school shooting",
+      "url": "https://thenextweb.com/news/turkey-social-media-ban-under-15",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Erdŏgan has 15 days to sign the bill into law. The legislation enters into force six months after publication in the Official Gazette. The main opposition CHP criticised it as a political censorship tool rather than child protection. Turkey has previously blocked Instagram, Roblox, and restricted platforms during the İmamoglu protests. Turkey’s Grand National Assembly [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Turkey.avif",
+      "published": "2026-04-24T11:43:00+00:00",
+      "firstSeen": "2026-04-24T13:00:01.892350+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1115
+    },
+    {
+      "title": "Intel beats expectations for the sixth straight quarter as AI demand for CPUs surges",
+      "url": "https://thenextweb.com/news/intel-q1-2026-earnings-ai-cpu",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Q1 revenue of $13.6 billion beat the $12.4 billion consensus by 9.4%. Data Centre and AI revenue rose 22% to $5.1 billion. Non-GAAP EPS of $0.29 beat the 1-cent consensus by a factor of 29. The stock is up more than 80% this year. Intel is working with Elon Musk on his planned Terafab chip [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Intel.avif",
+      "published": "2026-04-24T11:15:26+00:00",
+      "firstSeen": "2026-04-24T13:00:01.892350+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.098
     },
     {
       "title": "China plans to block US investment in its top AI firms without government approval",
@@ -28,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/04/China-vs-USA.avif",
       "published": "2026-04-24T10:57:54+00:00",
       "firstSeen": "2026-04-24T12:00:01.585718+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9188
+      "score": 3.8895
     },
     {
       "title": "China’s DeepSeek previews new AI model a year after jolting US rivals",
@@ -44,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKB320_DEEPSEEK_AI_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-24T09:45:30+00:00",
       "firstSeen": "2026-04-24T10:42:44.687422+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.3936
+      "score": 11.3653
     },
     {
       "title": "Prestigious photo contest answers ‘what is a photo?’",
@@ -60,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/WPP-2026_POY_Finalists.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613",
       "published": "2026-04-24T09:40:07+00:00",
       "firstSeen": "2026-04-24T10:42:44.687422+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.291
+      "score": 2.2628
     },
     {
       "title": "The Men Behind Your Favorite AI Gay Thirst Traps",
@@ -76,10 +140,10 @@
       "image": "https://media.wired.com/photos/69e8007028d4e7b7573ef27b/master/pass/The-Gay-AI-Influencers-Taking-IG%E2%80%94and-Red-Carpet%E2%80%94by-Storm-Culture.jpg",
       "published": "2026-04-24T09:30:00+00:00",
       "firstSeen": "2026-04-24T10:42:44.687422+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2162
+      "score": 2.1881
     },
     {
       "title": "5 Reasons to Think Twice Before Using ChatGPT—or Any Chatbot—for Financial Advice",
@@ -92,10 +156,10 @@
       "image": "https://media.wired.com/photos/69ea22cb7c6d09c92685b0af/master/pass/financial-advice-chat-gpt.jpg",
       "published": "2026-04-24T09:00:00+00:00",
       "firstSeen": "2026-04-24T09:07:20.122335+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.202
+      "score": 8.1743
     },
     {
       "title": "Amazon-backed nuclear startup X-Energy raises $1.02 billion in IPO",
@@ -108,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/04/X-Energy-Amazon-IPO.avif",
       "published": "2026-04-24T07:59:33+00:00",
       "firstSeen": "2026-04-24T09:00:02.101125+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7341
+      "score": 2.7071
     },
     {
       "title": "Cohere and Aleph Alpha announce merger in Berlin, creating a $20 billion transatlantic AI company",
@@ -124,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/04/Cohere.avif",
       "published": "2026-04-24T07:50:56+00:00",
       "firstSeen": "2026-04-24T09:00:02.101125+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1302
+      "score": 3.1033
     },
     {
       "title": "DeepSeek returns with V4-Pro and V4-Flash, a year after its ‘Sputnik moment’",
@@ -140,11 +204,11 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-04-24T07:06:49+00:00",
       "firstSeen": "2026-04-24T09:00:02.101125+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.5104
+      "score": 22.4841
     },
     {
       "title": "Verda raises $117 million to expand its GPU cloud platform from the Nordics into the US, UK, and Asia",
@@ -157,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/04/Verda.avif",
       "published": "2026-04-24T07:00:22+00:00",
       "firstSeen": "2026-04-24T09:00:02.101125+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3075
+      "score": 2.2813
     },
     {
       "title": "Norway plans to ban social media for children under 16 and shift age verification liability to platforms",
@@ -173,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/04/Social-media-ban.avif",
       "published": "2026-04-24T06:50:48+00:00",
       "firstSeen": "2026-04-24T09:00:02.101125+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0033
+      "score": 1.9772
     },
     {
       "title": "DeepSeek V4 - almost on the frontier, a fraction of the price",
@@ -189,11 +253,11 @@
       "image": "https://static.simonwillison.net/static/2026/deepseek-v4-flash.png",
       "published": "2026-04-24T06:01:04+00:00",
       "firstSeen": "2026-04-24T06:19:15.465614+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1216
+      "score": 14.0961
     },
     {
       "title": "Google DeepMind Introduces Decoupled DiLoCo: An Asynchronous Training Architecture Achieving 88% Goodput Under High Hardware Failure Rates",
@@ -206,10 +270,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-9.39.48-PM-1-150x150.png",
       "published": "2026-04-24T04:40:10+00:00",
       "firstSeen": "2026-04-24T05:00:01.178079+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.0173
+      "score": 6.9927
     },
     {
       "title": "Millisecond Converter",
@@ -222,10 +286,10 @@
       "image": "",
       "published": "2026-04-24T04:23:11+00:00",
       "firstSeen": "2026-04-24T06:19:15.465614+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0803
+      "score": 2.0559
     },
     {
       "title": "It's a big one",
@@ -238,10 +302,10 @@
       "image": "",
       "published": "2026-04-24T04:09:54+00:00",
       "firstSeen": "2026-04-24T05:00:01.178079+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7748
+      "score": 3.7506
     },
     {
       "title": "Mend Releases AI Security Governance Framework: Covering Asset Inventory, Risk Tiering, AI Supply Chain Security, and Maturity Model",
@@ -254,10 +318,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-16-1024x731.png",
       "published": "2026-04-24T02:07:11+00:00",
       "firstSeen": "2026-04-24T03:00:01.436456+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.656
+      "score": 0.6331
     },
     {
       "title": "russellromney/honker",
@@ -270,10 +334,10 @@
       "image": "",
       "published": "2026-04-24T01:50:07+00:00",
       "firstSeen": "2026-04-24T02:00:01.484898+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1194
+      "score": 3.0967
     },
     {
       "title": "An update on recent Claude Code quality reports",
@@ -286,10 +350,10 @@
       "image": "",
       "published": "2026-04-24T01:31:25+00:00",
       "firstSeen": "2026-04-24T02:00:01.484898+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0122
+      "score": 9.9897
     },
     {
       "title": "Serving the For You feed",
@@ -302,10 +366,10 @@
       "image": "",
       "published": "2026-04-24T01:08:17+00:00",
       "firstSeen": "2026-04-24T02:00:01.484898+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0965
+      "score": -1.1188
     },
     {
       "title": "DeepSeek-V4: a million-token context that agents can actually use",
@@ -318,11 +382,11 @@
       "image": "https://huggingface.co/blog/assets/deepseekv4/thumbnail.png",
       "published": "2026-04-24T00:00:00+00:00",
       "firstSeen": "2026-04-24T12:00:01.585718+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.1182
+      "score": 16.0966
     },
     {
       "title": "Anthropic and NEC collaborate to build Japan’s largest AI engineering workforce",
@@ -335,10 +399,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeGlobe&amp%3BbackgroundColor=heather",
       "published": "2026-04-24T00:00:00+00:00",
       "firstSeen": "2026-04-24T06:00:01.820554+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1882
+      "score": 5.1666
     },
     {
       "title": "Mend.io Releases AI Security Governance Framework Covering Asset Inventory, Risk Tiering, AI Supply Chain Security, and Maturity Model",
@@ -354,7 +418,7 @@
       "lastSeen": "2026-04-24T02:00:01.484898+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.5802
+      "score": 0.5594
     },
     {
       "title": "Claude is connecting directly to your personal apps like Spotify, Uber Eats, and TurboTax",
@@ -367,10 +431,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/anthropic-claude-personal-apps.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-04-23T22:27:11+00:00",
       "firstSeen": "2026-04-23T23:00:01.710007+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.115
+      "score": 11.0943
     },
     {
       "title": "OpenAI Releases GPT-5.5, a Fully Retrained Agentic Model That Scores 82.7% on Terminal-Bench 2.0 and 84.9% on GDPval",
@@ -383,11 +447,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-23-at-2.57.37-PM-150x150.png",
       "published": "2026-04-23T22:11:30+00:00",
       "firstSeen": "2026-04-23T23:00:01.710007+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.4696
+      "score": 23.449
     },
     {
       "title": "Extract PDF text in your browser with LiteParse for the web",
@@ -400,10 +464,10 @@
       "image": "https://static.simonwillison.net/static/2026/liteparse-web.jpg",
       "published": "2026-04-23T21:54:24+00:00",
       "firstSeen": "2026-04-23T23:00:01.710007+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0337
+      "score": 7.0133
     },
     {
       "title": "A Coding Tutorial on OpenMythos on Recurrent-Depth Transformers with Depth Extrapolation, Adaptive Computation, and Mixture-of-Experts Routing",
@@ -416,10 +480,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-15.png",
       "published": "2026-04-23T21:25:34+00:00",
       "firstSeen": "2026-04-23T21:58:59.429091+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.4538
+      "score": 12.4337
     },
     {
       "title": "Bret Taylor’s Sierra buys YC-backed AI startup Fragment",
@@ -432,10 +496,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/10/AP22166762615783.jpg?resize=1200%2C800",
       "published": "2026-04-23T21:00:00+00:00",
       "firstSeen": "2026-04-23T21:58:59.429091+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.5152
+      "score": 0.4953
     },
     {
       "title": "In a first, a ransomware family is confirmed to be quantum-safe",
@@ -448,10 +512,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/07/GettyImages-1952157610-1152x648-1753386930.jpg",
       "published": "2026-04-23T20:41:23+00:00",
       "firstSeen": "2026-04-23T23:00:01.710007+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7689
+      "score": 1.7492
     },
     {
       "title": "Meta is cutting 8,000 jobs to pay for AI. It is also asking the survivors to train their replacements.",
@@ -464,10 +528,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-ceo-mark-zuckerberg.avif",
       "published": "2026-04-23T20:15:56+00:00",
       "firstSeen": "2026-04-23T21:58:59.429091+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8605
+      "score": 2.841
     },
     {
       "title": "A pelican for GPT-5.5 via the semi-official Codex backdoor API",
@@ -480,11 +544,11 @@
       "image": "https://static.simonwillison.net/static/2026/gpt-5.5-pelican.png",
       "published": "2026-04-23T19:59:47+00:00",
       "firstSeen": "2026-04-23T21:00:01.711154+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.6952
+      "score": 21.6759
     },
     {
       "title": "High gas prices are not saving Tesla. They are just slowing the bleeding.",
@@ -497,10 +561,10 @@
       "image": "https://media.thenextweb.com/2026/04/tesla-sales-high-gas-prices-ev-market.avif",
       "published": "2026-04-23T19:59:27+00:00",
       "firstSeen": "2026-04-23T21:00:01.711154+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7551
+      "score": 1.7358
     },
     {
       "title": "Meta is laying off 10 percent of its staff",
@@ -513,10 +577,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2235448475.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-04-23T19:41:07+00:00",
       "firstSeen": "2026-04-23T21:00:01.711154+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0592
+      "score": 3.04
     },
     {
       "title": "SoftBank wants to borrow $10 billion against its OpenAI stake. The spread tells you what the banks think.",
@@ -532,7 +596,7 @@
       "lastSeen": "2026-04-24T12:00:01.585718+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7489
+      "score": 4.7298
     },
     {
       "title": "Meet Noscroll, an AI bot that does your doomscrolling for you",
@@ -545,10 +609,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/doomscrolling-GettyImages-2195349954.jpg?resize=1200%2C800",
       "published": "2026-04-23T19:38:25+00:00",
       "firstSeen": "2026-04-23T21:00:01.711154+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8883
+      "score": 1.8691
     },
     {
       "title": "Apple’s Next Chapter, SpaceX and Cursor Strike a Deal, and Palantir’s Controversial Manifesto",
@@ -561,10 +625,10 @@
       "image": "https://media.wired.com/photos/69e9325b3ea6d24e4cfdd4c8/master/pass/Uncanny-Valley-Tim-Cook-Business-2233926826.jpg",
       "published": "2026-04-23T19:26:11+00:00",
       "firstSeen": "2026-04-23T19:38:28.523148+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9843
+      "score": 2.9653
     },
     {
       "title": "llm-openai-via-codex 0.1a0",
@@ -577,76 +641,11 @@
       "image": "",
       "published": "2026-04-23T19:22:29+00:00",
       "firstSeen": "2026-04-24T06:19:15.465614+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5831
-    },
-    {
-      "title": "Rilian raises $17.5 million to bring agentic AI to sovereign defence",
-      "url": "https://thenextweb.com/news/rilian-raises-17-5-million-to-bring-agentic-ai-to-sovereign-defence",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The McLean, Virginia startup’s Caspian platform sits as a command layer above existing security stacks, deploying pre-trained AI agents into air-gapped and compliance-restricted environments. One of its co-founders is Nick Pompeo, son of former US Secretary of State Mike Pompeo. Rilian, a McLean, Virginia-based startup building agentic AI systems integration for defence and national security [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Rilian.avif",
-      "published": "2026-04-23T19:20:22+00:00",
-      "firstSeen": "2026-04-23T21:00:01.711154+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5425
-    },
-    {
-      "title": "White House accuses China of industrial-scale AI model distillation, commits to intelligence sharing with OpenAI, Anthropic, Google",
-      "url": "https://thenextweb.com/news/us-white-house-ai-model-distillation-china-theft",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Summary: The White House OSTP released a policy memo accusing China of “industrial-scale” distillation of US AI models, committing to share intelligence with US AI companies and explore accountability measures. OpenAI accused DeepSeek of distilling its models in February; Anthropic named DeepSeek, MiniMax, and Moonshot AI as having created 24,000 fraudulent accounts generating 16+ million [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/us-white-house-ai-model-distillation-china-theft.avif",
-      "published": "2026-04-23T19:15:07+00:00",
-      "firstSeen": "2026-04-23T21:00:01.711154+00:00",
-      "lastSeen": "2026-04-24T10:42:44.687422+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 10.4408
-    },
-    {
-      "title": "Zapata Quantum raises $15 million after emerging from bankruptcy",
-      "url": "https://thenextweb.com/news/zapata-quantum-15m-financing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The oversubscribed financing, led by Triatomic Capital, caps a restructuring that addressed $18.7 million in debt, converted $10 million of that to equity, and preserved 60-plus patents. The company had been days away from liquidation in late 2024. Zapata Quantum announced on 23 April 2026 that it has completed an oversubscribed $15 million financing led [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Zapata-Quantum.avif",
-      "published": "2026-04-23T18:59:43+00:00",
-      "firstSeen": "2026-04-23T19:38:28.523148+00:00",
-      "lastSeen": "2026-04-24T08:00:01.569161+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4359
-    },
-    {
-      "title": "OpenAI’s New GPT-5.5 Powers Codex on NVIDIA Infrastructure — and NVIDIA Is Already Putting It to Work",
-      "url": "https://blogs.nvidia.com/blog/openai-codex-gpt-5-5-ai-agents",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AI agents have revolutionized developer workflows, and their next frontier is knowledge work: processing information, solving complex problems, coming up with new ideas and driving innovation.  Codex, OpenAI’s agentic coding application, is enabling this new frontier. It’s now powered by GPT-5.5, OpenAI’s latest frontier model, which runs on NVIDIA GB200 NVL72 rack-scale systems.  Over 10,000 [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/logo-lockup-codex-tech-blog-v-1920x1080-5175350.png",
-      "published": "2026-04-23T18:57:55+00:00",
-      "firstSeen": "2026-04-23T19:00:01.283181+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 20.3753
+      "score": 16.5642
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -659,10 +658,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6551
+      "score": 2.6514
     },
     {
       "title": "Inside Universe 25",
@@ -675,10 +674,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.0355
+      "score": 3.0328
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -691,10 +690,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8213
+      "score": 1.8212
     },
     {
       "title": "Dark Breath",
@@ -707,7 +706,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-24T12:00:01.585718+00:00",
+      "lastSeen": "2026-04-24T13:00:01.892350+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.5409
