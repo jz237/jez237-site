@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T22:00:01.320104+00:00",
+  "updatedAt": "2026-04-24T21:59:02.013026+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4782,8 +4782,8 @@
       "checkedAt": "2026-04-24T21:00:01.377954+00:00"
     },
     "https://www.techrepublic.com/article/news-apac-deepseek-v4-ai-model-huawei-ascend-chips-support": {
-      "image": "https://assets.techrepublic.com/uploads/2026/04/deepseek-1.jpg",
-      "checkedAt": "2026-04-24T22:00:01.320104+00:00"
+      "image": "",
+      "checkedAt": "2026-04-24T21:59:02.013026+00:00"
     }
   }
 }
