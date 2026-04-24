@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T06:19:15.465614+00:00",
+  "updatedAt": "2026-04-24T08:00:01.569161+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4700,6 +4700,10 @@
     "https://simonwillison.net/2026/Apr/23/llm-openai-via-codex": {
       "image": "",
       "checkedAt": "2026-04-24T06:19:15.465614+00:00"
+    },
+    "https://huggingface.co/blog/transformersjs-chrome-extension": {
+      "image": "https://huggingface.co/blog/assets/transformersjs-chrome-extension/thumbnail.jpg",
+      "checkedAt": "2026-04-24T08:00:01.569161+00:00"
     }
   }
 }
