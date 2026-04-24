@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T15:22:08.587431+00:00",
+  "updatedAt": "2026-04-24T17:00:01.208457+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4740,6 +4740,14 @@
     "https://www.anthropic.com/news/election-safeguards-update": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Vote&amp;backgroundColor=olive",
       "checkedAt": "2026-04-24T15:22:08.587431+00:00"
+    },
+    "https://techcrunch.com/2026/04/24/mac-mini-price-expensive-ebay-shortage-ai-memory": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/CMC_8135.jpg?resize=1200,800",
+      "checkedAt": "2026-04-24T17:00:01.208457+00:00"
+    },
+    "https://www.together.ai/blog/distribution-aware-speculative-decoding": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69e709e8522525391f5e76ee_OG-image_blog-DAS-2026.jpg",
+      "checkedAt": "2026-04-24T17:00:01.208457+00:00"
     }
   }
 }
