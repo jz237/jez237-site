@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T03:46:57.430281+00:00",
+  "updatedAt": "2026-04-24T05:00:01.178079+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4684,6 +4684,10 @@
     "https://www.marktechpost.com/2026/04/23/mend-releases-ai-security-governance-framework": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-16-1024x731.png",
       "checkedAt": "2026-04-24T03:00:01.436456+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/24/weekly": {
+      "image": "",
+      "checkedAt": "2026-04-24T05:00:01.178079+00:00"
     }
   }
 }
