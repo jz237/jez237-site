@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T21:02:43.562004+00:00",
+  "updatedAt": "2026-04-24T21:59:02.013026+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4780,6 +4780,10 @@
     "https://techcrunch.com/2026/04/24/metas-loss-is-thinking-machines-gain": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-1730510668.jpg?resize=1200,800",
       "checkedAt": "2026-04-24T21:00:01.377954+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apac-deepseek-v4-ai-model-huawei-ascend-chips-support": {
+      "image": "",
+      "checkedAt": "2026-04-24T21:59:02.013026+00:00"
     }
   }
 }
