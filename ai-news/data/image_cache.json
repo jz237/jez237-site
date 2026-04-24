@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T09:00:02.101125+00:00",
+  "updatedAt": "2026-04-24T10:00:01.438716+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4704,6 +4704,14 @@
     "https://huggingface.co/blog/transformersjs-chrome-extension": {
       "image": "https://huggingface.co/blog/assets/transformersjs-chrome-extension/thumbnail.jpg",
       "checkedAt": "2026-04-24T08:00:01.569161+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/918035/deepseek-preview-v4-ai-model": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKB320_DEEPSEEK_AI_CVIRGINIA_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-24T10:00:01.438716+00:00"
+    },
+    "https://www.theverge.com/gadgets/918016/prestigious-photo-contest-answers-what-is-a-photo": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/WPP-2026_POY_Finalists.jpg?quality=90&amp;strip=all&amp;crop=0,10.732984293194,100,78.534031413613",
+      "checkedAt": "2026-04-24T10:00:01.438716+00:00"
     }
   }
 }
