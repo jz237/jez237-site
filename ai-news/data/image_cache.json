@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T12:00:01.585718+00:00",
+  "updatedAt": "2026-04-24T13:00:01.892350+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4716,6 +4716,14 @@
     "https://huggingface.co/blog/deepseekv4": {
       "image": "https://huggingface.co/blog/assets/deepseekv4/thumbnail.png",
       "checkedAt": "2026-04-24T12:00:01.585718+00:00"
+    },
+    "https://techcrunch.com/2026/04/24/in-another-wild-turn-for-ai-chips-meta-signs-deal-for-millions-of-amazon-ai-cpus": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/09/GettyImages-1415078085.jpg?resize=1200,721",
+      "checkedAt": "2026-04-24T13:00:01.892350+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/917755/musk-altman-openai-xai-gossip": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-24T13:00:01.892350+00:00"
     }
   }
 }
