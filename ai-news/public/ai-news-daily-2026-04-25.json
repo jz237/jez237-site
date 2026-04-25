@@ -1,6 +1,6 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T18:00:02.078615+00:00",
+  "updatedAt": "2026-04-25T17:54:46.744552+00:00",
   "items": [
     {
       "title": "GPT-5.5 prompting guide",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.4403
+      "score": 18.4421
     },
     {
       "title": "Quoting Romain Huet",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-04-25T12:06:55+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.2241
+      "score": 18.2264
     },
     {
       "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-25-at-12.43.00-AM-1-150x150.png",
       "published": "2026-04-25T07:44:05+00:00",
       "firstSeen": "2026-04-25T08:00:01.443566+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.5471
+      "score": 14.5491
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -63,10 +63,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-9.20.50-PM-1-150x150.png",
       "published": "2026-04-25T04:21:58+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6732
+      "score": 10.675
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -79,10 +79,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-70.png",
       "published": "2026-04-25T00:52:49+00:00",
       "firstSeen": "2026-04-25T01:00:01.914094+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.0037
+      "score": 7.0054
     },
     {
       "title": "WHY ARE YOU LIKE THIS",
@@ -95,10 +95,10 @@
       "image": "https://static.simonwillison.net/static/2026/why-are-you-like-this.jpeg",
       "published": "2026-04-25T16:44:01+00:00",
       "firstSeen": "2026-04-25T16:59:06.966150+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.602
+      "score": 6.6045
     },
     {
       "title": "Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos",
@@ -111,10 +111,10 @@
       "image": "https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/master/pass/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg",
       "published": "2026-04-25T10:30:00+00:00",
       "firstSeen": "2026-04-25T11:01:04.267380+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1831
+      "score": 6.1853
     },
     {
       "title": "Meta signs multibillion-dollar deal for Amazon Graviton5 chips as AI compute demand outstrips $135B capex budget",
@@ -127,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
       "published": "2026-04-25T11:22:37+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6651
+      "score": 5.6674
     },
     {
       "title": "OpenAI CEO apologizes to Tumbler Ridge community",
@@ -142,11 +142,11 @@
       "summary": "In a letter to the residents of Tumbler Ridge, Canada, OpenAI CEO Sam Altman said he is “deeply sorry” that his company failed to alert law enforcement about the suspect in a recent mass shooting.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2194585161.jpg?w=1024",
       "published": "2026-04-25T17:17:56+00:00",
-      "firstSeen": "2026-04-25T18:00:02.078615+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "firstSeen": "2026-04-25T17:54:46.744552+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2688
+      "score": 5.2714
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -157,9 +157,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T18:00:09.648137+00:00",
+      "published": "2026-04-25T17:54:51.963767+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -175,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/04/stanford-james-zou-human-intelligence-ai-physiology.avif",
       "published": "2026-04-25T11:32:03+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4691
+      "score": 4.4714
     },
     {
       "title": "Porsche built one of the best electric SUVs ever made, and does not expect the world to buy enough of them",
@@ -191,10 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/porsche-cayenne-coupe-electric-ev-strategy.avif",
       "published": "2026-04-25T11:55:26+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T18:00:02.078615+00:00",
+      "lastSeen": "2026-04-25T17:54:46.744552+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7791
+      "score": 3.7814
     }
   ],
   "errors": []
