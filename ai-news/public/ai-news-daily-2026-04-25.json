@@ -1,6 +1,6 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T10:02:21.413641+00:00",
+  "updatedAt": "2026-04-25T11:01:04.267380+00:00",
   "items": [
     {
       "title": "GPT-5.5 prompting guide",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T10:02:21.413641+00:00",
+      "lastSeen": "2026-04-25T11:01:04.267380+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.626
+      "score": 18.6009
     },
     {
       "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-04-25T10:02:21.413641+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.7518
+      "score": 14.7241
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -49,7 +49,7 @@
       "lastSeen": "2026-04-25T10:02:21.413641+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8596
+      "score": 10.8344
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -65,7 +65,39 @@
       "lastSeen": "2026-04-25T10:02:21.413641+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.1729
+      "score": 7.15
+    },
+    {
+      "title": "Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos",
+      "url": "https://www.wired.com/story/security-news-this-week-discord-sleuths-gained-unauthorized-access-to-anthropics-mythos",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Plus: Spy firms tap into a global telecom weakness to track targets, 500,000 UK health records go up for sale on Alibaba, Apple patches a revealing notification bug, and more.",
+      "image": "https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/master/pass/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg",
+      "published": "2026-04-25T10:30:00+00:00",
+      "firstSeen": "2026-04-25T11:01:04.267380+00:00",
+      "lastSeen": "2026-04-25T11:01:04.267380+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3743
+    },
+    {
+      "title": "Denis Brovarnyy: Tech education that starts where theory ends",
+      "url": "https://thenextweb.com/news/denis-brovarnyy-ai-education-skills-gap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The gap between finishing a course and actually being useful on a team, Denis Brovarnyy has seen it from both sides. And in an era where AI is reshaping every technical role, that gap is getting more expensive to ignore. Companies are no longer experimenting with AI. They are implementing it. And they need people [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/denis-brovarnyy-ai-education-skills-gap.avif",
+      "published": "2026-04-25T10:06:00+00:00",
+      "firstSeen": "2026-04-25T11:01:04.267380+00:00",
+      "lastSeen": "2026-04-25T11:01:04.267380+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8223
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -76,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T10:02:25.293684+00:00",
+      "published": "2026-04-25T11:01:08.275451+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T10:02:21.413641+00:00",
+      "lastSeen": "2026-04-25T11:01:04.267380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -97,7 +129,7 @@
       "lastSeen": "2026-04-25T10:02:21.413641+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.3767
+      "score": 2.3537
     },
     {
       "title": "Ace the Ping-Pong Robot Can Whup Your Ass",
@@ -110,17 +142,17 @@
       "image": "https://media.wired.com/photos/69ea3dfba5897da10992cdf4/master/pass/178826162",
       "published": "2026-04-25T09:30:00+00:00",
       "firstSeen": "2026-04-25T10:02:21.413641+00:00",
-      "lastSeen": "2026-04-25T10:02:21.413641+00:00",
+      "lastSeen": "2026-04-25T11:01:04.267380+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2736
+      "score": 2.2446
     }
   ],
   "errors": [
     {
-      "source": "OpenAI News",
-      "url": "https://openai.com/news/rss.xml",
-      "error": "The read operation timed out"
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
     }
   ]
 }
