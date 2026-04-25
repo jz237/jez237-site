@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-25T11:50:53.526096+00:00",
+  "updatedAt": "2026-04-25T13:00:01.606297+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4808,6 +4808,10 @@
     "https://simonwillison.net/2026/Apr/25/gpt-5-5-prompting-guide": {
       "image": "",
       "checkedAt": "2026-04-25T05:00:01.583322+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/25/romain-huet": {
+      "image": "",
+      "checkedAt": "2026-04-25T13:00:01.606297+00:00"
     }
   }
 }
