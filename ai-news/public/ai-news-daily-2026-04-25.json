@@ -1,9 +1,9 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T07:00:01.848928+00:00",
+  "updatedAt": "2026-04-25T08:00:01.443566+00:00",
   "items": [
     {
-      "title": "I compared GPT-5.5 against Claude Opus 4.7 on every shared benchmark. Opus 4.7 leads on 6 of 10, GPT-5.5 on 4, with margins between 2 and 13 points. Pricing, time-to-first-token, throughput, and context-window behavior, all laid out.",
+      "title": "GPT-5.5 vs Claude Opus 4.7: Pricing, Speed, Benchmarks",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T07:00:09.927520+00:00",
+      "published": "2026-04-25T08:00:08.098927+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T07:00:01.848928+00:00",
+      "lastSeen": "2026-04-25T08:00:01.443566+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -30,11 +30,27 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T07:00:01.848928+00:00",
+      "lastSeen": "2026-04-25T08:00:01.443566+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.7084
+      "score": 18.6805
+    },
+    {
+      "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
+      "url": "https://www.marktechpost.com/2026/04/25/google-deepmind-introduces-vision-banana-an-instruction-tuned-image-generator-that-beats-sam-3-on-segmentation-and-depth-anything-v3-on-metric-depth-estimation",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "A new Google paper argues that image generation pretraining is to computer vision what GPT-style pretraining is to NLP — and the benchmark numbers back that up.\nThe post Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-25-at-12.43.00-AM-1-150x150.png",
+      "published": "2026-04-25T07:44:05+00:00",
+      "firstSeen": "2026-04-25T08:00:01.443566+00:00",
+      "lastSeen": "2026-04-25T08:00:01.443566+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 14.8119
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -47,10 +63,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-9.20.50-PM-1-150x150.png",
       "published": "2026-04-25T04:21:58+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T07:00:01.848928+00:00",
+      "lastSeen": "2026-04-25T08:00:01.443566+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9424
+      "score": 10.9144
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -63,10 +79,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-70.png",
       "published": "2026-04-25T00:52:49+00:00",
       "firstSeen": "2026-04-25T01:00:01.914094+00:00",
-      "lastSeen": "2026-04-25T07:00:01.848928+00:00",
+      "lastSeen": "2026-04-25T08:00:01.443566+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.248
+      "score": 7.2226
     },
     {
       "title": "A Coding Implementation on Deepgram Python SDK for Transcription, Text-to-Speech, Async Audio Processing, and Text Intelligence",
@@ -79,10 +95,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-71.png",
       "published": "2026-04-25T01:02:19+00:00",
       "firstSeen": "2026-04-25T02:00:01.883700+00:00",
-      "lastSeen": "2026-04-25T07:00:01.848928+00:00",
+      "lastSeen": "2026-04-25T08:00:01.443566+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.4521
+      "score": 2.4266
     }
   ],
   "errors": []
