@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T23:53:47.268939+00:00",
+  "updatedAt": "2026-04-25T01:00:01.914094+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4792,6 +4792,14 @@
     "https://www.technologyreview.com/2026/04/24/1136422/why-deepseeks-v4-matters": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/260424_deepseek.jpg?resize=1200,600",
       "checkedAt": "2026-04-24T22:56:11.889535+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/24/a-coding-implementation-on-microsofts-openmementos-with-trace-structure-analysis-context-compression-and-fine-tuning-data-preparation": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-70.png",
+      "checkedAt": "2026-04-25T01:00:01.914094+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/24/llm": {
+      "image": "",
+      "checkedAt": "2026-04-25T01:00:01.914094+00:00"
     }
   }
 }
