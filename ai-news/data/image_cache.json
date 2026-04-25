@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-25T19:51:52.277876+00:00",
+  "updatedAt": "2026-04-25T21:00:01.572303+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4828,6 +4828,10 @@
     "https://techcrunch.com/2026/04/25/why-cohere-is-merging-with-aleph-alpha": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/08/GettyImages-1757707025.jpg?w=1024",
       "checkedAt": "2026-04-25T17:54:46.744552+00:00"
+    },
+    "https://techcrunch.com/2026/04/25/maines-governor-vetoes-data-center-moratorium": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800",
+      "checkedAt": "2026-04-25T21:00:01.572303+00:00"
     }
   }
 }
