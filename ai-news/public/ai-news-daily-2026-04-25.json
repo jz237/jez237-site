@@ -1,6 +1,6 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T20:54:38.002138+00:00",
+  "updatedAt": "2026-04-25T21:50:34.443046+00:00",
   "items": [
     {
       "title": "I compared GPT-5.5 against Claude Opus 4.7 on every shared benchmark. Opus 4.7 leads on 6 of 10, GPT-5.5 on 4, with margins between 2 and 13 points. Pricing, time-to-first-token, throughput, and context-window behavior, all laid out.",
@@ -11,13 +11,30 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T20:54:42.532624+00:00",
+      "published": "2026-04-25T21:50:40.108492+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
       "score": 20.01
+    },
+    {
+      "title": "A Coding Implementation on kvcached for Elastic KV Cache Memory, Bursty LLM Serving, and Multi-Model GPU Sharing",
+      "url": "https://www.marktechpost.com/2026/04/25/a-coding-implementation-on-kvcached-for-elastic-kv-cache-memory-bursty-llm-serving-and-multi-model-gpu-sharing",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we explore kvcached, a dynamic KV-cache implementation on top of vLLM, to understand how dynamic KV-cache allocation transforms GPU memory usage for large language models. We begin by setting up the environment and deploying lightweight Qwen2.5 models through an OpenAI-compatible API, ensuring a realistic inference workflow. We then design controlled experiments where [&#8230;]\nThe post A Coding Implementation on kvcached for Elastic KV Cache Memory, Bursty LLM Serving, and Multi-Model GPU Sharing appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-18-1024x731.png",
+      "published": "2026-04-25T21:30:28+00:00",
+      "firstSeen": "2026-04-25T21:50:34.443046+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 19.7098
     },
     {
       "title": "GPT-5.5 prompting guide",
@@ -30,11 +47,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.382
+      "score": 18.3643
     },
     {
       "title": "Quoting Romain Huet",
@@ -47,11 +64,11 @@
       "image": "",
       "published": "2026-04-25T12:06:55+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1516
+      "score": 18.1295
     },
     {
       "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
@@ -64,10 +81,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-25-at-12.43.00-AM-1-150x150.png",
       "published": "2026-04-25T07:44:05+00:00",
       "firstSeen": "2026-04-25T08:00:01.443566+00:00",
-      "lastSeen": "2026-04-25T21:00:01.572303+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.4829
+      "score": 14.4634
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -80,10 +97,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-9.20.50-PM-1-150x150.png",
       "published": "2026-04-25T04:21:58+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T21:00:01.572303+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6147
+      "score": 10.597
+    },
+    {
+      "title": "Anthropic created a test marketplace for agent-on-agent commerce",
+      "url": "https://techcrunch.com/2026/04/25/anthropic-created-a-test-marketplace-for-agent-on-agent-commerce",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In a recent experiment, Anthropic created a classified marketplace where AI agents represented both buyers and sellers, striking real deals for real goods and real money.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-88622588.jpg?resize=1200%2C870",
+      "published": "2026-04-25T21:43:37+00:00",
+      "firstSeen": "2026-04-25T21:50:34.443046+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.9865
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -96,10 +129,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-70.png",
       "published": "2026-04-25T00:52:49+00:00",
       "firstSeen": "2026-04-25T01:00:01.914094+00:00",
-      "lastSeen": "2026-04-25T21:00:01.572303+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9506
+      "score": 6.9345
     },
     {
       "title": "WHY ARE YOU LIKE THIS",
@@ -112,10 +145,10 @@
       "image": "https://static.simonwillison.net/static/2026/why-are-you-like-this.jpeg",
       "published": "2026-04-25T16:44:01+00:00",
       "firstSeen": "2026-04-25T16:59:06.966150+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5195
+      "score": 6.4945
     },
     {
       "title": "Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos",
@@ -128,10 +161,10 @@
       "image": "https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/master/pass/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg",
       "published": "2026-04-25T10:30:00+00:00",
       "firstSeen": "2026-04-25T11:01:04.267380+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1138
+      "score": 6.0927
     },
     {
       "title": "Meta signs multibillion-dollar deal for Amazon Graviton5 chips as AI compute demand outstrips $135B capex budget",
@@ -144,10 +177,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
       "published": "2026-04-25T11:22:37+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5941
+      "score": 5.5725
     },
     {
       "title": "OpenAI CEO apologizes to Tumbler Ridge community",
@@ -160,49 +193,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2194585161.jpg?w=1024",
       "published": "2026-04-25T17:17:56+00:00",
       "firstSeen": "2026-04-25T17:54:46.744552+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
+      "lastSeen": "2026-04-25T21:50:34.443046+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.185
-    },
-    {
-      "title": "OpenAI knew. It chose not to call the police. Now Sam Altman is sorry.",
-      "url": "https://thenextweb.com/news/sam-altman-openai-apology-tumbler-ridge-shooting",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sam Altman published an open letter to the community of Tumbler Ridge, British Columbia, on Thursday, apologising for OpenAI’s failure to alert law enforcement after its own systems flagged a user who went on to carry out the deadliest school shooting in Canada in nearly four decades. “I am deeply sorry that we did not [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
-      "published": "2026-04-25T18:51:33+00:00",
-      "firstSeen": "2026-04-25T19:51:52.277876+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0891
-    },
-    {
-      "title": "The Stanford professor behind an FDA-cleared cardiac AI wants $1 billion for his next company",
-      "url": "https://thenextweb.com/news/stanford-james-zou-human-intelligence-ai-physiology",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Summary: Stanford professor James Zou is reportedly raising approximately $100 million at a valuation targeting $1 billion for a startup called Human Intelligence that applies AI to research on the human body, according to Bloomberg. Zou’s research includes an FDA-cleared cardiac AI (EchoNet), a Nature-published Virtual Lab that designed novel nanobodies, and a Virtual Biotech [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/stanford-james-zou-human-intelligence-ai-physiology.avif",
-      "published": "2026-04-25T11:32:03+00:00",
-      "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3978
+      "score": 5.1596
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
