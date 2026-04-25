@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-25T03:29:43.932466+00:00",
+  "updatedAt": "2026-04-25T05:00:01.583322+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4804,6 +4804,10 @@
     "https://www.marktechpost.com/2026/04/24/a-coding-implementation-on-deepgram-python-sdk-for-transcription-text-to-speech-async-audio-processing-and-text-intelligence": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-71.png",
       "checkedAt": "2026-04-25T02:00:01.883700+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/25/gpt-5-5-prompting-guide": {
+      "image": "",
+      "checkedAt": "2026-04-25T05:00:01.583322+00:00"
     }
   }
 }
