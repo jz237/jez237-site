@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-25T06:00:01.282236+00:00",
+  "updatedAt": "2026-04-25T05:56:09.864512+00:00",
   "items": [
     {
       "title": "I compared GPT-5.5 against Claude Opus 4.7 on every shared benchmark. Opus 4.7 leads on 6 of 10, GPT-5.5 on 4, with margins between 2 and 13 points. Pricing, time-to-first-token, throughput, and context-window behavior, all laid out.",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T06:00:16.581729+00:00",
+      "published": "2026-04-25T05:56:16.626102+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-9.20.50-PM-1-150x150.png",
       "published": "2026-04-25T04:21:58+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9712
+      "score": 10.9731
     },
     {
       "title": "GPT-5.5 prompting guide",
@@ -45,11 +45,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.7371
+      "score": 18.739
     },
     {
       "title": "A Coding Implementation on Deepgram Python SDK for Transcription, Text-to-Speech, Async Audio Processing, and Text Intelligence",
@@ -62,10 +62,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-71.png",
       "published": "2026-04-25T01:02:19+00:00",
       "firstSeen": "2026-04-25T02:00:01.883700+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.4784
+      "score": 2.4801
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -78,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-70.png",
       "published": "2026-04-25T00:52:49+00:00",
       "firstSeen": "2026-04-25T01:00:01.914094+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2742
+      "score": 7.2759
     },
     {
       "title": "llm 0.31",
@@ -94,11 +94,11 @@
       "image": "",
       "published": "2026-04-24T23:35:07+00:00",
       "firstSeen": "2026-04-25T01:00:01.914094+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1105
+      "score": 15.1121
     },
     {
       "title": "The people do not yearn for automation",
@@ -111,10 +111,10 @@
       "image": "",
       "published": "2026-04-24T22:38:49+00:00",
       "firstSeen": "2026-04-24T22:56:11.889535+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0868
+      "score": 6.0884
     },
     {
       "title": "Three reasons why DeepSeek’s new model matters",
@@ -127,11 +127,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/260424_deepseek.jpg?resize=1200%2C600",
       "published": "2026-04-24T21:40:58+00:00",
       "firstSeen": "2026-04-24T22:56:11.889535+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.4631
+      "score": 15.4646
     },
     {
       "title": "DeepSeek Drops Cheaper V4 AI as Huawei Jumps In",
@@ -144,11 +144,11 @@
       "image": "",
       "published": "2026-04-24T21:08:44+00:00",
       "firstSeen": "2026-04-24T21:59:02.013026+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.1101
+      "score": 16.1117
     },
     {
       "title": "Europe’s child safety laws require collecting the data its privacy laws forbid",
@@ -161,10 +161,10 @@
       "image": "https://media.thenextweb.com/2026/04/eu-child-safety-privacy-law-csa-regulation.avif",
       "published": "2026-04-24T21:00:37+00:00",
       "firstSeen": "2026-04-24T21:59:02.013026+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0069
+      "score": 3.0084
     },
     {
       "title": "Meta’s loss is Thinking Machines’ gain",
@@ -177,10 +177,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-1730510668.jpg?resize=1200%2C800",
       "published": "2026-04-24T20:52:07+00:00",
       "firstSeen": "2026-04-24T21:00:01.377954+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0436
+      "score": 2.0451
     },
     {
       "title": "X-Energy’s failed $1 billion SPAC became a $1 billion IPO. The reactor did not change. The market did.",
@@ -193,10 +193,10 @@
       "image": "https://media.thenextweb.com/2026/04/unnamed-file-1.avif",
       "published": "2026-04-24T20:33:04+00:00",
       "firstSeen": "2026-04-24T21:59:02.013026+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8961
+      "score": 1.8976
     },
     {
       "title": "US government’s Intel stake jumps 300% to $36B after CHIPS Act grants were converted to equity under Trump",
@@ -209,10 +209,10 @@
       "image": "https://media.thenextweb.com/2026/04/us-government-intel-stake-36-billion-chips-act.avif",
       "published": "2026-04-24T20:02:32+00:00",
       "firstSeen": "2026-04-24T21:00:01.377954+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9842
+      "score": 2.9857
     },
     {
       "title": "SoftBank is converting a Sharp LCD factory into a battery plant for AI data centres. The data centres cannot wait five years.",
@@ -225,10 +225,10 @@
       "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
       "published": "2026-04-24T19:54:10+00:00",
       "firstSeen": "2026-04-24T21:00:01.377954+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.881
+      "score": 1.8824
     },
     {
       "title": "ComfyUI hits $500M valuation as creators seek more control over AI-generated media",
@@ -241,10 +241,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/05/fall-guys.png?resize=1200%2C675",
       "published": "2026-04-24T19:49:35+00:00",
       "firstSeen": "2026-04-24T20:00:01.550348+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0192
+      "score": 2.0207
     },
     {
       "title": "Google is investing up to $40 billion in a company that is beating Gemini. That is the point.",
@@ -257,10 +257,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-40-billion-anthropic-investment-gemini.avif",
       "published": "2026-04-24T19:41:14+00:00",
       "firstSeen": "2026-04-24T21:02:43.562004+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.876
+      "score": 9.8775
     },
     {
       "title": "Why are top university websites serving porn? It comes down to shoddy housekeeping.",
@@ -273,10 +273,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/07/GettyImages-1137650996-1152x648.jpg",
       "published": "2026-04-24T19:00:39+00:00",
       "firstSeen": "2026-04-24T20:00:01.550348+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8606
+      "score": 1.8621
     },
     {
       "title": "8 Gemini tips for organizing your space (and life)",
@@ -289,10 +289,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_Spring_Cleaning_hero.max-600x600.format-webp.webp",
       "published": "2026-04-24T19:00:00+00:00",
       "firstSeen": "2026-04-24T19:00:02.036742+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1404
+      "score": 8.1418
     },
     {
       "title": "Google to invest up to $40B in Anthropic in cash and compute",
@@ -305,10 +305,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-04-24T18:00:03+00:00",
       "firstSeen": "2026-04-24T19:00:02.036742+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6782
+      "score": 5.6796
     },
     {
       "title": "Apple’s new CEO, and why Elon Musk wants to buy Cursor for $60B",
@@ -321,10 +321,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-04-24T17:45:57+00:00",
       "firstSeen": "2026-04-24T17:59:00.113262+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7731
+      "score": 3.7745
     },
     {
       "title": "DeepSeek AI Releases DeepSeek-V4: Compressed Sparse Attention and Heavily Compressed Attention Enable One-Million-Token Contexts",
@@ -337,11 +337,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-10.35.07-AM-1-150x150.png",
       "published": "2026-04-24T17:36:03+00:00",
       "firstSeen": "2026-04-24T17:59:00.113262+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2995
+      "score": 15.3009
     },
     {
       "title": "AI-Designed Drugs by a DeepMind Spinoff Are Headed to Human Trials",
@@ -354,10 +354,10 @@
       "image": "https://media.wired.com/photos/69ea468e0e9dbe999945f7fa/master/pass/XT502412.jpg",
       "published": "2026-04-24T17:17:36+00:00",
       "firstSeen": "2026-04-24T17:59:00.113262+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9629
+      "score": 4.9642
     },
     {
       "title": "How Project Maven taught the military to love AI",
@@ -370,10 +370,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268484_How_the_US_embraced_AI_warfare_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-24T17:00:00+00:00",
       "firstSeen": "2026-04-24T17:11:05.857541+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0266
+      "score": 2.028
     },
     {
       "title": "Marked-up Mac minis flood eBay amid shortages driven by AI",
@@ -386,10 +386,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/CMC_8135.jpg?resize=1200%2C800",
       "published": "2026-04-24T16:42:19+00:00",
       "firstSeen": "2026-04-24T17:00:01.208457+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0503
+      "score": 3.0517
     },
     {
       "title": "Apple's Next CEO Needs to Launch a Killer AI Product",
@@ -402,10 +402,10 @@
       "image": "https://media.wired.com/photos/69ea4c46037c333b88b0c456/master/pass/Backchannel-What-John-Ternus-Must-Do-Business-2264179980.jpg",
       "published": "2026-04-24T15:00:00+00:00",
       "firstSeen": "2026-04-24T15:22:08.587431+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7152
+      "score": 3.7165
     },
     {
       "title": "AirPods, Touch Bars, and the rest of Tim Cook&#8217;s legacy",
@@ -418,10 +418,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0424_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-24T14:43:07+00:00",
       "firstSeen": "2026-04-24T15:00:01.515943+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0795
+      "score": 3.0808
     },
     {
       "title": "AI Upgrades, Security Breaches, and Corporate Shakeups Define the Week in Tech",
@@ -434,10 +434,10 @@
       "image": "",
       "published": "2026-04-24T14:00:51+00:00",
       "firstSeen": "2026-04-24T17:59:00.113262+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8556
+      "score": 2.8568
     },
     {
       "title": "Tim Cook is stepping down. What happens to Apple now?",
@@ -450,10 +450,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/tim-cook-glowing-apple-logo-GettyImages-2234517515.jpg?w=1024",
       "published": "2026-04-24T14:00:00+00:00",
       "firstSeen": "2026-04-24T17:59:00.113262+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6953
+      "score": 3.6966
     },
     {
       "title": "Uber CTO Praveen Neppalli Naga joins stacked StrictlyVC SF lineup for April 30 event",
@@ -466,10 +466,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/StrictlyVC-NYC-2024.jpg?resize=1200%2C800",
       "published": "2026-04-24T14:00:00+00:00",
       "firstSeen": "2026-04-24T14:03:40.108598+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8953
+      "score": 1.8966
     },
     {
       "title": "Nothing introduces an AI-powered dictation tool",
@@ -482,10 +482,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/IMG_2376-rotated.jpeg?resize=900%2C1200",
       "published": "2026-04-24T13:41:42+00:00",
       "firstSeen": "2026-04-24T14:00:01.388527+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5893
+      "score": 2.5906
     },
     {
       "title": "DeepSeek previews new AI model that ‘closes the gap’ with frontier models",
@@ -498,10 +498,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2272184430.jpg?w=1024",
       "published": "2026-04-24T13:30:59+00:00",
       "firstSeen": "2026-04-24T14:00:01.388527+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9359
+      "score": 6.9371
     },
     {
       "title": "Musk vs. Altman is here, and it&#8217;s going to get messy",
@@ -514,10 +514,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-24T12:00:00+00:00",
       "firstSeen": "2026-04-24T12:03:19.276523+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9272
+      "score": 3.9284
     },
     {
       "title": "In another wild turn for AI chips, Meta signs deal for millions of Amazon AI CPUs",
@@ -530,10 +530,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/09/GettyImages-1415078085.jpg?resize=1200%2C721",
       "published": "2026-04-24T12:00:00+00:00",
       "firstSeen": "2026-04-24T12:03:19.276523+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8572
+      "score": 3.8584
     },
     {
       "title": "Turkey’s parliament passes social media ban for under-15s, one week after a school shooting",
@@ -546,10 +546,10 @@
       "image": "https://media.thenextweb.com/2026/04/Turkey.avif",
       "published": "2026-04-24T11:43:00+00:00",
       "firstSeen": "2026-04-24T14:00:01.388527+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7119
+      "score": 1.7131
     },
     {
       "title": "Intel beats expectations for the sixth straight quarter as AI demand for CPUs surges",
@@ -562,10 +562,10 @@
       "image": "https://media.thenextweb.com/2026/04/Intel.avif",
       "published": "2026-04-24T11:15:26+00:00",
       "firstSeen": "2026-04-24T14:00:01.388527+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7036
+      "score": 1.7047
     },
     {
       "title": "China plans to block US investment in its top AI firms without government approval",
@@ -578,10 +578,10 @@
       "image": "https://media.thenextweb.com/2026/04/China-vs-USA.avif",
       "published": "2026-04-24T10:57:54+00:00",
       "firstSeen": "2026-04-24T12:00:01.585718+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4983
+      "score": 3.4994
     },
     {
       "title": "China’s DeepSeek previews new AI model a year after jolting US rivals",
@@ -594,10 +594,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKB320_DEEPSEEK_AI_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-24T09:45:30+00:00",
       "firstSeen": "2026-04-24T10:42:44.687422+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.9869
+      "score": 10.988
     },
     {
       "title": "Prestigious photo contest answers ‘what is a photo?’",
@@ -610,10 +610,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/WPP-2026_POY_Finalists.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613",
       "published": "2026-04-24T09:40:07+00:00",
       "firstSeen": "2026-04-24T10:42:44.687422+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8853
+      "score": 1.8865
     },
     {
       "title": "These AI Thirst Trap Creators Say They’re Misunderstood",
@@ -626,10 +626,10 @@
       "image": "https://media.wired.com/photos/69e8007028d4e7b7573ef27b/master/pass/The-Gay-AI-Influencers-Taking-IG%E2%80%94and-Red-Carpet%E2%80%94by-Storm-Culture.jpg",
       "published": "2026-04-24T09:30:00+00:00",
       "firstSeen": "2026-04-24T10:42:44.687422+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8124
+      "score": 1.8135
     },
     {
       "title": "5 Reasons to Think Twice Before Using ChatGPT—or Any Chatbot—for Financial Advice",
@@ -642,10 +642,10 @@
       "image": "https://media.wired.com/photos/69ea22cb7c6d09c92685b0af/master/pass/financial-advice-chat-gpt.jpg",
       "published": "2026-04-24T09:00:00+00:00",
       "firstSeen": "2026-04-24T09:07:20.122335+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8038
+      "score": 7.8049
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -658,10 +658,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6019
+      "score": 2.6021
     },
     {
       "title": "Inside Universe 25",
@@ -674,10 +674,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9979
+      "score": 2.998
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -690,7 +690,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8208
@@ -706,7 +706,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-13T20:00:00+00:00",
       "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-25T06:00:01.282236+00:00",
+      "lastSeen": "2026-04-25T05:56:09.864512+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.5405
