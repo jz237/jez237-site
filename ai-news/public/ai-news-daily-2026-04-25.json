@@ -1,6 +1,6 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T23:00:01.229402+00:00",
+  "updatedAt": "2026-04-25T22:54:41.689445+00:00",
   "items": [
     {
       "title": "xAI Launches grok-voice-think-fast-1.0: Topping τ-voice Bench at 67.3%, Outperforming Gemini, GPT Realtime, and More",
@@ -9,11 +9,11 @@
       "sourceUrl": "https://www.marktechpost.com/feed/",
       "sourceWeight": 0.8,
       "category": "AI",
-      "summary": "The new flagship voice model outperforms Gemini, GPT Realtime, and its own predecessor across retail, airline, and telecom workflows\nThe post xAI Launches grok-voice-think-fast-1.0: Topping τ-voice Bench at 67.3%, Outperforming Gemini, GPT Realtime, and More appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-25-at-3.36.24-PM-150x150.png",
-      "published": "2026-04-25T22:36:57+00:00",
-      "firstSeen": "2026-04-25T23:00:01.229402+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-25T22:54:47.948307+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -34,24 +34,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.6753
-    },
-    {
-      "title": "Head-to-head comparison of Claude Opus 4.7 vs Opus 4.6: benchmark deltas, pricing, effort levels, vision, tokenizer, and a migration checklist. Opus 4.7 wins 12 of 14 reported benchmarks at the same $5/$25 price.",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T23:00:11.345386+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 19.41
+      "score": 19.6779
     },
     {
       "title": "GPT-5.5 prompting guide",
@@ -64,11 +47,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.343
+      "score": 18.3446
     },
     {
       "title": "Quoting Romain Huet",
@@ -81,11 +64,11 @@
       "image": "",
       "published": "2026-04-25T12:06:55+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.103
+      "score": 18.105
     },
     {
       "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
@@ -101,7 +84,7 @@
       "lastSeen": "2026-04-25T23:00:01.229402+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.4398
+      "score": 14.4416
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -117,7 +100,7 @@
       "lastSeen": "2026-04-25T23:00:01.229402+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5755
+      "score": 10.5772
     },
     {
       "title": "Anthropic created a test marketplace for agent-on-agent commerce",
@@ -130,10 +113,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-88622588.jpg?resize=1200%2C870",
       "published": "2026-04-25T21:43:37+00:00",
       "firstSeen": "2026-04-25T21:50:34.443046+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9518
+      "score": 7.9544
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -149,7 +132,7 @@
       "lastSeen": "2026-04-25T23:00:01.229402+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.915
+      "score": 6.9165
     },
     {
       "title": "WHY ARE YOU LIKE THIS",
@@ -162,10 +145,10 @@
       "image": "https://static.simonwillison.net/static/2026/why-are-you-like-this.jpeg",
       "published": "2026-04-25T16:44:01+00:00",
       "firstSeen": "2026-04-25T16:59:06.966150+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4643
+      "score": 6.4665
     },
     {
       "title": "Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos",
@@ -178,10 +161,10 @@
       "image": "https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/master/pass/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg",
       "published": "2026-04-25T10:30:00+00:00",
       "firstSeen": "2026-04-25T11:01:04.267380+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0673
+      "score": 6.0692
     },
     {
       "title": "Meta signs multibillion-dollar deal for Amazon Graviton5 chips as AI compute demand outstrips $135B capex budget",
@@ -194,11 +177,33 @@
       "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
       "published": "2026-04-25T11:22:37+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T23:00:01.229402+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5465
+      "score": 5.5484
+    },
+    {
+      "title": "OpenAI CEO apologizes to Tumbler Ridge community",
+      "url": "https://techcrunch.com/2026/04/25/openai-ceo-apologizes-to-tumbler-ridge-community",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In a letter to the residents of Tumbler Ridge, Canada, OpenAI CEO Sam Altman said he is “deeply sorry” that his company failed to alert law enforcement about the suspect in a recent mass shooting.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2194585161.jpg?w=1024",
+      "published": "2026-04-25T17:17:56+00:00",
+      "firstSeen": "2026-04-25T17:54:46.744552+00:00",
+      "lastSeen": "2026-04-25T22:54:41.689445+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1312
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
