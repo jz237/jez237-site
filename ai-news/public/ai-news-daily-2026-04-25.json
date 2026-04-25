@@ -1,6 +1,6 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T19:51:52.277876+00:00",
+  "updatedAt": "2026-04-25T20:54:38.002138+00:00",
   "items": [
     {
       "title": "I compared GPT-5.5 against Claude Opus 4.7 on every shared benchmark. Opus 4.7 leads on 6 of 10, GPT-5.5 on 4, with margins between 2 and 13 points. Pricing, time-to-first-token, throughput, and context-window behavior, all laid out.",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T19:51:58.259268+00:00",
+      "published": "2026-04-25T20:54:42.532624+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.4024
+      "score": 18.382
     },
     {
       "title": "Quoting Romain Huet",
@@ -47,11 +47,11 @@
       "image": "",
       "published": "2026-04-25T12:06:55+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.177
+      "score": 18.1516
     },
     {
       "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
@@ -67,7 +67,7 @@
       "lastSeen": "2026-04-25T19:51:52.277876+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.5053
+      "score": 14.4829
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -83,7 +83,7 @@
       "lastSeen": "2026-04-25T19:51:52.277876+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6352
+      "score": 10.6147
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -99,7 +99,7 @@
       "lastSeen": "2026-04-25T19:51:52.277876+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9692
+      "score": 6.9506
     },
     {
       "title": "WHY ARE YOU LIKE THIS",
@@ -112,10 +112,10 @@
       "image": "https://static.simonwillison.net/static/2026/why-are-you-like-this.jpeg",
       "published": "2026-04-25T16:44:01+00:00",
       "firstSeen": "2026-04-25T16:59:06.966150+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5484
+      "score": 6.5195
     },
     {
       "title": "Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos",
@@ -128,10 +128,10 @@
       "image": "https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/master/pass/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg",
       "published": "2026-04-25T10:30:00+00:00",
       "firstSeen": "2026-04-25T11:01:04.267380+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1381
+      "score": 6.1138
     },
     {
       "title": "Meta signs multibillion-dollar deal for Amazon Graviton5 chips as AI compute demand outstrips $135B capex budget",
@@ -144,10 +144,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
       "published": "2026-04-25T11:22:37+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.619
+      "score": 5.5941
     },
     {
       "title": "OpenAI CEO apologizes to Tumbler Ridge community",
@@ -160,10 +160,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2194585161.jpg?w=1024",
       "published": "2026-04-25T17:17:56+00:00",
       "firstSeen": "2026-04-25T17:54:46.744552+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2143
+      "score": 5.185
     },
     {
       "title": "OpenAI knew. It chose not to call the police. Now Sam Altman is sorry.",
@@ -176,10 +176,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
       "published": "2026-04-25T18:51:33+00:00",
       "firstSeen": "2026-04-25T19:51:52.277876+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1197
+      "score": 5.0891
     },
     {
       "title": "The Stanford professor behind an FDA-cleared cardiac AI wants $1 billion for his next company",
@@ -192,11 +192,17 @@
       "image": "https://media.thenextweb.com/2026/04/stanford-james-zou-human-intelligence-ai-physiology.avif",
       "published": "2026-04-25T11:32:03+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T19:51:52.277876+00:00",
+      "lastSeen": "2026-04-25T20:54:38.002138+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4228
+      "score": 4.3978
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
