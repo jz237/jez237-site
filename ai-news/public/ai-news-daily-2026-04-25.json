@@ -1,6 +1,6 @@
 {
   "date": "2026-04-25",
-  "updatedAt": "2026-04-25T13:00:01.606297+00:00",
+  "updatedAt": "2026-04-25T13:37:43.098539+00:00",
   "items": [
     {
       "title": "GPT-5.5 prompting guide",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-25T04:13:36+00:00",
       "firstSeen": "2026-04-25T05:00:01.583322+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.5521
+      "score": 18.5372
     },
     {
       "title": "Quoting Romain Huet",
@@ -30,11 +30,11 @@
       "image": "",
       "published": "2026-04-25T12:06:55+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.3633
+      "score": 18.3447
     },
     {
       "title": "Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation",
@@ -50,7 +50,7 @@
       "lastSeen": "2026-04-25T13:00:01.606297+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 14.6703
+      "score": 14.6539
     },
     {
       "title": "Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness",
@@ -66,7 +66,7 @@
       "lastSeen": "2026-04-25T13:00:01.606297+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7854
+      "score": 10.7705
     },
     {
       "title": "A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation",
@@ -82,7 +82,7 @@
       "lastSeen": "2026-04-25T13:00:01.606297+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.1056
+      "score": 7.092
     },
     {
       "title": "Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos",
@@ -95,10 +95,10 @@
       "image": "https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/master/pass/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg",
       "published": "2026-04-25T10:30:00+00:00",
       "firstSeen": "2026-04-25T11:01:04.267380+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3162
+      "score": 6.2984
     },
     {
       "title": "Meta signs multibillion-dollar deal for Amazon Graviton5 chips as AI compute demand outstrips $135B capex budget",
@@ -111,10 +111,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-amazon-graviton-chips-agentic-ai.avif",
       "published": "2026-04-25T11:22:37+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8015
+      "score": 5.7833
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -125,9 +125,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-25T13:00:11.136907+00:00",
+      "published": "2026-04-25T13:37:46.602774+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -143,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/04/stanford-james-zou-human-intelligence-ai-physiology.avif",
       "published": "2026-04-25T11:32:03+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6061
+      "score": 4.5878
     },
     {
       "title": "Porsche built one of the best electric SUVs ever made, and does not expect the world to buy enough of them",
@@ -159,10 +159,10 @@
       "image": "https://media.thenextweb.com/2026/04/porsche-cayenne-coupe-electric-ev-strategy.avif",
       "published": "2026-04-25T11:55:26+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9176
+      "score": 3.8991
     },
     {
       "title": "Meta is firing 8,000 people. Microsoft is paying 8,750 to leave. Both are spending the savings on AI.",
@@ -175,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-microsoft-layoffs-23000-ai-spending.avif",
       "published": "2026-04-25T11:11:54+00:00",
       "firstSeen": "2026-04-25T13:00:01.606297+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7963
+      "score": 2.7782
     },
     {
       "title": "Denis Brovarnyy: Tech education that starts where theory ends",
@@ -191,11 +191,17 @@
       "image": "https://media.thenextweb.com/2026/04/denis-brovarnyy-ai-education-skills-gap.avif",
       "published": "2026-04-25T10:06:00+00:00",
       "firstSeen": "2026-04-25T11:01:04.267380+00:00",
-      "lastSeen": "2026-04-25T13:00:01.606297+00:00",
+      "lastSeen": "2026-04-25T13:37:43.098539+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7649
+      "score": 2.7473
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
