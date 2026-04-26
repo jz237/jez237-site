@@ -1,6 +1,6 @@
 {
   "date": "2026-04-26",
-  "updatedAt": "2026-04-26T06:00:02.091289+00:00",
+  "updatedAt": "2026-04-26T06:18:29.514705+00:00",
   "items": [
     {
       "title": "GPT-5.5 vs GPT-5.4: Pricing, Speed, Context, Benchmarks",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-26T06:00:10.000970+00:00",
+      "published": "2026-04-26T06:18:33.828008+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-26T06:00:02.091289+00:00",
+      "lastSeen": "2026-04-26T06:18:29.514705+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-74-1024x731.png",
       "published": "2026-04-26T04:04:15+00:00",
       "firstSeen": "2026-04-26T05:00:01.451441+00:00",
-      "lastSeen": "2026-04-26T06:00:02.091289+00:00",
+      "lastSeen": "2026-04-26T06:18:29.514705+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.5626
+      "score": 2.5537
     },
     {
       "title": "RAG Without Vectors: How PageIndex Retrieves by Reasoning",
@@ -46,10 +46,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-47-150x150.png",
       "published": "2026-04-26T04:22:40+00:00",
       "firstSeen": "2026-04-26T05:00:01.451441+00:00",
-      "lastSeen": "2026-04-26T06:00:02.091289+00:00",
+      "lastSeen": "2026-04-26T06:18:29.514705+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.5215
+      "score": 1.5126
     }
   ],
   "errors": []
