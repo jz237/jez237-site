@@ -1,9 +1,9 @@
 {
   "date": "2026-04-26",
-  "updatedAt": "2026-04-26T08:21:17.913866+00:00",
+  "updatedAt": "2026-04-26T10:00:02.065944+00:00",
   "items": [
     {
-      "title": "I compared GPT-5.5 against Claude Opus 4.7 on every shared benchmark. Opus 4.7 leads on 6 of 10, GPT-5.5 on 4, with margins between 2 and 13 points. Pricing, time-to-first-token, throughput, and context-window behavior, all laid out.",
+      "title": "GPT-5.5 vs Claude Opus 4.7: Pricing, Speed, Benchmarks",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-26T08:21:21.190319+00:00",
+      "published": "2026-04-26T10:00:09.585649+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-26T08:21:17.913866+00:00",
+      "lastSeen": "2026-04-26T10:00:02.065944+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
@@ -30,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-19.png",
       "published": "2026-04-26T07:59:03+00:00",
       "firstSeen": "2026-04-26T08:00:01.529910+00:00",
-      "lastSeen": "2026-04-26T08:21:17.913866+00:00",
+      "lastSeen": "2026-04-26T10:00:02.065944+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.4587
+      "score": 10.4101
     },
     {
       "title": "A Coding Tutorial on Datashader on Rendering Massive Datasets with High-Performance Python Visual Analytics",
@@ -46,10 +46,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-74-1024x731.png",
       "published": "2026-04-26T04:04:15+00:00",
       "firstSeen": "2026-04-26T05:00:01.451441+00:00",
-      "lastSeen": "2026-04-26T08:21:17.913866+00:00",
+      "lastSeen": "2026-04-26T10:00:02.065944+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.4966
+      "score": 2.4529
     },
     {
       "title": "RAG Without Vectors: How PageIndex Retrieves by Reasoning",
@@ -62,10 +62,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-47-150x150.png",
       "published": "2026-04-26T04:22:40+00:00",
       "firstSeen": "2026-04-26T05:00:01.451441+00:00",
-      "lastSeen": "2026-04-26T08:21:17.913866+00:00",
+      "lastSeen": "2026-04-26T10:00:02.065944+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.4549
+      "score": 1.4109
     }
   ],
   "errors": []
