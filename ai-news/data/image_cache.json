@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-26T06:18:29.514705+00:00",
+  "updatedAt": "2026-04-26T08:00:01.529910+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4844,6 +4844,10 @@
     "https://www.marktechpost.com/2026/04/25/a-coding-tutorial-on-datashader-on-rendering-massive-datasets-with-high-performance-python-visual-analytics": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-74-1024x731.png",
       "checkedAt": "2026-04-26T05:00:01.451441+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/26/top-7-benchmarks-that-actually-matter-for-agentic-reasoning-in-large-language-models": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-19.png",
+      "checkedAt": "2026-04-26T08:00:01.529910+00:00"
     }
   }
 }
