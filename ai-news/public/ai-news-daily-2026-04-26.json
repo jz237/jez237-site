@@ -1,7 +1,24 @@
 {
   "date": "2026-04-26",
-  "updatedAt": "2026-04-26T16:59:32.010865+00:00",
+  "updatedAt": "2026-04-26T17:55:48.428080+00:00",
   "items": [
+    {
+      "title": "I compared GPT-5.5 against Claude Opus 4.7 on every shared benchmark. Opus 4.7 leads on 6 of 10, GPT-5.5 on 4, with margins between 2 and 13 points. Pricing, time-to-first-token, throughput, and context-window behavior, all laid out.",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-26T17:55:54.786840+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 20.01
+    },
     {
       "title": "Top 7 Benchmarks That Actually Matter for Agentic Reasoning in Large Language Models",
       "url": "https://www.marktechpost.com/2026/04/26/top-7-benchmarks-that-actually-matter-for-agentic-reasoning-in-large-language-models",
@@ -16,7 +33,7 @@
       "lastSeen": "2026-04-26T16:59:32.010865+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.2265
+      "score": 10.2045
     },
     {
       "title": "To buy this Bay Area home, you’ll need Anthropic equity",
@@ -29,10 +46,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-04-26T15:30:00+00:00",
       "firstSeen": "2026-04-26T16:00:01.128586+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2453
+      "score": 5.2182
     },
     {
       "title": "A startup with a bankrupt fintech CEO and a president’s son wants to build America’s robot army",
@@ -45,26 +62,10 @@
       "image": "https://media.thenextweb.com/2026/04/foundation-humanoid-robot-soldiers-pentagon.avif",
       "published": "2026-04-26T12:27:08+00:00",
       "firstSeen": "2026-04-26T13:38:48.833909+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8197
-    },
-    {
-      "title": "Live model battles across chat, coding, image, video, and audio modalities",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-26T16:59:35.941715+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 4.7947
     },
     {
       "title": "Brockman’s diary called it a lie. Now a jury will hear it.",
@@ -77,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/04/musk-altman-openai-trial-credibility-nonprofit.avif",
       "published": "2026-04-26T12:13:00+00:00",
       "firstSeen": "2026-04-26T13:00:01.707015+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0133
+      "score": 3.9886
     },
     {
       "title": "The EU sanctioned Chinese firms for arming Russia. China retaliated by threatening Europe’s ability to arm itself.",
@@ -93,10 +94,10 @@
       "image": "https://media.thenextweb.com/2026/04/beijing-warns-eu-china-russia-sanctions.avif",
       "published": "2026-04-26T11:59:15+00:00",
       "firstSeen": "2026-04-26T13:00:01.707015+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1072
+      "score": 3.0826
     },
     {
       "title": "China orders its apps to stop sending orders to exhausted drivers. The algorithm is now subject to collective bargaining.",
@@ -109,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/04/china-gig-worker-platform-labour-rules.avif",
       "published": "2026-04-26T11:52:43+00:00",
       "firstSeen": "2026-04-26T13:00:01.707015+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1043
+      "score": 3.0798
     },
     {
       "title": "Sequoia is giving away the hardware for an AI project it cannot invest in. That is the point.",
@@ -125,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/04/sequoia-openclaw-mac-mini-ai-agents.avif",
       "published": "2026-04-26T12:38:33+00:00",
       "firstSeen": "2026-04-26T13:38:48.833909+00:00",
-      "lastSeen": "2026-04-26T16:59:32.010865+00:00",
+      "lastSeen": "2026-04-26T17:55:48.428080+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7248
+      "score": 2.6997
     },
     {
       "title": "A Coding Tutorial on Datashader on Rendering Massive Datasets with High-Performance Python Visual Analytics",
@@ -144,7 +145,7 @@
       "lastSeen": "2026-04-26T16:59:32.010865+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.2883
+      "score": 2.2685
     },
     {
       "title": "RAG Without Vectors: How PageIndex Retrieves by Reasoning",
@@ -160,8 +161,14 @@
       "lastSeen": "2026-04-26T16:59:32.010865+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.2448
+      "score": 1.2249
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
