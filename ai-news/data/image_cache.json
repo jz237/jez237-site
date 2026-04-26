@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-26T21:52:15.356556+00:00",
+  "updatedAt": "2026-04-26T23:00:01.186324+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4852,6 +4852,10 @@
     "https://techcrunch.com/2026/04/26/to-buy-this-bay-area-home-youll-need-anthropic-equity": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "checkedAt": "2026-04-26T16:00:01.128586+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/26/how-to-build-smarter-multilingual-text-wrapping-with-budoux-through-parsing-html-rendering-model-introspection-and-toy-training": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-76-1024x731.png",
+      "checkedAt": "2026-04-26T23:00:01.186324+00:00"
     }
   }
 }
