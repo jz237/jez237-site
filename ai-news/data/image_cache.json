@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T18:00:01.339961+00:00",
+  "updatedAt": "2026-04-27T19:00:01.472355+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4948,6 +4948,22 @@
     "https://openai.com/index/choco": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2R8JZ9T70W7lgUBsjpgRCO/330ebfaf2744a03af595fdd9701d934a/oai_Choco_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-27T18:00:01.339961+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/27/build-a-reinforcement-learning-powered-agent-that-learns-to-retrieve-relevant-long-term-memories": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-80.png",
+      "checkedAt": "2026-04-27T19:00:01.472355+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/27/now-deceased-agi-clause": {
+      "image": "",
+      "checkedAt": "2026-04-27T19:00:01.472355+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/919326/google-ai-pentagon-classified-letter": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2194442232.jpg?quality=90&amp;strip=all&amp;crop=0%2C0.0046823055672613%2C100%2C78.443717922583&amp;w=1200",
+      "checkedAt": "2026-04-27T19:00:01.472355+00:00"
+    },
+    "https://www.techrepublic.com/article/news-china-blocks-meta-2-5b-manus-ai-deal": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/meta-manus-ai-news.jpg",
+      "checkedAt": "2026-04-27T19:00:01.472355+00:00"
     }
   }
 }
