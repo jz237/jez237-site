@@ -1,6 +1,6 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T09:00:01.300595+00:00",
+  "updatedAt": "2026-04-27T10:00:02.018796+00:00",
   "items": [
     {
       "title": "DeepSeek cuts V4-Pro prices by 75% and slashes cache costs across its entire API to a tenth",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-04-27T07:25:07+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.1027
+      "score": 22.0739
     },
     {
       "title": "Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-1.43.16-AM-150x150.png",
       "published": "2026-04-27T08:47:20+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.7636
+      "score": 18.7336
     },
     {
       "title": "How to Build a Fully Searchable AI Knowledge Base with OpenKB, OpenRouter, and Llama",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "published": "2026-04-27T05:20:25+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7137
+      "score": 10.6864
     },
     {
       "title": "Announcing our partnership with the Republic of Korea",
@@ -63,10 +63,10 @@
       "image": "https://lh3.googleusercontent.com/3q6uiTEWOv5PKJQYWgYLxCgohyndMqdWTFiwFDbxSzk-tW0HeannPdF7kvqR2hmE_tvSeryfw4IvG7gwuZ11rBgIYGvapEQvHO9RRJXw4JCqyme6uA=w528-h297-n-nu-rw-lo",
       "published": "2026-04-27T07:00:06+00:00",
       "firstSeen": "2026-04-27T08:00:01.753940+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3706
+      "score": 6.3421
     },
     {
       "title": "Conditional anomaly detection using soft harmonic functions: An application to clinical alerting",
@@ -77,9 +77,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T09:00:11.448514+00:00",
+      "published": "2026-04-27T10:00:11.733561+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.46
@@ -95,10 +95,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-56-150x150.png",
       "published": "2026-04-27T05:33:44+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2198
+      "score": 3.1924
+    },
+    {
+      "title": "Copenhagen’s Atech raises pre-seed from Sequoia, a16z, and Lovable to build ‘vibe-engineering’ for hardware",
+      "url": "https://thenextweb.com/news/atech-pre-seed-hardware-vibe-engineering-lovable",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The round amount is undisclosed. Backers include Nordic Makers, Emblem, the Lovable company itself, the Sequoia Scout Fund, and the Andreessen Horowitz Scout Fund. Lovable CEO Anton Osika personally endorsed the team. Atech lets users describe a hardware concept in natural language and receive a working prototype. Atech, a Copenhagen-based AI hardware startup, has raised [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Atech.avif",
+      "published": "2026-04-27T08:49:53+00:00",
+      "firstSeen": "2026-04-27T10:00:02.018796+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1148
     },
     {
       "title": "The Iran war is hitting the AI supply chain where it hurts",
@@ -111,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/04/Circuit-board.avif",
       "published": "2026-04-27T08:16:13+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T10:00:02.018796+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1279
+      "score": 2.0984
     }
   ],
   "errors": []
