@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T14:23:49.331387+00:00",
+  "updatedAt": "2026-04-27T16:00:01.922143+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -1675,7 +1675,7 @@
     },
     "https://www.techrepublic.com/article/best-business-email-providers": {
       "image": "https://assets.techrepublic.com/uploads/2024/07/AdobeStock_488920698.jpg",
-      "checkedAt": "2026-03-24T10:00:01.160839+00:00"
+      "checkedAt": "2026-04-27T16:00:01.922143+00:00"
     },
     "https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Mirage-background.png?w=1200",
@@ -4896,6 +4896,14 @@
     "https://huggingface.co/blog/openai-privacy-filter-web-apps": {
       "image": "https://huggingface.co/blog/assets/openai-privacy-filter-web-apps/thumbnail.png",
       "checkedAt": "2026-04-27T14:23:49.331387+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/919028/canva-magic-layers-ai-replacing-palestine": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Canva-Magic-Layers-AI-Palestine-switched.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-27T16:00:01.922143+00:00"
+    },
+    "https://www.techrepublic.com/article/eu-180-million-sovereign-cloud-contract": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/cloud-infrastructure-envato-elements.jpg",
+      "checkedAt": "2026-04-27T16:00:01.922143+00:00"
     }
   }
 }
