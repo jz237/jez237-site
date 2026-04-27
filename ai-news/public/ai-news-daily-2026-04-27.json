@@ -1,6 +1,6 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T11:00:01.436845+00:00",
+  "updatedAt": "2026-04-27T12:00:01.905737+00:00",
   "items": [
     {
       "title": "DeepSeek cuts V4-Pro prices by 75% and slashes cache costs across its entire API to a tenth",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-04-27T07:25:07+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.0458
+      "score": 22.0185
     },
     {
       "title": "Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-1.43.16-AM-150x150.png",
       "published": "2026-04-27T08:47:20+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.7045
+      "score": 18.6761
     },
     {
       "title": "How to Build a Fully Searchable AI Knowledge Base with OpenKB, OpenRouter, and Llama",
@@ -47,10 +47,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "published": "2026-04-27T05:20:25+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.66
+      "score": 10.6342
+    },
+    {
+      "title": "Google DeepMind to open its first AI campus in the world in Seoul",
+      "url": "https://thenextweb.com/news/google-deepmind-ai-campus-seoul",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Demis Hassabis met South Korean President Lee Jae Myung at Cheong Wa Dae on Monday and signed an MOU with the Ministry of Science and ICT. The campus will be operational this year. Hassabis accepted a request to send at least 10 Google engineers from US headquarters. He presented Lee with a Go board signed [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Google-DeepMind.avif",
+      "published": "2026-04-27T11:14:35+00:00",
+      "firstSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1271
     },
     {
       "title": "Announcing our partnership with the Republic of Korea",
@@ -63,10 +79,10 @@
       "image": "https://lh3.googleusercontent.com/3q6uiTEWOv5PKJQYWgYLxCgohyndMqdWTFiwFDbxSzk-tW0HeannPdF7kvqR2hmE_tvSeryfw4IvG7gwuZ11rBgIYGvapEQvHO9RRJXw4JCqyme6uA=w528-h297-n-nu-rw-lo",
       "published": "2026-04-27T07:00:06+00:00",
       "firstSeen": "2026-04-27T08:00:01.753940+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3144
+      "score": 6.2874
     },
     {
       "title": "Sereact raises $110 million Series B to build robots that simulate the consequences of their actions before they act",
@@ -79,10 +95,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sereact.avif",
       "published": "2026-04-27T09:54:49+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2173
+      "score": 4.188
     },
     {
       "title": "The LoRA Assumption That Breaks in Production",
@@ -95,10 +111,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-56-150x150.png",
       "published": "2026-04-27T05:33:44+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1658
+      "score": 3.1399
     },
     {
       "title": "Performance Anomaly Detection in Athletics: A Benchmarking System with Visual Analytics",
@@ -109,9 +125,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T11:00:09.798624+00:00",
+      "published": "2026-04-27T12:00:10.226143+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -127,10 +143,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200%2C664",
       "published": "2026-04-27T10:00:00+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
+    },
+    {
+      "title": "The world’s largest EV battery maker is raising $5 billion in Hong Kong",
+      "url": "https://thenextweb.com/news/catl-5-billion-hong-kong-share-placement",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The world’s largest EV battery maker priced its Hong Kong listing at HK$263 in May 2025. Its shares touched HK$701 before the placement was announced. The deal builds on a week of shareholder activity: a Sinopec unit sold $770M of CATL stock at HK$708 on 22 April; a Shenzhen block trade of 58 million A-shares [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/CATL.avif",
+      "published": "2026-04-27T10:31:48+00:00",
+      "firstSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.106
     },
     {
       "title": "China orders Meta to unwind its $2 billion acquisition of Manus",
@@ -143,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
       "published": "2026-04-27T09:37:35+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1088
+      "score": 2.0798
     },
     {
       "title": "India’s Acko hires Kotak, ICICI Securities, and Morgan Stanley for a $350 million IPO targeting a $2.5 billion valuation",
@@ -159,42 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/Acko.avif",
       "published": "2026-04-27T09:19:29+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1
-    },
-    {
-      "title": "Copenhagen’s Atech raises pre-seed from Sequoia, a16z, and Lovable to build ‘vibe-engineering’ for hardware",
-      "url": "https://thenextweb.com/news/atech-pre-seed-hardware-vibe-engineering-lovable",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The round amount is undisclosed. Backers include Nordic Makers, Emblem, the Lovable company itself, the Sequoia Scout Fund, and the Andreessen Horowitz Scout Fund. Lovable CEO Anton Osika personally endorsed the team. Atech lets users describe a hardware concept in natural language and receive a working prototype. Atech, a Copenhagen-based AI hardware startup, has raised [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Atech.avif",
-      "published": "2026-04-27T08:49:53+00:00",
-      "firstSeen": "2026-04-27T09:28:18.991262+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0857
-    },
-    {
-      "title": "The Iran war is hitting the AI supply chain where it hurts",
-      "url": "https://thenextweb.com/news/iran-war-pcb-supply-chain-sabic",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Iran’s strike on SABIC’s Jubail petrochemical complex in early April halted production of the resin used to make PCB laminates. Goldman Sachs analysts say prices surged 40% in April alone. A South Korean supplier to Samsung and AMD says epoxy resin wait times have stretched from three weeks to fifteen. The Iran war that began [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Circuit-board.avif",
-      "published": "2026-04-27T08:16:13+00:00",
-      "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0697
+      "score": 2.0712
     }
   ],
   "errors": []
