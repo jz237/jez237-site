@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T22:04:28.382272+00:00",
+  "updatedAt": "2026-04-27T23:07:51.125700+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4984,6 +4984,10 @@
     "https://www.anthropic.com/news/theo-hourmouzis-general-manager-australia-new-zealand": {
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
       "checkedAt": "2026-04-27T23:00:01.615802+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/27/1136466/elon-musk-and-sam-altman-are-going-to-court-over-openais-future": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/musk-altman.jpg?resize=1200,600",
+      "checkedAt": "2026-04-27T23:07:51.125700+00:00"
     }
   }
 }
