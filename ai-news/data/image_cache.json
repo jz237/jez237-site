@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T09:28:18.991262+00:00",
+  "updatedAt": "2026-04-27T11:00:01.436845+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4864,6 +4864,10 @@
     "https://www.marktechpost.com/2026/04/26/how-to-build-a-fully-searchable-ai-knowledge-base-with-openkb-openrouter-and-llama": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "checkedAt": "2026-04-27T06:00:02.014868+00:00"
+    },
+    "https://techcrunch.com/2026/04/27/meta-inks-deal-for-solar-power-at-night-beamed-from-space": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200,664",
+      "checkedAt": "2026-04-27T11:00:01.436845+00:00"
     }
   }
 }
