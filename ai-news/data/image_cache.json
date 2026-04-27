@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T11:00:01.436845+00:00",
+  "updatedAt": "2026-04-27T11:58:06.603781+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4868,6 +4868,10 @@
     "https://techcrunch.com/2026/04/27/meta-inks-deal-for-solar-power-at-night-beamed-from-space": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200,664",
       "checkedAt": "2026-04-27T11:00:01.436845+00:00"
+    },
+    "https://www.theverge.com/transportation/918411/gm-ai-car-design-nissan-neural-concept": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/side.png?quality=90&amp;strip=all&amp;crop=0%2C3.0977312390925%2C100%2C93.804537521815&amp;w=1200",
+      "checkedAt": "2026-04-27T11:58:06.603781+00:00"
     }
   }
 }
