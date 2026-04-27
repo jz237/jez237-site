@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T05:00:01.543400+00:00",
+  "updatedAt": "2026-04-27T06:00:02.014868+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4860,6 +4860,10 @@
     "https://openai.com/index/our-principles": {
       "image": "",
       "checkedAt": "2026-04-26T23:53:51.651801+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/26/how-to-build-a-fully-searchable-ai-knowledge-base-with-openkb-openrouter-and-llama": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
+      "checkedAt": "2026-04-27T06:00:02.014868+00:00"
     }
   }
 }
