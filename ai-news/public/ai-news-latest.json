@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T20:00:01.218179+00:00",
+  "updatedAt": "2026-04-27T21:00:01.199192+00:00",
   "items": [
     {
       "title": "Conditional anomaly detection using soft harmonic functions: An application to clinical alerting",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T20:00:06.713986+00:00",
+      "published": "2026-04-27T21:00:07.526683+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.46
+    },
+    {
+      "title": "Elon Musk Boosts New Yorker’s Sam Altman Exposé on X as Trial Begins",
+      "url": "https://www.wired.com/story/elon-musk-boost-new-yorker-article-sam-altman-x",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The move comes as the trial for Elon Musk’s lawsuit against OpenAI kicks off in federal court in Oakland.",
+      "image": "https://media.wired.com/photos/69efb98c62f06e966778ac07/master/pass/GettyImages-491588398.jpg",
+      "published": "2026-04-27T20:08:51+00:00",
+      "firstSeen": "2026-04-27T21:00:01.199192+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2642
     },
     {
       "title": "Build a Reinforcement Learning Powered Agent that Learns to Retrieve Relevant Long-Term Memories for Accurate LLM Question Answering",
@@ -28,10 +44,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-80.png",
       "published": "2026-04-27T18:58:20+00:00",
       "firstSeen": "2026-04-27T19:00:01.472355+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.389
+      "score": 9.3597
     },
     {
       "title": "Truecaller Faces New Pressure in India as Growth Matures",
@@ -44,10 +60,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/12/India-Flag-3-Envato.jpg",
       "published": "2026-04-27T18:46:28+00:00",
       "firstSeen": "2026-04-27T20:00:01.218179+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2132
+      "score": 3.184
     },
     {
       "title": "Tracking the history of the now-deceased OpenAI Microsoft AGI clause",
@@ -60,10 +76,10 @@
       "image": "",
       "published": "2026-04-27T18:38:17+00:00",
       "firstSeen": "2026-04-27T19:00:01.472355+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0492
+      "score": 7.0201
     },
     {
       "title": "OpenMOSS Releases MOSS-Audio: An Open-Source Foundation Model for Speech, Sound, Music, and Time-Aware Audio Reasoning",
@@ -76,11 +92,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-11.34.12-AM-150x150.png",
       "published": "2026-04-27T18:36:06+00:00",
       "firstSeen": "2026-04-27T19:00:01.472355+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.3281
+      "score": 15.2991
     },
     {
       "title": "Google employees ask Sundar Pichai to say no to classified military AI use",
@@ -93,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2194442232.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0.0046823055672613%2C100%2C78.443717922583&amp%3Bw=1200",
       "published": "2026-04-27T18:17:12+00:00",
       "firstSeen": "2026-04-27T19:00:01.472355+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3089
+      "score": 4.2801
     },
     {
       "title": "China Shuts Down Meta’s $2.5B Bid for AI Startup Manus",
@@ -109,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/meta-manus-ai-news.jpg",
       "published": "2026-04-27T18:10:26+00:00",
       "firstSeen": "2026-04-27T19:00:01.472355+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8956
+      "score": 4.8669
     },
     {
       "title": "OpenAI ends Microsoft legal peril over its $50B Amazon deal",
@@ -121,14 +137,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "OpenAI has won major concessions from its largest shareholder, Microsoft, that will allow it to sell products on AWS, while Microsoft get more cash in a revenue-share agreement.",
+      "summary": "OpenAI has won major concessions from its largest shareholder, Microsoft, that will allow it to sell products on AWS, while Microsoft gets more cash in a revenue-share agreement.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200%2C800",
       "published": "2026-04-27T17:40:38+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2213
+      "score": 5.193
     },
     {
       "title": "Speech translation in Google Meet is now rolling out to mobile devices",
@@ -141,10 +157,10 @@
       "image": "",
       "published": "2026-04-27T17:37:47+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4199
+      "score": 4.3917
     },
     {
       "title": "DeepMind’s David Silver just raised $1.1B to build an AI that learns without human data",
@@ -157,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2233739454.jpg?resize=1200%2C686",
       "published": "2026-04-27T17:24:21+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6135
+      "score": 6.5855
     },
     {
       "title": "OpenAI is building a phone that would make apps obsolete. The supply chain says it might actually ship.",
@@ -173,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/04/Qualcomm-President-and-CEO-Cristiano-Amon.avif",
       "published": "2026-04-27T17:15:21+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.8693
+      "score": 7.8413
     },
     {
       "title": "Google’s AI researchers told management to refuse classified military work. Management spent three years making sure it could say yes.",
@@ -189,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-employees-classified-military-ai-pentagon.avif",
       "published": "2026-04-27T17:00:02+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.4621
+      "score": 8.4343
     },
     {
       "title": "Microsoft drops its exclusive licence to OpenAI’s technology",
@@ -205,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI-Microsoft.avif",
       "published": "2026-04-27T16:26:48+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1466
+      "score": 6.1193
     },
     {
       "title": "China Startup Secures $8.4B in Credit Lines for Orbital Data Center Push",
@@ -221,10 +237,10 @@
       "image": "",
       "published": "2026-04-27T16:25:42+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1461
+      "score": 3.1188
     },
     {
       "title": "How Arpit Grawal designed distribution ecosystems for 2.5 Billion consumers in emerging markets",
@@ -237,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/04/arpit-agrawal-emerging-markets-distribution-growth.avif",
       "published": "2026-04-27T16:23:58+00:00",
       "firstSeen": "2026-04-27T18:00:01.339961+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0453
+      "score": 2.018
     },
     {
       "title": "Microsoft and OpenAI’s famed AGI agreement is dead",
@@ -253,10 +269,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25431707/STK201_SAM_ALTMAN_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-27T16:15:47+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2515
+      "score": 5.2244
     },
     {
       "title": "The missing step between hype and profit",
@@ -269,10 +285,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/gnome-steps2a.jpg?resize=1200%2C600",
       "published": "2026-04-27T16:13:41+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2806
+      "score": 3.2534
     },
     {
       "title": "Investors back Skye’s AI home screen app for iPhone ahead of launch",
@@ -285,10 +301,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-11.09.42-AM.jpg?resize=1200%2C678",
       "published": "2026-04-27T16:13:02+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9803
+      "score": 3.9531
     },
     {
       "title": "The Prompt Engineering Cheat Sheet: How to Write Better AI Prompts",
@@ -301,10 +317,10 @@
       "image": "",
       "published": "2026-04-27T15:59:45+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0342
+      "score": 0.0072
     },
     {
       "title": "Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -317,10 +333,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-27T15:50:29+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.24
+      "score": 5.2131
     },
     {
       "title": "Sequoia and Nvidia back AlphaGo creator David Silver’s Ineffable Intelligence at $5.1 billion",
@@ -333,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/04/David-Silver-is-chasing-superhuman-intelligence-with-1bn-seed.avif",
       "published": "2026-04-27T14:53:42+00:00",
       "firstSeen": "2026-04-27T16:00:01.922143+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0046
+      "score": 9.9784
     },
     {
       "title": "Vinted reaches €8 billion valuation in €880 million secondary share sale led by EQT",
@@ -349,10 +365,10 @@
       "image": "https://media.thenextweb.com/2026/04/Vinted.avif",
       "published": "2026-04-27T14:45:13+00:00",
       "firstSeen": "2026-04-27T16:00:01.922143+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7008
+      "score": 2.6748
     },
     {
       "title": "Canva apologizes after its AI tool replaces ‘Palestine’ in designs",
@@ -365,10 +381,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Canva-Magic-Layers-AI-Palestine-switched.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-27T14:29:23+00:00",
       "firstSeen": "2026-04-27T16:00:01.922143+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2039
+      "score": 2.178
     },
     {
       "title": "EU Funds Sovereign Cloud Infrastructure with €180 Million Contract",
@@ -381,10 +397,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/cloud-infrastructure-envato-elements.jpg",
       "published": "2026-04-27T14:27:27+00:00",
       "firstSeen": "2026-04-27T16:00:01.922143+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.093
+      "score": 3.0672
     },
     {
       "title": "The Man Behind AlphaGo Thinks AI Is Taking the Wrong Path",
@@ -397,10 +413,10 @@
       "image": "https://media.wired.com/photos/69eba31172fa130deff56162/master/pass/Man-Behind-Alpha-Zero-Business-DavidSilver-2.jpg",
       "published": "2026-04-27T14:00:00+00:00",
       "firstSeen": "2026-04-27T14:23:49.331387+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.0956
     },
     {
       "title": "China blocks Meta’s $2B Manus deal after months-long probe",
@@ -413,10 +429,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2209215388.jpg?w=1024",
       "published": "2026-04-27T13:16:55+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8027
+      "score": 3.7777
     },
     {
       "title": "Anthropic Draws Google’s $40B Bet in Latest AI Megadeal",
@@ -429,10 +445,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04272026-google-anthropic-40b-investment.jpg",
       "published": "2026-04-27T13:12:31+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0609
+      "score": 10.0359
     },
     {
       "title": "OpenAI could be making a phone with AI agents replacing apps",
@@ -445,10 +461,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2206295463.jpg?resize=1200%2C800",
       "published": "2026-04-27T13:08:59+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.8994
+      "score": 8.8745
     },
     {
       "title": "Join the new AI Agents Vibe Coding Course from Google and Kaggle",
@@ -461,10 +477,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Vibe_Coding_Course_herosocial.max-600x600.format-webp.webp",
       "published": "2026-04-27T13:00:00+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3356
+      "score": 7.3108
     },
     {
       "title": "Rebuilding the data stack for AI",
@@ -477,10 +493,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Bavish-Patel_Rajan-Padmanabhan-V4.png?resize=1200%2C600",
       "published": "2026-04-27T13:00:00+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
+      "score": 2.0708
     },
     {
       "title": "Meta signs a deal to beam solar energy from space to its AI data centres",
@@ -493,10 +509,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-04-27T12:44:54+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0493
+      "score": 3.0247
     },
     {
       "title": "Spotify expands from soundtrack to sweat session: Peloton partnership puts 1,400 classes inside the app",
@@ -509,10 +525,10 @@
       "image": "https://media.thenextweb.com/2026/04/Fitness-with-Spotify.avif",
       "published": "2026-04-27T12:22:00+00:00",
       "firstSeen": "2026-04-27T14:00:01.908480+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7398
+      "score": 3.7154
     },
     {
       "title": "Musk v. Altman goes to trial in Oakland",
@@ -525,10 +541,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
       "published": "2026-04-27T11:49:43+00:00",
       "firstSeen": "2026-04-27T13:00:01.929893+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9266
+      "score": 3.9026
     },
     {
       "title": "Google DeepMind to open its first AI campus in the world in Seoul",
@@ -541,10 +557,10 @@
       "image": "https://media.thenextweb.com/2026/04/Google-DeepMind.avif",
       "published": "2026-04-27T11:14:35+00:00",
       "firstSeen": "2026-04-27T11:58:06.603781+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9125
+      "score": 7.8888
     },
     {
       "title": "The AI-designed car is taking shape",
@@ -557,10 +573,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/side.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.0977312390925%2C100%2C93.804537521815&amp%3Bw=1200",
       "published": "2026-04-27T11:00:00+00:00",
       "firstSeen": "2026-04-27T11:58:06.603781+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9833
+      "score": -1.0068
     },
     {
       "title": "The world’s largest EV battery maker is raising $5 billion in Hong Kong",
@@ -576,7 +592,7 @@
       "lastSeen": "2026-04-27T16:52:30.776403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8956
+      "score": 1.8724
     },
     {
       "title": "Meta inks deal for solar power at night, beamed from space",
@@ -589,10 +605,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200%2C664",
       "published": "2026-04-27T10:00:00+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0232
+      "score": 2.0004
     },
     {
       "title": "Sereact raises $110 million Series B to build robots that simulate the consequences of their actions before they act",
@@ -608,7 +624,7 @@
       "lastSeen": "2026-04-27T16:52:30.776403+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9812
+      "score": 3.9584
     },
     {
       "title": "China orders Meta to unwind its $2 billion acquisition of Manus",
@@ -624,23 +640,23 @@
       "lastSeen": "2026-04-27T16:52:30.776403+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8746
+      "score": 1.852
     },
     {
-      "title": "India’s Acko hires Kotak, ICICI Securities, and Morgan Stanley for a $350 million IPO targeting a $2.5 billion valuation",
-      "url": "https://thenextweb.com/news/acko-ipo-350-million-india",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The digital insurer, backed by General Atlantic, Canada Pension Plan Investment Board, and Accel, plans to file its DRHP confidentially with SEBI in H2 2026. In FY25 it grew revenue 35% to Rs 2,837 crore and cut net losses by 37%. It has raised over $583 million in total funding. Acko, the Bengaluru-based digital-first general [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Acko.avif",
-      "published": "2026-04-27T09:19:29+00:00",
-      "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T16:52:30.776403+00:00",
+      "title": "The Life Scientific: Jim Ashworth-Beaumont",
+      "url": "http://www.bbc.co.uk/programmes/w3ct8js8",
+      "source": "BBC Discovery",
+      "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
+      "sourceWeight": 0.85,
+      "category": "Science",
+      "summary": "It's a rare thing to encounter a medical specialist who has experience of his field from the expert and the patient perspective - but not unheard of...Jim Ashworth-Beaumont is an orthotist and prosthetist who spent years helping people adapt to life with artificial limbs and musculoskeletal supports, before a near-fatal accident left him relying on both.This twist of fate might have derailed many - but Jim drew on reserves of resilience and determination forged long before his accident; initially in the army, then by returning to education to earn the qualifications he missed out on as a young",
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "published": "2026-04-27T20:00:00+00:00",
+      "firstSeen": "2026-04-27T21:00:01.199192+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8677
+      "score": 2.2599
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -653,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5346
+      "score": 2.5342
     },
     {
       "title": "Inside Universe 25",
@@ -669,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9503
+      "score": 2.9501
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -685,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-14T08:30:00+00:00",
       "firstSeen": "2026-04-14T09:00:01.417790+00:00",
-      "lastSeen": "2026-04-27T20:00:01.218179+00:00",
+      "lastSeen": "2026-04-27T21:00:01.199192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8201
