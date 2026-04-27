@@ -1,6 +1,6 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T12:00:01.905737+00:00",
+  "updatedAt": "2026-04-27T11:58:06.603781+00:00",
   "items": [
     {
       "title": "DeepSeek cuts V4-Pro prices by 75% and slashes cache costs across its entire API to a tenth",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-04-27T07:25:07+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.0185
+      "score": 22.0194
     },
     {
       "title": "Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-1.43.16-AM-150x150.png",
       "published": "2026-04-27T08:47:20+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.6761
+      "score": 18.677
     },
     {
       "title": "How to Build a Fully Searchable AI Knowledge Base with OpenKB, OpenRouter, and Llama",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "published": "2026-04-27T05:20:25+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.6342
+      "score": 10.635
     },
     {
       "title": "Google DeepMind to open its first AI campus in the world in Seoul",
@@ -62,11 +62,11 @@
       "summary": "Demis Hassabis met South Korean President Lee Jae Myung at Cheong Wa Dae on Monday and signed an MOU with the Ministry of Science and ICT. The campus will be operational this year. Hassabis accepted a request to send at least 10 Google engineers from US headquarters. He presented Lee with a Go board signed [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/Google-DeepMind.avif",
       "published": "2026-04-27T11:14:35+00:00",
-      "firstSeen": "2026-04-27T12:00:01.905737+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "firstSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1271
+      "score": 8.1281
     },
     {
       "title": "Announcing our partnership with the Republic of Korea",
@@ -79,10 +79,10 @@
       "image": "https://lh3.googleusercontent.com/3q6uiTEWOv5PKJQYWgYLxCgohyndMqdWTFiwFDbxSzk-tW0HeannPdF7kvqR2hmE_tvSeryfw4IvG7gwuZ11rBgIYGvapEQvHO9RRJXw4JCqyme6uA=w528-h297-n-nu-rw-lo",
       "published": "2026-04-27T07:00:06+00:00",
       "firstSeen": "2026-04-27T08:00:01.753940+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2874
+      "score": 6.2882
     },
     {
       "title": "Sereact raises $110 million Series B to build robots that simulate the consequences of their actions before they act",
@@ -95,10 +95,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sereact.avif",
       "published": "2026-04-27T09:54:49+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.188
+      "score": 4.189
     },
     {
       "title": "The LoRA Assumption That Breaks in Production",
@@ -111,10 +111,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-56-150x150.png",
       "published": "2026-04-27T05:33:44+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1399
+      "score": 3.1407
     },
     {
       "title": "Performance Anomaly Detection in Athletics: A Benchmarking System with Visual Analytics",
@@ -125,9 +125,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T12:00:10.226143+00:00",
+      "published": "2026-04-27T11:58:10.627421+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -143,10 +143,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200%2C664",
       "published": "2026-04-27T10:00:00+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.2315
     },
     {
       "title": "The world’s largest EV battery maker is raising $5 billion in Hong Kong",
@@ -158,11 +158,11 @@
       "summary": "The world’s largest EV battery maker priced its Hong Kong listing at HK$263 in May 2025. Its shares touched HK$701 before the placement was announced. The deal builds on a week of shareholder activity: a Sinopec unit sold $770M of CATL stock at HK$708 on 22 April; a Shenzhen block trade of 58 million A-shares [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/CATL.avif",
       "published": "2026-04-27T10:31:48+00:00",
-      "firstSeen": "2026-04-27T12:00:01.905737+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "firstSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.106
+      "score": 2.1069
     },
     {
       "title": "China orders Meta to unwind its $2 billion acquisition of Manus",
@@ -175,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
       "published": "2026-04-27T09:37:35+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0798
+      "score": 2.0807
     },
     {
       "title": "India’s Acko hires Kotak, ICICI Securities, and Morgan Stanley for a $350 million IPO targeting a $2.5 billion valuation",
@@ -191,10 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/Acko.avif",
       "published": "2026-04-27T09:19:29+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T12:00:01.905737+00:00",
+      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0712
+      "score": 2.0721
     }
   ],
   "errors": []
