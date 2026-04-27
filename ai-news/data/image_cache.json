@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T13:00:01.929893+00:00",
+  "updatedAt": "2026-04-27T14:00:01.908480+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4872,6 +4872,26 @@
     "https://www.theverge.com/transportation/918411/gm-ai-car-design-nissan-neural-concept": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/side.png?quality=90&amp;strip=all&amp;crop=0%2C3.0977312390925%2C100%2C93.804537521815&amp;w=1200",
       "checkedAt": "2026-04-27T11:58:06.603781+00:00"
+    },
+    "https://techcrunch.com/2026/04/27/china-vetoes-metas-2b-manus-deal-after-months-long-probe": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2209215388.jpg?w=1024",
+      "checkedAt": "2026-04-27T14:00:01.908480+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-anthropic-40b-investment": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/tr-04272026-google-anthropic-40b-investment.jpg",
+      "checkedAt": "2026-04-27T14:00:01.908480+00:00"
+    },
+    "https://techcrunch.com/2026/04/27/openai-could-be-making-a-phone-with-ai-agents-replacing-apps": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2206295463.jpg?resize=1200,800",
+      "checkedAt": "2026-04-27T14:00:01.908480+00:00"
+    },
+    "https://www.technologyreview.com/2026/04/27/1136322/rebuilding-the-data-stack-for-ai": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/Bavish-Patel_Rajan-Padmanabhan-V4.png?resize=1200,600",
+      "checkedAt": "2026-04-27T14:00:01.908480+00:00"
+    },
+    "https://openai.com/index/next-phase-of-microsoft-partnership": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1naOS6n2h1CVL994q4kjI1/6c1e0943481d9d583916786626ef47bc/OAI_Microsoft_Partnership_16x9_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-27T14:00:01.908480+00:00"
     }
   }
 }
