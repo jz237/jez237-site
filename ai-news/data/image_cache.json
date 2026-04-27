@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T14:00:01.908480+00:00",
+  "updatedAt": "2026-04-27T14:23:49.331387+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4892,6 +4892,10 @@
     "https://openai.com/index/next-phase-of-microsoft-partnership": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1naOS6n2h1CVL994q4kjI1/6c1e0943481d9d583916786626ef47bc/OAI_Microsoft_Partnership_16x9_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-27T14:00:01.908480+00:00"
+    },
+    "https://huggingface.co/blog/openai-privacy-filter-web-apps": {
+      "image": "https://huggingface.co/blog/assets/openai-privacy-filter-web-apps/thumbnail.png",
+      "checkedAt": "2026-04-27T14:23:49.331387+00:00"
     }
   }
 }
