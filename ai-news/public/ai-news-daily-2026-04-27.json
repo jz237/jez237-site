@@ -1,7 +1,41 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T08:00:01.753940+00:00",
+  "updatedAt": "2026-04-27T09:00:01.300595+00:00",
   "items": [
+    {
+      "title": "DeepSeek cuts V4-Pro prices by 75% and slashes cache costs across its entire API to a tenth",
+      "url": "https://thenextweb.com/news/deepseek-v4-pro-price-cut-75-percent",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The promotional discount runs until 5 May 2026. Even at full price, V4-Pro already undercuts GPT-5.5, Claude Opus 4.7, and Gemini 3.1 Pro on per-token costs. The move is a direct challenge to the pricing strategy of US AI providers at a moment when the Trump administration has accused Chinese firms of distilling American AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
+      "published": "2026-04-27T07:25:07+00:00",
+      "firstSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 22.1027
+    },
+    {
+      "title": "Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo",
+      "url": "https://www.marktechpost.com/2026/04/27/meta-ai-releases-sapiens2-a-high-resolution-human-centric-vision-model-for-pose-segmentation-normals-pointmap-and-albedo",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Meta Reality Labs releases a new foundation model family for human-centric vision that pushes pose estimation, segmentation, and 3D geometry to new state-of-the-art levels — all from a single backbone.\nThe post Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-1.43.16-AM-150x150.png",
+      "published": "2026-04-27T08:47:20+00:00",
+      "firstSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 18.7636
+    },
     {
       "title": "How to Build a Fully Searchable AI Knowledge Base with OpenKB, OpenRouter, and Llama",
       "url": "https://www.marktechpost.com/2026/04/26/how-to-build-a-fully-searchable-ai-knowledge-base-with-openkb-openrouter-and-llama",
@@ -13,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "published": "2026-04-27T05:20:25+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T08:00:01.753940+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7416
+      "score": 10.7137
     },
     {
       "title": "Announcing our partnership with the Republic of Korea",
@@ -29,10 +63,10 @@
       "image": "https://lh3.googleusercontent.com/3q6uiTEWOv5PKJQYWgYLxCgohyndMqdWTFiwFDbxSzk-tW0HeannPdF7kvqR2hmE_tvSeryfw4IvG7gwuZ11rBgIYGvapEQvHO9RRJXw4JCqyme6uA=w528-h297-n-nu-rw-lo",
       "published": "2026-04-27T07:00:06+00:00",
       "firstSeen": "2026-04-27T08:00:01.753940+00:00",
-      "lastSeen": "2026-04-27T08:00:01.753940+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3999
+      "score": 6.3706
     },
     {
       "title": "Conditional anomaly detection using soft harmonic functions: An application to clinical alerting",
@@ -43,9 +77,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T08:00:09.539932+00:00",
+      "published": "2026-04-27T09:00:11.448514+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T08:00:01.753940+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 3.46
@@ -61,10 +95,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-56-150x150.png",
       "published": "2026-04-27T05:33:44+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T08:00:01.753940+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.248
+      "score": 3.2198
+    },
+    {
+      "title": "The Iran war is hitting the AI supply chain where it hurts",
+      "url": "https://thenextweb.com/news/iran-war-pcb-supply-chain-sabic",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Iran’s strike on SABIC’s Jubail petrochemical complex in early April halted production of the resin used to make PCB laminates. Goldman Sachs analysts say prices surged 40% in April alone. A South Korean supplier to Samsung and AMD says epoxy resin wait times have stretched from three weeks to fifteen. The Iran war that began [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Circuit-board.avif",
+      "published": "2026-04-27T08:16:13+00:00",
+      "firstSeen": "2026-04-27T09:00:01.300595+00:00",
+      "lastSeen": "2026-04-27T09:00:01.300595+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1279
     }
   ],
   "errors": []
