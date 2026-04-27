@@ -1,9 +1,9 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T03:57:03.348192+00:00",
+  "updatedAt": "2026-04-27T05:00:01.543400+00:00",
   "items": [
     {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
+      "title": "Performance Anomaly Detection in Athletics: A Benchmarking System with Visual Analytics",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T03:57:10.034597+00:00",
+      "published": "2026-04-27T05:00:09.433034+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T03:57:03.348192+00:00",
+      "lastSeen": "2026-04-27T05:00:01.543400+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
