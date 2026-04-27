@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T15:00:01.682063+00:00",
+  "updatedAt": "2026-04-27T14:23:49.331387+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4893,17 +4893,9 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1naOS6n2h1CVL994q4kjI1/6c1e0943481d9d583916786626ef47bc/OAI_Microsoft_Partnership_16x9_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-27T14:00:01.908480+00:00"
     },
-    "https://www.theverge.com/ai-artificial-intelligence/919028/canva-magic-layers-ai-replacing-palestine": {
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Canva-Magic-Layers-AI-Palestine-switched.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
-      "checkedAt": "2026-04-27T15:00:01.682063+00:00"
-    },
-    "https://www.techrepublic.com/article/eu-180-million-sovereign-cloud-contract": {
-      "image": "https://assets.techrepublic.com/uploads/2026/04/cloud-infrastructure-envato-elements.jpg",
-      "checkedAt": "2026-04-27T15:00:01.682063+00:00"
-    },
     "https://huggingface.co/blog/openai-privacy-filter-web-apps": {
       "image": "https://huggingface.co/blog/assets/openai-privacy-filter-web-apps/thumbnail.png",
-      "checkedAt": "2026-04-27T15:00:01.682063+00:00"
+      "checkedAt": "2026-04-27T14:23:49.331387+00:00"
     }
   }
 }
