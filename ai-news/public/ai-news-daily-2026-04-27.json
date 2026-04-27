@@ -1,6 +1,6 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T09:28:18.991262+00:00",
+  "updatedAt": "2026-04-27T11:00:01.436845+00:00",
   "items": [
     {
       "title": "DeepSeek cuts V4-Pro prices by 75% and slashes cache costs across its entire API to a tenth",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-04-27T07:25:07+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.089
+      "score": 22.0458
     },
     {
       "title": "Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-1.43.16-AM-150x150.png",
       "published": "2026-04-27T08:47:20+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.7493
+      "score": 18.7045
     },
     {
       "title": "How to Build a Fully Searchable AI Knowledge Base with OpenKB, OpenRouter, and Llama",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "published": "2026-04-27T05:20:25+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7007
+      "score": 10.66
     },
     {
       "title": "Announcing our partnership with the Republic of Korea",
@@ -63,26 +63,26 @@
       "image": "https://lh3.googleusercontent.com/3q6uiTEWOv5PKJQYWgYLxCgohyndMqdWTFiwFDbxSzk-tW0HeannPdF7kvqR2hmE_tvSeryfw4IvG7gwuZ11rBgIYGvapEQvHO9RRJXw4JCqyme6uA=w528-h297-n-nu-rw-lo",
       "published": "2026-04-27T07:00:06+00:00",
       "firstSeen": "2026-04-27T08:00:01.753940+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3571
+      "score": 6.3144
     },
     {
-      "title": "Conditional anomaly detection using soft harmonic functions: An application to clinical alerting",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Sereact raises $110 million Series B to build robots that simulate the consequences of their actions before they act",
+      "url": "https://thenextweb.com/news/sereact-raises-110-million-series-b",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T09:28:25.080248+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "summary": "The round is led by Headline, with new investors Bullhound Capital, Felix Capital, and Daphni. Valuation is undisclosed. Sereact’s vision language action models already run in BMW, Daimler Truck, and logistics customers. The $110M is more than four times the €25M Series A raised just 15 months ago. Sereact, the Stuttgart-based AI robotics software company, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Sereact.avif",
+      "published": "2026-04-27T09:54:49+00:00",
+      "firstSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.46
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2173
     },
     {
       "title": "The LoRA Assumption That Breaks in Production",
@@ -95,10 +95,74 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-56-150x150.png",
       "published": "2026-04-27T05:33:44+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2068
+      "score": 3.1658
+    },
+    {
+      "title": "Performance Anomaly Detection in Athletics: A Benchmarking System with Visual Analytics",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-27T11:00:09.798624+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
+    },
+    {
+      "title": "Meta inks deal for solar power at night, beamed from space",
+      "url": "https://techcrunch.com/2026/04/27/meta-inks-deal-for-solar-power-at-night-beamed-from-space",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Overview Energy's first contract with Meta is a small step toward a future of space-based solar power.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200%2C664",
+      "published": "2026-04-27T10:00:00+00:00",
+      "firstSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
+    },
+    {
+      "title": "China orders Meta to unwind its $2 billion acquisition of Manus",
+      "url": "https://thenextweb.com/news/china-blocks-meta-manus-2-billion-acquisition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The NDRC’s Office of the Working Mechanism for Foreign Investment Security Review issued a formal cancellation order on Monday, four months after the deal was announced. Manus co-founders Xiao Hong and Ji Yichao have been barred from leaving China since March.  China’s National Development and Reform Commission has formally ordered Meta to unwind its $2 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
+      "published": "2026-04-27T09:37:35+00:00",
+      "firstSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1088
+    },
+    {
+      "title": "India’s Acko hires Kotak, ICICI Securities, and Morgan Stanley for a $350 million IPO targeting a $2.5 billion valuation",
+      "url": "https://thenextweb.com/news/acko-ipo-350-million-india",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The digital insurer, backed by General Atlantic, Canada Pension Plan Investment Board, and Accel, plans to file its DRHP confidentially with SEBI in H2 2026. In FY25 it grew revenue 35% to Rs 2,837 crore and cut net losses by 37%. It has raised over $583 million in total funding. Acko, the Bengaluru-based digital-first general [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Acko.avif",
+      "published": "2026-04-27T09:19:29+00:00",
+      "firstSeen": "2026-04-27T11:00:01.436845+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1
     },
     {
       "title": "Copenhagen’s Atech raises pre-seed from Sequoia, a16z, and Lovable to build ‘vibe-engineering’ for hardware",
@@ -111,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/04/Atech.avif",
       "published": "2026-04-27T08:49:53+00:00",
       "firstSeen": "2026-04-27T09:28:18.991262+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1306
+      "score": 2.0857
     },
     {
       "title": "The Iran war is hitting the AI supply chain where it hurts",
@@ -127,10 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/Circuit-board.avif",
       "published": "2026-04-27T08:16:13+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T09:28:18.991262+00:00",
+      "lastSeen": "2026-04-27T11:00:01.436845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1139
+      "score": 2.0697
     }
   ],
   "errors": []
