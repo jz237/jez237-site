@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T22:00:01.796219+00:00",
+  "updatedAt": "2026-04-27T23:00:01.615802+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4980,6 +4980,10 @@
     "https://openai.com/index/openai-available-at-fedramp-moderate": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/7wH8tF8d1YzMuZeMndFnWr/c123943a0c86f76376d493739abedd2a/openai-available-at-fedramp-moderate-16_9.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-27T22:00:01.796219+00:00"
+    },
+    "https://www.anthropic.com/news/theo-hourmouzis-general-manager-australia-new-zealand": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
+      "checkedAt": "2026-04-27T23:00:01.615802+00:00"
     }
   }
 }
