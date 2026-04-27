@@ -1,6 +1,6 @@
 {
   "date": "2026-04-27",
-  "updatedAt": "2026-04-27T11:58:06.603781+00:00",
+  "updatedAt": "2026-04-27T13:00:01.929893+00:00",
   "items": [
     {
       "title": "DeepSeek cuts V4-Pro prices by 75% and slashes cache costs across its entire API to a tenth",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-04-27T07:25:07+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.0194
+      "score": 21.992
     },
     {
       "title": "Meta AI Releases Sapiens2: A High-Resolution Human-Centric Vision Model for Pose, Segmentation, Normals, Pointmap, and Albedo",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-27-at-1.43.16-AM-150x150.png",
       "published": "2026-04-27T08:47:20+00:00",
       "firstSeen": "2026-04-27T09:00:01.300595+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.677
+      "score": 18.6486
     },
     {
       "title": "How to Build a Fully Searchable AI Knowledge Base with OpenKB, OpenRouter, and Llama",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-20.png",
       "published": "2026-04-27T05:20:25+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.635
+      "score": 10.6092
     },
     {
       "title": "Google DeepMind to open its first AI campus in the world in Seoul",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/04/Google-DeepMind.avif",
       "published": "2026-04-27T11:14:35+00:00",
       "firstSeen": "2026-04-27T11:58:06.603781+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1281
+      "score": 8.0976
     },
     {
       "title": "Announcing our partnership with the Republic of Korea",
@@ -79,10 +79,10 @@
       "image": "https://lh3.googleusercontent.com/3q6uiTEWOv5PKJQYWgYLxCgohyndMqdWTFiwFDbxSzk-tW0HeannPdF7kvqR2hmE_tvSeryfw4IvG7gwuZ11rBgIYGvapEQvHO9RRJXw4JCqyme6uA=w528-h297-n-nu-rw-lo",
       "published": "2026-04-27T07:00:06+00:00",
       "firstSeen": "2026-04-27T08:00:01.753940+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2882
+      "score": 6.2612
     },
     {
       "title": "Sereact raises $110 million Series B to build robots that simulate the consequences of their actions before they act",
@@ -95,10 +95,26 @@
       "image": "https://media.thenextweb.com/2026/04/Sereact.avif",
       "published": "2026-04-27T09:54:49+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.189
+      "score": 4.1596
+    },
+    {
+      "title": "Musk v. Altman goes to trial in Oakland",
+      "url": "https://thenextweb.com/news/musk-altman-openai-trial-oakland",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A four-week federal case over OpenAI’s soul, a diary entry, $150 billion in claimed damages, and the question of whether a nonprofit can become the world’s most valuable AI company.  The years-long legal battle between Elon Musk and Sam Altman over the future of OpenAI moved from social media to a federal courtroom in Oakland, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
+      "published": "2026-04-27T11:49:43+00:00",
+      "firstSeen": "2026-04-27T13:00:01.929893+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1148
     },
     {
       "title": "The LoRA Assumption That Breaks in Production",
@@ -111,10 +127,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/image-56-150x150.png",
       "published": "2026-04-27T05:33:44+00:00",
       "firstSeen": "2026-04-27T06:00:02.014868+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1407
+      "score": 3.1147
     },
     {
       "title": "Performance Anomaly Detection in Athletics: A Benchmarking System with Visual Analytics",
@@ -125,9 +141,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-27T11:58:10.627421+00:00",
+      "published": "2026-04-27T13:00:08.006114+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -143,10 +159,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Overview-satellite-rendering.png?resize=1200%2C664",
       "published": "2026-04-27T10:00:00+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2315
+      "score": 2.202
     },
     {
       "title": "The world’s largest EV battery maker is raising $5 billion in Hong Kong",
@@ -159,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/04/CATL.avif",
       "published": "2026-04-27T10:31:48+00:00",
       "firstSeen": "2026-04-27T11:58:06.603781+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1069
+      "score": 2.077
     },
     {
       "title": "China orders Meta to unwind its $2 billion acquisition of Manus",
@@ -175,26 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
       "published": "2026-04-27T09:37:35+00:00",
       "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
+      "lastSeen": "2026-04-27T13:00:01.929893+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0807
-    },
-    {
-      "title": "India’s Acko hires Kotak, ICICI Securities, and Morgan Stanley for a $350 million IPO targeting a $2.5 billion valuation",
-      "url": "https://thenextweb.com/news/acko-ipo-350-million-india",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The digital insurer, backed by General Atlantic, Canada Pension Plan Investment Board, and Accel, plans to file its DRHP confidentially with SEBI in H2 2026. In FY25 it grew revenue 35% to Rs 2,837 crore and cut net losses by 37%. It has raised over $583 million in total funding. Acko, the Bengaluru-based digital-first general [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Acko.avif",
-      "published": "2026-04-27T09:19:29+00:00",
-      "firstSeen": "2026-04-27T11:00:01.436845+00:00",
-      "lastSeen": "2026-04-27T11:58:06.603781+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0721
+      "score": 2.0516
     }
   ],
   "errors": []
