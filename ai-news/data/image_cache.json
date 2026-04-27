@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-26T22:56:29.189926+00:00",
+  "updatedAt": "2026-04-27T00:00:01.687654+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4856,6 +4856,10 @@
     "https://www.marktechpost.com/2026/04/26/how-to-build-smarter-multilingual-text-wrapping-with-budoux-through-parsing-html-rendering-model-introspection-and-toy-training": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-76-1024x731.png",
       "checkedAt": "2026-04-26T23:00:01.186324+00:00"
+    },
+    "https://openai.com/index/our-principles": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/sOXwMmuOREhljTDZ4gVid/e277a6d0e6364e53591ac8b9c42de068/our-principles-16_9-text.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-27T00:00:01.687654+00:00"
     }
   }
 }
