@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T16:52:30.776403+00:00",
+  "updatedAt": "2026-04-27T18:00:01.339961+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -4928,6 +4928,26 @@
     "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-27T16:52:30.776403+00:00"
+    },
+    "https://techcrunch.com/2026/04/27/openai-ends-microsoft-legal-peril-over-its-50b-amazon-deal": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2214107176.jpg?resize=1200,800",
+      "checkedAt": "2026-04-27T18:00:01.339961+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/27/speech-translation-in-google-meet-is-now-rolling-out-to-mobile-d": {
+      "image": "",
+      "checkedAt": "2026-04-27T18:00:01.339961+00:00"
+    },
+    "https://techcrunch.com/2026/04/27/deepminds-david-silver-just-raised-1-1b-to-build-an-ai-that-learns-without-human-data": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2233739454.jpg?resize=1200,686",
+      "checkedAt": "2026-04-27T18:00:01.339961+00:00"
+    },
+    "https://openai.com/index/open-source-codex-orchestration-symphony": {
+      "image": "",
+      "checkedAt": "2026-04-27T18:00:01.339961+00:00"
+    },
+    "https://openai.com/index/choco": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/2R8JZ9T70W7lgUBsjpgRCO/330ebfaf2744a03af595fdd9701d934a/oai_Choco_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-27T18:00:01.339961+00:00"
     }
   }
 }
