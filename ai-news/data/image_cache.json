@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T17:01:15.271198+00:00",
+  "updatedAt": "2026-04-28T18:49:00.625535+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5096,6 +5096,10 @@
     "https://openai.com/index/openai-on-aws": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6Qdod1sP2lAXzlwaRnglBQ/95090ca1ad0eeca76034c16cb451106d/oai-aws-16x9.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-28T18:00:01.386650+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/google-expands-pentagons-access-to-its-ai-after-anthropics-refusal": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/12/GettyImages-1080946342.jpeg?resize=1200,800",
+      "checkedAt": "2026-04-28T18:49:00.625535+00:00"
     }
   }
 }
