@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T04:00:01.859437+00:00",
+  "updatedAt": "2026-04-28T05:00:01.902956+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5004,6 +5004,14 @@
     "https://www.theverge.com/tech/919469/elon-musk-dont-like": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23906796/VRG_Illo_STK022_K_Radtke_Musk_Scales_2.jpg?quality=90&amp;strip=all&amp;crop=0%2C8.1617647058824%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-28T04:00:01.859437+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/27/how-to-build-a-lightweight-vision-language-action-inspired-embodied-agent-with-latent-world-modeling-and-model-predictive-control": {
+      "image": "",
+      "checkedAt": "2026-04-28T05:00:01.902956+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/27/meet-talkie-1930-a-13b-open-weight-llm-trained-on-pre-1931-english-text-for-historical-reasoning-and-generalization-research": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-81-1024x731.png",
+      "checkedAt": "2026-04-28T05:00:01.902956+00:00"
     }
   }
 }
