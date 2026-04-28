@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T04:02:24.174899+00:00",
+  "updatedAt": "2026-04-28T06:00:01.714659+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5008,6 +5008,14 @@
     "https://www.marktechpost.com/2026/04/27/meet-talkie-1930-a-13b-open-weight-llm-trained-on-pre-1931-english-text-for-historical-reasoning-and-generalization-research": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-81-1024x731.png",
       "checkedAt": "2026-04-28T04:02:24.174899+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/28/pip-261": {
+      "image": "",
+      "checkedAt": "2026-04-28T06:00:01.714659+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/27/how-to-build-a-lightweight-vision-language-action-inspired-embodied-agent-with-latent-world-modeling-and-model-predictive-control": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-82-1024x731.png",
+      "checkedAt": "2026-04-28T06:00:01.714659+00:00"
     }
   }
 }
