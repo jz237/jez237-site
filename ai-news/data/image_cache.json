@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T20:00:02.002677+00:00",
+  "updatedAt": "2026-04-28T21:00:01.568262+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5112,6 +5112,14 @@
     "https://techcrunch.com/2026/04/28/amazon-launches-an-ai-powered-audio-qa-experience-on-product-pages": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Amazon-Jointhe-chat-AI.jpeg?resize=1200,675",
       "checkedAt": "2026-04-28T20:00:02.002677+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/920048/elon-musk-testimony-save-humanity": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_J.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-04-28T21:00:01.568262+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/919827/taylor-swift-trademarks-ai-copycats": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2268536362.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.737892056687%2C100%2C78.524215886627&amp;w=1200",
+      "checkedAt": "2026-04-28T21:00:01.568262+00:00"
     }
   }
 }
