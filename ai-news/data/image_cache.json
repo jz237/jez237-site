@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T18:49:00.625535+00:00",
+  "updatedAt": "2026-04-28T20:00:02.002677+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5100,6 +5100,18 @@
     "https://techcrunch.com/2026/04/28/google-expands-pentagons-access-to-its-ai-after-anthropics-refusal": {
       "image": "https://techcrunch.com/wp-content/uploads/2018/12/GettyImages-1080946342.jpeg?resize=1200,800",
       "checkedAt": "2026-04-28T18:49:00.625535+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/amazon-is-already-offering-new-openai-products-on-aws": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Data-center-ChatGPT.png?resize=1200,600",
+      "checkedAt": "2026-04-28T20:00:02.002677+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/917052/elon-musk-takes-stand-trial-openai-sam-altman": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/VRG_Illo_STK022_K_Radtke_Musk_Bolts.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-28T20:00:02.002677+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/amazon-launches-an-ai-powered-audio-qa-experience-on-product-pages": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Amazon-Jointhe-chat-AI.jpeg?resize=1200,675",
+      "checkedAt": "2026-04-28T20:00:02.002677+00:00"
     }
   }
 }
