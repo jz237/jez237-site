@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "updatedAt": "2026-04-28T20:38:04.836439+00:00",
+  "updatedAt": "2026-04-28T22:00:01.137717+00:00",
   "items": [
     {
       "title": "NVIDIA Launches Nemotron 3 Nano Omni Model, Unifying Vision, Audio and Language for up to 9x More Efficient AI Agents",
@@ -13,11 +13,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/nemotron-3-nano-omni-featured-1920x1080-1.jpg",
       "published": "2026-04-28T16:00:28+00:00",
       "firstSeen": "2026-04-28T17:00:01.527381+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.7573
+      "score": 18.7213
     },
     {
       "title": "Claude can now plug directly into Photoshop, Blender, and Ableton",
@@ -30,10 +30,27 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Claude-creative-connectors-Blender-.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T16:49:08+00:00",
       "firstSeen": "2026-04-28T17:00:01.527381+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.4494
+      "score": 17.4125
+    },
+    {
+      "title": "OpenAI Releases Privacy Filter: A 1.5B-Parameter Open-Source PII Redaction Model with 50M Active Parameters",
+      "url": "https://www.marktechpost.com/2026/04/28/openai-releases-privacy-filter-a-1-5b-parameter-open-source-pii-redaction-model-with-50m-active-parameters",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "OpenAI's Privacy Filter Is a 1.5B-Parameter PII Detector Built on a Distilled Decoder — And It Runs in Your Browser\nThe post OpenAI Releases Privacy Filter: A 1.5B-Parameter Open-Source PII Redaction Model with 50M Active Parameters appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-83-1024x731.png",
+      "published": "2026-04-28T21:37:57+00:00",
+      "firstSeen": "2026-04-28T22:00:01.137717+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 16.7088
     },
     {
       "title": "OpenAI models, Codex, and Managed Agents come to AWS",
@@ -46,11 +63,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/6Qdod1sP2lAXzlwaRnglBQ/95090ca1ad0eeca76034c16cb451106d/oai-aws-16x9.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-04-28T00:00:00+00:00",
       "firstSeen": "2026-04-28T18:49:00.625535+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.0201
+      "score": 15.997
     },
     {
       "title": "Lovable launches its vibe-coding app on iOS and Android",
@@ -63,11 +80,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-04-28T16:09:30+00:00",
       "firstSeen": "2026-04-28T17:00:01.527381+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.7614
+      "score": 15.7252
     },
     {
       "title": "OpenAI’s models are now available everywhere. The question is whether everywhere is enough.",
@@ -80,11 +97,11 @@
       "image": "https://media.thenextweb.com/2026/04/amazon-aws-openai-models-microsoft-exclusivity-ends.avif",
       "published": "2026-04-28T18:42:54+00:00",
       "firstSeen": "2026-04-28T20:00:02.002677+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.3929
+      "score": 13.3541
     },
     {
       "title": "Top 10 Physical AI Models Powering Real-World Robots in 2026",
@@ -97,11 +114,11 @@
       "image": "",
       "published": "2026-04-28T08:14:02+00:00",
       "firstSeen": "2026-04-28T09:31:57.792310+00:00",
-      "lastSeen": "2026-04-28T21:00:01.568262+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6995
+      "score": 12.6704
     },
     {
       "title": "Google is testing AI chatbot search for YouTube",
@@ -114,11 +131,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/acastro_STK092_04.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T00:01:54+00:00",
       "firstSeen": "2026-04-28T00:03:47.529377+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5806
+      "score": 12.5575
     },
     {
       "title": "Amazon launches an AI-powered audio Q&A experience on product pages",
@@ -131,11 +148,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Amazon-Jointhe-chat-AI.jpeg?resize=1200%2C675",
       "published": "2026-04-28T18:49:54+00:00",
       "firstSeen": "2026-04-28T20:00:02.002677+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.3363
+      "score": 12.2973
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -148,10 +165,26 @@
       "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg",
       "published": "2026-04-28T13:00:24+00:00",
       "firstSeen": "2026-04-08T13:59:54.505487+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.04
+      "score": 11.0068
+    },
+    {
+      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. The trial began with [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-28T19:27:50+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-04-28T22:00:01.137717+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2852
     },
     {
       "title": "Redpine raises €6.8M led by NordicNinja to build a licensed data API for AI agents",
@@ -167,46 +200,8 @@
       "lastSeen": "2026-04-28T12:01:05.847145+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2991
-    },
-    {
-      "title": "How to Build a Lightweight Vision-Language-Action-Inspired Embodied Agent with Latent World Modeling and Model Predictive Control",
-      "url": "https://www.marktechpost.com/2026/04/27/how-to-build-a-lightweight-vision-language-action-inspired-embodied-agent-with-latent-world-modeling-and-model-predictive-control",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build an embodied simulation vision agent that learns to perceive, plan, predict, and replan directly from pixel observations. We create a fully NumPy-rendered grid world in which the agent observes RGB frames rather than symbolic state variables, enabling us to simulate a simplified Vision-Language-Action-style pipeline. We train a lightweight world model [&#8230;]\nThe post How to Build a Lightweight Vision-Language-Action-Inspired Embodied Agent with Latent World Modeling and Model Predictive Control appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-82-1024x731.png",
-      "published": "2026-04-28T04:59:49+00:00",
-      "firstSeen": "2026-04-28T05:00:01.902956+00:00",
-      "lastSeen": "2026-04-28T21:00:01.568262+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.0324
-    },
-    {
-      "title": "Claude for Creative Work",
-      "url": "https://www.anthropic.com/news/claude-for-creative-work",
-      "source": "Anthropic News",
-      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Claude for Creative Work",
-      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeArrow&amp%3BbackgroundColor=cactus",
-      "published": "2026-04-28T00:00:00+00:00",
-      "firstSeen": "2026-04-28T16:00:01.468274+00:00",
-      "lastSeen": "2026-04-28T20:38:04.836439+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.0201
+      "score": 8.2712
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
