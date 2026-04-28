@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T12:01:05.847145+00:00",
+  "updatedAt": "2026-04-28T14:00:01.148748+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -3006,8 +3006,8 @@
       "checkedAt": "2026-04-08T13:59:54.505487+00:00"
     },
     "https://www.techrepublic.com/article/chatplayground-ai": {
-      "image": "",
-      "checkedAt": "2026-04-08T13:59:54.505487+00:00"
+      "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg",
+      "checkedAt": "2026-04-28T14:00:01.148748+00:00"
     },
     "https://huggingface.co/blog/ibm-research/altk-evolve": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6435a1131860001f144239ea/hNoPqYEH7TYWM8ayDpZgF.png",
@@ -5036,6 +5036,26 @@
     "https://www.theverge.com/ai-artificial-intelligence/915660/mythos-script-kiddies-hackers-attack-cybersecurity-ai": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/rogers-script-kiddies-Lede-STATIC.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-28T12:00:02.040385+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/youtube-is-testing-an-ai-powered-search-feature-that-shows-guided-answers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2242441443.jpg?resize=1200,800",
+      "checkedAt": "2026-04-28T14:00:01.148748+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/28/matthew-yglesias": {
+      "image": "",
+      "checkedAt": "2026-04-28T14:00:01.148748+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/bci-startup-neurable-looks-to-license-its-mind-reading-tech-for-consumer-wearables": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2255262571.jpg?w=1024",
+      "checkedAt": "2026-04-28T14:00:01.148748+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/red-hats-openclaw-maintainer-just-made-enterprise-claw-deployments-a-lot-safer": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Red-Hat-Sally-OMalley.jpg?w=960",
+      "checkedAt": "2026-04-28T14:00:01.148748+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/otters-new-feature-lets-users-search-across-their-enterprise-tools": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Otter-feat.jpg?resize=1200,675",
+      "checkedAt": "2026-04-28T14:00:01.148748+00:00"
     }
   }
 }
