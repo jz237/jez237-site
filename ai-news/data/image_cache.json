@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T11:00:01.452193+00:00",
+  "updatedAt": "2026-04-28T12:00:02.040385+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5028,6 +5028,14 @@
     "https://www.marktechpost.com/2026/04/28/top-10-physical-ai-models-powering-real-world-robots-in-2026": {
       "image": "",
       "checkedAt": "2026-04-28T09:31:57.792310+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/919494/google-pentagon-classified-ai-deal": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24925007/236780_Google_AntiTrust_Trial_Custom_Art_CVirginia__0001_5.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-28T12:00:02.040385+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/915660/mythos-script-kiddies-hackers-attack-cybersecurity-ai": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/rogers-script-kiddies-Lede-STATIC.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-28T12:00:02.040385+00:00"
     }
   }
 }
