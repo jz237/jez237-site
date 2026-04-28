@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-28",
+  "updatedAt": "2026-04-28T00:00:02.072458+00:00",
+  "items": [
+    {
+      "title": "Performance Anomaly Detection in Athletics: A Benchmarking System with Visual Analytics",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-28T00:00:12.362643+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-28T00:00:02.072458+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
+    }
+  ],
+  "errors": []
+}
