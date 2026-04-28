@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "updatedAt": "2026-04-28T06:41:52.795128+00:00",
+  "updatedAt": "2026-04-28T08:00:01.221485+00:00",
   "items": [
     {
       "title": "Google is testing AI chatbot search for YouTube",
@@ -13,11 +13,27 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/acastro_STK092_04.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T00:01:54+00:00",
       "firstSeen": "2026-04-28T00:03:47.529377+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8741
+      "score": 12.8416
+    },
+    {
+      "title": "Redpine raises €6.8M led by NordicNinja to build a licensed data API for AI agents",
+      "url": "https://thenextweb.com/news/redpine-raises-e6-8m-api-for-ai-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The round brings total raised to €9 million. Investors from OpenAI, Perplexity, and Spotify backed the seed. The platform operates as a headless API that lets AI agents query and pay for premium licensed datasets in real time, on a token-based model. Competitors include Scale AI, Appen, and Defined.ai, all annotation-first; Redpine is API-native. Redpine, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Redpine.avif",
+      "published": "2026-04-28T06:48:14+00:00",
+      "firstSeen": "2026-04-28T08:00:01.221485+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.614
     },
     {
       "title": "How to Build a Lightweight Vision-Language-Action-Inspired Embodied Agent with Latent World Modeling and Model Predictive Control",
@@ -30,10 +46,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-82-1024x731.png",
       "published": "2026-04-28T04:59:49+00:00",
       "firstSeen": "2026-04-28T05:00:01.902956+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3692
+      "score": 8.332
     },
     {
       "title": "Meet Talkie-1930: A 13B Open-Weight LLM Trained on Pre-1931 English Text for Historical Reasoning and Generalization Research",
@@ -46,10 +62,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-81-1024x731.png",
       "published": "2026-04-28T02:24:13+00:00",
       "firstSeen": "2026-04-28T04:02:24.174899+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2963
+      "score": 8.2616
+    },
+    {
+      "title": "Google signs classified AI deal with the Pentagon for ‘any lawful government purpose’",
+      "url": "https://thenextweb.com/news/google-pentagon-classified-ai-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Information reported the deal on Tuesday. The agreement allows the DoD to use Google’s AI models without the restrictions that led Anthropic to be blacklisted in February. Google becomes the latest in a line of AI companies, alongside OpenAI and xAI, to supply classified AI capability to the US military. Google has signed a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2014/06/googleio_2014_54.avif",
+      "published": "2026-04-28T07:14:12+00:00",
+      "firstSeen": "2026-04-28T08:00:01.221485+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.1269
+    },
+    {
+      "title": "Meta prepares to unwind its $2 billion Manus acquisition after China’s block",
+      "url": "https://thenextweb.com/news/meta-manus-acquisition-unwind-china-deadline-weeks",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta is preparing to unwind its approximately $2 billion acquisition of the agentic AI startup Manus after China’s National Development and Reform Commission formally ordered the deal’s cancellation on Monday, the Wall Street Journal reported, citing people familiar with the matter. Beijing has given Meta and Manus a preliminary deadline of several weeks to reverse [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
+      "published": "2026-04-28T06:57:32+00:00",
+      "firstSeen": "2026-04-28T08:00:01.221485+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.9186
     },
     {
       "title": "Jury selection in Musk v. Altman: ‘People don’t like him’",
@@ -62,10 +110,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23906796/VRG_Illo_STK022_K_Radtke_Musk_Scales_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C8.1617647058824%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T03:39:33+00:00",
       "firstSeen": "2026-04-28T04:00:01.859437+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.271
+      "score": 4.235
     },
     {
       "title": "Some Musk v. Altman Jurors Don't Like Elon Musk",
@@ -78,10 +126,10 @@
       "image": "https://media.wired.com/photos/69efe08a87c24c30ec966a36/master/pass/Model-Behavior-Musk-Altman-Jury-Business.jpg",
       "published": "2026-04-28T00:39:30+00:00",
       "firstSeen": "2026-04-28T02:00:01.680078+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1201
+      "score": 4.0871
     },
     {
       "title": "Introducing talkie: a 13B vintage language model from 1930",
@@ -94,10 +142,10 @@
       "image": "",
       "published": "2026-04-28T02:47:42+00:00",
       "firstSeen": "2026-04-28T03:00:01.323678+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.477
+      "score": 2.4419
     },
     {
       "title": "Michal Valko, Hamed Valizadegan, Branislav Kveton, Gregory F. Cooper, Milos Hauskrecht",
@@ -108,9 +156,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-28T06:41:57.357987+00:00",
+      "published": "2026-04-28T08:00:05.772479+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -126,10 +174,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/raw2insights-adaptive-ultrasound-imaging.png",
       "published": "2026-04-28T00:28:13+00:00",
       "firstSeen": "2026-04-28T02:00:01.680078+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2553
+      "score": 2.2224
     },
     {
       "title": "What's new in pip 26.1 - lockfiles and dependency cooldowns!",
@@ -142,17 +190,11 @@
       "image": "",
       "published": "2026-04-28T05:23:05+00:00",
       "firstSeen": "2026-04-28T06:00:01.714659+00:00",
-      "lastSeen": "2026-04-28T06:41:52.795128+00:00",
+      "lastSeen": "2026-04-28T08:00:01.221485+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2506
+      "score": 2.2129
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
