@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T03:00:01.323678+00:00",
+  "updatedAt": "2026-04-28T04:00:01.859437+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5000,6 +5000,10 @@
     "https://simonwillison.net/2026/Apr/28/talkie": {
       "image": "",
       "checkedAt": "2026-04-28T03:00:01.323678+00:00"
+    },
+    "https://www.theverge.com/tech/919469/elon-musk-dont-like": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23906796/VRG_Illo_STK022_K_Radtke_Musk_Scales_2.jpg?quality=90&amp;strip=all&amp;crop=0%2C8.1617647058824%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-28T04:00:01.859437+00:00"
     }
   }
 }
