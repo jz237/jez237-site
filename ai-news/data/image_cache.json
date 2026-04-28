@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T14:00:01.148748+00:00",
+  "updatedAt": "2026-04-28T15:00:01.415319+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5056,6 +5056,10 @@
     "https://techcrunch.com/2026/04/28/otters-new-feature-lets-users-search-across-their-enterprise-tools": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Otter-feat.jpg?resize=1200,675",
       "checkedAt": "2026-04-28T14:00:01.148748+00:00"
+    },
+    "https://www.theverge.com/podcast/919534/musk-openai-trial-vergecast": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/VRG_VST_0428_Site.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-28T15:00:01.415319+00:00"
     }
   }
 }
