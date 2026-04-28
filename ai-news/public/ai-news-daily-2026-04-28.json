@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "updatedAt": "2026-04-28T09:31:57.792310+00:00",
+  "updatedAt": "2026-04-28T11:00:01.452193+00:00",
   "items": [
     {
       "title": "Top 10 Physical AI Models Powering Real-World Robots in 2026",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-04-28T08:14:02+00:00",
       "firstSeen": "2026-04-28T09:31:57.792310+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.981
+      "score": 12.9386
     },
     {
       "title": "Google is testing AI chatbot search for YouTube",
@@ -30,11 +30,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/acastro_STK092_04.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T00:01:54+00:00",
       "firstSeen": "2026-04-28T00:03:47.529377+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8048
+      "score": 12.7711
     },
     {
       "title": "Redpine raises €6.8M led by NordicNinja to build a licensed data API for AI agents",
@@ -47,10 +47,10 @@
       "image": "https://media.thenextweb.com/2026/04/Redpine.avif",
       "published": "2026-04-28T06:48:14+00:00",
       "firstSeen": "2026-04-28T08:00:01.221485+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5697
+      "score": 8.529
     },
     {
       "title": "How to Build a Lightweight Vision-Language-Action-Inspired Embodied Agent with Latent World Modeling and Model Predictive Control",
@@ -63,10 +63,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-82-1024x731.png",
       "published": "2026-04-28T04:59:49+00:00",
       "firstSeen": "2026-04-28T05:00:01.902956+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2898
+      "score": 8.251
     },
     {
       "title": "Meet Talkie-1930: A 13B Open-Weight LLM Trained on Pre-1931 English Text for Historical Reasoning and Generalization Research",
@@ -79,10 +79,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-81-1024x731.png",
       "published": "2026-04-28T02:24:13+00:00",
       "firstSeen": "2026-04-28T04:02:24.174899+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2224
+      "score": 8.1863
     },
     {
       "title": "Google signs classified AI deal with the Pentagon for ‘any lawful government purpose’",
@@ -95,10 +95,10 @@
       "image": "https://media.thenextweb.com/2014/06/googleio_2014_54.avif",
       "published": "2026-04-28T07:14:12+00:00",
       "firstSeen": "2026-04-28T08:00:01.221485+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.082
+      "score": 8.0408
     },
     {
       "title": "Google Cloud Next AI Keynote: 5 Takeaways for IT Leaders",
@@ -111,10 +111,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/Untitled-design-9.png",
       "published": "2026-04-28T07:53:08+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.3008
+      "score": 6.2588
+    },
+    {
+      "title": "Accenture deploys Microsoft 365 Copilot to all 743,000 employees",
+      "url": "https://thenextweb.com/news/accenture-deploys-microsoft-365-copilot-to-all-743000-employees",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "97% of Accenture employees report Copilot helped complete routine tasks up to 15 times faster. 89% monthly active usage among the 200,000-person cohort tested. Microsoft has over 450 million M365 enterprise users; only ~3% currently pay $30/month for Copilot. Its shares are down 12% this year. Microsoft is rolling out its Microsoft 365 Copilot AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2011/09/accenture.avif",
+      "published": "2026-04-28T10:09:33+00:00",
+      "firstSeen": "2026-04-28T11:00:01.452193+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2246
     },
     {
       "title": "Meta prepares to unwind its $2 billion Manus acquisition after China’s block",
@@ -127,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
       "published": "2026-04-28T06:57:32+00:00",
       "firstSeen": "2026-04-28T08:00:01.221485+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8741
+      "score": 4.8332
     },
     {
       "title": "Jury selection in Musk v. Altman: ‘People don’t like him’",
@@ -143,10 +159,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23906796/VRG_Illo_STK022_K_Radtke_Musk_Scales_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C8.1617647058824%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T03:39:33+00:00",
       "firstSeen": "2026-04-28T04:00:01.859437+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1944
+      "score": 4.1571
     },
     {
       "title": "Some Musk v. Altman Jurors Don't Like Elon Musk",
@@ -159,10 +175,10 @@
       "image": "https://media.wired.com/photos/69efe08a87c24c30ec966a36/master/pass/Model-Behavior-Musk-Altman-Jury-Business.jpg",
       "published": "2026-04-28T00:39:30+00:00",
       "firstSeen": "2026-04-28T02:00:01.680078+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0497
+      "score": 4.0153
     },
     {
       "title": "Patronus raises €11 million to turn senior emergency smartwatches from ‘bedside decoration’ into daily-worn devices",
@@ -175,26 +191,10 @@
       "image": "https://media.thenextweb.com/2026/04/Patronus-AI.avif",
       "published": "2026-04-28T07:28:39+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
+      "lastSeen": "2026-04-28T11:00:01.452193+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.789
-    },
-    {
-      "title": "Introducing talkie: a 13B vintage language model from 1930",
-      "url": "https://simonwillison.net/2026/Apr/28/talkie",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Introducing talkie: a 13B vintage language model from 1930\nNew project from Nick Levine, David Duvenaud, and Alec Radford (of GPT, GPT-2, Whisper fame).\ntalkie-1930-13b-base (53.1 GB) is a \"13B language model trained on 260B tokens of historical pre-1931 English text\". \ntalkie-1930-13b-it (26.6 GB) is a checkpoint \"finetuned using a novel dataset of instruction-response pairs extracted from pre-1931 reference works\", designed to power a chat interface. You can try that out here.\nBoth models are Apache 2.0 licensed. Since the training data for the base model is entirely out of copyright (the US",
-      "image": "",
-      "published": "2026-04-28T02:47:42+00:00",
-      "firstSeen": "2026-04-28T03:00:01.323678+00:00",
-      "lastSeen": "2026-04-28T09:31:57.792310+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4022
+      "score": 2.7475
     }
   ],
   "errors": []
