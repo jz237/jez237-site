@@ -1,6 +1,6 @@
 {
   "date": "2026-04-29",
-  "updatedAt": "2026-04-29T08:00:01.988701+00:00",
+  "updatedAt": "2026-04-29T09:00:01.701773+00:00",
   "items": [
     {
       "title": "Poolside AI Introduces Laguna XS.2 and M.1: Agentic Coding Models Reaching 68.2% and 72.5% on SWE-bench Verified",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-28-at-10.43.19-PM-1-150x150.png",
       "published": "2026-04-29T05:45:42+00:00",
       "firstSeen": "2026-04-29T07:00:02.065366+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7537
+      "score": 9.7254
     },
     {
       "title": "A Coding Implementation on Document Parsing Benchmarking with LlamaIndex ParseBench Using Python, Hugging Face, and Evaluation Metrics",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-04-29T07:08:42+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3942
+      "score": 9.3647
     },
     {
       "title": "How to Build Traceable and Evaluated LLM Workflows Using Promptflow, Prompty, and OpenAI",
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-04-29T02:47:22+00:00",
       "firstSeen": "2026-04-29T05:00:01.676465+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1718
+      "score": 6.1457
     },
     {
       "title": "At his OpenAI trial, Musk relitigates an old friendship",
@@ -61,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200%2C675",
       "published": "2026-04-29T00:40:16+00:00",
       "firstSeen": "2026-04-29T01:00:01.156757+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0874
+      "score": 5.0628
     },
     {
       "title": "Meta FAIR Releases NeuralSet: A Python Package for Neuro-AI That Supports fMRI, M/EEG, Spikes, and HuggingFace Embeddings",
@@ -77,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-29-at-12.54.07-AM-1-150x150.png",
       "published": "2026-04-29T07:56:02+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.018
+      "score": 3.9879
     },
     {
       "title": "smol-audio: A Colab-Friendly Notebook Collection for Fine-Tuning Whisper, Parakeet, Voxtral, Granite Speech, and Audio Flamingo 3",
@@ -93,10 +93,10 @@
       "image": "",
       "published": "2026-04-29T07:31:31+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3056
+      "score": 3.2758
     },
     {
       "title": "Minsik Lee, Seoi Hong, Chongmin Lee, Sieun Choi, Jian Kim, Jua Han, Jihie Kim",
@@ -107,12 +107,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-29T08:00:11.596583+00:00",
+      "published": "2026-04-29T09:00:05.643610+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "All3 raises $25m to automate construction with legged robots and AI design software",
+      "url": "https://thenextweb.com/news/all3-25m-seed-construction-robots-ai-housing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The London-founded startup wants to replace the entire construction value chain, from architect’s brief to move-in-ready building, using AI and a purpose-built on-site robot called the Mantis. Construction is the world’s largest industry by value and one of its least automated. A typical building project today involves roughly the same sequence of hand-offs, on-site labour, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/All3-founders.avif",
+      "published": "2026-04-29T08:00:58+00:00",
+      "firstSeen": "2026-04-29T09:00:01.701773+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1203
     },
     {
       "title": "Amadeus agrees to buy IDEMIA’s public security unit for $1.2 billion",
@@ -125,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amadeus.avif",
       "published": "2026-04-29T07:01:21+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1205
+      "score": 2.0912
     },
     {
       "title": "EU and Parliament fail to agree on AI Act changes after 12 hours of talks, pushing deal to next month",
@@ -141,10 +157,26 @@
       "image": "https://media.thenextweb.com/2025/07/Untitled-design-3.avif",
       "published": "2026-04-29T07:11:55+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 0.9258
+      "score": 0.8963
+    },
+    {
+      "title": "Meta found in breach of EU law for failing to keep children off Facebook and Instagram",
+      "url": "https://thenextweb.com/news/meta-found-in-breach-of-eu-law-for-failing-to-keep-children-off-facebook-and-instagram",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Commission has issued preliminary findings that Meta has violated DSA obligations requiring it to prevent underage children from accessing its platforms, a charge previously levelled only at adult content sites. The European Commission has issued preliminary findings that Meta is in breach of the Digital Services Act for failing to keep children off [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-04-29T07:38:40+00:00",
+      "firstSeen": "2026-04-29T09:00:01.701773+00:00",
+      "lastSeen": "2026-04-29T09:00:01.701773+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.9907
     }
   ],
   "errors": []
