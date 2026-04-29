@@ -1,7 +1,23 @@
 {
   "date": "2026-04-29",
-  "updatedAt": "2026-04-29T06:00:01.129519+00:00",
+  "updatedAt": "2026-04-29T07:00:02.065366+00:00",
   "items": [
+    {
+      "title": "Poolside AI Introduces Laguna XS.2 and M.1: Agentic Coding Models Reaching 68.2% and 72.5% on SWE-bench Verified",
+      "url": "https://www.marktechpost.com/2026/04/28/poolside-ai-introduces-laguna-xs-2-and-m-1-agentic-coding-models-reaching-68-2-and-72-5-on-swe-bench-verified",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Poolside Releases Laguna XS.2 and M.1: Open-Weight Agentic Coding Models Built for Long-Horizon Tasks\nThe post Poolside AI Introduces Laguna XS.2 and M.1: Agentic Coding Models Reaching 68.2% and 72.5% on SWE-bench Verified appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-28-at-10.43.19-PM-1-150x150.png",
+      "published": "2026-04-29T05:45:42+00:00",
+      "firstSeen": "2026-04-29T07:00:02.065366+00:00",
+      "lastSeen": "2026-04-29T07:00:02.065366+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.7828
+    },
     {
       "title": "How to Build Traceable and Evaluated LLM Workflows Using Promptflow, Prompty, and OpenAI",
       "url": "https://www.marktechpost.com/2026/04/28/how-to-build-traceable-and-evaluated-llm-workflows-using-promptflow-prompty-and-openai",
@@ -13,10 +29,10 @@
       "image": "",
       "published": "2026-04-29T02:47:22+00:00",
       "firstSeen": "2026-04-29T05:00:01.676465+00:00",
-      "lastSeen": "2026-04-29T05:00:01.676465+00:00",
+      "lastSeen": "2026-04-29T07:00:02.065366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2261
+      "score": 6.1986
     },
     {
       "title": "At his OpenAI trial, Musk relitigates an old friendship",
@@ -29,13 +45,13 @@
       "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200%2C675",
       "published": "2026-04-29T00:40:16+00:00",
       "firstSeen": "2026-04-29T01:00:01.156757+00:00",
-      "lastSeen": "2026-04-29T06:00:01.129519+00:00",
+      "lastSeen": "2026-04-29T07:00:02.065366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1386
+      "score": 5.1126
     },
     {
-      "title": "Yiqian Liu, Jiayi Niu, Adam Kelleher, Subhabrata Das",
+      "title": "Minsik Lee, Seoi Hong, Chongmin Lee, Sieun Choi, Jian Kim, Jua Han, Jihie Kim",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,19 +59,13 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-29T06:00:06.685938+00:00",
+      "published": "2026-04-29T07:00:08.958075+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-29T06:00:01.129519+00:00",
+      "lastSeen": "2026-04-29T07:00:02.065366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
