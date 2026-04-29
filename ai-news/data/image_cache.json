@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T20:00:01.836174+00:00",
+  "updatedAt": "2026-04-29T21:00:01.379176+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5248,6 +5248,14 @@
     "https://www.techrepublic.com/article/news-sas-agentic-ai-governance-tools": {
       "image": "https://assets.techrepublic.com/uploads/2026/04/attractive-young-european-businessman-using-displa-2026-01-11-08-34-34-utc-1.jpg",
       "checkedAt": "2026-04-29T20:00:01.836174+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/google-gains-25m-subscriptions-in-q1-driven-by-youtube-and-google-one": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
+      "checkedAt": "2026-04-29T21:00:01.379176+00:00"
+    },
+    "https://www.techrepublic.com/article/news-amazon-openai-aws-microsoft-cloud-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/openai.jpg",
+      "checkedAt": "2026-04-29T21:00:01.379176+00:00"
     }
   }
 }
