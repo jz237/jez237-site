@@ -269,6 +269,7 @@
     const BASE = 'https://jz237.github.io/games/';
     const games = [
       // Featured (polished)
+      { title: 'Millipede',                     path: '2026-04-28/neon-myriapod/',             emoji: '🪲', date: 'Apr 28', cat: 'arcade',   tag: 'featured',     desc: 'Touch-first fungal swarm shooter with power-ups and queen waves' },
       { title: 'Hard Hat Mac',                  path: 'hard-hat-mac/',                         emoji: '👷', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: 'Classic 1983 Apple II remake — 3 construction levels' },
       { title: 'Crystal Cavern',                path: '2026-03-16/crystal-cavern/',            emoji: '💎', date: 'Mar 16', cat: 'arcade',   tag: 'featured',     desc: 'Descend through dark crystal caves with dynamic lighting' },
       { title: 'Shatter Storm',                 path: '2026-03-11/shatter-storm/',             emoji: '🧱', date: 'Mar 11', cat: 'arcade',   tag: 'featured',     desc: 'Stained-glass breakout' },
@@ -314,6 +315,7 @@
 
     // Map each emoji to an appropriate motion
     const EMOJI_ANIM = {
+      '🪲': 'slither',  // millipede
       '👷': 'hammer',   // construction worker
       '💎': 'twinkle',  // crystal
       '🧱': 'shake',    // brick shatter
