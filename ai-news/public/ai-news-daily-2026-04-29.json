@@ -1,6 +1,6 @@
 {
   "date": "2026-04-29",
-  "updatedAt": "2026-04-29T10:00:01.958329+00:00",
+  "updatedAt": "2026-04-29T09:21:58.411515+00:00",
   "items": [
     {
       "title": "Poolside AI Introduces Laguna XS.2 and M.1: Agentic Coding Models Reaching 68.2% and 72.5% on SWE-bench Verified",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-04-29T10:00:01.958329+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6978
+      "score": 9.7152
     },
     {
       "title": "General Motors is adding Gemini to four million cars",
@@ -28,11 +28,11 @@
       "summary": "General Motors is planning to bring Google's Gemini AI assistant to around four million vehicles across the US. Model year 2022 and newer Cadillac, Chevrolet, Buick, and GMC vehicles with Google built-in will be eligible for the AI upgrade, which will be rolled out via over-the-air software updates for GM's infotainment system \"over several months,\" [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Google-Gemini-AI-in-a-Chevrolet.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T09:14:38+00:00",
-      "firstSeen": "2026-04-29T10:00:01.958329+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "firstSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4371
+      "score": 9.4563
     },
     {
       "title": "A Coding Implementation on Document Parsing Benchmarking with LlamaIndex ParseBench Using Python, Hugging Face, and Evaluation Metrics",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-04-29T10:00:01.958329+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3361
+      "score": 9.3542
     },
     {
       "title": "How to Build Traceable and Evaluated LLM Workflows Using Promptflow, Prompty, and OpenAI",
@@ -64,7 +64,7 @@
       "lastSeen": "2026-04-29T10:00:01.958329+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1203
+      "score": 6.1363
     },
     {
       "title": "At his OpenAI trial, Musk relitigates an old friendship",
@@ -77,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200%2C675",
       "published": "2026-04-29T00:40:16+00:00",
       "firstSeen": "2026-04-29T01:00:01.156757+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0389
+      "score": 5.054
     },
     {
       "title": "Meta FAIR Releases NeuralSet: A Python Package for Neuro-AI That Supports fMRI, M/EEG, Spikes, and HuggingFace Embeddings",
@@ -96,7 +96,7 @@
       "lastSeen": "2026-04-29T10:00:01.958329+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9586
+      "score": 3.9771
     },
     {
       "title": "smol-audio: A Colab-Friendly Notebook Collection for Fine-Tuning Whisper, Parakeet, Voxtral, Granite Speech, and Audio Flamingo 3",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-04-29T10:00:01.958329+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2469
+      "score": 3.2652
     },
     {
       "title": "Minsik Lee, Seoi Hong, Chongmin Lee, Sieun Choi, Jian Kim, Jua Han, Jihie Kim",
@@ -123,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-29T10:00:08.675093+00:00",
+      "published": "2026-04-29T09:22:03.628067+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -140,27 +140,11 @@
       "summary": "At WIRED Health, British surgeon Ara Darzi said AI is set to transform the diagnosis and treatment of drug-resistant infections. But a lack of incentives means innovation may not reach patients.",
       "image": "https://media.wired.com/photos/69ea459b31b8426862a83c48/master/pass/XT502056.jpg",
       "published": "2026-04-29T09:00:00+00:00",
-      "firstSeen": "2026-04-29T10:00:01.958329+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "firstSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2598
-    },
-    {
-      "title": "Cognizant to acquire AI infrastructure specialist Astreya for $600 million",
-      "url": "https://thenextweb.com/news/cognizant-astreya-600-million-acquisition-ai-infrastructure",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The deal, Cognizant’s fourth major acquisition in 18 months, is designed to plug a specific gap in its AI builder strategy: the ability to design, build, and run the physical data centre infrastructure that enterprise AI actually runs on. Cognizant has agreed to acquire Astreya, a San Jose-based IT managed services firm specialising in AI [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Cognizant-Ravi-Kumar-S.avif",
-      "published": "2026-04-29T09:12:23+00:00",
-      "firstSeen": "2026-04-29T10:00:01.958329+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.126
+      "score": 2.2789
     },
     {
       "title": "All3 raises $25m to automate construction with legged robots and AI design software",
@@ -173,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/04/All3-founders.avif",
       "published": "2026-04-29T08:00:58+00:00",
       "firstSeen": "2026-04-29T09:00:01.701773+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.091
+      "score": 2.1095
     },
     {
       "title": "Amadeus agrees to buy IDEMIA’s public security unit for $1.2 billion",
@@ -189,11 +173,33 @@
       "image": "https://media.thenextweb.com/2026/04/Amadeus.avif",
       "published": "2026-04-29T07:01:21+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0627
+      "score": 2.0807
+    },
+    {
+      "title": "EU and Parliament fail to agree on AI Act changes after 12 hours of talks, pushing deal to next month",
+      "url": "https://thenextweb.com/news/eu-ai-act-omnibus-deal-fails-april-2026-talks",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The collapse of Tuesday’s trilogue exposes deep divisions over whether high-risk AI systems embedded in consumer products should be exempt from the world’s strictest AI rules After 12 hours of negotiations on Tuesday, EU member states and European Parliament lawmakers failed to reach a deal on proposed changes to the bloc’s landmark AI Act. Talks [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2025/07/Untitled-design-3.avif",
+      "published": "2026-04-29T07:11:55+00:00",
+      "firstSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "fluff",
+      "score": 0.8857
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
