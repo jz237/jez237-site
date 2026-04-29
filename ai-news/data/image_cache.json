@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T17:00:01.927941+00:00",
+  "updatedAt": "2026-04-29T18:00:02.060881+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5220,6 +5220,10 @@
     "https://www.together.ai/blog/deepseek-v4-pro-now-available-on-together-ai": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f22fc85bbbad38a50e5b4c_OG-image_20260429_BLOG_DSV4_2026%20(1).png",
       "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://www.theverge.com/tech/920723/linux-ubuntu-ai-features-ai-kill-switch": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK414_AI_CHATBOT_E.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-29T18:00:02.060881+00:00"
     }
   }
 }
