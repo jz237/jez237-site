@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T18:44:40.235690+00:00",
+  "updatedAt": "2026-04-29T19:00:01.554731+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5232,6 +5232,10 @@
     "https://www.theverge.com/ai-artificial-intelligence/920775/evidence-exhibits-elon-musk-sam-altman-openai-trial": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia6.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-04-29T18:44:40.235690+00:00"
+    },
+    "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2250760741.jpg?resize=1200,800",
+      "checkedAt": "2026-04-29T19:00:01.554731+00:00"
     }
   }
 }
