@@ -239,6 +239,7 @@
     .game-card .tag.classic      { background: rgba(255,217,61,0.18);  color: #ffe38a; border: 1px solid rgba(255,217,61,0.4); }
     .game-card .tag.experimental { background: rgba(198,107,255,0.16); color: #d7b8ff; border: 1px solid rgba(163,119,217,0.4); }
     .game-card .tag.unfinished   { background: rgba(224,102,126,0.14); color: #ffc1cd; border: 1px solid rgba(224,102,126,0.38); }
+    .game-card .tag.demo         { background: rgba(68,209,255,0.16); color: #b9f3ff; border: 1px solid rgba(68,209,255,0.42); }
 
     .game-count {
       text-align: center;
@@ -304,6 +305,7 @@
     const games = [
       // Featured (polished)
       { title: 'Millipede',                     path: '2026-04-28/neon-myriapod/',             emoji: '🪲', date: 'Apr 28', cat: 'arcade',   tag: 'featured',     desc: 'Touch-first fungal swarm shooter with power-ups and queen waves' },
+      { title: 'Night Fireworks Show',          path: '2026-04-23/fireworks-nocturne/',          emoji: '🎆', date: 'Apr 23', cat: 'arcade',   tag: 'demo',         desc: 'Realistic night fireworks demo with smoke, bloom, crackle, and touch launches' },
       { title: 'Hard Hat Mac',                  path: 'hard-hat-mac/',                         emoji: '👷', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: 'Classic 1983 Apple II remake — 3 construction levels' },
       { title: 'Crystal Cavern',                path: '2026-03-16/crystal-cavern/',            emoji: '💎', date: 'Mar 16', cat: 'arcade',   tag: 'featured',     desc: 'Descend through dark crystal caves with dynamic lighting' },
       { title: 'Shatter Storm',                 path: '2026-03-11/shatter-storm/',             emoji: '🧱', date: 'Mar 11', cat: 'arcade',   tag: 'featured',     desc: 'Stained-glass breakout' },
@@ -353,6 +355,7 @@
       if (status === 'unfinished') return '🚧 Unfinished';
       return t === 'featured' ? '⭐ Featured'
            : t === 'classic'  ? '🎮 Classic'
+           : t === 'demo'     ? '🎆 Demo'
            : '🧪 Experimental';
     }
 
