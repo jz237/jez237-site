@@ -1,6 +1,6 @@
 {
   "date": "2026-04-29",
-  "updatedAt": "2026-04-29T15:00:01.999298+00:00",
+  "updatedAt": "2026-04-29T14:28:15.843583+00:00",
   "items": [
     {
       "title": "Larry’s risky business",
@@ -12,44 +12,12 @@
       "summary": "If you want to know whether the AI bubble is bursting, there's only one publicly traded company that will tell you: Oracle. That's right, the database company. Oracle has burned its boats and pivoted to AI, but not in any kind of usual way. It is not a foundation model builder like OpenAI or Anthropic, [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/68456_ORACLE_BELLWEATHER7.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T13:57:16+00:00",
-      "firstSeen": "2026-04-29T15:00:01.999298+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "firstSeen": "2026-04-29T14:28:15.843583+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.6285
-    },
-    {
-      "title": "ChatGPT downloads are slowing — and may cause problems for OpenAI&#8217;s IPO",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/920476/openai-chatgpt-downloads-slow-down-ipo",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "ChatGPT is struggling to keep up its once-explosive growth as users uninstall the app or opt for rival chatbots instead. According to data from market intelligence firm Sensor Tower, ChatGPT experienced a 132 percent increase in uninstalls year over year in April. Its uninstall rate was even higher last month, up 413 percent year-over-year, following [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25844039/STK155_OPEN_AI_CVirginia__A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-29T14:43:41+00:00",
-      "firstSeen": "2026-04-29T15:00:01.999298+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.4517
-    },
-    {
-      "title": "Tumbler Ridge families sue OpenAI for not alerting police to the suspect’s ChatGPT activity",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/920479/tumbler-ridge-chagpt-openai-lawsuit",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Seven families of victims injured or killed in the Tumbler Ridge school shooting in Canada have filed lawsuits against OpenAI and CEO Sam Altman, accusing the company and its leadership of negligence after they failed to alert police to the suspected shooter's ChatGPT activity. The families allege OpenAI stayed silent after its systems flagged activity [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2260765297.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.740836125969%2C100%2C78.518327748063&amp%3Bw=1200",
-      "published": "2026-04-29T14:47:57+00:00",
-      "firstSeen": "2026-04-29T15:00:01.999298+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.3539
+      "score": 14.6443
     },
     {
       "title": "GM brings Google Gemini to four million vehicles in one of the largest in-car AI deployments yet",
@@ -62,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/04/General-Motors-brings-Gemini.avif",
       "published": "2026-04-29T09:41:02+00:00",
       "firstSeen": "2026-04-29T11:00:01.615789+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.299
+      "score": 11.313
     },
     {
       "title": "Poolside AI Introduces Laguna XS.2 and M.1: Agentic Coding Models Reaching 68.2% and 72.5% on SWE-bench Verified",
@@ -78,10 +46,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-28-at-10.43.19-PM-1-150x150.png",
       "published": "2026-04-29T05:45:42+00:00",
       "firstSeen": "2026-04-29T07:00:02.065366+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.571
+      "score": 9.5836
     },
     {
       "title": "General Motors is adding Gemini to four million cars",
@@ -94,10 +62,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Google-Gemini-AI-in-a-Chevrolet.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T09:14:38+00:00",
       "firstSeen": "2026-04-29T09:21:58.411515+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2974
+      "score": 9.3113
     },
     {
       "title": "A Coding Implementation on Document Parsing Benchmarking with LlamaIndex ParseBench Using Python, Hugging Face, and Evaluation Metrics",
@@ -110,10 +78,10 @@
       "image": "",
       "published": "2026-04-29T07:08:42+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2044
+      "score": 9.2175
     },
     {
       "title": "I've Covered Robots for Years. This One Is Different",
@@ -126,10 +94,10 @@
       "image": "https://media.wired.com/photos/69f11fc37df9442e8d9b4374/master/pass/20260320-wired-eka-robotics-0429.jpg",
       "published": "2026-04-29T10:00:00+00:00",
       "firstSeen": "2026-04-29T11:00:01.615789+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2473
+      "score": 7.2615
     },
     {
       "title": "How to Build Traceable and Evaluated LLM Workflows Using Promptflow, Prompty, and OpenAI",
@@ -142,26 +110,10 @@
       "image": "",
       "published": "2026-04-29T02:47:22+00:00",
       "firstSeen": "2026-04-29T05:00:01.676465+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0036
-    },
-    {
-      "title": "This $30 Subscription Will Bring AI Into Your Business",
-      "url": "https://www.techrepublic.com/article/1minai-pro-plan-lifetime-subscription",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Tap into the power of OpenAI, Meta, Midjourney, and additional powerful AI models with 1min.AI.\nThe post This $30 Subscription Will Bring AI Into Your Business appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2024/07/tr_20240703-1minai-pro-plan-lifetime-subscription.jpg",
-      "published": "2026-04-29T14:00:36+00:00",
-      "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2201
+      "score": 6.0152
     },
     {
       "title": "At his OpenAI trial, Musk relitigates an old friendship",
@@ -174,10 +126,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200%2C675",
       "published": "2026-04-29T00:40:16+00:00",
       "firstSeen": "2026-04-29T01:00:01.156757+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9288
+      "score": 4.9397
     },
     {
       "title": "Cybersecurity in the Intelligence Age",
@@ -190,10 +142,58 @@
       "image": "",
       "published": "2026-04-29T04:00:00+00:00",
       "firstSeen": "2026-04-29T11:53:05.705235+00:00",
-      "lastSeen": "2026-04-29T15:00:01.999298+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2104
+      "score": 4.2224
+    },
+    {
+      "title": "Colby Adcock’s Scout AI raises $100M to train its models for war. We visited its bootcamp",
+      "url": "https://techcrunch.com/2026/04/29/coby-adcocks-scout-ai-raises-100-million-to-train-models-for-war-we-visited-its-bootcamp",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "We visited Scout AI's training ground where it's working on AI agents that can help individual soldiers control fleets of autonomous vehicles.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Scout_Still_10.jpg?resize=1200%2C675",
+      "published": "2026-04-29T09:45:00+00:00",
+      "firstSeen": "2026-04-29T11:53:05.705235+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1548
+    },
+    {
+      "title": "Meta FAIR Releases NeuralSet: A Python Package for Neuro-AI That Supports fMRI, M/EEG, Spikes, and HuggingFace Embeddings",
+      "url": "https://www.marktechpost.com/2026/04/29/meta-fair-releases-neuralset-a-python-package-for-neuro-ai-that-supports-fmri-m-eeg-spikes-and-huggingface-embeddings",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Introducing NeuralSet: Meta's Simple, Fast, and Scalable Python Package That Bridges Neuroscience and AI\nThe post Meta FAIR Releases NeuralSet: A Python Package for Neuro-AI That Supports fMRI, M/EEG, Spikes, and HuggingFace Embeddings appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-29-at-12.54.07-AM-1-150x150.png",
+      "published": "2026-04-29T07:56:02+00:00",
+      "firstSeen": "2026-04-29T08:00:01.988701+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.8373
+    },
+    {
+      "title": "Query-Efficient Quantum Approximate Optimization via Graph-Conditioned Trust Regions",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-04-29T14:28:21.760201+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-04-29T14:28:15.843583+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.76
     }
   ],
   "errors": []
