@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T16:00:01.125095+00:00",
+  "updatedAt": "2026-04-29T16:51:11.956666+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5192,6 +5192,34 @@
     "https://huggingface.co/blog/ibm-granite/granite-4-1": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-1.png",
       "checkedAt": "2026-04-29T16:00:01.125095+00:00"
+    },
+    "https://huggingface.co/blog/evaleval/eval-costs-bottleneck": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/6413251362e6057cbb6259bd/ukJJW86oJu36zOJwqZJBG.png",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/clueless-closet.webp?w=1200",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/09/GoogleTV-2024.png?resize=1200,591",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/29/step-by-step-guide-to-build-a-complete-pii-detection-and-redaction-pipeline-with-openai-privacy-filter": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-22.png",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://www.theverge.com/tech/920420/google-photos-ai-try-on-wardrobe": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKB353_GOOGLE_PHOTOS_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://huggingface.co/blog/inference-providers-deepinfra": {
+      "image": "https://huggingface.co/blog/assets/inference-providers/welcome-deepinfra.jpg",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
+    },
+    "https://www.together.ai/blog/deepseek-v4-pro-now-available-on-together-ai": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f22fc85bbbad38a50e5b4c_OG-image_20260429_BLOG_DSV4_2026%20(1).png",
+      "checkedAt": "2026-04-29T16:51:11.956666+00:00"
     }
   }
 }
