@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T09:21:58.411515+00:00",
+  "updatedAt": "2026-04-29T11:00:01.615789+00:00",
   "items": [
     {
       "title": "Minsik Lee, Seoi Hong, Chongmin Lee, Sieun Choi, Jian Kim, Jua Han, Jihie Kim",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-29T09:22:03.628067+00:00",
+      "published": "2026-04-29T11:00:08.391863+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "China freezes new robotaxi licenses after Baidu chaos",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/920312/china-suspends-autonomous-vehicle-permits-baidu-chaos",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "China has suspended new licenses for autonomous vehicles, Bloomberg reports, citing unnamed people familiar with the matter. The move comes after dozens of robotaxis operated by Chinese tech giant Baidu ground to a halt in traffic last month in Wuhan, creating chaos. The restrictions will prevent companies from adding new driverless cars to their fleets, [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2152484525.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
+      "published": "2026-04-29T10:39:21+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3495
+    },
+    {
+      "title": "AI recruiting startup Dex raises $5.3m seed to match AI engineers with the companies that need them most",
+      "url": "https://thenextweb.com/news/ai-recruiting-startup-dex-raises-5-3m-seed-to-match-ai-engineers-with-the-companies-that-need-them-most",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Founded by a former Atomico talent adviser, Dex charges employers agency fees only on successful hires, and has gone from zero to $1.8 million ARR in under six months of charging. Paddy Lambros spent two and a half years advising roughly 100 European startups on hiring at Atomico, one of Europe’s largest venture capital firms. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Dex-AI.avif",
+      "published": "2026-04-29T10:11:16+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8254
+    },
+    {
+      "title": "GitHub rushed to fix a critical vulnerability in less than six hours",
+      "url": "https://www.theverge.com/news/920295/github-remote-code-execution-vulnerability-fix",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "GitHub employees fixed a critical remote code execution vulnerability in less than six hours last month. Wiz Research used AI models to uncover a vulnerability in GitHub's internal git infrastructure that could have allowed attackers to access millions of public and private code repositories. \"Our security team immediately began validating the bug bounty report. Within [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/acastro_220504_STK121_0001.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-04-29T10:04:25+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.732
+    },
+    {
+      "title": "When Robots Have Their ChatGPT Moment, Remember These Pincers",
+      "url": "https://www.wired.com/story/when-robots-have-their-chatgpt-moment-remember-these-pincers",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "From sorting chicken nuggets to screwing in light bulbs, Eka’s robots are eerily lifelike. But do they have real physical smarts?",
+      "image": "https://media.wired.com/photos/69f11fc37df9442e8d9b4374/master/pass/20260320-wired-eka-robotics-0429.jpg",
+      "published": "2026-04-29T10:00:00+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2599
+    },
+    {
+      "title": "GM brings Google Gemini to four million vehicles in one of the largest in-car AI deployments yet",
+      "url": "https://thenextweb.com/news/gm-google-gemini-four-million-vehicles-in-car-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The over-the-air update replaces Google Assistant across model year 2022 and newer Cadillac, Chevrolet, Buick, and GMC vehicles, but arrives under the shadow of GM’s data-sharing controversy and a looming FTC consent order. General Motors has announced that Google Gemini is rolling out to approximately four million vehicles in the United States, in what the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/General-Motors-brings-Gemini.avif",
+      "published": "2026-04-29T09:41:02+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.4105
     },
     {
       "title": "General Motors is adding Gemini to four million cars",
@@ -28,10 +108,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Google-Gemini-AI-in-a-Chevrolet.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T09:14:38+00:00",
       "firstSeen": "2026-04-29T09:21:58.411515+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4563
+      "score": 9.4076
+    },
+    {
+      "title": "Cognizant to acquire AI infrastructure specialist Astreya for $600 million",
+      "url": "https://thenextweb.com/news/cognizant-astreya-600-million-acquisition-ai-infrastructure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The deal, Cognizant’s fourth major acquisition in 18 months, is designed to plug a specific gap in its AI builder strategy: the ability to design, build, and run the physical data centre infrastructure that enterprise AI actually runs on. Cognizant has agreed to acquire Astreya, a San Jose-based IT managed services firm specialising in AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Cognizant-Ravi-Kumar-S.avif",
+      "published": "2026-04-29T09:12:23+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0965
     },
     {
       "title": "How AI Could Help Combat Antibiotic Resistance",
@@ -44,10 +140,26 @@
       "image": "https://media.wired.com/photos/69ea459b31b8426862a83c48/master/pass/XT502056.jpg",
       "published": "2026-04-29T09:00:00+00:00",
       "firstSeen": "2026-04-29T09:21:58.411515+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2789
+      "score": 2.2305
+    },
+    {
+      "title": "Spain’s Solaria raises €300m to power data centres with solar and battery storage",
+      "url": "https://thenextweb.com/news/solaria-300m-raise-solar-data-centre",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Spanish solar developer is betting that co-locating renewable generation with battery storage adjacent to data centres is the answer to AI’s power hunger, and investors are oversubscribed at 6.7x. Europe has a data centre problem. Electricity grids across the continent are struggling to keep pace with the power demands of the AI boom, planning [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Solaria.avif",
+      "published": "2026-04-29T08:45:02+00:00",
+      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -1.0166
     },
     {
       "title": "All3 raises $25m to automate construction with legged robots and AI design software",
@@ -60,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/04/All3-founders.avif",
       "published": "2026-04-29T08:00:58+00:00",
       "firstSeen": "2026-04-29T09:00:01.701773+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1095
+      "score": 2.0625
     },
     {
       "title": "Meta FAIR Releases NeuralSet: A Python Package for Neuro-AI That Supports fMRI, M/EEG, Spikes, and HuggingFace Embeddings",
@@ -76,10 +188,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-29-at-12.54.07-AM-1-150x150.png",
       "published": "2026-04-29T07:56:02+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9771
+      "score": 3.9302
     },
     {
       "title": "Meta found in breach of EU law for failing to keep children off Facebook and Instagram",
@@ -92,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-04-29T07:38:40+00:00",
       "firstSeen": "2026-04-29T09:00:01.701773+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0014
+      "score": -1.0479
     },
     {
       "title": "smol-audio: A Colab-Friendly Notebook Collection for Fine-Tuning Whisper, Parakeet, Voxtral, Granite Speech, and Audio Flamingo 3",
@@ -108,10 +220,10 @@
       "image": "",
       "published": "2026-04-29T07:31:31+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2652
+      "score": 3.2188
     },
     {
       "title": "EU and Parliament fail to agree on AI Act changes after 12 hours of talks, pushing deal to next month",
@@ -124,10 +236,10 @@
       "image": "https://media.thenextweb.com/2025/07/Untitled-design-3.avif",
       "published": "2026-04-29T07:11:55+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 0.8857
+      "score": 0.8398
     },
     {
       "title": "A Coding Implementation on Document Parsing Benchmarking with LlamaIndex ParseBench Using Python, Hugging Face, and Evaluation Metrics",
@@ -140,10 +252,10 @@
       "image": "",
       "published": "2026-04-29T07:08:42+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.3542
+      "score": 9.3083
     },
     {
       "title": "Amadeus agrees to buy IDEMIA’s public security unit for $1.2 billion",
@@ -156,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amadeus.avif",
       "published": "2026-04-29T07:01:21+00:00",
       "firstSeen": "2026-04-29T08:00:01.988701+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0807
+      "score": 2.0349
     },
     {
       "title": "Poolside AI Introduces Laguna XS.2 and M.1: Agentic Coding Models Reaching 68.2% and 72.5% on SWE-bench Verified",
@@ -172,10 +284,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-28-at-10.43.19-PM-1-150x150.png",
       "published": "2026-04-29T05:45:42+00:00",
       "firstSeen": "2026-04-29T07:00:02.065366+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7152
+      "score": 9.671
     },
     {
       "title": "How to Build Traceable and Evaluated LLM Workflows Using Promptflow, Prompty, and OpenAI",
@@ -188,10 +300,10 @@
       "image": "",
       "published": "2026-04-29T02:47:22+00:00",
       "firstSeen": "2026-04-29T05:00:01.676465+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1363
+      "score": 6.0957
     },
     {
       "title": "At his OpenAI trial, Musk relitigates an old friendship",
@@ -204,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200%2C675",
       "published": "2026-04-29T00:40:16+00:00",
       "firstSeen": "2026-04-29T01:00:01.156757+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.054
+      "score": 5.0156
     },
     {
       "title": "OpenAI Really Wants Codex to Shut Up About Goblins",
@@ -220,10 +332,10 @@
       "image": "https://media.wired.com/photos/69f144197df9442e8d9b4623/master/pass/biz_gremlin_GettyImages-163004531.jpg",
       "published": "2026-04-28T23:45:05+00:00",
       "firstSeen": "2026-04-28T22:09:08.318187+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1322
+      "score": 8.0948
     },
     {
       "title": "Elon Musk appeared more petty than prepared",
@@ -236,10 +348,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_G.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-04-28T23:17:12+00:00",
       "firstSeen": "2026-04-29T00:05:26.638649+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1914
+      "score": 3.1545
     },
     {
       "title": "Quoting OpenAI Codex base_instructions",
@@ -252,11 +364,11 @@
       "image": "",
       "published": "2026-04-28T22:02:53+00:00",
       "firstSeen": "2026-04-29T00:05:26.638649+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2933
+      "score": 15.2576
     },
     {
       "title": "OpenAI Releases Privacy Filter: A 1.5B-Parameter Open-Source PII Redaction Model with 50M Active Parameters",
@@ -269,11 +381,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-83-1024x731.png",
       "published": "2026-04-28T21:37:57+00:00",
       "firstSeen": "2026-04-28T22:00:01.137717+00:00",
-      "lastSeen": "2026-04-29T10:00:01.958329+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.414
+      "score": 16.3788
     },
     {
       "title": "Elon Musk Testifies That He Started OpenAI to Prevent a ‘Terminator Outcome’",
@@ -286,10 +398,10 @@
       "image": "https://media.wired.com/photos/69f0ecdcb1c2fecb9fce2560/master/pass/Model-Behavior-Musk-Testifies-Business.jpg",
       "published": "2026-04-28T21:35:17+00:00",
       "firstSeen": "2026-04-28T22:00:01.137717+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9831
+      "score": 4.9479
     },
     {
       "title": "South Africa used AI to write its AI policy. The citations were fake.",
@@ -302,10 +414,10 @@
       "image": "https://media.thenextweb.com/2026/04/south-africa-ai-policy-hallucinated-citations.avif",
       "published": "2026-04-28T21:24:36+00:00",
       "firstSeen": "2026-04-28T23:08:48.099072+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8391
+      "score": 1.8041
     },
     {
       "title": "OpenAI called the growth report clickbait. The market disagreed by tens of billions of dollars.",
@@ -318,10 +430,10 @@
       "image": "https://media.thenextweb.com/2026/04/openai-growth-fears-firing-all-cylinders.avif",
       "published": "2026-04-28T21:13:37+00:00",
       "firstSeen": "2026-04-28T22:00:01.137717+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8351
+      "score": 4.8003
     },
     {
       "title": "The founder of Scholly sold his scholarship app to Sallie Mae. He says they fired him for asking why they were selling students’ data.",
@@ -337,7 +449,7 @@
       "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9266
+      "score": 2.8921
     },
     {
       "title": "Elon Musk tells the jury that all he wants to do is save humanity",
@@ -346,14 +458,14 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "On the stand, Elon Musk is positioning himself as a savior. In the high-profile trial between him and his fellow OpenAI co-founder, now CEO, Sam Altman, Musk opened by going through his background. He went as far back as being raised in South Africa and arriving in Canada for college with \"2,500 in Canadian travelers' [&#8230;]",
+      "summary": "On the stand, Elon Musk is positioning himself as a savior. In the high-profile trial between him and his fellow OpenAI cofounder, now CEO, Sam Altman, Musk opened by going through his background. He went as far back as being raised in South Africa and arriving in Canada for college with \"2,500 in Canadian travelers' [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_J.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-04-28T20:46:54+00:00",
       "firstSeen": "2026-04-28T22:00:01.137717+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0355
+      "score": 4.0011
     },
     {
       "title": "Musk told the jury the OpenAI case is simple. The consequences of his testimony are anything but.",
@@ -369,7 +481,7 @@
       "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8213
+      "score": 4.7871
     },
     {
       "title": "Taylor Swift is stepping up the legal war on AI copycats",
@@ -382,10 +494,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2268536362.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.737892056687%2C100%2C78.524215886627&amp%3Bw=1200",
       "published": "2026-04-28T20:30:00+00:00",
       "firstSeen": "2026-04-28T20:38:04.836439+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1294
+      "score": 3.0953
     },
     {
       "title": "Google signed the Pentagon’s classified AI deal and walked away from its drone swarm contest on the same day.",
@@ -401,7 +513,7 @@
       "lastSeen": "2026-04-29T06:00:01.129519+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8166
+      "score": 5.7826
     },
     {
       "title": "“They stole a charity.” “He didn’t get his way.” The Musk-Altman trial opened with two stories that cannot both be true.",
@@ -417,7 +529,7 @@
       "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8132
+      "score": 1.7794
     },
     {
       "title": "Amazon is already offering new OpenAI products on AWS",
@@ -430,10 +542,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Data-center-ChatGPT.png?resize=1200%2C600",
       "published": "2026-04-28T19:48:02+00:00",
       "firstSeen": "2026-04-28T20:00:02.002677+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6446
+      "score": 6.6111
     },
     {
       "title": "Nvidia is no longer just selling the shovels. Nemotron 3 Nano Omni is the company’s most aggressive move into AI models.",
@@ -449,7 +561,7 @@
       "lastSeen": "2026-04-29T09:21:58.411515+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.0041
+      "score": 6.9706
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -462,10 +574,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T19:27:50+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0076
+      "score": 8.9744
     },
     {
       "title": "Elon Musk takes the stand in high-profile trial against OpenAI",
@@ -478,10 +590,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/VRG_Illo_STK022_K_Radtke_Musk_Bolts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-28T19:00:13+00:00",
       "firstSeen": "2026-04-28T20:00:02.002677+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9981
+      "score": 4.9654
     },
     {
       "title": "Amazon tried selling office software and failed. Now it is betting that office software itself is obsolete.",
@@ -497,7 +609,7 @@
       "lastSeen": "2026-04-29T08:00:01.988701+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8865
+      "score": 2.8538
     },
     {
       "title": "Amazon launches an AI-powered audio Q&A experience on product pages",
@@ -510,11 +622,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Amazon-Jointhe-chat-AI.jpeg?resize=1200%2C675",
       "published": "2026-04-28T18:49:54+00:00",
       "firstSeen": "2026-04-28T20:00:02.002677+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.0246
+      "score": 11.992
     },
     {
       "title": "OpenAI’s models are now available everywhere. The question is whether everywhere is enough.",
@@ -531,119 +643,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.0822
-    },
-    {
-      "title": "‘It’s Undignified’: Hundreds of Workers Training Meta’s AI Could Be Laid Off",
-      "url": "https://www.wired.com/story/meta-covalen-ai-workers-layoffs",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "More than 700 people working for a Meta contractor in Ireland are at risk of losing their jobs, documents show.",
-      "image": "https://media.wired.com/photos/69f0fa6eb90e944fb5c0bece/master/pass/Hundreds-of-Workers-Training-Meta-AI-Are-Being-Laid-Off-Business-1246766082.jpg",
-      "published": "2026-04-28T18:36:47+00:00",
-      "firstSeen": "2026-04-28T18:49:00.625535+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2202
-    },
-    {
-      "title": "True Anomaly raised $1 billion to build weapons for a programme the Pentagon has not committed to building",
-      "url": "https://thenextweb.com/news/true-anomaly-650m-space-defence-golden-dome",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "True Anomaly, the Colorado-based startup that builds autonomous spacecraft for orbital combat, has raised $650 million in Series D funding at a $2.2 billion valuation, bringing total capital raised to $1 billion since its founding in August 2022. The round was co-led by Eclipse and Riot Ventures, with new investors Paradigm, Atreides, G Squared, The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/true-anomaly-650m-space-defence-golden-dome.avif",
-      "published": "2026-04-28T18:36:24+00:00",
-      "firstSeen": "2026-04-28T20:00:02.002677+00:00",
-      "lastSeen": "2026-04-29T06:00:01.129519+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.48
-    },
-    {
-      "title": "Google expands Pentagon’s access to its AI after Anthropic’s refusal",
-      "url": "https://techcrunch.com/2026/04/28/google-expands-pentagons-access-to-its-ai-after-anthropics-refusal",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "After Anthropic refused to allow the DoD to use its AI for domestic mass surveillance and autonomous weapons, Google has signed a new contract with the department.",
-      "image": "https://techcrunch.com/wp-content/uploads/2018/12/GettyImages-1080946342.jpeg?resize=1200%2C800",
-      "published": "2026-04-28T18:15:00+00:00",
-      "firstSeen": "2026-04-28T18:49:00.625535+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9128
-    },
-    {
-      "title": "Venture capital is moving beyond code because the next tech boom will be built, not programmed",
-      "url": "https://thenextweb.com/news/venture-capital-shift-deep-tech",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "For more than two decades, software has defined the trajectory of venture capital. It was efficient, scalable, and, for a long time, unmatched in its ability to generate outsized returns. Investors poured capital into SaaS platforms, marketplaces, and digital infrastructure, confident in a model that prioritized speed, low marginal costs, and rapid growth. I was [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Jamie-Gull-venture-capital-shift-deep-tech.avif",
-      "published": "2026-04-28T18:00:58+00:00",
-      "firstSeen": "2026-04-28T18:49:00.625535+00:00",
-      "lastSeen": "2026-04-29T06:34:44.478817+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4681
-    },
-    {
-      "title": "Claude can now plug directly into Photoshop, Blender, and Ableton",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/919648/anthropic-claude-creative-connectors-adobe-blender",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Anthropic has launched a set of connectors for Claude that allow the AI chatbot to tap into popular creative software, including Adobe's Creative Cloud apps, Affinity, Blender, Ableton, Autodesk, and more. This marks the company's latest efforts to break into the creative industry following its launch of Claude Design earlier this month. The new connectors [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Claude-creative-connectors-Blender-.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-28T16:49:08+00:00",
-      "firstSeen": "2026-04-28T17:00:01.527381+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 17.1547
-    },
-    {
-      "title": "Samsung Galaxy Glasses Leak: Pricing, Specs, and Launch Timeline Revealed",
-      "url": "https://www.techrepublic.com/article/news-samsung-smart-glasses-ai-leak",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Samsung’s rumored smart glasses may challenge Meta with AI features, display-free design, leaked pricing, and a possible 2027 AR roadmap.\nThe post Samsung Galaxy Glasses Leak: Pricing, Specs, and Launch Timeline Revealed appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/samsung-glasses.jpg",
-      "published": "2026-04-28T16:38:05+00:00",
-      "firstSeen": "2026-04-28T17:00:01.527381+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.5411
-    },
-    {
-      "title": "Apple’s $599 Mac mini Sells Out, Resurfaces on eBay Above Retail",
-      "url": "https://www.techrepublic.com/article/news-apple-mac-mini-ai-ebay-markups",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple’s sold-out $599 M4 Mac mini is getting marked up on eBay as buyers chase compact machines for local AI work while supplies stay tight.\nThe post Apple’s $599 Mac mini Sells Out, Resurfaces on eBay Above Retail appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/04/mahmudul-hasan-U8tkeF_u9Fc-unsplash-1.jpg",
-      "published": "2026-04-28T16:18:12+00:00",
-      "firstSeen": "2026-04-28T17:00:01.527381+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8348
+      "score": 13.0497
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -656,10 +656,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.4287
+      "score": -1.4531
     },
     {
       "title": "The Life Scientific: Jim Ashworth-Beaumont",
@@ -672,10 +672,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5796
+      "score": 1.5623
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -688,10 +688,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5251
+      "score": 2.525
     },
     {
       "title": "Inside Universe 25",
@@ -704,10 +704,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-29T09:21:58.411515+00:00",
+      "lastSeen": "2026-04-29T11:00:01.615789+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9436
+      "score": 2.9435
     },
     {
       "title": "Jens Juul Holst on the gut hormone discovery behind weight-loss drugs",
@@ -790,11 +790,5 @@
       "score": 3.29
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
