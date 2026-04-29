@@ -42,10 +42,23 @@
       color: var(--ink-hi);
     }
 
+    .game-section { margin-top: 22px; }
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 18px 0 12px;
+      font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+      color: var(--ink-hi);
+    }
+    .section-title h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); font-weight: 500; }
+    .section-title span { color: var(--ink-lo); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+
     .game-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
     }
 
     .game-card {
@@ -225,6 +238,7 @@
     .game-card .tag.featured     { background: rgba(127,149,255,0.18); color: #c8d1ff; border: 1px solid rgba(127,149,255,0.4); }
     .game-card .tag.classic      { background: rgba(255,217,61,0.18);  color: #ffe38a; border: 1px solid rgba(255,217,61,0.4); }
     .game-card .tag.experimental { background: rgba(198,107,255,0.16); color: #d7b8ff; border: 1px solid rgba(163,119,217,0.4); }
+    .game-card .tag.unfinished   { background: rgba(224,102,126,0.14); color: #ffc1cd; border: 1px solid rgba(224,102,126,0.38); }
 
     .game-count {
       text-align: center;
@@ -232,6 +246,26 @@
       font-size: 13px;
       margin-top: 28px;
       letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 620px) {
+      main.container { padding-inline: 10px; }
+      .game-filters { gap: 6px; margin: 18px 0 18px; }
+      .game-filters button { padding: 7px 10px; font-size: 11px; }
+      .game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .game-card { padding: 10px 8px; gap: 6px; border-radius: 14px; align-items: center; text-align: center; }
+      .game-card .icon-wrap { width: 42px; height: 42px; border-radius: 11px; font-size: 1.45em; }
+      .game-card .title { font-size: 0.78rem; line-height: 1.08; min-height: 2.1em; display: flex; align-items: center; }
+      .game-card .desc { display: none; }
+      .game-card .date { font-size: 9px; }
+      .game-card .tag { font-size: 8px; padding: 2px 6px; margin-top: 0; }
+      .section-title { margin: 16px 0 8px; padding-inline: 2px; }
+      .section-title h2 { font-size: 1.25rem; }
+      .section-title span { font-size: 10px; }
+    }
+
+    @media (max-width: 370px) {
+      .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
@@ -257,7 +291,7 @@
       <button data-filter="retro70s">📺 70s Classics</button>
     </div>
 
-    <div class="game-grid" id="game-grid"></div>
+    <div id="game-sections"></div>
     <p class="game-count" id="game-count"></p>
 
     <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
@@ -301,13 +335,22 @@
       { title: 'Gravity Weaver',                path: '2026-03-03/gravity-weaver/',            emoji: '🕸️', date: 'Mar 3', cat: 'puzzle',   tag: 'experimental', desc: 'Gravity-puzzle prototype' }
     ];
 
-    const grid   = document.getElementById('game-grid');
+    const sections = document.getElementById('game-sections');
     const count  = document.getElementById('game-count');
     const filters= document.getElementById('game-filters');
 
     let currentFilter = 'all';
 
-    function tagLabel(t) {
+    const UNFINISHED = new Set([
+      'hard hat mac', 'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
+      'lantern creek', 'super star trek', 'depth charge', 'boulder dash', 'ember knight',
+      'vortex storm eater', 'runecaster', 'tessera', 'gravity weaver', 'storm echo'
+    ]);
+    const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
+
+    function tagLabel(t, status) {
+      if (status === 'unfinished') return '🚧 Unfinished';
       return t === 'featured' ? '⭐ Featured'
            : t === 'classic'  ? '🎮 Classic'
            : '🧪 Experimental';
@@ -343,19 +386,35 @@
       return EMOJI_ANIM[e] || 'float';
     }
 
-    function render() {
-      const list = currentFilter === 'all'
-        ? games
-        : games.filter(g => g.tag === currentFilter || g.cat === currentFilter);
-      grid.innerHTML = list.map(g => `
+    function gameCard(g) {
+      return `
         <a class="game-card" href="${BASE}${g.path}" target="_blank" rel="noopener">
           <span class="icon-wrap"><span data-anim="${animForEmoji(g.emoji)}">${g.emoji}</span></span>
           <span class="title">${g.title}</span>
           ${g.desc ? `<span class="desc">${g.desc}</span>` : ''}
           <span class="date">${g.date}</span>
-          <span class="tag ${g.tag}">${tagLabel(g.tag)}</span>
+          <span class="tag ${g.status === 'unfinished' ? 'unfinished' : g.tag}">${tagLabel(g.tag, g.status)}</span>
         </a>
-      `).join('');
+      `;
+    }
+
+    function renderSection(title, list) {
+      if (!list.length) return '';
+      return `
+        <section class="game-section" aria-label="${title} games">
+          <div class="section-title"><h2>${title}</h2><span>${list.length} game${list.length === 1 ? '' : 's'}</span></div>
+          <div class="game-grid">${list.map(gameCard).join('')}</div>
+        </section>
+      `;
+    }
+
+    function render() {
+      const list = currentFilter === 'all'
+        ? games
+        : games.filter(g => g.tag === currentFilter || g.cat === currentFilter || g.status === currentFilter);
+      const released = list.filter(g => g.status !== 'unfinished');
+      const unfinished = list.filter(g => g.status === 'unfinished');
+      sections.innerHTML = renderSection('Released Games', released) + renderSection('Unfinished Games', unfinished);
       count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}${currentFilter === 'all' ? '' : ' · ' + currentFilter}`;
     }
 
