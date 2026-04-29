@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T23:08:48.099072+00:00",
+  "updatedAt": "2026-04-29T01:00:01.156757+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5132,6 +5132,14 @@
     "https://www.theverge.com/ai-artificial-intelligence/920191/elon-musk-sam-altman-trial-day-one": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_G.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
       "checkedAt": "2026-04-29T00:00:01.336625+00:00"
+    },
+    "https://techcrunch.com/2026/04/28/at-his-openai-trial-musk-relitigates-an-old-friendship": {
+      "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200,675",
+      "checkedAt": "2026-04-29T01:00:01.156757+00:00"
+    },
+    "https://openai.com/index/our-commitment-to-community-safety": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4LxnvjduXTJ8PvsFyOinqE/cd764864719bfa914c88e34d6e9f1002/Frame-1.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-04-29T01:00:01.156757+00:00"
     }
   }
 }

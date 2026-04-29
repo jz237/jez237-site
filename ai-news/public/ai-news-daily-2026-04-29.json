@@ -1,9 +1,25 @@
 {
   "date": "2026-04-29",
-  "updatedAt": "2026-04-29T00:00:01.336625+00:00",
+  "updatedAt": "2026-04-29T01:00:01.156757+00:00",
   "items": [
     {
-      "title": "Stochastic KV Routing: Enabling Adaptive Depth-Wise Cache Sharing",
+      "title": "At his OpenAI trial, Musk relitigates an old friendship",
+      "url": "https://techcrunch.com/2026/04/28/at-his-openai-trial-musk-relitigates-an-old-friendship",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "It's a story Musk has told before -- in interviews and to author Walter Isaacson for his bestselling biography of Musk -- but Tuesday was the first time he said it under oath.",
+      "image": "https://techcrunch.com/wp-content/uploads/2016/07/a3c4057e7d804c79b4bfb3278f4afced.jpg?resize=1200%2C675",
+      "published": "2026-04-29T00:40:16+00:00",
+      "firstSeen": "2026-04-29T01:00:01.156757+00:00",
+      "lastSeen": "2026-04-29T01:00:01.156757+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.28
+    },
+    {
+      "title": "Anastasiia Filippova, David Grangier, Marco Cuturi, Jo\\~ao Monteiro",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-29T00:00:09.831613+00:00",
+      "published": "2026-04-29T01:00:25.947131+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-29T00:00:01.336625+00:00",
+      "lastSeen": "2026-04-29T01:00:01.156757+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
