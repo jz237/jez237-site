@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T14:21:42.954444+00:00",
+  "updatedAt": "2026-04-30T16:00:01.968743+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5356,6 +5356,18 @@
     "https://www.theverge.com/tech/921048/verified-by-spotify-badge": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/S4A_Verified_Header_Ravyn.jpg?quality=90&amp;strip=all&amp;crop=0%2C4.0288596603244%2C100%2C91.942280679351&amp;w=1200",
       "checkedAt": "2026-04-30T14:00:01.155611+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/30/a-coding-implementation-on-pyright-type-checking-covering-generics-protocols-strict-mode-type-narrowing-and-modern-python-typing": {
+      "image": "",
+      "checkedAt": "2026-04-30T16:00:01.968743+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/x-announces-a-rebuilt-ad-platform-powered-by-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/11/X-and-Threads-GettyImages-1763609384.jpeg?resize=1200,832",
+      "checkedAt": "2026-04-30T16:00:01.968743+00:00"
+    },
+    "https://www.theverge.com/tech/921159/smart-glasses-review-wearable-even-realities-g2-meta-ray-ban-rokid-lucyd-oakley-meta-vanguard": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268494_smart_glasses_overview_AKrales_0381.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-04-30T16:00:01.968743+00:00"
     }
   }
 }
