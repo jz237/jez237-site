@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T18:00:01.698665+00:00",
+  "updatedAt": "2026-04-30T19:00:01.959130+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5404,6 +5404,22 @@
     "https://techcrunch.com/2026/04/30/stripe-link-digital-wallet-ai-agents-shopping": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/link-2026-04-30-at-1.04.31-PM.jpg?resize=1200,659",
       "checkedAt": "2026-04-30T18:00:01.698665+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/30/rss-vibe-coded-apps": {
+      "image": "",
+      "checkedAt": "2026-04-30T19:00:01.959130+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/openai-announces-new-advanced-security-for-chatgpt-accounts-including-a-partnership-with-yubico": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/OopenAI-how-to-1.jpg?resize=1200,600",
+      "checkedAt": "2026-04-30T19:00:01.959130+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/921546/elon-musk-xai-openai-trial-model-distillation": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_G.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-04-30T19:00:01.959130+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/elon-musk-testifies-that-xai-trained-grok-on-openai-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200,801",
+      "checkedAt": "2026-04-30T19:00:01.959130+00:00"
     }
   }
 }
