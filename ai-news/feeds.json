@@ -137,5 +137,11 @@
     "url": "https://www.interconnects.ai/feed",
     "weight": 0.9,
     "category": "AI"
+  },
+  {
+    "name": "Microsoft Research Blog",
+    "url": "https://www.microsoft.com/en-us/research/feed/",
+    "weight": 0.9,
+    "category": "AI"
   }
 ]
