@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T17:00:01.641915+00:00",
+  "updatedAt": "2026-04-30T18:00:01.698665+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5392,6 +5392,18 @@
     "https://openai.com/index/advanced-account-security": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/3KGOHkSXu53naMuSFNaiwv/aa2f914943c839ce6b75b8620a46b340/SEO_Banner_2560x1440_02.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-04-30T17:00:01.641915+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/fda-approval-fundraising-and-the-reality-of-building-in-healthcare-according-to-bioticsai-founder": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/bms2e11-featured.png?resize=1200,675",
+      "checkedAt": "2026-04-30T18:00:01.698665+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/googles-gemini-ai-assistant-is-hitting-the-road-in-millions-of-vehicles": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Gemini-google-vehicles.jpeg?w=1200",
+      "checkedAt": "2026-04-30T18:00:01.698665+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/stripe-link-digital-wallet-ai-agents-shopping": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/link-2026-04-30-at-1.04.31-PM.jpg?resize=1200,659",
+      "checkedAt": "2026-04-30T18:00:01.698665+00:00"
     }
   }
 }
