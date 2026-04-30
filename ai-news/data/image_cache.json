@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T08:00:01.946786+00:00",
+  "updatedAt": "2026-04-30T09:00:01.791595+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5328,6 +5328,10 @@
     "https://www.marktechpost.com/2026/04/30/ibm-releases-two-granite-speech-4-1-2b-models-autoregressive-asr-with-translation-and-non-autoregressive-editing-for-fast-inference": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-24.png",
       "checkedAt": "2026-04-30T08:00:01.946786+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/04/260429102035.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/human-vs-ai-brain-thinking-understanding.webp",
+      "checkedAt": "2026-04-30T09:00:01.791595+00:00"
     }
   }
 }
