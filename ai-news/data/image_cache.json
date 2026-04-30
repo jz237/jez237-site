@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T20:00:01.811817+00:00",
+  "updatedAt": "2026-04-30T21:00:01.461538+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5432,6 +5432,10 @@
     "https://www.together.ai/blog/shutting-down-copy-fail-in-production": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f3a83ea5f2cd2d43eb3f8a_OG-image_20260430_BLOG_COPYFAIL.png",
       "checkedAt": "2026-04-30T19:36:36.879939+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/legal-ai-startup-legora-hits-5-6-valuation-and-its-battle-with-harvey-just-got-hotter": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/jude-law-for-legora.jpeg?resize=1200,831",
+      "checkedAt": "2026-04-30T21:00:01.461538+00:00"
     }
   }
 }
