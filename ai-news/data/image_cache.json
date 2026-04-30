@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T18:22:43.920498+00:00",
+  "updatedAt": "2026-04-30T19:36:36.879939+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5416,6 +5416,22 @@
     "https://techcrunch.com/2026/04/30/elon-musk-testifies-that-xai-trained-grok-on-openai-models": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200,801",
       "checkedAt": "2026-04-30T18:22:43.920498+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/after-dissing-anthropic-for-limiting-mythos-openai-restricts-access-to-cyber-too": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200,783",
+      "checkedAt": "2026-04-30T19:36:36.879939+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/30/rss-vibe-coded-apps": {
+      "image": "",
+      "checkedAt": "2026-04-30T19:36:36.879939+00:00"
+    },
+    "https://www.techrepublic.com/article/news-aws-amazon-connect-agentic-ai-tools": {
+      "image": "https://assets.techrepublic.com/uploads/2026/04/amazon-connect.png?f=jpeg",
+      "checkedAt": "2026-04-30T19:36:36.879939+00:00"
+    },
+    "https://www.together.ai/blog/shutting-down-copy-fail-in-production": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f3a83ea5f2cd2d43eb3f8a_OG-image_20260430_BLOG_COPYFAIL.png",
+      "checkedAt": "2026-04-30T19:36:36.879939+00:00"
     }
   }
 }
