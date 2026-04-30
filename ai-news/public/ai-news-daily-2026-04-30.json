@@ -1,7 +1,24 @@
 {
   "date": "2026-04-30",
-  "updatedAt": "2026-04-30T18:00:01.698665+00:00",
+  "updatedAt": "2026-04-30T19:00:01.959130+00:00",
   "items": [
+    {
+      "title": "OpenAI announces new advanced security for ChatGPT accounts, including a partnership with Yubico",
+      "url": "https://techcrunch.com/2026/04/30/openai-announces-new-advanced-security-for-chatgpt-accounts-including-a-partnership-with-yubico",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "OpenAI is launching additional opt-in protections for ChatGPT accounts. The new security initiative includes a new partnership with security key provider Yubico.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/OopenAI-how-to-1.jpg?resize=1200%2C600",
+      "published": "2026-04-30T18:20:03+00:00",
+      "firstSeen": "2026-04-30T19:00:01.959130+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 25.0698
+    },
     {
       "title": "OpenAI’s new security model is for ‘critical cyber defenders’ only",
       "url": "https://www.theverge.com/ai-artificial-intelligence/921073/openai-sam-altman-new-cybersecurity-model-gpt-5-5-cyber",
@@ -13,11 +30,43 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T11:09:01+00:00",
       "firstSeen": "2026-04-30T11:51:58.768619+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.1694
+      "score": 16.1445
+    },
+    {
+      "title": "Elon Musk confirms xAI used OpenAI’s models to train Grok",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/921546/elon-musk-xai-openai-trial-model-distillation",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "In a federal courtroom in California on Thursday, Elon Musk testified that his own AI startup, xAI, has used OpenAI's models to improve its own. The matter at question is model distillation, a common industry practice by which one larger AI model acts as a \"teacher\" of sorts to pass on knowledge to a smaller [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_G.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
+      "published": "2026-04-30T18:16:57+00:00",
+      "firstSeen": "2026-04-30T19:00:01.959130+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.3383
+    },
+    {
+      "title": "Elon Musk testifies that xAI trained Grok on OpenAI models",
+      "url": "https://techcrunch.com/2026/04/30/elon-musk-testifies-that-xai-trained-grok-on-openai-models",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "\"Distillation\" is a hot topic as frontier labs try to prevent smaller competitors from copying their models.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200%2C801",
+      "published": "2026-04-30T18:03:57+00:00",
+      "firstSeen": "2026-04-30T19:00:01.959130+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.2618
     },
     {
       "title": "Enabling a new model for healthcare with AI co-clinician",
@@ -30,11 +79,11 @@
       "image": "https://lh3.googleusercontent.com/z2sN_eil5tgap-Ji1W_4l1xnbfLRghzxdXzyCMdnKFVW1xTfgm0o8bpg9pNwE4RcHTR2QGEGhGx7LFn7Q6bg-LEPBW20d4Djo3Erii8PBYYrWz36=w528-h297-n-nu-rw-lo",
       "published": "2026-04-30T12:14:15+00:00",
       "firstSeen": "2026-04-30T16:00:01.968743+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6673
+      "score": 12.6416
     },
     {
       "title": "Earlybird closes €360M Fund VIII, its largest ever, with a new perpetual ownership model and a deeptech-first thesis",
@@ -51,7 +100,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.8892
+      "score": 10.8662
     },
     {
       "title": "Gemini is rolling out to cars with Google built-in",
@@ -64,26 +113,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Google-Gemini-car-AI-assistant-upgrade.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T16:00:00+00:00",
       "firstSeen": "2026-04-30T16:44:15.099086+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5005
-    },
-    {
-      "title": "Google’s Gemini AI assistant is hitting the road in millions of vehicles",
-      "url": "https://techcrunch.com/2026/04/30/googles-gemini-ai-assistant-is-hitting-the-road-in-millions-of-vehicles",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google announced on Thursday that it will begin rolling out Gemini to cars with Google built-in, marking a significant upgrade from the current Google Assistant. The move signals Google’s push to bring more advanced, conversational AI into the driving experience. The announcement follows closely behind news from General Motors, which revealed yesterday that Gemini is [&#8230;]",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Gemini-google-vehicles.jpeg?w=1200",
-      "published": "2026-04-30T17:46:54+00:00",
-      "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.4833
+      "score": 10.472
     },
     {
       "title": "OpenAI Rolls Out ‘Advanced’ Security Mode for At-Risk Accounts",
@@ -96,10 +129,42 @@
       "image": "https://media.wired.com/photos/69f3851f013dbae7ce7c178e/master/pass/security_chatgpt_GettyImages-2271059989.jpg",
       "published": "2026-04-30T17:30:39+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3751
+      "score": 10.3454
+    },
+    {
+      "title": "We need RSS for sharing abundant vibe-coded apps",
+      "url": "https://simonwillison.net/2026/Apr/30/rss-vibe-coded-apps",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "We need RSS for sharing abundant vibe-coded apps\nMatt Webb:\n\nI would love an RSS web feed for all those various tools and apps pages, each item with an “Install” button. (But install to where?)\nThe lesson here is that when vibe-coding accelerates app development, apps become more personal, more situated, and more frequent. Shipping a tool or a micro-app is less like launching a website and more like posting on a blog.\n\nThis inspired me to have Claude add an Atom feed (and icon) to my /elsewhere/tools/ page, which itself is populated by content from my tools.simonwillison.net site.\n\n\n    Tags: ",
+      "image": "",
+      "published": "2026-04-30T18:38:48+00:00",
+      "firstSeen": "2026-04-30T19:00:01.959130+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.4792
+    },
+    {
+      "title": "Google’s Gemini AI assistant is hitting the road in millions of vehicles",
+      "url": "https://techcrunch.com/2026/04/30/googles-gemini-ai-assistant-is-hitting-the-road-in-millions-of-vehicles",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The move signals Google’s push to bring more advanced, conversational AI into the driving experience.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Gemini-google-vehicles.jpeg?w=1200",
+      "published": "2026-04-30T17:46:54+00:00",
+      "firstSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3534
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -112,10 +177,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T16:57:14+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3285
+      "score": 9.2992
     },
     {
       "title": "Sources: Anthropic could raise a new $50B round at a valuation of $900B",
@@ -128,74 +193,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200%2C800",
       "published": "2026-04-30T00:07:15+00:00",
       "firstSeen": "2026-04-30T01:00:02.076442+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
+      "lastSeen": "2026-04-30T19:00:01.959130+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8594
-    },
-    {
-      "title": "Italy’s antitrust authority closes probes into DeepSeek, Mistral, and Nova AI over AI hallucination disclosures",
-      "url": "https://thenextweb.com/news/agcm-deepseek-mistral-nova-ai-hallucination-probes",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The AGCM accepted binding commitments from all three chatbot providers, establishing a concrete benchmark for what ‘adequate’ hallucination transparency must look like in practice, and a 120-day compliance window before potential fines. Italy’s competition and consumer protection authority, the AGCM, has closed its investigations into three AI chatbot providers, China’s DeepSeek, France’s Mistral AI, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Italy-antitrust-authority.avif",
-      "published": "2026-04-30T10:55:52+00:00",
-      "firstSeen": "2026-04-30T11:51:58.768619+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.3039
-    },
-    {
-      "title": "Elon Musk Seemingly Admits xAI Has Used OpenAI's Models to Train Its Own",
-      "url": "https://www.wired.com/story/elon-musk-distill-openai-models-partly-xai",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "While answering questions under oath, Musk argued it’s standard practice for AI labs to use their competitors' models.",
-      "image": "https://media.wired.com/photos/69f3848c17e0528daa0ec80c/master/pass/Musk-Admits-to-Partly-Distilling-OpenAI-Models-Business-2273133893.jpg",
-      "published": "2026-04-30T17:41:14+00:00",
-      "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.2805
-    },
-    {
-      "title": "Cursor Introduces a TypeScript SDK for Building Programmatic Coding Agents With Sandboxed Cloud VMs, Subagents, Hooks, and Token-Based Pricing",
-      "url": "https://www.marktechpost.com/2026/04/29/cursor-introduces-a-typescript-sdk-for-building-programmatic-coding-agents-with-sandboxed-cloud-vms-subagents-hooks-and-token-based-pricing",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Cursor Launches TypeScript SDK to Let Developers Build and Deploy Programmatic Coding Agents\nThe post Cursor Introduces a TypeScript SDK for Building Programmatic Coding Agents With Sandboxed Cloud VMs, Subagents, Hooks, and Token-Based Pricing appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-90.png",
-      "published": "2026-04-30T04:40:37+00:00",
-      "firstSeen": "2026-04-30T06:39:12.171687+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.4797
-    },
-    {
-      "title": "Stripe introduces Link, a digital wallet that autonomous AI agents can use, too",
-      "url": "https://techcrunch.com/2026/04/30/stripe-link-digital-wallet-ai-agents-shopping",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Link lets users connect cards, banks, and subscriptions, then authorize AI agents to spend securely via approval flows.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/link-2026-04-30-at-1.04.31-PM.jpg?resize=1200%2C659",
-      "published": "2026-04-30T17:15:19+00:00",
-      "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T18:00:01.698665+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.7675
+      "score": 8.8411
     }
   ],
   "errors": []
