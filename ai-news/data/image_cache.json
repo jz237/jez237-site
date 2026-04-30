@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T23:09:09.073832+00:00",
+  "updatedAt": "2026-04-30T01:00:02.076442+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5272,6 +5272,46 @@
     "https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age": {
       "image": "",
       "checkedAt": "2026-04-29T23:09:09.073832+00:00"
+    },
+    "https://www.techrepublic.com/article/news-amazon-layoffs-fresh-ai-workforce-cuts": {
+      "image": "",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/amazons-cloud-business-is-surging-and-so-is-its-capital-spending": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2201505679.jpg?resize=1200,800",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://www.techrepublic.com/article/news-tesla-optimus-robot-launch-timeline": {
+      "image": "",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/sources-anthropic-could-raise-a-new-50b-round-at-a-valuation-of-900b": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200,800",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://www.theverge.com/tech/921022/elon-musk-cross-openai-altman": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_H.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/on-the-stand-elon-musk-cant-escape-his-own-tweets": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2087343879.jpg?w=1024",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/meta-is-still-burning-money-on-ar-vr": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/10/meta-distorted-glitched.jpg?resize=1200,675",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/satya-nadella-says-hes-ready-to-exploit-the-new-openai-deal": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2153474575.jpg?resize=1200,800",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/29/llm-3": {
+      "image": "",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
+    },
+    "https://simonwillison.net/2026/Apr/29/llm-2": {
+      "image": "",
+      "checkedAt": "2026-04-30T01:00:02.076442+00:00"
     }
   }
 }
