@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-30T06:00:01.888741+00:00",
+  "updatedAt": "2026-04-30T07:00:01.319810+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5320,6 +5320,10 @@
     "https://www.together.ai/blog/announcing-together-ai-and-adaption-partnership": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f2a8c5d7ef2c7b13a3fedd_OG-image_20260429_BLOG_DSV4_2026%20(3).png",
       "checkedAt": "2026-04-30T05:00:01.986770+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/29/cursor-introduces-a-typescript-sdk-for-building-programmatic-coding-agents-with-sandboxed-cloud-vms-subagents-hooks-and-token-based-pricing": {
+      "image": "",
+      "checkedAt": "2026-04-30T07:00:01.319810+00:00"
     }
   }
 }
