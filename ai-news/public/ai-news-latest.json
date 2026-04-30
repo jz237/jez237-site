@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-30T20:00:01.811817+00:00",
+  "updatedAt": "2026-04-30T21:00:01.461538+00:00",
   "items": [
     {
-      "title": "Information Extraction from Electricity Invoices with General-Purpose Large Language Models",
+      "title": "MATH-PT: A Math Reasoning Benchmark for European and Brazilian Portuguese",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-30T20:00:06.634729+00:00",
+      "published": "2026-04-30T21:00:05.430454+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.41
+    },
+    {
+      "title": "The most severe Linux threat to surface in years catches the world flat-footed",
+      "url": "https://arstechnica.com/security/2026/04/as-the-most-severe-linux-threat-in-years-surfaces-the-world-scrambles",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "CopyFail threatens multi-tenant servers, CI/CD work flows, Kubernetes containers, and more.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/09/code-vulnerability-security-1000x648.jpg",
+      "published": "2026-04-30T20:20:48+00:00",
+      "firstSeen": "2026-04-30T21:00:01.461538+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.1302
+    },
+    {
+      "title": "Legal AI startup Legora hits $5.6B valuation and its battle with Harvey just got hotter",
+      "url": "https://techcrunch.com/2026/04/30/legal-ai-startup-legora-hits-5-6-valuation-and-its-battle-with-harvey-just-got-hotter",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The two wildly fast-growing rivals have raised massive sums, pushed into each other's home turf and now have dueling ad campaigns.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/jude-law-for-legora.jpeg?resize=1200%2C831",
+      "published": "2026-04-30T20:14:47+00:00",
+      "firstSeen": "2026-04-30T21:00:01.461538+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2672
+    },
+    {
+      "title": "Nemotron Labs: What OpenClaw Agents Mean for Every Organization",
+      "url": "https://blogs.nvidia.com/blog/what-openclaw-agents-mean-for-every-organization",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "By early 2026, the open source project OpenClaw had become a phenomenon. In January, its GitHub star count crossed 100,000 as developer interest surged.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/nemotron-labs-openclaw-1920x1080-1.jpg",
+      "published": "2026-04-30T20:00:39+00:00",
+      "firstSeen": "2026-04-30T21:00:01.461538+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6602
     },
     {
       "title": "After dissing Anthropic for limiting Mythos, OpenAI restricts access to Cyber, too",
@@ -24,15 +72,15 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "OpenAI will begin rolling out it cybersecurity testing tool, GPT-5.5 Cyber only \"to critical cyber defenders\" at first.",
+      "summary": "OpenAI will begin rolling out its cybersecurity testing tool, GPT-5.5 Cyber only \"to critical cyber defenders\" at first.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200%2C783",
       "published": "2026-04-30T19:27:41+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.6736
+      "score": 19.644
     },
     {
       "title": "Samsung’s founding family doubled its wealth in a year. Its workers want a share.",
@@ -45,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/samsung-dynasty-ai-boom-wealth-doubles.avif",
       "published": "2026-04-30T19:17:20+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1285
+      "score": 2.0989
     },
     {
       "title": "OpenAI now lets you lock your ChatGPT account with a hardware key. Here is why it thinks you should.",
@@ -61,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/04/Yubico-openai.avif",
       "published": "2026-04-30T19:04:04+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.8219
+      "score": 11.7925
     },
     {
       "title": "All the evidence unveiled so far in Musk v. Altman",
@@ -77,10 +125,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia6.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T19:00:00+00:00",
       "firstSeen": "2026-04-29T18:44:40.235690+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3298
+      "score": 4.3005
     },
     {
       "title": "Meta posted its best quarter ever. The stock dropped 9 per cent.",
@@ -93,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-users.avif",
       "published": "2026-04-30T18:58:42+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1192
+      "score": 2.0899
     },
     {
       "title": "Musk v. Altman Kicks Off, DOJ Guts Voting Rights Unit, and Is the AI Job Apocalypse Overhyped?",
@@ -109,10 +157,10 @@
       "image": "https://media.wired.com/photos/69f2663444afef60af143aae/master/pass/Uncanny-Valley-Musk-v-Altman-Business-2272923137.jpg",
       "published": "2026-04-30T18:54:54+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2573
+      "score": 4.2281
     },
     {
       "title": "Europe’s finance ministers are about to discuss an AI model none of them can access",
@@ -125,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/04/eu-finance-ministers-mythos-anthropic-cybersecurity.avif",
       "published": "2026-04-30T18:43:47+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1118
+      "score": 4.0828
     },
     {
       "title": "We need RSS for sharing abundant vibe-coded apps",
@@ -141,10 +189,10 @@
       "image": "",
       "published": "2026-04-30T18:38:48+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4494
+      "score": 9.4204
     },
     {
       "title": "AWS Expands Amazon Connect Into AI Tools for Hiring, Healthcare, and Supply Chains",
@@ -157,10 +205,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/amazon-connect.png?f=jpeg",
       "published": "2026-04-30T18:34:28+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9073
+      "score": 4.8783
     },
     {
       "title": "AI integration demands integrity, not just innovation: Amy Trahey on building accountability into an AI-driven world",
@@ -173,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/04/Ai-integrity.avif",
       "published": "2026-04-30T18:23:03+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8017
+      "score": 2.7729
     },
     {
       "title": "OpenAI announces new advanced security for ChatGPT accounts, including a partnership with Yubico",
@@ -189,11 +237,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/OopenAI-how-to-1.jpg?resize=1200%2C600",
       "published": "2026-04-30T18:20:03+00:00",
       "firstSeen": "2026-04-30T18:22:43.920498+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 25.0402
+      "score": 25.0115
     },
     {
       "title": "Elon Musk confirms xAI used OpenAI’s models to train Grok",
@@ -206,10 +254,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_G.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-04-30T18:16:57+00:00",
       "firstSeen": "2026-04-30T18:22:43.920498+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.3087
+      "score": 14.28
     },
     {
       "title": "Elon Musk testifies that xAI trained Grok on OpenAI models",
@@ -222,10 +270,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200%2C801",
       "published": "2026-04-30T18:03:57+00:00",
       "firstSeen": "2026-04-30T18:22:43.920498+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.2324
+      "score": 14.2039
     },
     {
       "title": "Musk calls himself ‘a fool’ on the stand as OpenAI’s lawyer dismantles his nonprofit narrative",
@@ -238,10 +286,10 @@
       "image": "https://media.thenextweb.com/2024/07/Untitled-design-17.avif",
       "published": "2026-04-30T17:54:26+00:00",
       "firstSeen": "2026-04-30T19:36:36.879939+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0879
+      "score": 5.0594
     },
     {
       "title": "FDA approval, fundraising, and the reality of building in healthcare according to BioticsAI founder",
@@ -254,10 +302,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/bms2e11-featured.png?resize=1200%2C675",
       "published": "2026-04-30T17:53:53+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3276
+      "score": 3.2992
     },
     {
       "title": "Google’s Gemini AI assistant is hitting the road in millions of vehicles",
@@ -270,10 +318,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Gemini-google-vehicles.jpeg?w=1200",
       "published": "2026-04-30T17:46:54+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3242
+      "score": 9.2959
     },
     {
       "title": "Elon Musk Seemingly Admits xAI Has Used OpenAI’s Models to Train Its Own",
@@ -286,10 +334,10 @@
       "image": "https://media.wired.com/photos/69f3848c17e0528daa0ec80c/master/pass/Musk-Admits-to-Partly-Distilling-OpenAI-Models-Business-2273133893.jpg",
       "published": "2026-04-30T17:41:14+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2215
+      "score": 8.1933
     },
     {
       "title": "OpenAI Rolls Out ‘Advanced’ Security Mode for At-Risk Accounts",
@@ -302,10 +350,10 @@
       "image": "https://media.wired.com/photos/69f3851f013dbae7ce7c178e/master/pass/security_chatgpt_GettyImages-2271059989.jpg",
       "published": "2026-04-30T17:30:39+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3165
+      "score": 10.2884
     },
     {
       "title": "Blue Owl made 10x its money on SpaceX and has already sold half its position",
@@ -318,10 +366,10 @@
       "image": "https://media.thenextweb.com/2026/04/Blue-Owl.avif",
       "published": "2026-04-30T17:28:29+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8755
+      "score": 3.8474
     },
     {
       "title": "Stripe introduces Link, a digital wallet that autonomous AI agents can use, too",
@@ -334,10 +382,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/link-2026-04-30-at-1.04.31-PM.jpg?resize=1200%2C659",
       "published": "2026-04-30T17:15:19+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7092
+      "score": 6.6813
     },
     {
       "title": "Spotify launches a verified badge for artists, and AI-persona accounts won’t qualify",
@@ -350,10 +398,10 @@
       "image": "https://media.thenextweb.com/2026/04/Verified-artist-Spotify-feature.avif",
       "published": "2026-04-30T17:08:22+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.066
+      "score": 6.0381
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -366,10 +414,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T16:57:14+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2707
+      "score": 9.2431
     },
     {
       "title": "Navigating AI complexity with strategic finance: Sapphire CFO Solutions on the evolving role of CFOs in startups",
@@ -382,10 +430,10 @@
       "image": "https://media.thenextweb.com/2026/04/ai-finance-fractional-cfo-startups.avif",
       "published": "2026-04-30T16:49:03+00:00",
       "firstSeen": "2026-04-30T18:00:01.698665+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1569
+      "score": 3.1293
     },
     {
       "title": "Meta is running get-rich-quick ads for its AI tools",
@@ -398,10 +446,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/get-rich-quick_70fa93.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.876819515563%2C100%2C78.246360968874&amp%3Bw=1200",
       "published": "2026-04-30T16:48:13+00:00",
       "firstSeen": "2026-04-30T17:00:01.641915+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2665
+      "score": 2.239
     },
     {
       "title": "Salesforce is crowdsourcing its AI roadmap — with customers",
@@ -414,10 +462,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/11/Salesforce_logo-e1672835031758.jpg?resize=1200%2C675",
       "published": "2026-04-30T16:06:49+00:00",
       "firstSeen": "2026-04-30T16:44:15.099086+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1774
+      "score": 2.1504
     },
     {
       "title": "Gemini is rolling out to cars with Google built-in",
@@ -430,10 +478,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Google-Gemini-car-AI-assistant-upgrade.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T16:00:00+00:00",
       "firstSeen": "2026-04-30T16:44:15.099086+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4443
+      "score": 10.4173
     },
     {
       "title": "Here&#8217;s how the new Microsoft and OpenAI deal breaks down",
@@ -446,10 +494,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25098341/1778707567.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.399233250067%2C100%2C75.201533499866&amp%3Bw=1200",
       "published": "2026-04-30T16:00:00+00:00",
       "firstSeen": "2026-04-30T16:44:15.099086+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2443
+      "score": 5.2173
     },
     {
       "title": "This startup’s new mechanistic interpretability tool lets you debug LLMs",
@@ -462,10 +510,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/maintenance-ai.jpg?resize=1200%2C600",
       "published": "2026-04-30T15:59:41+00:00",
       "firstSeen": "2026-04-30T16:44:15.099086+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5742
+      "score": 4.5472
     },
     {
       "title": "A Coding Implementation on Pyright Type Checking Covering Generics, Protocols, Strict Mode, Type Narrowing, and Modern Python Typing",
@@ -478,10 +526,10 @@
       "image": "",
       "published": "2026-04-30T15:33:36+00:00",
       "firstSeen": "2026-04-30T16:00:01.968743+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5924
+      "score": 5.5657
     },
     {
       "title": "X announces a rebuilt ad platform powered by AI",
@@ -494,10 +542,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/11/X-and-Threads-GettyImages-1763609384.jpeg?resize=1200%2C832",
       "published": "2026-04-30T15:14:55+00:00",
       "firstSeen": "2026-04-30T16:00:01.968743+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.054
+      "score": 5.0276
     },
     {
       "title": "The rise of platform-led games and why 2025 marked a shift",
@@ -510,10 +558,10 @@
       "image": "https://media.thenextweb.com/2026/04/gaming-platforms-user-engagement-evolution.avif",
       "published": "2026-04-30T15:01:38+00:00",
       "firstSeen": "2026-04-30T16:00:01.968743+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0081
+      "score": 1.9818
     },
     {
       "title": "All these smart glasses and nothing to do",
@@ -526,10 +574,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268494_smart_glasses_overview_AKrales_0381.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T15:00:00+00:00",
       "firstSeen": "2026-04-30T16:00:01.968743+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2173
+      "score": 2.1911
     },
     {
       "title": "Jan Lane illuminates the cybersecurity illusion leaders can no longer afford",
@@ -545,7 +593,7 @@
       "lastSeen": "2026-04-30T18:22:43.920498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9856
+      "score": 1.96
     },
     {
       "title": "OpenAI talks about not talking about goblins",
@@ -558,10 +606,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25461999/STK155_OPEN_AI_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-30T13:42:29+00:00",
       "firstSeen": "2026-04-30T14:00:01.155611+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5836
+      "score": 6.5583
     },
     {
       "title": "Uber expands to hotel bookings, AI voice assistant, and more, thanks to AI",
@@ -577,7 +625,7 @@
       "lastSeen": "2026-04-30T18:22:43.920498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.773
+      "score": 3.7477
     },
     {
       "title": "Why building frontier tech isn’t about solving equations but surviving uncertainty and skepticism",
@@ -593,56 +641,7 @@
       "lastSeen": "2026-04-30T18:22:43.920498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.973
-    },
-    {
-      "title": "Verified by Spotify badge lets you know this artist isn&#8217;t AI",
-      "url": "https://www.theverge.com/tech/921048/verified-by-spotify-badge",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Spotify is launching a new verification program to combat spam, fakes, and AI. Some artists will now have a \"Verified by Spotify\" badge and a green checkmark on their profile, indicating that the company has confirmed a real person is behind the music and the profile. At least at launch, Spotify says that AI personas [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/S4A_Verified_Header_Ravyn.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C4.0288596603244%2C100%2C91.942280679351&amp%3Bw=1200",
-      "published": "2026-04-30T13:08:23+00:00",
-      "firstSeen": "2026-04-30T14:00:01.155611+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8691
-    },
-    {
-      "title": "It’s Gonna Be May: 16 Games Hit the Cloud This Month, With More NVIDIA GeForce RTX 5080 Power",
-      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-may-2026-games-list",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "It’s gonna be May — and the cloud’s in full festival mode.  16 games are joining GeForce NOW this month, including new AAA titles arriving on launch day from Steam, Xbox, PC Game Pass and GOG, so members can stream their PC libraries instantly across almost any device. Headline launches include the highly anticipated Forza [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/04/gfn-thursday-4-30-nv-blog-1280x680-logo.jpg",
-      "published": "2026-04-30T13:00:47+00:00",
-      "firstSeen": "2026-04-30T14:00:01.155611+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.8959
-    },
-    {
-      "title": "Enabling a new model for healthcare with AI co-clinician",
-      "url": "https://deepmind.google/blog/ai-co-clinician",
-      "source": "Google DeepMind Blog",
-      "sourceUrl": "https://deepmind.google/blog/rss.xml",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "Researching the path to AI-augmented care and development of an AI co-clinician.",
-      "image": "https://lh3.googleusercontent.com/z2sN_eil5tgap-Ji1W_4l1xnbfLRghzxdXzyCMdnKFVW1xTfgm0o8bpg9pNwE4RcHTR2QGEGhGx7LFn7Q6bg-LEPBW20d4Djo3Erii8PBYYrWz36=w528-h297-n-nu-rw-lo",
-      "published": "2026-04-30T12:14:15+00:00",
-      "firstSeen": "2026-04-30T16:00:01.968743+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 12.6166
+      "score": 1.9477
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -655,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.7693
+      "score": -1.7751
     },
     {
       "title": "The Life Scientific: Jim Ashworth-Beaumont",
@@ -671,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3389
+      "score": 1.3348
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -687,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.522
+      "score": 2.5219
     },
     {
       "title": "Inside Universe 25",
@@ -703,7 +702,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-30T20:00:01.811817+00:00",
+      "lastSeen": "2026-04-30T21:00:01.461538+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.9414
