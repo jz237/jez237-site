@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T22:09:41.846115+00:00",
+  "updatedAt": "2026-04-30T00:00:01.795946+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5264,6 +5264,26 @@
     "https://techcrunch.com/2026/04/29/google-cloud-surpasses-20b-but-says-growth-was-capacity-constrained": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2266466589.jpg?w=1024",
       "checkedAt": "2026-04-29T23:00:01.976475+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/on-the-stand-elon-musk-cant-escape-his-own-tweets": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2087343879.jpg?w=1024",
+      "checkedAt": "2026-04-30T00:00:01.795946+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/meta-is-still-burning-money-on-ar-vr": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/10/meta-distorted-glitched.jpg?resize=1200,675",
+      "checkedAt": "2026-04-30T00:00:01.795946+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/satya-nadella-says-hes-ready-to-exploit-the-new-openai-deal": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2153474575.jpg?resize=1200,800",
+      "checkedAt": "2026-04-30T00:00:01.795946+00:00"
+    },
+    "https://techcrunch.com/2026/04/29/microsoft-says-it-has-over-20m-paid-copilot-users-and-they-really-are-using-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2017/07/gettyimages-496394442.jpg?resize=1200,747",
+      "checkedAt": "2026-04-30T00:00:01.795946+00:00"
+    },
+    "https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age": {
+      "image": "",
+      "checkedAt": "2026-04-30T00:00:01.795946+00:00"
     }
   }
 }
