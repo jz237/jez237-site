@@ -1,7 +1,23 @@
 {
   "date": "2026-04-30",
-  "updatedAt": "2026-04-30T00:00:01.795946+00:00",
+  "updatedAt": "2026-04-30T00:06:11.712285+00:00",
   "items": [
+    {
+      "title": "Elon Musk’s worst enemy in court is Elon Musk",
+      "url": "https://www.theverge.com/tech/921022/elon-musk-cross-openai-altman",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "About five hours into Elon Musk's testimony, I typed the following sentence into my notes: \"I have never been more sympathetic to Sam Altman in my life.\" Musk's direct testimony was an improvement over yesterday - even if his lawyer kept asking leading questions to cue him in how to answer. But that memory was [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_H.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
+      "published": "2026-04-30T00:01:24+00:00",
+      "firstSeen": "2026-04-30T00:06:11.712285+00:00",
+      "lastSeen": "2026-04-30T00:06:11.712285+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.7576
+    },
     {
       "title": "Architecture Determines Observability in Transformers",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-30T00:00:10.899582+00:00",
+      "published": "2026-04-30T00:06:21.499481+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-30T00:00:01.795946+00:00",
+      "lastSeen": "2026-04-30T00:06:11.712285+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
