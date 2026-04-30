@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-29T23:09:09.073832+00:00",
+  "updatedAt": "2026-04-30T01:00:02.076442+00:00",
   "items": [
     {
-      "title": "Architecture Determines Observability in Transformers",
+      "title": "Intrinsic Mutual Information as a Modulator for Preference Optimization",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,172 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-04-29T23:09:15.460235+00:00",
+      "published": "2026-04-30T01:00:10.385141+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.66
+    },
+    {
+      "title": "Amazon Layoffs Hit Thousands Across Multiple States as Fresh Stores Close",
+      "url": "https://www.techrepublic.com/article/news-amazon-layoffs-fresh-ai-workforce-cuts",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amazon layoffs are hitting workers across several states as Fresh closures, AI investments, and post-pandemic restructuring reshape its workforce.\nThe post Amazon Layoffs Hit Thousands Across Multiple States as Fresh Stores Close appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-04-30T00:21:09+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2304
+    },
+    {
+      "title": "Amazon’s cloud business is surging — and so is its capital spending",
+      "url": "https://techcrunch.com/2026/04/29/amazons-cloud-business-is-surging-and-so-is-its-capital-spending",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The e-commerce giant is making more money than expected from AWS but it's also spending a lot, and will continue to do so in the near term, its chief executive said.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2201505679.jpg?resize=1200%2C800",
+      "published": "2026-04-30T00:14:23+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.967
+    },
+    {
+      "title": "Tesla Optimus Robot Launch Timeline Targets 2027 Scale",
+      "url": "https://www.techrepublic.com/article/news-tesla-optimus-robot-launch-timeline",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Elon Musk says Tesla’s Optimus robot could launch next year, with production starting in 2026 and a major scale-up planned by 2027.\nThe post Tesla Optimus Robot Launch Timeline Targets 2027 Scale appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-04-30T00:08:27+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.924
+    },
+    {
+      "title": "Sources: Anthropic could raise a new $50B round at a valuation of $900B",
+      "url": "https://techcrunch.com/2026/04/29/sources-anthropic-could-raise-a-new-50b-round-at-a-valuation-of-900b",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The maker of Claude has received multiple pre-emptive offers at valuations in the $850 billion to $900 billion range, according to sources familiar with the matter.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256664479.jpg?resize=1200%2C800",
+      "published": "2026-04-30T00:07:15+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2634
+    },
+    {
+      "title": "Elon Musk’s worst enemy in court is Elon Musk",
+      "url": "https://www.theverge.com/tech/921022/elon-musk-cross-openai-altman",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "About five hours into Elon Musk's testimony, I typed the following sentence into my notes: \"I have never been more sympathetic to Sam Altman in my life.\" Musk's direct testimony was an improvement over yesterday - even if his lawyer kept asking leading questions to cue him in how to answer. But that memory was [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK022_ELON_MUSK_CVIRGINIA4_H.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
+      "published": "2026-04-30T00:01:24+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.7305
+    },
+    {
+      "title": "On the stand, Elon Musk can’t escape his own tweets",
+      "url": "https://techcrunch.com/2026/04/29/on-the-stand-elon-musk-cant-escape-his-own-tweets",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Elon Musk took the stand for the second day for his attempt to legally dismantle OpenAI.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2087343879.jpg?w=1024",
+      "published": "2026-04-29T23:58:36+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2592
+    },
+    {
+      "title": "Meta is still burning money on AR/VR",
+      "url": "https://techcrunch.com/2026/04/29/meta-is-still-burning-money-on-ar-vr",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Meta is losing billions on Reality Labs each quarter, and its AI expenditures are only going to increase its spending.",
+      "image": "https://techcrunch.com/wp-content/uploads/2022/10/meta-distorted-glitched.jpg?resize=1200%2C675",
+      "published": "2026-04-29T23:58:26+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2591
+    },
+    {
+      "title": "Satya Nadella says he’s ready to ‘exploit’ the new OpenAI deal",
+      "url": "https://techcrunch.com/2026/04/29/satya-nadella-says-hes-ready-to-exploit-the-new-openai-deal",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Microsoft gets to offer OpenAI's tech to its cloud customers and doesn't have to pay for it. \"We fully plan to exploit it,\" Nadella said.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2153474575.jpg?resize=1200%2C800",
+      "published": "2026-04-29T23:55:23+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2576
+    },
+    {
+      "title": "llm 0.32a1",
+      "url": "https://simonwillison.net/2026/Apr/29/llm-3",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: llm 0.32a1\n    \n\nFixed a bug in 0.32a0 where tool-calling conversations were not correctly reinflated from SQLite. #1426\n\n\n    \n        Tags: llm",
+      "image": "",
+      "published": "2026-04-29T23:52:50+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9563
+    },
+    {
+      "title": "How Elon Musk Squeezed OpenAI: They 'Are Gonna Want to Kill Me’",
+      "url": "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Tensions flared on the third day of trial in Musk v. Altman as OpenAI’s lawyers cross-examined Musk.",
+      "image": "https://media.wired.com/photos/69f2443b51254f9508013a9a/master/pass/Model-Behavior-Musk-Grilled-by-OpenAI-Lawyers-Business.jpg",
+      "published": "2026-04-29T23:41:51+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2509
     },
     {
       "title": "Microsoft says it has over 20M paid Copilot users, and they really are using it",
@@ -28,13 +188,13 @@
       "image": "https://techcrunch.com/wp-content/uploads/2017/07/gettyimages-496394442.jpg?resize=1200%2C747",
       "published": "2026-04-29T23:02:23+00:00",
       "firstSeen": "2026-04-29T23:09:09.073832+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2866
+      "score": 5.2317
     },
     {
-      "title": "Google Cloud surpasses $20B but says growth was capacity-constrained",
+      "title": "Google Cloud surpasses $20B, but says growth was capacity-constrained",
       "url": "https://techcrunch.com/2026/04/29/google-cloud-surpasses-20b-but-says-growth-was-capacity-constrained",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
@@ -44,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2266466589.jpg?w=1024",
       "published": "2026-04-29T22:20:48+00:00",
       "firstSeen": "2026-04-29T23:00:01.976475+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2657
+      "score": 2.2118
     },
     {
       "title": "Google gains 25M subscriptions in Q1, driven by YouTube and Google One",
@@ -60,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-04-29T20:59:00+00:00",
       "firstSeen": "2026-04-29T21:00:01.379176+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2257
+      "score": 2.1739
     },
     {
       "title": "Emergency First Responders Say Waymos Are Getting Worse",
@@ -76,10 +236,10 @@
       "image": "https://media.wired.com/photos/69f2023315173e86b113088a/master/pass/GettyImages-2259269133.jpg",
       "published": "2026-04-29T20:45:37+00:00",
       "firstSeen": "2026-04-29T21:00:01.379176+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2193
+      "score": 2.1678
     },
     {
       "title": "Taylor Swift Wants to Trademark Her Likeness. These TikTok Deepfake Ads Show Why",
@@ -92,10 +252,10 @@
       "image": "https://media.wired.com/photos/69f2427e8cf66a0c9e78249e/master/pass/TaylorSwiftDeepFakes_1080x1080.jpg",
       "published": "2026-04-29T20:36:53+00:00",
       "firstSeen": "2026-04-29T21:00:01.379176+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6151
+      "score": 3.5638
     },
     {
       "title": "Google Search queries hit an ‘all time high’ last quarter",
@@ -108,10 +268,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23951561/VRG_Illo_STK179_L_Normand_SundarPichai_Neutral.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T20:28:11+00:00",
       "firstSeen": "2026-04-29T22:00:01.504817+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.781
+      "score": 5.7299
     },
     {
       "title": "AWS to Resell OpenAI Products After Microsoft Loses Exclusive License",
@@ -124,10 +284,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/openai.jpg",
       "published": "2026-04-29T20:09:57+00:00",
       "firstSeen": "2026-04-29T21:00:01.379176+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1624
+      "score": 6.1118
     },
     {
       "title": "New Apple Rumor: iOS 27 Could Add AI Editing Tools to Photos",
@@ -140,10 +300,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/james-yarema-ZYVrM9caRpU-unsplash-1.jpg",
       "published": "2026-04-29T19:41:32+00:00",
       "firstSeen": "2026-04-29T20:00:01.836174+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1492
+      "score": 3.0992
     },
     {
       "title": "Top 10 KV Cache Compression Techniques for LLM Inference: Reducing Memory Overhead Across Eviction, Quantization, and Low-Rank Methods",
@@ -156,10 +316,10 @@
       "image": "",
       "published": "2026-04-29T19:28:32+00:00",
       "firstSeen": "2026-04-29T20:00:01.836174+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9132
+      "score": 5.8635
     },
     {
       "title": "SAS Launches AI Governance Tools to Tame Agentic AI in the Enterprise",
@@ -172,10 +332,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/attractive-young-european-businessman-using-displa-2026-01-11-08-34-34-utc-1.jpg",
       "published": "2026-04-29T19:13:21+00:00",
       "firstSeen": "2026-04-29T20:00:01.836174+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6362
+      "score": 9.5869
     },
     {
       "title": "LLM 0.32a0  is a major backwards-compatible refactor",
@@ -188,11 +348,11 @@
       "image": "https://static.simonwillison.net/static/2026/claude-thinking-llm.gif",
       "published": "2026-04-29T19:01:47+00:00",
       "firstSeen": "2026-04-29T20:00:01.836174+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.771
+      "score": 10.7219
     },
     {
       "title": "Is AI video just a prequel? Runway’s CEO thinks world models are next",
@@ -205,10 +365,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2250760741.jpg?resize=1200%2C800",
       "published": "2026-04-29T18:59:44+00:00",
       "firstSeen": "2026-04-29T19:00:01.554731+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.17
+      "score": 4.121
+    },
+    {
+      "title": "llm 0.32a0",
+      "url": "https://simonwillison.net/2026/Apr/29/llm-2",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: llm 0.32a0\n    See the annotated release notes.\n    \n        Tags: llm",
+      "image": "",
+      "published": "2026-04-29T18:57:47+00:00",
+      "firstSeen": "2026-04-30T01:00:02.076442+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8202
     },
     {
       "title": "Parallel Web Systems hits $2B valuation five months after its last big raise",
@@ -221,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Parag-Agrawal-Parallel.jpg?resize=1200%2C800",
       "published": "2026-04-29T18:33:05+00:00",
       "firstSeen": "2026-04-29T18:44:40.235690+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.758
+      "score": 0.7096
     },
     {
       "title": "All the evidence unveiled so far in Musk v. Altman",
@@ -237,10 +413,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia6.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T18:03:05+00:00",
       "firstSeen": "2026-04-29T18:44:40.235690+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2147
+      "score": 4.1669
     },
     {
       "title": "Ubuntu’s AI plans have Linux users looking for a &#8216;kill switch&#8217;",
@@ -253,10 +429,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK414_AI_CHATBOT_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T17:32:02+00:00",
       "firstSeen": "2026-04-29T18:00:02.060881+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.201
+      "score": 2.154
     },
     {
       "title": "Qwen Team Releases FlashQLA: a High-Performance Linear Attention Kernel Library That Achieves Up to 3× Speedup on NVIDIA Hopper GPUs",
@@ -269,10 +445,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-29-at-10.27.48-AM-1-150x150.png",
       "published": "2026-04-29T17:28:17+00:00",
       "firstSeen": "2026-04-29T18:44:40.235690+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.3594
+      "score": 3.3124
     },
     {
       "title": "Sanctioned Chinese AI Firm SenseTime Releases Image Model Built for Speed",
@@ -285,11 +461,11 @@
       "image": "https://media.wired.com/photos/69f11e18364b858d165e91bf/master/pass/SenseTime-AI-Models-Chinese-Chips-Business-2154581485.jpg",
       "published": "2026-04-29T17:23:52+00:00",
       "firstSeen": "2026-04-29T18:00:02.060881+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5275
+      "score": 12.4806
     },
     {
       "title": "AI evals are becoming the new compute bottleneck",
@@ -302,10 +478,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6413251362e6057cbb6259bd/ukJJW86oJu36zOJwqZJBG.png",
       "published": "2026-04-29T16:45:09+00:00",
       "firstSeen": "2026-04-29T16:51:11.956666+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2508
+      "score": 2.2048
     },
     {
       "title": "Google Photos uses AI to make the iconic closet from ‘Clueless’ a reality",
@@ -318,10 +494,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/clueless-closet.webp?w=1200",
       "published": "2026-04-29T16:42:33+00:00",
       "firstSeen": "2026-04-29T16:51:11.956666+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -2.9903
+      "score": -3.0363
     },
     {
       "title": "More Gemini features are coming to Google TV",
@@ -334,10 +510,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/09/GoogleTV-2024.png?resize=1200%2C591",
       "published": "2026-04-29T16:40:49+00:00",
       "firstSeen": "2026-04-29T16:51:11.956666+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.109
+      "score": 8.063
     },
     {
       "title": "Step by Step Guide to Build a Complete PII Detection and Redaction Pipeline with OpenAI Privacy Filter",
@@ -350,10 +526,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-22.png",
       "published": "2026-04-29T16:38:30+00:00",
       "firstSeen": "2026-04-29T16:51:11.956666+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.138
+      "score": 6.0921
     },
     {
       "title": "Google Photos launches an AI try-on feature for clothes you already have",
@@ -366,10 +542,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKB353_GOOGLE_PHOTOS_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T16:00:00+00:00",
       "firstSeen": "2026-04-29T16:51:11.956666+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9618
+      "score": 3.9167
     },
     {
       "title": "LG Electronics and Nvidia are in talks on robotics, AI data centres, and mobility",
@@ -382,10 +558,10 @@
       "image": "https://media.thenextweb.com/2026/04/LG-electronics.avif",
       "published": "2026-04-29T15:53:36+00:00",
       "firstSeen": "2026-04-29T16:51:11.956666+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9491
+      "score": 1.9041
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -398,10 +574,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-04-29T15:35:32+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1516
+      "score": 9.107
     },
     {
       "title": "China threatens the EU with broad retaliation if Huawei and ZTE are banned from European networks",
@@ -414,10 +590,10 @@
       "image": "https://media.thenextweb.com/2026/02/The-EUs-strategic-rebalancing-of-research-partnerships-with-China.avif",
       "published": "2026-04-29T15:24:31+00:00",
       "firstSeen": "2026-04-29T16:00:01.125095+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9371
+      "score": 1.8927
     },
     {
       "title": "Granite 4.1 LLMs: How They’re Built",
@@ -430,10 +606,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-4-1.png",
       "published": "2026-04-29T15:01:48+00:00",
       "firstSeen": "2026-04-29T16:00:01.125095+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2078
+      "score": 2.1639
     },
     {
       "title": "Building the compute infrastructure for the Intelligence Age",
@@ -446,10 +622,10 @@
       "image": "",
       "published": "2026-04-29T15:00:00+00:00",
       "firstSeen": "2026-04-29T23:09:09.073832+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2771
+      "score": 4.2332
     },
     {
       "title": "Tumbler Ridge families are suing OpenAI",
@@ -462,187 +638,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2260765297.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.740836125969%2C100%2C78.518327748063&amp%3Bw=1200",
       "published": "2026-04-29T14:47:57+00:00",
       "firstSeen": "2026-04-29T15:00:01.999298+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1322
-    },
-    {
-      "title": "ChatGPT downloads are slowing — and may cause problems for OpenAI&#8217;s IPO",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/920476/openai-chatgpt-downloads-slow-down-ipo",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "ChatGPT is struggling to keep up its once-explosive growth as users uninstall the app or opt for rival chatbots instead. According to data from market intelligence firm Sensor Tower, ChatGPT experienced a 132 percent increase in uninstalls year over year in April. Its uninstall rate was even higher last month, up 413 percent year-over-year, following [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25844039/STK155_OPEN_AI_CVirginia__A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-29T14:43:41+00:00",
-      "firstSeen": "2026-04-29T15:00:01.999298+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.2305
-    },
-    {
-      "title": "This $30 Subscription Will Bring AI Into Your Business",
-      "url": "https://www.techrepublic.com/article/1minai-pro-plan-lifetime-subscription",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Tap into the power of OpenAI, Meta, Midjourney, and additional powerful AI models with 1min.AI.\nThe post This $30 Subscription Will Bring AI Into Your Business appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2024/07/tr_20240703-1minai-pro-plan-lifetime-subscription.jpg",
-      "published": "2026-04-29T14:00:36+00:00",
-      "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0033
-    },
-    {
-      "title": "Larry’s risky business",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/920378/oracle-openai-datacenter-buildout",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "If you want to know whether the AI bubble is bursting, there's only one publicly traded company that will tell you: Oracle. That's right, the database company. Oracle has burned its boats and pivoted to AI, but not in any kind of usual way. It is not a foundation model builder like OpenAI or Anthropic, [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/68456_ORACLE_BELLWEATHER7.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-29T13:57:16+00:00",
-      "firstSeen": "2026-04-29T14:28:15.843583+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 14.412
-    },
-    {
-      "title": "Firestorm Labs raises $82M to take drone factories into the field",
-      "url": "https://techcrunch.com/2026/04/29/firestorm-labs-raises-82m-to-take-drone-factories-into-the-field",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A defense startup just raised $82 million to put drone factories inside shipping containers and bring manufacturing to the front lines.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/DSC07538.jpg?resize=1200%2C675",
-      "published": "2026-04-29T13:10:57+00:00",
-      "firstSeen": "2026-04-29T14:00:01.223413+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0239
-    },
-    {
-      "title": "Meet Shapes, the app bringing humans and AI into the same group chats",
-      "url": "https://techcrunch.com/2026/04/29/meet-shapes-the-app-bringing-humans-and-ai-into-the-same-group-chats",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Think Discord chats, but with AI characters in addition to humans.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2270785056.jpg?resize=1200%2C686",
-      "published": "2026-04-29T13:00:00+00:00",
-      "firstSeen": "2026-04-29T14:00:01.223413+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1197
-    },
-    {
-      "title": "Taylor Swift deepfakes are pushing scams on TikTok",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/920351/ai-celebrity-deepfake-ads-tiktok-copyleaks",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Scammers are using AI-generated videos of celebrities including Taylor Swift and Rihanna to promote shady services on TikTok, according to authentication company Copyleaks. The ads typically show celebrities in interview settings, such as red carpets, podcasts, or talk shows, and often manipulate real footage with AI, the company said. Many promote rewards programs claiming users [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2267995710.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729716127092%2C100%2C78.540567745815&amp%3Bw=1200",
-      "published": "2026-04-29T13:00:00+00:00",
-      "firstSeen": "2026-04-29T14:00:01.223413+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0897
-    },
-    {
-      "title": "mbiomics raises €30M Series A to take its microbiome cancer co-therapy into clinical trials",
-      "url": "https://thenextweb.com/news/mbiomics-30m-series-a-microbiome-melanoma",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Munich techbio company is developing a live bacterial product designed to enhance immune checkpoint inhibitor response in advanced melanoma, with a Phase 1B study planned for 2027 mbiomics GmbH, a Munich-based techbio company developing microbiome-based therapeutics, has completed the third and final closing of its Series A funding round, bringing the total raised to [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/mbiomics.avif",
-      "published": "2026-04-29T11:17:30+00:00",
-      "firstSeen": "2026-04-29T11:53:05.705235+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8412
-    },
-    {
-      "title": "Why a recent supply-chain attack singled out security firms Checkmarx and Bitwarden",
-      "url": "https://arstechnica.com/information-technology/2026/04/why-a-recent-supply-chain-attack-singled-out-security-firms-checkmarx-and-bitwarden",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Security firms find themselves especially exposed.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2021/07/data-breach.jpeg",
-      "published": "2026-04-29T11:00:24+00:00",
-      "firstSeen": "2026-04-29T11:53:05.705235+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.835
-    },
-    {
-      "title": "China freezes new robotaxi licenses after Baidu chaos",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/920312/china-suspends-autonomous-vehicle-permits-baidu-chaos",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "China has suspended new licenses for autonomous vehicles, Bloomberg reports, citing unnamed people familiar with the matter. The move comes after dozens of robotaxis operated by Chinese tech giant Baidu ground to a halt in traffic last month in Wuhan, creating chaos. The restrictions will prevent companies from adding new driverless cars to their fleets, [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2152484525.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.729057198914%2C100%2C78.541885602173&amp%3Bw=1200",
-      "published": "2026-04-29T10:39:21+00:00",
-      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0374
-    },
-    {
-      "title": "AI recruiting startup Dex raises $5.3m seed to match AI engineers with the companies that need them most",
-      "url": "https://thenextweb.com/news/ai-recruiting-startup-dex-raises-5-3m-seed-to-match-ai-engineers-with-the-companies-that-need-them-most",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Founded by a former Atomico talent adviser, Dex charges employers agency fees only on successful hires, and has gone from zero to $1.8 million ARR in under six months of charging. Paddy Lambros spent two and a half years advising roughly 100 European startups on hiring at Atomico, one of Europe’s largest venture capital firms. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Dex-AI.avif",
-      "published": "2026-04-29T10:11:16+00:00",
-      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.5173
-    },
-    {
-      "title": "GitHub rushed to fix a critical vulnerability in less than six hours",
-      "url": "https://www.theverge.com/news/920295/github-remote-code-execution-vulnerability-fix",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "GitHub employees fixed a critical remote code execution vulnerability in less than six hours last month. Wiz Research used AI models to uncover a vulnerability in GitHub's internal git infrastructure that could have allowed attackers to access millions of public and private code repositories. \"Our security team immediately began validating the bug bounty report. Within [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/acastro_220504_STK121_0001.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-04-29T10:04:25+00:00",
-      "firstSeen": "2026-04-29T11:00:01.615789+00:00",
-      "lastSeen": "2026-04-29T20:18:36.847646+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4249
+      "score": 9.0886
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -655,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.6041
+      "score": -1.6229
     },
     {
       "title": "The Life Scientific: Jim Ashworth-Beaumont",
@@ -671,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4556
+      "score": 1.4424
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -687,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5235
+      "score": 2.5234
     },
     {
       "title": "Inside Universe 25",
@@ -703,7 +702,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-04-29T23:09:09.073832+00:00",
+      "lastSeen": "2026-04-30T01:00:02.076442+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.9424
