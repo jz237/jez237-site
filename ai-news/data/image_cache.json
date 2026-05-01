@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T21:05:34.780070+00:00",
+  "updatedAt": "2026-05-01T23:00:02.002397+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5536,6 +5536,14 @@
     "https://simonwillison.net/2026/May/1/inat-sightings": {
       "image": "",
       "checkedAt": "2026-05-01T21:00:01.209727+00:00"
+    },
+    "https://techcrunch.com/2026/05/01/meta-buys-robotics-startup-to-bolster-its-humanoid-ai-ambitions": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2195752979.jpg?resize=1200,800",
+      "checkedAt": "2026-05-01T23:00:02.002397+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/01/1136800/musk-v-altman-week-1-musk-says-he-was-duped-warns-ai-could-kill-us-all-and-admits-that-xai-distills-openais-models": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/AP26118555311492.jpg?resize=1200,600",
+      "checkedAt": "2026-05-01T23:00:02.002397+00:00"
     }
   }
 }
