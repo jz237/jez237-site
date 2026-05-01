@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T02:00:01.585170+00:00",
+  "updatedAt": "2026-05-01T03:00:01.231289+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5468,6 +5468,10 @@
     "https://www.marktechpost.com/2026/04/30/moonshot-ai-open-sources-flashkda-cutlass-kernels-for-kimi-delta-attention-with-variable-length-batching-and-h20-benchmarks": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-92.png",
       "checkedAt": "2026-05-01T02:00:01.585170+00:00"
+    },
+    "https://techcrunch.com/2026/04/30/chatgpt-images-2-0-is-a-hit-in-india-but-not-a-big-winner-elsewhere-yet": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/04/chatgpt-india.jpg?resize=1200,800",
+      "checkedAt": "2026-05-01T03:00:01.231289+00:00"
     }
   }
 }
