@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T18:09:52.898524+00:00",
+  "updatedAt": "2026-05-01T20:00:02.047939+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5520,6 +5520,14 @@
     "https://techcrunch.com/video/musk-v-altman-is-just-getting-started": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2213399157.jpg?resize=1200,800",
       "checkedAt": "2026-05-01T18:00:01.261408+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-iphone-17-earnings-ceo-transition": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/thai-nguyen-0p9xlD2VzCY-unsplash-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-01T20:00:02.047939+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-power-plays-security-breaches-and-industry-shifts-define-the-week-in-tech": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/ChatGPT-Image-May-1-2026-11_52_31-AM-1024x576.png?f=jpeg",
+      "checkedAt": "2026-05-01T20:00:02.047939+00:00"
     }
   }
 }
