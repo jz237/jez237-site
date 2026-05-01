@@ -1,6 +1,6 @@
 {
   "date": "2026-05-01",
-  "updatedAt": "2026-05-01T09:00:01.426243+00:00",
+  "updatedAt": "2026-05-01T09:56:32.024184+00:00",
   "items": [
     {
       "title": "ChatGPT Images 2.0 is a hit in India, but not a big winner elsewhere, yet",
@@ -13,10 +13,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/chatgpt-india.jpg?resize=1200%2C800",
       "published": "2026-05-01T02:00:00+00:00",
       "firstSeen": "2026-05-01T03:00:01.231289+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0956
+      "score": 8.0722
+    },
+    {
+      "title": "When Continual Learning Moves to Memory: A Study of Experience Reuse in LLM Agents",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-01T09:56:55.826953+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.46
     },
     {
       "title": "OpenAI president says AI is now writing 80% of the company’s code",
@@ -29,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/Greg-Brockman.avif",
       "published": "2026-05-01T08:13:34+00:00",
       "firstSeen": "2026-05-01T09:00:01.426243+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2266
+      "score": 7.1988
     },
     {
       "title": "Microsoft Research’s World-R1 Uses Flow-GRPO and 3D-Aware Rewards to Inject Geometric Consistency Into Wan 2.1 Without Architectural Changes",
@@ -45,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-30-at-5.32.14-PM-1-150x150.png",
       "published": "2026-05-01T00:40:01+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4927
+      "score": 5.4702
     },
     {
       "title": "A Coding Deep Dive into Agentic UI, Generative UI, State Synchronization, and Interrupt-Driven Approval Flows",
@@ -61,10 +77,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-25.png",
       "published": "2026-05-01T05:06:51+00:00",
       "firstSeen": "2026-05-01T06:00:01.781052+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.2074
+      "score": 5.1819
+    },
+    {
+      "title": "OpenAI-backed 1X opens California factory targeting 10,000 home humanoid robots in year one",
+      "url": "https://thenextweb.com/news/1x-neo-humanoid-factory-hayward-10000-home-robots",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Norway-founded company’s vertically integrated NEO factory in Hayward marks the first US-scale push to put a general-purpose humanoid robot into private homes, with shipments planned this year and a competitive field that is already crowded 1X Technologies has opened a 58,000-square-foot manufacturing facility in Hayward, California, to produce its NEO humanoid robot at consumer [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/NEO-1x.avif",
+      "published": "2026-05-01T09:18:01+00:00",
+      "firstSeen": "2026-05-01T09:56:32.024184+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1306
+    },
+    {
+      "title": "Anthropic’s Mythos is moving between governments faster than regulators can agree on what to do with it",
+      "url": "https://thenextweb.com/news/nthropic-mythos-geopolitical-government-control",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic’s most controversial product has spent its first three weeks moving between state actors who cannot agree on whether it is theirs to use, theirs to block, or someone else’s problem entirely. On Wednesday morning, an unnamed Trump administration official told the Wall Street Journal that the White House opposed Anthropic’s plan to expand access [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
+      "published": "2026-05-01T08:43:59+00:00",
+      "firstSeen": "2026-05-01T09:56:32.024184+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1137
     },
     {
       "title": "How Shivon Zilis Operated as Elon Musk’s OpenAI Insider",
@@ -77,10 +125,10 @@
       "image": "https://media.wired.com/photos/69f3d20465348cc78c80dfb1/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Leads-Back-to-Shivon-Zelis-Business-2258844337.jpg",
       "published": "2026-05-01T00:51:18+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0673
+      "score": 5.0446
     },
     {
       "title": "Qwen AI Releases Qwen-Scope: An Open-Source Sparse AutoEncoders (SAE) Suite That Turns LLM Internal Features into Practical Development Tools",
@@ -93,10 +141,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-1.00.12-AM-1-150x150.png",
       "published": "2026-05-01T08:25:21+00:00",
       "firstSeen": "2026-05-01T09:00:01.426243+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.7025
+      "score": 4.6745
     },
     {
       "title": "Moonshot AI Open-Sources FlashKDA: CUTLASS Kernels for Kimi Delta Attention with Variable-Length Batching and H20 Benchmarks",
@@ -109,10 +157,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-92.png",
       "published": "2026-05-01T01:16:07+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1574
+      "score": 4.1345
+    },
+    {
+      "title": "A new US phone network for Christians aims to block porn and gender-related content",
+      "url": "https://www.technologyreview.com/2026/05/01/1136739/a-new-t-mobile-network-for-christians-aims-to-block-porn-and-gender-related-content",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A new US-wide cell phone network marketed to Christians is set to launch next week. It blocks porn, which experts in network security say marks the first time a US cell plan has used network-level blocking for such content that can’t be turned off even by adult account owners. It’s also rolling out a filter&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/radiant-phone2.jpg?resize=1200%2C600",
+      "published": "2026-05-01T09:00:00+00:00",
+      "firstSeen": "2026-05-01T09:56:32.024184+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.0616
     },
     {
       "title": "The man who built Internet Explorer wants to teach AI to think on 20 watts",
@@ -125,74 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/flourish-reardon-brain-inspired-ai-efficiency.avif",
       "published": "2026-05-01T08:06:21+00:00",
       "firstSeen": "2026-05-01T09:00:01.426243+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.523
-    },
-    {
-      "title": "Apple posted its best quarter ever by not building an AI model",
-      "url": "https://thenextweb.com/news/apple-record-quarter-cook-ternus-ai-strategy",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple reported its best March quarter in history on Thursday, posting revenue of $111.2 billion, up 17 per cent year over year, with net profit of $29.6 billion. iPhone revenue reached a March quarter record of $58 billion, up 22 per cent, driven by what Tim Cook called “extraordinary” demand for the iPhone 17, which [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/apple-record-quarter-cook-ternus-ai-strategy.avif",
-      "published": "2026-05-01T08:27:47+00:00",
-      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2337
-    },
-    {
-      "title": "Binary Spiking Neural Networks as Causal Models",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-01T09:00:07.252813+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "The companies burning the most electricity are buying carbon credits from genetically engineered trees",
-      "url": "https://thenextweb.com/news/living-carbon-octopus-reforestation-carbon-credits",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Octopus Energy Generation has committed $500 million to Living Carbon, a San Francisco biotech company that plants trees on degraded land to remove carbon dioxide from the atmosphere. The deal, announced on 30 April, will fund reforestation projects across North America with the goal of removing up to 50 million tonnes of CO₂ over 40 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/living-carbon-octopus-reforestation-carbon-credits.avif",
-      "published": "2026-05-01T08:14:31+00:00",
-      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1271
-    },
-    {
-      "title": "News publishers are blocking the Internet Archive’s Wayback Machine to stop AI companies from using it",
-      "url": "https://thenextweb.com/news/news-publishers-are-blocking-the-internet-archives-wayback-machine-to-stop-ai-companies-from-using-it",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The New York Times, CNN, USA Today, The Guardian, and at least 241 other news organisations across nine countries have moved to restrict the Archive’s crawlers, a decision the Archive’s own director has called being ‘collateral damage’ in a war that is not really about them. The Internet Archive has preserved more than one trillion [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/News-publisher.avif",
-      "published": "2026-05-01T06:39:54+00:00",
-      "firstSeen": "2026-05-01T07:34:54.594330+00:00",
-      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0809
+      "score": 3.4953
     }
   ],
   "errors": []
