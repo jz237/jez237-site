@@ -1,7 +1,23 @@
 {
   "date": "2026-05-01",
-  "updatedAt": "2026-05-01T00:00:01.806863+00:00",
+  "updatedAt": "2026-05-01T01:00:02.086315+00:00",
   "items": [
+    {
+      "title": "How Shivon Zilis Operated as Elon Musk’s OpenAI Insider",
+      "url": "https://www.wired.com/story/model-behavior-why-everything-in-musk-v-altman-leads-back-to-shivon-zelis",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Messages presented at trial reveal how Zilis, the mother of four of Musk's children, acted as an intermediary between him and OpenAI.",
+      "image": "https://media.wired.com/photos/69f3d20465348cc78c80dfb1/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Leads-Back-to-Shivon-Zelis-Business-2258844337.jpg",
+      "published": "2026-05-01T00:51:18+00:00",
+      "firstSeen": "2026-05-01T01:00:02.086315+00:00",
+      "lastSeen": "2026-05-01T01:00:02.086315+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2856
+    },
     {
       "title": "Tiago Teixeira, Ana Carolina Erthal, Juan Belieni, Beatriz Canaverde, Diego Mesquita, Miguel Faria, Eliezer de Souza ...",
       "url": "https://llm-stats.com/ai-news",
@@ -11,13 +27,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-01T00:00:07.440308+00:00",
+      "published": "2026-05-01T01:00:08.403332+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-01T00:00:01.806863+00:00",
+      "lastSeen": "2026-05-01T01:00:02.086315+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
