@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T04:12:37.050807+00:00",
+  "updatedAt": "2026-05-01T06:00:01.781052+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5472,6 +5472,10 @@
     "https://techcrunch.com/2026/04/30/chatgpt-images-2-0-is-a-hit-in-india-but-not-a-big-winner-elsewhere-yet": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/chatgpt-india.jpg?resize=1200,800",
       "checkedAt": "2026-05-01T03:00:01.231289+00:00"
+    },
+    "https://www.marktechpost.com/2026/04/30/a-coding-deep-dive-into-agentic-ui-generative-ui-state-synchronization-and-interrupt-driven-approval-flows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-25.png",
+      "checkedAt": "2026-05-01T06:00:01.781052+00:00"
     }
   }
 }
