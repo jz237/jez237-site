@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T19:37:07.546765+00:00",
+  "updatedAt": "2026-05-01T21:00:01.209727+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5528,6 +5528,14 @@
     "https://www.techrepublic.com/article/ai-power-plays-security-breaches-and-industry-shifts-define-the-week-in-tech": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/ChatGPT-Image-May-1-2026-11_52_31-AM-1024x576.png?f=jpeg",
       "checkedAt": "2026-05-01T20:00:02.047939+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/01/a-coding-guide-on-llm-post-training-with-trl-from-supervised-fine-tuning-to-dpo-and-grpo-reasoning": {
+      "image": "",
+      "checkedAt": "2026-05-01T21:00:01.209727+00:00"
+    },
+    "https://simonwillison.net/2026/May/1/inat-sightings": {
+      "image": "",
+      "checkedAt": "2026-05-01T21:00:01.209727+00:00"
     }
   }
 }
