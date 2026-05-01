@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T09:00:01.426243+00:00",
+  "updatedAt": "2026-05-01T10:00:01.890637+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5476,6 +5476,10 @@
     "https://www.marktechpost.com/2026/04/30/a-coding-deep-dive-into-agentic-ui-generative-ui-state-synchronization-and-interrupt-driven-approval-flows": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-25.png",
       "checkedAt": "2026-05-01T06:00:01.781052+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/01/1136739/a-new-t-mobile-network-for-christians-aims-to-block-porn-and-gender-related-content": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/radiant-phone2.jpg?resize=1200,600",
+      "checkedAt": "2026-05-01T10:00:01.890637+00:00"
     }
   }
 }
