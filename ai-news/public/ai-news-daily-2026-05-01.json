@@ -1,6 +1,6 @@
 {
   "date": "2026-05-01",
-  "updatedAt": "2026-05-01T18:00:01.261408+00:00",
+  "updatedAt": "2026-05-01T17:10:45.137007+00:00",
   "items": [
     {
       "title": "Pentagon strikes classified AI deals with OpenAI, Google, and Nvidia — but not Anthropic",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2273115889.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-01T14:09:56+00:00",
       "firstSeen": "2026-05-01T15:00:01.255113+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.2489
+      "score": 10.2717
     },
     {
       "title": "ChatGPT Images 2.0 is a hit in India, but not a big winner elsewhere, yet",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/chatgpt-india.jpg?resize=1200%2C800",
       "published": "2026-05-01T02:00:00+00:00",
       "firstSeen": "2026-05-01T03:00:01.231289+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8953
+      "score": 7.9116
     },
     {
       "title": "OpenAI president says AI is now writing 80% of the company’s code",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-01T09:56:32.024184+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9885
+      "score": 7.0078
     },
     {
       "title": "Microsoft wants lawyers to trust its new AI agent in Word documents",
@@ -61,10 +61,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832913/STK095_MICROSOFT_2_CVirginia_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-01T11:18:54+00:00",
       "firstSeen": "2026-05-01T13:51:22.461635+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5736
+      "score": 5.5946
     },
     {
       "title": "Microsoft Research’s World-R1 Uses Flow-GRPO and 3D-Aware Rewards to Inject Geometric Consistency Into Wan 2.1 Without Architectural Changes",
@@ -77,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-30-at-5.32.14-PM-1-150x150.png",
       "published": "2026-05-01T00:40:01+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2997
+      "score": 5.3153
     },
     {
       "title": "A Coding Deep Dive into Agentic UI, Generative UI, State Synchronization, and Interrupt-Driven Approval Flows",
@@ -93,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-25.png",
       "published": "2026-05-01T05:06:51+00:00",
       "firstSeen": "2026-05-01T06:00:01.781052+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.989
+      "score": 5.0068
     },
     {
       "title": "OpenAI-backed 1X opens California factory targeting 10,000 home humanoid robots in year one",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-05-01T11:20:47.555632+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9138
+      "score": 4.9338
     },
     {
       "title": "Anthropic’s Mythos is moving between governments faster than regulators can agree on what to do with it",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-05-01T11:20:47.555632+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9003
+      "score": 4.92
     },
     {
       "title": "How Shivon Zilis Operated as Elon Musk’s OpenAI Insider",
@@ -141,26 +141,10 @@
       "image": "https://media.wired.com/photos/69f3d20465348cc78c80dfb1/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Leads-Back-to-Shivon-Zelis-Business-2258844337.jpg",
       "published": "2026-05-01T00:51:18+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8732
-    },
-    {
-      "title": "The question nobody asked Zuckerberg",
-      "url": "https://thenextweb.com/news/meta-ai-spending-child-safety-lawsuits",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Mark Zuckerberg’s earnings call on Wednesday was about AI. It was about the $125 billion to $145 billion Meta plans to spend on capital expenditure in 2026. It was about Llama models and recommendation engines and the advertising systems that generate $56 billion in quarterly revenue. It was not about children. No investor asked Zuckerberg [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/meta-ai-spending-child-safety-lawsuits.avif",
-      "published": "2026-05-01T16:40:11+00:00",
-      "firstSeen": "2026-05-01T18:00:01.261408+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8101
+      "score": 4.889
     },
     {
       "title": "McKinsey’s new AI report argues the productivity payoff is real but conditional",
@@ -173,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/AI-productivity-report.avif",
       "published": "2026-05-01T10:25:31+00:00",
       "firstSeen": "2026-05-01T12:00:01.868344+00:00",
-      "lastSeen": "2026-05-01T17:00:01.527973+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7413
+      "score": 4.7618
     },
     {
       "title": "Qwen AI Releases Qwen-Scope: An Open-Source Sparse AutoEncoders (SAE) Suite That Turns LLM Internal Features into Practical Development Tools",
@@ -189,10 +173,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-1.00.12-AM-1-150x150.png",
       "published": "2026-05-01T08:25:21+00:00",
       "firstSeen": "2026-05-01T09:00:01.426243+00:00",
-      "lastSeen": "2026-05-01T18:00:01.261408+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.463
+      "score": 4.4825
+    },
+    {
+      "title": "Pentagon inks deals with Nvidia, Microsoft, and AWS to deploy AI on classified networks",
+      "url": "https://techcrunch.com/2026/05/01/pentagon-inks-deals-with-nvidia-microsoft-and-aws-to-deploy-ai-on-classified-networks",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The deals come as the DOD has doubled down on diversifying its exposure to AI vendors in the wake of its controversial dispute with Anthropic over usage terms of its AI models.",
+      "image": "https://techcrunch.com/wp-content/uploads/2021/07/GettyImages-1292192586.jpg?resize=1200%2C900",
+      "published": "2026-05-01T16:02:36+00:00",
+      "firstSeen": "2026-05-01T17:00:01.527973+00:00",
+      "lastSeen": "2026-05-01T17:10:45.137007+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2558
     }
   ],
   "errors": []
