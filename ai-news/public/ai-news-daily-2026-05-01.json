@@ -1,6 +1,6 @@
 {
   "date": "2026-05-01",
-  "updatedAt": "2026-05-01T07:34:54.594330+00:00",
+  "updatedAt": "2026-05-01T09:00:01.426243+00:00",
   "items": [
     {
       "title": "ChatGPT Images 2.0 is a hit in India, but not a big winner elsewhere, yet",
@@ -13,10 +13,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/chatgpt-india.jpg?resize=1200%2C800",
       "published": "2026-05-01T02:00:00+00:00",
       "firstSeen": "2026-05-01T03:00:01.231289+00:00",
-      "lastSeen": "2026-05-01T07:34:54.594330+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.132
+      "score": 8.0956
+    },
+    {
+      "title": "OpenAI president says AI is now writing 80% of the company’s code",
+      "url": "https://thenextweb.com/news/openai-brockman-80-percent-code-ai-productivity-claim",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Greg Brockman’s comments at Sequoia’s AI Ascent 2026 conference fit a pattern of AI lab leaders citing self-reinforcing productivity numbers, but the underlying evidence on AI coding productivity remains substantially more contested than the headline figure suggests. OpenAI president Greg Brockman said AI is now writing roughly 80% of the company’s code at Sequoia Capital’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Greg-Brockman.avif",
+      "published": "2026-05-01T08:13:34+00:00",
+      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.2266
     },
     {
       "title": "Microsoft Research’s World-R1 Uses Flow-GRPO and 3D-Aware Rewards to Inject Geometric Consistency Into Wan 2.1 Without Architectural Changes",
@@ -29,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/Screenshot-2026-04-30-at-5.32.14-PM-1-150x150.png",
       "published": "2026-05-01T00:40:01+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T07:00:01.383584+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5278
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4927
     },
     {
       "title": "A Coding Deep Dive into Agentic UI, Generative UI, State Synchronization, and Interrupt-Driven Approval Flows",
@@ -45,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-25.png",
       "published": "2026-05-01T05:06:51+00:00",
       "firstSeen": "2026-05-01T06:00:01.781052+00:00",
-      "lastSeen": "2026-05-01T07:00:01.383584+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.2471
+      "score": 5.2074
     },
     {
       "title": "How Shivon Zilis Operated as Elon Musk’s OpenAI Insider",
@@ -61,10 +77,26 @@
       "image": "https://media.wired.com/photos/69f3d20465348cc78c80dfb1/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Leads-Back-to-Shivon-Zelis-Business-2258844337.jpg",
       "published": "2026-05-01T00:51:18+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T07:34:54.594330+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1025
+      "score": 5.0673
+    },
+    {
+      "title": "Qwen AI Releases Qwen-Scope: An Open-Source Sparse AutoEncoders (SAE) Suite That Turns LLM Internal Features into Practical Development Tools",
+      "url": "https://www.marktechpost.com/2026/05/01/qwen-ai-releases-qwen-scope-an-open-source-sparse-autoencoders-sae-suite-that-turns-llm-internal-features-into-practical-development-tools",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Qwen Team Introduces Qwen-Scope: An Open-Source Sparse Autoencoder Suite That Turns LLM Internals into Practical Development Tools\nThe post Qwen AI Releases Qwen-Scope: An Open-Source Sparse AutoEncoders (SAE) Suite That Turns LLM Internal Features into Practical Development Tools appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-1.00.12-AM-1-150x150.png",
+      "published": "2026-05-01T08:25:21+00:00",
+      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.7025
     },
     {
       "title": "Moonshot AI Open-Sources FlashKDA: CUTLASS Kernels for Kimi Delta Attention with Variable-Length Batching and H20 Benchmarks",
@@ -77,10 +109,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/04/blog-92.png",
       "published": "2026-05-01T01:16:07+00:00",
       "firstSeen": "2026-05-01T02:00:01.585170+00:00",
-      "lastSeen": "2026-05-01T07:00:01.383584+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1931
+      "score": 4.1574
+    },
+    {
+      "title": "The man who built Internet Explorer wants to teach AI to think on 20 watts",
+      "url": "https://thenextweb.com/news/flourish-reardon-brain-inspired-ai-efficiency",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Thomas Reardon has a pattern. In 1994, he created the project that became Internet Explorer, the browser that turned Microsoft from a software company into an internet company and triggered the most consequential antitrust case in technology history. In 2015, he co-founded CTRL-labs, a neural interface startup that built a wristband capable of translating electrical [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/flourish-reardon-brain-inspired-ai-efficiency.avif",
+      "published": "2026-05-01T08:06:21+00:00",
+      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.523
+    },
+    {
+      "title": "Apple posted its best quarter ever by not building an AI model",
+      "url": "https://thenextweb.com/news/apple-record-quarter-cook-ternus-ai-strategy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple reported its best March quarter in history on Thursday, posting revenue of $111.2 billion, up 17 per cent year over year, with net profit of $29.6 billion. iPhone revenue reached a March quarter record of $58 billion, up 22 per cent, driven by what Tim Cook called “extraordinary” demand for the iPhone 17, which [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/apple-record-quarter-cook-ternus-ai-strategy.avif",
+      "published": "2026-05-01T08:27:47+00:00",
+      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2337
     },
     {
       "title": "Binary Spiking Neural Networks as Causal Models",
@@ -91,12 +155,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-01T07:35:03.844367+00:00",
+      "published": "2026-05-01T09:00:07.252813+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-01T07:34:54.594330+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "The companies burning the most electricity are buying carbon credits from genetically engineered trees",
+      "url": "https://thenextweb.com/news/living-carbon-octopus-reforestation-carbon-credits",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Octopus Energy Generation has committed $500 million to Living Carbon, a San Francisco biotech company that plants trees on degraded land to remove carbon dioxide from the atmosphere. The deal, announced on 30 April, will fund reforestation projects across North America with the goal of removing up to 50 million tonnes of CO₂ over 40 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/living-carbon-octopus-reforestation-carbon-credits.avif",
+      "published": "2026-05-01T08:14:31+00:00",
+      "firstSeen": "2026-05-01T09:00:01.426243+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1271
     },
     {
       "title": "News publishers are blocking the Internet Archive’s Wayback Machine to stop AI companies from using it",
@@ -109,17 +189,11 @@
       "image": "https://media.thenextweb.com/2026/05/News-publisher.avif",
       "published": "2026-05-01T06:39:54+00:00",
       "firstSeen": "2026-05-01T07:34:54.594330+00:00",
-      "lastSeen": "2026-05-01T07:34:54.594330+00:00",
+      "lastSeen": "2026-05-01T09:00:01.426243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1223
+      "score": 2.0809
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
