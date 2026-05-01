@@ -1,6 +1,6 @@
 {
   "date": "2026-05-01",
-  "updatedAt": "2026-05-01T01:00:02.086315+00:00",
+  "updatedAt": "2026-05-01T00:02:39.517680+00:00",
   "items": [
     {
       "title": "How Shivon Zilis Operated as Elon Musk’s OpenAI Insider",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-01T01:00:08.403332+00:00",
+      "published": "2026-05-01T00:02:44.464641+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-01T01:00:02.086315+00:00",
+      "lastSeen": "2026-05-01T00:02:39.517680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -37,9 +37,9 @@
   ],
   "errors": [
     {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "source": "Microsoft Research Blog",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "error": "The read operation timed out"
     }
   ]
 }
