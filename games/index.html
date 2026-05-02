@@ -501,7 +501,7 @@
     const UNFINISHED = new Set([
       'hard hat mac', 'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
       'lantern creek', 'super star trek', 'depth charge', 'boulder dash', 'ember knight',
-      'vortex storm eater', 'runecaster', 'tessera', 'gravity weaver', 'storm echo'
+      'vortex storm eater', 'runecaster', 'tessera', 'void echo', 'gravity weaver', 'storm echo'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
