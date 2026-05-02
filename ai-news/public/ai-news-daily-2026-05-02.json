@@ -1,6 +1,6 @@
 {
   "date": "2026-05-02",
-  "updatedAt": "2026-05-02T19:14:47.725136+00:00",
+  "updatedAt": "2026-05-02T21:00:01.398764+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Parsing, Analyzing, Visualizing, and Fine-Tuning Agent Reasoning Traces Using the lambda/hermes-agent-reasoning-traces Dataset",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-5.png",
       "published": "2026-05-02T07:47:46+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T19:00:01.988859+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.8203
+      "score": 10.7823
     },
     {
       "title": "A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-8.46.43-PM-1-150x150.png",
       "published": "2026-05-02T03:47:47+00:00",
       "firstSeen": "2026-05-02T04:00:01.904605+00:00",
-      "lastSeen": "2026-05-02T19:00:01.988859+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0862
+      "score": 8.0521
     },
     {
       "title": "Sightings",
@@ -45,10 +45,10 @@
       "image": "https://static.simonwillison.net/static/2026/beats-sightings.jpeg",
       "published": "2026-05-02T17:26:40+00:00",
       "firstSeen": "2026-05-02T18:00:02.002591+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6363
+      "score": 7.5865
     },
     {
       "title": "Musk’s case against OpenAI lands roughly in its first week",
@@ -61,10 +61,26 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
       "published": "2026-05-02T07:38:24+00:00",
       "firstSeen": "2026-05-02T08:42:15.746380+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8468
+      "score": 6.809
+    },
+    {
+      "title": "Build a Multi-Agent AI Workflow for Biological Network Modeling, Protein Interactions, Metabolism, and Cell Signaling Simulation",
+      "url": "https://www.marktechpost.com/2026/05/02/build-a-multi-agent-ai-workflow-for-biological-network-modeling-protein-interactions-metabolism-and-cell-signaling-simulation",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Build a Multi-Agent AI Workflow for Biological Network Modeling, Protein Interactions, Metabolism, and Cell Signaling Simulation\nThe post Build a Multi-Agent AI Workflow for Biological Network Modeling, Protein Interactions, Metabolism, and Cell Signaling Simulation appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-1-1024x731.png",
+      "published": "2026-05-02T20:31:07+00:00",
+      "firstSeen": "2026-05-02T21:00:01.398764+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.0054
     },
     {
       "title": "A visual guide to GPU kernels: threads, blocks, warps, the memory hierarchy, kernel launch syntax, and the FlashAttention-class kernels powering every LLM in 2026.",
@@ -75,9 +91,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-02T19:14:52.944776+00:00",
+      "published": "2026-05-02T21:00:06.222391+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.76
@@ -93,10 +109,10 @@
       "image": "https://media.thenextweb.com/2017/10/mac-mini.avif",
       "published": "2026-05-02T07:24:39+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6418
+      "score": 5.6041
     },
     {
       "title": "The best AI dictation apps, tested and ranked",
@@ -109,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200%2C800",
       "published": "2026-05-02T16:00:00+00:00",
       "firstSeen": "2026-05-02T19:00:01.988859+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6951
+      "score": 4.6473
     },
     {
       "title": "GameStop eyes eBay takeover in audacious $46 billion bet on Ryan Cohen’s e-commerce vision",
@@ -128,7 +144,7 @@
       "lastSeen": "2026-05-02T15:58:25.211508+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2266
+      "score": 4.1897
     },
     {
       "title": "Disneyland Now Uses Face Recognition on Visitors",
@@ -141,10 +157,10 @@
       "image": "https://media.wired.com/photos/69f53066ed110137695d66cd/master/pass/security_disney_getty.jpg",
       "published": "2026-05-02T10:30:00+00:00",
       "firstSeen": "2026-05-02T11:00:01.777470+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0527
+      "score": 4.0117
     },
     {
       "title": "AI chipmaker Cerebras targets up to $4bn IPO at $40bn valuation",
@@ -160,7 +176,7 @@
       "lastSeen": "2026-05-02T17:04:00.889454+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8298
+      "score": 3.7927
     },
     {
       "title": "Why a Canadian bank is trying to predict earthquakes with quantum computers",
@@ -173,33 +189,11 @@
       "image": "https://media.thenextweb.com/2026/05/BMO.avif",
       "published": "2026-05-02T07:12:29+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
+      "lastSeen": "2026-05-02T21:00:01.398764+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2373
-    },
-    {
-      "title": "Foreign automakers are not staging a comeback in China. They are learning to be the junior partner.",
-      "url": "https://thenextweb.com/news/foreign-automakers-china-ev-comeback-struggle",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In January and February 2026, Volkswagen reclaimed the top position in China’s passenger vehicle market with a 13.9 per cent share, narrowly ahead of Geely at 13.8 per cent. Toyota’s joint ventures held 7.8 per cent. BYD, which dominated 2024 and much of 2025 as the world’s largest EV maker, slipped to fourth at 7.1 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/foreign-automakers-china-ev-comeback-struggle.avif",
-      "published": "2026-05-02T17:09:21+00:00",
-      "firstSeen": "2026-05-02T18:00:02.002591+00:00",
-      "lastSeen": "2026-05-02T19:14:47.725136+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0879
+      "score": 3.1999
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
