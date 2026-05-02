@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T23:04:58.424934+00:00",
+  "updatedAt": "2026-05-02T01:00:01.395008+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5548,6 +5548,10 @@
     "https://techcrunch.com/2026/05/01/replits-amjad-masad-on-the-cursor-deal-fighting-apple-and-why-hed-rather-not-sell": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55242949643_f997627b64_k.jpg?resize=1200,800",
       "checkedAt": "2026-05-02T00:00:01.259075+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/01/a-coding-implementation-of-end-to-end-brain-decoding-from-meg-signals-using-neuralset-and-deep-learning-for-predicting-linguistic-features": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-3-1024x731.png",
+      "checkedAt": "2026-05-02T01:00:01.395008+00:00"
     }
   }
 }
