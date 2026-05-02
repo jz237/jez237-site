@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-02T20:58:10.812531+00:00",
+  "updatedAt": "2026-05-02T22:00:02.129041+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5568,6 +5568,10 @@
     "https://www.techrepublic.com/article/news-best-ai-image-editing-prompts-2026": {
       "image": "",
       "checkedAt": "2026-05-02T20:58:10.812531+00:00"
+    },
+    "https://techcrunch.com/2026/05/02/ai-generated-actors-and-scripts-are-now-ineligible-for-oscars": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2266014829.jpg?w=1024",
+      "checkedAt": "2026-05-02T22:00:02.129041+00:00"
     }
   }
 }
