@@ -1,6 +1,6 @@
 {
   "date": "2026-05-02",
-  "updatedAt": "2026-05-02T10:07:47.869214+00:00",
+  "updatedAt": "2026-05-02T11:04:46.184293+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Parsing, Analyzing, Visualizing, and Fine-Tuning Agent Reasoning Traces Using the lambda/hermes-agent-reasoning-traces Dataset",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-5.png",
       "published": "2026-05-02T07:47:46+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.051
+      "score": 11.0241
     },
     {
       "title": "A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-8.46.43-PM-1-150x150.png",
       "published": "2026-05-02T03:47:47+00:00",
       "firstSeen": "2026-05-02T04:00:01.904605+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2925
+      "score": 8.2685
     },
     {
       "title": "Musk’s case against OpenAI lands roughly in its first week",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
       "published": "2026-05-02T07:38:24+00:00",
       "firstSeen": "2026-05-02T08:42:15.746380+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0765
+      "score": 7.0498
     },
     {
       "title": "Apple’s $599 Mac mini is gone. Blame the AI agents.",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2017/10/mac-mini.avif",
       "published": "2026-05-02T07:24:39+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.87
+      "score": 5.8434
     },
     {
       "title": "GameStop eyes eBay takeover in audacious $46 billion bet on Ryan Cohen’s e-commerce vision",
@@ -77,10 +77,26 @@
       "image": "https://media.thenextweb.com/2026/05/Ryan-Cohen.avif",
       "published": "2026-05-02T06:42:53+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4504
+      "score": 4.4244
+    },
+    {
+      "title": "Disneyland Now Uses Face Recognition on Visitors",
+      "url": "https://www.wired.com/story/security-news-this-week-disneyland-now-uses-face-recognition-on-visitors",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Plus: The NSA tests Anthropic’s Mythos Preview to find vulnerabilities, a Finnish teen is charged over the Scattered Spider hacking spree, and more.",
+      "image": "https://media.wired.com/photos/69f53066ed110137695d66cd/master/pass/security_disney_getty.jpg",
+      "published": "2026-05-02T10:30:00+00:00",
+      "firstSeen": "2026-05-02T11:00:01.777470+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2724
     },
     {
       "title": "AI chipmaker Cerebras targets up to $4bn IPO at $40bn valuation",
@@ -93,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
       "published": "2026-05-02T06:51:42+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0545
+      "score": 4.0284
     },
     {
       "title": "Why a Canadian bank is trying to predict earthquakes with quantum computers",
@@ -109,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/BMO.avif",
       "published": "2026-05-02T07:12:29+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4642
+      "score": 3.4378
     },
     {
       "title": "What Is a Contaminated LLM? Detection, Famous Cases, 2026 Guide",
@@ -123,9 +139,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-02T10:07:53.805103+00:00",
+      "published": "2026-05-02T11:04:49.853927+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -141,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/joby-evtol-nyc-air-taxi-commercial-launch.avif",
       "published": "2026-05-02T09:50:09+00:00",
       "firstSeen": "2026-05-02T11:00:01.777470+00:00",
-      "lastSeen": "2026-05-02T11:00:01.777470+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.115
+      "score": 2.1126
     },
     {
       "title": "The company that built TikTok’s algorithm is now designing drugs for diseases pharma called undruggable",
@@ -157,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/bytedance-anew-labs-ai-drug-discovery.avif",
       "published": "2026-05-02T09:01:59+00:00",
       "firstSeen": "2026-05-02T10:00:01.167308+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.117
+      "score": 2.0892
     },
     {
       "title": "Wall Street says Oracle is a buy. The investors selling it can count to $300 billion.",
@@ -173,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/oracle-openai-wall-street-disconnect.avif",
       "published": "2026-05-02T06:52:27+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T10:07:47.869214+00:00",
+      "lastSeen": "2026-05-02T11:04:46.184293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0549
+      "score": 2.0287
     }
   ],
   "errors": []
