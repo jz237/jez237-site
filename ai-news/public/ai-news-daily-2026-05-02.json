@@ -1,6 +1,6 @@
 {
   "date": "2026-05-02",
-  "updatedAt": "2026-05-02T23:00:41.387093+00:00",
+  "updatedAt": "2026-05-02T23:58:01.766858+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Parsing, Analyzing, Visualizing, and Fine-Tuning Agent Reasoning Traces Using the lambda/hermes-agent-reasoning-traces Dataset",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-05-02T23:00:41.387093+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.7408
+      "score": 10.722
     },
     {
       "title": "A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-02T23:00:41.387093+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.015
+      "score": 7.9981
     },
     {
       "title": "Sightings",
@@ -45,10 +45,10 @@
       "image": "https://static.simonwillison.net/static/2026/beats-sightings.jpeg",
       "published": "2026-05-02T17:26:40+00:00",
       "firstSeen": "2026-05-02T18:00:02.002591+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5324
+      "score": 7.5077
     },
     {
       "title": "Musk’s case against OpenAI lands roughly in its first week",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
       "published": "2026-05-02T07:38:24+00:00",
       "firstSeen": "2026-05-02T08:42:15.746380+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7677
+      "score": 6.7489
     },
     {
       "title": "Build a Multi-Agent AI Workflow for Biological Network Modeling, Protein Interactions, Metabolism, and Cell Signaling Simulation",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-02T23:00:41.387093+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9464
+      "score": 5.9195
     },
     {
       "title": "Apple’s $599 Mac mini is gone. Blame the AI agents.",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2017/10/mac-mini.avif",
       "published": "2026-05-02T07:24:39+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5632
+      "score": 5.5445
     },
     {
       "title": "The best AI dictation apps, tested and ranked",
@@ -109,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200%2C800",
       "published": "2026-05-02T16:00:00+00:00",
       "firstSeen": "2026-05-02T19:00:01.988859+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5953
+      "score": 4.5716
     },
     {
       "title": "GameStop eyes eBay takeover in audacious $46 billion bet on Ryan Cohen’s e-commerce vision",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-05-02T15:58:25.211508+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1495
+      "score": 4.1312
     },
     {
       "title": "Disneyland Now Uses Face Recognition on Visitors",
@@ -141,10 +141,10 @@
       "image": "https://media.wired.com/photos/69f53066ed110137695d66cd/master/pass/security_disney_getty.jpg",
       "published": "2026-05-02T10:30:00+00:00",
       "firstSeen": "2026-05-02T11:00:01.777470+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9671
+      "score": 3.9467
     },
     {
       "title": "AI chipmaker Cerebras targets up to $4bn IPO at $40bn valuation",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-05-02T17:04:00.889454+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7524
+      "score": 3.734
     },
     {
       "title": "Why a Canadian bank is trying to predict earthquakes with quantum computers",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/BMO.avif",
       "published": "2026-05-02T07:12:29+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1592
+      "score": 3.1406
     },
     {
       "title": "5 Best AI Photo Editing Prompts in 2026: How to Get Better AI Images",
@@ -189,11 +189,17 @@
       "image": "",
       "published": "2026-05-02T03:26:57+00:00",
       "firstSeen": "2026-05-02T20:58:10.812531+00:00",
-      "lastSeen": "2026-05-02T23:00:41.387093+00:00",
+      "lastSeen": "2026-05-02T23:58:01.766858+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7888
+      "score": 2.7721
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
