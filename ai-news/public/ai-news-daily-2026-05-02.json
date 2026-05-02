@@ -1,7 +1,23 @@
 {
   "date": "2026-05-02",
-  "updatedAt": "2026-05-02T03:00:01.536955+00:00",
+  "updatedAt": "2026-05-02T04:00:01.904605+00:00",
   "items": [
+    {
+      "title": "A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B",
+      "url": "https://www.marktechpost.com/2026/05/01/a-new-nvidia-research-shows-speculative-decoding-in-nemo-rl-achieves-1-8x-rollout-generation-speedup-at-8b-and-projects-2-5x-end-to-end-speedup-at-235b",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "A new paper from NVIDIA Research integrates speculative decoding directly into NeMo RL with a vLLM backend, delivering lossless rollout acceleration at both 8B and projected 235B model scales.\nThe post A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-8.46.43-PM-1-150x150.png",
+      "published": "2026-05-02T03:47:47+00:00",
+      "firstSeen": "2026-05-02T04:00:01.904605+00:00",
+      "lastSeen": "2026-05-02T04:00:01.904605+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.4638
+    },
     {
       "title": "Binary Spiking Neural Networks as Causal Models",
       "url": "https://llm-stats.com/ai-news",
@@ -11,13 +27,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-02T03:00:05.212025+00:00",
+      "published": "2026-05-02T04:00:17.634087+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-02T03:00:01.536955+00:00",
+      "lastSeen": "2026-05-02T04:00:01.904605+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Microsoft Research Blog",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "error": "The read operation timed out"
+    }
+  ]
 }
