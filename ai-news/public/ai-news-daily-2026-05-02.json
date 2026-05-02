@@ -1,6 +1,6 @@
 {
   "date": "2026-05-02",
-  "updatedAt": "2026-05-02T14:00:01.707509+00:00",
+  "updatedAt": "2026-05-02T13:45:06.082821+00:00",
   "items": [
     {
       "title": "A complete guide to LLM benchmark contamination: how it happens, the five detection methods that work, the famous cases (GPT-4 on Codeforces, Phi/Mistral on GSM8K, BIG-Bench canary in Claude), and the 2026 benchmarks built to resist it.",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-02T14:00:09.344501+00:00",
+      "published": "2026-05-02T13:45:09.936566+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 13.91
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-5.png",
       "published": "2026-05-02T07:47:46+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.9459
+      "score": 10.9523
     },
     {
       "title": "A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-8.46.43-PM-1-150x150.png",
       "published": "2026-05-02T03:47:47+00:00",
       "firstSeen": "2026-05-02T04:00:01.904605+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1985
+      "score": 8.2042
     },
     {
       "title": "Musk’s case against OpenAI lands roughly in its first week",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
       "published": "2026-05-02T07:38:24+00:00",
       "firstSeen": "2026-05-02T08:42:15.746380+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9719
+      "score": 6.9782
     },
     {
       "title": "Apple’s $599 Mac mini is gone. Blame the AI agents.",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2017/10/mac-mini.avif",
       "published": "2026-05-02T07:24:39+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.766
+      "score": 5.7724
     },
     {
       "title": "GameStop eyes eBay takeover in audacious $46 billion bet on Ryan Cohen’s e-commerce vision",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/Ryan-Cohen.avif",
       "published": "2026-05-02T06:42:53+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3485
+      "score": 4.3547
     },
     {
       "title": "Disneyland Now Uses Face Recognition on Visitors",
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/69f53066ed110137695d66cd/master/pass/security_disney_getty.jpg",
       "published": "2026-05-02T10:30:00+00:00",
       "firstSeen": "2026-05-02T11:00:01.777470+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1881
+      "score": 4.195
     },
     {
       "title": "AI chipmaker Cerebras targets up to $4bn IPO at $40bn valuation",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
       "published": "2026-05-02T06:51:42+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9521
+      "score": 3.9584
     },
     {
       "title": "Why a Canadian bank is trying to predict earthquakes with quantum computers",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/BMO.avif",
       "published": "2026-05-02T07:12:29+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3609
+      "score": 3.3672
     },
     {
       "title": "The EVs America is losing in 2026 are not failing. They are being tariffed out of existence.",
@@ -156,11 +156,11 @@
       "summary": "At least a dozen electric vehicle models have been discontinued, paused, or cancelled in the United States this year. The list includes some of the most recognisable names in the industry: Tesla’s Model S and Model X, Honda’s entire 0 Series, the Volvo EX30, the BMW i4 and iX, the Hyundai Kona Electric and [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/05/ev-models-discontinued-us-tariffs-2026.avif",
       "published": "2026-05-02T12:43:37+00:00",
-      "firstSeen": "2026-05-02T14:00:01.707509+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "firstSeen": "2026-05-02T13:45:06.082821+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1118
+      "score": 2.1191
     },
     {
       "title": "Seven minutes from JFK to Midtown. Joby just flew the route it plans to sell.",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/joby-evtol-nyc-air-taxi-commercial-launch.avif",
       "published": "2026-05-02T09:50:09+00:00",
       "firstSeen": "2026-05-02T11:00:01.777470+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0298
+      "score": 2.0366
     },
     {
       "title": "The company that built TikTok’s algorithm is now designing drugs for diseases pharma called undruggable",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/bytedance-anew-labs-ai-drug-discovery.avif",
       "published": "2026-05-02T09:01:59+00:00",
       "firstSeen": "2026-05-02T10:00:01.167308+00:00",
-      "lastSeen": "2026-05-02T14:00:01.707509+00:00",
+      "lastSeen": "2026-05-02T13:45:06.082821+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0082
+      "score": 2.0149
     }
   ],
   "errors": []
