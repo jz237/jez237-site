@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Jez237 — AI News Feed</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="container">
+    <section class="hero-editorial">
+      <div class="eyebrow">Daily refresh</div>
+      <h1>AI model &amp; tooling stream.</h1>
+      <p class="lede">A curated feed of model releases, developer tooling, and notable research — rebuilt from scratch every morning. Filter by source, search headlines, sort by recency or score.</p>
+    </section>
+
+    <section class="card col-12" style="margin-top:16px;">
+      <div class="news-controls">
+        <select id="news-category" class="control">
+          <option value="AI">🤖 AI News</option>
+          <option value="Science">🔬 Discovery News</option>
+        </select>
+        <select id="news-sort" class="control">
+          <option value="latest">Sort: Latest</option>
+          <option value="top">Sort: Top scored</option>
+        </select>
+        <select id="news-source" class="control"></select>
+        <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
+        <span id="news-updated" class="news-meta"></span>
+      </div>
+      <div id="news-grid" class="news-grid"></div>
+    </section>
+
+    <footer>
+      Live feed from curated sources · Repo: <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">https://github.com/jz237/jez237-site</a>
+    </footer>
+  </main>
+
+  <script src="../assets/news.js"></script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
+</body>
+</html>
