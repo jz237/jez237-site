@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-01T22:02:19.502720+00:00",
+  "updatedAt": "2026-05-02T00:00:01.259075+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5544,6 +5544,10 @@
     "https://www.technologyreview.com/2026/05/01/1136800/musk-v-altman-week-1-musk-says-he-was-duped-warns-ai-could-kill-us-all-and-admits-that-xai-distills-openais-models": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/AP26118555311492.jpg?resize=1200,600",
       "checkedAt": "2026-05-01T23:00:02.002397+00:00"
+    },
+    "https://techcrunch.com/2026/05/01/replits-amjad-masad-on-the-cursor-deal-fighting-apple-and-why-hed-rather-not-sell": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/55242949643_f997627b64_k.jpg?resize=1200,800",
+      "checkedAt": "2026-05-02T00:00:01.259075+00:00"
     }
   }
 }
