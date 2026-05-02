@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-02T17:00:01.294136+00:00",
+  "updatedAt": "2026-05-02T18:00:02.002591+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5556,6 +5556,10 @@
     "https://www.marktechpost.com/2026/05/02/a-coding-implementation-to-parsing-analyzing-visualizing-and-fine-tuning-agent-reasoning-traces-using-the-lambda-hermes-agent-reasoning-traces-dataset": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-5.png",
       "checkedAt": "2026-05-02T08:00:02.086710+00:00"
+    },
+    "https://techcrunch.com/2026/05/02/the-best-ai-powered-dictation-apps-of-2025": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
+      "checkedAt": "2026-05-02T18:00:02.002591+00:00"
     }
   }
 }
