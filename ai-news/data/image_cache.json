@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-02T19:14:47.725136+00:00",
+  "updatedAt": "2026-05-02T20:58:10.812531+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5560,6 +5560,14 @@
     "https://techcrunch.com/2026/05/02/the-best-ai-powered-dictation-apps-of-2025": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
       "checkedAt": "2026-05-02T18:00:02.002591+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/02/build-a-multi-agent-ai-workflow-for-biological-network-modeling-protein-interactions-metabolism-and-cell-signaling-simulation": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-1-1024x731.png",
+      "checkedAt": "2026-05-02T20:58:10.812531+00:00"
+    },
+    "https://www.techrepublic.com/article/news-best-ai-image-editing-prompts-2026": {
+      "image": "",
+      "checkedAt": "2026-05-02T20:58:10.812531+00:00"
     }
   }
 }
