@@ -50,154 +50,152 @@
     }
     .hero-meta span strong { color: var(--ink-mid); font-weight: 500; }
   </style>
+  <link rel="stylesheet" href="assets/workbench-theme.css" />
 </head>
 <body>
-  <header id="site-nav"></header>
+  <header id="site-nav" class="home-hidden-nav"></header>
 
-  <main class="container">
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="home-title">
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="./">
+          <strong>Jez237</strong>
+          <span>Philadelphia · Zone 7a</span>
+        </a>
+        <p class="sidebar-note">A living journal. A garden journal and a workbench.</p>
 
-    <section class="hero-editorial">
-      <div class="eyebrow">A living journal</div>
-      <h1>A garden journal and a workbench.</h1>
-      <p class="lede">Seasonal plant progress, weather-aware garden tasks, photo archives, playable prototypes, and a daily AI news feed — all kept in one place, grown slowly and on purpose.</p>
-      <div class="actions">
-        <a class="primary" href="plants/">Open Garden Center →</a>
-        <a class="secondary" href="garden/">Garden Calendar</a>
-        <a class="secondary" href="ai-news/">AI News</a>
-      </div>
-      <div class="hero-meta">
-        <span>📍 <strong>Philadelphia · Zone 7a</strong></span>
-        <span>🪴 <strong>~20 plants tracked</strong></span>
-        <span>📅 <strong>Daily feeds</strong></span>
-      </div>
-    </section>
+        <nav class="side-nav">
+          <a class="active" href="./">⌘ <span>Overview</span></a>
+          <a href="plants/">✿ <span>Garden Center</span></a>
+          <a href="garden/">▣ <span>Garden Calendar</span></a>
+          <a href="ai-news/">◌ <span>AI News</span></a>
+          <a href="photos/">▧ <span>Photos, kept casual</span></a>
+          <a href="games/">◇ <span>GameMaster Arcade</span></a>
+          <a href="experiments/ai-explainer/">☷ <span>How AI Works</span></a>
+          <a href="https://jz237.github.io/stock-command-center/">↗ <span>Stock Command Center</span></a>
+          <a href="#workbench-tools">⚒ <span>Workbench / Tools</span></a>
+          <a href="#home-lab">◉ <span>Home Lab</span></a>
+          <a href="#direction">◎ <span>Where this is going</span></a>
+          <a href="plants/past-years/">□ <span>Archives</span></a>
+        </nav>
 
-    <!-- Featured pieces -->
-    <div class="section-head">
-      <h2>Now</h2>
-      <span class="section-sub">What's currently alive on the site</span>
-    </div>
-
-    <div class="stack-lg">
-      <a class="feature" href="plants/">
-        <div class="feature-media" style="background-image:url('photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
-        <div class="feature-copy">
-          <div class="eyebrow">Living journal</div>
-          <h3>Garden Center</h3>
-          <p>A season-by-season record of the yard — each plant kept as a dated timeline with notes, photos, and the occasional pull quote. Spring is currently in full swing.</p>
+        <div class="side-controls" aria-hidden="true">
+          <span>☼</span><span>☾</span><span>⚙</span>
         </div>
-      </a>
+      </aside>
 
-      <div class="row-2">
-        <a class="feature" href="garden/">
-          <div class="feature-media" style="background-image:url('photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg')"></div>
-          <div class="feature-copy">
-            <div class="eyebrow">Practical</div>
-            <h3>Garden Calendar</h3>
-            <p>Weather-aware daily tasks for Philadelphia zone 7a — hover any date to see what to do that day.</p>
+      <div class="hub-main">
+        <div class="hub-topbar">
+          <div>
+            <h1 id="home-title">Welcome back, gardener &amp; builder.</h1>
+            <p>One place for plants, projects, prototypes, and the tools that make it all work.</p>
           </div>
-        </a>
-        <a class="feature" href="ai-news/">
-          <div class="feature-media" style="background-image:url('photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg');filter:saturate(0.7) hue-rotate(-15deg)"></div>
-          <div class="feature-copy">
-            <div class="eyebrow">Daily refresh</div>
-            <h3>AI News Feed</h3>
-            <p>Curated model releases, tooling updates, and notable research — rebuilt from scratch every morning.</p>
+          <div class="topbar-actions">
+            <a href="garden/">Daily Log</a>
+            <button type="button" aria-label="Menu">☰</button>
           </div>
-        </a>
+        </div>
+
+        <section class="hub-card-grid" aria-label="Modular workbench hub">
+          <a class="hub-card" href="plants/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/garden-center.jpg')"></div>
+            <h2>Garden Center</h2>
+            <p>Plants, beds, soil notes, varieties &amp; experiments</p>
+            <span>View →</span>
+          </a>
+          <a class="hub-card" href="garden/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/calendar.jpg')"></div>
+            <h2>Garden Calendar</h2>
+            <p>Weather-aware tasks, schedule &amp; reminders</p>
+            <span>Open →</span>
+          </a>
+          <a class="hub-card" href="ai-news/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/ai-news.jpg')"></div>
+            <h2>AI News</h2>
+            <p>AI model &amp; tooling stream. Curated daily.</p>
+            <span>Read →</span>
+          </a>
+          <a class="hub-card" href="photos/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/photos.jpg')"></div>
+            <h2>Photos, kept casual</h2>
+            <p>Snapshots from the garden and beyond.</p>
+            <span>Browse →</span>
+          </a>
+          <a class="hub-card" href="games/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/games.jpg')"></div>
+            <h2>GameMaster Arcade</h2>
+            <p>Playable prototypes &amp; experiments.</p>
+            <span>Play →</span>
+          </a>
+          <a class="hub-card" href="experiments/ai-explainer/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/ai-explainer.jpg')"></div>
+            <h2>How AI Works</h2>
+            <p>Explainers, notes, and how it all fits together.</p>
+            <span>Learn →</span>
+          </a>
+          <a class="hub-card" href="https://jz237.github.io/stock-command-center/" target="_blank" rel="noopener">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/stock-command-center.svg')"></div>
+            <h2>Stock Command Center</h2>
+            <p>Market dashboard, watchlists, charts &amp; trading notes.</p>
+            <span>Launch →</span>
+          </a>
+          <a id="workbench-tools" class="hub-card" href="#workbench-list">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/tools.jpg')"></div>
+            <h2>Workbench / Tools</h2>
+            <p>Scripts, calculators, cheatsheets, utilities.</p>
+            <span>Open →</span>
+          </a>
+          <a id="home-lab" class="hub-card" href="#homelab-list">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/homelab.jpg')"></div>
+            <h2>Home Lab</h2>
+            <p>Servers, NAS, sensors, network &amp; monitoring.</p>
+            <span>Manage →</span>
+          </a>
+        </section>
+
+        <section class="quick-glance" aria-label="Quick glance">
+          <h2>Quick Glance</h2>
+          <div class="glance-grid">
+            <div><span>Weather</span><strong>61°F · Partly Cloudy</strong></div>
+            <div><span>Next Task</span><strong>Water new plantings</strong></div>
+            <div><span>Next Event</span><strong>Prune grapevine · May 20</strong></div>
+            <div><span>Moon Phase</span><strong>Waxing Gibbous</strong></div>
+            <div><span>AI News</span><strong>3 new updates</strong></div>
+            <div><span>Markets</span><strong>Stock Command Center linked</strong></div>
+            <div><span>Garden Zone</span><strong>Zone 7a</strong></div>
+          </div>
+        </section>
+
+        <section id="direction" class="below-hub">
+          <article>
+            <span class="module-kicker">Direction</span>
+            <h2>Modular first, garden still central.</h2>
+            <p>The homepage now behaves like a personal operating console: the garden stays the anchor, while tools, AI news, the stock command center, photos, games, and archives sit in clear adjacent modules.</p>
+          </article>
+          <article id="workbench-list">
+            <span class="module-kicker">Tools</span>
+            <h2>Small helpers</h2>
+            <div id="tools-list" class="list"></div>
+          </article>
+          <article>
+            <span class="module-kicker">Home lab</span>
+            <h2>System visibility</h2>
+            <div id="homelab-list" class="list"></div>
+          </article>
+        </section>
+
+        <section id="ai-agents" class="below-hub ai-agent-hub">
+          <article>
+            <span class="module-kicker">For AI assistants</span>
+            <h2>Adding photos with an AI</h2>
+            <p>Upload a plant, pet, or garden photo and say “add this to my garden site at github.com/jz237/jez237-site”. The assistant should fetch <a href="llms.txt">/llms.txt</a> for full instructions.</p>
+            <details>
+              <summary>Show the full AI prompt here</summary>
+              <div><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
+            </details>
+          </article>
+        </section>
       </div>
-    </div>
-
-    <!-- Pull quote -->
-    <div class="pullquote">
-      Not a pile of uploads. A <em>living garden journal</em> with practical tools underneath.
-    </div>
-
-    <!-- Photos + Games row -->
-    <div class="section-head">
-      <h2>Also here</h2>
-      <span class="section-sub">Side projects, experiments, collections</span>
-    </div>
-
-    <div class="row-3">
-      <a class="tile" href="photos/">
-        <div class="eyebrow">Gallery</div>
-        <h3>Photos</h3>
-        <p>Cats, garden, restorations. Casual corner.</p>
-      </a>
-      <a class="tile" href="games/">
-        <div class="eyebrow">Prototypes</div>
-        <h3>Game Experiments</h3>
-        <p>Playable AI-built games — Missile Command, Asteroids HD, Boulder Dash.</p>
-      </a>
-      <a class="tile" href="experiments/ai-explainer/">
-        <div class="eyebrow">Interactive</div>
-        <h3>How AI Works</h3>
-        <p>Neural networks, LLMs, training, hallucinations — built with React + Framer Motion.</p>
-      </a>
-    </div>
-
-    <!-- Lists from site.json -->
-    <div class="section-head">
-      <h2>Workbench</h2>
-      <span class="section-sub">Tools and home-lab visibility</span>
-    </div>
-
-    <div class="row-2">
-      <article class="tile" style="padding:24px;">
-        <div class="eyebrow">Tools &amp; utilities</div>
-        <h3>Small helpers</h3>
-        <div id="tools-list" class="list" style="margin-top:10px"></div>
-      </article>
-      <article class="tile" style="padding:24px;">
-        <div class="eyebrow">Home lab</div>
-        <h3>System visibility</h3>
-        <div id="homelab-list" class="list" style="margin-top:10px"></div>
-      </article>
-    </div>
-
-    <!-- Roadmap -->
-    <div class="section-head">
-      <h2>Where this is going</h2>
-      <span class="section-sub">The direction, not a decided roadmap</span>
-    </div>
-
-    <div class="row-2">
-      <div class="tile">
-        <div class="eyebrow">Garden Center</div>
-        <h3>The main storytelling section</h3>
-        <p>Each plant gets its own dated timeline so the season builds over time, instead of a brand new page for every photo.</p>
-      </div>
-      <div class="tile">
-        <div class="eyebrow">Garden Calendar</div>
-        <h3>Working tool for the actual yard</h3>
-        <p>Seasonal tasks, timing, applications, and reminders tied to Philadelphia zone 7a.</p>
-      </div>
-      <div class="tile">
-        <div class="eyebrow">Bed &amp; planning pages</div>
-        <h3>Where single-plant pages don't fit</h3>
-        <p>Full-bed records, layout ideas, before-and-after decisions, experiments.</p>
-      </div>
-      <div class="tile">
-        <div class="eyebrow">Seasonal archives later</div>
-        <h3>Browse by season, not just by plant</h3>
-        <p>As photos build up, add Spring, Summer, Fall archive views.</p>
-      </div>
-    </div>
-
-    <!-- ===================================================================
-         AI AGENT INSTRUCTIONS — visible collapsible section
-         Any AI assistant helping the owner add a plant/pet/garden photo to
-         this site should read this OR /llms.txt at the site root.
-         =================================================================== -->
-    <section id="ai-agents" class="tile" style="margin-top:clamp(28px,4vw,48px);padding:26px;">
-      <div class="eyebrow">For AI assistants</div>
-      <h3>Adding photos with an AI</h3>
-      <p style="margin:0 0 12px 0;">Upload a plant, pet, or garden photo to your AI of choice and say "add this to my garden site at github.com/jz237/jez237-site". The AI should fetch <a href="llms.txt" style="color:var(--brand-gold)">/llms.txt</a> for full instructions — section slugs, photo path conventions, voice rules, HTML templates, and output format.</p>
-      <details style="margin-top:10px;">
-        <summary style="cursor:pointer;color:var(--brand-gold);font-size:13px;">Show the full AI prompt here (click to expand)</summary>
-        <div style="margin-top:14px;padding:18px;background:rgba(0,0,0,0.25);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:var(--ink-mid);max-height:460px;overflow:auto;"><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
-      </details>
     </section>
 
     <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
