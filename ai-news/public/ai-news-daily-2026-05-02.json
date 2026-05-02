@@ -1,6 +1,6 @@
 {
   "date": "2026-05-02",
-  "updatedAt": "2026-05-02T02:00:01.177981+00:00",
+  "updatedAt": "2026-05-02T03:00:01.536955+00:00",
   "items": [
     {
       "title": "Binary Spiking Neural Networks as Causal Models",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-02T02:00:05.122437+00:00",
+      "published": "2026-05-02T03:00:05.212025+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-02T02:00:01.177981+00:00",
+      "lastSeen": "2026-05-02T03:00:01.536955+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
