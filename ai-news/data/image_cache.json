@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-03T19:15:00.520298+00:00",
+  "updatedAt": "2026-05-03T21:00:01.217088+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5588,6 +5588,10 @@
     "https://techcrunch.com/2026/05/03/in-harvard-study-ai-offered-more-accurate-diagnoses-than-emergency-room-doctors": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/01/GettyImages-104509077.jpg?resize=1200,800",
       "checkedAt": "2026-05-03T19:00:01.896427+00:00"
+    },
+    "https://techcrunch.com/2026/05/03/this-is-fine-creator-says-ai-startup-stole-his-art": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2241691471.jpg?w=1024",
+      "checkedAt": "2026-05-03T21:00:01.217088+00:00"
     }
   }
 }
