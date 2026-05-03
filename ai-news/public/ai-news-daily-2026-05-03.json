@@ -1,6 +1,6 @@
 {
   "date": "2026-05-03",
-  "updatedAt": "2026-05-03T10:14:50.030908+00:00",
+  "updatedAt": "2026-05-03T12:00:01.692198+00:00",
   "items": [
     {
       "title": "Mistral AI Launches Remote Agents in Vibe and Mistral Medium 3.5 with 77.6% SWE-Bench Verified Score",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-02-at-5.36.17-PM-1-150x150.png",
       "published": "2026-05-03T00:38:20+00:00",
       "firstSeen": "2026-05-03T01:00:01.794145+00:00",
-      "lastSeen": "2026-05-03T10:14:50.030908+00:00",
+      "lastSeen": "2026-05-03T12:00:01.692198+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.6623
+      "score": 12.6223
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-03T10:14:57.413012+00:00",
+      "published": "2026-05-03T12:00:08.575420+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-03T10:14:50.030908+00:00",
+      "lastSeen": "2026-05-03T12:00:01.692198+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-03-at-12.46.41-AM-1-150x150.png",
       "published": "2026-05-03T07:47:42+00:00",
       "firstSeen": "2026-05-03T08:00:01.886109+00:00",
-      "lastSeen": "2026-05-03T10:14:50.030908+00:00",
+      "lastSeen": "2026-05-03T12:00:01.692198+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9476
+      "score": 3.8987
     },
     {
       "title": "What is Tokenization Drift and How to Fix It?",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-2-150x150.png",
       "published": "2026-05-03T07:06:45+00:00",
       "firstSeen": "2026-05-03T08:00:01.886109+00:00",
-      "lastSeen": "2026-05-03T10:14:50.030908+00:00",
+      "lastSeen": "2026-05-03T12:00:01.692198+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2283
+      "score": 3.1803
     }
   ],
   "errors": []
