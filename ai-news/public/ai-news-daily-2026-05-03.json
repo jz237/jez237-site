@@ -1,6 +1,6 @@
 {
   "date": "2026-05-03",
-  "updatedAt": "2026-05-03T06:00:01.875431+00:00",
+  "updatedAt": "2026-05-03T07:00:01.888922+00:00",
   "items": [
     {
       "title": "Mistral AI Launches Remote Agents in Vibe and Mistral Medium 3.5 with 77.6% SWE-Bench Verified Score",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-02-at-5.36.17-PM-1-150x150.png",
       "published": "2026-05-03T00:38:20+00:00",
       "firstSeen": "2026-05-03T01:00:01.794145+00:00",
-      "lastSeen": "2026-05-03T06:00:01.875431+00:00",
+      "lastSeen": "2026-05-03T07:00:01.888922+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.7678
+      "score": 12.7418
     },
     {
       "title": "What Is a CUDA Kernel? A Visual Explainer",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-03T06:00:14.001356+00:00",
+      "published": "2026-05-03T07:00:10.458854+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-03T06:00:01.875431+00:00",
+      "lastSeen": "2026-05-03T07:00:01.888922+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
