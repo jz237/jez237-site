@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-03T16:00:01.756983+00:00",
+  "updatedAt": "2026-05-03T15:58:31.672480+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5583,7 +5583,7 @@
     },
     "https://simonwillison.net/2026/May/3/anthropic": {
       "image": "",
-      "checkedAt": "2026-05-03T16:00:01.756983+00:00"
+      "checkedAt": "2026-05-03T15:58:31.672480+00:00"
     }
   }
 }
