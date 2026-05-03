@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-03T19:15:00.520298+00:00",
+  "updatedAt": "2026-05-03T21:00:01.217088+00:00",
   "items": [
     {
-      "title": "Live model battles across chat, coding, image, video, and audio modalities",
+      "title": "What Is a CUDA Kernel? A Visual Explainer",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-03T19:15:09.022510+00:00",
+      "published": "2026-05-03T21:00:06.358603+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8159
+      "score": 2.36
+    },
+    {
+      "title": "‘This is fine’ creator says AI startup stole his art",
+      "url": "https://techcrunch.com/2026/05/03/this-is-fine-creator-says-ai-startup-stole-his-art",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The ad comes from Artisan, the AI startup behind billboards urging businesses to \"stop hiring humans.\"",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2241691471.jpg?w=1024",
+      "published": "2026-05-03T20:16:51+00:00",
+      "firstSeen": "2026-05-03T21:00:01.217088+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2682
+    },
+    {
+      "title": "Tesla is selling Chinese-made cars in Canada to escape the tariffs that both China and America imposed on it",
+      "url": "https://thenextweb.com/news/tesla-china-model-3-canada-tariff",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tesla is now selling Chinese-made Model 3 sedans in Canada at the lowest price the car has ever been offered in the country. The Model 3 Premium RWD, manufactured at Giga Shanghai, starts at C$39,490, roughly US$29,000. Two months ago, the cheapest Model 3 available in Canada was the Long Range AWD built at Tesla’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/tesla-china-model-3-canada-tariff.avif",
+      "published": "2026-05-03T19:48:00+00:00",
+      "firstSeen": "2026-05-03T21:00:01.217088+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1139
+    },
+    {
+      "title": "The $599 Mac Mini is dead. AI data centres killed it.",
+      "url": "https://thenextweb.com/news/apple-mac-mini-price-dram-ai-shortage",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Apple has discontinued the 256 gigabyte Mac Mini worldwide. The company’s cheapest desktop computer, the M4 Mac Mini with 16 gigabytes of RAM and 256 gigabytes of storage, was available for $599 until last week. It is gone. The Mac Mini now starts at $799 with 512 gigabytes of storage. The 256 gigabyte configuration has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/apple-mac-mini-price-dram-ai-shortage.avif",
+      "published": "2026-05-03T19:37:48+00:00",
+      "firstSeen": "2026-05-03T21:00:01.217088+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.1089
+    },
+    {
+      "title": "The Academy has not banned AI from the Oscars. It has defined what it means to be the author of a film.",
+      "url": "https://thenextweb.com/news/oscars-ai-ban-acting-writing-rules",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Academy of Motion Picture Arts and Sciences announced new eligibility rules on 2 May for the 99th Academy Awards, and the two that matter most are about seven words each. Acting nominations will be limited to roles “demonstrably performed by humans with their consent.” Screenplays must be “human-authored.” Producers will be required to sign [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/oscars-ai-ban-acting-writing-rules.avif",
+      "published": "2026-05-03T19:24:27+00:00",
+      "firstSeen": "2026-05-03T21:00:01.217088+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1024
     },
     {
       "title": "Every AI company now wants to ride shotgun. The car dashboard is becoming the last screen that matters.",
@@ -28,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/grok-carplay-voice-ai-dashboard.avif",
       "published": "2026-05-03T19:10:26+00:00",
       "firstSeen": "2026-05-03T19:15:00.520298+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6477
+      "score": 12.5956
     },
     {
       "title": "Planet Labs is not selling satellite images. It is selling a subscription to watch the entire planet change in real time.",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/planet-labs-pelican-satellite-earth-observation.avif",
       "published": "2026-05-03T18:52:02+00:00",
       "firstSeen": "2026-05-03T19:15:00.520298+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8384
+      "score": 2.7867
     },
     {
       "title": "In Harvard study, AI offered more accurate emergency room diagnoses than two human doctors",
@@ -60,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/01/GettyImages-104509077.jpg?resize=1200%2C800",
       "published": "2026-05-03T18:00:09+00:00",
       "firstSeen": "2026-05-03T19:00:01.896427+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2525
+      "score": 2.2021
     },
     {
       "title": "DJI invented the consumer drone. Now it cannot sell one in Washington or Beijing.",
@@ -76,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/dji-drone-ban-beijing-washington-squeeze.avif",
       "published": "2026-05-03T17:44:10+00:00",
       "firstSeen": "2026-05-03T19:00:01.896427+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1047
+      "score": 2.0546
     },
     {
       "title": "Skio never hired a sales team, never ran an ad, and just sold for $105 million cash to the company it was built to replace",
@@ -92,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/skio-recharge-105m-exit-subscription-shopify.avif",
       "published": "2026-05-03T17:31:49+00:00",
       "firstSeen": "2026-05-03T19:00:01.896427+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1987
+      "score": 3.1489
     },
     {
       "title": "Amazon’s best quarter in years was half-built on a $16.8 billion paper gain from Anthropic",
@@ -108,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jeff-bezos.avif",
       "published": "2026-05-03T17:13:09+00:00",
       "firstSeen": "2026-05-03T17:59:39.587604+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4397
+      "score": 5.3903
     },
     {
       "title": "Tim Cook returned $1 trillion to shareholders. John Ternus is being given permission to keep it.",
@@ -124,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/Apple-hq.avif",
       "published": "2026-05-03T16:42:49+00:00",
       "firstSeen": "2026-05-03T17:59:39.587604+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5752
+      "score": 4.5265
     },
     {
       "title": "The factory that built your iPhone is now building the robot that will assemble the next one",
@@ -140,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/china-smartphone-factories-humanoid-robots.avif",
       "published": "2026-05-03T16:33:30+00:00",
       "firstSeen": "2026-05-03T17:59:39.587604+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0707
+      "score": 2.0223
     },
     {
       "title": "Quoting Anthropic",
@@ -156,10 +220,10 @@
       "image": "",
       "published": "2026-05-03T15:13:23+00:00",
       "firstSeen": "2026-05-03T15:58:31.672480+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1736
+      "score": 9.1269
     },
     {
       "title": "How the internet’s favorite squirrel dad made the hottest camera app of 2026",
@@ -172,10 +236,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/Vrg_illo_squirrel_influencer.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-03T13:00:00+00:00",
       "firstSeen": "2026-05-03T13:45:16.494925+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9847
+      "score": 3.9408
     },
     {
       "title": "AI music is flooding streaming services — but who wants it?",
@@ -188,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/GettyImages-1468752442.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-03T12:00:00+00:00",
       "firstSeen": "2026-05-03T13:00:02.073776+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1594
+      "score": 2.1167
     },
     {
       "title": "Sakana AI Introduces KAME: A Tandem Speech-to-Speech Architecture That Injects LLM Knowledge in Real Time",
@@ -204,10 +268,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-03-at-12.46.41-AM-1-150x150.png",
       "published": "2026-05-03T07:47:42+00:00",
       "firstSeen": "2026-05-03T08:00:01.886109+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7202
+      "score": 3.6822
     },
     {
       "title": "What is Tokenization Drift and How to Fix It?",
@@ -220,10 +284,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-2-150x150.png",
       "published": "2026-05-03T07:06:45+00:00",
       "firstSeen": "2026-05-03T08:00:01.886109+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0052
+      "score": 2.9679
     },
     {
       "title": "Mistral AI Launches Remote Agents in Vibe and Mistral Medium 3.5 with 77.6% SWE-Bench Verified Score",
@@ -236,10 +300,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-02-at-5.36.17-PM-1-150x150.png",
       "published": "2026-05-03T00:38:20+00:00",
       "firstSeen": "2026-05-03T01:00:01.794145+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.476
+      "score": 12.4448
     },
     {
       "title": "AI-generated actors and scripts are now ineligible for Oscars",
@@ -252,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2266014829.jpg?w=1024",
       "published": "2026-05-02T21:54:58+00:00",
       "firstSeen": "2026-05-02T21:55:51.307508+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7982
+      "score": 1.7693
     },
     {
       "title": "Build a Multi-Agent AI Workflow for Biological Network Modeling, Protein Interactions, Metabolism, and Cell Signaling Simulation",
@@ -268,10 +332,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-1-1024x731.png",
       "published": "2026-05-02T20:31:07+00:00",
       "firstSeen": "2026-05-02T20:58:10.812531+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.505
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4773
     },
     {
       "title": "Sightings",
@@ -284,10 +348,10 @@
       "image": "https://static.simonwillison.net/static/2026/beats-sightings.jpeg",
       "published": "2026-05-02T17:26:40+00:00",
       "firstSeen": "2026-05-02T18:00:02.002591+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1271
+      "score": 7.1016
     },
     {
       "title": "Foreign automakers are not staging a comeback in China. They are learning to be the junior partner.",
@@ -303,7 +367,7 @@
       "lastSeen": "2026-05-03T19:15:00.520298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5828
+      "score": 1.5576
     },
     {
       "title": "Nvidia built the AI engine. Alphabet is building the car, the road, and the toll booth. The market is pricing accordingly.",
@@ -319,7 +383,7 @@
       "lastSeen": "2026-05-03T19:15:00.520298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5774
+      "score": 1.5524
     },
     {
       "title": "China has decided that firing a worker because an AI can do their job is illegal. No Western country has done the same.",
@@ -335,7 +399,7 @@
       "lastSeen": "2026-05-03T19:15:00.520298+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5734
+      "score": 1.5485
     },
     {
       "title": "The best AI dictation apps, tested and ranked",
@@ -348,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200%2C800",
       "published": "2026-05-02T16:00:00+00:00",
       "firstSeen": "2026-05-02T19:00:01.988859+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.206
+      "score": 4.1815
     },
     {
       "title": "The EVs America is losing in 2026 are not failing. They are being tariffed out of existence.",
@@ -367,7 +431,7 @@
       "lastSeen": "2026-05-03T19:00:01.896427+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5212
+      "score": 1.4988
     },
     {
       "title": "Disneyland Now Uses Face Recognition on Visitors",
@@ -380,10 +444,10 @@
       "image": "https://media.wired.com/photos/69f53066ed110137695d66cd/master/pass/security_disney_getty.jpg",
       "published": "2026-05-02T10:30:00+00:00",
       "firstSeen": "2026-05-02T11:00:01.777470+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6329
+      "score": 3.6119
     },
     {
       "title": "Y Combinator built its empire on software. Its latest investment thesis says the garage is no longer enough.",
@@ -399,7 +463,7 @@
       "lastSeen": "2026-05-03T19:00:01.896427+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.4871
+      "score": 0.4664
     },
     {
       "title": "Seven minutes from JFK to Midtown. Joby just flew the route it plans to sell.",
@@ -415,7 +479,7 @@
       "lastSeen": "2026-05-03T17:59:39.587604+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4848
+      "score": 1.4642
     },
     {
       "title": "The company that built TikTok’s algorithm is now designing drugs for diseases pharma called undruggable",
@@ -431,7 +495,7 @@
       "lastSeen": "2026-05-03T17:59:39.587604+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4752
+      "score": 1.455
     },
     {
       "title": "A Coding Implementation to Parsing, Analyzing, Visualizing, and Fine-Tuning Agent Reasoning Traces Using the lambda/hermes-agent-reasoning-traces Dataset",
@@ -444,10 +508,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-5.png",
       "published": "2026-05-02T07:47:46+00:00",
       "firstSeen": "2026-05-02T08:00:02.086710+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.4309
+      "score": 10.4114
     },
     {
       "title": "Musk’s case against OpenAI lands roughly in its first week",
@@ -463,7 +527,7 @@
       "lastSeen": "2026-05-03T17:04:36.420886+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4591
+      "score": 6.4397
     },
     {
       "title": "Apple’s $599 Mac mini is gone. Blame the AI agents.",
@@ -479,7 +543,7 @@
       "lastSeen": "2026-05-03T17:04:36.420886+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2565
+      "score": 5.2372
     },
     {
       "title": "Why a Canadian bank is trying to predict earthquakes with quantum computers",
@@ -495,7 +559,7 @@
       "lastSeen": "2026-05-03T17:04:36.420886+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.8542
+      "score": 2.835
     },
     {
       "title": "Wall Street says Oracle is a buy. The investors selling it can count to $300 billion.",
@@ -511,7 +575,7 @@
       "lastSeen": "2026-05-02T17:04:00.889454+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4505
+      "score": 1.4315
     },
     {
       "title": "AI chipmaker Cerebras targets up to $4bn IPO at $40bn valuation",
@@ -527,7 +591,7 @@
       "lastSeen": "2026-05-02T17:04:00.889454+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4503
+      "score": 3.4313
     },
     {
       "title": "GameStop eyes eBay takeover in audacious $46 billion bet on Ryan Cohen’s e-commerce vision",
@@ -543,7 +607,7 @@
       "lastSeen": "2026-05-02T15:58:25.211508+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8487
+      "score": 3.8298
     },
     {
       "title": "A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B",
@@ -556,10 +620,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-8.46.43-PM-1-150x150.png",
       "published": "2026-05-02T03:47:47+00:00",
       "firstSeen": "2026-05-02T04:00:01.904605+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.7376
+      "score": 7.7202
     },
     {
       "title": "5 Best AI Photo Editing Prompts in 2026: How to Get Better AI Images",
@@ -572,74 +636,10 @@
       "image": "",
       "published": "2026-05-02T03:26:57+00:00",
       "firstSeen": "2026-05-02T20:58:10.812531+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5141
-    },
-    {
-      "title": "A Coding Implementation of End-to-End Brain Decoding from MEG Signals Using NeuralSet and Deep Learning for Predicting Linguistic Features",
-      "url": "https://www.marktechpost.com/2026/05/01/a-coding-implementation-of-end-to-end-brain-decoding-from-meg-signals-using-neuralset-and-deep-learning-for-predicting-linguistic-features",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we explore how we can decode linguistic features directly from brain signals using a modern neuroAI pipeline. We work with MEG data and build an end-to-end system that transforms raw neural activity into meaningful predictions, in this case, estimating word length from brain responses. We set up the environment, load and process [&#8230;]\nThe post A Coding Implementation of End-to-End Brain Decoding from MEG Signals Using NeuralSet and Deep Learning for Predicting Linguistic Features appeared first on MarkTechPost.",
-      "image": "",
-      "published": "2026-05-01T23:09:48+00:00",
-      "firstSeen": "2026-05-02T00:01:33.803772+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9433
-    },
-    {
-      "title": "Replit’s Amjad Masad on the Cursor deal, fighting Apple, and why he’d rather not sell",
-      "url": "https://techcrunch.com/2026/05/01/replits-amjad-masad-on-the-cursor-deal-fighting-apple-and-why-hed-rather-not-sell",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "At TechCrunch's sold-out StrictlyVC event in San Francisco on Thursday night, we covered a lot of ground in a short time, beginning with the question everyone in the industry is asking right now: in a world where rival Cursor is reportedly in talks to be acquired by SpaceX for $60 billion, is Replit also bound to sell?",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/55242949643_f997627b64_k.jpg?resize=1200%2C800",
-      "published": "2026-05-01T23:06:50+00:00",
-      "firstSeen": "2026-05-02T00:00:01.259075+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6128
-    },
-    {
-      "title": "Meta Introduces Autodata: An Agentic Framework That Turns AI Models into Autonomous Data Scientists for High-Quality Training Data Creation",
-      "url": "https://www.marktechpost.com/2026/05/01/meta-introduces-autodata-an-agentic-framework-that-turns-ai-models-into-autonomous-data-scientists-for-high-quality-training-data-creation",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Meta Introduces Autodata: An Agentic Framework That Turns AI Models into Autonomous Data Scientists for High-Quality Training Data Creation\nThe post Meta Introduces Autodata: An Agentic Framework That Turns AI Models into Autonomous Data Scientists for High-Quality Training Data Creation appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-3.22.52-PM-1-150x150.png",
-      "published": "2026-05-01T22:24:02+00:00",
-      "firstSeen": "2026-05-01T23:00:02.002397+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 3.1365
-    },
-    {
-      "title": "Meta buys robotics startup to bolster its humanoid AI ambitions",
-      "url": "https://techcrunch.com/2026/05/01/meta-buys-robotics-startup-to-bolster-its-humanoid-ai-ambitions",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Meta bought humanoid startup Assured Robot Intelligence to beef up its AI models for robots, the company said.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2195752979.jpg?resize=1200%2C800",
-      "published": "2026-05-01T22:13:27+00:00",
-      "firstSeen": "2026-05-01T23:00:02.002397+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5049
+      "score": 2.4968
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9509
+      "score": -1.9523
     },
     {
       "title": "The Life Scientific: Jim Ashworth-Beaumont",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2106
+      "score": 1.2096
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5203
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-20T20:00:00+00:00",
       "firstSeen": "2026-04-20T20:59:22.286116+00:00",
-      "lastSeen": "2026-05-03T19:15:00.520298+00:00",
+      "lastSeen": "2026-05-03T21:00:01.217088+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.9402
@@ -770,11 +770,5 @@
       "score": 1.89
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
