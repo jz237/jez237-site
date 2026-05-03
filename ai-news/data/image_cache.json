@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-03T20:59:17.314347+00:00",
+  "updatedAt": "2026-05-03T21:57:06.707344+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5592,6 +5592,10 @@
     "https://techcrunch.com/2026/05/03/this-is-fine-creator-says-ai-startup-stole-his-art": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2241691471.jpg?w=1024",
       "checkedAt": "2026-05-03T20:59:17.314347+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/03/a-coding-implementation-to-explore-and-analyze-the-tasktrove-dataset-with-streaming-parsing-visualization-and-verifier-detection": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-8.png",
+      "checkedAt": "2026-05-03T21:57:06.707344+00:00"
     }
   }
 }
