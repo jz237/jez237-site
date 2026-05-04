@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "updatedAt": "2026-05-04T18:00:01.877073+00:00",
+  "updatedAt": "2026-05-04T18:51:36.454042+00:00",
   "items": [
     {
       "title": "Anthropic and Wall Street are building a $1.5bn pipeline into private equity",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.882
+      "score": 10.8623
     },
     {
       "title": "SAP buys Prior Labs to anchor a European frontier AI lab around tabular foundation models",
@@ -29,11 +29,11 @@
       "image": "https://media.thenextweb.com/2026/05/Prior-Labs-team.avif",
       "published": "2026-05-04T16:11:51+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.3963
+      "score": 10.3716
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -46,10 +46,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-04T15:43:49+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2928
+      "score": 9.2684
     },
     {
       "title": "Anthropic and OpenAI are both launching joint ventures for enterprise AI services",
@@ -62,10 +62,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200%2C783",
       "published": "2026-05-04T15:59:24+00:00",
       "firstSeen": "2026-05-04T16:00:01.239305+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.9303
+      "score": 8.9057
     },
     {
       "title": "Redis Array Playground",
@@ -78,10 +78,10 @@
       "image": "https://static.simonwillison.net/static/2026/redis-array-explorer-card.jpg",
       "published": "2026-05-04T15:53:57+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6276
+      "score": 7.6031
     },
     {
       "title": "Elon Musk’s only AI expert witness at the OpenAI trial fears an AGI arms race",
@@ -94,10 +94,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/stuart-russell-ai-getty.jpg?resize=1200%2C800",
       "published": "2026-05-04T16:57:47+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6588
+      "score": 6.6335
     },
     {
       "title": "Top Search and Fetch APIs for Building AI Agents in 2026: Tools, Tradeoffs, and Free Tiers",
@@ -110,10 +110,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/search_fetch_api_table_2026-1-150x150.png",
       "published": "2026-05-04T17:55:35+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0177
+      "score": 5.9918
     },
     {
       "title": "Week one of the Musk v. Altman trial: What it was like in the room",
@@ -126,10 +126,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260504_algo2.jpg?resize=1200%2C600",
       "published": "2026-05-04T15:51:27+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3264
+      "score": 5.302
     },
     {
       "title": "Elon Musk sent ominous texts to Greg Brockman, Sam Altman after asking for a settlement, OpenAI claims",
@@ -142,10 +142,42 @@
       "image": "",
       "published": "2026-05-04T16:36:03+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2481
+      "score": 5.2231
+    },
+    {
+      "title": "Musk tried to settle the OpenAI case two days before trial. Then he promised to make Brockman the most hated man in America.",
+      "url": "https://thenextweb.com/news/openai-trial-brockman-journals-nonprofit-settlement",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Elon Musk texted Greg Brockman two days before trial to ask about settling. Brockman suggested Musk drop all claims against the individuals. Musk replied: “By the end of this week, you and Sam will be the most hated men in America. If you insist, so it will be.” The exchange, disclosed in a court [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/openai-trial-brockman-journals-nonprofit-settlement.avif",
+      "published": "2026-05-04T18:18:10+00:00",
+      "firstSeen": "2026-05-04T18:51:36.454042+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1331
+    },
+    {
+      "title": "How OpenAI delivers low-latency voice AI at scale",
+      "url": "https://openai.com/index/delivering-low-latency-voice-ai-at-scale",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "How OpenAI rebuilt its WebRTC stack to power real-time Voice AI with low latency, global scale, and seamless conversational turn-taking.",
+      "image": "",
+      "published": "2026-05-04T00:00:00+00:00",
+      "firstSeen": "2026-05-04T18:51:36.454042+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0514
     },
     {
       "title": "OpenAI closes The Deployment Company, a $10bn enterprise AI bet on private equity",
@@ -158,42 +190,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-05-04T13:55:51+00:00",
       "firstSeen": "2026-05-04T14:27:38.215446+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
+      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0324
-    },
-    {
-      "title": "UK Government Announces Plans to Grow National AI Infrastructure",
-      "url": "https://www.techrepublic.com/article/uk-government-announces-plans-to-grow-national-ai-infrastructure",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The UK Government is to support the development of Britain’s AI hardware infrastructure, while also committing to work in establishing international standards for the deployment of AI.\nThe post UK Government Announces Plans to Grow National AI Infrastructure appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-12.png?f=jpeg",
-      "published": "2026-05-04T07:15:09+00:00",
-      "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7661
-    },
-    {
-      "title": "TRE Python binding — ReDoS robustness demo",
-      "url": "https://simonwillison.net/2026/May/4/tre-python-binding",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Research: TRE Python binding — ReDoS robustness demo\n        If it's good enough for antirez to add to Redis I figured Ville Laurikari's TRE regular expression engine was worth exploring in a little more detail.\nI had Claude Code build an experimental Python binding (it used ctypes) and try some malicious regular expression attacks against the library. TRE handles those much better than Python's standard library implementation, thanks mainly to the lack of support for backtracking.\n    \n    \n        Tags: security, python, regular-expressions, c, ctypes",
-      "image": "",
-      "published": "2026-05-04T17:52:00+00:00",
-      "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-04T18:00:01.877073+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 4.5859
+      "score": 5.0092
     }
   ],
   "errors": []
