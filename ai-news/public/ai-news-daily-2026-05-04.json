@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "updatedAt": "2026-05-04T06:00:01.154352+00:00",
+  "updatedAt": "2026-05-04T07:00:01.592963+00:00",
   "items": [
     {
       "title": "Putting HUMANS first: Efficient LAM Evaluation with Human Preference Alignment",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-04T06:00:07.200873+00:00",
+      "published": "2026-05-04T07:00:10.270950+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-04T06:00:01.154352+00:00",
+      "lastSeen": "2026-05-04T07:00:01.592963+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/TNW-Article-Banner.avif",
       "published": "2026-05-04T01:00:11+00:00",
       "firstSeen": "2026-05-04T02:00:01.484783+00:00",
-      "lastSeen": "2026-05-04T06:00:01.154352+00:00",
+      "lastSeen": "2026-05-04T07:00:01.592963+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3926
+      "score": -0.4188
     }
   ],
   "errors": []
