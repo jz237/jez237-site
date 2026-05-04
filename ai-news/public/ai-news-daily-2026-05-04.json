@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "updatedAt": "2026-05-04T06:51:44.180686+00:00",
+  "updatedAt": "2026-05-04T08:00:01.558339+00:00",
   "items": [
     {
       "title": "Putting HUMANS first: Efficient LAM Evaluation with Human Preference Alignment",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-04T06:51:48.183924+00:00",
+      "published": "2026-05-04T08:00:11.147481+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-04T06:51:44.180686+00:00",
+      "lastSeen": "2026-05-04T08:00:01.558339+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "China’s robot-hand unicorn Linkerbot is hunting a $6bn valuation",
+      "url": "https://thenextweb.com/news/linkerbot-china-robot-hand-6-billion-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Two years after a Beijing engineer started building dexterous hands inspired by a Japanese cartoon, his company holds 80% of the global market and is doubling its valuation in months. Robotic hands are not, conventionally, the part of a humanoid robot that investors get excited about. The legs walk, the arms lift, and the head, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Linkerbot.avif",
+      "published": "2026-05-04T06:50:13+00:00",
+      "firstSeen": "2026-05-04T08:00:01.558339+00:00",
+      "lastSeen": "2026-05-04T08:00:01.558339+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.115
     },
     {
       "title": "The next satisfactory standard for data governance may not come from Brussels. It may come from Beijing.",
@@ -29,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/TNW-Article-Banner.avif",
       "published": "2026-05-04T01:00:11+00:00",
       "firstSeen": "2026-05-04T02:00:01.484783+00:00",
-      "lastSeen": "2026-05-04T06:51:44.180686+00:00",
+      "lastSeen": "2026-05-04T08:00:01.558339+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.4152
+      "score": -0.4443
     }
   ],
   "errors": []
