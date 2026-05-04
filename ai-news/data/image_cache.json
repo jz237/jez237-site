@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T18:51:36.454042+00:00",
+  "updatedAt": "2026-05-04T20:00:01.760283+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5656,6 +5656,14 @@
     "https://openai.com/index/delivering-low-latency-voice-ai-at-scale": {
       "image": "",
       "checkedAt": "2026-05-04T18:51:36.454042+00:00"
+    },
+    "https://techcrunch.com/2026/05/04/image-ai-models-now-drive-app-growth-beating-chatbot-upgrades": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-apps-GettyImages-2214375253.jpg?resize=1200,800",
+      "checkedAt": "2026-05-04T20:00:01.760283+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-agents-prompt-injection-data-security": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/AdobeStock_472245346.jpg?f=jpeg",
+      "checkedAt": "2026-05-04T20:00:01.760283+00:00"
     }
   }
 }
