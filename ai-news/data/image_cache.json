@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T20:00:01.760283+00:00",
+  "updatedAt": "2026-05-04T20:39:44.277899+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5664,6 +5664,10 @@
     "https://www.techrepublic.com/article/news-ai-agents-prompt-injection-data-security": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/AdobeStock_472245346.jpg?f=jpeg",
       "checkedAt": "2026-05-04T20:00:01.760283+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8js9": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-05-04T20:39:44.277899+00:00"
     }
   }
 }
