@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T18:00:01.877073+00:00",
+  "updatedAt": "2026-05-04T19:00:01.831491+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5652,6 +5652,10 @@
     "https://www.together.ai/blog/foundational-research-powering-efficient-inference-at-scale": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f8d7922768e13db4223e31_OG-image_20260421_BLOG_Multi-tenantGPUclusters.png",
       "checkedAt": "2026-05-04T18:00:01.877073+00:00"
+    },
+    "https://openai.com/index/delivering-low-latency-voice-ai-at-scale": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5LQivcsFcndtRl4EsbtnOC/c548a54b9bbe11c0b4d9de714f800b30/Voice_AI___SEO_card.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-04T19:00:01.831491+00:00"
     }
   }
 }
