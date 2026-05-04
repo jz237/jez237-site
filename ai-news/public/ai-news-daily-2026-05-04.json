@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "updatedAt": "2026-05-04T14:00:01.163022+00:00",
+  "updatedAt": "2026-05-04T14:27:38.215446+00:00",
   "items": [
     {
       "title": "Anthropic and Wall Street are building a $1.5bn pipeline into private equity",
@@ -13,10 +13,26 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-04T07:56:50+00:00",
       "firstSeen": "2026-05-04T09:00:02.003474+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9798
+      "score": 10.9679
+    },
+    {
+      "title": "OpenAI closes The Deployment Company, a $10bn enterprise AI bet on private equity",
+      "url": "https://thenextweb.com/news/openai-deployco-finalized-10-billion-joint-venture",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI has finalised the most structurally novel enterprise AI deal of 2026: a $10bn vehicle anchored by TPG, with 19 investors and a 17.5% guaranteed annual return over five years. The strategy is to make PE portfolios a captive distribution channel. We wrote about the venture’s outline last month; Monday’s confirmation closes the funding question. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
+      "published": "2026-05-04T13:55:51+00:00",
+      "firstSeen": "2026-05-04T14:27:38.215446+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1339
     },
     {
       "title": "SK Hynix jumps 12% as Big Tech doubles down on AI memory",
@@ -29,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/SK-Hynix.avif",
       "published": "2026-05-04T08:41:50+00:00",
       "firstSeen": "2026-05-04T09:30:10.770183+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3993
+      "score": 4.3873
     },
     {
       "title": "Samsung swaps its TV chief for the first time in two years as TCL closes in",
@@ -45,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/Won-Jin-Lee-Samsung.avif",
       "published": "2026-05-04T07:20:17+00:00",
       "firstSeen": "2026-05-04T09:00:02.003474+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3642
+      "score": 3.3525
     },
     {
       "title": "UCB pays up to $2.2bn for Candid Therapeutics, doubling down on T-cell engagers in autoimmune disease",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/UCB.avif",
       "published": "2026-05-04T09:56:50+00:00",
       "firstSeen": "2026-05-04T11:00:01.689885+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1329
+      "score": 3.1204
     },
     {
       "title": "Meta would rather leave New Mexico than rebuild its apps for kids",
@@ -77,13 +93,13 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-05-04T07:43:19+00:00",
       "firstSeen": "2026-05-04T09:00:02.003474+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.074
+      "score": 3.0622
     },
     {
-      "title": "Putting HUMANS first: Efficient LAM Evaluation with Human Preference Alignment",
+      "title": "Woody Haosheng Gan, William Held, Diyi Yang",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -91,12 +107,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-04T14:00:07.548490+00:00",
+      "published": "2026-05-04T14:27:46.256273+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.36
+    },
+    {
+      "title": "Blackstone wants $1.75bn for the first AI-era data-centre REIT",
+      "url": "https://thenextweb.com/news/blackstone-bxdc-data-center-reit-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Blackstone Digital Infrastructure Trust will list on the NYSE under BXDC, targeting newly built data centres leased to hyperscalers. It is the most direct way Wall Street has yet packaged the AI build-out for public investors. For most of the past 18 months, the financial story behind the AI build-out has been a story about [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Blackstone.avif",
+      "published": "2026-05-04T13:42:59+00:00",
+      "firstSeen": "2026-05-04T14:27:38.215446+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1275
+    },
+    {
+      "title": "Palantir’s earnings test arrives in the middle of an AI software sell-off",
+      "url": "https://thenextweb.com/news/palantir-q1-2026-earnings-software-selloff",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "After a 30% year-to-date drawdown, Monday’s Q1 results are Palantir’s first chance to argue, not assume, that it does not belong in the broader AI software multiple compression. Until two weeks ago, Palantir was, by some measures, the best-performing large-cap software stock of the AI cycle. It had outpaced Salesforce, Microsoft, Oracle, and Adobe by [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Alex-Karp.avif",
+      "published": "2026-05-04T13:24:03+00:00",
+      "firstSeen": "2026-05-04T14:27:38.215446+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1181
     },
     {
       "title": "Cerebras files updated IPO terms: $3.5bn raise at $26.6bn valuation",
@@ -109,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
       "published": "2026-05-04T13:15:19+00:00",
       "firstSeen": "2026-05-04T14:00:01.163022+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1275
+      "score": 2.1138
     },
     {
       "title": "The West keeps asking how much China subsidises its industries. That is the wrong question.",
@@ -125,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/china-industrial-climb-commercialisation-not-subsidies.avif",
       "published": "2026-05-04T09:44:43+00:00",
       "firstSeen": "2026-05-04T11:00:01.689885+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
+      "lastSeen": "2026-05-04T14:27:38.215446+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0274
+      "score": 2.015
     },
     {
       "title": "China’s robot-hand unicorn Linkerbot is hunting a $6bn valuation",
@@ -144,23 +192,7 @@
       "lastSeen": "2026-05-04T14:00:01.163022+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9515
-    },
-    {
-      "title": "The next satisfactory standard for data governance may not come from Brussels. It may come from Beijing.",
-      "url": "https://thenextweb.com/news/china-data-governance-global-standard",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Union treats data as a privacy right. The United States treats it as a corporate asset. China treats it as a factor of production, a national economic resource on par with land, labour, capital, and technology. That distinction, which sounds like an abstraction, is producing a data governance framework that is structurally different [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/TNW-Article-Banner.avif",
-      "published": "2026-05-04T01:00:11+00:00",
-      "firstSeen": "2026-05-04T02:00:01.484783+00:00",
-      "lastSeen": "2026-05-04T14:00:01.163022+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.5834
+      "score": 1.9401
     }
   ],
   "errors": []
