@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T16:59:00.260704+00:00",
+  "updatedAt": "2026-05-04T18:00:01.877073+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5628,6 +5628,30 @@
     "https://www.anthropic.com/news/enterprise-ai-services-company": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20NodeLine&amp;backgroundColor=cactus",
       "checkedAt": "2026-05-04T16:59:00.260704+00:00"
+    },
+    "https://simonwillison.net/2026/May/4/tre-python-binding": {
+      "image": "",
+      "checkedAt": "2026-05-04T18:00:01.877073+00:00"
+    },
+    "https://www.techrepublic.com/article/google-workspace-adds-5-ai-upgrades-daily-work": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/google-cloud.jpg?f=jpeg",
+      "checkedAt": "2026-05-04T18:00:01.877073+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/04/1136826/week-one-of-the-musk-v-altman-trial-what-it-was-like-in-the-room": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260504_algo2.jpg?resize=1200,600",
+      "checkedAt": "2026-05-04T18:00:01.877073+00:00"
+    },
+    "https://www.techrepublic.com/article/formaura-smart-form-lifetime-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-04T18:00:01.877073+00:00"
+    },
+    "https://www.techrepublic.com/article/uk-government-announces-plans-to-grow-national-ai-infrastructure": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-12.png?f=jpeg",
+      "checkedAt": "2026-05-04T18:00:01.877073+00:00"
+    },
+    "https://www.together.ai/blog/foundational-research-powering-efficient-inference-at-scale": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f8d7922768e13db4223e31_OG-image_20260421_BLOG_Multi-tenantGPUclusters.png",
+      "checkedAt": "2026-05-04T18:00:01.877073+00:00"
     }
   }
 }
