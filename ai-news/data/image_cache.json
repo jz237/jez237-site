@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T20:39:44.277899+00:00",
+  "updatedAt": "2026-05-04T22:00:01.948246+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5668,6 +5668,10 @@
     "http://www.bbc.co.uk/programmes/w3ct8js9": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "checkedAt": "2026-05-04T20:39:44.277899+00:00"
+    },
+    "https://techcrunch.com/2026/05/04/openais-cozy-partner-cerebras-is-on-track-for-a-blockbuster-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1251294592.jpg?w=1024",
+      "checkedAt": "2026-05-04T22:00:01.948246+00:00"
     }
   }
 }
