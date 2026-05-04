@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T14:27:38.215446+00:00",
+  "updatedAt": "2026-05-04T16:00:01.239305+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5600,6 +5600,10 @@
     "https://techcrunch.com/2026/05/04/5-days-only-bring-a-partner-or-colleague-and-get-50-off-a-second-techcrunch-disrupt-2026-pass": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/LinkedIn-Ad-with-Text-GA-BOGO-V1-Rectangle.png?w=1200",
       "checkedAt": "2026-05-04T15:00:01.406565+00:00"
+    },
+    "https://techcrunch.com/2026/05/04/anthropic-and-openai-are-both-launching-joint-ventures-for-enterprise-ai-services": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200,783",
+      "checkedAt": "2026-05-04T16:00:01.239305+00:00"
     }
   }
 }
