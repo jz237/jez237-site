@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T14:00:01.163022+00:00",
+  "updatedAt": "2026-05-04T15:00:01.406565+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5596,6 +5596,10 @@
     "https://www.marktechpost.com/2026/05/03/a-coding-implementation-to-explore-and-analyze-the-tasktrove-dataset-with-streaming-parsing-visualization-and-verifier-detection": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-8.png",
       "checkedAt": "2026-05-03T21:57:06.707344+00:00"
+    },
+    "https://techcrunch.com/2026/05/04/5-days-only-bring-a-partner-or-colleague-and-get-50-off-a-second-techcrunch-disrupt-2026-pass": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/LinkedIn-Ad-with-Text-GA-BOGO-V1-Rectangle.png?w=1200",
+      "checkedAt": "2026-05-04T15:00:01.406565+00:00"
     }
   }
 }
