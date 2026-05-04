@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T17:00:01.439884+00:00",
+  "updatedAt": "2026-05-04T16:59:00.260704+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5606,28 +5606,28 @@
       "checkedAt": "2026-05-04T16:00:01.239305+00:00"
     },
     "https://techcrunch.com/2026/05/04/elon-musks-only-expert-witness-at-the-openai-trial-fears-an-agi-arms-race": {
-      "image": "",
-      "checkedAt": "2026-05-04T17:00:01.439884+00:00"
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/stuart-russell-ai-getty.jpg?resize=1200,800",
+      "checkedAt": "2026-05-04T16:59:00.260704+00:00"
     },
     "https://www.theverge.com/ai-artificial-intelligence/922947/roomba-creator-new-robot-familiar-machines-magic-ai-launch": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Golden.png?quality=90&amp;strip=all&amp;crop=0%2C1.8117057886209%2C100%2C96.376588422758&amp;w=1200",
-      "checkedAt": "2026-05-04T17:00:01.439884+00:00"
+      "checkedAt": "2026-05-04T16:59:00.260704+00:00"
     },
     "https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/10/AP22166762615783.jpg?resize=1200,800",
-      "checkedAt": "2026-05-04T17:00:01.439884+00:00"
+      "checkedAt": "2026-05-04T16:59:00.260704+00:00"
     },
     "https://techcrunch.com/2026/05/04/elon-musk-sent-ominous-texts-to-greg-brockman-sam-altman-after-asking-for-a-settlement-openai-claims": {
-      "image": "https://techcrunch.com/wp-content/uploads/2024/07/GettyImages-2158243766.jpg?resize=1200,675",
-      "checkedAt": "2026-05-04T17:00:01.439884+00:00"
+      "image": "",
+      "checkedAt": "2026-05-04T16:59:00.260704+00:00"
     },
     "https://techcrunch.com/2026/05/04/doordash-adds-ai-tools-to-speed-up-merchant-onboarding-edit-photos-of-dishes": {
-      "image": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1232015093.jpg?resize=1200,800",
-      "checkedAt": "2026-05-04T17:00:01.439884+00:00"
+      "image": "",
+      "checkedAt": "2026-05-04T16:59:00.260704+00:00"
     },
     "https://www.anthropic.com/news/enterprise-ai-services-company": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20NodeLine&amp;backgroundColor=cactus",
-      "checkedAt": "2026-05-04T17:00:01.439884+00:00"
+      "checkedAt": "2026-05-04T16:59:00.260704+00:00"
     }
   }
 }
