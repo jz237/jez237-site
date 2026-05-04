@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "updatedAt": "2026-05-04T01:00:02.018960+00:00",
+  "updatedAt": "2026-05-04T02:00:01.484783+00:00",
   "items": [
     {
       "title": "What Is a Contaminated LLM? Detection, Famous Cases, 2026 Guide",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-04T01:00:14.278741+00:00",
+      "published": "2026-05-04T02:00:06.026198+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-04T01:00:02.018960+00:00",
+      "lastSeen": "2026-05-04T02:00:01.484783+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "The next satisfactory standard for data governance may not come from Brussels. It may come from Beijing.",
+      "url": "https://thenextweb.com/news/china-data-governance-global-standard",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Union treats data as a privacy right. The United States treats it as a corporate asset. China treats it as a factor of production, a national economic resource on par with land, labour, capital, and technology. That distinction, which sounds like an abstraction, is producing a data governance framework that is structurally different [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/TNW-Article-Banner.avif",
+      "published": "2026-05-04T01:00:11+00:00",
+      "firstSeen": "2026-05-04T02:00:01.484783+00:00",
+      "lastSeen": "2026-05-04T02:00:01.484783+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.2801
     }
   ],
   "errors": []
