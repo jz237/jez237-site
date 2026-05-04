@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T19:00:01.831491+00:00",
+  "updatedAt": "2026-05-04T18:51:36.454042+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5654,8 +5654,8 @@
       "checkedAt": "2026-05-04T18:00:01.877073+00:00"
     },
     "https://openai.com/index/delivering-low-latency-voice-ai-at-scale": {
-      "image": "https://images.ctfassets.net/kftzwdyauwt9/5LQivcsFcndtRl4EsbtnOC/c548a54b9bbe11c0b4d9de714f800b30/Voice_AI___SEO_card.png?w=1600&amp;h=900&amp;fit=fill",
-      "checkedAt": "2026-05-04T19:00:01.831491+00:00"
+      "image": "",
+      "checkedAt": "2026-05-04T18:51:36.454042+00:00"
     }
   }
 }
