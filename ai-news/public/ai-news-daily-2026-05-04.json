@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "updatedAt": "2026-05-04T00:00:02.092711+00:00",
+  "updatedAt": "2026-05-04T00:00:08.678010+00:00",
   "items": [
     {
       "title": "What Is a Contaminated LLM? Detection, Famous Cases, 2026 Guide",
@@ -11,13 +11,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-04T00:00:17.299198+00:00",
+      "published": "2026-05-04T00:00:14.807306+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-04T00:00:02.092711+00:00",
+      "lastSeen": "2026-05-04T00:00:08.678010+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
