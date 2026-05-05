@@ -1,6 +1,6 @@
 {
   "date": "2026-05-05",
-  "updatedAt": "2026-05-05T17:00:01.967310+00:00",
+  "updatedAt": "2026-05-05T16:52:25.899136+00:00",
   "items": [
     {
       "title": "Etsy launches its app within ChatGPT as it continues its AI push",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/etsy-chatgpt-app-developer.jpeg?w=1200",
       "published": "2026-05-05T15:31:37+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.5459
+      "score": 20.5496
     },
     {
       "title": "Anthropic ships ten financial-services agents and pulls Moody’s inside Claude. The bank-software business is being rewritten.",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-05T15:34:17+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.1072
+      "score": 20.1109
     },
     {
       "title": "Researchers gaslit Claude into giving instructions to build explosives",
@@ -47,10 +47,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_A_7d58b5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T13:13:08+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6503
+      "score": 12.6538
     },
     {
       "title": "Google Adds Event-Driven Webhooks to the Gemini API, Eliminating the Need for Polling in Long-Running AI Jobs",
@@ -63,10 +63,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-13.png",
       "published": "2026-05-05T07:01:53+00:00",
       "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5539
+      "score": 12.5569
     },
     {
       "title": "OpenAI is reportedly launching a phone for ChatGPT",
@@ -79,10 +79,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T14:54:00+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9977
+      "score": 12.0013
     },
     {
       "title": "Google, Microsoft, and xAI will allow the US government to review their new AI models",
@@ -95,10 +95,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25263345/STK432_Government_A_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T14:26:59+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.7348
+      "score": 11.7384
     },
     {
       "title": "CopilotKit raises $27M to help devs deploy app-native AI agents",
@@ -111,10 +111,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/copilitokit.png?resize=1200%2C900",
       "published": "2026-05-05T14:07:47+00:00",
       "firstSeen": "2026-05-05T14:24:20.102999+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7057
+      "score": 9.7093
     },
     {
       "title": "Google DeepMind Workers Vote to Unionize Over Military AI Deals",
@@ -127,10 +127,10 @@
       "image": "https://media.wired.com/photos/69f9c20f546a456d51b2640c/master/pass/GettyImages-2177657481.jpg",
       "published": "2026-05-05T11:59:20+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.547
+      "score": 9.5504
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -143,10 +143,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T15:35:00+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3175
+      "score": 9.3213
     },
     {
       "title": "Google’s AI architect lived rent-free in Elon Musk’s head",
@@ -159,10 +159,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25740107/2177656484.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.748359005687%2C100%2C78.503281988627&amp%3Bw=1200",
       "published": "2026-05-05T13:11:58+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2498
+      "score": 8.2533
     },
     {
       "title": "Google DeepMind workers are unionizing over AI military contracts",
@@ -175,10 +175,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STKS515_CYBER_WARFARE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T10:08:33+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1692
+      "score": 8.1724
     },
     {
       "title": "Five AI labs now let the US government test their models before release. The arrangement is voluntary, has no legal basis, and is the closest thing America has to AI oversight.",
@@ -191,10 +191,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-ai-model-evaluation-google-microsoft-xai.avif",
       "published": "2026-05-05T13:10:02+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T16:52:25.899136+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8389
+      "score": 5.8424
     }
   ],
   "errors": []
