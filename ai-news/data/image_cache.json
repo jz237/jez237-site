@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T03:46:37.238586+00:00",
+  "updatedAt": "2026-05-05T05:00:02.020320+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5696,6 +5696,14 @@
     "https://techcrunch.com/2026/05/04/as-workers-worry-about-ai-nvidias-jensen-huang-says-ai-is-creating-an-enormous-number-of-jobs": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2205754389.jpg?w=1024",
       "checkedAt": "2026-05-05T03:46:37.238586+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/04/a-coding-guide-to-survey-bias-correction-using-facebook-research-balance-with-ipw-cbps-ranking-and-post-stratification-methods": {
+      "image": "",
+      "checkedAt": "2026-05-05T05:00:02.020320+00:00"
+    },
+    "https://openai.com/index/openai-pwc-finance-collaboration": {
+      "image": "",
+      "checkedAt": "2026-05-05T05:00:02.020320+00:00"
     }
   }
 }

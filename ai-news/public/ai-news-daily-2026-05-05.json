@@ -1,6 +1,6 @@
 {
   "date": "2026-05-05",
-  "updatedAt": "2026-05-05T03:46:37.238586+00:00",
+  "updatedAt": "2026-05-05T05:00:02.020320+00:00",
   "items": [
     {
       "title": "Quoting John Gruber",
@@ -13,13 +13,29 @@
       "image": "",
       "published": "2026-05-05T00:46:29+00:00",
       "firstSeen": "2026-05-05T02:00:01.754982+00:00",
-      "lastSeen": "2026-05-05T03:46:37.238586+00:00",
+      "lastSeen": "2026-05-05T05:00:02.020320+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.202
+      "score": 4.1682
     },
     {
-      "title": "Woody Haosheng Gan, William Held, Diyi Yang",
+      "title": "A Coding Guide to Survey Bias Correction Using Facebook Research Balance with IPW CBPS Ranking and Post Stratification Methods",
+      "url": "https://www.marktechpost.com/2026/05/04/a-coding-guide-to-survey-bias-correction-using-facebook-research-balance-with-ipw-cbps-ranking-and-post-stratification-methods",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we walk through a complete, end-to-end workflow for correcting bias in survey data using the balance library. We simulate a realistic population, deliberately introduce sampling bias, and then apply multiple re-weighting techniques to recover unbiased estimates. We focus on four widely used methods: Inverse Probability Weighting (IPW), Covariate Balancing Propensity Scores (CBPS), [&#8230;]\nThe post A Coding Guide to Survey Bias Correction Using Facebook Research Balance with IPW CBPS Ranking and Post Stratification Methods appeared first on MarkTechPost.",
+      "image": "",
+      "published": "2026-05-05T04:46:45+00:00",
+      "firstSeen": "2026-05-05T05:00:02.020320+00:00",
+      "lastSeen": "2026-05-05T05:00:02.020320+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.1133
+    },
+    {
+      "title": "Learning physically grounded traffic accident reconstruction from public accident reports",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-05T03:46:42.724954+00:00",
+      "published": "2026-05-05T05:00:09.294270+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-05T03:46:37.238586+00:00",
+      "lastSeen": "2026-05-05T05:00:02.020320+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2205754389.jpg?w=1024",
       "published": "2026-05-05T03:31:54+00:00",
       "firstSeen": "2026-05-05T03:46:37.238586+00:00",
-      "lastSeen": "2026-05-05T03:46:37.238586+00:00",
+      "lastSeen": "2026-05-05T05:00:02.020320+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2825
+      "score": 2.246
     }
   ],
   "errors": []
