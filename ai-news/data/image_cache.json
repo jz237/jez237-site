@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T06:26:51.079861+00:00",
+  "updatedAt": "2026-05-05T08:00:01.285174+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5704,6 +5704,10 @@
     "https://openai.com/index/openai-pwc-finance-collaboration": {
       "image": "",
       "checkedAt": "2026-05-05T05:00:02.020320+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/05/google-adds-event-driven-webhooks-to-the-gemini-api-eliminating-the-need-for-polling-in-long-running-ai-jobs": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-13.png",
+      "checkedAt": "2026-05-05T08:00:01.285174+00:00"
     }
   }
 }
