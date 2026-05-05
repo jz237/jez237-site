@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T09:00:01.367340+00:00",
+  "updatedAt": "2026-05-05T10:00:01.860785+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5712,6 +5712,10 @@
     "http://www.bbc.co.uk/programmes/m002tpng": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "checkedAt": "2026-05-05T09:00:01.367340+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/05/1136843/ai-democracy-blueprint": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/260430_AIdemocracy3.jpg?resize=1200,600",
+      "checkedAt": "2026-05-05T10:00:01.860785+00:00"
     }
   }
 }
