@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T20:00:01.128308+00:00",
+  "updatedAt": "2026-05-05T21:00:02.105401+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5820,6 +5820,22 @@
     "https://www.theverge.com/tech/924515/apple-intelligence-third-party-chatbot-extensions-ios-27": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/DSC_2327.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-05T20:00:01.128308+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/apple-plans-to-make-ios-27-a-choose-your-own-adventure-of-ai-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-apps-GettyImages-2214375253.jpg?resize=1200,800",
+      "checkedAt": "2026-05-05T21:00:02.105401+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/05/build-a-modular-skill-based-agent-system-for-llms-with-dynamic-tool-routing-in-python": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-2-1.png",
+      "checkedAt": "2026-05-05T21:00:02.105401+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/asml-ceo-christophe-fouquet-no-one-is-coming-for-us": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2250757778.jpg?resize=1200,800",
+      "checkedAt": "2026-05-05T21:00:02.105401+00:00"
+    },
+    "https://www.theverge.com/games/924551/microsoft-xbox-ceo-copilot-ai-asha-sharma": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/01_Wire-Hero-1920x1080-1-0b305b4a9ace7898196b.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-05-05T21:00:02.105401+00:00"
     }
   }
 }
