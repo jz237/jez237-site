@@ -1,7 +1,23 @@
 {
   "date": "2026-05-05",
-  "updatedAt": "2026-05-05T00:00:01.457769+00:00",
+  "updatedAt": "2026-05-05T01:00:02.096303+00:00",
   "items": [
+    {
+      "title": "Quoting John Gruber",
+      "url": "https://simonwillison.net/2026/May/5/john-gruber",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "So it’s well known that Y Combinator owns some stake in OpenAI. But how big is that stake? This seems like devilishly difficult information to obtain. I asked around and a little birdie who knows several OpenAI investors came back with an answer: Y Combinator owns about 0.6 percent of OpenAI. At OpenAI’s current $852 billion valuation, that’s worth over $5 billion.\n&mdash; John Gruber, Y Combinator’s Stake in OpenAI\n\n    Tags: openai, y-combinator, ai, john-gruber",
+      "image": "",
+      "published": "2026-05-05T00:46:29+00:00",
+      "firstSeen": "2026-05-05T01:00:02.096303+00:00",
+      "lastSeen": "2026-05-05T01:00:02.096303+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.2831
+    },
     {
       "title": "Woody Haosheng Gan, William Held, Diyi Yang",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-05T00:00:20.167071+00:00",
+      "published": "2026-05-05T01:00:10.336574+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T01:00:02.096303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
