@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T13:00:02.034997+00:00",
+  "updatedAt": "2026-05-05T14:00:01.352619+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5720,6 +5720,22 @@
     "https://www.theverge.com/tech/923918/google-deepmind-union-bid-ai-military-israel": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STKS515_CYBER_WARFARE_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-05T11:00:01.142765+00:00"
+    },
+    "https://www.theverge.com/podcast/923974/ai-car-design-codex-vergecast": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_VST_0405_Site.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-05T14:00:01.352619+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/indias-first-genai-unicorn-shifts-to-cloud-services-as-ai-model-ambitions-face-reality": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-1244207281.jpg?resize=1200,800",
+      "checkedAt": "2026-05-05T14:00:01.352619+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/923961/security-researchers-mindgard-gaslit-claude-forbidden-information": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_A_7d58b5.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-05T14:00:01.352619+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/923518/musk-altman-trial-openai-demis-hassabis-google-deepmind": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25740107/2177656484.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.748359005687%2C100%2C78.503281988627&amp;w=1200",
+      "checkedAt": "2026-05-05T14:00:01.352619+00:00"
     }
   }
 }

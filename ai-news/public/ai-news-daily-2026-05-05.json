@@ -1,7 +1,23 @@
 {
   "date": "2026-05-05",
-  "updatedAt": "2026-05-05T13:00:02.034997+00:00",
+  "updatedAt": "2026-05-05T14:00:01.352619+00:00",
   "items": [
+    {
+      "title": "Researchers gaslit Claude into giving instructions to build explosives",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/923961/security-researchers-mindgard-gaslit-claude-forbidden-information",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Anthropic has spent years building itself up as the safe AI company. But new security research shared with The Verge suggests Claude's carefully crafted helpful personality may itself be a vulnerability. Researchers at AI red-teaming company Mindgard say they got Claude to offer up erotica, malicious code, and instructions for building explosives, and other prohibited [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_A_7d58b5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-05T13:13:08+00:00",
+      "firstSeen": "2026-05-05T14:00:01.352619+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.7364
+    },
     {
       "title": "Google Adds Event-Driven Webhooks to the Gemini API, Eliminating the Need for Polling in Long-Running AI Jobs",
       "url": "https://www.marktechpost.com/2026/05/05/google-adds-event-driven-webhooks-to-the-gemini-api-eliminating-the-need-for-polling-in-long-running-ai-jobs",
@@ -13,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-13.png",
       "published": "2026-05-05T07:01:53+00:00",
       "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6519
+      "score": 12.6264
     },
     {
       "title": "Google DeepMind Workers Vote to Unionize Over Military AI Deals",
@@ -29,10 +45,26 @@
       "image": "https://media.wired.com/photos/69f9c20f546a456d51b2640c/master/pass/GettyImages-2177657481.jpg",
       "published": "2026-05-05T11:59:20+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.6595
+      "score": 9.6302
+    },
+    {
+      "title": "Google’s AI architect lived rent-free in Elon Musk’s head",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/923518/musk-altman-trial-openai-demis-hassabis-google-deepmind",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "About a week into the Musk v. Altman trial, we've heard from some of the most powerful people in tech - including OpenAI president Greg Brockman, Elon Musk's fixer Jared Birchall, and Musk himself. But one of the most prominent characters is hovering around the margins: Demis Hassabis, CEO of Google DeepMind. Hassabis is the [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25740107/2177656484.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.748359005687%2C100%2C78.503281988627&amp%3Bw=1200",
+      "published": "2026-05-05T13:11:58+00:00",
+      "firstSeen": "2026-05-05T14:00:01.352619+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.3358
     },
     {
       "title": "Google DeepMind workers are unionizing over AI military contracts",
@@ -45,10 +77,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STKS515_CYBER_WARFARE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T10:08:33+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.276
+      "score": 8.2482
+    },
+    {
+      "title": "Five AI labs now let the US government test their models before release. The arrangement is voluntary, has no legal basis, and is the closest thing America has to AI oversight.",
+      "url": "https://thenextweb.com/news/us-ai-model-evaluation-google-microsoft-xai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Mythos crisis forced the United States government to confront a question it had been avoiding: what happens when an AI model is powerful enough to threaten national security and the government has no formal mechanism to evaluate it before the public gets access? On Tuesday, the Commerce Department announced that Google, Microsoft, and xAI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/us-ai-model-evaluation-google-microsoft-xai.avif",
+      "published": "2026-05-05T13:10:02+00:00",
+      "firstSeen": "2026-05-05T14:00:01.352619+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9248
     },
     {
       "title": "The IronSource founders sold an ad tech company for $4.4 billion. Their next bet is that AI agents will replace the ad buyers their old company served.",
@@ -61,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/zyg-ironsource-founders-agentic-ecommerce-ai.avif",
       "published": "2026-05-05T12:22:45+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9312
+      "score": 5.9016
     },
     {
       "title": "eleQtron closes €57m Series A, one of Europe’s largest quantum-computing rounds",
@@ -80,7 +128,23 @@
       "lastSeen": "2026-05-05T13:00:02.034997+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5944
+      "score": 4.5658
+    },
+    {
+      "title": "In 2018, 4,000 Google employees killed a Pentagon contract. In 2026, Google signed a bigger one. Now the AI researchers are unionising",
+      "url": "https://thenextweb.com/news/deepmind-union-google-pentagon-ai-military",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In 2018, four thousand Google employees signed a petition against Project Maven, a Pentagon contract that used the company’s AI to analyse drone surveillance footage. Google did not renew the contract. It published a set of AI principles pledging not to develop weapons or surveillance technology that violates international norms. It built an AI ethics [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/deepmind-union-google-pentagon-ai-military.avif",
+      "published": "2026-05-05T13:29:46+00:00",
+      "firstSeen": "2026-05-05T14:00:01.352619+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5347
     },
     {
       "title": "Quoting John Gruber",
@@ -93,10 +157,10 @@
       "image": "",
       "published": "2026-05-05T00:46:29+00:00",
       "firstSeen": "2026-05-05T02:00:01.754982+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9733
+      "score": 3.9518
     },
     {
       "title": "Fervo Energy launches $1.33bn IPO, the largest climate-tech listing of 2026",
@@ -109,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/fervo-energy-ipo-launch-1-33-billion.avif",
       "published": "2026-05-05T12:14:16+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9269
+      "score": 3.8974
     },
     {
       "title": "A Coding Guide to Survey Bias Correction Using Facebook Research Balance with IPW CBPS Ranking and Post Stratification Methods",
@@ -125,74 +189,10 @@
       "image": "",
       "published": "2026-05-05T04:46:45+00:00",
       "firstSeen": "2026-05-05T05:00:02.020320+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
+      "lastSeen": "2026-05-05T14:00:01.352619+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.8954
-    },
-    {
-      "title": "He Couldn’t Land a Job Interview. Was AI to Blame?",
-      "url": "https://www.wired.com/story/he-couldnt-land-a-job-interview-was-ai-to-blame",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Armed with some Python and a white-hot sense of injustice, one medical student spent six months trying to figure out whether an algorithm trashed his job application.",
-      "image": "https://media.wired.com/photos/69e938c49a0a1ec843ac2159/master/pass/AIApplications_Main_Anim.gif",
-      "published": "2026-05-05T10:00:00+00:00",
-      "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.302
-    },
-    {
-      "title": "Tesla’s FSD rollout in Europe runs into the regulator scepticism Musk has been projecting through",
-      "url": "https://thenextweb.com/news/tesla-fsd-eu-skepticism-regulator-records",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Elon Musk’s public confidence about Tesla’s Full Self-Driving rollout in Europe is, on the available evidence, not shared by the European regulators who would actually have to approve it. Reuters published an exclusive analysis of regulator emails and records on Tuesday, showing that several EU national authorities have expressed sustained skepticism toward FSD’s claimed safety [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/tesla-fsd-eu-skepticism-regulator-records-.avif",
-      "published": "2026-05-05T11:36:29+00:00",
-      "firstSeen": "2026-05-05T12:00:01.756777+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2083
-    },
-    {
-      "title": "Why Gradient Descent Zigzags and How Momentum Fixes It",
-      "url": "https://www.marktechpost.com/2026/05/05/why-gradient-descent-zigzags-and-how-momentum-fixes-it",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "How momentum optimizes gradient descent by dampening oscillations and accelerating convergence on complex\nThe post Why Gradient Descent Zigzags and How Momentum Fixes It appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-13-150x150.png",
-      "published": "2026-05-05T07:26:29+00:00",
-      "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1626
-    },
-    {
-      "title": "Apple explores Intel and Samsung for chipmaking, ending TSMC’s solo run on M-series",
-      "url": "https://thenextweb.com/news/apple-intel-samsung-foundry-tsmc-diversification",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Bloomberg reports Apple is in early-stage discussions with Intel and Samsung about producing some of its M-series chips. The talks are exploratory; the signal is significant. Apple’s silicon strategy has, for nearly a decade, run on a single foundry relationship. Bloomberg reported on Tuesday that the company is now exploring early-stage discussions with Intel and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Apple-hq.avif",
-      "published": "2026-05-05T09:41:56+00:00",
-      "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T13:00:02.034997+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1536
+      "score": 3.8714
     }
   ],
   "errors": []
