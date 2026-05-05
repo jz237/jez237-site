@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T00:00:01.457769+00:00",
+  "updatedAt": "2026-05-05T00:05:06.816545+00:00",
   "items": [
     {
       "title": "Woody Haosheng Gan, William Held, Diyi Yang",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-05T00:00:20.167071+00:00",
+      "published": "2026-05-05T00:05:10.913752+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "OpenAI’s president does ‘all the things,’ except answer a question",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/923684/musk-brockman-altman-openai-trial",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "The strongest witness for Elon Musk's case against OpenAI so far has been Greg Brockman's journal. Brockman himself is running as a close second. Brockman was called to the stand in a rather unusual way - he was cross-examined first, followed by a direct examination - and he had some serious high school debate club [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia3.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-04T23:49:33+00:00",
+      "firstSeen": "2026-05-05T00:05:06.816545+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3521
     },
     {
       "title": "Granite 4.1 3B SVG Pelican Gallery",
@@ -24,14 +40,14 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Granite 4.1 3B SVG Pelican Gallery\nIBM released their Granite 4.1 family of LLMs a few days ago. They're Apache 2.0 licensed and come in 3B, 8B and 30B sizes.\nUnsloth released the unsloth/granite-4.1-3b-GGUF collection of GGUF encoded quantized variants of the 3B model - 21 different model files ranging in size from 1.2GB to 6.34GB.\nAll 21 of those Unsloth files add up to 51.3GB, which inspired me to finally try an experiment I've been wanting to run for ages: prompting \"Generate an SVG of a pelican riding a bicycle\" against different sized quantized variants of the same model to see what the ",
+      "summary": "Granite 4.1 3B SVG Pelican Gallery\nIBM released their Granite 4.1 family of LLMs a few days ago. They're Apache 2.0 licensed and come in 3B, 8B and 30B sizes.\nGranite 4.1 LLMs: How They’re Built by Granite team member Yousaf Shah describes the training process in detail.\nUnsloth released the unsloth/granite-4.1-3b-GGUF collection of GGUF encoded quantized variants of the 3B model - 21 different model files ranging in size from 1.2GB to 6.34GB.\nAll 21 of those Unsloth files add up to 51.3GB, which inspired me to finally try an experiment I've been wanting to run for ages: prompting \"Generate an",
       "image": "https://static.simonwillison.net/static/2026/granite-3B-pelicans.jpg",
       "published": "2026-05-04T23:49:24+00:00",
       "firstSeen": "2026-05-05T00:00:01.457769+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9846
+      "score": 3.282
     },
     {
       "title": "Greg Brockman Defends $30B OpenAI Stake: ‘Blood, Sweat, and Tears’",
@@ -44,10 +60,10 @@
       "image": "https://media.wired.com/photos/69f8dc3d515a33a2efb30971/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Greg-Brockman-Testifies-Business-2273978244.jpg",
       "published": "2026-05-04T23:19:52+00:00",
       "firstSeen": "2026-05-05T00:00:01.457769+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2697
+      "score": 5.2672
     },
     {
       "title": "Zyphra Introduces Tensor and Sequence Parallelism (TSP): A Hardware-Aware Training and Inference Strategy That Delivers 2.6x Throughput Over Matched TP+SP Baselines",
@@ -63,7 +79,7 @@
       "lastSeen": "2026-05-05T00:00:01.457769+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2977
+      "score": 6.2952
     },
     {
       "title": "Quoting Andy Masley",
@@ -76,10 +92,10 @@
       "image": "",
       "published": "2026-05-04T22:51:09+00:00",
       "firstSeen": "2026-05-05T00:00:01.457769+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2555
+      "score": 2.253
     },
     {
       "title": "April 2026 newsletter",
@@ -92,11 +108,11 @@
       "image": "",
       "published": "2026-05-04T22:38:36+00:00",
       "firstSeen": "2026-05-05T00:00:01.457769+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 22.6493
+      "score": 22.6468
     },
     {
       "title": "How to Build an End-to-End Production Grade Machine Learning Pipeline with ZenML, Including Custom Materializers, Metadata Tracking, and Hyperparameter Optimization",
@@ -112,7 +128,7 @@
       "lastSeen": "2026-05-05T00:00:01.457769+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5662
+      "score": 3.5637
     },
     {
       "title": "OpenAI’s cozy partner Cerebras is on track for a blockbuster IPO",
@@ -125,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-1251294592.jpg?w=1024",
       "published": "2026-05-04T21:53:21+00:00",
       "firstSeen": "2026-05-04T22:00:01.948246+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2273
+      "score": 5.2249
     },
     {
       "title": "Pinterest just crossed $1 billion in quarterly revenue. The bet that made it work was not social media. It was search.",
@@ -141,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/pinterest-billion-revenue-visual-search-advertising.avif",
       "published": "2026-05-04T21:32:19+00:00",
       "firstSeen": "2026-05-04T22:00:01.948246+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4773
+      "score": 4.4749
     },
     {
       "title": "Denmark built Europe’s cleanest grid. AI data centres are overloading it.",
@@ -157,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/denmark-data-centre-grid-pause-ai-energy-.avif",
       "published": "2026-05-04T21:14:57+00:00",
       "firstSeen": "2026-05-04T22:00:01.948246+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0691
+      "score": 2.0667
     },
     {
       "title": "Every government has an AI strategy. Dubai just gave its private sector a deadline.",
@@ -173,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/dubai-agentic-ai-private-sector-mandate.avif",
       "published": "2026-05-04T21:06:22+00:00",
       "firstSeen": "2026-05-04T22:00:01.948246+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.565
+      "score": 5.5626
     },
     {
       "title": "Apple spent a decade waiting for developers to build Wallet passes. Now it is letting users build their own.",
@@ -189,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-ios-27-wallet-custom-passes-create.avif",
       "published": "2026-05-04T19:36:43+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1238
+      "score": 3.1215
     },
     {
       "title": "Image AI models now drive app growth, beating chatbot upgrades",
@@ -205,11 +221,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/ai-apps-GettyImages-2214375253.jpg?resize=1200%2C800",
       "published": "2026-05-04T19:12:49+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.353
+      "score": 13.3508
     },
     {
       "title": "A crypto VC raised $1 billion to fund AI agents. The bet is that finance, not models, is what they need.",
@@ -222,10 +238,10 @@
       "image": "https://media.thenextweb.com/2026/05/Katie-Haun-a-former-Andreessen-Horowitz-general-partner.avif",
       "published": "2026-05-04T19:12:28+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4129
+      "score": 5.4106
     },
     {
       "title": "Why removing humans from care may undermine outcomes",
@@ -238,10 +254,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-digital-health-retention-problem.avif",
       "published": "2026-05-04T18:53:44+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7046
+      "score": 2.7023
     },
     {
       "title": "AI is now an F1 sponsor, a strategist, and a tech director. The race weekend has changed.",
@@ -254,10 +270,10 @@
       "image": "https://media.thenextweb.com/2026/05/F1.avif",
       "published": "2026-05-04T18:51:52+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0037
+      "score": 10.0015
     },
     {
       "title": "Space weather could cost the satellite industry $40 billion in a single storm. A 15-person startup is building the forecast.",
@@ -270,10 +286,10 @@
       "image": "https://media.thenextweb.com/2026/05/mission-space-weather-satellite-constellation-hex20.avif",
       "published": "2026-05-04T18:33:25+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6956
+      "score": 2.6934
     },
     {
       "title": "STMicroelectronics targets more than $3bn from space, riding the satellite constellation boom",
@@ -286,10 +302,10 @@
       "image": "https://media.thenextweb.com/2026/05/STMicroelectronics.avif",
       "published": "2026-05-04T18:32:08+00:00",
       "firstSeen": "2026-05-04T18:51:36.454042+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9951
+      "score": 1.9929
     },
     {
       "title": "Musk tried to settle the OpenAI case two days before trial. Then he promised to make Brockman the most hated man in America.",
@@ -302,10 +318,10 @@
       "image": "https://media.thenextweb.com/2026/05/openai-trial-brockman-journals-nonprofit-settlement.avif",
       "published": "2026-05-04T18:18:10+00:00",
       "firstSeen": "2026-05-04T18:51:36.454042+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.989
+      "score": 4.9868
     },
     {
       "title": "GameStop wants to buy eBay for $55.5 billion. Its own revenue fell 27 per cent last year.",
@@ -321,7 +337,7 @@
       "lastSeen": "2026-05-04T20:39:44.277899+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7851
+      "score": 3.7829
     },
     {
       "title": "Indirect Prompt Injection Is Now a Real-World AI Security Threat",
@@ -334,10 +350,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/AdobeStock_472245346.jpg?f=jpeg",
       "published": "2026-05-04T18:01:34+00:00",
       "firstSeen": "2026-05-04T20:00:01.760283+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7818
+      "score": 4.7796
     },
     {
       "title": "GameStop offers $56 billion for eBay, struggles to explain how it'll pay for it",
@@ -350,10 +366,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/gamestop-store-1152x648-1777915631.jpg",
       "published": "2026-05-04T17:57:46+00:00",
       "firstSeen": "2026-05-04T18:51:36.454042+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9802
+      "score": 1.978
     },
     {
       "title": "Top Search and Fetch APIs for Building AI Agents in 2026: Tools, Tradeoffs, and Free Tiers",
@@ -369,7 +385,7 @@
       "lastSeen": "2026-05-05T00:00:01.457769+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8492
+      "score": 5.847
     },
     {
       "title": "TRE Python binding — ReDoS robustness demo",
@@ -382,10 +398,10 @@
       "image": "",
       "published": "2026-05-04T17:52:00+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.4177
+      "score": 4.4155
     },
     {
       "title": "CryptoProcessing by Coinspaid achieves the highest CCSS security certification level",
@@ -401,7 +417,7 @@
       "lastSeen": "2026-05-04T20:39:44.277899+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9627
+      "score": 1.9606
     },
     {
       "title": "The latest AI news we announced in April 2026",
@@ -414,10 +430,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/April_2026_AI_Recap_still.max-600x600.format-webp.webp",
       "published": "2026-05-04T17:00:00+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2356
+      "score": 2.2335
     },
     {
       "title": "Elon Musk’s only AI expert witness at the OpenAI trial fears an AGI arms race",
@@ -430,10 +446,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/stuart-russell-ai-getty.jpg?resize=1200%2C800",
       "published": "2026-05-04T16:57:47+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4947
+      "score": 6.4926
     },
     {
       "title": "The creator of Roomba is back with a furry robot companion",
@@ -446,10 +462,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Golden.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C1.8117057886209%2C100%2C96.376588422758&amp%3Bw=1200",
       "published": "2026-05-04T16:51:38+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1621
+      "score": 2.16
     },
     {
       "title": "Google Workspace Adds 5 AI Upgrades That Could Change Daily Work",
@@ -462,10 +478,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/google-cloud.jpg?f=jpeg",
       "published": "2026-05-04T16:50:16+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0515
+      "score": 3.0494
     },
     {
       "title": "Sierra raises $950M as the race to own enterprise AI gets serious",
@@ -478,10 +494,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/10/AP22166762615783.jpg?resize=1200%2C800",
       "published": "2026-05-04T16:45:55+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7897
+      "score": 2.7876
     },
     {
       "title": "Elon Musk sent ominous texts to Greg Brockman, Sam Altman after asking for a settlement, OpenAI claims",
@@ -494,10 +510,10 @@
       "image": "",
       "published": "2026-05-04T16:36:03+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0856
+      "score": 5.0835
     },
     {
       "title": "SAP buys Prior Labs to anchor a European frontier AI lab around tabular foundation models",
@@ -514,7 +530,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.2356
+      "score": 10.2336
     },
     {
       "title": "Anthropic and OpenAI are both launching joint ventures for enterprise AI services",
@@ -527,10 +543,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/Screenshot-2026-04-14-at-7.00.44-PM.png?resize=1200%2C783",
       "published": "2026-05-04T15:59:24+00:00",
       "firstSeen": "2026-05-04T16:00:01.239305+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.7706
+      "score": 8.7685
     },
     {
       "title": "The distillation panic",
@@ -543,10 +559,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/b94fcb01-2fef-44ce-9d1d-4b0d9b7a737e_3182x1790.png",
       "published": "2026-05-04T15:56:44+00:00",
       "firstSeen": "2026-05-04T16:00:01.239305+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2395
+      "score": 3.2374
     },
     {
       "title": "Redis Array Playground",
@@ -559,10 +575,10 @@
       "image": "https://static.simonwillison.net/static/2026/redis-array-explorer-card.jpg",
       "published": "2026-05-04T15:53:57+00:00",
       "firstSeen": "2026-05-04T16:59:00.260704+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4683
+      "score": 7.4663
     },
     {
       "title": "Week one of the Musk v. Altman trial: What it was like in the room",
@@ -575,10 +591,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260504_algo2.jpg?resize=1200%2C600",
       "published": "2026-05-04T15:51:27+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1673
+      "score": 5.1653
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -591,10 +607,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-04T15:43:49+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1342
+      "score": 9.1322
     },
     {
       "title": "The $59 AI Tool Turning Forms Into Smart Workflows",
@@ -607,10 +623,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-1.jpg?f=jpeg",
       "published": "2026-05-04T15:34:19+00:00",
       "firstSeen": "2026-05-04T18:00:01.877073+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0204
+      "score": 3.0183
     },
     {
       "title": "Reduce friction and latency for long-running jobs with Webhooks in Gemini API",
@@ -623,26 +639,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/WebhooksGeminiAPI-hero.max-600x600.format-webp.webp",
       "published": "2026-05-04T15:30:00+00:00",
       "firstSeen": "2026-05-04T22:00:01.948246+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9987
-    },
-    {
-      "title": "Brussels reissues its Huawei warning, six years on, and prepares to make it stick",
-      "url": "https://thenextweb.com/news/eu-huawei-zte-connectivity-infrastructure-recommendation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Commission has formally recommended that member states keep Huawei and ZTE out of their connectivity infrastructure. The same restrictions are now moving toward becoming legally binding. China has already threatened to retaliate. When the European Commission first asked its member states to keep Huawei and ZTE out of their 5G networks, in the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
-      "published": "2026-05-04T15:27:34+00:00",
-      "firstSeen": "2026-05-04T16:00:01.239305+00:00",
-      "lastSeen": "2026-05-04T18:51:36.454042+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9177
+      "score": 9.9966
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8743
+      "score": 2.872
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -671,7 +671,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9669
@@ -687,10 +687,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1993
+      "score": 1.1992
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
@@ -703,7 +703,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-21T08:30:00+00:00",
       "firstSeen": "2026-04-21T09:00:01.479762+00:00",
-      "lastSeen": "2026-05-05T00:00:01.457769+00:00",
+      "lastSeen": "2026-05-05T00:05:06.816545+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5201
@@ -789,5 +789,11 @@
       "score": 1.89
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
