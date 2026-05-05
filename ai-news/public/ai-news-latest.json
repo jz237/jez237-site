@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-05T16:00:01.889835+00:00",
+  "updatedAt": "2026-05-05T17:00:01.967310+00:00",
   "items": [
     {
-      "title": "Understanding Emergent Misalignment via Feature Superposition Geometry",
+      "title": "Gouki Minegishi, Hiroki Furuta, Takeshi Kojima, Yusuke Iwasawa, Yutaka Matsuo",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-05T16:00:06.722774+00:00",
+      "published": "2026-05-05T17:00:10.948512+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Meta sued by major book publishers over copyright infringement",
+      "url": "https://www.theverge.com/tech/924230/meta-publishers-lawsuit-ai-copyright",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Meta is facing a class action lawsuit filed by five major book publishers and one author over claims the company \"engaged in one of the most massive infringements of copyrighted materials in history\" when training its Llama AI models, as reported earlier by The New York Times. In their suit, Macmillan, McGraw-Hill, Elsevier, Hachette, Cengage, [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25546027/STK043_META_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-05T16:52:38+00:00",
+      "firstSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6562
+    },
+    {
+      "title": "Half of young Europeans turn to AI to talk about intimate matters",
+      "url": "https://thenextweb.com/news/young-europeans-ai-chatbots-emotional-support-cause",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Before we talk about the technology, we need to talk about what it is taking from us, or teaching us to give away. As journalists and writers covering tech, our job is not only to report what is being built, funded, launched, or regulated. It is also to pay attention to what these systems are [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/AI-and-human-relation.avif",
+      "published": "2026-05-05T16:42:14+00:00",
+      "firstSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.841
+    },
+    {
+      "title": "Microsoft at NSDI 2026: Advances in large-scale networked systems",
+      "url": "https://www.microsoft.com/en-us/research/blog/microsoft-at-nsdi-2026-advances-in-large-scale-networked-systems",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Microsoft researchers share advances in building and operating large-scale distributed systems, spanning datacenters, networking, and the growing intersection with AI during  NSDI ’26.\nThe post Microsoft at NSDI 2026: Advances in large-scale networked systems appeared first on Microsoft Research.",
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/NSDI2026-BlogHeroFeature-1400x788-1.jpg",
+      "published": "2026-05-05T16:00:00+00:00",
+      "firstSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8298
+    },
+    {
+      "title": "Google is partnering with XPRIZE and Range Media Partners on the $3.5 million Future Vision film competition.",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/future-vision-film-competition-xprize",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Google is partnering with XPRIZE and Range Media Partners on the $3.5 million Future Vision film competition.",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/futurevisionxprize_social.max-600x600.format-webp.webp",
+      "published": "2026-05-05T16:00:00+00:00",
+      "firstSeen": "2026-05-05T17:00:01.967310+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7998
     },
     {
       "title": "PayPal says it’s ‘becoming a technology company again.’ That means AI.",
@@ -28,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-05-05T15:49:55+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2849
+      "score": 2.2549
     },
     {
       "title": "Five major publishers are suing Meta over Llama. They have evidence that the previous plaintiffs did not.",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-users.avif",
       "published": "2026-05-05T15:48:20+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1441
+      "score": 5.1141
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -60,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T15:35:00+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3473
+      "score": 9.3175
     },
     {
       "title": "Anthropic ships ten financial-services agents and pulls Moody’s inside Claude. The bank-software business is being rewritten.",
@@ -76,11 +140,11 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-05T15:34:17+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.137
+      "score": 20.1072
     },
     {
       "title": "Etsy launches its app within ChatGPT as it continues its AI push",
@@ -93,11 +157,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/etsy-chatgpt-app-developer.jpeg?w=1200",
       "published": "2026-05-05T15:31:37+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.5756
+      "score": 20.5459
     },
     {
       "title": "OpenAI is reportedly launching a phone for ChatGPT",
@@ -110,10 +174,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T14:54:00+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0269
+      "score": 11.9977
     },
     {
       "title": "QuantWare lands €152m to build the world’s largest open-architecture quantum processor fab in Delft",
@@ -126,10 +190,10 @@
       "image": "https://media.thenextweb.com/2026/05/QuantWare-leadership.avif",
       "published": "2026-05-05T14:32:10+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8062
+      "score": 2.7772
     },
     {
       "title": "Meta will use AI to analyze height and bone structure to identify if users are underage",
@@ -142,10 +206,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/tween-girl-on-phone-GettyImages-2231040634.jpg?resize=1200%2C782",
       "published": "2026-05-05T14:27:00+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.8564
+      "score": -0.8852
     },
     {
       "title": "Google, Microsoft, and xAI will allow the US government to review their new AI models",
@@ -158,10 +222,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25263345/STK432_Government_A_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T14:26:59+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.7636
+      "score": 11.7348
     },
     {
       "title": "ElevenLabs lists BlackRock, Jamie Foxx and Longoria as new investors",
@@ -177,7 +241,7 @@
       "lastSeen": "2026-05-05T14:24:20.102999+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2406
+      "score": 2.2118
     },
     {
       "title": "ElevenLabs lists BlackRock, Jamie Foxx and Eva Longoria as new investors",
@@ -190,10 +254,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/Mati-Staniszewski_SXSW.jpg?resize=1200%2C799",
       "published": "2026-05-05T14:20:50+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2406
+      "score": 2.2118
     },
     {
       "title": "CopilotKit raises $27M to help devs deploy app-native AI agents",
@@ -206,10 +270,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/copilitokit.png?resize=1200%2C900",
       "published": "2026-05-05T14:07:47+00:00",
       "firstSeen": "2026-05-05T14:24:20.102999+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7343
+      "score": 9.7057
     },
     {
       "title": "4 days left: Get 50% off a second TechCrunch Disrupt 2026 pass to make more deals faster",
@@ -222,10 +286,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/Disrupt-2025-exhibitor.jpg?resize=1200%2C800",
       "published": "2026-05-05T14:00:00+00:00",
       "firstSeen": "2026-05-05T14:24:20.102999+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.202
     },
     {
       "title": "Coinbase is cutting 14 per cent of its workforce. The reason it gave was not the crypto downturn. It was AI.",
@@ -238,10 +302,10 @@
       "image": "https://media.thenextweb.com/2026/05/coinbase-layoffs-ai-native-crypto-downturn.avif",
       "published": "2026-05-05T13:45:45+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0837
+      "score": 2.0554
     },
     {
       "title": "What an AI-designed car looks like",
@@ -254,10 +318,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_VST_0405_Site.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T13:42:18+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.292
+      "score": 2.2638
     },
     {
       "title": "In 2018, 4,000 Google employees killed a Pentagon contract. In 2026, Google signed a bigger one. Now the AI researchers are unionising",
@@ -270,10 +334,10 @@
       "image": "https://media.thenextweb.com/2026/05/deepmind-union-google-pentagon-ai-military.avif",
       "published": "2026-05-05T13:29:46+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4761
+      "score": 4.448
     },
     {
       "title": "India’s first GenAI unicorn shifts to cloud services as AI model ambitions face reality",
@@ -286,10 +350,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-1244207281.jpg?resize=1200%2C800",
       "published": "2026-05-05T13:18:50+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2109
+      "score": 2.1829
     },
     {
       "title": "Researchers gaslit Claude into giving instructions to build explosives",
@@ -302,10 +366,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_A_7d58b5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T13:13:08+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6782
+      "score": 12.6503
     },
     {
       "title": "Google’s AI architect lived rent-free in Elon Musk’s head",
@@ -318,10 +382,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25740107/2177656484.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.748359005687%2C100%2C78.503281988627&amp%3Bw=1200",
       "published": "2026-05-05T13:11:58+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2777
+      "score": 8.2498
     },
     {
       "title": "Five AI labs now let the US government test their models before release. The arrangement is voluntary, has no legal basis, and is the closest thing America has to AI oversight.",
@@ -334,10 +398,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-ai-model-evaluation-google-microsoft-xai.avif",
       "published": "2026-05-05T13:10:02+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8667
+      "score": 5.8389
     },
     {
       "title": "A crypto miner became Europe’s most valuable AI startup in two years. Now it is spending $812 million to prove the model scales.",
@@ -350,10 +414,10 @@
       "image": "https://media.thenextweb.com/2026/05/GPUs.avif",
       "published": "2026-05-05T12:53:18+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3589
+      "score": 2.3313
     },
     {
       "title": "The IronSource founders sold an ad tech company for $4.4 billion. Their next bet is that AI agents will replace the ad buyers their old company served.",
@@ -366,10 +430,10 @@
       "image": "https://media.thenextweb.com/2026/05/zyg-ironsource-founders-agentic-ecommerce-ai.avif",
       "published": "2026-05-05T12:22:45+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8447
+      "score": 5.8175
     },
     {
       "title": "Fervo Energy launches $1.33bn IPO, the largest climate-tech listing of 2026",
@@ -382,10 +446,10 @@
       "image": "https://media.thenextweb.com/2026/05/fervo-energy-ipo-launch-1-33-billion.avif",
       "published": "2026-05-05T12:14:16+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8408
+      "score": 3.8137
     },
     {
       "title": "ServiceNow projects $30bn by 2030, with a third of ACV from AI",
@@ -401,7 +465,7 @@
       "lastSeen": "2026-05-05T16:00:01.889835+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0377
+      "score": 2.0107
     },
     {
       "title": "Google DeepMind Workers Vote to Unionize Over Military AI Deals",
@@ -414,10 +478,10 @@
       "image": "https://media.wired.com/photos/69f9c20f546a456d51b2640c/master/pass/GettyImages-2177657481.jpg",
       "published": "2026-05-05T11:59:20+00:00",
       "firstSeen": "2026-05-05T13:00:02.034997+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.574
+      "score": 9.547
     },
     {
       "title": "Tesla’s FSD rollout in Europe runs into the regulator scepticism Musk has been projecting through",
@@ -433,7 +497,7 @@
       "lastSeen": "2026-05-05T14:24:20.102999+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1237
+      "score": 3.097
     },
     {
       "title": "Intel hires Qualcomm veteran Alex Katouzian to lead a new Client Computing and Physical AI group",
@@ -449,7 +513,7 @@
       "lastSeen": "2026-05-05T14:24:20.102999+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.021
+      "score": 1.9944
     },
     {
       "title": "Meta is raising $13bn for one Texas data centre, a new ceiling for single-site AI financings",
@@ -465,7 +529,7 @@
       "lastSeen": "2026-05-05T14:24:20.102999+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0174
+      "score": 1.9909
     },
     {
       "title": "Why Reddit blocked my daily visit to its mobile website",
@@ -478,10 +542,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2194614711-1152x648.jpg",
       "published": "2026-05-05T11:20:08+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1163
+      "score": 3.0898
     },
     {
       "title": "eleQtron closes €57m Series A, one of Europe’s largest quantum-computing rounds",
@@ -497,7 +561,7 @@
       "lastSeen": "2026-05-05T13:00:02.034997+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5109
+      "score": 4.4846
     },
     {
       "title": "Firecrawl is becoming AI’s default web layer.",
@@ -513,7 +577,7 @@
       "lastSeen": "2026-05-05T13:00:02.034997+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7053
+      "score": 2.6792
     },
     {
       "title": "Musk settles SEC Twitter-disclosure case for $1.5m, the maximum penalty for the violation",
@@ -529,7 +593,7 @@
       "lastSeen": "2026-05-05T13:00:02.034997+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9857
+      "score": 1.9601
     },
     {
       "title": "Google DeepMind workers are unionizing over AI military contracts",
@@ -542,10 +606,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STKS515_CYBER_WARFARE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T10:08:33+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1948
+      "score": 8.1692
     },
     {
       "title": "He Couldn’t Land a Job Interview. Was AI to Blame?",
@@ -558,10 +622,10 @@
       "image": "https://media.wired.com/photos/69e938c49a0a1ec843ac2159/master/pass/AIApplications_Main_Anim.gif",
       "published": "2026-05-05T10:00:00+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2211
+      "score": 3.1956
     },
     {
       "title": "Apple explores Intel and Samsung for chipmaking, ending TSMC’s solo run on M-series",
@@ -577,71 +641,7 @@
       "lastSeen": "2026-05-05T13:00:02.034997+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0734
-    },
-    {
-      "title": "A blueprint for using AI to strengthen democracy",
-      "url": "https://www.technologyreview.com/2026/05/05/1136843/ai-democracy-blueprint",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Every few centuries, changes in how information moves reshape how societies govern themselves. The printing press spread vernacular literacy, helping give rise to the Reformation and, eventually, representative government. The telegraph made it possible to administer vast nations like the US, accelerating the growth of the modern bureaucratic state. Broadcast media created shared national audiences,&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/260430_AIdemocracy3.jpg?resize=1200%2C600",
-      "published": "2026-05-05T09:00:00+00:00",
-      "firstSeen": "2026-05-05T09:17:12.200113+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
-    },
-    {
-      "title": "Three months after raising $30bn, Alphabet taps the euro market again",
-      "url": "https://thenextweb.com/news/alphabet-six-tranche-euro-debt-offering",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Three months after a $30bn multi-currency raise, Google’s parent is back. The euro tranches expand one of the most active corporate borrowing programmes of the AI cycle. Three months after raising more than $30bn in a multi-currency global debt issue, Alphabet is back at the bond market. Bloomberg reported on Tuesday that Google’s parent has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/03/Alphabet-handed-Sundar-Pichai-a-692M-pay-package.avif",
-      "published": "2026-05-05T08:58:53+00:00",
-      "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T11:36:35.554417+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9551
-    },
-    {
-      "title": "Why Gradient Descent Zigzags and How Momentum Fixes It",
-      "url": "https://www.marktechpost.com/2026/05/05/why-gradient-descent-zigzags-and-how-momentum-fixes-it",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "How momentum optimizes gradient descent by dampening oscillations and accelerating convergence on complex\nThe post Why Gradient Descent Zigzags and How Momentum Fixes It appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-13-150x150.png",
-      "published": "2026-05-05T07:26:29+00:00",
-      "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0872
-    },
-    {
-      "title": "Google Adds Event-Driven Webhooks to the Gemini API, Eliminating the Need for Polling in Long-Running AI Jobs",
-      "url": "https://www.marktechpost.com/2026/05/05/google-adds-event-driven-webhooks-to-the-gemini-api-eliminating-the-need-for-polling-in-long-running-ai-jobs",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "A push-based notification system for Batch API, Deep Research, and video generation tasks arrives with built-in security, retry guarantees, and two configuration modes.\nThe post Google Adds Event-Driven Webhooks to the Gemini API, Eliminating the Need for Polling in Long-Running AI Jobs appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-13.png",
-      "published": "2026-05-05T07:01:53+00:00",
-      "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.5774
+      "score": 3.0481
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1131
+      "score": 1.0886
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5211
+      "score": 2.5038
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -686,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9716
+      "score": -1.9718
     },
     {
       "title": "The Life Scientific: Jim Ashworth-Beaumont",
@@ -702,10 +702,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-05-05T16:00:01.889835+00:00",
+      "lastSeen": "2026-05-05T17:00:01.967310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1959
+      "score": 1.1958
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",

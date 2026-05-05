@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T16:00:01.889835+00:00",
+  "updatedAt": "2026-05-05T17:00:01.967310+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5780,6 +5780,14 @@
     "https://simonwillison.net/2026/May/5/llm-echo": {
       "image": "",
       "checkedAt": "2026-05-05T16:00:01.889835+00:00"
+    },
+    "https://www.theverge.com/tech/924230/meta-publishers-lawsuit-ai-copyright": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25546027/STK043_META_CVIRGINIA_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-05T17:00:01.967310+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/microsoft-at-nsdi-2026-advances-in-large-scale-networked-systems": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/NSDI2026-BlogHeroFeature-1400x788-1.jpg",
+      "checkedAt": "2026-05-05T17:00:01.967310+00:00"
     }
   }
 }
