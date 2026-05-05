@@ -1,6 +1,6 @@
 {
   "date": "2026-05-05",
-  "updatedAt": "2026-05-05T18:00:01.900906+00:00",
+  "updatedAt": "2026-05-05T19:00:01.931701+00:00",
   "items": [
     {
       "title": "OpenAI releases GPT-5.5 Instant, a new default model for ChatGPT",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Memory-update.jpeg?resize=1200%2C845",
       "published": "2026-05-05T17:00:00+00:00",
       "firstSeen": "2026-05-05T18:00:01.900906+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.2598
+      "score": 23.2305
     },
     {
       "title": "OpenAI claims ChatGPT’s new default model hallucinates way less",
@@ -30,11 +30,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STK155_OPEN_AI_4_CVirginia_A.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.742221417566%2C100%2C78.515557164868&amp%3Bw=1200",
       "published": "2026-05-05T17:00:00+00:00",
       "firstSeen": "2026-05-05T18:00:01.900906+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.9798
+      "score": 21.9505
     },
     {
       "title": "Etsy launches its app within ChatGPT as it continues its AI push",
@@ -47,11 +47,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/etsy-chatgpt-app-developer.jpeg?w=1200",
       "published": "2026-05-05T15:31:37+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.517
+      "score": 20.4888
     },
     {
       "title": "Anthropic ships ten financial-services agents and pulls Moody’s inside Claude. The bank-software business is being rewritten.",
@@ -64,11 +64,11 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-05T15:34:17+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 20.0782
+      "score": 20.0501
     },
     {
       "title": "GPT-5.5 Instant: smarter, clearer, and more personalized",
@@ -81,11 +81,11 @@
       "image": "",
       "published": "2026-05-05T10:00:00+00:00",
       "firstSeen": "2026-05-05T18:00:01.900906+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.5808
+      "score": 17.5567
     },
     {
       "title": "GPT-5.5 Instant System Card",
@@ -98,11 +98,11 @@
       "image": "",
       "published": "2026-05-05T10:00:00+00:00",
       "firstSeen": "2026-05-05T18:00:01.900906+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.5808
+      "score": 13.5567
     },
     {
       "title": "Researchers gaslit Claude into giving instructions to build explosives",
@@ -115,10 +115,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STKB364_CLAUDE_2_A_7d58b5.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T13:13:08+00:00",
       "firstSeen": "2026-05-05T14:00:01.352619+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6232
+      "score": 12.5968
     },
     {
       "title": "Google Adds Event-Driven Webhooks to the Gemini API, Eliminating the Need for Polling in Long-Running AI Jobs",
@@ -131,10 +131,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-13.png",
       "published": "2026-05-05T07:01:53+00:00",
       "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5311
+      "score": 12.5089
     },
     {
       "title": "OpenAI is reportedly launching a phone for ChatGPT",
@@ -147,10 +147,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T14:54:00+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9692
+      "score": 11.9416
     },
     {
       "title": "Google, Microsoft, and xAI will allow the US government to review their new AI models",
@@ -163,10 +163,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25263345/STK432_Government_A_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T14:26:59+00:00",
       "firstSeen": "2026-05-05T16:00:01.889835+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.7067
+      "score": 11.6794
     },
     {
       "title": "New ways to buy ChatGPT ads",
@@ -179,10 +179,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/7BFuH170Tk8pxf9XMjXE48/253f0f50015a47b3a94a42c57c5bd3b9/SEO-ChatGPT-Ads.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-05T00:00:00+00:00",
       "firstSeen": "2026-05-05T18:00:01.900906+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0672
+      "score": 10.0489
     },
     {
       "title": "CopilotKit raises $27M to help devs deploy app-native AI agents",
@@ -195,10 +195,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/copilitokit.png?resize=1200%2C900",
       "published": "2026-05-05T14:07:47+00:00",
       "firstSeen": "2026-05-05T14:24:20.102999+00:00",
-      "lastSeen": "2026-05-05T18:00:01.900906+00:00",
+      "lastSeen": "2026-05-05T19:00:01.931701+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.6779
+      "score": 9.6508
     }
   ],
   "errors": []
