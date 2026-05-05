@@ -384,7 +384,13 @@ p,
 
 /* Philly Weather Dashboard */
 .weather-dashboard {
+  display: block !important;
+  grid-template-columns: none !important;
+  width: 100%;
   margin-top: 26px;
+}
+.weather-dashboard #philly-weather-widget {
+  width: 100%;
 }
 .weather-dashboard-card {
   position: relative;
