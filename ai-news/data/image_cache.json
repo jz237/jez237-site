@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T00:00:01.457769+00:00",
+  "updatedAt": "2026-05-05T01:00:02.096303+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5684,6 +5684,14 @@
     "https://simonwillison.net/2026/May/4/april-newsletter": {
       "image": "",
       "checkedAt": "2026-05-05T00:00:01.457769+00:00"
+    },
+    "https://simonwillison.net/2026/May/5/john-gruber": {
+      "image": "",
+      "checkedAt": "2026-05-05T01:00:02.096303+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/923684/musk-brockman-altman-openai-trial": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia3.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-05T01:00:02.096303+00:00"
     }
   }
 }
