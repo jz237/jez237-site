@@ -1,6 +1,6 @@
 {
   "date": "2026-05-05",
-  "updatedAt": "2026-05-05T11:00:01.142765+00:00",
+  "updatedAt": "2026-05-05T12:00:01.756777+00:00",
   "items": [
     {
       "title": "Google Adds Event-Driven Webhooks to the Gemini API, Eliminating the Need for Polling in Long-Running AI Jobs",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-13.png",
       "published": "2026-05-05T07:01:53+00:00",
       "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7052
+      "score": 12.6782
     },
     {
       "title": "Google DeepMind workers are unionizing over AI military contracts",
@@ -29,10 +29,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STKS515_CYBER_WARFARE_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-05T10:08:33+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3341
+      "score": 8.3047
+    },
+    {
+      "title": "eleQtron closes €57m Series A, one of Europe’s largest quantum-computing rounds",
+      "url": "https://thenextweb.com/news/eleqtron-closes-e57m-series-a-one-of-europes-largest-quantum-computing-rounds",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Quantum computing has, for most of its commercial existence, been a category in which European labs do exceptional research and US and Asian companies do most of the venture funding. On Tuesday, the German trapped-ion quantum-computing scale-up eleQtron announced that it has closed a €57m Series A round, one of the largest of its kind [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/eleqtron-closes-e57m-series-a.avif",
+      "published": "2026-05-05T11:08:00+00:00",
+      "firstSeen": "2026-05-05T12:00:01.756777+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6238
     },
     {
       "title": "Quoting John Gruber",
@@ -45,10 +61,10 @@
       "image": "",
       "published": "2026-05-05T00:46:29+00:00",
       "firstSeen": "2026-05-05T02:00:01.754982+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.018
+      "score": 3.9953
     },
     {
       "title": "A Coding Guide to Survey Bias Correction Using Facebook Research Balance with IPW CBPS Ranking and Post Stratification Methods",
@@ -61,10 +77,10 @@
       "image": "",
       "published": "2026-05-05T04:46:45+00:00",
       "firstSeen": "2026-05-05T05:00:02.020320+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.9454
+      "score": 3.9201
     },
     {
       "title": "He Couldn’t Land a Job Interview. Was AI to Blame?",
@@ -77,10 +93,26 @@
       "image": "https://media.wired.com/photos/69e938c49a0a1ec843ac2159/master/pass/AIApplications_Main_Anim.gif",
       "published": "2026-05-05T10:00:00+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3599
+      "score": 3.3305
+    },
+    {
+      "title": "Tesla’s FSD rollout in Europe runs into the regulator scepticism Musk has been projecting through",
+      "url": "https://thenextweb.com/news/tesla-fsd-eu-skepticism-regulator-records",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Elon Musk’s public confidence about Tesla’s Full Self-Driving rollout in Europe is, on the available evidence, not shared by the European regulators who would actually have to approve it. Reuters published an exclusive analysis of regulator emails and records on Tuesday, showing that several EU national authorities have expressed sustained skepticism toward FSD’s claimed safety [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/tesla-fsd-eu-skepticism-regulator-records-.avif",
+      "published": "2026-05-05T11:36:29+00:00",
+      "firstSeen": "2026-05-05T12:00:01.756777+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2381
     },
     {
       "title": "Why Gradient Descent Zigzags and How Momentum Fixes It",
@@ -93,10 +125,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-13-150x150.png",
       "published": "2026-05-05T07:26:29+00:00",
       "firstSeen": "2026-05-05T08:00:01.285174+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2165
+      "score": 3.1892
     },
     {
       "title": "Apple explores Intel and Samsung for chipmaking, ending TSMC’s solo run on M-series",
@@ -109,10 +141,26 @@
       "image": "https://media.thenextweb.com/2026/05/Apple-hq.avif",
       "published": "2026-05-05T09:41:56+00:00",
       "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2109
+      "score": 3.1819
+    },
+    {
+      "title": "Firecrawl is becoming AI’s default web layer.",
+      "url": "https://thenextweb.com/news/firecrawl-ai-web-layer-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Open source is a hard place to fake traction. You either solve a real problem developers keep hitting, or you don’t, and the GitHub graph tells the truth either way. Firecrawl’s tells a clear story. The project has more than 100,000 GitHub stars, the largest open source repo in its category. More than a million [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/firecrawl-ai-web-layer-agents.avif",
+      "published": "2026-05-05T10:55:28+00:00",
+      "firstSeen": "2026-05-05T12:00:01.756777+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8176
     },
     {
       "title": "Woody Haosheng Gan, William Held, Diyi Yang",
@@ -128,7 +176,7 @@
       "lastSeen": "2026-05-05T11:00:01.142765+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.3299
     },
     {
       "title": "A blueprint for using AI to strengthen democracy",
@@ -141,58 +189,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/04/260430_AIdemocracy3.jpg?resize=1200%2C600",
       "published": "2026-05-05T09:00:00+00:00",
       "firstSeen": "2026-05-05T09:17:12.200113+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
+      "lastSeen": "2026-05-05T12:00:01.756777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
-    },
-    {
-      "title": "Musk settles SEC Twitter-disclosure case for $1.5m, the maximum penalty for the violation",
-      "url": "https://thenextweb.com/news/musk-sec-twitter-disclosure-settlement-1-5-million",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "After four years of litigation, Elon Musk has agreed to pay a $1.5m civil penalty over his late 2022 Twitter stake disclosure. The harm to other shareholders, the SEC alleged, was $150m. Elon Musk has, after nearly four years of litigation, settled the Securities and Exchange Commission’s case against him over his late disclosure of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/musk-openai-testimony-charity-precedent.avif",
-      "published": "2026-05-05T10:10:36+00:00",
-      "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1251
-    },
-    {
-      "title": "Three months after raising $30bn, Alphabet taps the euro market again",
-      "url": "https://thenextweb.com/news/alphabet-six-tranche-euro-debt-offering",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Three months after a $30bn multi-currency raise, Google’s parent is back. The euro tranches expand one of the most active corporate borrowing programmes of the AI cycle. Three months after raising more than $30bn in a multi-currency global debt issue, Alphabet is back at the bond market. Bloomberg reported on Tuesday that Google’s parent has [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/03/Alphabet-handed-Sundar-Pichai-a-692M-pay-package.avif",
-      "published": "2026-05-05T08:58:53+00:00",
-      "firstSeen": "2026-05-05T11:00:01.142765+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.09
-    },
-    {
-      "title": "As workers worry about AI, Nvidia’s Jensen Huang says AI is ‘creating an enormous number of jobs’",
-      "url": "https://techcrunch.com/2026/05/04/as-workers-worry-about-ai-nvidias-jensen-huang-says-ai-is-creating-an-enormous-number-of-jobs",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The Nvidia CEO seems to feel that claims of AI's job-killing potential have been greatly exaggerated.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/04/GettyImages-2205754389.jpg?w=1024",
-      "published": "2026-05-05T03:31:54+00:00",
-      "firstSeen": "2026-05-05T03:46:37.238586+00:00",
-      "lastSeen": "2026-05-05T11:00:01.142765+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0839
+      "score": 2.202
     }
   ],
   "errors": []
