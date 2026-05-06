@@ -87,17 +87,18 @@
       fetchJson(aqUrl),
       fetchJson(nwsUrl).catch(() => null)
     ]);
-    let nwsPeriod = null;
+    let tonightPeriod = null;
     if (points?.properties?.forecast) {
       try {
         const forecast = await fetchJson(points.properties.forecast);
-        nwsPeriod = forecast?.properties?.periods?.[0] || null;
+        const periods = forecast?.properties?.periods || [];
+        tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    return { weather, aq, nwsPeriod };
+    return { weather, aq, tonightPeriod };
   }
 
-  function render({ weather, aq, nwsPeriod }) {
+  function render({ weather, aq, tonightPeriod }) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -162,7 +163,7 @@
           </div>
         </div>
 
-        ${nwsPeriod?.detailedForecast ? `<p class="weather-nws-summary">${nwsPeriod.detailedForecast}</p>` : ''}
+        ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${tonightPeriod.detailedForecast}</p>` : ''}
 
         <div class="weather-hourly-strip" aria-label="Hourly weather">
           ${nextHours.map(h => `<div><span>${h.time}</span><strong>${h.icon} ${h.temp}°</strong><em>${h.rain}% rain</em></div>`).join('')}
