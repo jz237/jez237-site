@@ -180,6 +180,9 @@
         apparent_temperature: currentPeriod.temperature,
         weather_code: codeFromForecast(currentPeriod.shortForecast),
         cloud_cover: /cloud|overcast/i.test(currentPeriod.shortForecast || '') ? 80 : 35,
+        pressure_msl: null,
+        relative_humidity_2m: null,
+        dew_point_2m: null,
         wind_speed_10m: parseWindSpeed(currentPeriod.windSpeed),
         wind_direction_10m: currentPeriod.windDirection,
         wind_gusts_10m: parseWindSpeed(currentPeriod.windSpeed)
@@ -191,6 +194,7 @@
         precipitation_probability: hourlyPeriods.map(p => p.probabilityOfPrecipitation?.value ?? 0),
         weather_code: hourlyPeriods.map(p => codeFromForecast(p.shortForecast)),
         cloud_cover: hourlyPeriods.map(p => /cloud|overcast/i.test(p.shortForecast || '') ? 80 : 35),
+        pressure_msl: hourlyPeriods.map(() => null),
         wind_speed_10m: hourlyPeriods.map(p => parseWindSpeed(p.windSpeed)),
         wind_direction_10m: hourlyPeriods.map(p => p.windDirection),
         wind_gusts_10m: hourlyPeriods.map(p => parseWindSpeed(p.windSpeed))
@@ -200,7 +204,9 @@
         weather_code: dayPeriods.map(p => codeFromForecast(p.shortForecast)),
         temperature_2m_max: dayPeriods.map(p => p.temperature),
         temperature_2m_min: dayPeriods.map((p, i) => nightPeriods[i]?.temperature ?? p.temperature),
-        precipitation_probability_max: dayPeriods.map((p, i) => Math.max(p.probabilityOfPrecipitation?.value ?? 0, nightPeriods[i]?.probabilityOfPrecipitation?.value ?? 0))
+        precipitation_probability_max: dayPeriods.map((p, i) => Math.max(p.probabilityOfPrecipitation?.value ?? 0, nightPeriods[i]?.probabilityOfPrecipitation?.value ?? 0)),
+        sunrise: [],
+        sunset: []
       }
     };
   }
@@ -209,9 +215,9 @@
     const lat = Number(place.lat);
     const lon = Number(place.lon);
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-      `&current=temperature_2m,apparent_temperature,precipitation,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-      `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-      `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
+      `&current=temperature_2m,apparent_temperature,relative_humidity_2m,dew_point_2m,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
+      `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset` +
       `&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${TZ}&forecast_days=6`;
     const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=us_aqi,pm2_5,ozone&timezone=${TZ}&forecast_days=2`;
     const nwsUrl = `https://api.weather.gov/points/${lat},${lon}`;
@@ -276,6 +282,39 @@
     return notes.slice(0, 2).join(' · ') || 'steady';
   }
 
+  function fishingScore(hour) {
+    let score = 5;
+    if (hour.cloud >= 60) score += 1;
+    if (hour.rain > 0 && hour.rain <= 45) score += 1;
+    if (hour.rain >= 70) score -= 2;
+    if (hour.wind >= 8 && hour.wind <= 14) score += 1;
+    if (hour.wind >= 18 || hour.gust >= 25) score -= 2;
+    if (hour.pressureTrend === 'falling') score += 1;
+    if (hour.pressureTrend === 'rising') score -= 1;
+    if (hour.isGolden) score += 2;
+    return Math.max(1, Math.min(10, score));
+  }
+
+  function pressureTrend(values, index) {
+    const now = Number(values?.[index]);
+    const earlier = Number(values?.[Math.max(0, index - 3)]);
+    if (!Number.isFinite(now) || !Number.isFinite(earlier)) return 'unknown';
+    const delta = now - earlier;
+    if (delta <= -0.8) return 'falling';
+    if (delta >= 0.8) return 'rising';
+    return 'steady';
+  }
+
+  function fmtClock(ts) {
+    if (!ts) return '—';
+    return new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function nearSunWindow(ts, sunrise, sunset) {
+    const t = new Date(ts).getTime();
+    return [sunrise, sunset].some(s => s && Math.abs(t - new Date(s).getTime()) <= 90 * 60 * 1000);
+  }
+
   async function updatePlace(placeOrZip) {
     const status = root.querySelector('#weather-status');
     let nextPlace;
@@ -313,6 +352,13 @@
     const wind = Math.round(current.wind_speed_10m ?? 0);
     const gust = Math.round(current.wind_gusts_10m ?? wind);
     const dir = windDir(current.wind_direction_10m);
+    const humidity = current.relative_humidity_2m == null ? null : Math.round(current.relative_humidity_2m);
+    const dewPoint = current.dew_point_2m == null ? null : Math.round(current.dew_point_2m);
+    const currentPressure = current.pressure_msl == null ? null : Math.round(current.pressure_msl);
+    const hourlyIndex = nearestHourlyIndex(hourly.time || []);
+    const currentTrend = pressureTrend(hourly.pressure_msl, hourlyIndex);
+    const sunrise = daily.sunrise?.[0];
+    const sunset = daily.sunset?.[0];
     const condition = conditionClass(current.weather_code ?? daily.weather_code?.[0], rain, Math.max(wind, gust));
     const aqiVals = (aq.hourly?.us_aqi || []).filter(v => v != null).slice(0, 24);
     const aqiMax = aqiVals.length ? Math.max(...aqiVals.map(Number)) : null;
@@ -323,7 +369,6 @@
     const ozone = ozoneVals.length ? Math.max(...ozoneVals) : null;
     const dominantPollutant = pm25 == null && ozone == null ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
     const cachedTime = cachedAt ? new Date(cachedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
-    const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 12).map((ts, offset) => {
       const i = hourlyIndex + offset;
       const [hIcon, hLabel] = weatherLabel(hourly.weather_code?.[i]);
@@ -337,17 +382,17 @@
         wind: Math.round(hourly.wind_speed_10m?.[i] ?? wind),
         gust: Math.round(hourly.wind_gusts_10m?.[i] ?? gust),
         dir: windDir(hourly.wind_direction_10m?.[i]),
-        cloud: Math.round(hourly.cloud_cover?.[i] ?? current.cloud_cover ?? 0)
+        cloud: Math.round(hourly.cloud_cover?.[i] ?? current.cloud_cover ?? 0),
+        pressureTrend: pressureTrend(hourly.pressure_msl, i),
+        isGolden: nearSunWindow(ts, sunrise, sunset)
       };
       h.note = fishingNote(h);
+      h.score = fishingScore(h);
       return h;
     });
 
     root.innerHTML = `
       <div class="weather-dashboard-card weather-condition-${condition}">
-        <div class="weather-motion-layer" aria-hidden="true">
-          <i></i><i></i><i></i>
-        </div>
         <div class="weather-dashboard-top">
           <div>
             <span class="module-kicker">Weather Console</span>
@@ -366,57 +411,79 @@
           </div>
         </div>
 
-        <div class="weather-dashboard-grid">
-          <div class="weather-metric primary">
-            <span>Today</span>
-            <strong>${lo}–${hi}°F</strong>
-            <div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>
-          </div>
-          <div class="weather-metric">
-            <span>Rain</span>
-            <strong>${rain}%</strong>
-            <div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>
-          </div>
-          <div class="weather-metric">
-            <span>Wind</span>
-            <strong>${wind} mph ${dir}</strong>
-            <em>gust ${gust} mph</em>
-          </div>
-          <div class="weather-metric aqi ${aqi.cls}">
-            <span>Air</span>
-            <strong>${aqi.text}</strong>
-            <em>${aqi.advice}</em>
-            <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
-          </div>
-        </div>
+        <div class="weather-desktop-layout">
+          <div class="weather-layout-current">
+            <div class="weather-dashboard-grid">
+              <div class="weather-metric primary">
+                <span>Today</span>
+                <strong>${lo}–${hi}°F</strong>
+                <div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>
+              </div>
+              <div class="weather-metric">
+                <span>Rain</span>
+                <strong>${rain}%</strong>
+                <div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>
+              </div>
+              <div class="weather-metric">
+                <span>Wind</span>
+                <strong>${wind} mph ${dir}</strong>
+                <em>gust ${gust} mph</em>
+              </div>
+              <div class="weather-metric pressure">
+                <span>Pressure</span>
+                <strong>${currentPressure == null ? '—' : `${currentPressure} mb`}</strong>
+                <em>${currentTrend === 'unknown' ? 'trend unavailable' : currentTrend}</em>
+              </div>
+              <div class="weather-metric astro">
+                <span>Sun</span>
+                <strong>${fmtClock(sunrise)}</strong>
+                <em>sunset ${fmtClock(sunset)}</em>
+              </div>
+              <div class="weather-metric comfort">
+                <span>Comfort</span>
+                <strong>${humidity == null ? '—' : `${humidity}% RH`}</strong>
+                <em>dew point ${dewPoint == null ? '—' : `${dewPoint}°`}</em>
+              </div>
+              <div class="weather-metric aqi ${aqi.cls}">
+                <span>Air</span>
+                <strong>${aqi.text}</strong>
+                <em>${aqi.advice}</em>
+                <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
+              </div>
+            </div>
 
-        ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
+            ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
 
-        ${renderAlerts(alerts)}
+            ${renderAlerts(alerts)}
 
-        ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
+            ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
 
-        <div class="weather-timeline-head">
-          <div>
-            <span class="module-kicker">Fishing Conditions Timeline</span>
-            <h3>Next 12 hours</h3>
+            <div class="weather-air-detail">
+              <span>Air detail</span>
+              <strong>${aqi.advice}</strong>
+              <em>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`} · ${dominantPollutant}</em>
+            </div>
           </div>
-          <p>Rain, wind, cloud cover, and low-light windows hour by hour.</p>
-        </div>
-        <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
-          ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
-            <span>${h.time}</span>
-            <strong>${h.icon} ${h.temp}°</strong>
-            <em>feels ${h.feels}° · ${h.label}</em>
-            <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
-            <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
-          </div>`).join('')}
-        </div>
 
-        <div class="weather-air-detail">
-          <span>Air detail</span>
-          <strong>${aqi.advice}</strong>
-          <em>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`} · ${dominantPollutant}</em>
+          <div class="weather-layout-timeline">
+            <div class="weather-timeline-head">
+              <div>
+                <span class="module-kicker">Fishing Conditions Timeline</span>
+                <h3>Next 12 hours</h3>
+              </div>
+              <p>Rain, wind, pressure trend, and dawn/dusk windows hour by hour.</p>
+            </div>
+            <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
+              ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
+                <span>${h.time}</span>
+                <strong>${h.icon} ${h.temp}°</strong>
+                <em>Fishing ${h.score}/10${h.isGolden ? ' · golden window' : ''}</em>
+                <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
+                <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
+                <small>pressure ${h.pressureTrend}</small>
+              </div>`).join('')}
+            </div>
+          </div>
         </div>
 
         <div class="weather-five-day-head">
