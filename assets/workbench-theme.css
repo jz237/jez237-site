@@ -940,24 +940,40 @@ p,
     border-radius: 12px;
   }
   .weather-hourly-strip {
-    grid-template-columns: repeat(12, 124px);
+    display: flex !important;
+    grid-template-columns: none !important;
     gap: 8px;
     margin-inline: -2px;
-    scroll-snap-type: x proximity;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   .weather-hourly-strip div {
     scroll-snap-align: start;
+    flex: 0 0 72%;
+    max-width: 72%;
     padding: 11px;
   }
   .fishing-timeline div { min-height: 142px; }
   .weather-five-day {
-    grid-template-columns: repeat(5, 124px);
+    display: flex !important;
+    grid-template-columns: none !important;
     gap: 8px;
     overflow-x: auto;
+    overflow-y: hidden;
     padding-bottom: 6px;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
-  .weather-day { scroll-snap-align: start; padding: 11px; }
+  .weather-day {
+    flex: 0 0 72%;
+    max-width: 72%;
+    scroll-snap-align: start;
+    padding: 11px;
+  }
   .weather-five-day-head h3,
   .weather-timeline-head h3 {
     font-size: 28px;
