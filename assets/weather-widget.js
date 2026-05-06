@@ -172,6 +172,21 @@
     return notes.slice(0, 2).join(' · ') || 'steady';
   }
 
+  async function updatePlace(placeOrZip) {
+    const status = root.querySelector('#weather-status');
+    try {
+      if (status) status.textContent = 'Loading forecast…';
+      const nextPlace = typeof placeOrZip === 'string' ? await lookupZip(placeOrZip) : placeOrZip;
+      savePlace(nextPlace);
+      root.innerHTML = `<div class="weather-dashboard-card weather-loading">Loading ${escapeHtml(nextPlace.name || 'weather')}…</div>`;
+      render(await loadWeather(nextPlace));
+    } catch (err) {
+      const nextStatus = root.querySelector('#weather-status');
+      if (nextStatus) nextStatus.textContent = err?.message || 'Could not load that ZIP right now.';
+      else root.innerHTML = `<div class="weather-dashboard-card weather-loading">${escapeHtml(err?.message || 'Could not load that ZIP right now.')}</div>`;
+    }
+  }
+
   function render({ weather, aq, tonightPeriod, alerts, place }) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
@@ -222,8 +237,8 @@
             <form class="weather-location-form" id="weather-location-form">
               <label for="weather-zip-input">ZIP forecast</label>
               <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19107" value="${escapeHtml(place?.zip || '')}">
-              <button type="submit">Update</button>
-              <button type="button" id="weather-reset-location">Philly</button>
+              <button type="submit" id="weather-update-location">Update</button>
+              <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
             </form>
           </div>
           <div class="weather-now-badge">
@@ -302,27 +317,20 @@
         <p class="weather-updated" id="weather-status">Updated from live public weather APIs at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}.</p>
       </div>`;
 
-    const form = root.querySelector('#weather-location-form');
-    const input = root.querySelector('#weather-zip-input');
-    const reset = root.querySelector('#weather-reset-location');
-    const status = root.querySelector('#weather-status');
-    form?.addEventListener('submit', async event => {
-      event.preventDefault();
-      try {
-        if (status) status.textContent = 'Looking up ZIP and loading forecast…';
-        const nextPlace = await lookupZip(input?.value);
-        savePlace(nextPlace);
-        render(await loadWeather(nextPlace));
-      } catch (err) {
-        if (status) status.textContent = err?.message || 'Could not load that ZIP right now.';
-      }
-    });
-    reset?.addEventListener('click', async () => {
-      savePlace(DEFAULT_PLACE);
-      if (status) status.textContent = 'Loading Philly forecast…';
-      render(await loadWeather(DEFAULT_PLACE));
-    });
   }
+
+  root.addEventListener('submit', event => {
+    if (event.target?.id !== 'weather-location-form') return;
+    event.preventDefault();
+    const input = root.querySelector('#weather-zip-input');
+    updatePlace(input?.value);
+  });
+
+  root.addEventListener('click', event => {
+    if (!event.target?.closest?.('[data-weather-reset="true"]')) return;
+    event.preventDefault();
+    updatePlace(DEFAULT_PLACE);
+  });
 
   root.innerHTML = '<div class="weather-dashboard-card weather-loading">Loading weather…</div>';
   loadWeather().then(render).catch(err => {
