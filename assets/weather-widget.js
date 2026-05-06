@@ -1,5 +1,5 @@
 (() => {
-  const DEFAULT_PLACE = { name: 'Philadelphia', lat: 39.9526, lon: -75.1652, zip: '19107' };
+  const DEFAULT_PLACE = { name: 'Philadelphia', lat: 40.0607, lon: -75.0802, zip: '19111' };
   const TZ = 'America/New_York';
   const STORAGE_KEY = 'jez237-weather-place-v1';
   const CACHE_KEY_PREFIX = 'jez237-weather-cache-v1:';
@@ -420,10 +420,10 @@
           <div>
             <span class="module-kicker">Weather Console</span>
             <h2>${icon} ${label}</h2>
-            <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())} · Same source family as the local Discord weather post.</p>
+            <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
             <form class="weather-location-form" id="weather-location-form">
               <label for="weather-zip-input">ZIP forecast</label>
-              <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19107" value="${escapeHtml(place?.zip || '')}">
+              <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(place?.zip || '')}">
               <button type="submit" id="weather-update-location">Update</button>
               <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
             </form>
