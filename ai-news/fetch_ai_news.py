@@ -69,37 +69,6 @@ EDITORIAL_PRIORITY = {
     ],
 }
 
-# Strong signals that an item is specifically about a NEW AI model release.
-# Must be specific enough to avoid false positives (e.g. generic "release notes").
-MODEL_RELEASE_SIGNALS = [
-    # Explicit release phrases
-    "new model", "model release", "model launch", "foundation model",
-    "releases its", "launches its", "releases new", "launches new",
-    # Company + action
-    "openai releases", "openai launches", "openai announces",
-    "anthropic releases", "anthropic launches", "anthropic announces",
-    "google releases", "google launches", "google deepmind releases",
-    "meta releases", "meta launches", "meta ai releases",
-    "mistral releases", "mistral launches", "mistral ai releases",
-    "deepseek releases", "deepseek launches",
-    "xai releases", "xai launches", "grok releases",
-    "cohere releases", "cohere launches",
-    "nvidia releases", "nvidia launches",
-    "amazon releases", "amazon launches",
-    # Specific well-known model families
-    "gpt-5", "gpt-4o", "gpt-4.5", "gpt-5.4", "gpt-5.3",
-    "claude 3", "claude 4", "claude opus", "claude sonnet", "claude haiku",
-    "gemini 2", "gemini 3", "gemini ultra", "gemini flash",
-    "llama 4", "llama 3", "llama 3.1", "llama 3.2", "llama 3.3",
-    "deepseek-v", "deepseek-r",
-    "grok-3", "grok-2", "grok-4",
-    "phi-4", "phi-5", "mistral large", "mistral small", "mixtral",
-    "qwen 3", "qwen2", "qwen-max",
-    # Release status phrases
-    "now available", "generally available", "publicly available",
-    "available today", "available now", "open sourced", "open-sourced",
-]
-
 
 def now_utc():
     return datetime.now(timezone.utc)
@@ -321,17 +290,6 @@ def fetch_url(url):
         return r.read()
 
 
-def flag_model_release(item):
-    """Detect if an item is specifically about a new AI model release.
-    Sets item["model_release"] = True if matched. Returns True/False."""
-    title = (item.get("title") or "").lower()
-    summary = (item.get("summary") or "").lower()
-    text_blob = f"{title} {summary}"
-    matched = any(sig in text_blob for sig in MODEL_RELEASE_SIGNALS)
-    if matched:
-        item["model_release"] = True
-    return matched
-
 
 def editorial_gate(item):
     """Lightweight editorial classifier for what belongs in #news.
@@ -339,11 +297,6 @@ def editorial_gate(item):
     title = (item.get("title") or "").lower()
     summary = (item.get("summary") or "").lower()
     text_blob = f"{title} {summary}"
-
-    # Always keep real model releases in the mix.
-    if item.get("model_release"):
-        return True, "model_release"
-
 
 
     big_name_hits = sum(1 for w in EDITORIAL_PRIORITY["big_names"] if w in text_blob)
@@ -365,7 +318,7 @@ def editorial_gate(item):
     if "coding after coders" in text_blob:
         return True, "editorial_commentary"
 
-    # Obvious framework/toolkit/plumbing posts should stay out unless they are model releases.
+    # Obvious framework/toolkit/plumbing posts should stay out unless they have stronger signals.
     if hard_downrank_hits >= 1 and hard_boost_hits == 0:
         return False, "framework_or_plumbing"
 
@@ -429,10 +382,6 @@ def score_item(item, now):
     downrank_hits = sum(1 for w in EDITORIAL_PRIORITY["downrank"] if w in text_blob)
     editorial_score -= min(downrank_hits, 3) * 0.9
 
-    # Strong boost for confirmed AI model releases — preserve these in the mix.
-    if item.get("model_release"):
-        keyword_score += 6.0
-        editorial_score += 2.3
 
     # Extra title bias: if a major product/capability signal is in the title, that's usually what Jez wants.
     title_priority_hits = sum(1 for w in (EDITORIAL_PRIORITY["big_names"] + EDITORIAL_PRIORITY["capabilities"] + EDITORIAL_PRIORITY["hard_boost"]) if w in title)
@@ -582,9 +531,7 @@ def main():
             "checkedAt": now.isoformat(),
         }
 
-    # Flag model releases (must run before scoring so boost is applied)
     for it in all_items:
-        flag_model_release(it)
         allow, reason = editorial_gate(it)
         it["editorial_allow"] = allow
         it["editorial_reason"] = reason
