@@ -545,9 +545,7 @@ p,
   gap: 12px;
   margin: 18px 0;
 }
-.weather-metric.primary {
-  grid-column: span 2;
-}
+
 .weather-metric {
   display: block;
   min-height: 118px;
@@ -588,7 +586,8 @@ p,
 }
 .weather-temp-track,
 .weather-bar,
-.weather-aqi-scale {
+.weather-aqi-scale,
+.weather-uv-scale {
   position: relative;
   height: 8px;
   margin-top: 16px;
@@ -616,11 +615,13 @@ p,
   border-radius: inherit;
   background: linear-gradient(90deg, #72caf0, #4f8cff, #72ffe0, #72caf0);
 }
-.weather-aqi-scale {
+.weather-aqi-scale,
+.weather-uv-scale {
   overflow: visible;
   background: linear-gradient(90deg, #4dd37b 0 33%, #f1d18e 33% 66%, #e68ea8 66% 100%);
 }
-.weather-aqi-scale i {
+.weather-aqi-scale i,
+.weather-uv-scale i {
   position: absolute;
   top: 50%;
   width: 14px;
@@ -862,5 +863,4 @@ p,
   .weather-now-badge { width: 100%; text-align: left; }
   .weather-dashboard-grid,
   .weather-five-day { grid-template-columns: 1fr; }
-  .weather-metric.primary { grid-column: span 1; }
 }
