@@ -855,17 +855,32 @@ p,
   .weather-hourly-strip { grid-template-columns: repeat(12, 126px); overflow-x: auto; }
 }
 @media (max-width: 640px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
   .workbench-home {
+    width: 100% !important;
+    max-width: 100% !important;
     padding: 0 !important;
+    overflow-x: hidden !important;
   }
   .desktop-hub {
+    width: 100% !important;
+    max-width: 100% !important;
     border: 0;
     border-radius: 0;
     box-shadow: none;
     min-height: auto;
+    overflow-x: hidden !important;
   }
   .hub-main {
+    width: 100% !important;
+    max-width: 100% !important;
     padding: 14px 10px 28px !important;
+    overflow-x: hidden !important;
   }
   .weather-page-intro {
     margin-bottom: 10px !important;
@@ -881,6 +896,19 @@ p,
     display: none;
   }
   .weather-dashboard { margin-top: 16px; }
+  .weather-dashboard,
+  #philly-weather-widget,
+  .weather-dashboard-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    overflow-x: hidden !important;
+  }
+  .weather-dashboard-card * {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
   .weather-dashboard-card {
     padding: 12px;
     border-radius: 14px;
@@ -931,7 +959,12 @@ p,
   .weather-aqi-scale,
   .weather-uv-scale { margin-top: 12px; }
   .weather-radar-link { margin: 4px 0 14px; }
-  .weather-radar-link a { font-size: 22px; }
+  .weather-radar-link a {
+    display: block;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: 22px;
+  }
   .weather-nws-summary,
   .weather-air-detail,
   .weather-alert,
@@ -950,6 +983,7 @@ p,
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    overflow-x: auto !important;
   }
   .weather-hourly-strip div {
     scroll-snap-align: start;
@@ -967,6 +1001,7 @@ p,
     padding-bottom: 6px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    overflow-x: auto !important;
   }
   .weather-day {
     flex: 0 0 72%;
