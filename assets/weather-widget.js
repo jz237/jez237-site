@@ -1,7 +1,7 @@
 (() => {
-  const LAT = 39.9526;
-  const LON = -75.1652;
+  const DEFAULT_PLACE = { name: 'Philadelphia', lat: 39.9526, lon: -75.1652, zip: '19107' };
   const TZ = 'America/New_York';
+  const STORAGE_KEY = 'jez237-weather-place-v1';
   const root = document.getElementById('philly-weather-widget');
   if (!root) return;
 
@@ -34,12 +34,12 @@
   }
 
   function aqiInfo(aqi) {
-    if (aqi == null || Number.isNaN(Number(aqi))) return { text: 'Unknown', cls: 'unknown', pct: 0 };
+    if (aqi == null || Number.isNaN(Number(aqi))) return { text: 'Unknown', cls: 'unknown', pct: 0, advice: 'Air quality data unavailable.' };
     const n = Math.round(Number(aqi));
-    if (n <= 50) return { text: `${n} Good`, cls: 'good', pct: Math.min(100, n / 3) };
-    if (n <= 100) return { text: `${n} Moderate`, cls: 'moderate', pct: 35 + (n - 51) * 0.65 };
-    if (n <= 150) return { text: `${n} Sensitive`, cls: 'sensitive', pct: 68 + (n - 101) * 0.5 };
-    return { text: `${n} Unhealthy`, cls: 'unhealthy', pct: 96 };
+    if (n <= 50) return { text: `${n} Good`, cls: 'good', pct: Math.min(100, n / 3), advice: 'Fine for most people.' };
+    if (n <= 100) return { text: `${n} Moderate`, cls: 'moderate', pct: 35 + (n - 51) * 0.65, advice: 'Okay for most; sensitive people may notice it.' };
+    if (n <= 150) return { text: `${n} Sensitive`, cls: 'sensitive', pct: 68 + (n - 101) * 0.5, advice: 'Sensitive groups should take it easier.' };
+    return { text: `${n} Unhealthy`, cls: 'unhealthy', pct: 96, advice: 'Limit long outdoor exertion.' };
   }
 
   function windDir(degrees) {
@@ -50,6 +50,18 @@
 
   function fmtDate(ts) {
     return new Date(ts).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  }
+
+  function loadSavedPlace() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (saved?.lat && saved?.lon) return saved;
+    } catch (_) {}
+    return DEFAULT_PLACE;
+  }
+
+  function savePlace(place) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(place)); } catch (_) {}
   }
 
   function dayName(ts) {
@@ -83,15 +95,31 @@
     return res.json();
   }
 
-  async function loadWeather() {
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+  async function lookupZip(zip) {
+    const clean = String(zip || '').trim().match(/^\d{5}$/)?.[0];
+    if (!clean) throw new Error('Enter a 5-digit ZIP code.');
+    const data = await fetchJson(`https://api.zippopotam.us/us/${clean}`);
+    const place = data?.places?.[0];
+    if (!place) throw new Error(`No location found for ${clean}.`);
+    return {
+      name: `${place['place name']}, ${place['state abbreviation']}`,
+      lat: Number(place.latitude),
+      lon: Number(place.longitude),
+      zip: clean
+    };
+  }
+
+  async function loadWeather(place = loadSavedPlace()) {
+    const lat = Number(place.lat);
+    const lon = Number(place.lon);
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
       `&current=temperature_2m,apparent_temperature,precipitation,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
       `&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${TZ}&forecast_days=6`;
-    const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${LAT}&longitude=${LON}&hourly=us_aqi,pm2_5,ozone&timezone=${TZ}&forecast_days=2`;
-    const nwsUrl = `https://api.weather.gov/points/${LAT},${LON}`;
-    const alertsUrl = `https://api.weather.gov/alerts/active?point=${LAT},${LON}`;
+    const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=us_aqi,pm2_5,ozone&timezone=${TZ}&forecast_days=2`;
+    const nwsUrl = `https://api.weather.gov/points/${lat},${lon}`;
+    const alertsUrl = `https://api.weather.gov/alerts/active?point=${lat},${lon}`;
 
     const [weather, aq, points, alerts] = await Promise.all([
       fetchJson(weatherUrl),
@@ -107,7 +135,7 @@
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    return { weather, aq, tonightPeriod, alerts };
+    return { weather, aq, tonightPeriod, alerts, place };
   }
 
   function alertTone(alert) {
@@ -144,7 +172,7 @@
     return notes.slice(0, 2).join(' · ') || 'steady';
   }
 
-  function render({ weather, aq, tonightPeriod, alerts }) {
+  function render({ weather, aq, tonightPeriod, alerts, place }) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -160,6 +188,10 @@
     const aqiVals = (aq.hourly?.us_aqi || []).filter(v => v != null).slice(0, 24);
     const aqiMax = aqiVals.length ? Math.max(...aqiVals.map(Number)) : null;
     const aqi = aqiInfo(aqiMax);
+    const pm25Vals = (aq.hourly?.pm2_5 || []).filter(v => v != null).slice(0, 24).map(Number);
+    const ozoneVals = (aq.hourly?.ozone || []).filter(v => v != null).slice(0, 24).map(Number);
+    const pm25 = pm25Vals.length ? Math.max(...pm25Vals) : null;
+    const ozone = ozoneVals.length ? Math.max(...ozoneVals) : null;
     const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 12).map((ts, offset) => {
       const i = hourlyIndex + offset;
@@ -184,9 +216,15 @@
       <div class="weather-dashboard-card">
         <div class="weather-dashboard-top">
           <div>
-            <span class="module-kicker">Philly Weather Console</span>
+            <span class="module-kicker">Weather Console</span>
             <h2>${icon} ${label}</h2>
-            <p>${fmtDate(current.time || Date.now())} · Same source family as the local Discord weather post.</p>
+            <p>${escapeHtml(place?.name || 'Philadelphia')} · ${fmtDate(current.time || Date.now())} · Same source family as the local Discord weather post.</p>
+            <form class="weather-location-form" id="weather-location-form">
+              <label for="weather-zip-input">ZIP forecast</label>
+              <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19107" value="${escapeHtml(place?.zip || '')}">
+              <button type="submit">Update</button>
+              <button type="button" id="weather-reset-location">Philly</button>
+            </form>
           </div>
           <div class="weather-now-badge">
             <strong>${temp}°</strong>
@@ -213,6 +251,7 @@
           <div class="weather-metric aqi ${aqi.cls}">
             <span>Air</span>
             <strong>${aqi.text}</strong>
+            <em>${aqi.advice}</em>
             <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
           </div>
         </div>
@@ -239,6 +278,16 @@
           </div>`).join('')}
         </div>
 
+        <div class="weather-air-detail">
+          <span>Air detail</span>
+          <strong>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`}</strong>
+          <em>${aqi.advice}</em>
+        </div>
+
+        <div class="weather-five-day-head">
+          <span class="module-kicker">5-Day Forecast</span>
+          <h3>Extended outlook</h3>
+        </div>
         <div class="weather-five-day" aria-label="Five day forecast">
           ${(daily.time || []).slice(1, 6).map((ts, i) => {
             const idx = i + 1;
@@ -250,11 +299,32 @@
           }).join('')}
         </div>
 
-        <p class="weather-updated">Updated from live public weather APIs at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}.</p>
+        <p class="weather-updated" id="weather-status">Updated from live public weather APIs at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}.</p>
       </div>`;
+
+    const form = root.querySelector('#weather-location-form');
+    const input = root.querySelector('#weather-zip-input');
+    const reset = root.querySelector('#weather-reset-location');
+    const status = root.querySelector('#weather-status');
+    form?.addEventListener('submit', async event => {
+      event.preventDefault();
+      try {
+        if (status) status.textContent = 'Looking up ZIP and loading forecast…';
+        const nextPlace = await lookupZip(input?.value);
+        savePlace(nextPlace);
+        render(await loadWeather(nextPlace));
+      } catch (err) {
+        if (status) status.textContent = err?.message || 'Could not load that ZIP right now.';
+      }
+    });
+    reset?.addEventListener('click', async () => {
+      savePlace(DEFAULT_PLACE);
+      if (status) status.textContent = 'Loading Philly forecast…';
+      render(await loadWeather(DEFAULT_PLACE));
+    });
   }
 
-  root.innerHTML = '<div class="weather-dashboard-card weather-loading">Loading Philly weather…</div>';
+  root.innerHTML = '<div class="weather-dashboard-card weather-loading">Loading weather…</div>';
   loadWeather().then(render).catch(err => {
     console.error(err);
     root.innerHTML = '<div class="weather-dashboard-card weather-loading">Weather panel could not load right now.</div>';

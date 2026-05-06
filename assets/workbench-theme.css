@@ -432,6 +432,42 @@ p,
 .weather-nws-summary {
   color: var(--wb-muted, #a8bdc6);
 }
+.weather-location-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 12px;
+}
+.weather-location-form label {
+  color: var(--wb-muted, #a8bdc6);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.weather-location-form input {
+  width: 86px;
+  padding: 8px 10px;
+  color: var(--wb-text, #eef6f8);
+  background: rgba(0,0,0,0.24);
+  border: 1px solid rgba(160,198,216,0.25);
+  border-radius: 10px;
+}
+.weather-location-form button {
+  padding: 8px 12px;
+  color: #061118;
+  font-weight: 800;
+  background: var(--wb-gold, #f1d18e);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.weather-location-form button[type="button"] {
+  color: var(--wb-text, #eef6f8);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.12);
+}
 .weather-now-badge {
   min-width: 124px;
   text-align: right;
@@ -585,14 +621,16 @@ p,
   border-radius: 12px;
   line-height: 1.55;
 }
-.weather-timeline-head {
+.weather-timeline-head,
+.weather-five-day-head {
   display: flex;
   justify-content: space-between;
   gap: 14px;
   align-items: end;
   margin-top: 20px;
 }
-.weather-timeline-head h3 {
+.weather-timeline-head h3,
+.weather-five-day-head h3 {
   margin: 4px 0 0;
   font-size: clamp(22px, 3vw, 32px);
 }
@@ -602,6 +640,35 @@ p,
   color: var(--wb-muted, #a8bdc6);
   font-size: 13px;
   text-align: right;
+}
+.weather-air-detail {
+  margin-top: 16px;
+  padding: 13px 15px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(160,198,216,0.16);
+}
+.weather-air-detail span,
+.weather-air-detail strong,
+.weather-air-detail em {
+  display: block;
+}
+.weather-air-detail span {
+  color: var(--wb-muted, #a8bdc6);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.weather-air-detail strong {
+  margin-top: 5px;
+  color: #fff7e8;
+}
+.weather-air-detail em {
+  margin-top: 4px;
+  color: var(--wb-muted, #a8bdc6);
+  font-size: 12px;
+  font-style: normal;
 }
 .weather-hourly-strip,
 .weather-five-day {
@@ -700,7 +767,8 @@ p,
 }
 @media (max-width: 640px) {
   .weather-dashboard-top,
-  .weather-timeline-head { flex-direction: column; align-items: flex-start; }
+  .weather-timeline-head,
+  .weather-five-day-head { flex-direction: column; align-items: flex-start; }
   .weather-timeline-head p { text-align: left; }
   .weather-now-badge { width: 100%; text-align: left; }
   .weather-dashboard-grid,
