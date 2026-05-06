@@ -355,6 +355,11 @@
     const humidity = current.relative_humidity_2m == null ? null : Math.round(current.relative_humidity_2m);
     const dewPoint = current.dew_point_2m == null ? null : Math.round(current.dew_point_2m);
     const currentPressure = current.pressure_msl == null ? null : Math.round(current.pressure_msl);
+    const cloudCover = current.cloud_cover == null ? null : Math.round(current.cloud_cover);
+    const placeTitle = place?.name || 'Philadelphia, PA';
+    const placeParts = String(placeTitle).split(',').map(part => part.trim()).filter(Boolean);
+    const placeMain = placeParts[0] || placeTitle;
+    const placeSub = [placeParts.slice(1).join(', '), place?.zip].filter(Boolean).join(' · ') || 'saved forecast';
     const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const currentTrend = pressureTrend(hourly.pressure_msl, hourlyIndex);
     const sunrise = daily.sunrise?.[0];
@@ -397,7 +402,7 @@
           <div>
             <span class="module-kicker">Weather Console</span>
             <h2>${icon} ${label}</h2>
-            <p>${escapeHtml(place?.name || 'Philadelphia')} · ${fmtDate(current.time || Date.now())} · Same source family as the local Discord weather post.</p>
+            <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())} · Same source family as the local Discord weather post.</p>
             <form class="weather-location-form" id="weather-location-form">
               <label for="weather-zip-input">ZIP forecast</label>
               <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19107" value="${escapeHtml(place?.zip || '')}">
@@ -441,6 +446,16 @@
             <span>Comfort</span>
             <strong>${humidity == null ? '—' : `${humidity}% RH`}</strong>
             <em>dew point ${dewPoint == null ? '—' : `${dewPoint}°`}</em>
+          </div>
+          <div class="weather-metric location">
+            <span>Location</span>
+            <strong>${escapeHtml(placeMain)}</strong>
+            <em>${escapeHtml(placeSub)}</em>
+          </div>
+          <div class="weather-metric clouds">
+            <span>Clouds</span>
+            <strong>${cloudCover == null ? '—' : `${cloudCover}%`}</strong>
+            <em>${cloudCover == null ? 'cover unavailable' : cloudCover >= 70 ? 'mostly covered' : cloudCover >= 35 ? 'partly covered' : 'mostly open sky'}</em>
           </div>
           <div class="weather-metric aqi ${aqi.cls}">
             <span>Air</span>
