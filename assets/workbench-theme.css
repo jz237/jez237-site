@@ -807,25 +807,6 @@ p,
   margin: 7px 0 4px;
   color: var(--wb-title, #f4ecdf);
 }
-.weather-hourly-strip b {
-  position: relative;
-  margin: 10px 0 7px;
-  padding-top: 12px;
-  color: #dff5ff;
-  font-size: 12px;
-  font-weight: 800;
-}
-.weather-hourly-strip b::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--rain, 2%);
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #72caf0, #4f8cff, #72ffe0, #72caf0);
-  box-shadow: 0 0 12px rgba(114,202,240,0.30);
-}
 .weather-hourly-strip em,
 .weather-hourly-strip small,
 .weather-day small,
