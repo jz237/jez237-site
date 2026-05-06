@@ -545,8 +545,7 @@ p,
   gap: 12px;
   margin: 18px 0;
 }
-.weather-metric.primary,
-.weather-metric.aqi {
+.weather-metric.primary {
   grid-column: span 2;
 }
 .weather-metric {
@@ -850,4 +849,5 @@ p,
   .weather-now-badge { width: 100%; text-align: left; }
   .weather-dashboard-grid,
   .weather-five-day { grid-template-columns: 1fr; }
+  .weather-metric.primary { grid-column: span 1; }
 }
