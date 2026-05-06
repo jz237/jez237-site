@@ -446,6 +446,7 @@ p,
   height: 68%;
   background: linear-gradient(90deg, rgba(134,185,111,0.12), rgba(114,202,240,0.12), rgba(241,209,142,0.10));
   filter: blur(26px);
+  animation: weather-glow-drift 12s ease-in-out infinite alternate;
   pointer-events: none;
 }
 .weather-dashboard-card::before {
@@ -460,14 +461,16 @@ p,
   pointer-events: none;
 }
 .weather-condition-rainy::before {
-  opacity: 0.18;
-  background: linear-gradient(115deg, transparent 0 42%, rgba(72,255,214,0.12) 48%, transparent 56%);
-  animation-duration: 12s;
+  opacity: 0.28;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(72,255,214,0.10), transparent 28%),
+    linear-gradient(115deg, transparent 0 38%, rgba(72,255,214,0.18) 48%, transparent 58%);
+  animation-duration: 8s;
 }
 .weather-condition-stormy::before {
-  opacity: 0.18;
+  opacity: 0.26;
   background: linear-gradient(115deg, transparent 0 45%, rgba(230,142,168,0.14) 49%, transparent 55%);
-  animation-duration: 10s;
+  animation-duration: 7s;
 }
 .weather-condition-sunny::before {
   opacity: 0.14;
@@ -477,8 +480,19 @@ p,
   from { background-position: 0 0, 120% 0; }
   to { background-position: 0 0, -120% 0; }
 }
+@keyframes weather-glow-drift {
+  from { transform: translate3d(-4%, 0, 0) scale(1); opacity: 0.70; }
+  to { transform: translate3d(4%, -3%, 0) scale(1.06); opacity: 1; }
+}
+@keyframes weather-bar-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 180% 50%; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .weather-dashboard-card::before { animation: none; }
+  .weather-dashboard-card::before,
+  .weather-dashboard-card::after,
+  .weather-bar i,
+  .weather-hourly-strip b::before { animation: none !important; }
 }
 .weather-dashboard-card > * { position: relative; z-index: 1; }
 .weather-dashboard-top {
@@ -616,7 +630,9 @@ p,
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #72caf0, #4f8cff);
+  background: linear-gradient(90deg, #72caf0, #4f8cff, #72ffe0, #72caf0);
+  background-size: 220% 100%;
+  animation: weather-bar-shimmer 5s linear infinite;
 }
 .weather-aqi-scale {
   overflow: visible;
@@ -816,7 +832,9 @@ p,
   width: var(--rain, 2%);
   height: 6px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #72caf0, #4f8cff);
+  background: linear-gradient(90deg, #72caf0, #4f8cff, #72ffe0, #72caf0);
+  background-size: 220% 100%;
+  animation: weather-bar-shimmer 4s linear infinite;
   box-shadow: 0 0 12px rgba(114,202,240,0.30);
 }
 .weather-hourly-strip em,
