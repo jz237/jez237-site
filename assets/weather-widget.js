@@ -236,15 +236,17 @@
       pointsPromise,
       alertsPromise
     ]);
+    let todayPeriod = null;
     let tonightPeriod = null;
     if (points?.properties?.forecast) {
       try {
         const forecast = await fetchJson(points.properties.forecast);
         const periods = forecast?.properties?.periods || [];
+        todayPeriod = periods.find(p => p?.isDaytime === true) || periods[0] || null;
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    const bundle = { weather, aq, tonightPeriod, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
+    const bundle = { weather, aq, todayPeriod, tonightPeriod, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
     saveWeatherCache(bundle);
     return bundle;
   }
@@ -359,7 +361,7 @@
     }
   }
 
-  function render({ weather, aq, tonightPeriod, alerts, place, source, stale, cachedAt, error }) {
+  function render({ weather, aq, todayPeriod, tonightPeriod, alerts, place, source, stale, cachedAt, error }) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -421,6 +423,7 @@
             <span class="module-kicker">Weather Console</span>
             <h2>${icon} ${label}</h2>
             <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
+            ${todayPeriod?.detailedForecast ? `<p class="weather-day-summary"><strong>Today:</strong> ${escapeHtml(todayPeriod.detailedForecast)}</p>` : ''}
             <form class="weather-location-form" id="weather-location-form">
               <label for="weather-zip-input">ZIP forecast</label>
               <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(place?.zip || '')}">
