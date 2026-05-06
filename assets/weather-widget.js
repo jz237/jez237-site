@@ -2,6 +2,7 @@
   const DEFAULT_PLACE = { name: 'Philadelphia', lat: 39.9526, lon: -75.1652, zip: '19107' };
   const TZ = 'America/New_York';
   const STORAGE_KEY = 'jez237-weather-place-v1';
+  const CACHE_KEY_PREFIX = 'jez237-weather-cache-v1:';
   const root = document.getElementById('philly-weather-widget');
   if (!root) return;
 
@@ -44,8 +45,27 @@
 
   function windDir(degrees) {
     if (degrees == null) return '';
+    if (typeof degrees === 'string') return degrees;
     const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
     return dirs[Math.floor(((Number(degrees) % 360) + 11.25) / 22.5) % 16];
+  }
+
+  function codeFromForecast(text) {
+    const value = String(text || '').toLowerCase();
+    if (/thunder|storm/.test(value)) return 95;
+    if (/snow|sleet|ice/.test(value)) return 73;
+    if (/rain|shower/.test(value)) return 63;
+    if (/drizzle/.test(value)) return 53;
+    if (/fog|mist/.test(value)) return 45;
+    if (/sunny|clear/.test(value)) return 0;
+    if (/partly|mostly sunny/.test(value)) return 2;
+    if (/cloud|overcast/.test(value)) return 3;
+    return 3;
+  }
+
+  function parseWindSpeed(value) {
+    const nums = String(value || '').match(/\d+/g)?.map(Number) || [];
+    return nums.length ? Math.max(...nums) : 0;
   }
 
   function fmtDate(ts) {
@@ -62,6 +82,24 @@
 
   function savePlace(place) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(place)); } catch (_) {}
+  }
+
+  function cacheKey(place) {
+    return `${CACHE_KEY_PREFIX}${place?.zip || `${Number(place?.lat).toFixed(3)},${Number(place?.lon).toFixed(3)}`}`;
+  }
+
+  function saveWeatherCache(bundle) {
+    try {
+      localStorage.setItem(cacheKey(bundle.place), JSON.stringify({ ...bundle, cachedAt: new Date().toISOString() }));
+    } catch (_) {}
+  }
+
+  function loadWeatherCache(place) {
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey(place)) || 'null');
+      if (cached?.weather?.current) return { ...cached, stale: true };
+    } catch (_) {}
+    return null;
   }
 
   function dayName(ts) {
@@ -109,6 +147,53 @@
     };
   }
 
+  async function loadNwsWeatherBackup(points) {
+    if (!points?.properties?.forecastHourly || !points?.properties?.forecast) {
+      throw new Error('NWS backup forecast unavailable.');
+    }
+    const [hourlyForecast, dailyForecast] = await Promise.all([
+      fetchJson(points.properties.forecastHourly),
+      fetchJson(points.properties.forecast)
+    ]);
+    const hourlyPeriods = hourlyForecast?.properties?.periods || [];
+    const dailyPeriods = dailyForecast?.properties?.periods || [];
+    if (!hourlyPeriods.length) throw new Error('NWS backup hourly forecast unavailable.');
+    const currentPeriod = hourlyPeriods[0];
+    const dayPeriods = dailyPeriods.filter(p => p?.isDaytime !== false).slice(0, 6);
+    const nightPeriods = dailyPeriods.filter(p => p?.isDaytime === false).slice(0, 6);
+    return {
+      source: 'NWS backup',
+      current: {
+        time: currentPeriod.startTime,
+        temperature_2m: currentPeriod.temperature,
+        apparent_temperature: currentPeriod.temperature,
+        weather_code: codeFromForecast(currentPeriod.shortForecast),
+        cloud_cover: /cloud|overcast/i.test(currentPeriod.shortForecast || '') ? 80 : 35,
+        wind_speed_10m: parseWindSpeed(currentPeriod.windSpeed),
+        wind_direction_10m: currentPeriod.windDirection,
+        wind_gusts_10m: parseWindSpeed(currentPeriod.windSpeed)
+      },
+      hourly: {
+        time: hourlyPeriods.map(p => p.startTime),
+        temperature_2m: hourlyPeriods.map(p => p.temperature),
+        apparent_temperature: hourlyPeriods.map(p => p.temperature),
+        precipitation_probability: hourlyPeriods.map(p => p.probabilityOfPrecipitation?.value ?? 0),
+        weather_code: hourlyPeriods.map(p => codeFromForecast(p.shortForecast)),
+        cloud_cover: hourlyPeriods.map(p => /cloud|overcast/i.test(p.shortForecast || '') ? 80 : 35),
+        wind_speed_10m: hourlyPeriods.map(p => parseWindSpeed(p.windSpeed)),
+        wind_direction_10m: hourlyPeriods.map(p => p.windDirection),
+        wind_gusts_10m: hourlyPeriods.map(p => parseWindSpeed(p.windSpeed))
+      },
+      daily: {
+        time: dayPeriods.map(p => (p.startTime || '').slice(0, 10)),
+        weather_code: dayPeriods.map(p => codeFromForecast(p.shortForecast)),
+        temperature_2m_max: dayPeriods.map(p => p.temperature),
+        temperature_2m_min: dayPeriods.map((p, i) => nightPeriods[i]?.temperature ?? p.temperature),
+        precipitation_probability_max: dayPeriods.map((p, i) => Math.max(p.probabilityOfPrecipitation?.value ?? 0, nightPeriods[i]?.probabilityOfPrecipitation?.value ?? 0))
+      }
+    };
+  }
+
   async function loadWeather(place = loadSavedPlace()) {
     const lat = Number(place.lat);
     const lon = Number(place.lon);
@@ -121,11 +206,17 @@
     const nwsUrl = `https://api.weather.gov/points/${lat},${lon}`;
     const alertsUrl = `https://api.weather.gov/alerts/active?point=${lat},${lon}`;
 
+    const pointsPromise = fetchJson(nwsUrl).catch(() => null);
+    const alertsPromise = fetchJson(alertsUrl).catch(() => null);
+    const weatherPromise = fetchJson(weatherUrl)
+      .then(weather => ({ ...weather, source: 'Open-Meteo' }))
+      .catch(async () => loadNwsWeatherBackup(await pointsPromise));
+    const aqPromise = fetchJson(aqUrl).catch(() => ({ hourly: {}, unavailable: true }));
     const [weather, aq, points, alerts] = await Promise.all([
-      fetchJson(weatherUrl),
-      fetchJson(aqUrl),
-      fetchJson(nwsUrl).catch(() => null),
-      fetchJson(alertsUrl).catch(() => null)
+      weatherPromise,
+      aqPromise,
+      pointsPromise,
+      alertsPromise
     ]);
     let tonightPeriod = null;
     if (points?.properties?.forecast) {
@@ -135,7 +226,9 @@
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    return { weather, aq, tonightPeriod, alerts, place };
+    const bundle = { weather, aq, tonightPeriod, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
+    saveWeatherCache(bundle);
+    return bundle;
   }
 
   function alertTone(alert) {
@@ -174,20 +267,29 @@
 
   async function updatePlace(placeOrZip) {
     const status = root.querySelector('#weather-status');
+    let nextPlace;
     try {
-      if (status) status.textContent = 'Loading forecast…';
-      const nextPlace = typeof placeOrZip === 'string' ? await lookupZip(placeOrZip) : placeOrZip;
-      savePlace(nextPlace);
+      if (status) status.textContent = 'Looking up location…';
+      nextPlace = typeof placeOrZip === 'string' ? await lookupZip(placeOrZip) : placeOrZip;
+    } catch (err) {
+      if (status) status.textContent = err?.message || 'Could not find that ZIP.';
+      return;
+    }
+    savePlace(nextPlace);
+    try {
       root.innerHTML = `<div class="weather-dashboard-card weather-loading">Loading ${escapeHtml(nextPlace.name || 'weather')}…</div>`;
       render(await loadWeather(nextPlace));
     } catch (err) {
-      const nextStatus = root.querySelector('#weather-status');
-      if (nextStatus) nextStatus.textContent = err?.message || 'Could not load that ZIP right now.';
-      else root.innerHTML = `<div class="weather-dashboard-card weather-loading">${escapeHtml(err?.message || 'Could not load that ZIP right now.')}</div>`;
+      const cached = loadWeatherCache(nextPlace);
+      if (cached) {
+        render({ ...cached, error: err?.message || 'Live refresh failed.' });
+        return;
+      }
+      root.innerHTML = `<div class="weather-dashboard-card weather-loading">${escapeHtml(err?.message || 'Could not load that ZIP right now.')}</div>`;
     }
   }
 
-  function render({ weather, aq, tonightPeriod, alerts, place }) {
+  function render({ weather, aq, tonightPeriod, alerts, place, source, stale, cachedAt, error }) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -207,6 +309,8 @@
     const ozoneVals = (aq.hourly?.ozone || []).filter(v => v != null).slice(0, 24).map(Number);
     const pm25 = pm25Vals.length ? Math.max(...pm25Vals) : null;
     const ozone = ozoneVals.length ? Math.max(...ozoneVals) : null;
+    const dominantPollutant = pm25 == null && ozone == null ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
+    const cachedTime = cachedAt ? new Date(cachedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
     const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 12).map((ts, offset) => {
       const i = hourlyIndex + offset;
@@ -271,6 +375,8 @@
           </div>
         </div>
 
+        ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
+
         ${renderAlerts(alerts)}
 
         ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
@@ -294,8 +400,8 @@
 
         <div class="weather-air-detail">
           <span>Air detail</span>
-          <strong>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`}</strong>
-          <em>${aqi.advice}</em>
+          <strong>${aqi.advice}</strong>
+          <em>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`} · ${dominantPollutant}</em>
         </div>
 
         <div class="weather-five-day-head">
@@ -312,7 +418,7 @@
           }).join('')}
         </div>
 
-        <p class="weather-updated" id="weather-status">Updated from live public weather APIs at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}.</p>
+        <p class="weather-updated" id="weather-status">${stale ? 'Cached fallback' : 'Updated'} from ${escapeHtml(source || 'live public weather APIs')} at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}.</p>
       </div>`;
 
   }
@@ -333,6 +439,8 @@
   root.innerHTML = '<div class="weather-dashboard-card weather-loading">Loading weather…</div>';
   loadWeather().then(render).catch(err => {
     console.error(err);
-    root.innerHTML = '<div class="weather-dashboard-card weather-loading">Weather panel could not load right now.</div>';
+    const cached = loadWeatherCache(loadSavedPlace());
+    if (cached) render({ ...cached, error: err?.message || 'Live weather APIs are temporarily unavailable.' });
+    else root.innerHTML = '<div class="weather-dashboard-card weather-loading">Weather panel could not load right now.</div>';
   });
 })();
