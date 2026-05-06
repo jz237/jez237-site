@@ -452,38 +452,46 @@ p,
 .weather-dashboard-card::before {
   content: "";
   position: absolute;
-  top: -20%;
-  bottom: -20%;
-  left: -55%;
-  width: 46%;
+  top: -28%;
+  bottom: -28%;
+  left: -42%;
+  width: min(520px, 56%);
   z-index: 0;
-  opacity: 0.30;
-  background: linear-gradient(105deg, transparent 0 20%, rgba(255,255,255,0.18) 48%, transparent 76%);
-  filter: blur(10px);
+  opacity: 0.42;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(255,255,255,0.22), transparent 58%),
+    linear-gradient(105deg, transparent 0 16%, rgba(255,255,255,0.22) 48%, transparent 82%);
+  filter: blur(8px);
   transform: translateX(0) skewX(-12deg);
-  animation: weather-console-sweep 9s ease-in-out infinite;
+  animation: weather-console-sweep 6.5s ease-in-out infinite;
   pointer-events: none;
 }
 .weather-condition-rainy::before {
-  opacity: 0.38;
-  background: linear-gradient(105deg, transparent 0 18%, rgba(72,255,214,0.24) 48%, transparent 78%);
-  animation-duration: 6s;
+  opacity: 0.52;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(72,255,214,0.22), transparent 58%),
+    linear-gradient(105deg, transparent 0 16%, rgba(72,255,214,0.30) 48%, transparent 82%);
+  animation-duration: 5.2s;
 }
 .weather-condition-stormy::before {
-  opacity: 0.36;
-  background: linear-gradient(105deg, transparent 0 18%, rgba(230,142,168,0.24) 48%, transparent 78%);
-  animation-duration: 5s;
+  opacity: 0.50;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(230,142,168,0.20), transparent 58%),
+    linear-gradient(105deg, transparent 0 16%, rgba(230,142,168,0.30) 48%, transparent 82%);
+  animation-duration: 4.8s;
 }
 .weather-condition-sunny::before {
-  opacity: 0.34;
-  background: linear-gradient(105deg, transparent 0 18%, rgba(255,224,150,0.24) 48%, transparent 78%);
+  opacity: 0.48;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(255,224,150,0.22), transparent 58%),
+    linear-gradient(105deg, transparent 0 16%, rgba(255,224,150,0.30) 48%, transparent 82%);
 }
 @keyframes weather-console-sweep {
   0% { transform: translateX(0) skewX(-12deg); opacity: 0; }
-  12% { opacity: 0.28; }
-  50% { opacity: 0.42; }
-  88% { opacity: 0.24; }
-  100% { transform: translateX(360%) skewX(-12deg); opacity: 0; }
+  10% { opacity: 0.32; }
+  45% { opacity: 0.58; }
+  80% { opacity: 0.34; }
+  100% { transform: translateX(calc(100vw + 620px)) skewX(-12deg); opacity: 0; }
 }
 @keyframes weather-glow-drift {
   from { transform: translate3d(-4%, 0, 0) scale(1); opacity: 0.70; }
