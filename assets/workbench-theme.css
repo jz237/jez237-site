@@ -452,33 +452,38 @@ p,
 .weather-dashboard-card::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: -20%;
+  bottom: -20%;
+  left: -55%;
+  width: 46%;
   z-index: 0;
-  opacity: 0.16;
-  background: linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,0.10) 48%, transparent 56%);
-  background-size: 240% 100%;
-  animation: weather-console-sweep 18s linear infinite;
+  opacity: 0.30;
+  background: linear-gradient(105deg, transparent 0 20%, rgba(255,255,255,0.18) 48%, transparent 76%);
+  filter: blur(10px);
+  transform: translateX(0) skewX(-12deg);
+  animation: weather-console-sweep 9s ease-in-out infinite;
   pointer-events: none;
 }
 .weather-condition-rainy::before {
-  opacity: 0.28;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(72,255,214,0.10), transparent 28%),
-    linear-gradient(115deg, transparent 0 38%, rgba(72,255,214,0.18) 48%, transparent 58%);
-  animation-duration: 8s;
+  opacity: 0.38;
+  background: linear-gradient(105deg, transparent 0 18%, rgba(72,255,214,0.24) 48%, transparent 78%);
+  animation-duration: 6s;
 }
 .weather-condition-stormy::before {
-  opacity: 0.26;
-  background: linear-gradient(115deg, transparent 0 45%, rgba(230,142,168,0.14) 49%, transparent 55%);
-  animation-duration: 7s;
+  opacity: 0.36;
+  background: linear-gradient(105deg, transparent 0 18%, rgba(230,142,168,0.24) 48%, transparent 78%);
+  animation-duration: 5s;
 }
 .weather-condition-sunny::before {
-  opacity: 0.14;
-  background: linear-gradient(115deg, transparent 0 42%, rgba(255,224,150,0.16) 48%, transparent 56%);
+  opacity: 0.34;
+  background: linear-gradient(105deg, transparent 0 18%, rgba(255,224,150,0.24) 48%, transparent 78%);
 }
 @keyframes weather-console-sweep {
-  from { background-position: 0 0, 120% 0; }
-  to { background-position: 0 0, -120% 0; }
+  0% { transform: translateX(0) skewX(-12deg); opacity: 0; }
+  12% { opacity: 0.28; }
+  50% { opacity: 0.42; }
+  88% { opacity: 0.24; }
+  100% { transform: translateX(360%) skewX(-12deg); opacity: 0; }
 }
 @keyframes weather-glow-drift {
   from { transform: translate3d(-4%, 0, 0) scale(1); opacity: 0.70; }
@@ -556,6 +561,18 @@ p,
   background: rgba(255,255,255,0.075);
   border: 1px solid rgba(255,255,255,0.12);
 }
+.weather-now-badge::after {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 4px;
+  margin: 10px 0 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #72caf0, #72ffe0, #f1d18e, #72caf0);
+  background-size: 240% 100%;
+  box-shadow: 0 0 14px rgba(114,202,240,0.45);
+  animation: weather-bar-shimmer 1.8s linear infinite;
+}
 .weather-now-badge strong {
   display: block;
   font-size: clamp(42px, 6vw, 64px);
@@ -632,7 +649,7 @@ p,
   border-radius: inherit;
   background: linear-gradient(90deg, #72caf0, #4f8cff, #72ffe0, #72caf0);
   background-size: 220% 100%;
-  animation: weather-bar-shimmer 5s linear infinite;
+  animation: weather-bar-shimmer 2.8s linear infinite;
 }
 .weather-aqi-scale {
   overflow: visible;
