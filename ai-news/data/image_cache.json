@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T18:55:11.660527+00:00",
+  "updatedAt": "2026-05-06T20:00:01.447078+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5960,6 +5960,10 @@
     "https://techcrunch.com/2026/05/06/how-elon-musk-left-openai-according-to-greg-brockman": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273248471.jpg?resize=1200,800",
       "checkedAt": "2026-05-06T18:55:11.660527+00:00"
+    },
+    "https://huggingface.co/blog/ServiceNow-AI/correctness-before-corrections": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/correctness-before-corrections.png",
+      "checkedAt": "2026-05-06T20:00:01.447078+00:00"
     }
   }
 }
