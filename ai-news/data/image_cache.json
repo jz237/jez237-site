@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T14:42:29.174963+00:00",
+  "updatedAt": "2026-05-06T16:00:01.697699+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5908,6 +5908,30 @@
     "https://techcrunch.com/2026/05/06/3-days-left-to-lock-in-50-off-a-second-ticket-to-techcrunch-disrupt-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2018/10/27055664959_5fbe947d9b_o.jpg?resize=1200,799",
       "checkedAt": "2026-05-06T14:33:35.841315+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-05-06T16:00:01.697699+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/khosla-backed-robotics-startup-genesis-ai-has-gone-full-stack-demo-shows": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Genesis-AI-Rubiks-Cube-Solve-A-Cam.jpg?resize=1200,675",
+      "checkedAt": "2026-05-06T16:00:01.697699+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/tinder-owner-match-group-is-slowing-hiring-to-pay-for-its-increased-use-of-ai-tools": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/09/tinder-icon-ios.jpg?resize=1200,674",
+      "checkedAt": "2026-05-06T16:00:01.697699+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/apple-to-pay-250m-to-settle-lawsuit-over-siris-delayed-ai-features": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/apple-on-phone.jpg?resize=1200,800",
+      "checkedAt": "2026-05-06T16:00:01.697699+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/ethos-raises-22-75m-from-a16z-for-its-expert-network-with-voice-onboarding": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-05-at-23.18.12.jpeg?resize=1200,812",
+      "checkedAt": "2026-05-06T16:00:01.697699+00:00"
+    },
+    "https://openai.com/index/introducing-b2b-signals": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/nLjavCv9SqZk0i5Ds1h7B/9c25cdb04fdb79c8b30d7c1e181d4b97/Frame2.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-06T16:00:01.697699+00:00"
     }
   }
 }

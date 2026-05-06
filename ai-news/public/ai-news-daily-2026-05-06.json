@@ -1,6 +1,6 @@
 {
   "date": "2026-05-06",
-  "updatedAt": "2026-05-06T14:42:29.174963+00:00",
+  "updatedAt": "2026-05-06T16:00:01.697699+00:00",
   "items": [
     {
       "title": "Inworld AI Launches Realtime TTS-2: A Closed-Loop Voice Model That Adapts to How You Actually Talk",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-05-at-5.20.25-PM-150x150.png",
       "published": "2026-05-06T00:34:38+00:00",
       "firstSeen": "2026-05-06T01:00:01.686060+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.8629
+      "score": 17.8367
     },
     {
       "title": "NVIDIA Spectrum-X — the Open, AI-Native Ethernet Fabric — Sets the Standard for Gigascale AI, Now With MRC",
@@ -30,11 +30,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/ethernet-press-spectrum-x-corp-blog-1920x1080-1.jpg",
       "published": "2026-05-06T11:30:20+00:00",
       "firstSeen": "2026-05-06T12:00:02.012660+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.5964
+      "score": 11.5609
     },
     {
       "title": "When Claude Hallucinates in Court: The Latham & Watkins Incident and What It Means for Attorney Liability",
@@ -47,10 +47,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-5.png",
       "published": "2026-05-06T07:23:12+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1176
+      "score": 11.0859
+    },
+    {
+      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. Elon Musk, his financial [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-06T15:37:32+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3486
+    },
+    {
+      "title": "How frontier enterprises are building an AI advantage",
+      "url": "https://openai.com/index/introducing-b2b-signals",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "OpenAI’s B2B Signals research shows how frontier enterprises deepen AI adoption, scale Codex-powered agentic workflows, and build durable competitive advantage.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/nLjavCv9SqZk0i5Ds1h7B/9c25cdb04fdb79c8b30d7c1e181d4b97/Frame2.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-05-06T00:00:00+00:00",
+      "firstSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.2053
     },
     {
       "title": "China’s Big Fund is now leading the DeepSeek round, and the price has more than doubled in two weeks",
@@ -66,7 +98,7 @@
       "lastSeen": "2026-05-06T12:03:48.753704+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7518
+      "score": 6.72
     },
     {
       "title": "Google AI Releases Multi-Token Prediction (MTP) Drafters for Gemma 4: Delivering Up to 3x Faster Inference Without Quality Loss",
@@ -79,10 +111,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/HHkSld4W0AIM_q5-150x150.jpeg",
       "published": "2026-05-06T08:23:04+00:00",
       "firstSeen": "2026-05-06T09:00:01.794699+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2428
+      "score": 6.2103
     },
     {
       "title": "Samsung Electronics crosses $1tn, joining TSMC, as the AI memory cycle pulls Korea into a record",
@@ -98,7 +130,7 @@
       "lastSeen": "2026-05-06T12:03:48.753704+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4483
+      "score": 5.4167
     },
     {
       "title": "Google&#8217;s AI search summaries will now quote Reddit",
@@ -111,10 +143,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Google-AI-Search-updates-Reddit-linking.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-06T13:00:30+00:00",
       "firstSeen": "2026-05-06T14:00:01.485194+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4093
+      "score": 5.3723
+    },
+    {
+      "title": "Agentic AI-Based Joint Computing and Networking via Mixture of Experts and Large Language Models",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-06T16:00:07.103456+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
+    },
+    {
+      "title": "Google updates AI search to include ‘expert advice’ from Reddit and other web forums",
+      "url": "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "While citing web forums and discussion boards can help users find answers to more niche queries, this design choice could also prove chaotic.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
+      "published": "2026-05-06T15:49:39+00:00",
+      "firstSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6847
     },
     {
       "title": "Vibe coding and agentic engineering are getting closer than I'd like",
@@ -127,74 +191,10 @@
       "image": "",
       "published": "2026-05-06T14:24:08+00:00",
       "firstSeen": "2026-05-06T14:33:35.841315+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
+      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.2807
-    },
-    {
-      "title": "Thailand approves $29bn in projects, with TikTok’s ₿842bn data-centre expansion alone worth $25bn",
-      "url": "https://thenextweb.com/news/thailand-29-billion-tiktok-data-center-approval",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Bangkok’s Board of Investment cleared six major investments on Wednesday. Three of them are data centres. The headline is the TikTok number, but the larger story is what Thailand is becoming inside the regional AI infrastructure trade. Thailand’s Board of Investment is, on most readings, an institutional body whose press releases attract limited international attention. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/thailand-flag.avif",
-      "published": "2026-05-06T10:42:09+00:00",
-      "firstSeen": "2026-05-06T11:00:01.743618+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.8342
-    },
-    {
-      "title": "SpaceX files for a $55bn Texas semiconductor fab, with combined chipmaking investment reaching $119bn",
-      "url": "https://thenextweb.com/news/spacex-terafab-55-billion-texas-chip-plant",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Terafab project sits alongside the existing Bastrop packaging operation. Combined, the two facilities could anchor a $119bn Texas chipmaking footprint. SpaceX has not yet disclosed the process technology Terafab will run, or the construction timeline. SpaceX has filed paperwork for a semiconductor fabrication facility in rural Texas with a planned investment of approximately $55bn. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Terafab.avif",
-      "published": "2026-05-06T13:10:43+00:00",
-      "firstSeen": "2026-05-06T14:00:01.485194+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.5542
-    },
-    {
-      "title": "Google’s top differential-privacy scientist tells the EU its data-sharing plan can be reversed in two hours",
-      "url": "https://thenextweb.com/news/googles-top-differential-privacy-scientist-tells-the-eu-its-data-sharing-plan-can-be-reversed-in-two-hours",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Sergei Vassilvitskii, distinguished scientist at Google since 2012, has written to Brussels warning that the Commission’s proposed anonymisation scheme for forced search-data sharing is, by his red team’s own demonstration, breakable in 120 minutes. The decision deadline is 27 July. There is a familiar genre of corporate complaint in EU regulatory proceedings: a US technology [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
-      "published": "2026-05-06T08:38:13+00:00",
-      "firstSeen": "2026-05-06T09:00:01.794699+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3793
-    },
-    {
-      "title": "Apple Will Pay $250 Million to Settle Lawsuit Over Siri’s AI Features",
-      "url": "https://www.wired.com/story/apple-will-pay-dollar250-million-to-settle-lawsuit-over-siris-ai-features",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "If you bought an iPhone 15 or 16 in the US, you could be set to pocket up to $95 per device as part of the settlement.",
-      "image": "https://media.wired.com/photos/69fb0b751edc0624d26eda73/master/pass/GettyImages-2260718787.jpg",
-      "published": "2026-05-06T10:41:37+00:00",
-      "firstSeen": "2026-05-06T11:00:01.743618+00:00",
-      "lastSeen": "2026-05-06T14:42:29.174963+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2739
+      "score": 4.2422
     }
   ],
   "errors": []
