@@ -345,6 +345,9 @@
 
     root.innerHTML = `
       <div class="weather-dashboard-card weather-condition-${condition}">
+        <div class="weather-motion-layer" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </div>
         <div class="weather-dashboard-top">
           <div>
             <span class="module-kicker">Weather Console</span>
