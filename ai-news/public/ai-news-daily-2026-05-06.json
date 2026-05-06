@@ -1,6 +1,6 @@
 {
   "date": "2026-05-06",
-  "updatedAt": "2026-05-06T16:00:01.697699+00:00",
+  "updatedAt": "2026-05-06T16:52:14.084817+00:00",
   "items": [
     {
       "title": "Inworld AI Launches Realtime TTS-2: A Closed-Loop Voice Model That Adapts to How You Actually Talk",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-05-at-5.20.25-PM-150x150.png",
       "published": "2026-05-06T00:34:38+00:00",
       "firstSeen": "2026-05-06T01:00:01.686060+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.8367
+      "score": 17.8196
     },
     {
       "title": "NVIDIA Spectrum-X — the Open, AI-Native Ethernet Fabric — Sets the Standard for Gigascale AI, Now With MRC",
@@ -30,11 +30,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/ethernet-press-spectrum-x-corp-blog-1920x1080-1.jpg",
       "published": "2026-05-06T11:30:20+00:00",
       "firstSeen": "2026-05-06T12:00:02.012660+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.5609
+      "score": 11.5377
     },
     {
       "title": "When Claude Hallucinates in Court: The Latham & Watkins Incident and What It Means for Attorney Liability",
@@ -47,10 +47,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-5.png",
       "published": "2026-05-06T07:23:12+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0859
+      "score": 11.0652
+    },
+    {
+      "title": "Live blog: Code w/ Claude 2026",
+      "url": "https://simonwillison.net/2026/May/6/code-w-claude-2026",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I'm at Anthropic's Code w/ Claude event in 2026, and I'll be live blogging the keynote and a few other notes throughout the day.\n    \n        Tags: ai, generative-ai, llms, anthropic, claude, claude-code, live-blog",
+      "image": "",
+      "published": "2026-05-06T15:58:27+00:00",
+      "firstSeen": "2026-05-06T16:52:14.084817+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.2629
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -63,10 +79,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-06T15:37:32+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3486
+      "score": 9.3226
     },
     {
       "title": "How frontier enterprises are building an AI advantage",
@@ -79,10 +95,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/nLjavCv9SqZk0i5Ds1h7B/9c25cdb04fdb79c8b30d7c1e181d4b97/Frame2.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-06T00:00:00+00:00",
       "firstSeen": "2026-05-06T16:00:01.697699+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.2053
+      "score": 7.1884
     },
     {
       "title": "China’s Big Fund is now leading the DeepSeek round, and the price has more than doubled in two weeks",
@@ -98,7 +114,7 @@
       "lastSeen": "2026-05-06T12:03:48.753704+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.72
+      "score": 6.6992
     },
     {
       "title": "Google AI Releases Multi-Token Prediction (MTP) Drafters for Gemma 4: Delivering Up to 3x Faster Inference Without Quality Loss",
@@ -111,10 +127,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/HHkSld4W0AIM_q5-150x150.jpeg",
       "published": "2026-05-06T08:23:04+00:00",
       "firstSeen": "2026-05-06T09:00:01.794699+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2103
+      "score": 6.189
     },
     {
       "title": "Samsung Electronics crosses $1tn, joining TSMC, as the AI memory cycle pulls Korea into a record",
@@ -130,7 +146,7 @@
       "lastSeen": "2026-05-06T12:03:48.753704+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4167
+      "score": 5.396
     },
     {
       "title": "Google&#8217;s AI search summaries will now quote Reddit",
@@ -143,13 +159,13 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Google-AI-Search-updates-Reddit-linking.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-06T13:00:30+00:00",
       "firstSeen": "2026-05-06T14:00:01.485194+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3723
+      "score": 5.3481
     },
     {
-      "title": "Agentic AI-Based Joint Computing and Networking via Mixture of Experts and Large Language Models",
+      "title": "When Safety Geometry Collapses: Fine-Tuning Vulnerabilities in Agentic Guard Models",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -157,44 +173,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-06T16:00:07.103456+00:00",
+      "published": "2026-05-06T16:52:19.275870+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
     },
     {
-      "title": "Google updates AI search to include ‘expert advice’ from Reddit and other web forums",
-      "url": "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
+      "title": "5 gardening tips you can try right in Search",
+      "url": "https://blog.google/products-and-platforms/products/search/gardening-tips",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
       "category": "AI",
-      "summary": "While citing web forums and discussion boards can help users find answers to more niche queries, this design choice could also prove chaotic.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/google-logo.jpg?resize=1200%2C800",
-      "published": "2026-05-06T15:49:39+00:00",
-      "firstSeen": "2026-05-06T16:00:01.697699+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
+      "summary": "An abstract background featuring soft, stippled illustrations of flowers and a butterfly in a bright palette of blue, green, and red. In the center of the image is a white circle containing a magnifying glass.",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/01-Google_Gardening_Header.max-600x600.format-webp.webp",
+      "published": "2026-05-06T16:00:00+00:00",
+      "firstSeen": "2026-05-06T16:52:14.084817+00:00",
+      "lastSeen": "2026-05-06T16:52:14.084817+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6847
-    },
-    {
-      "title": "Vibe coding and agentic engineering are getting closer than I'd like",
-      "url": "https://simonwillison.net/2026/May/6/vibe-coding-and-agentic-engineering",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "I recently talked with Joseph Ruscio about AI coding tools for Heavybit's High Leverage podcast: Ep. #9, The AI Coding Paradigm Shift with Simon Willison. Here are some of my highlights, including my disturbing realization that vibe coding and agentic engineering have started to converge in my own work.\nOne thing I really enjoy about podcasts is that they sometimes push me to think out loud in a way that exposes an idea I've not previously been able to put into words.\nVibe coding and agentic engineering are starting to overlap\nA few weeks after vibe coding was first coined I published Not all ",
-      "image": "",
-      "published": "2026-05-06T14:24:08+00:00",
-      "firstSeen": "2026-05-06T14:33:35.841315+00:00",
-      "lastSeen": "2026-05-06T16:00:01.697699+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.2422
+      "score": 4.8037
     }
   ],
   "errors": []
