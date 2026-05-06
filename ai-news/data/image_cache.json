@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T12:03:48.753704+00:00",
+  "updatedAt": "2026-05-06T14:00:01.485194+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5888,6 +5888,14 @@
     "https://openai.com/index/mrc-supercomputer-networking": {
       "image": "",
       "checkedAt": "2026-05-06T12:00:02.012660+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/ai-boom-pushes-samsung-to-1t": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/Samsung-logo.webp?resize=1200,799",
+      "checkedAt": "2026-05-06T14:00:01.485194+00:00"
+    },
+    "https://www.theverge.com/tech/924993/google-ai-search-mode-overviews-update-reddit-links": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Google-AI-Search-updates-Reddit-linking.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-06T14:00:01.485194+00:00"
     }
   }
 }
