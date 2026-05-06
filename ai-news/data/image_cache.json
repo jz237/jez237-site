@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T22:00:02.010039+00:00",
+  "updatedAt": "2026-05-06T22:06:58.522541+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5992,6 +5992,10 @@
     "https://thenextweb.com/news/google-blackstone-kkr-omnibus-ai-licensing-private-equity": {
       "image": "https://media.thenextweb.com/2026/05/google-blackstone-kkr-omnibus-ai-licensing-private-equity.avif",
       "checkedAt": "2026-05-06T22:00:02.010039+00:00"
+    },
+    "https://thenextweb.com/news/snap-q1-2026-iran-war-advertising-perplexity-specs": {
+      "image": "https://media.thenextweb.com/placeholder-bg-1.png",
+      "checkedAt": "2026-05-06T22:06:58.522541+00:00"
     }
   }
 }
