@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T06:42:24.523140+00:00",
+  "updatedAt": "2026-05-06T08:00:01.759356+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5860,6 +5860,18 @@
     "https://techcrunch.com/2026/05/05/marc-lore-says-that-ai-will-soon-enable-anyone-open-a-restaurant": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/marc-lore-wonder.jpg?resize=1200,672",
       "checkedAt": "2026-05-06T06:42:24.523140+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/06/when-claude-hallucinates-in-court-the-latham-watkins-incident-and-what-it-means-for-attorney-liability": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-5.png",
+      "checkedAt": "2026-05-06T08:00:01.759356+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/06/how-to-build-a-fully-interactive-multi-page-nicegui-application-with-real-time-dashboard-crud-operations-file-upload-and-async-chat": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-15.png",
+      "checkedAt": "2026-05-06T08:00:01.759356+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/peter-sarlins-qutwo-reaches-380m-valuation-in-angel-round": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2174694558.jpg?resize=1200,800",
+      "checkedAt": "2026-05-06T08:00:01.759356+00:00"
     }
   }
 }
