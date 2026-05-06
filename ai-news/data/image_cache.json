@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T21:00:01.604400+00:00",
+  "updatedAt": "2026-05-06T22:00:02.010039+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5968,6 +5968,30 @@
     "https://www.theverge.com/column/925487/david-sacks-trump-administration-ai-model-review": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2268643920.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-06T20:44:10.824356+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/barry-diller-trusts-sam-altman-but-trust-is-irrelevant-as-agi-nears-he-says": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/barry-diller.jpg?resize=1200,679",
+      "checkedAt": "2026-05-06T22:00:02.010039+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/snap-says-its-400m-deal-with-perplexity-amicably-ended": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/07/GettyImages-647104884.jpg?resize=1200,800",
+      "checkedAt": "2026-05-06T22:00:02.010039+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/is-xai-a-neocloud-now": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2256968212.jpg?w=1024",
+      "checkedAt": "2026-05-06T22:00:02.010039+00:00"
+    },
+    "https://www.theverge.com/tech/925559/google-project-mariner-shut-down": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/project-mariner-logo.png?quality=90&amp;strip=all&amp;crop=0%2C12.533882885894%2C100%2C74.932234228213&amp;w=1200",
+      "checkedAt": "2026-05-06T22:00:02.010039+00:00"
+    },
+    "https://thenextweb.com/news/core42-g42-minneapolis-data-center-office-conversion-uae": {
+      "image": "https://media.thenextweb.com/2026/05/core42-g42-minneapolis-data-center-office-conversion-uae.avif",
+      "checkedAt": "2026-05-06T22:00:02.010039+00:00"
+    },
+    "https://thenextweb.com/news/google-blackstone-kkr-omnibus-ai-licensing-private-equity": {
+      "image": "https://media.thenextweb.com/2026/05/google-blackstone-kkr-omnibus-ai-licensing-private-equity.avif",
+      "checkedAt": "2026-05-06T22:00:02.010039+00:00"
     }
   }
 }
