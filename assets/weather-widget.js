@@ -34,6 +34,17 @@
     return codeMap[Number(code)] || ['🌡️', 'Forecast'];
   }
 
+  function conditionClass(code, rain = 0, wind = 0) {
+    const n = Number(code);
+    if ([95, 96, 99].includes(n) || wind >= 22) return 'stormy';
+    if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(n) || rain >= 55) return 'rainy';
+    if ([71, 73, 75].includes(n)) return 'snowy';
+    if ([45, 48].includes(n)) return 'foggy';
+    if ([2, 3].includes(n)) return 'cloudy';
+    if ([0, 1].includes(n)) return 'sunny';
+    return 'neutral';
+  }
+
   function aqiInfo(aqi) {
     if (aqi == null || Number.isNaN(Number(aqi))) return { text: 'Unknown', cls: 'unknown', pct: 0, advice: 'Air quality data unavailable.' };
     const n = Math.round(Number(aqi));
@@ -302,6 +313,7 @@
     const wind = Math.round(current.wind_speed_10m ?? 0);
     const gust = Math.round(current.wind_gusts_10m ?? wind);
     const dir = windDir(current.wind_direction_10m);
+    const condition = conditionClass(current.weather_code ?? daily.weather_code?.[0], rain, Math.max(wind, gust));
     const aqiVals = (aq.hourly?.us_aqi || []).filter(v => v != null).slice(0, 24);
     const aqiMax = aqiVals.length ? Math.max(...aqiVals.map(Number)) : null;
     const aqi = aqiInfo(aqiMax);
@@ -332,7 +344,7 @@
     });
 
     root.innerHTML = `
-      <div class="weather-dashboard-card">
+      <div class="weather-dashboard-card weather-condition-${condition}">
         <div class="weather-dashboard-top">
           <div>
             <span class="module-kicker">Weather Console</span>
