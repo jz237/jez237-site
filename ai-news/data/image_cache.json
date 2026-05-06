@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T06:00:01.791173+00:00",
+  "updatedAt": "2026-05-06T07:00:01.317835+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5856,6 +5856,14 @@
     "https://www.sciencedaily.com/releases/2026/05/260504023844.htm": {
       "image": "https://www.sciencedaily.com/images/1920/synthegy-development.webp",
       "checkedAt": "2026-05-06T02:00:02.088186+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/peter-sarlins-qutwo-reaches-380m-valuation-in-angel-round": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2174694558.jpg?resize=1200,800",
+      "checkedAt": "2026-05-06T07:00:01.317835+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/marc-lore-says-that-ai-will-soon-enable-anyone-open-a-restaurant": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/marc-lore-wonder.jpg?resize=1200,672",
+      "checkedAt": "2026-05-06T07:00:01.317835+00:00"
     }
   }
 }
