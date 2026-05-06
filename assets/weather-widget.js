@@ -498,13 +498,13 @@
             <span class="module-kicker">Fishing Conditions Timeline</span>
             <h3>Next 12 hours</h3>
           </div>
-          <p>Rain, wind, pressure trend, and dawn/dusk windows hour by hour.</p>
+          <p>Rain, wind, and pressure trend hour by hour.</p>
         </div>
         <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
           ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
             <span>${h.time}</span>
             <strong>${h.icon} ${h.temp}°</strong>
-            <em>${h.label}${h.isGolden ? ' · golden window' : ''}</em>
+            <em>${h.label}</em>
             <small>${h.rain}% rain · ${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
             <small>pressure ${h.pressureTrend}</small>
             <small class="weather-fishing-score">Fishing ${h.score}/10</small>
