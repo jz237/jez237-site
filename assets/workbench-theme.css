@@ -453,33 +453,25 @@ p,
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.28;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,0.06) 18px 19px),
-    linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,0.10) 48%, transparent 56%);
-  background-size: auto, 240% 100%;
-  animation: weather-console-sweep 14s linear infinite;
+  opacity: 0.16;
+  background: linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,0.10) 48%, transparent 56%);
+  background-size: 240% 100%;
+  animation: weather-console-sweep 18s linear infinite;
   pointer-events: none;
 }
 .weather-condition-rainy::before {
-  opacity: 0.34;
-  background:
-    repeating-linear-gradient(105deg, transparent 0 13px, rgba(114,202,240,0.16) 13px 15px),
-    linear-gradient(115deg, transparent 0 42%, rgba(72,255,214,0.11) 48%, transparent 56%);
-  animation-duration: 8s;
+  opacity: 0.18;
+  background: linear-gradient(115deg, transparent 0 42%, rgba(72,255,214,0.12) 48%, transparent 56%);
+  animation-duration: 12s;
 }
 .weather-condition-stormy::before {
-  opacity: 0.30;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 14px, rgba(168,189,198,0.10) 14px 16px),
-    linear-gradient(115deg, transparent 0 45%, rgba(230,142,168,0.16) 49%, transparent 55%);
-  animation-duration: 6s;
+  opacity: 0.18;
+  background: linear-gradient(115deg, transparent 0 45%, rgba(230,142,168,0.14) 49%, transparent 55%);
+  animation-duration: 10s;
 }
 .weather-condition-sunny::before {
-  opacity: 0.24;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 22px, rgba(241,209,142,0.10) 22px 23px),
-    linear-gradient(115deg, transparent 0 42%, rgba(255,224,150,0.16) 48%, transparent 56%);
+  opacity: 0.14;
+  background: linear-gradient(115deg, transparent 0 42%, rgba(255,224,150,0.16) 48%, transparent 56%);
 }
 @keyframes weather-console-sweep {
   from { background-position: 0 0, 120% 0; }
