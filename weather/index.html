@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/design.css" />
-  <link rel="stylesheet" href="../assets/workbench-theme.css?v=20260506-mobile-weather-2" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css?v=20260506-mobile-weather-3" />
   <style>
     main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
     .weather-page-intro { margin-bottom: 18px; }
@@ -51,11 +51,11 @@
       .weather-timeline-head h3,
       .weather-five-day-head h3 { font-size: 28px !important; }
       .weather-timeline-head p { text-align: left !important; }
-      .weather-hourly-strip { grid-template-columns: repeat(12, 124px) !important; gap: 8px !important; scroll-snap-type: x proximity !important; }
-      .weather-hourly-strip div { scroll-snap-align: start !important; padding: 11px !important; }
+      .weather-hourly-strip { display: flex !important; grid-template-columns: none !important; gap: 8px !important; width: 100% !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; scroll-snap-type: x mandatory !important; -webkit-overflow-scrolling: touch !important; }
+      .weather-hourly-strip div { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
       .fishing-timeline div { min-height: 142px !important; }
-      .weather-five-day { grid-template-columns: repeat(5, 124px) !important; gap: 8px !important; overflow-x: auto !important; padding-bottom: 6px !important; scroll-snap-type: x proximity !important; }
-      .weather-day { scroll-snap-align: start !important; padding: 11px !important; }
+      .weather-five-day { display: flex !important; grid-template-columns: none !important; gap: 8px !important; width: 100% !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; padding-bottom: 6px !important; scroll-snap-type: x mandatory !important; -webkit-overflow-scrolling: touch !important; }
+      .weather-day { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
     }
   </style>
 </head>
