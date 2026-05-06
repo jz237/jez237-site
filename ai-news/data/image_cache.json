@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T22:13:43.466520+00:00",
+  "updatedAt": "2026-05-06T00:00:02.113272+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5844,6 +5844,14 @@
     "https://simonwillison.net/2026/May/5/our-ai-started-a-cafe-in-stockholm": {
       "image": "",
       "checkedAt": "2026-05-05T23:00:01.613125+00:00"
+    },
+    "https://techcrunch.com/2026/05/05/sap-bets-1-16b-on-18-month-old-german-ai-lab-and-says-yes-to-nemoclaw": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/nemoclaw.jpg?resize=1200,675",
+      "checkedAt": "2026-05-06T00:00:02.113272+00:00"
+    },
+    "https://simonwillison.net/2026/May/5/datasette-referrer-policy": {
+      "image": "",
+      "checkedAt": "2026-05-06T00:00:02.113272+00:00"
     }
   }
 }
