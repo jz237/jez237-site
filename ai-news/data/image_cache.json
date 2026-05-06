@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T11:00:01.743618+00:00",
+  "updatedAt": "2026-05-06T12:00:02.012660+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5880,6 +5880,14 @@
     "https://www.theverge.com/tech/924933/google-chrome-4gb-gemini-nano-ai-features": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24418650/STK114_Google_Chrome_01.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-06T11:00:01.743618+00:00"
+    },
+    "https://www.theverge.com/tech/924931/microsoft-office-copilot-windows-reorg-shuffle": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832915/STK095_MICROSOFT_2_CVirginia_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-06T12:00:02.012660+00:00"
+    },
+    "https://openai.com/index/mrc-supercomputer-networking": {
+      "image": "",
+      "checkedAt": "2026-05-06T12:00:02.012660+00:00"
     }
   }
 }
