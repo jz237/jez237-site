@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T01:00:01.686060+00:00",
+  "updatedAt": "2026-05-06T02:00:02.088186+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5852,6 +5852,10 @@
     "https://simonwillison.net/2026/May/5/datasette-referrer-policy": {
       "image": "",
       "checkedAt": "2026-05-06T00:20:19.160453+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/05/260504023844.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/synthegy-development.webp",
+      "checkedAt": "2026-05-06T02:00:02.088186+00:00"
     }
   }
 }
