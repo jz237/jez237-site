@@ -509,10 +509,59 @@ p,
 @media (prefers-reduced-motion: reduce) {
   .weather-dashboard-card::before,
   .weather-dashboard-card::after,
+  .weather-motion-layer i,
   .weather-bar i,
   .weather-hourly-strip b::before { animation: none !important; }
 }
 .weather-dashboard-card > * { position: relative; z-index: 1; }
+.weather-motion-layer {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0 !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+.weather-motion-layer i {
+  position: absolute;
+  display: block;
+  width: clamp(180px, 24vw, 360px);
+  height: clamp(180px, 24vw, 360px);
+  border-radius: 999px;
+  opacity: 0.34;
+  filter: blur(34px);
+  transform: translate3d(0,0,0);
+  animation: weather-blob-orbit 8s ease-in-out infinite alternate;
+}
+.weather-motion-layer i:nth-child(1) {
+  left: -7%;
+  top: 4%;
+  background: rgba(114,202,240,0.58);
+}
+.weather-motion-layer i:nth-child(2) {
+  right: -9%;
+  top: 10%;
+  background: rgba(241,209,142,0.48);
+  animation-delay: -2.5s;
+  animation-duration: 9.5s;
+}
+.weather-motion-layer i:nth-child(3) {
+  left: 34%;
+  bottom: -16%;
+  background: rgba(134,185,111,0.34);
+  animation-delay: -5s;
+  animation-duration: 11s;
+}
+.weather-condition-rainy .weather-motion-layer i:nth-child(1),
+.weather-condition-rainy .weather-motion-layer i:nth-child(3) { background: rgba(72,255,214,0.46); }
+.weather-condition-stormy .weather-motion-layer i:nth-child(1) { background: rgba(97,137,173,0.52); }
+.weather-condition-stormy .weather-motion-layer i:nth-child(2) { background: rgba(230,142,168,0.42); }
+.weather-condition-sunny .weather-motion-layer i:nth-child(1),
+.weather-condition-sunny .weather-motion-layer i:nth-child(2) { background: rgba(255,224,150,0.50); }
+@keyframes weather-blob-orbit {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.22; }
+  50% { transform: translate3d(42px, -26px, 0) scale(1.12); opacity: 0.42; }
+  100% { transform: translate3d(-28px, 34px, 0) scale(0.96); opacity: 0.30; }
+}
 .weather-dashboard-top {
   display: flex;
   align-items: flex-start;
@@ -898,6 +947,11 @@ p,
   .weather-hourly-strip { grid-template-columns: repeat(12, 126px); }
 }
 @media (max-width: 640px) {
+  .weather-motion-layer i {
+    opacity: 0.22;
+    filter: blur(42px);
+    animation-duration: 13s;
+  }
   .weather-dashboard-card::before {
     opacity: 0.16;
     animation-duration: 11s;
