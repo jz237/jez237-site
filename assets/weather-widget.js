@@ -289,7 +289,6 @@
             <em>feels ${h.feels}° · ${h.label}</em>
             <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
             <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
-            <small>${h.cloud}% cloud · ${h.note}</small>
           </div>`).join('')}
         </div>
 
