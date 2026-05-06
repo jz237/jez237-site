@@ -471,11 +471,6 @@
             <em>${uvAdvice(uvMax)}</em>
             <div class="weather-uv-scale"><i style="left:${uvPct(uvMax)}%"></i></div>
           </div>
-          <a class="weather-metric radar" href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">
-            <span>Radar</span>
-            <strong>Windy</strong>
-            <em>radar map</em>
-          </a>
           <div class="weather-metric aqi ${aqi.cls}">
             <span>Air</span>
             <strong>${aqi.text}</strong>
@@ -483,6 +478,8 @@
             <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
           </div>
         </div>
+
+        <p class="weather-radar-link"><a href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">Click here for live weather radar on Windy</a></p>
 
         ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
 
