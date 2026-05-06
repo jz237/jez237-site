@@ -67,6 +67,16 @@
     return best;
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[ch]));
+  }
+
   async function fetchJson(url) {
     const res = await fetch(url, { headers: { Accept: 'application/json' } });
     if (!res.ok) throw new Error(`${res.status} from ${url}`);
@@ -76,16 +86,18 @@
   async function loadWeather() {
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
       `&current=temperature_2m,apparent_temperature,precipitation,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-      `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
+      `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
       `&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${TZ}&forecast_days=6`;
     const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${LAT}&longitude=${LON}&hourly=us_aqi,pm2_5,ozone&timezone=${TZ}&forecast_days=2`;
     const nwsUrl = `https://api.weather.gov/points/${LAT},${LON}`;
+    const alertsUrl = `https://api.weather.gov/alerts/active?point=${LAT},${LON}`;
 
-    const [weather, aq, points] = await Promise.all([
+    const [weather, aq, points, alerts] = await Promise.all([
       fetchJson(weatherUrl),
       fetchJson(aqUrl),
-      fetchJson(nwsUrl).catch(() => null)
+      fetchJson(nwsUrl).catch(() => null),
+      fetchJson(alertsUrl).catch(() => null)
     ]);
     let tonightPeriod = null;
     if (points?.properties?.forecast) {
@@ -95,10 +107,44 @@
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    return { weather, aq, tonightPeriod };
+    return { weather, aq, tonightPeriod, alerts };
   }
 
-  function render({ weather, aq, tonightPeriod }) {
+  function alertTone(alert) {
+    const severity = String(alert?.properties?.severity || '').toLowerCase();
+    const event = String(alert?.properties?.event || '').toLowerCase();
+    if (severity === 'extreme' || severity === 'severe' || /warning|tornado|flood|severe thunderstorm/.test(event)) return 'danger';
+    if (severity === 'moderate' || /watch|advisory|statement/.test(event)) return 'watch';
+    return 'info';
+  }
+
+  function renderAlerts(alerts) {
+    const features = (alerts?.features || []).slice(0, 3);
+    if (!features.length) return '';
+    return `<div class="weather-alerts" aria-label="Active weather alerts">
+      ${features.map(alert => {
+        const props = alert.properties || {};
+        const tone = alertTone(alert);
+        const expires = props.expires ? new Date(props.expires).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+        return `<article class="weather-alert ${tone}">
+          <span>⚠️ ${escapeHtml(props.event || 'Weather alert')}</span>
+          <strong>${escapeHtml(props.headline || props.description || 'Active weather alert for Philadelphia.')}</strong>
+          ${expires ? `<em>Until ${expires}</em>` : ''}
+        </article>`;
+      }).join('')}
+    </div>`;
+  }
+
+  function fishingNote(hour) {
+    const notes = [];
+    if (hour.rain >= 55) notes.push('rain window');
+    if (hour.wind >= 15 || hour.gust >= 22) notes.push('windy');
+    if (hour.cloud >= 70) notes.push('low light');
+    if (hour.rain < 25 && hour.wind < 12) notes.push('fishable');
+    return notes.slice(0, 2).join(' · ') || 'steady';
+  }
+
+  function render({ weather, aq, tonightPeriod, alerts }) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -115,15 +161,23 @@
     const aqiMax = aqiVals.length ? Math.max(...aqiVals.map(Number)) : null;
     const aqi = aqiInfo(aqiMax);
     const hourlyIndex = nearestHourlyIndex(hourly.time || []);
-    const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 8).map((ts, offset) => {
+    const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 12).map((ts, offset) => {
       const i = hourlyIndex + offset;
-      const [hIcon] = weatherLabel(hourly.weather_code?.[i]);
-      return {
+      const [hIcon, hLabel] = weatherLabel(hourly.weather_code?.[i]);
+      const h = {
         time: new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric' }),
         icon: hIcon,
+        label: hLabel,
         temp: Math.round(hourly.temperature_2m?.[i] ?? temp),
-        rain: Math.round(hourly.precipitation_probability?.[i] ?? 0)
+        feels: Math.round(hourly.apparent_temperature?.[i] ?? hourly.temperature_2m?.[i] ?? temp),
+        rain: Math.round(hourly.precipitation_probability?.[i] ?? 0),
+        wind: Math.round(hourly.wind_speed_10m?.[i] ?? wind),
+        gust: Math.round(hourly.wind_gusts_10m?.[i] ?? gust),
+        dir: windDir(hourly.wind_direction_10m?.[i]),
+        cloud: Math.round(hourly.cloud_cover?.[i] ?? current.cloud_cover ?? 0)
       };
+      h.note = fishingNote(h);
+      return h;
     });
 
     root.innerHTML = `
@@ -163,10 +217,26 @@
           </div>
         </div>
 
-        ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${tonightPeriod.detailedForecast}</p>` : ''}
+        ${renderAlerts(alerts)}
 
-        <div class="weather-hourly-strip" aria-label="Hourly weather">
-          ${nextHours.map(h => `<div><span>${h.time}</span><strong>${h.icon} ${h.temp}°</strong><em>${h.rain}% rain</em></div>`).join('')}
+        ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
+
+        <div class="weather-timeline-head">
+          <div>
+            <span class="module-kicker">Fishing Conditions Timeline</span>
+            <h3>Next 12 hours</h3>
+          </div>
+          <p>Rain, wind, cloud cover, and low-light windows hour by hour.</p>
+        </div>
+        <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
+          ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
+            <span>${h.time}</span>
+            <strong>${h.icon} ${h.temp}°</strong>
+            <em>feels ${h.feels}° · ${h.label}</em>
+            <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
+            <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
+            <small>${h.cloud}% cloud · ${h.note}</small>
+          </div>`).join('')}
         </div>
 
         <div class="weather-five-day" aria-label="Five day forecast">
