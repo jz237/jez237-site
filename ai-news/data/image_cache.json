@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T09:00:01.794699+00:00",
+  "updatedAt": "2026-05-06T10:00:01.331717+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5872,6 +5872,10 @@
     "https://techcrunch.com/2026/05/05/peter-sarlins-qutwo-reaches-380m-valuation-in-angel-round": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2174694558.jpg?resize=1200,800",
       "checkedAt": "2026-05-06T08:00:01.759356+00:00"
+    },
+    "https://huggingface.co/blog/open-asr-leaderboard-private-data": {
+      "image": "https://huggingface.co/blog/assets/open-asr-leaderboard-private-data/thumbnail.png",
+      "checkedAt": "2026-05-06T10:00:01.331717+00:00"
     }
   }
 }
