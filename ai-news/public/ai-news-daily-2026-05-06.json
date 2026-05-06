@@ -1,6 +1,6 @@
 {
   "date": "2026-05-06",
-  "updatedAt": "2026-05-06T12:00:02.012660+00:00",
+  "updatedAt": "2026-05-06T13:00:01.235414+00:00",
   "items": [
     {
       "title": "Inworld AI Launches Realtime TTS-2: A Closed-Loop Voice Model That Adapts to How You Actually Talk",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-05-at-5.20.25-PM-150x150.png",
       "published": "2026-05-06T00:34:38+00:00",
       "firstSeen": "2026-05-06T01:00:01.686060+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9209
+      "score": 17.899
     },
     {
       "title": "NVIDIA Spectrum-X — the Open, AI-Native Ethernet Fabric — Sets the Standard for Gigascale AI, Now With MRC",
@@ -30,11 +30,11 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/ethernet-press-spectrum-x-corp-blog-1920x1080-1.jpg",
       "published": "2026-05-06T11:30:20+00:00",
       "firstSeen": "2026-05-06T12:00:02.012660+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.675
+      "score": 11.6453
     },
     {
       "title": "When Claude Hallucinates in Court: The Latham & Watkins Incident and What It Means for Attorney Liability",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-5.png",
       "published": "2026-05-06T07:23:12+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1877
+      "score": 11.1612
     },
     {
       "title": "China’s Big Fund is now leading the DeepSeek round, and the price has more than doubled in two weeks",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-06T07:33:24+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8223
+      "score": 6.7956
     },
     {
       "title": "Google AI Releases Multi-Token Prediction (MTP) Drafters for Gemma 4: Delivering Up to 3x Faster Inference Without Quality Loss",
@@ -79,10 +79,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/HHkSld4W0AIM_q5-150x150.jpeg",
       "published": "2026-05-06T08:23:04+00:00",
       "firstSeen": "2026-05-06T09:00:01.794699+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3149
+      "score": 6.2876
     },
     {
       "title": "Samsung Electronics crosses $1tn, joining TSMC, as the AI memory cycle pulls Korea into a record",
@@ -95,10 +95,26 @@
       "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
       "published": "2026-05-06T07:25:04+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.5185
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.492
+    },
+    {
+      "title": "Agentic AI-Based Joint Computing and Networking via Mixture of Experts and Large Language Models",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-06T13:00:10.069122+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "Thailand approves $29bn in projects, with TikTok’s ₿842bn data-centre expansion alone worth $25bn",
@@ -111,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/05/thailand-flag.avif",
       "published": "2026-05-06T10:42:09+00:00",
       "firstSeen": "2026-05-06T11:00:01.743618+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.911
+      "score": 3.882
     },
     {
       "title": "Google’s top differential-privacy scientist tells the EU its data-sharing plan can be reversed in two hours",
@@ -127,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
       "published": "2026-05-06T08:38:13+00:00",
       "firstSeen": "2026-05-06T09:00:01.794699+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4519
+      "score": 3.4244
     },
     {
       "title": "Apple Will Pay $250 Million to Settle Lawsuit Over Siri's AI Features",
@@ -143,10 +159,10 @@
       "image": "https://media.wired.com/photos/69fb0b751edc0624d26eda73/master/pass/GettyImages-2260718787.jpg",
       "published": "2026-05-06T10:41:37+00:00",
       "firstSeen": "2026-05-06T11:00:01.743618+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3508
+      "score": 3.3217
     },
     {
       "title": "Peter Sarlin’s QuTwo reaches $380M valuation in angel round",
@@ -159,10 +175,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2174694558.jpg?resize=1200%2C800",
       "published": "2026-05-06T06:47:12+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2417
+      "score": 3.2156
     },
     {
       "title": "How to Build a Fully Interactive Multi-Page NiceGUI Application with Real-Time Dashboard, CRUD Operations, File Upload, and Async Chat",
@@ -175,26 +191,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-15.png",
       "published": "2026-05-06T07:02:14+00:00",
       "firstSeen": "2026-05-06T08:00:01.759356+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
+      "lastSeen": "2026-05-06T13:00:01.235414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1783
-    },
-    {
-      "title": "Peter Sarlin’s Qutwo hits $380m valuation in an angel round",
-      "url": "https://thenextweb.com/news/qutwo-380m-angel-round-peter-sarlin-helsinki",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "After selling Silo AI to AMD for $665m, the Helsinki entrepreneur is doing it again. Qutwo’s angel round prices a quantum-classical orchestration layer with no quantum hardware shipping yet, and customers already paying tens of millions for it. There is a particular kind of European startup story that is not supposed to happen at this [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Peter-Sarlin.avif",
-      "published": "2026-05-06T08:48:58+00:00",
-      "firstSeen": "2026-05-06T09:00:01.794699+00:00",
-      "lastSeen": "2026-05-06T12:00:02.012660+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1569
+      "score": 3.1521
     }
   ],
   "errors": []
