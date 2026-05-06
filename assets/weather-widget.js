@@ -479,7 +479,7 @@
           </div>
         </div>
 
-        <p class="weather-radar-link"><a href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">Click here for live weather radar on Windy</a></p>
+        <p class="weather-radar-link"><a href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">Live Weather Radar on Windy</a></p>
 
         ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
 
