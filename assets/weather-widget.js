@@ -411,79 +411,73 @@
           </div>
         </div>
 
-        <div class="weather-desktop-layout">
-          <div class="weather-layout-current">
-            <div class="weather-dashboard-grid">
-              <div class="weather-metric primary">
-                <span>Today</span>
-                <strong>${lo}–${hi}°F</strong>
-                <div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>
-              </div>
-              <div class="weather-metric">
-                <span>Rain</span>
-                <strong>${rain}%</strong>
-                <div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>
-              </div>
-              <div class="weather-metric">
-                <span>Wind</span>
-                <strong>${wind} mph ${dir}</strong>
-                <em>gust ${gust} mph</em>
-              </div>
-              <div class="weather-metric pressure">
-                <span>Pressure</span>
-                <strong>${currentPressure == null ? '—' : `${currentPressure} mb`}</strong>
-                <em>${currentTrend === 'unknown' ? 'trend unavailable' : currentTrend}</em>
-              </div>
-              <div class="weather-metric astro">
-                <span>Sun</span>
-                <strong>${fmtClock(sunrise)}</strong>
-                <em>sunset ${fmtClock(sunset)}</em>
-              </div>
-              <div class="weather-metric comfort">
-                <span>Comfort</span>
-                <strong>${humidity == null ? '—' : `${humidity}% RH`}</strong>
-                <em>dew point ${dewPoint == null ? '—' : `${dewPoint}°`}</em>
-              </div>
-              <div class="weather-metric aqi ${aqi.cls}">
-                <span>Air</span>
-                <strong>${aqi.text}</strong>
-                <em>${aqi.advice}</em>
-                <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
-              </div>
-            </div>
-
-            ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
-
-            ${renderAlerts(alerts)}
-
-            ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
-
-            <div class="weather-air-detail">
-              <span>Air detail</span>
-              <strong>${aqi.advice}</strong>
-              <em>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`} · ${dominantPollutant}</em>
-            </div>
+        <div class="weather-dashboard-grid">
+          <div class="weather-metric primary">
+            <span>Today</span>
+            <strong>${lo}–${hi}°F</strong>
+            <div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>
           </div>
-
-          <div class="weather-layout-timeline">
-            <div class="weather-timeline-head">
-              <div>
-                <span class="module-kicker">Fishing Conditions Timeline</span>
-                <h3>Next 12 hours</h3>
-              </div>
-              <p>Rain, wind, pressure trend, and dawn/dusk windows hour by hour.</p>
-            </div>
-            <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
-              ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
-                <span>${h.time}</span>
-                <strong>${h.icon} ${h.temp}°</strong>
-                <em>Fishing ${h.score}/10${h.isGolden ? ' · golden window' : ''}</em>
-                <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
-                <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
-                <small>pressure ${h.pressureTrend}</small>
-              </div>`).join('')}
-            </div>
+          <div class="weather-metric">
+            <span>Rain</span>
+            <strong>${rain}%</strong>
+            <div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>
           </div>
+          <div class="weather-metric">
+            <span>Wind</span>
+            <strong>${wind} mph ${dir}</strong>
+            <em>gust ${gust} mph</em>
+          </div>
+          <div class="weather-metric pressure">
+            <span>Pressure</span>
+            <strong>${currentPressure == null ? '—' : `${currentPressure} mb`}</strong>
+            <em>${currentTrend === 'unknown' ? 'trend unavailable' : currentTrend}</em>
+          </div>
+          <div class="weather-metric astro">
+            <span>Sun</span>
+            <strong>${fmtClock(sunrise)}</strong>
+            <em>sunset ${fmtClock(sunset)}</em>
+          </div>
+          <div class="weather-metric comfort">
+            <span>Comfort</span>
+            <strong>${humidity == null ? '—' : `${humidity}% RH`}</strong>
+            <em>dew point ${dewPoint == null ? '—' : `${dewPoint}°`}</em>
+          </div>
+          <div class="weather-metric aqi ${aqi.cls}">
+            <span>Air</span>
+            <strong>${aqi.text}</strong>
+            <em>${aqi.advice}</em>
+            <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
+          </div>
+        </div>
+
+        ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
+
+        ${renderAlerts(alerts)}
+
+        ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
+
+        <div class="weather-air-detail">
+          <span>Air detail</span>
+          <strong>${aqi.advice}</strong>
+          <em>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`} · ${dominantPollutant}</em>
+        </div>
+
+        <div class="weather-timeline-head">
+          <div>
+            <span class="module-kicker">Fishing Conditions Timeline</span>
+            <h3>Next 12 hours</h3>
+          </div>
+          <p>Rain, wind, pressure trend, and dawn/dusk windows hour by hour.</p>
+        </div>
+        <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
+          ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
+            <span>${h.time}</span>
+            <strong>${h.icon} ${h.temp}°</strong>
+            <em>Fishing ${h.score}/10${h.isGolden ? ' · golden window' : ''}</em>
+            <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
+            <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
+            <small>pressure ${h.pressureTrend}</small>
+          </div>`).join('')}
         </div>
 
         <div class="weather-five-day-head">
