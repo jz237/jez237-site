@@ -473,10 +473,11 @@
           ${nextHours.map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
             <span>${h.time}</span>
             <strong>${h.icon} ${h.temp}°</strong>
-            <em>Fishing ${h.score}/10${h.isGolden ? ' · golden window' : ''}</em>
+            <em>${h.label}${h.isGolden ? ' · golden window' : ''}</em>
             <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
             <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
             <small>pressure ${h.pressureTrend}</small>
+            <small class="weather-fishing-score">Fishing ${h.score}/10</small>
           </div>`).join('')}
         </div>
 

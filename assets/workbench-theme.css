@@ -814,6 +814,13 @@ p,
   font-style: normal;
   line-height: 1.35;
 }
+.weather-hourly-strip .weather-fishing-score {
+  display: block;
+  margin-top: auto;
+  padding-top: 8px;
+  color: var(--wb-gold, #f1d18e);
+  font-weight: 800;
+}
 .weather-five-day {
   grid-template-columns: repeat(5, 1fr);
   margin-top: 12px;
