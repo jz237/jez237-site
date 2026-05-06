@@ -505,8 +505,7 @@
             <span>${h.time}</span>
             <strong>${h.icon} ${h.temp}°</strong>
             <em>${h.label}${h.isGolden ? ' · golden window' : ''}</em>
-            <b style="--rain:${Math.max(2, Math.min(100, h.rain))}%">${h.rain}% rain</b>
-            <small>${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
+            <small>${h.rain}% rain · ${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
             <small>pressure ${h.pressureTrend}</small>
             <small class="weather-fishing-score">Fishing ${h.score}/10</small>
           </div>`).join('')}
