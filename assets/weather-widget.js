@@ -206,7 +206,8 @@
         temperature_2m_min: dayPeriods.map((p, i) => nightPeriods[i]?.temperature ?? p.temperature),
         precipitation_probability_max: dayPeriods.map((p, i) => Math.max(p.probabilityOfPrecipitation?.value ?? 0, nightPeriods[i]?.probabilityOfPrecipitation?.value ?? 0)),
         sunrise: [],
-        sunset: []
+        sunset: [],
+        uv_index_max: []
       }
     };
   }
@@ -217,7 +218,7 @@
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
       `&current=temperature_2m,apparent_temperature,relative_humidity_2m,dew_point_2m,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-      `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max` +
       `&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${TZ}&forecast_days=6`;
     const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=us_aqi,pm2_5,ozone&timezone=${TZ}&forecast_days=2`;
     const nwsUrl = `https://api.weather.gov/points/${lat},${lon}`;
@@ -310,6 +311,20 @@
     return new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
   }
 
+  function uvAdvice(value) {
+    if (!Number.isFinite(value)) return 'unavailable';
+    if (value >= 8) return 'very high';
+    if (value >= 6) return 'high';
+    if (value >= 3) return 'moderate';
+    return 'low';
+  }
+
+  function radarUrl(place) {
+    const lat = Number(place?.lat ?? DEFAULT_PLACE.lat).toFixed(4);
+    const lon = Number(place?.lon ?? DEFAULT_PLACE.lon).toFixed(4);
+    return `https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiY2VudGVyIjpb${lon},${lat}XSwiem9vbSI6OH19`;
+  }
+
   function nearSunWindow(ts, sunrise, sunset) {
     const t = new Date(ts).getTime();
     return [sunrise, sunset].some(s => s && Math.abs(t - new Date(s).getTime()) <= 90 * 60 * 1000);
@@ -355,11 +370,9 @@
     const humidity = current.relative_humidity_2m == null ? null : Math.round(current.relative_humidity_2m);
     const dewPoint = current.dew_point_2m == null ? null : Math.round(current.dew_point_2m);
     const currentPressure = current.pressure_msl == null ? null : Math.round(current.pressure_msl);
-    const cloudCover = current.cloud_cover == null ? null : Math.round(current.cloud_cover);
+    const uvMax = daily.uv_index_max?.[0] == null ? null : Math.round(Number(daily.uv_index_max[0]) * 10) / 10;
     const placeTitle = place?.name || 'Philadelphia, PA';
-    const placeParts = String(placeTitle).split(',').map(part => part.trim()).filter(Boolean);
-    const placeMain = placeParts[0] || placeTitle;
-    const placeSub = [placeParts.slice(1).join(', '), place?.zip].filter(Boolean).join(' · ') || 'saved forecast';
+    const radarHref = radarUrl(place);
     const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const currentTrend = pressureTrend(hourly.pressure_msl, hourlyIndex);
     const sunrise = daily.sunrise?.[0];
@@ -447,16 +460,16 @@
             <strong>${humidity == null ? '—' : `${humidity}% RH`}</strong>
             <em>dew point ${dewPoint == null ? '—' : `${dewPoint}°`}</em>
           </div>
-          <div class="weather-metric location">
-            <span>Location</span>
-            <strong>${escapeHtml(placeMain)}</strong>
-            <em>${escapeHtml(placeSub)}</em>
+          <div class="weather-metric uv">
+            <span>UV Index</span>
+            <strong>${uvMax == null ? '—' : uvMax}</strong>
+            <em>${uvAdvice(uvMax)}</em>
           </div>
-          <div class="weather-metric clouds">
-            <span>Clouds</span>
-            <strong>${cloudCover == null ? '—' : `${cloudCover}%`}</strong>
-            <em>${cloudCover == null ? 'cover unavailable' : cloudCover >= 70 ? 'mostly covered' : cloudCover >= 35 ? 'partly covered' : 'mostly open sky'}</em>
-          </div>
+          <a class="weather-metric radar" href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">
+            <span>Radar</span>
+            <strong>Open map</strong>
+            <em>NWS local radar</em>
+          </a>
           <div class="weather-metric aqi ${aqi.cls}">
             <span>Air</span>
             <strong>${aqi.text}</strong>
