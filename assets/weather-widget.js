@@ -242,7 +242,8 @@
       try {
         const forecast = await fetchJson(points.properties.forecast);
         const periods = forecast?.properties?.periods || [];
-        todayPeriod = periods.find(p => p?.isDaytime === true) || periods[0] || null;
+        const todayKey = localDateKey(new Date(), TZ);
+        todayPeriod = periods.find(p => p?.isDaytime === true && localDateKey(p.startTime, TZ) === todayKey) || null;
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
@@ -311,6 +312,43 @@
   function fmtClock(ts) {
     if (!ts) return '—';
     return new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function localDateKey(ts, tz = TZ) {
+    return new Date(ts).toLocaleDateString('en-CA', { timeZone: tz });
+  }
+
+  function localHour(ts, tz = TZ) {
+    return Number(new Date(ts).toLocaleTimeString('en-US', { timeZone: tz, hour: 'numeric', hour12: false }));
+  }
+
+  function average(nums) {
+    const vals = nums.filter(v => Number.isFinite(v));
+    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  }
+
+  function summarizeToday(weather) {
+    const current = weather.current || {};
+    const hourly = weather.hourly || {};
+    const daily = weather.daily || {};
+    const today = localDateKey(current.time || Date.now(), TZ);
+    const indexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === today && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
+    const codes = indexes.map(i => hourly.weather_code?.[i]).filter(v => v != null);
+    const clouds = indexes.map(i => Number(hourly.cloud_cover?.[i])).filter(Number.isFinite);
+    const rainChances = indexes.map(i => Number(hourly.precipitation_probability?.[i])).filter(Number.isFinite);
+    const winds = indexes.map(i => Number(hourly.wind_speed_10m?.[i])).filter(Number.isFinite);
+    const code = daily.weather_code?.[0] ?? current.weather_code ?? codes[Math.floor(codes.length / 2)];
+    const [, label] = weatherLabel(code);
+    const hi = daily.temperature_2m_max?.[0] == null ? null : Math.round(daily.temperature_2m_max[0]);
+    const lo = daily.temperature_2m_min?.[0] == null ? null : Math.round(daily.temperature_2m_min[0]);
+    const rain = daily.precipitation_probability_max?.[0] == null ? (rainChances.length ? Math.round(Math.max(...rainChances)) : null) : Math.round(daily.precipitation_probability_max[0]);
+    const cloudAvg = average(clouds);
+    const windMax = winds.length ? Math.round(Math.max(...winds)) : null;
+    const sky = cloudAvg == null ? '' : cloudAvg >= 75 ? ' Skies have been mostly cloudy.' : cloudAvg >= 40 ? ' Skies have been partly cloudy.' : ' Skies have been mostly clear.';
+    const tempText = hi == null || lo == null ? '' : ` Temperatures run about ${lo}–${hi}°.`;
+    const rainText = rain == null ? '' : ` Peak rain chance is ${rain}%.`;
+    const windText = windMax == null ? '' : ` Winds up to ${windMax} mph.`;
+    return `${label} today.${sky}${tempText}${rainText}${windText}`.trim();
   }
 
   function uvAdvice(value) {
@@ -393,6 +431,7 @@
     const pm25 = pm25Vals.length ? Math.max(...pm25Vals) : null;
     const ozone = ozoneVals.length ? Math.max(...ozoneVals) : null;
     const dominantPollutant = pm25 == null && ozone == null ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
+    const todaySummary = todayPeriod?.detailedForecast || summarizeToday(weather);
     const cachedTime = cachedAt ? new Date(cachedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 12).map((ts, offset) => {
       const i = hourlyIndex + offset;
@@ -422,7 +461,7 @@
           <div>
             <h2>${icon} ${label}</h2>
             <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
-            ${todayPeriod?.detailedForecast ? `<p class="weather-day-summary"><strong>Today:</strong> ${escapeHtml(todayPeriod.detailedForecast)}</p>` : ''}
+            ${todaySummary ? `<p class="weather-day-summary"><strong>Today:</strong> ${escapeHtml(todaySummary)}</p>` : ''}
             <form class="weather-location-form" id="weather-location-form">
               <label for="weather-zip-input">ZIP forecast</label>
               <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(place?.zip || '')}">
