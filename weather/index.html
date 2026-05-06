@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Weather Console — Jez237</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .weather-page-intro { margin-bottom: 18px; }
+    .weather-page-intro h1 { margin-bottom: 8px; }
+    .weather-page-intro p { color: var(--ink-lo); max-width: 760px; }
+  </style>
+</head>
+<body>
+  <header id="site-nav" class="home-hidden-nav"></header>
+
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="weather-title">
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="../">
+          <strong>Jez237</strong>
+          <span>Philadelphia · Zone 7a</span>
+        </a>
+        <p class="sidebar-note">A living journal. A garden journal and a workbench.</p>
+
+        <nav class="side-nav">
+          <a href="../">⌘ <span>Overview</span></a>
+          <a class="active" href="./">☀ <span>Weather Console</span></a>
+          <a href="../plants/">✿ <span>Garden Center</span></a>
+          <a href="../garden/">▣ <span>Garden Calendar</span></a>
+          <a href="../ai-news/">◌ <span>AI News</span></a>
+          <a href="../photos/">▧ <span>Photos, kept casual</span></a>
+          <a href="../games/">◇ <span>GameMaster Arcade</span></a>
+          <a href="../experiments/ai-explainer/">☷ <span>How AI Works</span></a>
+          <a href="https://jz237.github.io/stock-command-center/">↗ <span>Stock Command Center</span></a>
+          <a href="../#workbench-tools">⚒ <span>Workbench / Tools</span></a>
+          <a href="../plants/past-years/">□ <span>Archives</span></a>
+        </nav>
+
+        <div class="side-controls" aria-hidden="true">
+          <span>☼</span><span>☾</span><span>⚙</span>
+        </div>
+      </aside>
+
+      <div class="hub-main">
+        <div class="hub-topbar weather-page-intro">
+          <div>
+            <h1 id="weather-title">Weather Console</h1>
+            <p>Philly by default, ZIP-aware when you need another spot. Built around hourly fishing conditions, alerts, air quality, and the next few days.</p>
+          </div>
+          <div class="topbar-actions">
+            <a href="../">Overview</a>
+            <button type="button" aria-label="Menu">☰</button>
+          </div>
+        </div>
+
+        <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
+          <div id="philly-weather-widget"></div>
+        </section>
+      </div>
+    </section>
+
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
+      <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
+  <script src="../assets/weather-widget.js" defer></script>
+</body>
+</html>

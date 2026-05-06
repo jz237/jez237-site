@@ -300,8 +300,7 @@
         </div>
 
         <div class="weather-five-day-head">
-          <span class="module-kicker">5-Day Forecast</span>
-          <h3>Extended outlook</h3>
+          <h3>5-day Extended Outlook</h3>
         </div>
         <div class="weather-five-day" aria-label="Five day forecast">
           ${(daily.time || []).slice(1, 6).map((ts, i) => {
