@@ -322,7 +322,12 @@
   function radarUrl(place) {
     const lat = Number(place?.lat ?? DEFAULT_PLACE.lat).toFixed(4);
     const lon = Number(place?.lon ?? DEFAULT_PLACE.lon).toFixed(4);
-    return `https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiY2VudGVyIjpb${lon},${lat}XSwiem9vbSI6OH19`;
+    return `https://www.windy.com/?radar,${lat},${lon},9`;
+  }
+
+  function uvPct(value) {
+    if (!Number.isFinite(value)) return 0;
+    return Math.max(0, Math.min(100, (value / 11) * 100));
   }
 
   function nearSunWindow(ts, sunrise, sunset) {
@@ -464,11 +469,12 @@
             <span>UV Index</span>
             <strong>${uvMax == null ? '—' : uvMax}</strong>
             <em>${uvAdvice(uvMax)}</em>
+            <div class="weather-uv-scale"><i style="left:${uvPct(uvMax)}%"></i></div>
           </div>
           <a class="weather-metric radar" href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">
             <span>Radar</span>
-            <strong>Open map</strong>
-            <em>NWS local radar</em>
+            <strong>Windy</strong>
+            <em>radar map</em>
           </a>
           <div class="weather-metric aqi ${aqi.cls}">
             <span>Air</span>
