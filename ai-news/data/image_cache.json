@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T14:00:01.485194+00:00",
+  "updatedAt": "2026-05-06T14:33:35.841315+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5896,6 +5896,18 @@
     "https://www.theverge.com/tech/924993/google-ai-search-mode-overviews-update-reddit-links": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Google-AI-Search-updates-Reddit-linking.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-06T14:00:01.485194+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/at-techcrunch-disrupt-2026-all-your-ma-questions-will-be-answered": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Disrupt-2025-Builders-Stage-Crowd.png?resize=1200,800",
+      "checkedAt": "2026-05-06T14:33:35.841315+00:00"
+    },
+    "https://simonwillison.net/2026/May/6/vibe-coding-and-agentic-engineering": {
+      "image": "",
+      "checkedAt": "2026-05-06T14:33:35.841315+00:00"
+    },
+    "https://techcrunch.com/2026/05/06/3-days-left-to-lock-in-50-off-a-second-ticket-to-techcrunch-disrupt-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/10/27055664959_5fbe947d9b_o.jpg?resize=1200,799",
+      "checkedAt": "2026-05-06T14:33:35.841315+00:00"
     }
   }
 }
