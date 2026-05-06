@@ -964,3 +964,75 @@ p,
   }
   .weather-updated { font-size: 11px; line-height: 1.4; }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+  .workbench-home {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  .desktop-hub,
+  .hub-main,
+  .weather-dashboard,
+  #philly-weather-widget,
+  .weather-dashboard-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+  .desktop-hub {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  .hub-main {
+    padding: 14px 10px 30px !important;
+  }
+  .weather-dashboard-card {
+    overflow: hidden;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  .weather-dashboard-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .weather-air-detail *,
+  .weather-nws-summary,
+  .weather-day-summary,
+  .weather-alert *,
+  .weather-hourly-strip *,
+  .weather-five-day * {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .weather-hourly-strip,
+  .weather-five-day {
+    display: flex !important;
+    grid-template-columns: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    gap: 10px !important;
+    padding: 2px 2px 10px !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .weather-hourly-strip > div,
+  .weather-five-day > div {
+    flex: 0 0 72% !important;
+    max-width: 72% !important;
+    scroll-snap-align: start;
+  }
+  .weather-hourly-strip > div {
+    min-height: 150px !important;
+  }
+  .weather-five-day > div {
+    min-height: 132px;
+  }
+}
