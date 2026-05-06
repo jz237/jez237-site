@@ -570,6 +570,24 @@ p,
 .weather-metric.moderate strong { color: #f6d88e; }
 .weather-metric.sensitive strong,
 .weather-metric.unhealthy strong { color: #f0a0b5; }
+.weather-stale-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: baseline;
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(241,209,142,0.12);
+  border: 1px solid rgba(241,209,142,0.34);
+}
+.weather-stale-banner strong {
+  color: #fff7e8;
+}
+.weather-stale-banner span {
+  color: var(--wb-muted, #a8bdc6);
+  font-size: 13px;
+}
 .weather-alerts {
   display: grid;
   gap: 10px;
