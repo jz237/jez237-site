@@ -420,7 +420,6 @@
       <div class="weather-dashboard-card weather-condition-${condition}">
         <div class="weather-dashboard-top">
           <div>
-            <span class="module-kicker">Weather Console</span>
             <h2>${icon} ${label}</h2>
             <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
             ${todayPeriod?.detailedForecast ? `<p class="weather-day-summary"><strong>Today:</strong> ${escapeHtml(todayPeriod.detailedForecast)}</p>` : ''}
