@@ -54,6 +54,19 @@
     return { text: `${n} Unhealthy`, cls: 'unhealthy', pct: 96, advice: 'Limit long outdoor exertion.' };
   }
 
+  function pollutantLabel(kind, value) {
+    if (!Number.isFinite(value)) return 'n/a';
+    if (kind === 'pm2_5') {
+      const label = value <= 9 ? 'low/good' : value <= 35.4 ? 'moderate' : value <= 55.4 ? 'high for sensitive people' : 'high';
+      return `${value.toFixed(1)} µg/m³ (${label})`;
+    }
+    if (kind === 'ozone') {
+      const label = value <= 100 ? 'low/good' : value <= 160 ? 'moderate' : value <= 200 ? 'high for sensitive people' : 'high';
+      return `${Math.round(value)} µg/m³ (${label})`;
+    }
+    return String(value);
+  }
+
   function windDir(degrees) {
     if (degrees == null) return '';
     if (typeof degrees === 'string') return degrees;
@@ -327,6 +340,31 @@
     return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
   }
 
+  function summarizeAqWindow(aq, key, targetDate, night = false) {
+    const times = aq.hourly?.time || [];
+    const vals = aq.hourly?.[key] || [];
+    const selected = [];
+    times.forEach((ts, i) => {
+      const val = Number(vals[i]);
+      if (!Number.isFinite(val)) return;
+      const dateKey = localDateKey(ts, TZ);
+      const hour = localHour(ts, TZ);
+      const tomorrow = new Date(`${targetDate}T12:00:00`);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowKey = localDateKey(tomorrow, TZ);
+      const include = night
+        ? ((dateKey === targetDate && hour >= 18) || (dateKey === tomorrowKey && hour <= 6))
+        : (dateKey === targetDate && hour >= 6 && hour <= 17);
+      if (include) selected.push(val);
+    });
+    if (!selected.length) return { max: null, avg: null, min: null };
+    return {
+      max: Math.max(...selected),
+      avg: selected.reduce((a, b) => a + b, 0) / selected.length,
+      min: Math.min(...selected)
+    };
+  }
+
   function summarizeToday(weather) {
     const current = weather.current || {};
     const hourly = weather.hourly || {};
@@ -423,14 +461,18 @@
     const sunrise = daily.sunrise?.[0];
     const sunset = daily.sunset?.[0];
     const condition = conditionClass(current.weather_code ?? daily.weather_code?.[0], rain, Math.max(wind, gust));
-    const aqiVals = (aq.hourly?.us_aqi || []).filter(v => v != null).slice(0, 24);
-    const aqiMax = aqiVals.length ? Math.max(...aqiVals.map(Number)) : null;
+    const todayKey = localDateKey(current.time || Date.now(), TZ);
+    const dayAqi = summarizeAqWindow(aq, 'us_aqi', todayKey, false);
+    const nightAqi = summarizeAqWindow(aq, 'us_aqi', todayKey, true);
+    const dayPm25 = summarizeAqWindow(aq, 'pm2_5', todayKey, false);
+    const nightPm25 = summarizeAqWindow(aq, 'pm2_5', todayKey, true);
+    const dayOzone = summarizeAqWindow(aq, 'ozone', todayKey, false);
+    const nightOzone = summarizeAqWindow(aq, 'ozone', todayKey, true);
+    const aqiMax = dayAqi.max ?? nightAqi.max;
     const aqi = aqiInfo(aqiMax);
-    const pm25Vals = (aq.hourly?.pm2_5 || []).filter(v => v != null).slice(0, 24).map(Number);
-    const ozoneVals = (aq.hourly?.ozone || []).filter(v => v != null).slice(0, 24).map(Number);
-    const pm25 = pm25Vals.length ? Math.max(...pm25Vals) : null;
-    const ozone = ozoneVals.length ? Math.max(...ozoneVals) : null;
-    const dominantPollutant = pm25 == null && ozone == null ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
+    const pm25 = Math.max(...[dayPm25.max, nightPm25.max].filter(Number.isFinite));
+    const ozone = Math.max(...[dayOzone.max, nightOzone.max].filter(Number.isFinite));
+    const dominantPollutant = !Number.isFinite(pm25) && !Number.isFinite(ozone) ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
     const todaySummary = todayPeriod?.detailedForecast || summarizeToday(weather);
     const cachedTime = cachedAt ? new Date(cachedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 12).map((ts, offset) => {
@@ -529,9 +571,15 @@
         ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight:</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
 
         <div class="weather-air-detail">
-          <span>Air detail</span>
+          <span>Air quality outlook</span>
           <strong>${aqi.advice}</strong>
-          <em>PM2.5 ${pm25 == null ? '—' : `${pm25.toFixed(1)} µg/m³`} · Ozone ${ozone == null ? '—' : `${Math.round(ozone)} µg/m³`} · ${dominantPollutant}</em>
+          <div class="weather-air-grid">
+            <div><b>Daytime AQI</b><em>${dayAqi.max == null ? 'n/a' : `${aqiInfo(dayAqi.max).text}${dayAqi.avg == null ? '' : ` · avg ${Math.round(dayAqi.avg)}`}`}</em></div>
+            <div><b>Tonight AQI</b><em>${nightAqi.max == null ? 'n/a' : `${aqiInfo(nightAqi.max).text}${nightAqi.avg == null ? '' : ` · avg ${Math.round(nightAqi.avg)}`}`}</em></div>
+            <div><b>PM2.5 max</b><em>Day: ${pollutantLabel('pm2_5', dayPm25.max)}<br>Tonight: ${pollutantLabel('pm2_5', nightPm25.max)}</em></div>
+            <div><b>Ozone max</b><em>Day: ${pollutantLabel('ozone', dayOzone.max)}<br>Tonight: ${pollutantLabel('ozone', nightOzone.max)}</em></div>
+          </div>
+          <em>${dominantPollutant}</em>
         </div>
 
         <div class="weather-timeline-head">
