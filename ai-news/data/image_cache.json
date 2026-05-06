@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T16:00:01.697699+00:00",
+  "updatedAt": "2026-05-06T17:00:01.859752+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5932,6 +5932,10 @@
     "https://openai.com/index/introducing-b2b-signals": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/nLjavCv9SqZk0i5Ds1h7B/9c25cdb04fdb79c8b30d7c1e181d4b97/Frame2.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-06T16:00:01.697699+00:00"
+    },
+    "https://simonwillison.net/2026/May/6/code-w-claude-2026": {
+      "image": "",
+      "checkedAt": "2026-05-06T17:00:01.859752+00:00"
     }
   }
 }
