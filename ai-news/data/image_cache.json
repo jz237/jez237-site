@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T22:06:58.522541+00:00",
+  "updatedAt": "2026-05-06T23:00:02.017723+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -5996,6 +5996,18 @@
     "https://thenextweb.com/news/snap-q1-2026-iran-war-advertising-perplexity-specs": {
       "image": "https://media.thenextweb.com/placeholder-bg-1.png",
       "checkedAt": "2026-05-06T22:06:58.522541+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/06/a-groq-powered-agentic-research-assistant-with-langgraph-tool-calling-sub-agents-and-agentic-memory-lets-built-it": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-6.png",
+      "checkedAt": "2026-05-06T23:00:02.017723+00:00"
+    },
+    "https://openai.com/index/singular-bank": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1OnlxB4PvMkGuoGAOaSTHJ/e2a10ebfa7fe8b569d024323bcfca3dc/oai_SingularBank_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-06T23:00:02.017723+00:00"
+    },
+    "https://openai.com/index/uber": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/44fSkviPWfIhzSgGXp9dhg/ac7d107ec3203cd2c90db1e5b6b9fff9/oai_Uber_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-06T23:00:02.017723+00:00"
     }
   }
 }
