@@ -795,9 +795,9 @@ p,
   gap: 10px;
 }
 .weather-hourly-strip {
-  grid-template-columns: repeat(12, minmax(112px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   margin-top: 12px;
-  overflow-x: auto;
+  overflow-x: visible;
   padding-bottom: 6px;
 }
 .weather-hourly-strip div,
