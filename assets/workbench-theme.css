@@ -855,11 +855,82 @@ p,
   .weather-hourly-strip { grid-template-columns: repeat(12, 126px); overflow-x: auto; }
 }
 @media (max-width: 640px) {
+  .weather-dashboard { margin-top: 16px; }
+  .weather-dashboard-card {
+    padding: 14px;
+    border-radius: 16px;
+  }
   .weather-dashboard-top,
   .weather-timeline-head,
   .weather-five-day-head { flex-direction: column; align-items: flex-start; }
+  .weather-dashboard-top { gap: 12px; margin-bottom: 14px; }
+  .weather-dashboard-top h2 { font-size: 34px; }
+  .weather-dashboard-top p,
+  .weather-day-summary,
+  .weather-nws-summary { font-size: 13px; line-height: 1.45; }
+  .weather-day-summary { margin-top: 8px; }
+  .weather-location-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 7px;
+  }
+  .weather-location-form label { grid-column: 1 / -1; }
+  .weather-location-form input { width: 100%; min-width: 0; }
+  .weather-location-form button { padding: 8px 10px; }
   .weather-timeline-head p { text-align: left; }
-  .weather-now-badge { width: 100%; text-align: left; }
-  .weather-dashboard-grid,
-  .weather-five-day { grid-template-columns: 1fr; }
+  .weather-now-badge {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .weather-now-badge::after { display: none; }
+  .weather-now-badge strong { font-size: 42px; }
+  .weather-dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .weather-metric {
+    min-height: 98px;
+    padding: 11px;
+    border-radius: 13px;
+  }
+  .weather-metric span { font-size: 10px; letter-spacing: 0.08em; }
+  .weather-metric strong { font-size: 22px; line-height: 1.05; }
+  .weather-metric em { font-size: 12px; }
+  .weather-temp-track,
+  .weather-bar,
+  .weather-aqi-scale,
+  .weather-uv-scale { margin-top: 12px; }
+  .weather-radar-link { margin: 4px 0 14px; }
+  .weather-radar-link a { font-size: 24px; }
+  .weather-nws-summary,
+  .weather-air-detail,
+  .weather-alert,
+  .weather-stale-banner {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  .weather-hourly-strip {
+    grid-template-columns: repeat(12, 132px);
+    gap: 8px;
+    margin-inline: -2px;
+    scroll-snap-type: x proximity;
+  }
+  .weather-hourly-strip div {
+    scroll-snap-align: start;
+    padding: 11px;
+  }
+  .fishing-timeline div { min-height: 148px; }
+  .weather-five-day {
+    grid-template-columns: repeat(5, 132px);
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x proximity;
+  }
+  .weather-day { scroll-snap-align: start; padding: 11px; }
+  .weather-updated { font-size: 11px; line-height: 1.4; }
 }
