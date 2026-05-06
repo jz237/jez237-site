@@ -555,17 +555,22 @@ p,
   border: 1px solid rgba(160,198,216,0.18);
   text-decoration: none;
 }
-.weather-metric.radar {
-  background: linear-gradient(145deg, rgba(114,202,240,0.13), rgba(255,255,255,0.055));
-  border-color: rgba(114,202,240,0.34);
-}
-.weather-metric.radar:hover,
-.weather-metric.radar:focus-visible {
-  border-color: rgba(241,209,142,0.55);
-  box-shadow: 0 0 0 2px rgba(241,209,142,0.14);
-}
 .weather-metric.uv strong { color: #f6d88e; }
-.weather-metric.radar strong { color: #9ee7ff; }
+.weather-radar-link {
+  margin: -4px 0 16px;
+  font-size: 15px;
+  font-weight: 800;
+}
+.weather-radar-link a {
+  color: #9ee7ff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(158,231,255,0.55);
+}
+.weather-radar-link a:hover,
+.weather-radar-link a:focus-visible {
+  color: var(--wb-gold, #f1d18e);
+  border-bottom-color: currentColor;
+}
 .weather-metric span {
   display: block;
   margin-bottom: 8px;
