@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T17:01:25.138521+00:00",
+  "updatedAt": "2026-05-07T18:57:08.039023+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6104,6 +6104,14 @@
     "https://openai.com/index/introducing-trusted-contact-in-chatgpt": {
       "image": "",
       "checkedAt": "2026-05-07T18:00:01.969189+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/925874/chatgpt-trusted-contact-emergency-self-harm-notification": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462005/STK155_OPEN_AI_CVirginia_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-07T18:57:08.039023+00:00"
+    },
+    "https://openai.com/index/testing-ads-in-chatgpt": {
+      "image": "",
+      "checkedAt": "2026-05-07T18:57:08.039023+00:00"
     }
   }
 }
