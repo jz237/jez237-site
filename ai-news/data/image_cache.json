@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T22:00:01.978779+00:00",
+  "updatedAt": "2026-05-07T23:00:02.140778+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6168,6 +6168,10 @@
     "https://openai.com/index/gpt-5-5-with-trusted-access-for-cyber": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5JZQQtfzupvQaPZWeiyQJZ/0f41e206019eb32f7901673fa55fec52/seo-card-trusted-access.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-07T22:00:01.978779+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/openai-launches-new-voice-intelligence-features-in-its-api": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
+      "checkedAt": "2026-05-07T23:00:02.140778+00:00"
     }
   }
 }
