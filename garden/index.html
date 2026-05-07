@@ -661,19 +661,18 @@
     }
 
     // ─── WEATHER ────────────────────────────────────────────────────────────
-    // wttr.in weather codes → emoji
+    // Open-Meteo weather codes → emoji/labels. Keep this aligned with /weather/.
     const WX_CODE = {
-      113:"☀️", 116:"⛅", 119:"☁️", 122:"☁️",
-      143:"🌫️", 176:"🌦️", 179:"🌨️", 182:"🌧️", 185:"🌧️",
-      200:"⛈️", 227:"🌨️", 230:"❄️",
-      248:"🌫️", 260:"🌫️",
-      263:"🌦️", 266:"🌧️", 281:"🌧️", 284:"🌧️",
-      293:"🌦️", 296:"🌧️", 299:"🌧️", 302:"🌧️", 305:"🌧️", 308:"🌧️",
-      311:"🌧️", 314:"🌧️", 317:"🌨️", 320:"🌨️", 323:"🌨️", 326:"🌨️",
-      329:"❄️", 332:"❄️", 335:"❄️", 338:"❄️", 350:"🌧️",
-      353:"🌦️", 356:"🌧️", 359:"🌧️", 362:"🌨️", 365:"🌨️",
-      368:"🌨️", 371:"❄️", 374:"🌨️", 377:"🌨️",
-      386:"⛈️", 389:"⛈️", 392:"⛈️", 395:"⛈️"
+      0:"☀️", 1:"🌤️", 2:"⛅", 3:"☁️", 45:"🌫️", 48:"🌫️",
+      51:"🌦️", 53:"🌦️", 55:"🌧️", 61:"🌧️", 63:"🌧️", 65:"🌧️",
+      71:"🌨️", 73:"🌨️", 75:"❄️", 80:"🌦️", 81:"🌧️", 82:"⛈️",
+      95:"⛈️", 96:"⛈️", 99:"⛈️"
+    };
+    const WX_DESC = {
+      0:"Sunny", 1:"Mostly sunny", 2:"Partly cloudy", 3:"Cloudy", 45:"Fog", 48:"Fog",
+      51:"Light drizzle", 53:"Drizzle", 55:"Heavy drizzle", 61:"Light rain", 63:"Rain", 65:"Heavy rain",
+      71:"Light snow", 73:"Snow", 75:"Heavy snow", 80:"Showers", 81:"Showers", 82:"Heavy showers",
+      95:"Storms", 96:"Storms", 99:"Severe storms"
     };
 
     let wxData = {}; // key: "YYYY-MM-DD" → { icon, rain, high, low }
@@ -681,29 +680,49 @@
     async function loadWeather() {
       const strip = document.getElementById("wx-strip");
       try {
-        const r = await fetch("https://wttr.in/Philadelphia?format=j1");
+        const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=40.0607&longitude=-75.0802&hourly=precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America/New_York&forecast_days=7");
         const j = await r.json();
-        const today2 = new Date();
+        const daily = j.daily || {};
+        const hourly = j.hourly || {};
+        const phillyHourNow = Number(new Date().toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', hour12: false }));
 
-        j.weather.forEach((day, i) => {
-          const d = new Date(today2);
-          d.setDate(today2.getDate() + i);
-          const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-          const code = parseInt(day.hourly[4]?.weatherCode || day.hourly[0]?.weatherCode || 113);
-          const rainPct = Math.max(...day.hourly.map(h => parseInt(h.chanceofrain || 0)));
+        (daily.time || []).forEach((key, i) => {
+          const hourIndexes = (hourly.time || []).map((ts, idx) => ts.startsWith(key) ? idx : -1).filter(idx => idx >= 0);
+          const dayIndexes = hourIndexes.filter(idx => {
+            const h = Number((hourly.time[idx] || "T12:00").slice(11, 13));
+            return h >= 6 && h <= 18;
+          });
+          const middayIndexes = dayIndexes.filter(idx => {
+            const h = Number((hourly.time[idx] || "T12:00").slice(11, 13));
+            return h >= 10 && h <= 16;
+          });
+          const usableDayIndexes = key === todayKey
+            ? (dayIndexes.filter(idx => Number((hourly.time[idx] || "T12:00").slice(11, 13)) >= Math.min(18, phillyHourNow)) || dayIndexes)
+            : dayIndexes;
+          const selectedDayIndexes = usableDayIndexes.length ? usableDayIndexes : dayIndexes;
+          const wetIndexes = selectedDayIndexes.filter(idx => {
+            const code = Number(hourly.weather_code?.[idx]);
+            const rain = Number(hourly.precipitation_probability?.[idx] || 0);
+            return rain >= 30 && [51,53,55,61,63,65,80,81,82,95,96,99].includes(code);
+          });
+          const selectedMiddayIndexes = middayIndexes.filter(idx => selectedDayIndexes.includes(idx));
+          const codeSource = wetIndexes.length ? wetIndexes : (selectedMiddayIndexes.length ? selectedMiddayIndexes : selectedDayIndexes);
+          const code = Number(hourly.weather_code?.[codeSource[Math.floor(codeSource.length / 2)]] ?? daily.weather_code?.[i] ?? 0);
+          const rainVals = selectedDayIndexes.map(idx => Number(hourly.precipitation_probability?.[idx])).filter(Number.isFinite);
+          const rainPct = rainVals.length ? Math.round(Math.max(...rainVals)) : 0;
           wxData[key] = {
             icon: WX_CODE[code] || "🌤️",
             rain: rainPct,
-            high: Math.round(parseInt(day.maxtempF)),
-            low:  Math.round(parseInt(day.mintempF)),
-            desc: day.hourly[4]?.weatherDesc?.[0]?.value || ""
+            high: Math.round(Number(daily.temperature_2m_max?.[i])),
+            low:  Math.round(Number(daily.temperature_2m_min?.[i])),
+            desc: WX_DESC[code] || "Forecast"
           };
         });
 
         // Update strip with today summary
         const todayWx = wxData[todayKey];
         if (todayWx) {
-          strip.innerHTML = `${todayWx.icon} Philadelphia today — <span>${todayWx.high}°F / ${todayWx.low}°F</span>&nbsp;&nbsp;💧 Rain <span>${todayWx.rain}%</span>&nbsp;&nbsp;<span style="color:var(--muted)">${todayWx.desc}</span>`;
+          strip.innerHTML = `${todayWx.icon} Philadelphia 19111 today — <span>${todayWx.high}°F / ${todayWx.low}°F</span>&nbsp;&nbsp;💧 Daytime rain <span>${todayWx.rain}%</span>&nbsp;&nbsp;<span style="color:var(--muted)">${todayWx.desc}</span>`;
         } else {
           strip.innerHTML = "🌤️ Philadelphia — weather unavailable";
         }

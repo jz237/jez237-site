@@ -370,16 +370,19 @@
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
     const today = localDateKey(current.time || Date.now(), TZ);
-    const indexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === today && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
+    const nowHour = localHour(current.time || Date.now(), TZ);
+    const daytimeIndexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === today && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
+    const remainingIndexes = daytimeIndexes.filter(i => localHour(hourly.time?.[i], TZ) >= Math.min(18, nowHour));
+    const indexes = remainingIndexes.length ? remainingIndexes : daytimeIndexes;
     const codes = indexes.map(i => hourly.weather_code?.[i]).filter(v => v != null);
     const clouds = indexes.map(i => Number(hourly.cloud_cover?.[i])).filter(Number.isFinite);
     const rainChances = indexes.map(i => Number(hourly.precipitation_probability?.[i])).filter(Number.isFinite);
     const winds = indexes.map(i => Number(hourly.wind_speed_10m?.[i])).filter(Number.isFinite);
-    const code = daily.weather_code?.[0] ?? current.weather_code ?? codes[Math.floor(codes.length / 2)];
+    const code = codes.length ? codes[Math.floor(codes.length / 2)] : (current.weather_code ?? daily.weather_code?.[0]);
     const [, label] = weatherLabel(code);
     const hi = daily.temperature_2m_max?.[0] == null ? null : Math.round(daily.temperature_2m_max[0]);
     const lo = daily.temperature_2m_min?.[0] == null ? null : Math.round(daily.temperature_2m_min[0]);
-    const rain = daily.precipitation_probability_max?.[0] == null ? (rainChances.length ? Math.round(Math.max(...rainChances)) : null) : Math.round(daily.precipitation_probability_max[0]);
+    const rain = rainChances.length ? Math.round(Math.max(...rainChances)) : (daily.precipitation_probability_max?.[0] == null ? null : Math.round(daily.precipitation_probability_max[0]));
     const cloudAvg = average(clouds);
     const windMax = winds.length ? Math.round(Math.max(...winds)) : null;
     const sky = cloudAvg == null ? '' : cloudAvg >= 75 ? ' Skies have been mostly cloudy.' : cloudAvg >= 40 ? ' Skies have been partly cloudy.' : ' Skies have been mostly clear.';
@@ -406,6 +409,15 @@
   function uvPct(value) {
     if (!Number.isFinite(value)) return 0;
     return Math.max(0, Math.min(100, (value / 11) * 100));
+  }
+
+  function peakRainFromIndex(hourly, startIndex, count = 12) {
+    const vals = [];
+    for (let i = Math.max(0, startIndex); i < Math.min((hourly.time || []).length, startIndex + count); i += 1) {
+      const val = Number(hourly.precipitation_probability?.[i]);
+      if (Number.isFinite(val)) vals.push(val);
+    }
+    return vals.length ? Math.round(Math.max(...vals)) : 0;
   }
 
   function daytimeOutlookForDate(hourly, daily, idx) {
@@ -458,7 +470,8 @@
     const lo = Math.round(daily.temperature_2m_min?.[0] ?? current.temperature_2m ?? 0);
     const temp = Math.round(current.temperature_2m ?? hi);
     const feels = Math.round(current.apparent_temperature ?? temp);
-    const rain = Math.round(daily.precipitation_probability_max?.[0] ?? 0);
+    const hourlyIndex = nearestHourlyIndex(hourly.time || []);
+    const rain = peakRainFromIndex(hourly, hourlyIndex, 12);
     const wind = Math.round(current.wind_speed_10m ?? 0);
     const gust = Math.round(current.wind_gusts_10m ?? wind);
     const dir = windDir(current.wind_direction_10m);
@@ -468,7 +481,6 @@
     const uvMax = daily.uv_index_max?.[0] == null ? null : Math.round(Number(daily.uv_index_max[0]) * 10) / 10;
     const placeTitle = place?.name || 'Philadelphia, PA';
     const radarHref = radarUrl(place);
-    const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const currentTrend = pressureTrend(hourly.pressure_msl, hourlyIndex);
     const sunrise = daily.sunrise?.[0];
     const sunset = daily.sunset?.[0];
@@ -536,7 +548,7 @@
             <div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>
           </div>
           <div class="weather-metric">
-            <span>Rain</span>
+            <span>Next 12h rain</span>
             <strong>${rain}%</strong>
             <div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>
           </div>
