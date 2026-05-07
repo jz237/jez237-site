@@ -1,6 +1,6 @@
 {
   "date": "2026-05-07",
-  "updatedAt": "2026-05-07T06:00:01.439298+00:00",
+  "updatedAt": "2026-05-07T06:49:25.505042+00:00",
   "items": [
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-06-at-10.35.41-PM-1-150x150.png",
       "published": "2026-05-07T05:44:59+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T06:00:01.439298+00:00",
+      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.4624
+      "score": 14.4377
+    },
+    {
+      "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
+      "url": "https://thenextweb.com/news/pit-16m-launch-andreessen-horowitz-ai-enterprise-operations",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Voi co-founder, Adam Jafer, is the chief executive. Lakestar joined a16z on the round, with strategic angels from OpenAI, Anthropic, Google, Deel, and Revolut. Early customers, including Voi, Tre, Stena Recycling, and Kry, are reporting deployment timelines of days to weeks. Pit, a Stockholm-based AI-native software platform for enterprise operations, has launched publicly with [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Pit.avif",
+      "published": "2026-05-07T05:00:55+00:00",
+      "firstSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 7.8961
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -29,26 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/OpsMill-.avif",
       "published": "2026-05-07T05:00:55+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T06:00:01.439298+00:00",
+      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8203
-    },
-    {
-      "title": "Continual Distillation of Teachers from Different Domains",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-07T06:00:07.515263+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-07T06:00:01.439298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 4.7961
     },
     {
       "title": "Five architects of the AI economy explain where the wheels are coming off",
@@ -61,10 +61,42 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200%2C800",
       "published": "2026-05-07T05:25:10+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T06:00:01.439298+00:00",
+      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2724
+      "score": 2.2479
+    },
+    {
+      "title": "Corgi reaches a $1.3bn valuation four months after its Series A, with TCV leading a $160m round",
+      "url": "https://thenextweb.com/news/corgi-160m-series-b-tcv-13bn-valuation-trucking",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Y Combinator-backed AI-native insurance carrier closed its Series A in January at a $630m valuation. The Series B doubles that figure and funds expansion beyond startup insurance into trucking, where the company says quoting and risk modelling can be similarly compressed. Corgi, a Y Combinator-backed AI-native insurance carrier built for startups, has raised a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Corgi-founders.avif",
+      "published": "2026-05-07T05:55:55+00:00",
+      "firstSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1231
+    },
+    {
+      "title": "EdgeRazor: A Lightweight Framework for Large Language Models via Mixed-Precision Quantization-Aware Distillation",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-07T06:49:29.809186+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.74
     }
   ],
   "errors": []
