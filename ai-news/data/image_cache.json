@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T06:49:25.505042+00:00",
+  "updatedAt": "2026-05-07T08:00:01.729780+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6016,6 +6016,10 @@
     "https://techcrunch.com/2026/05/06/five-architects-of-the-ai-economy-explain-where-the-wheels-are-coming-off": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200,800",
       "checkedAt": "2026-05-07T06:00:01.439298+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/07/openai-introduces-mrc-multipath-reliable-connection-a-new-open-networking-protocol-for-large-scale-ai-supercomputer-training-clusters": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
+      "checkedAt": "2026-05-07T08:00:01.729780+00:00"
     }
   }
 }
