@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T12:00:01.450243+00:00",
+  "updatedAt": "2026-05-07T13:00:01.824683+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6032,6 +6032,10 @@
     "https://openai.com/index/parloa": {
       "image": "",
       "checkedAt": "2026-05-07T12:00:01.450243+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/spotifys-ai-dj-now-supports-french-german-italian-and-brazilian-portuguese": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Spotify-AI-DJ-Header.jpg?w=978",
+      "checkedAt": "2026-05-07T13:00:01.824683+00:00"
     }
   }
 }

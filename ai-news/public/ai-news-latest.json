@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-07T12:00:01.450243+00:00",
+  "updatedAt": "2026-05-07T13:00:01.824683+00:00",
   "items": [
     {
-      "title": "Continual Distillation of Teachers from Different Domains",
+      "title": "Single-Position Intervention Fails: Distributed Output Templates Drive In-Context Learning",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-07T12:00:06.684744+00:00",
+      "published": "2026-05-07T13:00:09.050389+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Spotify’s AI DJ now supports French, German, Italian and Brazilian Portuguese",
+      "url": "https://techcrunch.com/2026/05/07/spotifys-ai-dj-now-supports-french-german-italian-and-brazilian-portuguese",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Spotify's AI DJ feature now supports French, German, Italian, and Brazilian Portuguese.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Spotify-AI-DJ-Header.jpg?w=978",
+      "published": "2026-05-07T12:20:04+00:00",
+      "firstSeen": "2026-05-07T13:00:01.824683+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2698
     },
     {
       "title": "Parloa builds service agents customers want to talk to",
@@ -28,10 +44,10 @@
       "image": "",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.0699
+      "score": 4.0405
     },
     {
       "title": "Thousands of Vibe-Coded Apps Expose Corporate and Personal Data on the Open Web",
@@ -44,10 +60,10 @@
       "image": "https://media.wired.com/photos/69fa825a7fe14eb8313cc3c7/master/pass/security_vibecodeexposure_gety.jpg",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3599
+      "score": 3.3305
     },
     {
       "title": "This Reggae Band Is in a Nightmare Battle Against AI Slop Remixes",
@@ -60,10 +76,10 @@
       "image": "https://media.wired.com/photos/69fa2d5eb7705358286eaf20/master/pass/His-Song-Is-Going-Viral%E2%80%94But-Its-All-Unauthorized-AI-Slop-Remixes-Culture-2-Additional%20Photo.jpg",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
     },
     {
       "title": "Tata and JSW to spend $1bn building India’s way out of Chinese battery dependence",
@@ -76,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/Tata-Group.avif",
       "published": "2026-05-07T10:26:44+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1035
+      "score": 2.0746
     },
     {
       "title": "Amazon retreats from Singapore groceries, leans on cross-border instead",
@@ -92,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
       "published": "2026-05-07T09:58:09+00:00",
       "firstSeen": "2026-05-07T11:00:01.143869+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0897
+      "score": 2.0612
     },
     {
       "title": "Quantum Motion lands $160m in EU’s first major late-stage commitment",
@@ -108,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/Quantum-Motion-1.avif",
       "published": "2026-05-07T08:39:03+00:00",
       "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0523
+      "score": 2.0248
     },
     {
       "title": "Meta AI Releases NeuralBench: A Unified Open-Source Framework to Benchmark NeuroAI Models Across 36 EEG Tasks and 94 Datasets",
@@ -124,10 +140,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-1.34.54-AM-1-150x150.png",
       "published": "2026-05-07T08:37:32+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.1716
+      "score": 4.1441
     },
     {
       "title": "Brussels strikes deal to thin out AI Act and outlaw nudification apps",
@@ -140,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/02/The-European-Parliament-pulls-back-AI-from-its-own-devices.avif",
       "published": "2026-05-07T08:11:52+00:00",
       "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4897
+      "score": 3.4626
     },
     {
       "title": "Silex Microsystems shares soar on Stockholm debut as MEMS foundry IPO clears at SEK 8.9bn EV",
@@ -156,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/Silex-Microsystems.avif",
       "published": "2026-05-07T07:58:06+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8334
+      "score": 4.8065
     },
     {
       "title": "OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training Clusters",
@@ -172,10 +188,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
       "published": "2026-05-07T07:50:02+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3998
+      "score": 6.3729
     },
     {
       "title": "Why Nexus Luxembourg has become a fixture in Europe’s AI calendar",
@@ -188,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/Nexus-Luxembourg-2026.avif",
       "published": "2026-05-07T07:45:11+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4276
+      "score": 3.4008
     },
     {
       "title": "Skyroot becomes India’s first space-tech unicorn ahead of June Vikram-1 launch",
@@ -201,13 +217,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "GIC and BlackRock-managed funds anchor a fresh round that more than doubles the company’s 2023 valuation. The round is timed to the planned orbital launch of Vikram-1 from Sriharikota, the first private Indian rocket to attempt the milestone. Skyroot Aerospace, the Hyderabad-based private launch-vehicle developer, has crossed into unicorn territory with a fresh round backed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/placeholder-bg-1.png",
+      "image": "https://media.thenextweb.com/2021/09/Android-India.avif",
       "published": "2026-05-07T07:23:13+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7177
+      "score": 2.6912
     },
     {
       "title": "Moonshot AI’s $20bn valuation seals one of China’s fastest AI funding trajectories",
@@ -220,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/Moonshot-AI.avif",
       "published": "2026-05-07T07:11:44+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0874
+      "score": -1.1138
     },
     {
       "title": "Lawrence Wong holds the line: AI will not produce jobless growth in Singapore",
@@ -236,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/Lawrence-Wong-1.avif",
       "published": "2026-05-07T06:56:06+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0944
+      "score": -1.1206
     },
     {
       "title": "Scale AI wins $500m Pentagon contract, five times its previous Defense Department deal",
@@ -252,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif",
       "published": "2026-05-07T06:30:57+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9946
+      "score": 1.9687
     },
     {
       "title": "Corgi reaches a $1.3bn valuation four months after its Series A, with TCV leading a $160m round",
@@ -271,7 +287,7 @@
       "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
+      "score": 1.9539
     },
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -284,10 +300,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-06-at-10.35.41-PM-1-150x150.png",
       "published": "2026-05-07T05:44:59+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.2947
+      "score": 14.2693
     },
     {
       "title": "Five architects of the AI economy explain where the wheels are coming off",
@@ -300,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200%2C800",
       "published": "2026-05-07T05:25:10+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1062
+      "score": 2.0811
     },
     {
       "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
@@ -319,7 +335,7 @@
       "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.756
+      "score": 7.7312
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -335,7 +351,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.656
+      "score": 4.6312
     },
     {
       "title": "Musk’s biggest loyalist became his biggest liability",
@@ -348,10 +364,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STPK222_SHIVON_ZILIS2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-06T23:37:02+00:00",
       "firstSeen": "2026-05-07T00:00:01.970755+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0398
+      "score": 2.0185
     },
     {
       "title": "Elon Musk’s Last-Ditch Effort to Control OpenAI: Recruit Sam Altman to Tesla",
@@ -364,10 +380,10 @@
       "image": "https://media.wired.com/photos/69fbb0898d34a433dee8f300/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Elon-Musk-Considered-Recruiting-Sam-Altman-to-Join-Tesla-AI-Lab-Business-2273123629.jpg",
       "published": "2026-05-06T23:23:45+00:00",
       "firstSeen": "2026-05-07T00:00:01.970755+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9651
+      "score": 4.9438
     },
     {
       "title": "A Groq-Powered Agentic Research Assistant with LangGraph, Tool Calling, Sub-Agents, and Agentic Memory: Lets Built It",
@@ -380,10 +396,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-6.png",
       "published": "2026-05-06T23:00:03+00:00",
       "firstSeen": "2026-05-06T23:00:02.017723+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 13.8866
+      "score": 13.8656
     },
     {
       "title": "Google’s AI Overviews killed 58 per cent of publisher clicks. Now it is adding a ‘Further Exploration’ section to bring some back.",
@@ -399,7 +415,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2999
+      "score": 4.2794
     },
     {
       "title": "Snap lost a 400 million dollar AI deal, 20 million dollars a month to the Iran war, and 24 per cent of its stock price. The AR glasses had better work.",
@@ -415,7 +431,7 @@
       "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7953
+      "score": 1.7749
     },
     {
       "title": "Barry Diller trusts Sam Altman. But ‘trust is irrelevant’ as AGI nears, he says.",
@@ -428,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/barry-diller.jpg?resize=1200%2C679",
       "published": "2026-05-06T21:57:56+00:00",
       "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9349
+      "score": 3.9145
     },
     {
       "title": "Nyobolt’s batteries charge in seconds and last 20,000 cycles. The customer that made it a unicorn is a warehouse robot.",
@@ -447,7 +463,7 @@
       "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7901
+      "score": 1.7698
     },
     {
       "title": "Snap says its $400M deal with Perplexity ‘amicably ended’",
@@ -460,10 +476,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/07/GettyImages-647104884.jpg?resize=1200%2C800",
       "published": "2026-05-06T21:43:24+00:00",
       "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3299
+      "score": 3.3096
     },
     {
       "title": "Is xAI a neocloud now?",
@@ -476,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2256968212.jpg?w=1024",
       "published": "2026-05-06T21:32:55+00:00",
       "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2263
+      "score": 5.2061
     },
     {
       "title": "Ukraine says robots seized enemy territory for the first time. The company behind them is now worth a billion dollars.",
@@ -495,7 +511,7 @@
       "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.786
+      "score": 1.7658
     },
     {
       "title": "Google shuts down Project Mariner",
@@ -508,10 +524,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/project-mariner-logo.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.533882885894%2C100%2C74.932234228213&amp%3Bw=1200",
       "published": "2026-05-06T21:21:45+00:00",
       "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9925
+      "score": 1.9724
     },
     {
       "title": "CopilotKit Introduces Enterprise Intelligence Platform That Gives Agentic Applications Persistent Memory Across Sessions and Devices",
@@ -524,10 +540,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-24-150x150.png",
       "published": "2026-05-06T21:10:08+00:00",
       "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.6486
+      "score": 8.6286
     },
     {
       "title": "Uber missed its revenue target. The stock jumped 10 per cent. Wall Street is pricing a different company.",
@@ -543,7 +559,7 @@
       "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7762
+      "score": 1.7563
     },
     {
       "title": "The UAE’s AI champion just leased a converted Minneapolis office. The irony writes itself.",
@@ -559,7 +575,7 @@
       "lastSeen": "2026-05-07T06:49:25.505042+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7688
+      "score": 1.7491
     },
     {
       "title": "Google is not building a consultancy. It is writing a licensing agreement. That may be the smarter play.",
@@ -575,7 +591,7 @@
       "lastSeen": "2026-05-07T06:49:25.505042+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 6.864
+      "score": 6.8444
     },
     {
       "title": "How David Sacks crashed and burned in the White House",
@@ -588,10 +604,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2268643920.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-06T20:18:00+00:00",
       "firstSeen": "2026-05-06T20:44:10.824356+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3712
+      "score": 3.3517
     },
     {
       "title": "vLLM V0 to V1: Correctness Before Corrections in RL",
@@ -604,10 +620,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ServiceNow-AI/correctness-before-corrections.png",
       "published": "2026-05-06T19:06:55+00:00",
       "firstSeen": "2026-05-06T20:00:01.447078+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0182
+      "score": 1.9993
     },
     {
       "title": "Anthropic Gets in Bed With SpaceX as the AI Race Turns Weird",
@@ -620,26 +636,10 @@
       "image": "https://media.wired.com/photos/69fb7a153d99bccc43e550bb/master/pass/Anthropic-SpaceX-Sign-Compute-Deal-Business-AP-25128659409640.jpg",
       "published": "2026-05-06T18:28:52+00:00",
       "firstSeen": "2026-05-06T18:55:11.660527+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8662
-    },
-    {
-      "title": "How Elon Musk left OpenAI, according to Greg Brockman",
-      "url": "https://techcrunch.com/2026/05/06/how-elon-musk-left-openai-according-to-greg-brockman",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Cutthroat negotiations between startup founders are rarely shared so publicly, especially when a company becomes as world-changing as OpenAI.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273248471.jpg?resize=1200%2C800",
-      "published": "2026-05-06T18:23:54+00:00",
-      "firstSeen": "2026-05-06T18:55:11.660527+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8646
+      "score": 6.8476
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.4831
+      "score": 0.4759
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0759
+      "score": 2.0708
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9775
+      "score": -1.9776
     },
     {
       "title": "The Life Scientific: Jim Ashworth-Beaumont",
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-05-07T12:00:01.450243+00:00",
+      "lastSeen": "2026-05-07T13:00:01.824683+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1917
