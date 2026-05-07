@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T21:00:01.386613+00:00",
+  "updatedAt": "2026-05-07T20:35:56.102332+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6154,12 +6154,12 @@
       "checkedAt": "2026-05-07T20:00:01.172994+00:00"
     },
     "https://techcrunch.com/2026/05/07/openai-introduces-new-trusted-contact-safeguard-for-cases-of-possible-self-harm": {
-      "image": "",
-      "checkedAt": "2026-05-07T21:00:01.386613+00:00"
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "checkedAt": "2026-05-07T20:35:56.102332+00:00"
     },
     "https://simonwillison.net/2026/May/7/llm-gemini": {
       "image": "",
-      "checkedAt": "2026-05-07T21:00:01.386613+00:00"
+      "checkedAt": "2026-05-07T20:35:56.102332+00:00"
     }
   }
 }
