@@ -1,6 +1,6 @@
 {
   "date": "2026-05-07",
-  "updatedAt": "2026-05-07T14:00:01.213526+00:00",
+  "updatedAt": "2026-05-07T15:00:01.705366+00:00",
   "items": [
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-06-at-10.35.41-PM-1-150x150.png",
       "published": "2026-05-07T05:44:59+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.2447
+      "score": 14.2207
+    },
+    {
+      "title": "OpenClaw and Claude can put your AI-generated podcasts in Spotify",
+      "url": "https://www.theverge.com/entertainment/925916/save-to-spotify-ai-podcasts",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Save to Spotify is a new command-line tool designed specifically for AI agents like OpenClaw, Claude Code, or OpenAI Codex. If you're the kind of person who collects research on a topic, then feeds it through their AI of choice to create audio summaries and personal podcasts, this lets you save them right alongside the [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/VRG_Illo_STK130_K_Radtke_Spotify_Podcast_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-07T14:15:40+00:00",
+      "firstSeen": "2026-05-07T15:00:01.705366+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.4376
     },
     {
       "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
@@ -32,7 +48,23 @@
       "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.707
+      "score": 7.6836
+    },
+    {
+      "title": "Android 17: Everything We Know About Google’s Biggest Year Yet",
+      "url": "https://www.techrepublic.com/article/news-android-17-rumors-google-io-2026",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Android 17 rumors point to Motion Assist, App Bubbles, native app locking, Gemini updates, and Android XR news ahead of Google I/O 2026.\nThe post Android 17: Everything We Know About Google’s Biggest Year Yet appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-05-07T14:08:37+00:00",
+      "firstSeen": "2026-05-07T15:00:01.705366+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.2241
     },
     {
       "title": "OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training Clusters",
@@ -45,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
       "published": "2026-05-07T07:50:02+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3468
+      "score": 6.3214
     },
     {
       "title": "Spotify wants to become the home for AI-generated personal audio",
@@ -61,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
       "published": "2026-05-07T13:00:00+00:00",
       "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2599
+      "score": 6.2305
     },
     {
       "title": "Silex Microsystems shares soar on Stockholm debut as MEMS foundry IPO clears at SEK 8.9bn EV",
@@ -77,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/Silex-Microsystems.avif",
       "published": "2026-05-07T07:58:06+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7803
+      "score": 4.7548
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -96,7 +128,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.607
+      "score": 4.5836
     },
     {
       "title": "Meta AI Releases NeuralBench: A Unified Open-Source Framework to Benchmark NeuroAI Models Across 36 EEG Tasks and 94 Datasets",
@@ -109,10 +141,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-1.34.54-AM-1-150x150.png",
       "published": "2026-05-07T08:37:32+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.1174
+      "score": 4.0915
     },
     {
       "title": "Parloa builds service agents customers want to talk to",
@@ -125,10 +157,10 @@
       "image": "",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.012
+      "score": 3.9843
     },
     {
       "title": "Brussels strikes deal to thin out AI Act and outlaw nudification apps",
@@ -141,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/02/The-European-Parliament-pulls-back-AI-from-its-own-devices.avif",
       "published": "2026-05-07T08:11:52+00:00",
       "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4363
+      "score": 3.4106
     },
     {
       "title": "Why Nexus Luxembourg has become a fixture in Europe’s AI calendar",
@@ -157,42 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/Nexus-Luxembourg-2026.avif",
       "published": "2026-05-07T07:45:11+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T15:00:01.705366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3748
-    },
-    {
-      "title": "Thousands of Vibe-Coded Apps Expose Corporate and Personal Data on the Open Web",
-      "url": "https://www.wired.com/story/thousands-of-vibe-coded-apps-expose-corporate-and-personal-data-on-the-open-web",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Companies like Lovable, Base44, Replit, and Netlify use AI to let anyone build a web app in seconds—and in thousands of cases, spill highly sensitive data onto the public internet.",
-      "image": "https://media.wired.com/photos/69fa825a7fe14eb8313cc3c7/master/pass/security_vibecodeexposure_gety.jpg",
-      "published": "2026-05-07T11:00:00+00:00",
-      "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.302
-    },
-    {
-      "title": "China’s Moonshot AI raises $2B at $20B valuation as demand for open-source AI skyrockets",
-      "url": "https://techcrunch.com/2026/05/07/chinas-moonshot-ai-raises-2b-at-20b-valuation-as-demand-for-open-source-ai-skyrockets",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Moonshot's annualized recurring revenue topped $200 million in April, driven by rapid growth in paid subscriptions and API usage.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024",
-      "published": "2026-05-07T13:44:25+00:00",
-      "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9821
+      "score": 3.3494
     }
   ],
   "errors": []
