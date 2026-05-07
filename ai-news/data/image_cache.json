@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T20:35:56.102332+00:00",
+  "updatedAt": "2026-05-07T22:00:01.978779+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6160,6 +6160,14 @@
     "https://simonwillison.net/2026/May/7/llm-gemini": {
       "image": "",
       "checkedAt": "2026-05-07T20:35:56.102332+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/voi-founders-new-ai-startup-pit-has-become-the-latest-rising-star-out-of-stockholm": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Pit-team-2.-Photo-by-Hugo-Thambert.jpg?resize=1200,800",
+      "checkedAt": "2026-05-07T22:00:01.978779+00:00"
+    },
+    "https://openai.com/index/gpt-5-5-with-trusted-access-for-cyber": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5JZQQtfzupvQaPZWeiyQJZ/0f41e206019eb32f7901673fa55fec52/seo-card-trusted-access.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-07T22:00:01.978779+00:00"
     }
   }
 }
