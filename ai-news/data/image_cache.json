@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T12:03:01.357429+00:00",
+  "updatedAt": "2026-05-07T14:00:01.213526+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6036,6 +6036,14 @@
     "https://techcrunch.com/2026/05/07/spotifys-ai-dj-now-supports-french-german-italian-and-brazilian-portuguese": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Spotify-AI-DJ-Header.jpg?w=978",
       "checkedAt": "2026-05-07T13:00:01.824683+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/chinas-moonshot-ai-raises-2b-at-20b-valuation-as-demand-for-open-source-ai-skyrockets": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024",
+      "checkedAt": "2026-05-07T14:00:01.213526+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/spotify-wants-to-become-the-home-for-ai-generated-personal-audio": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
+      "checkedAt": "2026-05-07T14:00:01.213526+00:00"
     }
   }
 }
