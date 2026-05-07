@@ -1,6 +1,6 @@
 {
   "date": "2026-05-07",
-  "updatedAt": "2026-05-07T10:00:01.144457+00:00",
+  "updatedAt": "2026-05-07T09:43:41.159065+00:00",
   "items": [
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-05-07T10:00:01.144457+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.3475
+      "score": 14.3549
     },
     {
       "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/Pit.avif",
       "published": "2026-05-07T05:00:55+00:00",
       "firstSeen": "2026-05-07T06:49:25.505042+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.8078
+      "score": 7.815
     },
     {
       "title": "OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training Clusters",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-07T10:00:01.144457+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4558
+      "score": 6.4636
     },
     {
       "title": "Silex Microsystems shares soar on Stockholm debut as MEMS foundry IPO clears at SEK 8.9bn EV",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/Silex-Microsystems.avif",
       "published": "2026-05-07T07:58:06+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8896
+      "score": 4.8975
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7078
+      "score": 4.715
     },
     {
       "title": "Meta AI Releases NeuralBench: A Unified Open-Source Framework to Benchmark NeuroAI Models Across 36 EEG Tasks and 94 Datasets",
@@ -96,7 +96,7 @@
       "lastSeen": "2026-05-07T10:00:01.144457+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.2288
+      "score": 4.2368
     },
     {
       "title": "Brussels strikes deal to thin out AI Act and outlaw nudification apps",
@@ -108,11 +108,11 @@
       "summary": "After two failed trilogues, Parliament and Council finally landed a compromise that pushes the high-risk compliance deadline to December 2027, lightens paperwork for smaller firms, and writes a long-promised ban on non-consensual intimate imagery into Europe’s flagship AI law. The European Commission confirmed on Wednesday that negotiators from the Parliament and the Council had finally [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/02/The-European-Parliament-pulls-back-AI-from-its-own-devices.avif",
       "published": "2026-05-07T08:11:52+00:00",
-      "firstSeen": "2026-05-07T10:00:01.144457+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "firstSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5463
+      "score": 3.5542
     },
     {
       "title": "Why Nexus Luxembourg has become a fixture in Europe’s AI calendar",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Nexus-Luxembourg-2026.avif",
       "published": "2026-05-07T07:45:11+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4834
+      "score": 3.4913
     },
     {
       "title": "Skyroot becomes India’s first space-tech unicorn ahead of June Vikram-1 launch",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/placeholder-bg-1.png",
       "published": "2026-05-07T07:23:13+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.773
+      "score": 2.7807
     },
     {
       "title": "Five architects of the AI economy explain where the wheels are coming off",
@@ -157,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200%2C800",
       "published": "2026-05-07T05:25:10+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1586
+      "score": 2.1659
     },
     {
       "title": "Quantum Motion lands $160m in EU’s first major late-stage commitment",
@@ -172,11 +172,11 @@
       "summary": "The London company building silicon-CMOS spin qubits has been one of the cleaner technical credentials in European quantum hardware. The choice of investee for the EU’s first major late-stage venture commitment, announced post-Brexit, is itself the news. The European Union’s new Scaleup Europe Fund has made its first investment, leading a $160m round in UK-based [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/placeholder-bg-1.png",
       "published": "2026-05-07T08:39:03+00:00",
-      "firstSeen": "2026-05-07T10:00:01.144457+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "firstSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1095
+      "score": 2.1176
     },
     {
       "title": "Scale AI wins $500m Pentagon contract, five times its previous Defense Department deal",
@@ -189,11 +189,17 @@
       "image": "https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif",
       "published": "2026-05-07T06:30:57+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0485
+      "score": 2.0561
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
