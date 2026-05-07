@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T08:00:01.729780+00:00",
+  "updatedAt": "2026-05-07T09:00:01.190288+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6020,6 +6020,10 @@
     "https://www.marktechpost.com/2026/05/07/openai-introduces-mrc-multipath-reliable-connection-a-new-open-networking-protocol-for-large-scale-ai-supercomputer-training-clusters": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
       "checkedAt": "2026-05-07T08:00:01.729780+00:00"
+    },
+    "https://thenextweb.com/news/skyroot-india-space-tech-unicorn-gic-blackrock": {
+      "image": "https://media.thenextweb.com/placeholder-bg-1.png",
+      "checkedAt": "2026-05-07T09:00:01.190288+00:00"
     }
   }
 }
