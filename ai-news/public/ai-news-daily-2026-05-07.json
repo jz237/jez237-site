@@ -1,6 +1,6 @@
 {
   "date": "2026-05-07",
-  "updatedAt": "2026-05-07T06:49:25.505042+00:00",
+  "updatedAt": "2026-05-07T08:00:01.729780+00:00",
   "items": [
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-06-at-10.35.41-PM-1-150x150.png",
       "published": "2026-05-07T05:44:59+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.4377
+      "score": 14.4033
     },
     {
       "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
@@ -29,10 +29,26 @@
       "image": "https://media.thenextweb.com/2026/05/Pit.avif",
       "published": "2026-05-07T05:00:55+00:00",
       "firstSeen": "2026-05-07T06:49:25.505042+00:00",
-      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.8961
+      "score": 7.8625
+    },
+    {
+      "title": "OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training Clusters",
+      "url": "https://www.marktechpost.com/2026/05/07/openai-introduces-mrc-multipath-reliable-connection-a-new-open-networking-protocol-for-large-scale-ai-supercomputer-training-clusters",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "MRC (Multipath Reliable Connection) is a new open networking protocol developed by OpenAI in partnership with AMD, Broadcom, Intel, Microsoft, and NVIDIA that improves GPU networking performance and resilience in large-scale AI training clusters by spreading packets across hundreds of paths simultaneously, recovering from network failures in microseconds, and enabling supercomputers with over 100,000 GPUs to be built using only two tiers of Ethernet switches.\nThe post OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
+      "published": "2026-05-07T07:50:02+00:00",
+      "firstSeen": "2026-05-07T08:00:01.729780+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.5149
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -45,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/OpsMill-.avif",
       "published": "2026-05-07T05:00:55+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7961
+      "score": 4.7625
     },
     {
       "title": "Five architects of the AI economy explain where the wheels are coming off",
@@ -61,10 +77,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200%2C800",
       "published": "2026-05-07T05:25:10+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2479
+      "score": 2.2139
+    },
+    {
+      "title": "Scale AI wins $500m Pentagon contract, five times its previous Defense Department deal",
+      "url": "https://thenextweb.com/news/scale-ai-500m-pentagon-defense-contract-cdao",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The agreement was signed with the Pentagon’s Chief Digital and Artificial Intelligence Office, the procurement vehicle driving the bulk of US military AI integration spending in 2025 and 2026. Microsoft, Amazon, and Google signed parallel classified-network deals the same week. Scale AI has won a $500m contract from the US Department of Defense, Bloomberg reported [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif",
+      "published": "2026-05-07T06:30:57+00:00",
+      "firstSeen": "2026-05-07T08:00:01.729780+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1056
     },
     {
       "title": "Corgi reaches a $1.3bn valuation four months after its Series A, with TCV leading a $160m round",
@@ -77,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/Corgi-founders.avif",
       "published": "2026-05-07T05:55:55+00:00",
       "firstSeen": "2026-05-07T06:49:25.505042+00:00",
-      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1231
+      "score": 2.0886
     },
     {
       "title": "EdgeRazor: A Lightweight Framework for Large Language Models via Mixed-Precision Quantization-Aware Distillation",
@@ -91,12 +123,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-07T06:49:29.809186+00:00",
+      "published": "2026-05-07T08:00:08.243337+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-07T06:49:25.505042+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.74
+    },
+    {
+      "title": "Lawrence Wong holds the line: AI will not produce jobless growth in Singapore",
+      "url": "https://thenextweb.com/news/singapore-no-jobless-growth-ai-pledge-lawrence-wong",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Singapore’s parliament has pledged that the country will not see jobless growth as artificial intelligence reshapes the economy, Bloomberg reported on Tuesday in coverage citing Channel NewsAsia. The statement reaffirms the position Prime Minister Lawrence Wong took in February during the parliamentary debate on the 2026 Budget, and represents the most explicit commitment a major [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Lawrence-Wong-1.avif",
+      "published": "2026-05-07T06:56:06+00:00",
+      "firstSeen": "2026-05-07T08:00:01.729780+00:00",
+      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.9821
     }
   ],
   "errors": []
