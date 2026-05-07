@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T16:00:02.075059+00:00",
+  "updatedAt": "2026-05-07T17:00:01.928399+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6092,6 +6092,10 @@
     "https://www.techrepublic.com/article/news-ai-chatbot-cheat-sheet-overview": {
       "image": "",
       "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/how-anthropics-mythos-has-rewritten-firefoxs-approach-to-cybersecurity": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
+      "checkedAt": "2026-05-07T17:00:01.928399+00:00"
     }
   }
 }
