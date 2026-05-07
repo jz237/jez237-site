@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-07T14:00:01.213526+00:00",
+  "updatedAt": "2026-05-07T14:46:17.884700+00:00",
   "items": [
     {
-      "title": "Continual Distillation of Teachers from Different Domains",
+      "title": "Nicolas Michel, Maorong Wang, Jiangpeng He, Toshihiko Yamasaki",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-07T14:00:06.341448+00:00",
+      "published": "2026-05-07T14:46:22.293337+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Exhibit at TechCrunch Disrupt 2026: Get in front of 10,000 decision-makers before space runs out",
+      "url": "https://techcrunch.com/2026/05/07/exhibit-at-techcrunch-disrupt-2026-get-in-front-of-10000-decision-makers-before-space-runs-out",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "If startup visibility, traction, and real deals matter, you should be on the TechCrunch Disrupt 2026 exhibit floor. Get your 6' exhibit table before your competitor does.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/Google-Exhibit-Disrupt-2025.jpg?resize=1200%2C800",
+      "published": "2026-05-07T14:30:00+00:00",
+      "firstSeen": "2026-05-07T14:46:17.884700+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2817
+    },
+    {
+      "title": "Aurora’s Chris Urmson on why self-driving trucks are finally ready to scale",
+      "url": "https://techcrunch.com/podcast/auroras-chris-urmson-on-why-self-driving-trucks-are-finally-ready-to-scale",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Self-driving has been &#8220;almost here&#8221; for over a decade. But somewhere between DARPA&#160;challenges&#160;and a handful of driverless trucks hauling freight between Dallas and Houston, Aurora&#160;co-founder and&#160;CEO&#160;Chris Urmson’s story&#160;changed.&#160;The self-driving truck&#160;company&#160;started commercial driverless operations last April and is now scaling from a handful of trucks to hundreds this year.&#160; On this episode of TechCrunch&#8217;s&#160;Equity&#160;podcast,&#160;we&#8217;re&#160;bringing you a [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/04/aurora-chris-urmson.jpeg?resize=1200%2C800",
+      "published": "2026-05-07T14:24:54+00:00",
+      "firstSeen": "2026-05-07T14:46:17.884700+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2792
+    },
+    {
+      "title": "OpenClaw and Claude can put your AI-generated podcasts in Spotify",
+      "url": "https://www.theverge.com/entertainment/925916/save-to-spotify-ai-podcasts",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Save to Spotify is a new command-line tool designed specifically for AI agents like OpenClaw, Claude Code, or OpenAI Codex. If you're the kind of person who collects research on a topic, then feeds it through their AI of choice to create audio summaries and personal podcasts, this lets you save them right alongside the [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/VRG_Illo_STK130_K_Radtke_Spotify_Podcast_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-07T14:15:40+00:00",
+      "firstSeen": "2026-05-07T14:46:17.884700+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.4445
+    },
+    {
+      "title": "Google’s taking a big swing at AI health with the Fitbit Air",
+      "url": "https://www.theverge.com/gadgets/925458/google-health-fitbit-air-ai-coaching-wearables-fitness-trackers",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "It's a Whoop dupe. That was my first thought when I saw the new $99 Google Fitbit Air. You can hardly blame me. The band is screenless with a metallic fabric clasp. My eyes flickered between the Fitbit Air and my wrist, where I'm wearing a Whoop MG. Was I not seeing double? But as [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Lavender-Lifestyle.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
+      "published": "2026-05-07T14:00:00+00:00",
+      "firstSeen": "2026-05-07T14:46:17.884700+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3367
+    },
+    {
+      "title": "2 days left: Get 50% off a second pass to TechCrunch Disrupt 2026",
+      "url": "https://techcrunch.com/2026/05/07/2-days-left-get-50-off-a-second-pass-to-techcrunch-disrupt-2026",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Two days left to save up to $410 on your pass, and get a second one at 50% off to TechCrunch Disrupt 2026. Offer ends May 8, 11:59 p.m. PT. Register now.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/LinkedIn-Ad-with-Text-GA-BOGO-V1-Rectangle.png?w=1200",
+      "published": "2026-05-07T14:00:00+00:00",
+      "firstSeen": "2026-05-07T14:46:17.884700+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2667
     },
     {
       "title": "China’s Moonshot AI raises $2B at $20B valuation as demand for open-source AI skyrockets",
@@ -28,10 +108,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024",
       "published": "2026-05-07T13:44:25+00:00",
       "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9821
+      "score": 2.9589
+    },
+    {
+      "title": "The largest education data breach in history was not an attack on a school. It was an attack on a vendor.",
+      "url": "https://thenextweb.com/news/the-largest-education-data-breach-in-history-was-not-an-attack-on-a-school-it-was-an-attack-on-a-vendor",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The largest education data breach in history was not an attack on a school. It was an attack on a vendor. On 30 April, hackers exploited a vulnerability in the systems of Instructure, the company that makes Canvas, the learning management system used by 41 per cent of higher education institutions across North America. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/instructure-canvas-breach-shinyhunters-education-data.avif",
+      "published": "2026-05-07T13:12:31+00:00",
+      "firstSeen": "2026-05-07T14:46:17.884700+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1033
     },
     {
       "title": "Silicon Valley spent $25 million on a California governor candidate. He is polling at 4 per cent",
@@ -44,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/silicon-valley-matt-mahan-california-governor-tech-money.avif",
       "published": "2026-05-07T13:00:44+00:00",
       "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1202
+      "score": 2.0975
     },
     {
       "title": "Linked and Loaded: Gaijin Single Sign-On Now Available on GeForce NOW",
@@ -60,10 +156,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/gfn-thursday-gaijin-sso-nv-blog-1280x680-logo.jpg",
       "published": "2026-05-07T13:00:27+00:00",
       "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2601
+      "score": 2.2374
     },
     {
       "title": "Spotify wants to become the home for AI-generated personal audio",
@@ -76,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
       "published": "2026-05-07T13:00:00+00:00",
       "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2599
+      "score": 6.2372
     },
     {
       "title": "Spotify’s AI DJ now supports French, German, Italian and Brazilian Portuguese",
@@ -92,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Spotify-AI-DJ-Header.jpg?w=978",
       "published": "2026-05-07T12:20:04+00:00",
       "firstSeen": "2026-05-07T13:00:01.824683+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2403
+      "score": 2.218
     },
     {
       "title": "The rise of AI Orchestration Layers: BadCo.AI on guiding a more connected car buying experience",
@@ -108,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-orchestration-car-buying-badco-ai.avif",
       "published": "2026-05-07T12:15:49+00:00",
       "firstSeen": "2026-05-07T14:00:01.213526+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7982
+      "score": 2.776
     },
     {
       "title": "Parloa builds service agents customers want to talk to",
@@ -124,10 +220,10 @@
       "image": "",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.012
+      "score": 3.9906
     },
     {
       "title": "Thousands of Vibe-Coded Apps Expose Corporate and Personal Data on the Open Web",
@@ -140,10 +236,10 @@
       "image": "https://media.wired.com/photos/69fa825a7fe14eb8313cc3c7/master/pass/security_vibecodeexposure_gety.jpg",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.302
+      "score": 3.2806
     },
     {
       "title": "This Reggae Band Is in a Nightmare Battle Against AI Slop Remixes",
@@ -156,10 +252,10 @@
       "image": "https://media.wired.com/photos/69fa2d5eb7705358286eaf20/master/pass/His-Song-Is-Going-Viral%E2%80%94But-Its-All-Unauthorized-AI-Slop-Remixes-Culture-2-Additional%20Photo.jpg",
       "published": "2026-05-07T11:00:00+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.1806
     },
     {
       "title": "Tata and JSW to spend $1bn building India’s way out of Chinese battery dependence",
@@ -172,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/Tata-Group.avif",
       "published": "2026-05-07T10:26:44+00:00",
       "firstSeen": "2026-05-07T12:00:01.450243+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0466
+      "score": 2.0254
     },
     {
       "title": "Amazon retreats from Singapore groceries, leans on cross-border instead",
@@ -188,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
       "published": "2026-05-07T09:58:09+00:00",
       "firstSeen": "2026-05-07T11:00:01.143869+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0335
+      "score": 2.0126
     },
     {
       "title": "Quantum Motion lands $160m in EU’s first major late-stage commitment",
@@ -204,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/05/Quantum-Motion-1.avif",
       "published": "2026-05-07T08:39:03+00:00",
       "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9981
+      "score": 1.978
     },
     {
       "title": "Meta AI Releases NeuralBench: A Unified Open-Source Framework to Benchmark NeuroAI Models Across 36 EEG Tasks and 94 Datasets",
@@ -220,10 +316,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-1.34.54-AM-1-150x150.png",
       "published": "2026-05-07T08:37:32+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.1174
+      "score": 4.0974
     },
     {
       "title": "Brussels strikes deal to thin out AI Act and outlaw nudification apps",
@@ -236,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/02/The-European-Parliament-pulls-back-AI-from-its-own-devices.avif",
       "published": "2026-05-07T08:11:52+00:00",
       "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4363
+      "score": 3.4164
     },
     {
       "title": "Silex Microsystems shares soar on Stockholm debut as MEMS foundry IPO clears at SEK 8.9bn EV",
@@ -252,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/05/Silex-Microsystems.avif",
       "published": "2026-05-07T07:58:06+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7803
+      "score": 4.7606
     },
     {
       "title": "OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training Clusters",
@@ -268,10 +364,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
       "published": "2026-05-07T07:50:02+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3468
+      "score": 6.3272
     },
     {
       "title": "Why Nexus Luxembourg has become a fixture in Europe’s AI calendar",
@@ -284,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/05/Nexus-Luxembourg-2026.avif",
       "published": "2026-05-07T07:45:11+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3748
+      "score": 3.3552
     },
     {
       "title": "Skyroot becomes India’s first space-tech unicorn ahead of June Vikram-1 launch",
@@ -300,10 +396,10 @@
       "image": "https://media.thenextweb.com/2026/05/Skyroot.avif",
       "published": "2026-05-07T07:23:13+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6654
+      "score": 2.646
     },
     {
       "title": "Moonshot AI’s $20bn valuation seals one of China’s fastest AI funding trajectories",
@@ -319,7 +415,7 @@
       "lastSeen": "2026-05-07T14:00:01.213526+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1395
+      "score": -1.1588
     },
     {
       "title": "Lawrence Wong holds the line: AI will not produce jobless growth in Singapore",
@@ -335,7 +431,7 @@
       "lastSeen": "2026-05-07T12:03:01.357429+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.146
+      "score": -1.1652
     },
     {
       "title": "Scale AI wins $500m Pentagon contract, five times its previous Defense Department deal",
@@ -351,7 +447,7 @@
       "lastSeen": "2026-05-07T12:03:01.357429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9435
+      "score": 1.9246
     },
     {
       "title": "Corgi reaches a $1.3bn valuation four months after its Series A, with TCV leading a $160m round",
@@ -367,7 +463,7 @@
       "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9291
+      "score": 1.9105
     },
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -380,10 +476,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-06-at-10.35.41-PM-1-150x150.png",
       "published": "2026-05-07T05:44:59+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.2447
+      "score": 14.2262
     },
     {
       "title": "Five architects of the AI economy explain where the wheels are coming off",
@@ -396,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200%2C800",
       "published": "2026-05-07T05:25:10+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0567
+      "score": 2.0383
     },
     {
       "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
@@ -415,7 +511,7 @@
       "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.707
+      "score": 7.6889
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -431,7 +527,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.607
+      "score": 4.5889
     },
     {
       "title": "Musk’s biggest loyalist became his biggest liability",
@@ -444,10 +540,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STPK222_SHIVON_ZILIS2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-06T23:37:02+00:00",
       "firstSeen": "2026-05-07T00:00:01.970755+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9977
+      "score": 1.9821
     },
     {
       "title": "Elon Musk’s Last-Ditch Effort to Control OpenAI: Recruit Sam Altman to Tesla",
@@ -460,10 +556,10 @@
       "image": "https://media.wired.com/photos/69fbb0898d34a433dee8f300/master/pass/Model-Behavior-Why-Everything-in-Musk-v-Altman-Elon-Musk-Considered-Recruiting-Sam-Altman-to-Join-Tesla-AI-Lab-Business-2273123629.jpg",
       "published": "2026-05-06T23:23:45+00:00",
       "firstSeen": "2026-05-07T00:00:01.970755+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9232
+      "score": 4.9076
     },
     {
       "title": "A Groq-Powered Agentic Research Assistant with LangGraph, Tool Calling, Sub-Agents, and Agentic Memory: Lets Built It",
@@ -476,10 +572,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-6.png",
       "published": "2026-05-06T23:00:03+00:00",
       "firstSeen": "2026-05-06T23:00:02.017723+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 13.8452
+      "score": 13.8298
     },
     {
       "title": "Google’s AI Overviews killed 58 per cent of publisher clicks. Now it is adding a ‘Further Exploration’ section to bring some back.",
@@ -495,7 +591,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2594
+      "score": 4.2444
     },
     {
       "title": "Snap lost a 400 million dollar AI deal, 20 million dollars a month to the Iran war, and 24 per cent of its stock price. The AR glasses had better work.",
@@ -511,7 +607,7 @@
       "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.755
+      "score": 1.7401
     },
     {
       "title": "Barry Diller trusts Sam Altman. But ‘trust is irrelevant’ as AGI nears, he says.",
@@ -524,10 +620,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/barry-diller.jpg?resize=1200%2C679",
       "published": "2026-05-06T21:57:56+00:00",
       "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8946
+      "score": 3.8797
     },
     {
       "title": "Nyobolt’s batteries charge in seconds and last 20,000 cycles. The customer that made it a unicorn is a warehouse robot.",
@@ -543,103 +639,7 @@
       "lastSeen": "2026-05-07T08:00:01.729780+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7501
-    },
-    {
-      "title": "Snap says its $400M deal with Perplexity ‘amicably ended’",
-      "url": "https://techcrunch.com/2026/05/06/snap-says-its-400m-deal-with-perplexity-amicably-ended",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The deal, announced last November, would have seen Perplexity's AI search engine integrated directly into Snapchat.",
-      "image": "https://techcrunch.com/wp-content/uploads/2022/07/GettyImages-647104884.jpg?resize=1200%2C800",
-      "published": "2026-05-06T21:43:24+00:00",
-      "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.2899
-    },
-    {
-      "title": "Is xAI a neocloud now?",
-      "url": "https://techcrunch.com/2026/05/06/is-xai-a-neocloud-now",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "xAI's real business may be more about building data centers than training AI models.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2256968212.jpg?w=1024",
-      "published": "2026-05-06T21:32:55+00:00",
-      "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1865
-    },
-    {
-      "title": "Ukraine says robots seized enemy territory for the first time. The company behind them is now worth a billion dollars.",
-      "url": "https://thenextweb.com/news/ukraine-says-robots-seized-enemy-territory-for-the-first-time-the-company-behind-them-is-now-worth-a-billion-dollars",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In April, Ukrainian President Volodymyr Zelensky announced that his forces had, for the first time in the history of warfare, seized an enemy position using only unmanned systems. No infantry. No human soldiers entering the contested ground. Drones and ground robots identified the target, suppressed defensive fire, and captured the position without a single Ukrainian [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/uforce-ukraine-robot-warfare-defence-tech-unicorn.avif",
-      "published": "2026-05-06T21:31:57+00:00",
-      "firstSeen": "2026-05-06T22:06:58.522541+00:00",
-      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7462
-    },
-    {
-      "title": "Google shuts down Project Mariner",
-      "url": "https://www.theverge.com/tech/925559/google-project-mariner-shut-down",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Google has pulled the plug on Project Mariner, an experimental feature designed to perform tasks for you across the web, as reported earlier by Wired's Maxwell Zeff. The Project Mariner landing page now contains a message that says: \"Thank you for using Project Mariner. It was shut down on May 4th, 2026 and its technology [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/project-mariner-logo.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.533882885894%2C100%2C74.932234228213&amp%3Bw=1200",
-      "published": "2026-05-06T21:21:45+00:00",
-      "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9529
-    },
-    {
-      "title": "CopilotKit Introduces Enterprise Intelligence Platform That Gives Agentic Applications Persistent Memory Across Sessions and Devices",
-      "url": "https://www.marktechpost.com/2026/05/06/copilotkit-introduces-enterprise-intelligence-platform-that-gives-agentic-applications-persistent-memory-across-sessions-and-devices",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "CopilotKit Intelligence adds a managed persistence layer on top of the open-source CopilotKit stack, giving agents the ability to retain context, state, and interaction history without custom storage infrastructure\nThe post CopilotKit Introduces Enterprise Intelligence Platform That Gives Agentic Applications Persistent Memory Across Sessions and Devices appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-24-150x150.png",
-      "published": "2026-05-06T21:10:08+00:00",
-      "firstSeen": "2026-05-06T22:00:02.010039+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.6092
-    },
-    {
-      "title": "Uber missed its revenue target. The stock jumped 10 per cent. Wall Street is pricing a different company.",
-      "url": "https://thenextweb.com/news/uber-q1-2026-earnings-autonomous-demand-acceleration",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Uber missed its revenue estimate on Tuesday. The stock jumped 10 per cent. The divergence between the number Wall Street expected and the number the market rewarded tells the story of a company that has crossed a threshold: Uber is no longer being priced as a ride-hailing business that also delivers food. It is being [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/uber-q1-2026-earnings-autonomous-demand-acceleration.avif",
-      "published": "2026-05-06T21:03:03+00:00",
-      "firstSeen": "2026-05-06T22:06:58.522541+00:00",
-      "lastSeen": "2026-05-07T08:00:01.729780+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7369
+      "score": 1.7353
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.4689
+      "score": 0.4636
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0659
+      "score": 2.0621
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9777
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-05-07T14:00:01.213526+00:00",
+      "lastSeen": "2026-05-07T14:46:17.884700+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1917
+      "score": 1.1916
     },
     {
       "title": "Lucy Carpenter on how our oceans are destroying ozone",
