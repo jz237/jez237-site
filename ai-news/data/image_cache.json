@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T23:04:09.389601+00:00",
+  "updatedAt": "2026-05-07T00:00:01.970755+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6008,6 +6008,10 @@
     "https://openai.com/index/uber": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/44fSkviPWfIhzSgGXp9dhg/ac7d107ec3203cd2c90db1e5b6b9fff9/oai_Uber_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-06T23:00:02.017723+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/925665/musk-altman-trial-shivon-zilis-testimony": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STPK222_SHIVON_ZILIS2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-07T00:00:01.970755+00:00"
     }
   }
 }
