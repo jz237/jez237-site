@@ -408,6 +408,18 @@
     return Math.max(0, Math.min(100, (value / 11) * 100));
   }
 
+  function daytimeOutlookForDate(hourly, daily, idx) {
+    const date = daily.time?.[idx];
+    const indexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === date && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
+    const rainVals = indexes.map(i => Number(hourly.precipitation_probability?.[i])).filter(Number.isFinite);
+    const rain = rainVals.length ? Math.round(Math.max(...rainVals)) : Math.round(daily.precipitation_probability_max?.[idx] ?? 0);
+    const wetIndexes = indexes.filter(i => Number(hourly.precipitation_probability?.[i] || 0) >= 30 && [51,53,55,61,63,65,80,81,82,95,96,99].includes(Number(hourly.weather_code?.[i])));
+    const codeSource = wetIndexes.length ? wetIndexes : indexes.filter(i => localHour(hourly.time?.[i], TZ) >= 10 && localHour(hourly.time?.[i], TZ) <= 16);
+    const codes = (codeSource.length ? codeSource : indexes).map(i => Number(hourly.weather_code?.[i])).filter(Number.isFinite);
+    const code = codes.length ? codes[Math.floor(codes.length / 2)] : daily.weather_code?.[idx];
+    return { code, rain };
+  }
+
   function nearSunWindow(ts, sunrise, sunset) {
     const t = new Date(ts).getTime();
     return [sunrise, sunset].some(s => s && Math.abs(t - new Date(s).getTime()) <= 90 * 60 * 1000);
@@ -606,11 +618,11 @@
         <div class="weather-five-day" aria-label="Five day forecast">
           ${(daily.time || []).slice(1, 6).map((ts, i) => {
             const idx = i + 1;
-            const [dIcon, dLabel] = weatherLabel(daily.weather_code?.[idx]);
+            const outlook = daytimeOutlookForDate(hourly, daily, idx);
+            const [dIcon, dLabel] = weatherLabel(outlook.code);
             const dHi = Math.round(daily.temperature_2m_max?.[idx] ?? 0);
             const dLo = Math.round(daily.temperature_2m_min?.[idx] ?? 0);
-            const dRain = Math.round(daily.precipitation_probability_max?.[idx] ?? 0);
-            return `<div class="weather-day"><span>${dayName(ts)}</span><strong>${dIcon}</strong><em>${dLo}–${dHi}°</em><small>${dRain}% · ${dLabel}</small></div>`;
+            return `<div class="weather-day"><span>${dayName(ts)}</span><strong>${dIcon}</strong><em>${dLo}–${dHi}°</em><small>${outlook.rain}% day · ${dLabel}</small></div>`;
           }).join('')}
         </div>
 
