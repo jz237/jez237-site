@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T17:00:01.928399+00:00",
+  "updatedAt": "2026-05-07T18:00:01.969189+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6096,6 +6096,14 @@
     "https://techcrunch.com/2026/05/07/how-anthropics-mythos-has-rewritten-firefoxs-approach-to-cybersecurity": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024",
       "checkedAt": "2026-05-07T17:00:01.928399+00:00"
+    },
+    "https://openai.com/index/advancing-voice-intelligence-with-new-models-in-the-api": {
+      "image": "",
+      "checkedAt": "2026-05-07T18:00:01.969189+00:00"
+    },
+    "https://openai.com/index/introducing-trusted-contact-in-chatgpt": {
+      "image": "",
+      "checkedAt": "2026-05-07T18:00:01.969189+00:00"
     }
   }
 }
