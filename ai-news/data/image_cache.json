@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T14:46:17.884700+00:00",
+  "updatedAt": "2026-05-07T16:00:02.075059+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6064,6 +6064,34 @@
     "https://www.theverge.com/gadgets/925458/google-health-fitbit-air-ai-coaching-wearables-fitness-trackers": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Lavender-Lifestyle.png?quality=90&amp;strip=all&amp;crop=0%2C15.095986038394%2C100%2C69.808027923211&amp;w=1200",
       "checkedAt": "2026-05-07T14:46:17.884700+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/startup-battlefield-200-applications-close-may-27-a-shot-at-vc-access-global-visibility-techcrunch-coverage-and-100k": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/Startup-Battlefield-2023-1.jpg?resize=1200,800",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://www.techrepublic.com/article/news-android-17-rumors-google-io-2026": {
+      "image": "",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://www.techrepublic.com/article/news-anthropic-spacex-claude-compute-colossus-1": {
+      "image": "",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://www.techrepublic.com/article/news-openai-ai-agent-phone-2027-production": {
+      "image": "",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-enterprise-wifi-cisco-wireless-report": {
+      "image": "",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://www.techrepublic.com/article/news-coinbase-layoffs-ai-workforce-cuts": {
+      "image": "",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-chatbot-cheat-sheet-overview": {
+      "image": "",
+      "checkedAt": "2026-05-07T16:00:02.075059+00:00"
     }
   }
 }
