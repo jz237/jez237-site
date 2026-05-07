@@ -1,6 +1,6 @@
 {
   "date": "2026-05-07",
-  "updatedAt": "2026-05-07T09:43:41.159065+00:00",
+  "updatedAt": "2026-05-07T11:00:01.143869+00:00",
   "items": [
     {
       "title": "Zyphra Releases ZAYA1-8B: A Reasoning MoE Trained on AMD Hardware That Punches Far Above Its Weight Class",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-06-at-10.35.41-PM-1-150x150.png",
       "published": "2026-05-07T05:44:59+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.3549
+      "score": 14.3207
     },
     {
       "title": "Pit launches in Stockholm with $16M to build custom AI-native software for enterprise operations",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-07T09:43:41.159065+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.815
+      "score": 7.7815
     },
     {
       "title": "OpenAI Introduces MRC (Multipath Reliable Connection): A New Open Networking Protocol for Large-Scale AI Supercomputer Training Clusters",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/mja.png",
       "published": "2026-05-07T07:50:02+00:00",
       "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4636
+      "score": 6.4274
     },
     {
       "title": "Silex Microsystems shares soar on Stockholm debut as MEMS foundry IPO clears at SEK 8.9bn EV",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/Silex-Microsystems.avif",
       "published": "2026-05-07T07:58:06+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8975
+      "score": 4.8612
     },
     {
       "title": "OpsMill raises $14m Series A to make IT infrastructure data trustworthy enough for AI agents",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-07T09:00:01.190288+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.715
+      "score": 4.6815
     },
     {
       "title": "Meta AI Releases NeuralBench: A Unified Open-Source Framework to Benchmark NeuroAI Models Across 36 EEG Tasks and 94 Datasets",
@@ -93,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-1.34.54-AM-1-150x150.png",
       "published": "2026-05-07T08:37:32+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T10:00:01.144457+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.2368
+      "score": 4.1998
     },
     {
       "title": "Brussels strikes deal to thin out AI Act and outlaw nudification apps",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/02/The-European-Parliament-pulls-back-AI-from-its-own-devices.avif",
       "published": "2026-05-07T08:11:52+00:00",
       "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5542
+      "score": 3.5176
     },
     {
       "title": "Why Nexus Luxembourg has become a fixture in Europe’s AI calendar",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Nexus-Luxembourg-2026.avif",
       "published": "2026-05-07T07:45:11+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4913
+      "score": 3.4551
     },
     {
       "title": "Skyroot becomes India’s first space-tech unicorn ahead of June Vikram-1 launch",
@@ -141,10 +141,26 @@
       "image": "https://media.thenextweb.com/placeholder-bg-1.png",
       "published": "2026-05-07T07:23:13+00:00",
       "firstSeen": "2026-05-07T09:00:01.190288+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7807
+      "score": 2.745
+    },
+    {
+      "title": "Continual Distillation of Teachers from Different Domains",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-07T11:00:06.135441+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "Five architects of the AI economy explain where the wheels are coming off",
@@ -157,49 +173,27 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55252231372_4afd845df5_o.jpg?resize=1200%2C800",
       "published": "2026-05-07T05:25:10+00:00",
       "firstSeen": "2026-05-07T06:00:01.439298+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1659
+      "score": 2.132
     },
     {
-      "title": "Quantum Motion lands $160m in EU’s first major late-stage commitment",
-      "url": "https://thenextweb.com/news/quantum-motion-160m-eu-scaleup-europe-fund-first-investment",
+      "title": "Amazon retreats from Singapore groceries, leans on cross-border instead",
+      "url": "https://thenextweb.com/news/amazon-fresh-singapore-closure-july-2026-layoffs",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The London company building silicon-CMOS spin qubits has been one of the cleaner technical credentials in European quantum hardware. The choice of investee for the EU’s first major late-stage venture commitment, announced post-Brexit, is itself the news. The European Union’s new Scaleup Europe Fund has made its first investment, leading a $160m round in UK-based [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/placeholder-bg-1.png",
-      "published": "2026-05-07T08:39:03+00:00",
-      "firstSeen": "2026-05-07T09:43:41.159065+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
+      "summary": "Amazon Fresh and the local fulfilment network shut on 6 July. A small number of Singapore roles go with them. AWS, retail, and Global Selling stay; the bet is that Singaporean shoppers want US, Japanese, and German catalogues, not local replenishment. Amazon is closing Amazon Fresh in Singapore and shutting down its local fulfilment operations, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
+      "published": "2026-05-07T09:58:09+00:00",
+      "firstSeen": "2026-05-07T11:00:01.143869+00:00",
+      "lastSeen": "2026-05-07T11:00:01.143869+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1176
-    },
-    {
-      "title": "Scale AI wins $500m Pentagon contract, five times its previous Defense Department deal",
-      "url": "https://thenextweb.com/news/scale-ai-500m-pentagon-defense-contract-cdao",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The agreement was signed with the Pentagon’s Chief Digital and Artificial Intelligence Office, the procurement vehicle driving the bulk of US military AI integration spending in 2025 and 2026. Microsoft, Amazon, and Google signed parallel classified-network deals the same week. Scale AI has won a $500m contract from the US Department of Defense, Bloomberg reported [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/pentagon-ai-deals-anthropic-safety-limits.avif",
-      "published": "2026-05-07T06:30:57+00:00",
-      "firstSeen": "2026-05-07T08:00:01.729780+00:00",
-      "lastSeen": "2026-05-07T09:43:41.159065+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0561
+      "score": 2.1189
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
