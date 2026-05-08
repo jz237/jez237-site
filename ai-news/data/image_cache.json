@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T20:00:01.443125+00:00",
+  "updatedAt": "2026-05-08T21:00:01.781605+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6236,6 +6236,14 @@
     "https://www.theverge.com/tech/926342/nanoleaf-smart-lighting-ai-robotics-red-light-wellness": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Nanoleaf-AI-Robotics-New-Products-1.jpg?quality=90&amp;strip=all&amp;crop=6.3654073199528%2C0%2C87.269185360094%2C100&amp;w=1200",
       "checkedAt": "2026-05-08T20:00:01.443125+00:00"
+    },
+    "https://techcrunch.com/2026/05/08/intels-comeback-story-is-even-wilder-than-it-seems": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/HFTb6BbbcAANe5y-e1775584097859.jpeg?w=597",
+      "checkedAt": "2026-05-08T21:00:01.781605+00:00"
+    },
+    "https://www.together.ai/blog/deploy-and-inference-any-model-from-huggingface": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69fe1fddae13f7cd5cdc1a62_OG-image_20260508_Inference%20model%20from%20HuggingFace.png",
+      "checkedAt": "2026-05-08T21:00:01.781605+00:00"
     }
   }
 }
