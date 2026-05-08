@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T19:00:01.858416+00:00",
+  "updatedAt": "2026-05-08T18:21:27.398400+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6221,13 +6221,9 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25717608/247361_PS5_Pro_VPavic_55.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.761835884455%2C100%2C78.47632823109&amp;w=1200",
       "checkedAt": "2026-05-08T18:00:02.087259+00:00"
     },
-    "https://techcrunch.com/2026/05/08/cloudflare-says-ai-made-1100-jobs-obsolete-even-as-revenue-hit-a-record-high": {
-      "image": "https://techcrunch.com/wp-content/uploads/2019/12/Matthew-Prince-CloudflareDSC00252.jpg?resize=1200,800",
-      "checkedAt": "2026-05-08T19:00:01.858416+00:00"
-    },
     "https://www.together.ai/blog/serving-deepseek-v4-why-million-token-context-is-an-inference-systems-problem": {
       "image": "",
-      "checkedAt": "2026-05-08T19:00:01.858416+00:00"
+      "checkedAt": "2026-05-08T18:21:27.398400+00:00"
     }
   }
 }
