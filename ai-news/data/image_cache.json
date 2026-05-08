@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T21:00:01.781605+00:00",
+  "updatedAt": "2026-05-08T20:15:08.411832+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6239,11 +6239,11 @@
     },
     "https://techcrunch.com/2026/05/08/intels-comeback-story-is-even-wilder-than-it-seems": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/HFTb6BbbcAANe5y-e1775584097859.jpeg?w=597",
-      "checkedAt": "2026-05-08T21:00:01.781605+00:00"
+      "checkedAt": "2026-05-08T20:15:08.411832+00:00"
     },
     "https://www.together.ai/blog/deploy-and-inference-any-model-from-huggingface": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69fe1fddae13f7cd5cdc1a62_OG-image_20260508_Inference%20model%20from%20HuggingFace.png",
-      "checkedAt": "2026-05-08T21:00:01.781605+00:00"
+      "checkedAt": "2026-05-08T20:15:08.411832+00:00"
     }
   }
 }
