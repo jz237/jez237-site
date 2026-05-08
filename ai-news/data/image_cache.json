@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T06:06:37.311650+00:00",
+  "updatedAt": "2026-05-08T07:55:38.115920+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6184,6 +6184,10 @@
     "https://techcrunch.com/2026/05/07/the-back-office-problem-that-explains-why-specialists-never-call-you-back": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-9.00.25-PM.png?resize=1200,711",
       "checkedAt": "2026-05-08T05:00:01.159415+00:00"
+    },
+    "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/medqa": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/lablab-ai-amd-developer-hackathon/medqa.png",
+      "checkedAt": "2026-05-08T07:55:38.115920+00:00"
     }
   }
 }
