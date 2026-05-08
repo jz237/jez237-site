@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T14:13:17.323651+00:00",
+  "updatedAt": "2026-05-08T16:00:01.440570+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6200,6 +6200,14 @@
     "https://techcrunch.com/2026/05/08/last-24-hours-to-get-50-off-a-second-pass-to-techcrunch-disrupt-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2016/04/17205300128_99b3d607eb_o.jpg?resize=1200,800",
       "checkedAt": "2026-05-08T15:00:01.907000+00:00"
+    },
+    "https://techcrunch.com/podcast/the-peoples-airline-and-the-enterprise-ai-gold-rush": {
+      "image": "",
+      "checkedAt": "2026-05-08T16:00:01.440570+00:00"
+    },
+    "https://www.theverge.com/report/926771/microsoft-openai-amazon-worries-shit-talk-azure": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/gettyimages-2153471300.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.743014182263%2C100%2C78.513971635474&amp;w=1200",
+      "checkedAt": "2026-05-08T16:00:01.440570+00:00"
     }
   }
 }
