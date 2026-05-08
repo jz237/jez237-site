@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T03:50:37.042549+00:00",
+  "updatedAt": "2026-05-08T05:00:01.159415+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6180,6 +6180,10 @@
     "https://www.marktechpost.com/2026/05/07/build-a-cloakbrowser-automation-workflow-with-stealth-chromium-persistent-profiles-and-browser-signal-inspection": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/km.png",
       "checkedAt": "2026-05-08T01:00:01.676263+00:00"
+    },
+    "https://techcrunch.com/2026/05/07/the-back-office-problem-that-explains-why-specialists-never-call-you-back": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-9.00.25-PM.png?resize=1200,711",
+      "checkedAt": "2026-05-08T05:00:01.159415+00:00"
     }
   }
 }
