@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T22:00:01.755147+00:00",
+  "updatedAt": "2026-05-08T23:00:02.049087+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6248,6 +6248,14 @@
     "https://www.marktechpost.com/2026/05/08/how-to-build-a-single-cell-rna-seq-analysis-pipeline-with-scanpy-for-pbmc-clustering-annotation-and-trajectory-discovery": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1.png",
       "checkedAt": "2026-05-08T22:00:01.755147+00:00"
+    },
+    "https://techcrunch.com/2026/05/08/laid-off-oracle-workers-tried-to-negotiate-better-severance-oracle-said-no": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-528022874.jpg?w=1024",
+      "checkedAt": "2026-05-08T23:00:02.049087+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/08/openai-adds-chrome-extension-to-codex-letting-its-ai-agent-access-linkedin-salesforce-gmail-and-internal-tools-via-signed-in-sessions": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2.png",
+      "checkedAt": "2026-05-08T23:00:02.049087+00:00"
     }
   }
 }
