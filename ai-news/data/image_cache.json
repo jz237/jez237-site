@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T00:00:01.822799+00:00",
+  "updatedAt": "2026-05-08T01:00:01.676263+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6176,6 +6176,10 @@
     "https://openai.com/index/simplex": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5fjNSHH89mLPBtQIWMnYeE/2324d64841e789e5b94269aa31170817/oai_simplex_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-08T00:00:01.822799+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/07/build-a-cloakbrowser-automation-workflow-with-stealth-chromium-persistent-profiles-and-browser-signal-inspection": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/km.png",
+      "checkedAt": "2026-05-08T01:00:01.676263+00:00"
     }
   }
 }
