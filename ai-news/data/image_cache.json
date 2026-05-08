@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T16:00:01.440570+00:00",
+  "updatedAt": "2026-05-08T16:42:55.056991+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6208,6 +6208,10 @@
     "https://www.theverge.com/report/926771/microsoft-openai-amazon-worries-shit-talk-azure": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/gettyimages-2153471300.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.743014182263%2C100%2C78.513971635474&amp;w=1200",
       "checkedAt": "2026-05-08T16:00:01.440570+00:00"
+    },
+    "https://huggingface.co/blog/allenai/emo": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/zw0eFl6MyYg-hmcPSBfYw.png",
+      "checkedAt": "2026-05-08T16:42:55.056991+00:00"
     }
   }
 }
