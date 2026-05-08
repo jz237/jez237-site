@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T22:13:27.553865+00:00",
+  "updatedAt": "2026-05-08T00:00:01.822799+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6172,6 +6172,10 @@
     "https://techcrunch.com/2026/05/07/openai-launches-new-voice-intelligence-features-in-its-api": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
       "checkedAt": "2026-05-07T23:00:02.140778+00:00"
+    },
+    "https://openai.com/index/simplex": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5fjNSHH89mLPBtQIWMnYeE/2324d64841e789e5b94269aa31170817/oai_simplex_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-08T00:00:01.822799+00:00"
     }
   }
 }
