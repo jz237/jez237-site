@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-08T18:21:27.398400+00:00",
+  "updatedAt": "2026-05-08T20:00:01.443125+00:00",
   "items": [
     {
-      "title": "Adaptive Computation Depth via Learned Token Routing in Transformers",
+      "title": "Sparse Prefix Caching for Hybrid and Recurrent LLM Serving",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-08T18:21:32.185931+00:00",
+      "published": "2026-05-08T20:00:10.279993+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Building realistic electric transmission grid dataset at scale: a pipeline from open dataset",
+      "url": "https://www.microsoft.com/en-us/research/blog/building-realistic-electric-transmission-grid-dataset-at-scale-a-pipeline-from-open-dataset",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Microsoft Research is excited to release an open dataset of approximate transmission topology of the U.S. power grid derived from publicly available data. The ability to study transmission-level power grid behavior is essential for modern power systems research. Analyses of congestion, transmission expansion, demand growth, and system resilience all depend on network models with realistic [&#8230;]\nThe post Building realistic electric transmission grid dataset at scale: a pipeline from open dataset appeared first on Microsoft Research.",
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/GridSage-BlogHeroFeature-1400x788-1-scaled.jpg",
+      "published": "2026-05-08T19:53:56+00:00",
+      "firstSeen": "2026-05-08T20:00:01.443125+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5569
+    },
+    {
+      "title": "Hackers breached five Polish water treatment plants. The attack vector was default passwords. Seventy per cent of American water utilities fail the same test.",
+      "url": "https://thenextweb.com/news/poland-water-treatment-cyberattack-russia-us",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Hackers breached five Polish water treatment plants in 2025, gaining access to the industrial control systems that regulate pumps, filters, and chemical dosing. In some facilities, the attackers could have altered the operational parameters of equipment that determines what comes out of the tap. The attack vector, in every case, was unremarkable: weak passwords and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/poland-water-treatment-cyberattack-russia-us.avif",
+      "published": "2026-05-08T19:06:35+00:00",
+      "firstSeen": "2026-05-08T20:00:01.443125+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1231
+    },
+    {
+      "title": "Uber’s robotaxi partner crashed 16 times in four months. The regulator called it “excessively assertive and insufficiently capable.”",
+      "url": "https://thenextweb.com/news/avride-uber-robotaxi-crashes-nhtsa-investigation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The National Highway Traffic Safety Administration has opened an investigation into Avride, Uber’s autonomous vehicle partner, after identifying 16 crashes and one minor injury in the four months since the company launched its robotaxi service in Dallas. The regulator’s language is unusually blunt: the vehicles displayed “excessive assertiveness and insufficient capability,” a phrase that could [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/avride-uber-robotaxi-crashes-nhtsa-investigation.avif",
+      "published": "2026-05-08T18:59:02+00:00",
+      "firstSeen": "2026-05-08T20:00:01.443125+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8194
     },
     {
       "title": "All the latest updates on AI data centers",
@@ -28,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-08T18:45:08+00:00",
       "firstSeen": "2026-05-08T19:00:01.858416+00:00",
-      "lastSeen": "2026-05-08T19:00:01.858416+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0524
+      "score": 3.0225
     },
     {
       "title": "Cloudflare says AI made 1,100 jobs obsolete, even as revenue hit a record high",
@@ -44,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2019/12/Matthew-Prince-CloudflareDSC00252.jpg?resize=1200%2C800",
       "published": "2026-05-08T18:33:21+00:00",
       "firstSeen": "2026-05-08T19:00:01.858416+00:00",
-      "lastSeen": "2026-05-08T19:00:01.858416+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2765
+      "score": 2.2467
     },
     {
       "title": "CyberSecQwen-4B: Why Defensive Cyber Needs Small, Specialized, Locally-Runnable Models",
@@ -60,10 +108,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/lablab-ai-amd-developer-hackathon/cybersecqwen-4b.png",
       "published": "2026-05-08T17:41:05+00:00",
       "firstSeen": "2026-05-08T18:00:02.087259+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4096
+      "score": 2.3615
     },
     {
       "title": "PlayStation sees AI as a ‘powerful tool’ to help make games",
@@ -76,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25717608/247361_PS5_Pro_VPavic_55.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.761835884455%2C100%2C78.47632823109&amp%3Bw=1200",
       "published": "2026-05-08T16:30:56+00:00",
       "firstSeen": "2026-05-08T18:00:02.087259+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3051
+      "score": 2.2585
     },
     {
       "title": "EMO: Pretraining mixture of experts for emergent modularity",
@@ -92,10 +140,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/zw0eFl6MyYg-hmcPSBfYw.png",
       "published": "2026-05-08T16:03:50+00:00",
       "firstSeen": "2026-05-08T16:42:55.056991+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6621
+      "score": 2.6161
     },
     {
       "title": "The “people’s airline” and the enterprise AI gold rush",
@@ -108,10 +156,10 @@
       "image": "",
       "published": "2026-05-08T15:46:17+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2137
+      "score": 6.1681
     },
     {
       "title": "Microsoft was worried OpenAI would run off to Amazon and ‘shit-talk’ Azure",
@@ -124,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/gettyimages-2153471300.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.743014182263%2C100%2C78.513971635474&amp%3Bw=1200",
       "published": "2026-05-08T15:25:02+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2737
+      "score": 5.2285
     },
     {
       "title": "See what happens when creative legends use AI to make ads for small businesses.",
@@ -140,10 +188,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Group_Icons_1x1.max-600x600.format-webp.webp",
       "published": "2026-05-08T15:00:00+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.432
+      "score": 3.3873
     },
     {
       "title": "Nick Bostrom Has a Plan for Humanity’s ‘Big Retirement’",
@@ -156,10 +204,10 @@
       "image": "https://media.wired.com/photos/69fb97105c1d9a514f66d2b3/master/pass/Backchannel-Q&A-Nick-Bostrom-Business-1145731695.jpg",
       "published": "2026-05-08T15:00:00+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.192
+      "score": 2.1473
     },
     {
       "title": "There’s a Long-Shot Proposal to Protect California Workers From AI",
@@ -172,10 +220,10 @@
       "image": "https://media.wired.com/photos/69fa6c65cfdc5f2b42e5b5ba/master/pass/pol_Tom_CA_GettyImages-2273635848.jpg",
       "published": "2026-05-08T15:00:00+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.192
+      "score": 2.1473
     },
     {
       "title": "Trump’s H-1B proposal would push entry-level tech salary floor near $162,000",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/04/us-white-house-ai-model-distillation-china-theft.avif",
       "published": "2026-05-08T14:35:37+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0408
+      "score": 1.9966
     },
     {
       "title": "Intel’s stock tripled under Lip-Bu Tan. He still has not told most employees the plan.",
@@ -204,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/intel-tan-relationships-manufacturing-turnaround.avif",
       "published": "2026-05-08T14:20:00+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0337
+      "score": 1.9898
     },
     {
       "title": "The AI industry’s model and agent skill repositories are full of malware. The infrastructure built to accelerate development is now the vector for compromising it.",
@@ -220,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/hugging-face-clawhub-malware-ai-supply-chain.avif",
       "published": "2026-05-08T14:07:10+00:00",
       "firstSeen": "2026-05-08T14:13:17.323651+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7278
+      "score": 4.6842
     },
     {
       "title": "Last 24 hours to get 50% off a second pass to TechCrunch Disrupt 2026",
@@ -236,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2016/04/17205300128_99b3d607eb_o.jpg?resize=1200%2C800",
       "published": "2026-05-08T14:00:00+00:00",
       "firstSeen": "2026-05-08T16:00:01.440570+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1646
+      "score": 2.1211
     },
     {
       "title": "Coinbase cut 700 jobs on Monday, lost $394 million on Thursday, and went dark on Friday because a data centre overheated",
@@ -252,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/05/Coinbase-logo.avif",
       "published": "2026-05-08T13:51:42+00:00",
       "firstSeen": "2026-05-08T14:13:17.323651+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0209
+      "score": 1.9775
     },
     {
       "title": "will.i.am taught 75 college students to build AI agents. The tech industry spent the same semester firing 73,000 people.",
@@ -268,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/05/will-i-am-agentic-self-ai-course-asu.avif",
       "published": "2026-05-08T13:40:37+00:00",
       "firstSeen": "2026-05-08T14:13:17.323651+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7159
+      "score": 4.6728
     },
     {
       "title": "Everybody wants to rule the AI world",
@@ -284,10 +332,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_VST_0408_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-08T13:31:37+00:00",
       "firstSeen": "2026-05-08T14:00:01.624737+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3219
+      "score": 3.279
+    },
+    {
+      "title": "Running Codex safely at OpenAI",
+      "url": "https://openai.com/index/running-codex-safely",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "How OpenAI runs Codex securely with sandboxing, approvals, network policies, and agent-native telemetry to support safe and compliant coding agent adoption.",
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6Z5UXg0cKSYxr2RGkNkMCl/3087a1569ea42e3aab6b3e4decd1b140/Frame4.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
+      "published": "2026-05-08T12:30:00+00:00",
+      "firstSeen": "2026-05-08T20:00:01.443125+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.4931
+    },
+    {
+      "title": "Nanoleaf bets its future on robots, red light therapy, and AI",
+      "url": "https://www.theverge.com/tech/926342/nanoleaf-smart-lighting-ai-robotics-red-light-wellness",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Smart lighting company Nanoleaf has been unusually quiet recently. While competitors such as Govee and Philips Hue have been pumping out new products and innovative features at an impressive pace, Nanoleaf has launched just a handful of smart lighting products in the last two years. There's a reason for this lull - the company has [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Nanoleaf-AI-Robotics-New-Products-1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=6.3654073199528%2C0%2C87.269185360094%2C100&amp%3Bw=1200",
+      "published": "2026-05-08T12:15:00+00:00",
+      "firstSeen": "2026-05-08T20:00:01.443125+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8469
     },
     {
       "title": "PR & Media lessons from EU-Startups Summit 2026: what works, what does not",
@@ -300,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/05/PR-Media-lessons-from-EU-Startups-Summit-2026.avif",
       "published": "2026-05-08T12:13:19+00:00",
       "firstSeen": "2026-05-08T14:00:01.624737+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1224
+      "score": -1.1638
     },
     {
       "title": "Spotify’s AI DJ now speaks French, German, Italian, and Brazilian Portuguese",
@@ -316,10 +396,10 @@
       "image": "https://media.thenextweb.com/2026/05/DJ-Experience-Spotify.avif",
       "published": "2026-05-08T11:43:30+00:00",
       "firstSeen": "2026-05-08T13:00:01.685888+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6649
+      "score": 2.6241
     },
     {
       "title": "AWS was hit by overheating in northern Virginia, knocking Coinbase offline and rattling CME",
@@ -332,10 +412,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
       "published": "2026-05-08T11:18:36+00:00",
       "firstSeen": "2026-05-08T13:00:01.685888+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9544
+      "score": 1.9141
     },
     {
       "title": "G2A names CVC veteran Krzysztof Krawczyk as advisory board chair after taking minority stake",
@@ -351,7 +431,7 @@
       "lastSeen": "2026-05-08T18:21:27.398400+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9469
+      "score": 1.9069
     },
     {
       "title": "7 Best Global HR Software Options for International Companies in 2026",
@@ -367,7 +447,7 @@
       "lastSeen": "2026-05-08T18:21:27.398400+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.942
+      "score": 1.9022
     },
     {
       "title": "Lime files for a Nasdaq IPO under the LIME ticker, the first big micromobility test in eight years",
@@ -383,7 +463,7 @@
       "lastSeen": "2026-05-08T14:13:17.323651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.942
+      "score": 1.9022
     },
     {
       "title": "NVIDIA takes $2.1bn warrant in IREN as part of 5GW AI data-centre deal",
@@ -399,7 +479,7 @@
       "lastSeen": "2026-05-08T14:13:17.323651+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9314
+      "score": 1.8921
     },
     {
       "title": "SoftBank cuts OpenAI-backed margin loan target by 40% to $6bn",
@@ -415,7 +495,7 @@
       "lastSeen": "2026-05-08T14:00:01.624737+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9247
+      "score": 4.8856
     },
     {
       "title": "The New Wild West of AI Kids’ Toys",
@@ -428,10 +508,10 @@
       "image": "https://media.wired.com/photos/69fd2cd21516a07ed72646e6/master/pass/gear_kidsai_getty.jpg",
       "published": "2026-05-08T10:00:00+00:00",
       "firstSeen": "2026-05-08T11:00:01.475785+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": -0.5379
+      "score": -0.5768
     },
     {
       "title": "OpenAI launches GPT-Realtime-2 and two new voice API models",
@@ -447,7 +527,7 @@
       "lastSeen": "2026-05-08T14:00:01.624737+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 13.2205
+      "score": 13.1816
     },
     {
       "title": "Sony forecasts 11% profit lift and $3.2bn buyback as music and sensors offset PS5 memory shock",
@@ -463,7 +543,7 @@
       "lastSeen": "2026-05-08T14:00:01.624737+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3061
+      "score": 4.2679
     },
     {
       "title": "The Thai end of the Supermicro chip-smuggling case has a name, and it sits inside Bangkok’s national AI plan",
@@ -479,7 +559,7 @@
       "lastSeen": "2026-05-08T13:00:01.685888+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8817
+      "score": 1.8446
     },
     {
       "title": "MedQA: Fine-Tuning a Clinical AI on AMD ROCm — No CUDA Required",
@@ -495,7 +575,7 @@
       "lastSeen": "2026-05-08T16:42:55.056991+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1528
+      "score": 2.1161
     },
     {
       "title": "Anthropic Introduces Natural Language Autoencoders That Convert Claude’s Internal Activations Directly into Human-Readable Text Explanations",
@@ -508,10 +588,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-08-at-12.38.29-AM-150x150.png",
       "published": "2026-05-08T07:45:09+00:00",
       "firstSeen": "2026-05-08T09:00:01.170268+00:00",
-      "lastSeen": "2026-05-08T19:00:01.858416+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.7393
+      "score": 12.7028
     },
     {
       "title": "OpenAI Releases Three Realtime Audio Models: GPT-Realtime-2, GPT-Realtime-Translate, and GPT-Realtime-Whisper in the Realtime API",
@@ -524,10 +604,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11.png",
       "published": "2026-05-08T07:05:36+00:00",
       "firstSeen": "2026-05-08T09:00:01.170268+00:00",
-      "lastSeen": "2026-05-08T19:00:01.858416+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.8245
+      "score": 10.7886
     },
     {
       "title": "The fax machine is the bottleneck in US healthcare, and VCs are starting to notice",
@@ -540,10 +620,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-9.00.25-PM.png?resize=1200%2C711",
       "published": "2026-05-08T04:42:29+00:00",
       "firstSeen": "2026-05-08T05:00:01.159415+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9429
+      "score": 1.9093
     },
     {
       "title": "Musk v. Altman Evidence Shows What Microsoft Executives Thought of OpenAI",
@@ -556,122 +636,10 @@
       "image": "https://media.wired.com/photos/69fd155e0436533ae1a17e00/master/pass/What-Microsoft-Executives-Were-Dishing-About-OpenAI-Business-1778707567.jpg",
       "published": "2026-05-08T01:42:14+00:00",
       "firstSeen": "2026-05-08T02:00:01.906405+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8826
-    },
-    {
-      "title": "Build a CloakBrowser Automation Workflow with Stealth Chromium, Persistent Profiles, and Browser Signal Inspection",
-      "url": "https://www.marktechpost.com/2026/05/07/build-a-cloakbrowser-automation-workflow-with-stealth-chromium-persistent-profiles-and-browser-signal-inspection",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we explore CloakBrowser, a Python-friendly browser automation tool that uses Playwright-style APIs within a stealth Chromium environment. We begin by setting up CloakBrowser, preparing the required browser binary, and resolving the common Colab asyncio loop issue by running the sync browser workflow in a separate worker thread. We then move through practical [&#8230;]\nThe post Build a CloakBrowser Automation Workflow with Stealth Chromium, Persistent Profiles, and Browser Signal Inspection appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/km.png",
-      "published": "2026-05-08T00:14:49+00:00",
-      "firstSeen": "2026-05-08T01:00:01.676263+00:00",
-      "lastSeen": "2026-05-08T19:00:01.858416+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9851
-    },
-    {
-      "title": "Serving DeepSeek-V4: why million-token context is an inference systems problem",
-      "url": "https://www.together.ai/blog/serving-deepseek-v4-why-million-token-context-is-an-inference-systems-problem",
-      "source": "Together AI Blog",
-      "sourceUrl": "https://www.together.ai/blog/rss.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "DeepSeek-V4 makes million-token context a serving-systems problem. Together AI explores the inference work behind V4 on NVIDIA HGX B200, including compressed KV layouts, prefix caching, kernel maturity, and endpoint profiles for long-context workloads.",
-      "image": "",
-      "published": "2026-05-08T00:00:00+00:00",
-      "firstSeen": "2026-05-08T18:21:27.398400+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0806
-    },
-    {
-      "title": "OpenAI launches new voice intelligence features in its API",
-      "url": "https://techcrunch.com/2026/05/07/openai-launches-new-voice-intelligence-features-in-its-api",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The new features could be handy for customer service systems, but OpenAI says they have applications that work across a variety of other fields, including education and creator platforms.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/01/GettyImages-2170386424.jpg?w=1024",
-      "published": "2026-05-07T22:24:50+00:00",
-      "firstSeen": "2026-05-08T00:00:01.822799+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.4221
-    },
-    {
-      "title": "LightSeek Foundation Releases TokenSpeed, an Open-Source LLM Inference Engine Targeting TensorRT-LLM-Level Performance for Agentic Workloads",
-      "url": "https://www.marktechpost.com/2026/05/07/lightseek-foundation-releases-tokenspeed-an-open-source-llm-inference-engine-targeting-tensorrt-llm-level-performance-for-agentic-workloads",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Inference efficiency has quietly become one of the most consequential bottlenecks in AI deployment. As agentic coding systems such as Claude Code, Codex, and Cursor scale from developer tools to infrastructure powering software development at large, the underlying inference engines serving those requests are under increasing strain. The LightSeek Foundation researchers have released TokenSpeed, an [&#8230;]\nThe post LightSeek Foundation Releases TokenSpeed, an Open-Source LLM Inference Engine Targeting TensorRT-LLM-Level Performance for Agentic Workloads appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-07-at-3.03.21-PM-1-150x150.png",
-      "published": "2026-05-07T22:03:47+00:00",
-      "firstSeen": "2026-05-07T22:13:27.553865+00:00",
-      "lastSeen": "2026-05-08T19:00:01.858416+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.346
-    },
-    {
-      "title": "Trump Pivots on AI Regulation, Worker Ousted by DOGE Runs for Office, and Hantavirus Explained",
-      "url": "https://www.wired.com/story/uncanny-valley-podcast-trump-pivots-ai-regulation-worker-ousted-by-doge-runs-for-office-hantavirus-explained",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Today on Uncanny Valley, we’re diving into recent reports that the Trump administration is considering an executive order that would establish some sort of federal oversight over new AI models.",
-      "image": "https://media.wired.com/photos/69fbb1dadb7daca60e4a6405/master/pass/Uncanny-Valley-Trump-AI-Regulation-Reversal-Politics-2273509289.jpg",
-      "published": "2026-05-07T21:37:20+00:00",
-      "firstSeen": "2026-05-07T22:00:01.978779+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8084
-    },
-    {
-      "title": "Voi founders’ new AI startup Pit has become the latest rising star out of Stockholm",
-      "url": "https://techcrunch.com/2026/05/07/voi-founders-new-ai-startup-pit-has-become-the-latest-rising-star-out-of-stockholm",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AI startup Pit is led by the co-founders of European scooter giant Voi and backed by a16z, which is leading the startup’s $16 million seed round.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Pit-team-2.-Photo-by-Hugo-Thambert.jpg?resize=1200%2C800",
-      "published": "2026-05-07T21:02:11+00:00",
-      "firstSeen": "2026-05-07T22:00:01.978779+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7984
-    },
-    {
-      "title": "How to Disable Google's Gemini in Chrome",
-      "url": "https://www.wired.com/story/you-can-disable-gemini-in-chrome-if-its-freaking-you-out",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Chrome users were caught off guard by a 4-GB Google AI model baked into Chrome, sparking privacy concerns. The good news: You can easily uninstall it. The bad? You might not want to.",
-      "image": "https://media.wired.com/photos/69fcafc792b22c38295c7ab7/master/pass/GettyImages-2229158788.jpg",
-      "published": "2026-05-07T20:31:57+00:00",
-      "firstSeen": "2026-05-07T22:00:01.978779+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.7899
+      "score": 4.8517
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3332
+      "score": 0.3282
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -700,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.97
+      "score": 1.9664
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -716,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-04-28T08:30:00+00:00",
       "firstSeen": "2026-04-28T09:00:01.807948+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.979
@@ -732,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-04-27T20:00:00+00:00",
       "firstSeen": "2026-04-27T20:17:37.126381+00:00",
-      "lastSeen": "2026-05-08T18:21:27.398400+00:00",
+      "lastSeen": "2026-05-08T20:00:01.443125+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1907
@@ -802,11 +770,5 @@
       "score": 1.54
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }

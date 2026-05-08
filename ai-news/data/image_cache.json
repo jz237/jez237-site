@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T18:21:27.398400+00:00",
+  "updatedAt": "2026-05-08T20:00:01.443125+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6224,6 +6224,18 @@
     "https://www.together.ai/blog/serving-deepseek-v4-why-million-token-context-is-an-inference-systems-problem": {
       "image": "",
       "checkedAt": "2026-05-08T18:21:27.398400+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/building-realistic-electric-transmission-grid-dataset-at-scale-a-pipeline-from-open-dataset": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/GridSage-BlogHeroFeature-1400x788-1-scaled.jpg",
+      "checkedAt": "2026-05-08T20:00:01.443125+00:00"
+    },
+    "https://openai.com/index/running-codex-safely": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6Z5UXg0cKSYxr2RGkNkMCl/3087a1569ea42e3aab6b3e4decd1b140/Frame4.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-08T20:00:01.443125+00:00"
+    },
+    "https://www.theverge.com/tech/926342/nanoleaf-smart-lighting-ai-robotics-red-light-wellness": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Nanoleaf-AI-Robotics-New-Products-1.jpg?quality=90&amp;strip=all&amp;crop=6.3654073199528%2C0%2C87.269185360094%2C100&amp;w=1200",
+      "checkedAt": "2026-05-08T20:00:01.443125+00:00"
     }
   }
 }
