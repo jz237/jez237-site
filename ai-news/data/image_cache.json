@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T16:00:01.440570+00:00",
+  "updatedAt": "2026-05-08T17:00:01.715831+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6208,6 +6208,14 @@
     "https://www.theverge.com/report/926771/microsoft-openai-amazon-worries-shit-talk-azure": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/gettyimages-2153471300.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.743014182263%2C100%2C78.513971635474&amp;w=1200",
       "checkedAt": "2026-05-08T16:00:01.440570+00:00"
+    },
+    "https://www.theverge.com/games/926914/sony-playstation-ai-powerful-tool-games": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25717608/247361_PS5_Pro_VPavic_55.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.761835884455%2C100%2C78.47632823109&amp;w=1200",
+      "checkedAt": "2026-05-08T17:00:01.715831+00:00"
+    },
+    "https://huggingface.co/blog/allenai/emo": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/zw0eFl6MyYg-hmcPSBfYw.png",
+      "checkedAt": "2026-05-08T17:00:01.715831+00:00"
     }
   }
 }
