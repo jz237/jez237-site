@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T17:08:53.279291+00:00",
+  "updatedAt": "2026-05-09T19:00:01.476773+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6288,6 +6288,10 @@
     "https://techcrunch.com/2026/05/09/nvidia-has-already-committed-40b-to-equity-ai-deals-this-year": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266475966.jpg?w=1024",
       "checkedAt": "2026-05-09T15:00:01.537834+00:00"
+    },
+    "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper.png",
+      "checkedAt": "2026-05-09T19:00:01.476773+00:00"
     }
   }
 }
