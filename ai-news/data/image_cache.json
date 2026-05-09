@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T08:00:01.457526+00:00",
+  "updatedAt": "2026-05-09T09:00:01.554192+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6272,6 +6272,18 @@
     "https://www.marktechpost.com/2026/05/08/9-best-ai-tools-for-spec-driven-development-in-2026-kiro-bmad-gsd-and-more-compare": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2-1.png",
       "checkedAt": "2026-05-09T06:25:47.205409+00:00"
+    },
+    "https://www.techrepublic.com/article/news-aws-rex-agentic-ai-data-security-gap": {
+      "image": "",
+      "checkedAt": "2026-05-09T09:00:01.554192+00:00"
+    },
+    "https://www.techrepublic.com/article/news-humanoid-robot-power-rankings-list": {
+      "image": "",
+      "checkedAt": "2026-05-09T09:00:01.554192+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-health-fitbit-ai-coach-fitbit-air": {
+      "image": "",
+      "checkedAt": "2026-05-09T09:00:01.554192+00:00"
     }
   }
 }
