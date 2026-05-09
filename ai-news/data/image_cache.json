@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T20:59:44.640659+00:00",
+  "updatedAt": "2026-05-09T22:00:01.463486+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6292,6 +6292,10 @@
     "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper.png",
       "checkedAt": "2026-05-09T19:00:01.476773+00:00"
+    },
+    "https://techcrunch.com/2026/05/09/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
+      "checkedAt": "2026-05-09T22:00:01.463486+00:00"
     }
   }
 }
