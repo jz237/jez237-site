@@ -1,6 +1,6 @@
 {
   "date": "2026-05-09",
-  "updatedAt": "2026-05-09T10:15:07.320051+00:00",
+  "updatedAt": "2026-05-09T12:00:01.834193+00:00",
   "items": [
     {
       "title": "Meet GitHub Spec-Kit: An Open Source Toolkit for Spec-Driven Development with AI Coding Agents",
@@ -13,10 +13,58 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-1-1024x731.png",
       "published": "2026-05-09T03:59:56+00:00",
       "firstSeen": "2026-05-09T04:00:02.094285+00:00",
-      "lastSeen": "2026-05-09T10:15:07.320051+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.8446
+      "score": 15.8008
+    },
+    {
+      "title": "The University of Michigan invested 20 million dollars in OpenAI before ChatGPT existed. Court documents show the stake is now worth two billion.",
+      "url": "https://thenextweb.com/news/michigan-openai-early-investment-billions-endowment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The University of Michigan invested 20 million dollars in OpenAI before ChatGPT existed, before Microsoft committed billions, and before the company was worth more than some countries. Court documents from the Musk v. Altman trial revealed this week that the stake carries a target redemption value of two billion dollars. A university endowment made [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/michigan-openai-early-investment-billions-endowment.avif",
+      "published": "2026-05-09T10:26:07+00:00",
+      "firstSeen": "2026-05-09T12:00:01.834193+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1032
+    },
+    {
+      "title": "Google built a 99 dollar AI health coach. Whoop responded with real doctors.",
+      "url": "https://thenextweb.com/news/whoop-doctors-fitbit-air-google-health-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google launched a 99 dollar screenless fitness tracker and a 9.99 dollar per month AI health coach powered by Gemini. One day later, Whoop announced that it would add on-demand video consultations with licensed clinicians to its app. Google is betting that artificial intelligence can interpret your health data. Whoop is betting that you [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/whoop-doctors-fitbit-air-google-health-ai.avif",
+      "published": "2026-05-09T10:43:17+00:00",
+      "firstSeen": "2026-05-09T12:00:01.834193+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.9116
+    },
+    {
+      "title": "Anthropic’s Mythos found thousands of zero-day vulnerabilities. The Fed chair called the banks.",
+      "url": "https://thenextweb.com/news/anthropic-mythos-cybersecurity-banks-vulnerability",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic built an AI model that found thousands of zero-day vulnerabilities in every major operating system and web browser. The Federal Reserve chair and the Treasury secretary called bank CEOs to discuss it. The company says there is a six-to-twelve month window to patch the flaws before adversaries build models that can do the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/anthropic-amodei-wiles-mythos-white-house-pentagon-cybersecurity.avif",
+      "published": "2026-05-09T10:35:36+00:00",
+      "firstSeen": "2026-05-09T12:00:01.834193+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.5078
     },
     {
       "title": "9 Best AI Tools for Spec-Driven Development in 2026: Kiro, BMAD, GSD, and More Compare",
@@ -29,10 +77,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2-1.png",
       "published": "2026-05-09T06:01:32+00:00",
       "firstSeen": "2026-05-09T06:25:47.205409+00:00",
-      "lastSeen": "2026-05-09T10:15:07.320051+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1982
+      "score": 5.1518
+    },
+    {
+      "title": "Akamai’s stock had its best day in 22 years. It took one AI contract.",
+      "url": "https://thenextweb.com/news/akamai-anthropic-cloud-deal-ai-infrastructure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Akamai Technologies disclosed a 1.8 billion dollar, seven-year cloud infrastructure deal with a customer it described only as “a leading frontier model provider.” Bloomberg identified the customer as Anthropic. The stock rose 27 per cent in a single day, the largest rally in the company’s 28-year history. A company that built its business delivering [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/akamai-anthropic-cloud-deal-ai-infrastructure.avif",
+      "published": "2026-05-09T10:52:51+00:00",
+      "firstSeen": "2026-05-09T12:00:01.834193+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1163
+    },
+    {
+      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-09T12:00:10.366050+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
     },
     {
       "title": "Quoting Luke Curley",
@@ -45,26 +125,10 @@
       "image": "",
       "published": "2026-05-09T01:03:58+00:00",
       "firstSeen": "2026-05-09T02:00:01.342993+00:00",
-      "lastSeen": "2026-05-09T10:15:07.320051+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7423
-    },
-    {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-09T10:15:14.009766+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-09T10:15:07.320051+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.7019
     },
     {
       "title": "Hackable Robot Lawn Mower Unlocks a New Nightmare",
@@ -77,10 +141,26 @@
       "image": "https://media.wired.com/photos/69fe6f189caafa670d32bc82/master/pass/security_mower_GettyImages-1454488331.jpg",
       "published": "2026-05-09T10:30:00+00:00",
       "firstSeen": "2026-05-09T11:00:01.350794+00:00",
-      "lastSeen": "2026-05-09T11:00:01.350794+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2748
+      "score": 2.2451
+    },
+    {
+      "title": "Quantinuum filed for an IPO worth 20 billion dollars. It has 31 million in revenue and a quantum computer that does not exist yet.",
+      "url": "https://thenextweb.com/news/quantinuum-ipo-quantum-computing-honeywell",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Quantinuum filed for a US initial public offering on Thursday that could value the company at more than 20 billion dollars. In the year ended 31 December 2025, Quantinuum reported revenue of 30.9 million dollars and a net loss of 192.6 million dollars. The company is asking public market investors to pay a premium [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/quantinuum-ipo-quantum-computing-honeywell.avif",
+      "published": "2026-05-09T11:02:36+00:00",
+      "firstSeen": "2026-05-09T12:00:01.834193+00:00",
+      "lastSeen": "2026-05-09T12:00:01.834193+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1211
     }
   ],
   "errors": []
