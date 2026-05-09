@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T00:08:32.428123+00:00",
+  "updatedAt": "2026-05-09T02:00:01.342993+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6260,6 +6260,10 @@
     "https://www.technologyreview.com/2026/05/08/1137008/musk-v-altman-week-2-openai-fires-back-and-shivon-zilis-reveals-that-musk-tried-to-poach-sam-altman": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260508_OpenAIcase.jpg?resize=1200,600",
       "checkedAt": "2026-05-09T01:00:01.180617+00:00"
+    },
+    "https://simonwillison.net/2026/May/9/luke-curley": {
+      "image": "",
+      "checkedAt": "2026-05-09T02:00:01.342993+00:00"
     }
   }
 }
