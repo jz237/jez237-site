@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T06:00:01.732932+00:00",
+  "updatedAt": "2026-05-09T06:25:47.205409+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6268,6 +6268,10 @@
     "https://www.marktechpost.com/2026/05/08/meet-github-spec-kit-an-open-source-toolkit-for-spec-driven-development-with-ai-coding-agents": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-1-1024x731.png",
       "checkedAt": "2026-05-09T04:00:02.094285+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/08/9-best-ai-tools-for-spec-driven-development-in-2026-kiro-bmad-gsd-and-more-compare": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2-1.png",
+      "checkedAt": "2026-05-09T06:25:47.205409+00:00"
     }
   }
 }
