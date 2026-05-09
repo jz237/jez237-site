@@ -1,9 +1,25 @@
 {
   "date": "2026-05-09",
-  "updatedAt": "2026-05-09T00:08:32.428123+00:00",
+  "updatedAt": "2026-05-09T02:00:01.342993+00:00",
   "items": [
     {
-      "title": "Sparse Prefix Caching for Hybrid and Recurrent LLM Serving",
+      "title": "Quoting Luke Curley",
+      "url": "https://simonwillison.net/2026/May/9/luke-curley",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "WebRTC is designed to degrade and drop my prompt during poor network conditions.\nwtf my dude\nWebRTC aggressively drops audio packets to keep latency low. If you’ve ever heard distorted audio on a conference call, that’s WebRTC baybee. The idea is that conference calls depend on rapid back-and-forth, so pausing to wait for audio is unacceptable.\n…but as a user, I would much rather wait an extra 200ms for my slow/expensive prompt to be accurate. After all, I’m paying good money to boil the ocean, and a garbage prompt means a garbage response. It’s not like LLMs are particularly responsive anyway",
+      "image": "",
+      "published": "2026-05-09T01:03:58+00:00",
+      "firstSeen": "2026-05-09T02:00:01.342993+00:00",
+      "lastSeen": "2026-05-09T02:00:01.342993+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.9618
+    },
+    {
+      "title": "Mikhail Shirokikh, Sergey Nikolenko",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-09T00:08:41.947732+00:00",
+      "published": "2026-05-09T02:00:07.362229+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-09T00:08:32.428123+00:00",
+      "lastSeen": "2026-05-09T02:00:01.342993+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
