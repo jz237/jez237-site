@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-10T17:09:16.799245+00:00",
+  "updatedAt": "2026-05-10T19:00:01.647892+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6324,6 +6324,10 @@
     "https://www.marktechpost.com/2026/05/10/openclaw-vs-hermes-agent-why-nous-researchs-self-improving-agent-now-leads-openrouters-global-rankings": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-5-1024x731.png",
       "checkedAt": "2026-05-10T17:00:01.406574+00:00"
+    },
+    "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/machinacheck": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/lablab-ai-amd-developer-hackathon/machinacheck.png",
+      "checkedAt": "2026-05-10T19:00:01.647892+00:00"
     }
   }
 }
