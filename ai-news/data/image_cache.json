@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-10T01:00:01.227320+00:00",
+  "updatedAt": "2026-05-10T02:00:01.492427+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6296,6 +6296,10 @@
     "https://techcrunch.com/2026/05/09/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
       "checkedAt": "2026-05-09T21:58:23.336210+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/09/a-coding-implementation-to-recover-hidden-malware-iocs-with-flare-floss-beyond-classic-strings-analysis": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-2-1024x731.png",
+      "checkedAt": "2026-05-10T02:00:01.492427+00:00"
     }
   }
 }
