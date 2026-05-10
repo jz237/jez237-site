@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-10T21:00:01.747051+00:00",
+  "updatedAt": "2026-05-10T22:00:01.764165+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6332,6 +6332,10 @@
     "https://techcrunch.com/2026/05/10/anthropic-says-evil-portrayals-of-ai-were-responsible-for-claudes-blackmail-attempts": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
       "checkedAt": "2026-05-10T21:00:01.747051+00:00"
+    },
+    "https://techcrunch.com/2026/05/10/get-ready-for-the-whisper-filled-office-of-the-future": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/12/GettyImages-84164497.jpg?resize=1200,798",
+      "checkedAt": "2026-05-10T22:00:01.764165+00:00"
     }
   }
 }
