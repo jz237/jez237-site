@@ -8,7 +8,8 @@
     "batch": "Launch Set",
     "slot": "launch-01",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/01-glass-orchard.png"
   },
   {
     "id": "02-clockwork-tidepool",
@@ -19,7 +20,8 @@
     "batch": "Launch Set",
     "slot": "launch-02",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/02-clockwork-tidepool.png"
   },
   {
     "id": "03-impossible-library-rain",
@@ -30,7 +32,8 @@
     "batch": "Launch Set",
     "slot": "launch-03",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/03-impossible-library-rain.png"
   },
   {
     "id": "04-cathedral-kitchen",
@@ -41,7 +44,8 @@
     "batch": "Launch Set",
     "slot": "launch-04",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/04-cathedral-kitchen.png"
   },
   {
     "id": "05-weather-map-dragon",
@@ -52,7 +56,8 @@
     "batch": "Launch Set",
     "slot": "launch-05",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/05-weather-map-dragon.png"
   },
   {
     "id": "06-night-market-snowglobe",
@@ -63,7 +68,8 @@
     "batch": "Launch Set",
     "slot": "launch-06",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/06-night-market-snowglobe.png"
   },
   {
     "id": "07-botanical-spacesuit",
@@ -74,7 +80,8 @@
     "batch": "Launch Set",
     "slot": "launch-07",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/07-botanical-spacesuit.png"
   },
   {
     "id": "08-paper-city-flood",
@@ -85,7 +92,8 @@
     "batch": "Launch Set",
     "slot": "launch-08",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/08-paper-city-flood.png"
   },
   {
     "id": "09-underwater-greenhouse",
@@ -96,7 +104,8 @@
     "batch": "Launch Set",
     "slot": "launch-09",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "image": "images/09-underwater-greenhouse.png"
   },
   {
     "id": "10-almanac-robot-garden",
@@ -107,6 +116,7 @@
     "batch": "Launch Set",
     "slot": "launch-10",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "image": "images/10-almanac-robot-garden.png"
   }
 ]
