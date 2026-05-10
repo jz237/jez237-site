@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-10T15:00:01.244686+00:00",
+  "updatedAt": "2026-05-10T15:09:48.473329+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6308,6 +6308,10 @@
     "https://techcrunch.com/2026/05/09/voice-ai-in-india-is-hard-wispr-flow-is-betting-on-it-anyway": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/wispr-flow-india-image.jpg?resize=1200,800",
       "checkedAt": "2026-05-10T15:00:01.244686+00:00"
+    },
+    "https://simonwillison.net/2026/May/10/andrew-quinn": {
+      "image": "",
+      "checkedAt": "2026-05-10T15:09:48.473329+00:00"
     }
   }
 }
