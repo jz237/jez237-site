@@ -130,5 +130,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-10-afternoon-porcelain-storm-anatomy-cabinet",
+    "title": "Porcelain Storm Anatomy Cabinet",
+    "tests": "Scientific display composition, cutaway weather visualization, porcelain/mother-of-pearl material rendering, glass reflections, suspended small objects, and coherent lighting.",
+    "prompt": "A museum-style natural history display cabinet containing a cross-sectioned thunderstorm built from glazed porcelain and mother-of-pearl. Inside a dark walnut case are stacked translucent ceramic cloud layers, tiny porcelain raindrops suspended on nearly invisible wires, branching gold-luster lightning veins, miniature blue-gray hailstones in labeled-looking but unreadable specimen drawers, and a small cutaway landscape at the bottom with silver rivers catching storm light. Soft spotlighting, deep shadows, delicate reflections on glass, precise scientific-display composition, tactile ceramic glaze textures, no readable text, no logos.",
+    "image": "images/2026-05-10-afternoon-porcelain-storm-anatomy-cabinet.png",
+    "date": "2026-05-10",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
