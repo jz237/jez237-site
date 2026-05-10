@@ -53,9 +53,77 @@
       border-radius: 28px;
       box-shadow: var(--shadow);
     }
-    .image-wrap { background: #05070a; min-height: 360px; display:flex; align-items:center; justify-content:center; }
+    .image-wrap { background: #05070a; min-height: 360px; display:flex; align-items:center; justify-content:center; position: relative; }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(5,7,10,.62);
+      color: rgba(238,243,251,.86);
+      font-size: .78rem;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
     img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-wrap img { cursor: zoom-in; }
     .card:last-child img { object-fit: contain; background: #05070a; }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      background: rgba(3,5,8,.94);
+      backdrop-filter: blur(14px);
+      color: var(--text);
+    }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr; }
+    .lightbox-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(12,15,20,.78);
+    }
+    .lightbox-title { min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: var(--muted); font-size: .88rem; font-weight: 500; }
+    .lightbox-close {
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .lightbox-stage {
+      min-height: 0;
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lightbox-stage img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 28px 90px rgba(0,0,0,.55);
+      cursor: zoom-in;
+    }
+    .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
+    .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     .content { padding: 26px; background: linear-gradient(180deg, rgba(20,25,35,.95), rgba(20,25,35,.82)); }
     .kicker { color: var(--accent); text-transform: uppercase; font-size: .78rem; letter-spacing: .14em; font-weight: 800; }
     h2 { margin: 8px 0 10px; font-size: clamp(1.4rem, 2.5vw, 2.1rem); line-height: 1.05; }
@@ -220,5 +288,73 @@
   <footer>
     Local files are stored beside this page in <code>images/</code>; prompt metadata is also saved as <code>prompts.json</code> and <code>gallery-data.json</code>.
   </footer>
+
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage">
+      <img id="lightbox-image" alt="">
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const viewer = document.getElementById('image-lightbox');
+      const stage = document.getElementById('lightbox-stage');
+      const image = document.getElementById('lightbox-image');
+      const title = document.getElementById('lightbox-title');
+      const close = document.getElementById('lightbox-close');
+      if (!viewer || !stage || !image || !title || !close) return;
+
+      function openViewer(src, alt) {
+        image.src = src;
+        image.alt = alt || 'Expanded generated image';
+        title.textContent = alt || 'Generated image';
+        viewer.classList.add('open');
+        viewer.classList.remove('actual');
+        viewer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        close.focus({ preventScroll: true });
+      }
+
+      function closeViewer() {
+        viewer.classList.remove('open', 'actual');
+        viewer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        image.removeAttribute('src');
+      }
+
+      document.querySelectorAll('.image-wrap img').forEach((thumb) => {
+        thumb.setAttribute('tabindex', '0');
+        thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
+        thumb.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openViewer(thumb.currentSrc || thumb.src, thumb.alt);
+          }
+        });
+      });
+
+      image.addEventListener('click', (event) => {
+        event.stopPropagation();
+        viewer.classList.toggle('actual');
+        if (viewer.classList.contains('actual')) {
+          stage.scrollLeft = Math.max(0, (image.naturalWidth - stage.clientWidth) / 2);
+          stage.scrollTop = Math.max(0, (image.naturalHeight - stage.clientHeight) / 2);
+        }
+      });
+
+      stage.addEventListener('click', (event) => {
+        if (event.target === stage) closeViewer();
+      });
+      close.addEventListener('click', closeViewer);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && viewer.classList.contains('open')) closeViewer();
+      });
+    })();
+  </script>
 </body>
 </html>
