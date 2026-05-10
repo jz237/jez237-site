@@ -118,5 +118,17 @@
     "model": "openai/gpt-image-2",
     "size": "1024x1536",
     "image": "images/10-almanac-robot-garden.png"
+  },
+  {
+    "id": "2026-05-10-midday-bioluminescent-laundry-tide",
+    "title": "Bioluminescent Laundry Tide",
+    "tests": "Domestic scene transformation, bioluminescent lighting, wet reflections, translucent fabric, bubbles, and coherent magical realism.",
+    "prompt": "A cozy basement laundry room at night quietly transformed into a tiny bioluminescent shoreline. The round washing-machine door glows like a portal full of dark blue seawater, drifting plankton, and miniature waves; wet clothes hang from lines as translucent jellyfish-like fabric forms with soft cyan and violet light; soap bubbles float through moonbeams from a small window; puddles on checkerboard tile reflect detergent bottles, wicker baskets, and glowing ripples. Domestic realism blended with magical ocean biology, cinematic low light, highly detailed textures, believable scale, no readable labels, no logos, no text.",
+    "image": "images/2026-05-10-midday-bioluminescent-laundry-tide.png",
+    "date": "2026-05-10",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
