@@ -2,61 +2,111 @@
   {
     "id": "01-glass-orchard",
     "title": "Transparent Glass Orchard",
-    "problem": "Transparency, refraction, caustics, repeating organic forms, and visible objects behind glass.",
-    "prompt": "A highly detailed surreal orchard made entirely of transparent blown glass trees at golden hour. Each tree has glass bark, glass leaves, and glass fruit with realistic refraction, subtle rainbow caustics on the grass, and visible distorted scenery through the trunks. A narrow dirt path winds through the orchard with dew on the ground. Cinematic lighting, physically plausible reflections, shallow mist, ultra-detailed, no text, no logos."
+    "prompt": "A highly detailed surreal orchard made entirely of transparent blown glass trees at golden hour. Each tree has glass bark, glass leaves, and glass fruit with realistic refraction, subtle rainbow caustics on the grass, and visible distorted scenery through the trunks. A narrow dirt path winds through the orchard with dew on the ground. Cinematic lighting, physically plausible reflections, shallow mist, ultra-detailed, no text, no logos.",
+    "tests": "Transparency, refraction, caustics, repeating organic forms, and visible objects behind glass.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-01",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "02-clockwork-tidepool",
     "title": "Clockwork Tidepool Ecosystem",
-    "problem": "Tiny mechanical detail, wet surfaces, marine life anatomy, scale contrast, and material separation.",
-    "prompt": "Macro view of a rocky tidepool where every sea creature is a tiny clockwork automaton: brass hermit crabs, copper starfish, jeweled anemones, and gear-driven shrimp moving through clear seawater. Wet black rocks, bubbles, kelp, salt crystals, specular highlights, intricate micro-gears visible under translucent shells. Scientific naturalist illustration meets cinematic macro photography, extremely detailed, no text."
+    "prompt": "Macro view of a rocky tidepool where every sea creature is a tiny clockwork automaton: brass hermit crabs, copper starfish, jeweled anemones, and gear-driven shrimp moving through clear seawater. Wet black rocks, bubbles, kelp, salt crystals, specular highlights, intricate micro-gears visible under translucent shells. Scientific naturalist illustration meets cinematic macro photography, extremely detailed, no text.",
+    "tests": "Tiny mechanical detail, wet surfaces, marine life anatomy, scale contrast, and material separation.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-02",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "03-impossible-library-rain",
     "title": "Impossible Rain Library",
-    "problem": "Architecture, impossible geometry, atmosphere, wet reflections, many books without readable text.",
-    "prompt": "An enormous impossible library built like an Escher labyrinth, with staircases crossing in impossible directions and shelves rising into rainy clouds. Gentle rain falls indoors, creating glossy reflections on marble floors. Thousands of books with blank decorative spines, warm lamps glowing through mist, ladders, arches, and floating reading platforms. Grand, moody, highly detailed, no readable text, no logos."
+    "prompt": "An enormous impossible library built like an Escher labyrinth, with staircases crossing in impossible directions and shelves rising into rainy clouds. Gentle rain falls indoors, creating glossy reflections on marble floors. Thousands of books with blank decorative spines, warm lamps glowing through mist, ladders, arches, and floating reading platforms. Grand, moody, highly detailed, no readable text, no logos.",
+    "tests": "Architecture, impossible geometry, atmosphere, wet reflections, many books without readable text.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-03",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "04-cathedral-kitchen",
     "title": "Cathedral Kitchen at Dawn",
-    "problem": "Hybrid architecture/interior design, warm food lighting, complex composition, believable scale.",
-    "prompt": "A vast cathedral transformed into a cozy working kitchen at dawn. Sunbeams pour through stained glass windows onto copper pots, hanging herbs, flour dust in the air, stone columns, wooden prep tables, fresh bread, steam rising from kettles, and tiny chefs preparing breakfast. Sacred architecture blended naturally with practical kitchen details. Warm, detailed, painterly-realistic, no text, no logos."
+    "prompt": "A vast cathedral transformed into a cozy working kitchen at dawn. Sunbeams pour through stained glass windows onto copper pots, hanging herbs, flour dust in the air, stone columns, wooden prep tables, fresh bread, steam rising from kettles, and tiny chefs preparing breakfast. Sacred architecture blended naturally with practical kitchen details. Warm, detailed, painterly-realistic, no text, no logos.",
+    "tests": "Hybrid architecture/interior design, warm food lighting, complex composition, believable scale.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-04",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "05-weather-map-dragon",
     "title": "Living Weather Map Dragon",
-    "problem": "Map-like graphic composition blended with a creature, clouds, precipitation, and readable symbolic structure without text.",
-    "prompt": "A majestic dragon formed from a living weather map, flying above a miniature landscape. Its wings are layered storm fronts, its scales are cloud cells, its breath is a curling cold front with rain bands, and lightning flickers inside translucent storm-cloud membranes. Below are tiny farms, rivers, hills, and patches of sunlight. Elegant meteorological visualization fused with fantasy realism, highly detailed, no text, no numbers, no logos."
+    "prompt": "A majestic dragon formed from a living weather map, flying above a miniature landscape. Its wings are layered storm fronts, its scales are cloud cells, its breath is a curling cold front with rain bands, and lightning flickers inside translucent storm-cloud membranes. Below are tiny farms, rivers, hills, and patches of sunlight. Elegant meteorological visualization fused with fantasy realism, highly detailed, no text, no numbers, no logos.",
+    "tests": "Map-like graphic composition blended with a creature, clouds, precipitation, and readable symbolic structure without text.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-05",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "06-night-market-snowglobe",
     "title": "Night Market Snow Globe",
-    "problem": "Nested scene, glass boundary, crowds, lighting, snowfall, reflections, and small object detail.",
-    "prompt": "A bustling miniature night market contained inside a crystal-clear snow globe sitting on an old wooden desk. Inside: tiny food stalls, lanterns, umbrellas, steam, shoppers, cobblestones, and falling snow. Outside the globe: blurred cozy room, books, tea cup, warm lamp. Strong glass distortion at the globe edges, realistic reflections, magical but grounded, ultra-detailed, no readable signs or text."
+    "prompt": "A bustling miniature night market contained inside a crystal-clear snow globe sitting on an old wooden desk. Inside: tiny food stalls, lanterns, umbrellas, steam, shoppers, cobblestones, and falling snow. Outside the globe: blurred cozy room, books, tea cup, warm lamp. Strong glass distortion at the globe edges, realistic reflections, magical but grounded, ultra-detailed, no readable signs or text.",
+    "tests": "Nested scene, glass boundary, crowds, lighting, snowfall, reflections, and small object detail.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-06",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "07-botanical-spacesuit",
     "title": "Botanical Spacesuit Portrait",
-    "problem": "Portrait realism, fabric/material detail, plants integrated into technology, helmet reflections.",
-    "prompt": "A dignified astronaut portrait wearing a white spacesuit overtaken by living botanical growth: moss seams, tiny flowers, fern fronds, vines threaded through life-support tubing, and a transparent helmet reflecting a greenhouse on Mars. Human face calm and realistic, soft studio lighting mixed with red Martian rim light, precise suit details, rich textures, no flags, no text, no logos."
+    "prompt": "A dignified astronaut portrait wearing a white spacesuit overtaken by living botanical growth: moss seams, tiny flowers, fern fronds, vines threaded through life-support tubing, and a transparent helmet reflecting a greenhouse on Mars. Human face calm and realistic, soft studio lighting mixed with red Martian rim light, precise suit details, rich textures, no flags, no text, no logos.",
+    "tests": "Portrait realism, fabric/material detail, plants integrated into technology, helmet reflections.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-07",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "08-paper-city-flood",
     "title": "Paper City After Rain",
-    "problem": "Material consistency, scale illusion, water interacting with paper, urban detail.",
-    "prompt": "A miniature city made entirely from folded watercolor paper after a rainstorm. Paper skyscrapers, paper rowhouses, paper trees, tiny paper bridges, and puddles that slightly warp and stain the paper streets. Soft overcast light, delicate fibers visible, curled edges, reflections in shallow water, handcrafted diorama realism, intricate details, no text, no logos."
+    "prompt": "A miniature city made entirely from folded watercolor paper after a rainstorm. Paper skyscrapers, paper rowhouses, paper trees, tiny paper bridges, and puddles that slightly warp and stain the paper streets. Soft overcast light, delicate fibers visible, curled edges, reflections in shallow water, handcrafted diorama realism, intricate details, no text, no logos.",
+    "tests": "Material consistency, scale illusion, water interacting with paper, urban detail.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-08",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "09-underwater-greenhouse",
     "title": "Underwater Greenhouse Observatory",
-    "problem": "Underwater lighting, glass architecture, plants, fish, volumetric depth, believable environment.",
-    "prompt": "A glass greenhouse observatory on the ocean floor, filled with lush terrestrial plants growing under warm lamps while fish and rays swim outside in blue water. Sunbeams descend from the surface, bubbles rise along the glass panels, condensation inside, coral anchoring the structure, gardeners in simple dive suits tending plants. Peaceful, detailed, cinematic, no text, no logos."
+    "prompt": "A glass greenhouse observatory on the ocean floor, filled with lush terrestrial plants growing under warm lamps while fish and rays swim outside in blue water. Sunbeams descend from the surface, bubbles rise along the glass panels, condensation inside, coral anchoring the structure, gardeners in simple dive suits tending plants. Peaceful, detailed, cinematic, no text, no logos.",
+    "tests": "Underwater lighting, glass architecture, plants, fish, volumetric depth, believable environment.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-09",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   },
   {
     "id": "10-almanac-robot-garden",
     "title": "Robot Garden Almanac Plate",
-    "problem": "Poster/layout discipline, decorative information design, multiple vignettes, avoiding fake unreadable text.",
-    "prompt": "A vertical vintage almanac-style illustrated plate about a small robot tending a garden through four seasons. Center: charming brass-and-ceramic robot watering tomatoes. Surrounding panels: spring seedlings, summer pollinators, autumn harvest basket, winter greenhouse lantern. Ornate botanical border, engraved linework, parchment background, weather instruments, seed packets without readable labels. Use only large simple readable title text: ROBOT GARDEN ALMANAC. Highly detailed, elegant, no logos."
+    "prompt": "A vertical vintage almanac-style illustrated plate about a small robot tending a garden through four seasons. Center: charming brass-and-ceramic robot watering tomatoes. Surrounding panels: spring seedlings, summer pollinators, autumn harvest basket, winter greenhouse lantern. Ornate botanical border, engraved linework, parchment background, weather instruments, seed packets without readable labels. Use only large simple readable title text: ROBOT GARDEN ALMANAC. Highly detailed, elegant, no logos.",
+    "tests": "Poster/layout discipline, decorative information design, multiple vignettes, avoiding fake unreadable text.",
+    "date": "2026-05-10",
+    "batch": "Launch Set",
+    "slot": "launch-10",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
