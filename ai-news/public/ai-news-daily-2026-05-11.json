@@ -1,6 +1,6 @@
 {
   "date": "2026-05-11",
-  "updatedAt": "2026-05-11T21:39:14.483001+00:00",
+  "updatedAt": "2026-05-11T23:00:01.222452+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Build Agent-Native Memory Infrastructure with Memori for Persistent Multi-User and Multi-Session LLM Applications",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
       "published": "2026-05-11T07:34:38+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.464
+      "score": 12.4367
     },
     {
       "title": "Anthropic says Claude learned to blackmail by reading stories about evil AI",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-11T15:00:01.231668+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8091
+      "score": 10.7813
     },
     {
       "title": "Claude AI agents are driving record Mac mini demand",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-11T21:39:14.483001+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.664
+      "score": 10.6304
     },
     {
       "title": "SocialReasoning-Bench: Measuring whether AI agents act in users’ best interests",
@@ -61,10 +61,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/SocialReasoningBench-TWLIFB-1200x627-1.jpg",
       "published": "2026-05-11T17:19:28+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.1354
+      "score": 10.0996
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T15:27:12+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.186
+      "score": 9.152
     },
     {
       "title": "Mac Users Warned Over Fake Claude Install Instructions",
@@ -93,10 +93,26 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/Gemini_Generated_Image_kztlsskztlsskztl.jpg?f=jpeg",
       "published": "2026-05-11T18:28:55+00:00",
       "firstSeen": "2026-05-11T19:00:01.826030+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1572
+      "score": 9.1203
+    },
+    {
+      "title": "How ChatGPT adoption broadened in early 2026",
+      "url": "https://openai.com/signals/research/2026q1-update",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "ChatGPT adoption surged in Q1 2026, with fastest growth among users over 35 and more balanced gender usage, signaling broader mainstream AI adoption.",
+      "image": "",
+      "published": "2026-05-11T15:00:00+00:00",
+      "firstSeen": "2026-05-11T23:00:01.222452+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2808
     },
     {
       "title": "Meta and Stanford Researchers Propose Fast Byte Latent Transformer That Reduces Inference Memory Bandwidth by Over 50% Without Tokenization",
@@ -109,10 +125,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-10.41.39-AM-150x150.png",
       "published": "2026-05-11T17:52:15+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3103
+      "score": 8.2739
     },
     {
       "title": "OpenAI launches $4bn Deployment Company with TPG, Advent, Bain, and Brookfield",
@@ -125,10 +141,26 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-05-11T15:15:55+00:00",
       "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4711
+      "score": 7.4373
+    },
+    {
+      "title": "GitLab is cutting jobs for the agentic era. It does not yet know how many.",
+      "url": "https://thenextweb.com/news/gitlab-layoffs-agentic-era-devops-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "GitLab is cutting jobs to invest in AI agents. The company announced on Monday that it will flatten management layers, reorganise its research and development teams into roughly 60 smaller autonomous units, reduce its country footprint by approximately 30 per cent, and use AI agents to automate internal reviews, approvals, and handoffs. CEO Bill [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/gitlab-layoffs-agentic-era-devops-ai.avif",
+      "published": "2026-05-11T21:55:06+00:00",
+      "firstSeen": "2026-05-11T23:00:01.222452+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.3174
     },
     {
       "title": "OpenAI launches DeployCo to help businesses build around intelligence",
@@ -141,10 +173,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/31rjlet3neWRz6pY1AzuTd/b48667a68f2e86d0fa1f7a890060bbbe/Frame__7_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-11T06:00:00+00:00",
       "firstSeen": "2026-05-11T14:00:01.906407+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9121
+      "score": 6.886
     },
     {
       "title": "Learning on the Shop floor",
@@ -157,42 +189,10 @@
       "image": "",
       "published": "2026-05-11T15:46:36+00:00",
       "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
+      "lastSeen": "2026-05-11T23:00:01.222452+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.6243
-    },
-    {
-      "title": "Quoting James Shore",
-      "url": "https://simonwillison.net/2026/May/11/james-shore",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Your AI coding agent, the one you use to write code, needs to reduce your maintenance costs. Not by a little bit, either. You write code twice as quick now? Better hope you’ve halved your maintenance costs. Three times as productive? One third the maintenance costs. Otherwise, you’re screwed. You’re trading a temporary speed boost for permanent indenture. [...]\nThe math only works if the LLM decreases your maintenance costs, and by exactly the inverse of the rate it adds code. If you double your output and your cost of maintaining that output, two times two means you’ve quadrupled your mainten",
-      "image": "",
-      "published": "2026-05-11T19:48:32+00:00",
-      "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.335
-    },
-    {
-      "title": "Sakana AI and NVIDIA Introduce TwELL with CUDA Kernels for 20.5% Inference and 21.9% Training Speedup in LLMs",
-      "url": "https://www.marktechpost.com/2026/05/11/sakana-ai-and-nvidia-introduce-twell-with-cuda-kernels-for-20-5-inference-and-21-9-training-speedup-in-llms",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Sakana AI and NVIDIA Researchers demonstrate that simple L1 regularization can induce over 99% sparsity in feedforward layers with negligible downstream performance impact, and translate that sparsity into real GPU throughput gains using new sparse data formats and fused CUDA kernels.\nThe post Sakana AI and NVIDIA Introduce TwELL with CUDA Kernels for 20.5% Inference and 21.9% Training Speedup in LLMs appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-1.25.44-AM-150x150.png",
-      "published": "2026-05-11T08:36:00+00:00",
-      "firstSeen": "2026-05-11T10:00:02.022836+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.2854
+      "score": 6.59
     }
   ],
   "errors": []
