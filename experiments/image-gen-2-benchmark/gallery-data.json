@@ -142,5 +142,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-10-evening-mycelium-map-room",
+    "title": "Mycelium Map Room",
+    "tests": "Organic-meets-technical composition, mycelium network detail, warm interior lighting, cartographic relief terrain, mixed natural and crafted materials, and believable workshop atmosphere.",
+    "prompt": "A cartographer's warm workshop where an enormous living mycelium network grows across a massive table-scale relief map, the fungal threads naturally forming rivers, roads, and mountain ridges in glowing white and pale blue. The map shows rolling hills carved from cork, tiny wooden buildings, and moss forests. The cartographer's tools — brass calipers, ink bottles, magnifying lamp — sit alongside sprouting mushroom caps used as natural map markers. Warm amber lamplight, rich wood tones, organic textures meeting precise mapmaking, ultra-detailed, no readable text, no logos.",
+    "image": "images/2026-05-10-evening-mycelium-map-room.png",
+    "date": "2026-05-10",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
