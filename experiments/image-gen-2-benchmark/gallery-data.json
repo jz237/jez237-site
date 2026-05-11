@@ -166,5 +166,17 @@
     "slot": "late-evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-11-morning-cake-terrace-farmland",
+    "title": "Cake Terrace Farmland",
+    "tests": "Food material rendering at landscape scale, multiple cake textures, sugar-glass waterfalls, tiny figure integration, warm golden lighting, and coherent terrain composition.",
+    "prompt": "A sweeping terraced hillside landscape made entirely of elaborate cakes and pastries. Each terrace is a different cake style: dark chocolate ganache cliffs, strawberry mousse hills, pistachio sponge terraces, and caramel sugar-glass waterfalls flowing between layers. Tiny fondant farmers in white hats tend rows of miniature macaron crops and cookie orchards. Sugar-spun bridges cross frosting rivers. The whole scene is lit by warm golden-hour light with soft shadows, dusted powdered sugar drifting in the air like pollen. Rich food textures meeting grand landscape composition, ultra-detailed, no text, no logos.",
+    "image": "images/2026-05-11-morning-cake-terrace-farmland.png",
+    "date": "2026-05-11",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
