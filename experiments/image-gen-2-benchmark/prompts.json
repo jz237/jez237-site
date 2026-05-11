@@ -178,5 +178,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-11-afternoon-ferrofluid-ballet-stage",
+    "title": "Ferrofluid Ballet Stage",
+    "tests": "Liquid-metal material behavior, magnetic field-driven forms, high-speed motion cues, glossy reflections, abstract figures, and controlled studio lighting.",
+    "prompt": "A dramatic studio photograph of a miniature ballet performance made from ferrofluid and polished magnets. On a glossy white ceramic stage, several elegant dancer-like forms rise from black ferrofluid, their skirts and limbs suggested by liquid-metal spikes and smooth reflective arcs. Small brushed-steel magnets hover and stand around them like stage props, visibly pulling the fluid into graceful radial patterns. Colored rim lights in deep cobalt, magenta, and warm amber create crisp reflections on the liquid surface; shallow depth of field, high-speed frozen motion, clean background, no text, no logos.",
+    "image": "images/2026-05-11-afternoon-ferrofluid-ballet-stage.png",
+    "date": "2026-05-11",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
