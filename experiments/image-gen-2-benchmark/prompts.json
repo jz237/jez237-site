@@ -154,5 +154,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-10-late-evening-amber-fossil-lighthouse",
+    "title": "Amber Fossil Lighthouse",
+    "tests": "Translucent amber material rendering, prehistoric inclusions visible inside solid form, warm-cool color contrast, coastal atmosphere, architectural structure, and internal glow through thick material.",
+    "prompt": "A lighthouse carved from a single enormous piece of translucent amber standing on a dark basalt coast at twilight. The lighthouse walls glow with warm golden light from within, and ancient prehistoric inclusions are clearly visible frozen inside the amber: insects with delicate wings, fern fronds, tiny feathers, and air bubbles. The amber surface shows natural crack patterns and deep honey-colored translucency. Waves crash against black rocks below, sending up spray that catches the amber glow. The lighthouse beam emerges from the top as a concentrated honey-gold ray cutting through deep blue twilight air. Seabirds silhouette against the warm light. Rich contrast between warm amber interior glow and cool evening sky, cinematic atmosphere, ultra-detailed textures, no text, no logos.",
+    "image": "images/2026-05-10-late-evening-amber-fossil-lighthouse.png",
+    "date": "2026-05-10",
+    "batch": "Daily Prompt",
+    "slot": "late-evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
