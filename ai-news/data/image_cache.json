@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T15:00:01.231668+00:00",
+  "updatedAt": "2026-05-11T16:00:01.427595+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6376,6 +6376,22 @@
     "https://techcrunch.com/2026/05/11/there-arent-enough-rockets-for-space-data-centers-cowboy-space-raised-275-million-to-build-them": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cowbow-Space-Company-photo.jpeg?resize=1200,960",
       "checkedAt": "2026-05-11T15:00:01.231668+00:00"
+    },
+    "https://simonwillison.net/2026/May/11/learning-on-the-shop-floor": {
+      "image": "",
+      "checkedAt": "2026-05-11T16:00:01.427595+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-intel-chip-manufacturing-deal": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-17.png?f=jpeg",
+      "checkedAt": "2026-05-11T16:00:01.427595+00:00"
+    },
+    "https://www.techrepublic.com/article/fundcentre-ai-vs-juniper-square": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/artificial-intelligence-brain-circuitry-and-data-i-2026-03-26-05-25-54-utc-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-11T16:00:01.427595+00:00"
+    },
+    "https://www.techrepublic.com/article/news-macos-27-rumored-liquid-glass-ui-tweaks": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05112026-macos-27-rumored-liquid-glass.jpg?f=jpeg",
+      "checkedAt": "2026-05-11T16:00:01.427595+00:00"
     }
   }
 }
