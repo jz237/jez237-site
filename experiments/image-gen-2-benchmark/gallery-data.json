@@ -190,5 +190,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-11-afternoon-kinetic-sand-subway-cutaway",
+    "title": "Kinetic Sand Subway Cutaway",
+    "tests": "Granular material texture, cutaway architecture, miniature transit scene, crisp-vs-crumbling edges, embedded lighting, and coherent macro scale.",
+    "prompt": "A cross-section view of a miniature subway station sculpted entirely from colored kinetic sand inside a shallow wooden tray. Smooth carved sand tunnels reveal tiny platforms, staircases, arched ceilings, and a stopped train made from layered bands of teal, rust, and cream sand. Granules visibly crumble at cut edges while compacted surfaces hold crisp architectural details. Small warm platform lights glow through translucent resin grains embedded in the sand, and overhead a few delicate sand streams fall like slow-motion hourglass curtains. Macro diorama realism, shallow depth of field, precise material texture, playful but physically plausible, no readable text, no logos.",
+    "image": "images/2026-05-11-afternoon-kinetic-sand-subway-cutaway.png",
+    "date": "2026-05-11",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
