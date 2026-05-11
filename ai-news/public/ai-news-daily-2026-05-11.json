@@ -1,6 +1,6 @@
 {
   "date": "2026-05-11",
-  "updatedAt": "2026-05-11T13:00:01.782958+00:00",
+  "updatedAt": "2026-05-11T12:20:24.799275+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Build Agent-Native Memory Infrastructure with Memori for Persistent Multi-User and Multi-Session LLM Applications",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
       "published": "2026-05-11T07:34:38+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.6662
+      "score": 12.6837
     },
     {
       "title": "Anthropic says Claude learned to blackmail by reading stories about evil AI",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-11T08:18:08+00:00",
       "firstSeen": "2026-05-11T08:33:59.577303+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0154
+      "score": 11.0333
     },
     {
       "title": "Sakana AI and NVIDIA Introduce TwELL with CUDA Kernels for 20.5% Inference and 21.9% Training Speedup in LLMs",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-1.25.44-AM-150x150.png",
       "published": "2026-05-11T08:36:00+00:00",
       "firstSeen": "2026-05-11T10:00:02.022836+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4934
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5115
     },
     {
       "title": "OpenAI Campus Network: Student club interest form",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.412
+      "score": 5.4308
     },
     {
       "title": "GPUaaS is reinforcing the illusion of European AI sovereignty",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/GPU.avif",
       "published": "2026-05-11T09:06:39+00:00",
       "firstSeen": "2026-05-11T10:00:02.022836+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0373
+      "score": 3.0556
     },
     {
       "title": "I Work in Hollywood. Everyone Who Used to Make TV Is Now Secretly Training AI",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/69f9d07ab5498e5bcdc18e55/master/pass/WIRED-AnastasiaKraynyuk-HollywoodAI-01.gif",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.502
+      "score": 2.5208
     },
     {
       "title": "How enterprises are scaling AI",
@@ -109,10 +109,10 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.412
+      "score": 2.4308
     },
     {
       "title": "Enshuai Zhou, Yifan Hao, Chao Wang, Rui Zhang, Di Huang, Jiaming Guo, Xing Hu, Zidong Du, Qi Guo, Yunji Chen",
@@ -123,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-11T13:00:09.428899+00:00",
+      "published": "2026-05-11T12:20:29.244931+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -141,10 +141,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/UK_1920x1080.max-600x600.format-webp.webp",
       "published": "2026-05-11T06:00:00+00:00",
       "firstSeen": "2026-05-11T07:00:01.573812+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2356
+      "score": 2.2524
     },
     {
       "title": "CUDA Proves Nvidia Is a Software Company",
@@ -157,10 +157,10 @@
       "image": "https://media.wired.com/photos/69fb095746deb466a6e86080/master/pass/WRD_CUDA_FINAL_RGB.png",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.2208
     },
     {
       "title": "Europe’s cumulative EV investment passes €200bn",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-11T10:31:49+00:00",
       "firstSeen": "2026-05-11T12:00:01.248192+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0771
+      "score": 2.0961
     },
     {
       "title": "Amazon prepares its first Swiss franc bond in six-part AI-capex push",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
       "published": "2026-05-11T10:09:19+00:00",
       "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T13:00:01.782958+00:00",
+      "lastSeen": "2026-05-11T12:20:24.799275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0664
+      "score": 2.0852
     }
   ],
   "errors": []
