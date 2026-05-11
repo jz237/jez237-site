@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T12:20:24.799275+00:00",
+  "updatedAt": "2026-05-11T14:00:01.906407+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6356,6 +6356,18 @@
     "https://www.marktechpost.com/2026/05/11/a-coding-implementation-to-build-agent-native-memory-infrastructure-with-memori-for-persistent-multi-user-and-multi-session-llm-applications": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
       "checkedAt": "2026-05-11T08:00:01.836193+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/11/1136967/fostering-breakthrough-ai-innovation-through-customer-back-engineering": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Capital-One-iStock-2208464815.jpg?resize=1200,600",
+      "checkedAt": "2026-05-11T14:00:01.906407+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/11/1136786/implementing-advanced-ai-technologies-in-finance": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/NetSuite-social-card.png?resize=1200,600",
+      "checkedAt": "2026-05-11T14:00:01.906407+00:00"
+    },
+    "https://openai.com/index/openai-launches-the-deployment-company": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/31rjlet3neWRz6pY1AzuTd/b48667a68f2e86d0fa1f7a890060bbbe/Frame__7_.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-11T14:00:01.906407+00:00"
     }
   }
 }
