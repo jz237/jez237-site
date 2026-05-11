@@ -1,6 +1,6 @@
 {
   "date": "2026-05-11",
-  "updatedAt": "2026-05-11T08:00:01.836193+00:00",
+  "updatedAt": "2026-05-11T08:33:59.577303+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Build Agent-Native Memory Infrastructure with Memori for Persistent Multi-User and Multi-Session LLM Applications",
@@ -13,10 +13,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
       "published": "2026-05-11T07:34:38+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.8071
+      "score": 12.7902
+    },
+    {
+      "title": "Anthropic says Claude learned to blackmail by reading stories about evil AI",
+      "url": "https://thenextweb.com/news/anthropic-claude-blackmail-internet-evil-ai-training",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The company has traced its model’s most uncomfortable behaviour to the corpus of science fiction it was trained on. The fix it describes is unsettling in a different way: teaching the model the reasons behind being good, not just the rules. In a fictional company called Summit Bridge, a fictional executive named Kyle Johnson is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
+      "published": "2026-05-11T08:18:08+00:00",
+      "firstSeen": "2026-05-11T08:33:59.577303+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.142
     },
     {
       "title": "OpenAI Campus Network: Student club interest form",
@@ -29,7 +45,7 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.5
@@ -45,10 +61,26 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.5
+    },
+    {
+      "title": "Enshuai Zhou, Yifan Hao, Chao Wang, Rui Zhang, Di Huang, Jiaming Guo, Xing Hu, Zidong Du, Qi Guo, Yunji Chen",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-11T08:34:06.428525+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     },
     {
       "title": "The new AI-powered Google Finance is expanding to Europe.",
@@ -61,26 +93,42 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/UK_1920x1080.max-600x600.format-webp.webp",
       "published": "2026-05-11T06:00:00+00:00",
       "firstSeen": "2026-05-11T07:00:01.573812+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3705
+      "score": 2.3543
     },
     {
-      "title": "Antoine Heranval (BioSP), Olivier Lopez (CREST), Didier Ngatcha (CREST), Daniel Nkameni (CREST)",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Microsoft-G42 Kenya data centre stalls over government offtake demands",
+      "url": "https://thenextweb.com/news/microsoft-g42-kenya-data-center-delay-offtake",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-11T08:00:10.302366+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "summary": "The company asked the Kenyan government for a guaranteed annual capacity offtake. The government did not commit at the level Microsoft requested. Talks have broken down for now; the project is not formally cancelled. A $1bn Microsoft data-centre project in Kenya, structured as a partnership with UAE-based G42, has stalled after the two companies failed [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
+      "published": "2026-05-11T07:29:55+00:00",
+      "firstSeen": "2026-05-11T08:33:59.577303+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.1178
+    },
+    {
+      "title": "SoftBank to manufacture large-scale batteries for AI data centres at former Sharp plant",
+      "url": "https://thenextweb.com/news/oftbank-sakai-battery-plant-ai-data-centres",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Target output is one gigawatt-hour a year. Partners are South Korea’s Cosmos Lab and DeltaX. Production opens for the fiscal year starting next April, with zinc-halide chemistry following in 2027. SoftBank Group’s mobile-services subsidiary will begin manufacturing large-scale battery cells at the Sakai, Osaka site that once belonged to Sharp, the company said on Sunday, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2013/05/160415325.avif",
+      "published": "2026-05-11T07:21:57+00:00",
+      "firstSeen": "2026-05-11T08:33:59.577303+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1139
     },
     {
       "title": "Why LaceLocker® believes the next breakthrough in wearables may begin beneath the laces",
@@ -93,10 +141,26 @@
       "image": "https://media.thenextweb.com/2026/05/lacelocker-future-wearables-connected-footwear.avif",
       "published": "2026-05-11T06:41:43+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1108
+      "score": 2.0943
+    },
+    {
+      "title": "Nintendo shares fall 7% as Switch 2 price hike and thin pipeline land in the same forecast",
+      "url": "https://thenextweb.com/news/nintendo-switch-2-price-hike-fy27-guidance-share-drop",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "FY27 hardware guidance is for 16.5m Switch 2 units, down 17%. Memory and shipping costs add a ¥100bn drag. The US price moves to $499.99 in September; Japan goes to ¥59,980 from 25 May. Nintendo shares dropped roughly 7% in Tokyo trading on Monday after Friday’s full-year results paired a record fiscal year with a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2021/07/Nintendo-Switch-OLED-model.avif",
+      "published": "2026-05-11T07:39:07+00:00",
+      "firstSeen": "2026-05-11T08:33:59.577303+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.4224
     },
     {
       "title": "How Tohme Accounting sees AI elevating cross-border accounting",
@@ -109,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-cross-border-accounting-financial-advisory.avif",
       "published": "2026-05-11T06:59:04+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T08:00:01.836193+00:00",
+      "lastSeen": "2026-05-11T08:33:59.577303+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9806
+      "score": -0.9973
     }
   ],
   "errors": []
