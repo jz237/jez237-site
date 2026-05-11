@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T18:00:01.343104+00:00",
+  "updatedAt": "2026-05-11T19:00:01.826030+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6408,6 +6408,14 @@
     "https://techcrunch.com/2026/05/11/digg-tries-again-this-time-as-an-ai-news-aggregator": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/digg-ver2-at-10.40.29-AM.jpg?resize=1200,888",
       "checkedAt": "2026-05-11T18:00:01.343104+00:00"
+    },
+    "https://www.techrepublic.com/article/news-claude-mac-download-google-ads-malware": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Gemini_Generated_Image_kztlsskztlsskztl.jpg?f=jpeg",
+      "checkedAt": "2026-05-11T19:00:01.826030+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-gmail-ai-personalization-privacy-settings": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/close-up-of-female-hands-using-laptop-on-cafe-tabl-2026-03-26-05-00-24-utc-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-11T19:00:01.826030+00:00"
     }
   }
 }
