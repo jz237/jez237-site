@@ -1,6 +1,6 @@
 {
   "date": "2026-05-11",
-  "updatedAt": "2026-05-11T11:00:01.714321+00:00",
+  "updatedAt": "2026-05-11T12:00:01.248192+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Build Agent-Native Memory Infrastructure with Memori for Persistent Multi-User and Multi-Session LLM Applications",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
       "published": "2026-05-11T07:34:38+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.7202
+      "score": 12.6928
     },
     {
       "title": "Anthropic says Claude learned to blackmail by reading stories about evil AI",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-11T08:18:08+00:00",
       "firstSeen": "2026-05-11T08:33:59.577303+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0706
+      "score": 11.0426
     },
     {
       "title": "Sakana AI and NVIDIA Introduce TwELL with CUDA Kernels for 20.5% Inference and 21.9% Training Speedup in LLMs",
@@ -45,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-1.25.44-AM-150x150.png",
       "published": "2026-05-11T08:36:00+00:00",
       "firstSeen": "2026-05-11T10:00:02.022836+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.549
+      "score": 5.5209
     },
     {
       "title": "OpenAI Campus Network: Student club interest form",
@@ -61,10 +61,10 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4699
+      "score": 5.4405
     },
     {
       "title": "GPUaaS is reinforcing the illusion of European AI sovereignty",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/GPU.avif",
       "published": "2026-05-11T09:06:39+00:00",
       "firstSeen": "2026-05-11T10:00:02.022836+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0938
+      "score": 3.0652
     },
     {
       "title": "I Work in Hollywood. Everyone Who Used to Make TV Is Now Secretly Training AI",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/69f9d07ab5498e5bcdc18e55/master/pass/WIRED-AnastasiaKraynyuk-HollywoodAI-01.gif",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5599
+      "score": 2.5305
     },
     {
       "title": "How enterprises are scaling AI",
@@ -109,10 +109,10 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4699
+      "score": 2.4405
     },
     {
       "title": "Enshuai Zhou, Yifan Hao, Chao Wang, Rui Zhang, Di Huang, Jiaming Guo, Xing Hu, Zidong Du, Qi Guo, Yunji Chen",
@@ -123,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-11T11:00:07.889501+00:00",
+      "published": "2026-05-11T12:00:11.862912+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -141,10 +141,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/UK_1920x1080.max-600x600.format-webp.webp",
       "published": "2026-05-11T06:00:00+00:00",
       "firstSeen": "2026-05-11T07:00:01.573812+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2873
+      "score": 2.2611
     },
     {
       "title": "CUDA Proves Nvidia Is a Software Company",
@@ -157,10 +157,26 @@
       "image": "https://media.wired.com/photos/69fb095746deb466a6e86080/master/pass/WRD_CUDA_FINAL_RGB.png",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
+    },
+    {
+      "title": "Europe’s cumulative EV investment passes €200bn",
+      "url": "https://thenextweb.com/news/europes-cumulative-ev-investment-passes-e200bn",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "New AutoMotive’s data tracker, reported by Reuters on Sunday, marks the threshold and puts the question to industrial policy: how much of the headline number will end up producing cells at scale, given that roughly 600 GWh of announced European battery capacity has already been delayed or cancelled. Europe has now invested cumulatively €200bn into [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
+      "published": "2026-05-11T10:31:49+00:00",
+      "firstSeen": "2026-05-11T12:00:01.248192+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.106
     },
     {
       "title": "Amazon prepares its first Swiss franc bond in six-part AI-capex push",
@@ -173,26 +189,10 @@
       "image": "https://media.thenextweb.com/2026/04/Amazon.avif",
       "published": "2026-05-11T10:09:19+00:00",
       "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
+      "lastSeen": "2026-05-11T12:00:01.248192+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1245
-    },
-    {
-      "title": "Dutch eyeo raises €40m to commercialise NCOS color-splitting image sensors",
-      "url": "https://thenextweb.com/news/eyeo-40m-series-a-ncos-imaging-sensor",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Innovation Industries leads the Series A. imec.xpand, Invest-NL Deep Tech Fund, QBIC, HTGF, and BOM return. Total funding now stands at €55m. The money funds in-house chip design and a push toward volume sensors built on the company’s NCOS color-splitting technology. Eindhoven-based eyeo has raised €40m in Series A funding to commercialise a sensor technology [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Eyeo.avif",
-      "published": "2026-05-11T09:44:48+00:00",
-      "firstSeen": "2026-05-11T11:00:01.714321+00:00",
-      "lastSeen": "2026-05-11T11:00:01.714321+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1123
+      "score": 2.095
     }
   ],
   "errors": []
