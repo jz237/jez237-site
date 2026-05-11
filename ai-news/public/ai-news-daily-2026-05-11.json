@@ -1,6 +1,6 @@
 {
   "date": "2026-05-11",
-  "updatedAt": "2026-05-11T18:00:01.343104+00:00",
+  "updatedAt": "2026-05-11T18:03:38.289228+00:00",
   "items": [
     {
       "title": "A Coding Implementation to Build Agent-Native Memory Infrastructure with Memori for Persistent Multi-User and Multi-Session LLM Applications",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
       "published": "2026-05-11T07:34:38+00:00",
       "firstSeen": "2026-05-11T08:00:01.836193+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.5435
+      "score": 12.5421
     },
     {
       "title": "Anthropic says Claude learned to blackmail by reading stories about evil AI",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-11T15:00:01.231668+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.8902
+      "score": 10.8888
     },
     {
       "title": "Claude AI agents are driving record Mac mini demand",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
       "published": "2026-05-11T14:59:03+00:00",
       "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.7616
+      "score": 10.7599
     },
     {
       "title": "SocialReasoning-Bench: Measuring whether AI agents act in users’ best interests",
@@ -61,10 +61,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/SocialReasoningBench-TWLIFB-1200x627-1.jpg",
       "published": "2026-05-11T17:19:28+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.2395
+      "score": 10.2377
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T15:27:12+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2849
+      "score": 9.2831
     },
     {
       "title": "Meta and Stanford Researchers Propose Fast Byte Latent Transformer That Reduces Inference Memory Bandwidth by Over 50% Without Tokenization",
@@ -93,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-10.41.39-AM-150x150.png",
       "published": "2026-05-11T17:52:15+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.416
+      "score": 8.4142
     },
     {
       "title": "OpenAI launches $4bn Deployment Company with TPG, Advent, Bain, and Brookfield",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-05-11T15:15:55+00:00",
       "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5695
+      "score": 7.5678
     },
     {
       "title": "OpenAI launches DeployCo to help businesses build around intelligence",
@@ -125,10 +125,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/31rjlet3neWRz6pY1AzuTd/b48667a68f2e86d0fa1f7a890060bbbe/Frame__7_.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-11T06:00:00+00:00",
       "firstSeen": "2026-05-11T14:00:01.906407+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9882
+      "score": 6.9869
     },
     {
       "title": "Learning on the Shop floor",
@@ -141,10 +141,10 @@
       "image": "",
       "published": "2026-05-11T15:46:36+00:00",
       "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.7241
+      "score": 6.7224
     },
     {
       "title": "Sakana AI and NVIDIA Introduce TwELL with CUDA Kernels for 20.5% Inference and 21.9% Training Speedup in LLMs",
@@ -157,10 +157,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-1.25.44-AM-150x150.png",
       "published": "2026-05-11T08:36:00+00:00",
       "firstSeen": "2026-05-11T10:00:02.022836+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3672
+      "score": 5.3658
     },
     {
       "title": "OpenAI Campus Network: Student club interest form",
@@ -173,10 +173,10 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2808
+      "score": 5.2793
     },
     {
       "title": "Serving DeepSeek-V4: why million-token context is an inference systems problem",
@@ -189,10 +189,10 @@
       "image": "",
       "published": "2026-05-11T00:00:00+00:00",
       "firstSeen": "2026-05-08T18:21:27.398400+00:00",
-      "lastSeen": "2026-05-11T18:00:01.343104+00:00",
+      "lastSeen": "2026-05-11T18:03:38.289228+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0872
+      "score": 5.0861
     }
   ],
   "errors": []
