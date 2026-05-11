@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T07:00:01.573812+00:00",
+  "updatedAt": "2026-05-11T08:00:01.836193+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6352,6 +6352,10 @@
     "https://openai.com/index/openai-campus-network-student-club-interest-form": {
       "image": "",
       "checkedAt": "2026-05-11T06:00:01.371586+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/11/a-coding-implementation-to-build-agent-native-memory-infrastructure-with-memori-for-persistent-multi-user-and-multi-session-llm-applications": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-4.png",
+      "checkedAt": "2026-05-11T08:00:01.836193+00:00"
     }
   }
 }
