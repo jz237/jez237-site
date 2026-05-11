@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-10T22:01:12.707759+00:00",
+  "updatedAt": "2026-05-11T00:00:01.574647+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6336,6 +6336,10 @@
     "https://techcrunch.com/2026/05/10/get-ready-for-the-whisper-filled-office-of-the-future": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/12/GettyImages-84164497.jpg?resize=1200,798",
       "checkedAt": "2026-05-10T22:00:01.764165+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/10/best-vector-databases-in-2026-pricing-scale-limits-and-architecture-tradeoffs-across-nine-leading-systems": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-6-1024x731.png",
+      "checkedAt": "2026-05-11T00:00:01.574647+00:00"
     }
   }
 }
