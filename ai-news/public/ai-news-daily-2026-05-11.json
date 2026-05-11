@@ -1,23 +1,7 @@
 {
   "date": "2026-05-11",
-  "updatedAt": "2026-05-11T06:00:01.371586+00:00",
+  "updatedAt": "2026-05-11T07:00:01.573812+00:00",
   "items": [
-    {
-      "title": "Breaking the Illusion: When Positive Meets Negative in Multimodal Decoding",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-11T06:00:09.136811+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-11T06:00:01.371586+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.16
-    },
     {
       "title": "OpenAI Campus Network: Student club interest form",
       "url": "https://openai.com/index/openai-campus-network-student-club-interest-form",
@@ -29,7 +13,7 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T06:00:01.371586+00:00",
+      "lastSeen": "2026-05-11T07:00:01.573812+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.5
@@ -45,10 +29,42 @@
       "image": "",
       "published": "2026-05-11T10:00:00+00:00",
       "firstSeen": "2026-05-11T06:00:01.371586+00:00",
-      "lastSeen": "2026-05-11T06:00:01.371586+00:00",
+      "lastSeen": "2026-05-11T07:00:01.573812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.5
+    },
+    {
+      "title": "The new AI-powered Google Finance is expanding to Europe.",
+      "url": "https://blog.google/products-and-platforms/products/search/ai-powered-google-finance-in-europe",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "A screenshot of the AI-powered experience on Google Finance.",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/UK_1920x1080.max-600x600.format-webp.webp",
+      "published": "2026-05-11T06:00:00+00:00",
+      "firstSeen": "2026-05-11T07:00:01.573812+00:00",
+      "lastSeen": "2026-05-11T07:00:01.573812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3999
+    },
+    {
+      "title": "Yubo Jiang, Yitong An, Xin Yang, Abudukelimu Wuerkaixi, Xuxin Cheng, Fengying Xie, Zhiguo Jiang, Cao Liu, Ke Zeng, Ha...",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-11T07:00:18.584213+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-11T07:00:01.573812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     }
   ],
   "errors": []
