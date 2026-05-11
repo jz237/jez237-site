@@ -1,0 +1,23 @@
+{
+  "date": "2026-05-11",
+  "updatedAt": "2026-05-11T00:00:01.574647+00:00",
+  "items": [
+    {
+      "title": "A complete guide to LLM benchmark contamination: how it happens, the five detection methods that work, the famous cases (GPT-4 on Codeforces, Phi/Mistral on GSM8K, BIG-Bench canary in Claude), and the 2026 benchmarks built to resist it.",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-11T00:00:10.552429+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-11T00:00:01.574647+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.91
+    }
+  ],
+  "errors": []
+}
