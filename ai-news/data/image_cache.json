@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T17:00:01.595835+00:00",
+  "updatedAt": "2026-05-11T18:00:01.343104+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6396,6 +6396,18 @@
     "https://www.theverge.com/tech/928007/google-ai-zero-day-exploit-stopped": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25330660/STK414_AI_CHATBOT_H.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-11T16:10:14.611746+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/11/1137090/three-things-in-ai-to-watch-according-to-a-nobel-winning-economist": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260507_algo2.jpg?resize=1200,600",
+      "checkedAt": "2026-05-11T18:00:01.343104+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/socialreasoning-bench-measuring-whether-ai-agents-act-in-users-best-interests": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/SocialReasoningBench-TWLIFB-1200x627-1.jpg",
+      "checkedAt": "2026-05-11T18:00:01.343104+00:00"
+    },
+    "https://techcrunch.com/2026/05/11/digg-tries-again-this-time-as-an-ai-news-aggregator": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/digg-ver2-at-10.40.29-AM.jpg?resize=1200,888",
+      "checkedAt": "2026-05-11T18:00:01.343104+00:00"
     }
   }
 }
