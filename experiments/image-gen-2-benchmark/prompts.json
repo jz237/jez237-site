@@ -238,5 +238,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-12-afternoon-opal-hive-planetarium",
+    "title": "Opal Hive Planetarium",
+    "tests": "Explores whether GPT Image 2 can combine macro scale cues, translucent mineral optics, tiny cosmic scenes, realistic insects, and coherent observatory lighting without muddying the composition.",
+    "prompt": "A visually rich surreal macro scene called Opal Hive Planetarium: a giant honeycomb hive grown from translucent opal and pale beeswax, suspended inside a dark old observatory dome. Each hexagonal cell contains a tiny glowing miniature galaxy, nebula, crescent moon, or star cluster like specimens in luminous chambers; warm amber honey threads and cool blue-violet opal fire refract through the walls. A few realistic bees with delicate glassy wings move carefully among brass astronomical instruments, velvet shadows, dust motes, and curved telescope parts. The hive casts prismatic caustics onto polished black stone below. Cinematic macro photography mixed with fine-art surrealism, crisp textures, physically plausible translucency, high detail, no readable text, no logos.",
+    "image": "images/2026-05-12-afternoon-opal-hive-planetarium.png",
+    "date": "2026-05-12",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
