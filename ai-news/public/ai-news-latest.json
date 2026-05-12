@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-12T12:10:24.328619+00:00",
+  "updatedAt": "2026-05-12T14:00:02.030326+00:00",
   "items": [
     {
-      "title": "BaLoRA: Bayesian Low-Rank Adaptation of Large Scale Models",
+      "title": "Jesse Ward-Bond, Ali Mashadian, Timothy C. Y. Chan, Edmond W. K. Young",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-12T12:10:29.124603+00:00",
+      "published": "2026-05-12T14:00:08.994413+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Advancing AI for materials with MatterSim: experimental synthesis, faster simulation, and multi-task models",
+      "url": "https://www.microsoft.com/en-us/research/blog/advancing-ai-for-materials-with-mattersim-experimental-synthesis-faster-simulation-and-multi-task-models",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "MatterSim is expanding what AI can do for materials science—from faster large-scale simulations to MatterSim-MT, a new multi-task model for simulating properties beyond potential energy surfaces alone.\nThe post Advancing AI for materials with MatterSim: experimental synthesis, faster simulation, and multi-task models appeared first on Microsoft Research.",
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/MatterSimv1_5-TWLIFB-1200x627-1-scaled.jpg",
+      "published": "2026-05-12T13:00:00+00:00",
+      "firstSeen": "2026-05-12T14:00:02.030326+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8298
+    },
+    {
+      "title": "Dessn raises $6M for its production focused design tool",
+      "url": "https://techcrunch.com/2026/05/12/dessn-raises-6m-for-its-production-focused-design-tool",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A new startup called Dessn has raised $6M to build AI-powered design tools that work directly with production codebases.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-6.45.13-PM.jpeg?resize=1200%2C560",
+      "published": "2026-05-12T13:00:00+00:00",
+      "firstSeen": "2026-05-12T14:00:02.030326+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2598
+    },
+    {
+      "title": "NHS England gives Palantir contractors broader access to patient data",
+      "url": "https://thenextweb.com/news/palantir-nhs-england-patient-data-access",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A leaked internal briefing note describes a new admin role on the £330m Federated Data Platform that lets external staff bypass case-by-case data approvals. Patient groups and Labour MPs have called the change dangerous. NHS England has decided to allow external personnel from contractors, including Palantir, to access identifiable patient data through a new administrative [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/NHS.avif",
+      "published": "2026-05-12T12:38:00+00:00",
+      "firstSeen": "2026-05-12T14:00:02.030326+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.209
     },
     {
       "title": "NVIDIA and SAP Bring Trust to Specialized Agents",
@@ -28,10 +76,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/logo-lockup-blog-SAP-1920x1080-1.jpg",
       "published": "2026-05-12T12:30:56+00:00",
       "firstSeen": "2026-05-12T13:00:01.415263+00:00",
-      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0753
+      "score": 6.0455
     },
     {
       "title": "Vapi raises $50m Series B led by Peak XV for enterprise voice AI",
@@ -44,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/Vapi-team.avif",
       "published": "2026-05-12T12:00:59+00:00",
       "firstSeen": "2026-05-12T13:00:01.415263+00:00",
-      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5203
+      "score": 4.491
     },
     {
       "title": "AI voice startup Vapi hits $500M valuation after winning Amazon Ring over 40 rivals",
@@ -60,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vapi-founders-jordan-dearsley-nikhil-gupta.jpg?resize=1200%2C800",
       "published": "2026-05-12T11:30:00+00:00",
       "firstSeen": "2026-05-12T12:00:01.222217+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6696
+      "score": 4.6162
     },
     {
       "title": "China is earning roughly $500m an hour from exports, and AI-related goods are doing the heavy lifting",
@@ -76,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/04/beijing-warns-eu-china-russia-sanctions.avif",
       "published": "2026-05-12T10:22:48+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0965
+      "score": 2.0448
     },
     {
       "title": "Ilya Sutskever discloses $7bn OpenAI stake during Musk-OpenAI litigation",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/Ilya-Sutskever.avif",
       "published": "2026-05-12T10:03:17+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0871
+      "score": 5.0358
     },
     {
       "title": "ServiceNow lines up $4bn bond sale to refinance Armis acquisition debt",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/ServiceNow.avif",
       "published": "2026-05-12T09:53:55+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1826
+      "score": 3.1315
     },
     {
       "title": "Ursula Von der Leyen pushes EU-wide social-media age protections for children",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2023/09/Untitled-design-1-2.avif",
       "published": "2026-05-12T09:27:00+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1699
+      "score": 3.1194
     },
     {
       "title": "The US Commerce Department deletes website details of Microsoft, Google, and xAI security-test deal",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/US-Commerce-Department.avif",
       "published": "2026-05-12T09:15:57+00:00",
       "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7647
+      "score": 5.7144
     },
     {
       "title": "Jensen Huang skips Trump’s China business delegation",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-1.avif",
       "published": "2026-05-12T08:56:36+00:00",
       "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1556
+      "score": 3.1058
     },
     {
       "title": "Texas AG sues Netflix over alleged spying and addictive design",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/04/Netflix.avif",
       "published": "2026-05-12T08:38:41+00:00",
       "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0473
+      "score": 1.9979
     },
     {
       "title": "Prosus targets $3.6bn from Just Eat in European food-delivery push",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2025/02/Untitled-design-7-1.avif",
       "published": "2026-05-12T08:32:01+00:00",
       "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0442
+      "score": 1.995
     },
     {
       "title": "Tilde Research Introduces Aurora: A Leverage-Aware Optimizer That Fixes a Hidden Neuron Death Problem in Muon",
@@ -204,10 +252,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-12.png",
       "published": "2026-05-12T08:07:28+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.553
+      "score": 4.5043
     },
     {
       "title": "Duch Ditto raises €7.6M for patient-side AI summaries of medical appointments",
@@ -223,7 +271,7 @@
       "lastSeen": "2026-05-12T12:10:24.328619+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8282
+      "score": 3.7798
     },
     {
       "title": "Adfin raises $18m Series A from Index Ventures for agentic business finance",
@@ -239,7 +287,7 @@
       "lastSeen": "2026-05-12T12:10:24.328619+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.0245
+      "score": 2.9762
     },
     {
       "title": "White Circle raises $11m Seed for production AI control platform",
@@ -255,7 +303,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7221
+      "score": 8.674
     },
     {
       "title": "Paymentology raises $175m co-led by Apis Partners and Aspirity Partners",
@@ -271,7 +319,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7135
+      "score": 2.6659
     },
     {
       "title": "Nscale secures $790m financing for Narvik AI data centre",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0093
+      "score": 1.9619
     },
     {
       "title": "A Coding Implementation to Portfolio Optimization with skfolio for Building Testing, Tuning, and Comparing Modern Investment Strategies",
@@ -300,10 +348,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-11-1024x731.png",
       "published": "2026-05-12T07:05:02+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.775
+      "score": 2.7277
     },
     {
       "title": "Happl raises $11m Series A to scale its global benefits operating system",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7988
+      "score": 3.7518
     },
     {
       "title": "OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation",
@@ -332,10 +380,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-10.png",
       "published": "2026-05-12T05:47:54+00:00",
       "firstSeen": "2026-05-12T06:00:02.088490+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.0415
+      "score": 11.9959
     },
     {
       "title": "Thinking Machines wants to build an AI that actually listens while it talks",
@@ -348,10 +396,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2271655163.jpg?resize=1200%2C879",
       "published": "2026-05-12T04:52:35+00:00",
       "firstSeen": "2026-05-12T06:00:02.088490+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0882
+      "score": 2.0437
     },
     {
       "title": "Riding an AI rally, Robinhood preps second retail venture IPO",
@@ -364,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vlad-tenev-robinhood-GettyImages-2272038864.jpg?w=1024",
       "published": "2026-05-12T00:09:01+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9777
+      "score": 1.9387
     },
     {
       "title": "Thoughts on GitLab's workforce reduction\" and \"structural and strategic decisions\"",
@@ -380,10 +428,10 @@
       "image": "",
       "published": "2026-05-11T23:58:55+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.674
+      "score": 3.6352
     },
     {
       "title": "Ilya Sutskever Stands by His Role in Sam Altman’s OpenAI Ouster: ‘I Didn’t Want It to Be Destroyed’",
@@ -396,10 +444,10 @@
       "image": "https://media.wired.com/photos/6a02504ee09a7c202c6b229b/master/pass/Model-Behavior-Musk-v-Altman-Ilya-Sutskever-Business-2275165628.jpg",
       "published": "2026-05-11T23:51:35+00:00",
       "firstSeen": "2026-05-12T00:08:54.623007+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9713
+      "score": 4.9327
     },
     {
       "title": "Building Blocks for Foundation Model Training and Inference on AWS",
@@ -412,10 +460,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/64d6b270c2eedf9af82baa23/YybsyZaGr5f0fLe0qDuLn.png",
       "published": "2026-05-11T23:18:26+00:00",
       "firstSeen": "2026-05-12T00:08:54.623007+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6994
+      "score": 2.6614
     },
     {
       "title": "OpenAI just released its answer to Claude Mythos",
@@ -428,10 +476,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T23:05:01+00:00",
       "firstSeen": "2026-05-11T23:09:18.555762+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.1247
+      "score": 14.0868
     },
     {
       "title": "GM just laid off hundreds of IT workers to hire those with stronger AI skills",
@@ -444,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/gm-headquarters-getty.jpg?resize=1200%2C800",
       "published": "2026-05-11T23:04:10+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6544
+      "score": 3.6166
     },
     {
       "title": "Linux bitten by second severe vulnerability in as many weeks",
@@ -460,10 +508,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2022/05/caution-tape-1000x648.jpeg",
       "published": "2026-05-11T22:28:19+00:00",
       "firstSeen": "2026-05-11T23:09:18.555762+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8018
+      "score": 1.7646
     },
     {
       "title": "Here&#8217;s what Mira Murati&#8217;s AI company is up to",
@@ -476,10 +524,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_Illo_mira-murati_stock_02.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T22:19:15+00:00",
       "firstSeen": "2026-05-11T23:00:01.222452+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0086
+      "score": 3.9716
     },
     {
       "title": "GitLab is cutting jobs for the agentic era. It does not yet know how many.",
@@ -495,7 +543,7 @@
       "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.9903
+      "score": 6.9537
     },
     {
       "title": "Wise left London for Nasdaq. It is also applying for a US banking charter. The migration is not just a listing change.",
@@ -511,7 +559,7 @@
       "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8851
+      "score": 2.8487
     },
     {
       "title": "ZoomInfo beat earnings, cut 600 jobs, and lost 29 per cent of its stock price. Its database is being repriced by AI.",
@@ -527,7 +575,7 @@
       "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7802
+      "score": 1.7441
     },
     {
       "title": "I built a machine learning model to predict who leaves tech jobs early. The results surprised me.",
@@ -543,7 +591,7 @@
       "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1656
+      "score": 3.1302
     },
     {
       "title": "Lodestellar is a €7 EPD quality tool helping manufacturers win multi-million euro tenders",
@@ -559,7 +607,7 @@
       "lastSeen": "2026-05-12T08:00:01.937266+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7598
+      "score": 1.7247
     },
     {
       "title": "Understanding LLM Distillation Techniques",
@@ -572,10 +620,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-29-150x150.png",
       "published": "2026-05-11T20:20:16+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2285
+      "score": 3.1935
     },
     {
       "title": "How to Build Technical Analysis and Backtesting Workflow with pandas-ta-classic, Strategy Signals, and Performance Metrics",
@@ -588,90 +636,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-8-1024x731.png",
       "published": "2026-05-11T20:05:23+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.1763
-    },
-    {
-      "title": "Quoting James Shore",
-      "url": "https://simonwillison.net/2026/May/11/james-shore",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Your AI coding agent, the one you use to write code, needs to reduce your maintenance costs. Not by a little bit, either. You write code twice as quick now? Better hope you’ve halved your maintenance costs. Three times as productive? One third the maintenance costs. Otherwise, you’re screwed. You’re trading a temporary speed boost for permanent indenture. [...]\nThe math only works if the LLM decreases your maintenance costs, and by exactly the inverse of the rate it adds code. If you double your output and your cost of maintaining that output, two times two means you’ve quadrupled your mainten",
-      "image": "",
-      "published": "2026-05-11T19:48:32+00:00",
-      "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.9882
-    },
-    {
-      "title": "Your AI Use Is Breaking My Brain",
-      "url": "https://simonwillison.net/2026/May/11/zombie-internet",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Your AI Use Is Breaking My Brain\nExcellent, angry piece by Jason Koebler on how AI writing online is becoming impossible to avoid, filtering it is mentally exhausting and it's even starting to distort regular human writing styles.\nI particularly liked his use of the term \"Zombie Internet\" to define a different, more insidious alternative to the \"Dead Internet\" (which is just bots talking to each other):\n\nI called it the Zombie Internet because the truth is that large parts of the internet are not just bots talking to bots or bots talking to people. It’s people talking to bots, people talking t",
-      "image": "",
-      "published": "2026-05-11T19:21:27+00:00",
-      "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8795
-    },
-    {
-      "title": "Using LLM in the shebang line of a script",
-      "url": "https://simonwillison.net/2026/May/11/llm-shebang",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "TIL: Using LLM in the shebang line of a script\n        Kim_Bruning on Hacker News:\n\nBut seriously, you can put a shebang on an english text file now (if you're sufficiently brave) [...]\n\nThis inspired me to look at patterns for doing exactly that with LLM. Here's the simplest, which takes advantage of LLM fragments:\n#!/usr/bin/env -S llm -f\nGenerate an SVG of a pelican riding a bicycle\n\nBut you can also incorporate tool calls using the -T name_of_tool option:\n#!/usr/bin/env -S llm -T llm_time -f\nWrite a haiku that mentions the exact current time\n\nOr even execute YAML templates directly that de",
-      "image": "",
-      "published": "2026-05-11T18:48:57+00:00",
-      "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.2308
-    },
-    {
-      "title": "Mac Users Warned Over Fake Claude Install Instructions",
-      "url": "https://www.techrepublic.com/article/news-claude-mac-download-google-ads-malware",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Hackers are using Google Ads and Claude shared chats to target Mac users with fake setup instructions that can install malware.\nThe post Mac Users Warned Over Fake Claude Install Instructions appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/Gemini_Generated_Image_kztlsskztlsskztl.jpg?f=jpeg",
-      "published": "2026-05-11T18:28:55+00:00",
-      "firstSeen": "2026-05-11T19:00:01.826030+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.8229
-    },
-    {
-      "title": "Meta and Stanford Researchers Propose Fast Byte Latent Transformer That Reduces Inference Memory Bandwidth by Over 50% Without Tokenization",
-      "url": "https://www.marktechpost.com/2026/05/11/meta-and-stanford-researchers-propose-fast-byte-latent-transformer-that-reduces-inference-memory-bandwidth-by-over-50-without-tokenization",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Researchers from Meta FAIR and Stanford propose three inference methods for the Byte Latent Transformer that reduce memory-bandwidth cost by over 50% without subword tokenization.\nThe post Meta and Stanford Researchers Propose Fast Byte Latent Transformer That Reduces Inference Memory Bandwidth by Over 50% Without Tokenization appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-10.41.39-AM-150x150.png",
-      "published": "2026-05-11T17:52:15+00:00",
-      "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.9816
+      "score": -0.2112
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -684,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0861
+      "score": 2.0383
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -700,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2919
+      "score": 3.2572
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -716,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2293
+      "score": 0.2289
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -732,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-12T12:10:24.328619+00:00",
+      "lastSeen": "2026-05-12T14:00:02.030326+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8965
+      "score": 1.8963
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
@@ -816,22 +784,6 @@
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.82
-    },
-    {
-      "title": "Dark Breath",
-      "url": "http://www.bbc.co.uk/programmes/w3ct8js6",
-      "source": "BBC Discovery",
-      "sourceUrl": "https://podcasts.files.bbci.co.uk/p002w557.rss",
-      "sourceWeight": 0.85,
-      "category": "Science",
-      "summary": "In July 2024 a startling scientific paper was published.Headlined ‘Evidence of dark oxygen production at the abyssal seafloor’, scientists told how they had discovered oxygen being made two and a half miles down, at the bottom of the Pacific Ocean.Their claim centred on small polymetallic nodules on the seafloor, and the key question - could these lumps of metal somehow be making oxygen in complete darkness?It was an extraordinary finding that, if proven, could overturn hundreds of years of scientific knowledge about how this crucial ingredient for life is made. It prompted global headlines an",
-      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
-      "published": "2026-04-13T20:00:00+00:00",
-      "firstSeen": "2026-04-13T21:00:01.618817+00:00",
-      "lastSeen": "2026-04-27T18:17:32.321281+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.54
     }
   ],
   "errors": []

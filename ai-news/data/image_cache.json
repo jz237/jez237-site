@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T12:10:24.328619+00:00",
+  "updatedAt": "2026-05-12T14:00:02.030326+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6488,6 +6488,14 @@
     "https://techcrunch.com/2026/05/12/vapi-hits-500m-valuation-as-amazon-ring-chose-its-ai-platform-over-40-rivals": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vapi-founders-jordan-dearsley-nikhil-gupta.jpg?resize=1200,800",
       "checkedAt": "2026-05-12T12:00:01.222217+00:00"
+    },
+    "https://techcrunch.com/2026/05/12/dessn-raises-6m-for-its-production-focused-design-tool": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-01-at-6.45.13-PM.jpeg?resize=1200,560",
+      "checkedAt": "2026-05-12T14:00:02.030326+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/advancing-ai-for-materials-with-mattersim-experimental-synthesis-faster-simulation-and-multi-task-models": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/MatterSimv1_5-TWLIFB-1200x627-1-scaled.jpg",
+      "checkedAt": "2026-05-12T14:00:02.030326+00:00"
     }
   }
 }
