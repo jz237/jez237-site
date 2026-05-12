@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dwarf Peach Tree — Plant Progress (Mockup v2)</title>
+  <title>Dwarf Peach Tree — Plant Progress (Mockup v3)</title>
   <style>
     :root {
       --bg: #1d1512;
       --panel: #2d221b;
+      --panel-2: #3a2b1f;
       --border: #624b37;
       --text: #f2e7da;
       --muted: #ccb9a4;
@@ -15,6 +16,8 @@
       --accent-2: #d39a67;
       --accent-3: #9bb06f;
       --warm: #e8c57a;
+      --line: rgba(255,255,255,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
       --ease: cubic-bezier(0.23, 1, 0.32, 1);
     }
     * { box-sizing: border-box; margin: 0; }
@@ -23,7 +26,7 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
       background: radial-gradient(circle at top, #4a2d30 0%, #1d1512 56%, #120d0a 100%);
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.5;
       min-height: 100vh;
     }
 
@@ -35,429 +38,388 @@
       padding: 10px 16px;
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.5px;
       backdrop-filter: blur(8px);
     }
     .mockup-banner a { color: #fff; text-decoration: underline; }
 
     /* ---- Header ---- */
-    .page-header {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 36px 22px 0;
+    header {
+      position: relative; z-index: 2;
+      background: rgba(29,21,18,0.84);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      padding: 40px 22px 28px;
     }
-    .back-link {
-      display: inline-flex; align-items: center; gap: 6px;
+    header h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      letter-spacing: -0.05em;
+      line-height: .95;
+      margin-bottom: 10px;
+      background: linear-gradient(120deg, #fff 0%, var(--accent-2) 55%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lede { max-width: 640px; color: var(--muted); font-size: 1.05rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
       color: var(--muted);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      margin-bottom: 18px;
-      transition: color 0.2s ease;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.3px;
     }
-    .back-link:hover { color: var(--warm); }
-    .back-link svg { width: 16px; height: 16px; }
-    .page-header h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-      margin-bottom: 4px;
+    .pill.accent { border-color: rgba(155,176,111,0.35); color: var(--accent-3); }
+    .pill.warm { border-color: rgba(211,154,103,0.3); color: var(--accent-2); }
+
+    /* ---- Main grid ---- */
+    main { max-width: 1180px; margin: 0 auto; padding: 24px 22px 70px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
+
+    /* ---- Card ---- */
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.3s ease;
     }
-    .page-header .latin {
-      font-style: italic;
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 56px rgba(0,0,0,.42);
+      border-color: rgba(232,197,122,0.3);
+    }
+    .image-wrap {
+      background: #0a0705;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      transition: transform 0.5s var(--ease);
+    }
+    .card:hover .image-wrap img { transform: scale(1.04); }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 12px; bottom: 12px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(10,7,5,.62);
+      color: rgba(242,231,217,.86);
+      font-size: .78rem;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
+
+    .content {
+      padding: 18px 20px 20px;
+      background: linear-gradient(180deg, rgba(45,34,27,.95), rgba(45,34,27,.82));
+    }
+    .kicker {
+      color: var(--accent-2);
+      text-transform: uppercase;
+      font-size: .74rem;
+      letter-spacing: .14em;
+      font-weight: 800;
+    }
+    h3 {
+      margin: 5px 0 8px;
+      font-size: 1.25rem;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .desc {
       color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 8px;
+      font-size: .9rem;
+      line-height: 1.55;
+      margin: 0;
     }
-    .page-header .one-liner {
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 600px;
-      line-height: 1.5;
-    }
-    .meta-row {
-      display: flex; flex-wrap: wrap; gap: 8px;
+    details {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
       margin-top: 12px;
     }
-    .meta-pill {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    .meta-pill.season { border-color: rgba(155,176,111,0.35); color: var(--accent-3); }
-    .meta-pill.type { border-color: rgba(211,154,103,0.3); color: var(--accent-2); }
-
-    /* ---- Photo Grid ---- */
-    .photo-section {
-      max-width: 1100px;
-      margin: 24px auto 0;
-      padding: 0 22px;
-    }
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 6px;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-      border: 1px solid var(--border);
-    }
-    .photo-cell {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: #0a0705;
-      cursor: zoom-in;
-    }
-    .photo-cell img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s var(--ease), filter 0.3s ease;
-    }
-    .photo-cell:hover img {
-      transform: scale(1.06);
-      filter: saturate(1.08);
-    }
-    .photo-cell .photo-label {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 24px 10px 8px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      pointer-events: none;
-    }
-    .photo-cell:hover .photo-label { opacity: 1; }
-    /* Enlarge icon hint */
-    .photo-cell .expand-hint {
-      position: absolute;
-      top: 8px; right: 8px;
-      width: 28px; height: 28px;
-      border-radius: 8px;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      pointer-events: none;
-    }
-    .photo-cell:hover .expand-hint { opacity: 1; }
-    .photo-cell .expand-hint svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2; }
-
-    /* ---- Expandable Captions below grid ---- */
-    .captions-section {
-      max-width: 1100px;
-      margin: 18px auto 0;
-      padding: 0 22px 60px;
-    }
-    .captions-section details {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      margin-bottom: 8px;
-      background: linear-gradient(180deg, rgba(50,39,31,0.6), rgba(33,25,20,0.6));
-      overflow: hidden;
-      transition: border-color 0.2s ease;
-    }
-    .captions-section details:hover { border-color: rgba(232,197,122,0.25); }
-    .captions-section summary {
-      padding: 12px 16px;
+    summary {
       cursor: pointer;
-      display: flex; align-items: center; gap: 12px;
-      font-weight: 600;
-      font-size: 0.9rem;
       color: var(--text);
-      list-style: none;
-      transition: color 0.2s ease;
-    }
-    .captions-section summary:hover { color: var(--warm); }
-    .captions-section summary::before {
-      content: "▸";
-      font-size: 0.75rem;
-      transition: transform 0.2s ease;
-      color: var(--muted);
-    }
-    .captions-section details[open] summary::before { transform: rotate(90deg); }
-    .captions-section summary .cap-date {
-      color: var(--accent-2);
-      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      min-width: 80px;
+      font-size: .85rem;
+      letter-spacing: 0.3px;
+      margin-bottom: 0;
+      list-style: none;
+      display: flex; align-items: center; gap: 6px;
     }
-    .captions-section summary .cap-title { flex: 1; }
-    .captions-section summary .cap-thumb {
-      width: 36px; height: 36px;
-      border-radius: 6px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .captions-section summary .cap-thumb img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .cap-body {
-      padding: 0 16px 14px;
+    summary::before {
+      content: "▸";
+      font-size: .7rem;
+      transition: transform .2s ease;
       color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.6;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 12px;
-      margin: 0 16px;
     }
-    .cap-body .quote {
+    details[open] summary::before { transform: rotate(90deg); }
+    summary:hover { color: var(--warm); }
+    .notes {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.65;
+    }
+    .notes .quote {
       border-left: 3px solid var(--accent-2);
       padding-left: 12px;
       margin-top: 8px;
       font-style: italic;
     }
+    .notes ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      line-height: 1.65;
+      color: var(--muted);
+      font-size: .86rem;
+    }
 
     /* ---- Lightbox ---- */
     .lightbox {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.94);
-      z-index: 2000;
-      flex-direction: column;
+      position: fixed; inset: 0; z-index: 50;
+      display: none;
+      background: rgba(3,5,8,.94);
+      backdrop-filter: blur(14px);
+      color: var(--text);
     }
-    .lightbox.active { display: flex; }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr auto; }
     .lightbox-bar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 18px;
-      background: rgba(20,15,12,0.9);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
+      gap: 16px; padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(20,15,12,.78);
     }
-    .lightbox-title { font-weight: 700; font-size: 0.95rem; min-width: 0; }
-    .lightbox-date { color: var(--accent-2); font-size: 0.78rem; font-weight: 600; margin-left: 12px; }
-    .lightbox-hint { color: var(--muted); font-size: 0.82rem; }
+    .lightbox-title { font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: var(--muted); font-size: .82rem; }
     .lightbox-close {
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,.18);
       border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: #fff; padding: 6px 14px;
+      background: rgba(255,255,255,.06);
+      color: var(--text); padding: 6px 14px;
       cursor: pointer; font: inherit; font-weight: 600;
     }
     .lightbox-stage {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      padding: 16px; overflow: auto;
+      min-height: 0; overflow: auto;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
     }
     .lightbox-stage img {
+      width: auto; height: auto;
       max-width: 95vw; max-height: 88vh;
-      border-radius: 10px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      cursor: pointer;
-      transition: max-width 0.3s ease, max-height 0.3s ease;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.55);
+      cursor: zoom-in;
     }
-    .lightbox-stage img.fullsize {
+    .lightbox.actual .lightbox-stage img {
       max-width: none; max-height: none;
+      cursor: zoom-out;
     }
     .lightbox-nav {
       display: flex; align-items: center; justify-content: center;
-      gap: 16px;
-      padding: 10px 18px 14px;
-      background: rgba(20,15,12,0.9);
-      border-top: 1px solid rgba(255,255,255,0.1);
+      gap: 16px; padding: 10px 18px 14px;
+      background: rgba(20,15,12,.78);
+      border-top: 1px solid rgba(255,255,255,.1);
     }
     .lightbox-nav button {
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,.18);
       border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: #fff; padding: 8px 18px;
+      background: rgba(255,255,255,.06);
+      color: var(--text); padding: 8px 18px;
       cursor: pointer; font: inherit; font-weight: 600;
-      transition: background 0.2s ease, border-color 0.2s ease;
     }
     .lightbox-nav button:hover {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,.12);
       border-color: rgba(232,197,122,0.35);
     }
-    .lightbox-nav .counter { color: var(--muted); font-size: 0.85rem; }
+    .lightbox-nav .counter { color: var(--muted); font-size: .85rem; }
 
-    @media (max-width: 740px) {
-      .photo-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-      .captions-section summary .cap-date { min-width: auto; }
+    @media (max-width: 680px) {
+      .grid { grid-template-columns: 1fr; }
     }
 
-    .mockup-footer {
-      text-align: center; padding: 40px 22px;
-      color: var(--muted); font-size: 0.85rem;
+    footer {
+      max-width: 1180px; margin: 0 auto;
+      padding: 0 22px 50px;
+      color: var(--muted); font-size: .85rem;
       border-top: 1px solid var(--border);
-      max-width: 1100px; margin: 0 auto;
     }
   </style>
 </head>
 <body>
 
 <div class="mockup-banner">
-  ⚠️ LAYOUT MOCKUP v2 — Compact photo grid + expandable captions. <a href="../../plants/dwarf-peach-tree/">← Current live page</a> &nbsp;|&nbsp; <a href="plant-mockup-index.html">← Index mockup</a>
+  ⚠️ LAYOUT MOCKUP v3 — Same pattern as AI images page. <a href="../../plants/dwarf-peach-tree/">← Current live page</a> &nbsp;|&nbsp; <a href="plant-mockup-index.html">← Index mockup</a>
 </div>
 
-<div class="page-header">
-  <a class="back-link" href="plant-mockup-index.html">
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
-    Plant Progress
-  </a>
+<header>
   <h1>Dwarf Peach Tree</h1>
-  <div class="latin">Prunus persica, dwarf variety</div>
-  <div class="one-liner">From swelling buds to full pink bloom, a small tree with a surprisingly dramatic spring arc.</div>
-  <div class="meta-row">
-    <span class="meta-pill season">spring bloom</span>
-    <span class="meta-pill type">fruit tree</span>
-    <span class="meta-pill">7 photos</span>
+  <p class="lede">From swelling buds to full pink bloom, a small tree with a surprisingly dramatic spring arc.</p>
+  <div class="meta">
+    <span class="pill accent">spring bloom</span>
+    <span class="pill warm">fruit tree</span>
+    <span class="pill">7 photos</span>
+    <a class="pill" href="plant-mockup-index.html" style="color:var(--warm);text-decoration:none;">← Plant Progress</a>
   </div>
-</div>
+</header>
 
-<!-- Photo Grid: 6-9 images visible at once, all clickable to expand -->
-<section class="photo-section">
-  <div class="photo-grid" id="photo-grid">
-    <div class="photo-cell" data-index="0" data-title="Full spring pink" data-date="Apr 12">
-      <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in peak bloom" loading="lazy" decoding="async">
-      <div class="photo-label">Full spring pink</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+<main>
+  <div class="grid">
+
+    <div class="card">
+      <div class="image-wrap" data-title="Full spring pink" data-date="April 12, 2026">
+        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in peak bloom" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 12, 2026</div>
+        <h3>Full spring pink</h3>
+        <p class="desc">Deep pink bloom clustered along the branches, first narrow green leaves starting to slip out between the flowers.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Peak to near-peak bloom, early leaf-out underway, strong flowering across the canopy. Nice contrast with the Pugster butterfly bush behind it.
+            <div class="quote">Small tree, big entrance. The kind of spring color that completely changes the mood of a corner.</div>
+          </div>
+        </details>
+      </div>
     </div>
-    <div class="photo-cell" data-index="1" data-title="Peach in the layered bed" data-date="Apr 13">
-      <img src="../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="Peach centered in the layered bed" loading="lazy" decoding="async">
-      <div class="photo-label">Peach in the layered bed</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+
+    <div class="card">
+      <div class="image-wrap" data-title="Peach in the layered bed" data-date="April 13, 2026">
+        <img src="../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="Dwarf peach centered in layered bed" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 13, 2026</div>
+        <h3>Peach held inside the wider planting</h3>
+        <p class="desc">A day after peak, the peach still the center of gravity, but the surrounding cast is starting to matter.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Peach bloom still dominates the composition. Pugster, salvia, and buddleia defining the lower layer. Bed geometry reads clearly with the brick edging.
+            <div class="quote">The peach is still the star, but the supporting cast is starting to take its places.</div>
+          </div>
+        </details>
+      </div>
     </div>
-    <div class="photo-cell" data-index="2" data-title="Leaf-out after bloom" data-date="Apr 17">
-      <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="Dwarf peach leafing out" loading="lazy" decoding="async">
-      <div class="photo-label">Leaf-out after bloom</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+
+    <div class="card">
+      <div class="image-wrap" data-title="Leaf-out after bloom" data-date="April 17, 2026">
+        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="Dwarf peach leafing out" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 17, 2026</div>
+        <h3>Leaf-out after bloom</h3>
+        <p class="desc">Fresh green growth taking over the canopy while a few deeper pink blossoms still hang on.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Leaf-out is now doing most of the visual work. A handful of pink blossoms still hanging on. Young branch structure easier to read than at peak bloom.
+            <div class="quote">The flowers made the entrance, but the leaves are what make it start looking like a tree.</div>
+          </div>
+        </details>
+      </div>
     </div>
-    <div class="photo-cell" data-index="3" data-title="Leaf clusters taking over" data-date="Apr 21">
-      <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-21.jpg" alt="Dwarf peach with dense leaf clusters" loading="lazy" decoding="async">
-      <div class="photo-label">Leaf clusters taking over</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+
+    <div class="card">
+      <div class="image-wrap" data-title="Leaf clusters taking over" data-date="April 21, 2026">
+        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-21.jpg" alt="Dwarf peach with dense leaf clusters" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 21, 2026</div>
+        <h3>Leaf clusters taking over</h3>
+        <p class="desc">Dense clusters of long narrow foliage filling out each branch tip, flower phase mostly passed.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Leaf clusters now dominating nearly every branch tip. Tree looks healthy, evenly leafed, structurally clean. Good sign it has transitioned safely into active seasonal growth.
+            <div class="quote">The blossoms were the announcement. This is the part where the tree gets down to work.</div>
+          </div>
+        </details>
+      </div>
     </div>
-    <div class="photo-cell" data-index="4" data-title="Settled into green" data-date="Apr 27">
-      <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-27.jpg" alt="Dwarf peach fully leafed out" loading="lazy" decoding="async">
-      <div class="photo-label">Leaf clusters taking over</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+
+    <div class="card">
+      <div class="image-wrap" data-title="Settled into green" data-date="April 27, 2026">
+        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-27.jpg" alt="Dwarf peach fully leafed out" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 27, 2026</div>
+        <h3>Settled into green</h3>
+        <p class="desc">Fully leafed out, dense green canopy rounding out the branch tips, surrounding perennials filling in.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Fresh green leaf clusters filling the canopy evenly. Tree form clear above the brick-edged planting pocket. Nearby sedum and perennial foliage filling the lower layers.
+            <div class="quote">The spring show is over, and the little tree looks ready to spend the season growing.</div>
+          </div>
+        </details>
+      </div>
     </div>
-    <div class="photo-cell" data-index="5" data-title="Before the show" data-date="Mar 29">
-      <img src="../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="Dwarf peach before bloom" loading="lazy" decoding="async">
-      <div class="photo-label">Before the show</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+
+    <div class="card">
+      <div class="image-wrap" data-title="Before the show" data-date="March 29, 2026">
+        <img src="../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="Dwarf peach tree before bloom" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">March 29, 2026</div>
+        <h3>Before the show</h3>
+        <p class="desc">Bare branching still exposed, buds swelling along the stems, just enough movement to hint bloom was close.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Buds swelling along the branches, tree still mostly bare. Pre-bloom structure easy to see. Pugster behind it still mostly acting as quiet background structure.
+            <div class="quote">All structure and promise, the kind of in-between moment that only feels dramatic after you've seen what comes next.</div>
+          </div>
+        </details>
+      </div>
     </div>
-    <div class="photo-cell" data-index="6" data-title="Summer reference — full leaf" data-date="2025 Summer">
-      <img src="../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="Dwarf peach 2025 summer reference" loading="lazy" decoding="async">
-      <div class="photo-label">Summer reference</div>
-      <div class="expand-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+
+    <div class="card">
+      <div class="image-wrap" data-title="Summer reference — full leaf" data-date="2025 Summer">
+        <img src="../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="Dwarf peach 2025 summer reference" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">2025 Summer</div>
+        <h3>Summer reference — full leaf</h3>
+        <p class="desc">Last summer's reference shot, dense rounded canopy in full leaf.</p>
+        <details>
+          <summary>Season notes</summary>
+          <div class="notes">
+            Useful context for understanding what the canopy looks like once fully committed to the season — dense, rounded, surprisingly full for such a small tree.
+          </div>
+        </details>
+      </div>
     </div>
+
   </div>
-</section>
+</main>
 
-<!-- Expandable captions: short, scannable, collapsed by default -->
-<section class="captions-section">
-  <details>
-    <summary>
-      <span class="cap-date">Apr 12</span>
-      <span class="cap-title">Full spring pink</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      Deep pink bloom clustered all along the branches while the first narrow green leaves start to slip out. Still young, but the bloom is strong enough to make it feel established.
-      <div class="quote">Small tree, big entrance.</div>
-    </div>
-  </details>
-
-  <details>
-    <summary>
-      <span class="cap-date">Apr 13</span>
-      <span class="cap-title">Peach held inside the wider planting</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      A day after peak — still the center of gravity, but the surrounding cast is starting to matter. Pugster, salvia, and buddleia filling in.
-    </div>
-  </details>
-
-  <details>
-    <summary>
-      <span class="cap-date">Apr 17</span>
-      <span class="cap-title">Leaf-out after bloom</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      Fresh green growth taking over the canopy, a few pink blossoms still hanging on. Starting to look like a young tree settling into its framework.
-    </div>
-  </details>
-
-  <details>
-    <summary>
-      <span class="cap-date">Apr 21</span>
-      <span class="cap-title">Leaf clusters taking over</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-21.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      Dense clusters of long narrow foliage filling out each branch tip. Flower phase is mostly gone. The tree has committed to the season.
-    </div>
-  </details>
-
-  <details>
-    <summary>
-      <span class="cap-date">Apr 27</span>
-      <span class="cap-title">Settled into green</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-27.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      Fully leafed out, dense green canopy, brick-edged planting pocket visible. The spring show is over — the tree is ready to grow.
-    </div>
-  </details>
-
-  <details>
-    <summary>
-      <span class="cap-date">Mar 29</span>
-      <span class="cap-title">Before the show</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      Bare branching still exposed, buds swelling along the stems. The kind of in-between moment that only feels dramatic after you've seen what comes next.
-    </div>
-  </details>
-
-  <details>
-    <summary>
-      <span class="cap-date">2025 Summer</span>
-      <span class="cap-title">Summer reference — full leaf</span>
-      <span class="cap-thumb"><img src="../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="" loading="lazy"></span>
-    </summary>
-    <div class="cap-body">
-      Reference shot from last summer showing the tree in full leaf — dense, rounded, surprisingly full for a small tree.
-    </div>
-  </details>
-</section>
-
-<footer class="mockup-footer">
-  Layout mockup v2 — photo grid + expandable captions. <a href="../../plants/dwarf-peach-tree/">← Current live page</a> &nbsp;|&nbsp; <a href="plant-mockup-index.html">← Index mockup</a>
+<footer>
+  Layout mockup v3 — AI images page pattern applied to plant detail. <a href="../../plants/dwarf-peach-tree/">← Current live page</a>
 </footer>
 
-<!-- Lightbox with navigation -->
-<div class="lightbox" id="lightbox">
+<!-- Lightbox -->
+<div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
   <div class="lightbox-bar">
-    <div style="display:flex;align-items:center;">
-      <span class="lightbox-title" id="lb-title"></span>
-      <span class="lightbox-date" id="lb-date"></span>
-    </div>
-    <div style="display:flex;align-items:center;gap:14px;">
-      <span class="lightbox-hint">Click image for full size · Arrows to browse</span>
-      <button class="lightbox-close" id="lb-close">Close</button>
-    </div>
+    <div class="lightbox-title" id="lightbox-title">Image preview</div>
+    <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Arrows to browse · Esc closes</div>
+    <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
   </div>
-  <div class="lightbox-stage" id="lb-stage">
-    <img id="lb-img" src="" alt="">
-  </div>
+  <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
   <div class="lightbox-nav">
     <button id="lb-prev">← Prev</button>
     <span class="counter" id="lb-counter"></span>
@@ -466,60 +428,63 @@
 </div>
 
 <script>
-  const cells = document.querySelectorAll('.photo-cell');
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lb-img');
-  const lbTitle = document.getElementById('lb-title');
-  const lbDate = document.getElementById('lb-date');
+  // Same lightbox logic as AI images page
+  const cards = document.querySelectorAll('.image-wrap');
+  const lightbox = document.getElementById('image-lightbox');
+  const lbImg = document.getElementById('lightbox-image');
+  const lbTitle = document.getElementById('lightbox-title');
   const lbCounter = document.getElementById('lb-counter');
-  let currentIdx = 0;
+  const lbStage = document.getElementById('lightbox-stage');
+  let idx = 0;
 
-  function openLightbox(idx) {
-    currentIdx = idx;
-    showImage(idx);
-    lightbox.classList.add('active');
+  function open(i) {
+    idx = i;
+    show(i);
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
-  function showImage(idx) {
-    const cell = cells[idx];
-    lbImg.src = cell.querySelector('img').src;
-    lbImg.classList.remove('fullsize');
-    lbTitle.textContent = cell.dataset.title;
-    lbDate.textContent = cell.dataset.date;
-    lbCounter.textContent = (idx + 1) + ' / ' + cells.length;
+  function show(i) {
+    const card = cards[i];
+    lbImg.src = card.querySelector('img').src;
+    lbImg.alt = card.querySelector('img').alt;
+    lbTitle.textContent = card.dataset.title + ' — ' + card.dataset.date;
+    lbCounter.textContent = (i + 1) + ' / ' + cards.length;
+    lightbox.classList.remove('actual');
   }
-  function closeLightbox() {
-    lightbox.classList.remove('active');
+  function close() {
+    lightbox.classList.remove('open', 'actual');
+    lightbox.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     lbImg.src = '';
   }
 
-  cells.forEach((cell, idx) => {
-    cell.addEventListener('click', () => openLightbox(idx));
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => open(i));
   });
 
-  document.getElementById('lb-close').addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.getElementById('lightbox-close').addEventListener('click', close);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
 
   document.getElementById('lb-prev').addEventListener('click', () => {
-    currentIdx = (currentIdx - 1 + cells.length) % cells.length;
-    showImage(currentIdx);
+    idx = (idx - 1 + cards.length) % cards.length;
+    show(idx);
   });
   document.getElementById('lb-next').addEventListener('click', () => {
-    currentIdx = (currentIdx + 1) % cells.length;
-    showImage(currentIdx);
+    idx = (idx + 1) % cards.length;
+    show(idx);
+  });
+
+  // Click image for true size
+  lbImg.addEventListener('click', () => {
+    lightbox.classList.toggle('actual');
   });
 
   document.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('active')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') { currentIdx = (currentIdx - 1 + cells.length) % cells.length; showImage(currentIdx); }
-    if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % cells.length; showImage(currentIdx); }
-  });
-
-  // Click image for full size
-  lbImg.addEventListener('click', () => {
-    lbImg.classList.toggle('fullsize');
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') { idx = (idx - 1 + cards.length) % cards.length; show(idx); }
+    if (e.key === 'ArrowRight') { idx = (idx + 1) % cards.length; show(idx); }
   });
 </script>
 
