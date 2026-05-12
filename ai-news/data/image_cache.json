@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T23:00:01.674493+00:00",
+  "updatedAt": "2026-05-12T23:15:50.645936+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6624,6 +6624,14 @@
     "https://openai.com/index/autoscout24": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/71SMEQAS8V26jHdprPQzoo/b3f8e1bb52044650161982fd76b70ab0/oai_AutoScout24_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-12T23:00:01.674493+00:00"
+    },
+    "https://simonwillison.net/2026/May/12/mo-bitar": {
+      "image": "",
+      "checkedAt": "2026-05-12T23:15:50.645936+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-wwdc-2026-ios-27-siri-ai-preview": {
+      "image": "",
+      "checkedAt": "2026-05-12T23:15:50.645936+00:00"
     }
   }
 }
