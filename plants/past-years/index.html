@@ -1,227 +1,261 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Past Years — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1d1611;
-      --earth-border: #624a35;
-      --earth-text: #f1e7d9;
-      --earth-muted: #ccb9a4;
-    }
-    body { background: radial-gradient(circle at top, #453126 0%, #1d1611 56%, #130e0b 100%); color: var(--earth-text); }
-    header { background: rgba(29,22,17,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #dfc790; }
-    .hero, .gallery-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(57,42,31,0.96), rgba(39,29,22,0.96));
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
-    }
-    .hero { padding: 24px; margin-bottom: 18px; }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-    .gallery-card {
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .gallery-card.featured { grid-column: span 2; }
-    .gallery-card img {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      display: block;
-    }
-    .gallery-copy { padding: 16px; }
-    .muted, .mini-date { color: var(--earth-muted); }
-    .meta-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-    .pill { font-size:12px; padding:5px 9px; border-radius:999px; border:1px solid rgba(255,255,255,0.09); background:rgba(255,255,255,0.04); color: var(--earth-muted); }
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    .gallery-card img { cursor: zoom-in; }
-    @media (max-width: 900px) {
-      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .gallery-card.featured { grid-column: span 2; }
-    }
-    @media (max-width: 640px) {
-      .gallery { grid-template-columns: 1fr; }
-      .gallery-card.featured { grid-column: span 1; }
-    }
+    .page-header { max-width:1180px; margin:0 auto; padding:56px 22px 28px; position:relative; z-index:2; }
+    .page-header h1 { font-size:clamp(2.2rem,6vw,5rem); letter-spacing:-0.07em; line-height:.92; margin-bottom:12px; }
+    .page-header h1 span { background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .lede { max-width:850px; color:var(--pc-muted); font-size:1.1rem; }
+    .page-header .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+    .page-header .pill { border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:var(--pc-muted); padding:9px 12px; border-radius:999px; font-size:.88rem; }
+    .page-header a.pill { color:#8eb6ff; text-decoration:none; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress Archive</div>
-      <h1 class="title">Past Years</h1>
-      <p class="muted">Historical garden photos, older comparisons, and useful references from seasons before the current journal.</p>
-    </section>
 
-    <section class="gallery">
-      <article class="gallery-card">
-        <img src="../../photos/garden/images/2025/peach-tree-butterfly-bush-purple-aster.jpg" alt="Peach tree, butterfly bush, and purple aster from a past year" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Peach tree, butterfly bush, and purple aster</h2>
-          <p>An older patio-and-bed view worth keeping around, the peach tree still young and staked, the butterfly bush throwing purple bloom, and the overall layout looking tidy, layered, and already full of promise.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">comparison point</span></div>
-        </div>
-      </article>
+  <div class="page-header">
+    <h1><span>2025 Reference</span></h1>
+    <p class="lede">Year-over-year reference photos from last season — how the garden looked at its peak, useful for comparison with this year's progress.</p>
+    <div class="meta">
+      <span class="pill">2025 Season</span>
+      <span class="pill">17 photos</span>
+      <a class="pill" href="../">← Plant Progress</a>
+    </div>
+  </div>
 
-      <article class="gallery-card featured">
-        <img src="../../photos/garden/images/2025/rising-sun-redbud-summer-reference.jpg" alt="Rising Sun redbud in summer from a past year" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Rising Sun redbud in summer</h2>
-          <p>A strong older reference shot of the Rising Sun redbud carrying that bright yellow-chartreuse summer foliage, with hosta bloom, silver foliage, and layered plantings giving the whole corner a mature, stacked look.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">summer color</span></div>
-        </div>
-      </article>
+  <div class="plant-main">
+    <div class="card-grid" id="gallery">
 
-      <article class="gallery-card featured">
-        <img src="../../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="Dwarf peach tree in a raised brick bed" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Dwarf peach tree in summer</h2>
-          <p>A healthy dwarf peach tree sitting in a raised brick bed, with a clean trunk, full canopy, and the kind of compact form that works well in a small garden. Good historical reference for structure and vigor.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">dwarf peach</span><span class="pill">reference</span></div>
+      <div class="plant-card" data-title="Garden overview — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/garden-overview-2025-reference.jpg" alt="Garden overview 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Garden overview — 2025</h3>
+          <p class="card-desc">The full yard at peak, everything filling in and looking established.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card">
-        <img src="../../photos/garden/images/2025/grape-archway-garden-2025-reference.jpg" alt="Grapevine archway garden reference" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Grapevine archway garden</h2>
-          <p>A lush tunnel-like view under the grapevine, with the path centered between dense plantings and bright red and green layers giving the whole garden a full, lived-in feel.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">grapevine</span><span class="pill">reference</span></div>
+      <div class="plant-card" data-title="Hydrangea &amp; allium bed — 2025 #1">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/hydrangea-allium-bed-2025-reference-1.jpg" alt="Hydrangea allium bed 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Hydrangea &amp; allium bed — 2025 #1</h3>
+          <p class="card-desc">The hydrangea/allium bed at peak — allium globes floating above the foliage.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card featured">
-        <img src="../../photos/garden/images/2025/mixed-bed-hydrangeas-2025-reference.jpg" alt="Mixed garden bed with hydrangeas and alliums" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Hydrangea and mixed bed in summer</h2>
-          <p>A dense, layered garden bed with lime hydrangea blooms, bright perennials, and a white lattice backdrop. A strong historical reference for the fuller, high-summer look of the garden.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">hydrangea</span><span class="pill">mixed bed</span></div>
+      <div class="plant-card" data-title="Hydrangea &amp; allium bed — 2025 #2">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/hydrangea-allium-bed-2025-reference-2.jpg" alt="Hydrangea allium bed 2025 view 2" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Hydrangea &amp; allium bed — 2025 #2</h3>
+          <p class="card-desc">Second angle showing allium globes floating above the hydrangea foliage.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card">
-        <img src="../../photos/garden/images/2025/grapevine-closeup-2025-reference.jpg" alt="Grapevine clusters close-up" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Grapevine clusters close-up</h2>
-          <p>A tight look at green grape clusters tucked under the vine canopy and trellis work, showing just how productive the grapevine can get in a season.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">grapevine</span><span class="pill">reference</span></div>
+      <div class="plant-card" data-title="Mixed bed hydrangeas — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/mixed-bed-hydrangeas-2025-reference.jpg" alt="Mixed bed hydrangeas 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Mixed bed hydrangeas — 2025</h3>
+          <p class="card-desc">Summer 2025 hydrangea reference — full bloom for comparison with this year.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card featured">
-        <img src="../../photos/garden/images/2025/raised-veg-beds-2025-reference.jpg" alt="Raised vegetable beds with tomatoes" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Raised vegetable beds in production</h2>
-          <p>A strong vegetable-garden moment with staked tomatoes filling the raised beds, rich mulch, and a narrow path system that keeps the planting area organized and productive.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">vegetable beds</span><span class="pill">tomatoes</span></div>
+      <div class="plant-card" data-title="Mixed perennial border — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/mixed-perennial-border-2025-reference.jpg" alt="Mixed perennial border 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Mixed perennial border — 2025</h3>
+          <p class="card-desc">The perennial border in full summer 2025 color.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card">
-        <img src="../../photos/garden/images/2025/japanese-maple-hydrangea-garden-2025-reference.jpg" alt="Japanese maple and hydrangea garden reference" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Japanese maple and hydrangea corner</h2>
-          <p>A lush mixed garden with a bright Japanese maple, white hydrangea blooms, and a layered understory giving the whole space a full, established look. Strong reference for color balance and massing.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">Japanese maple</span><span class="pill">hydrangea</span></div>
+      <div class="plant-card" data-title="Gold Dust Aucuba &amp; hosta border — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/gold-dust-aucuba-hosta-border-2025-reference.jpg" alt="Gold Dust Aucuba and hosta border 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Gold Dust Aucuba &amp; hosta border — 2025</h3>
+          <p class="card-desc">The shady aucuba/hosta border in 2025 — reference for the shade side composition.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card">
-        <img src="../../photos/garden/images/2025/garden-overview-2025-reference.jpg" alt="Garden overview with Japanese maple and mixed plantings" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Garden overview with maple and mixed beds</h2>
-          <p>A broad view of the garden showing the red Japanese maple, grapevine, hydrangeas, and layered perennial beds working together as one dense, lived-in landscape.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">garden overview</span><span class="pill">mixed planting</span></div>
+      <div class="plant-card" data-title="Grape archway — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/grape-archway-garden-2025-reference.jpg" alt="Grape archway 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Grape archway — 2025</h3>
+          <p class="card-desc">The grapevine arch in full 2025 summer canopy — showing what this year is building toward.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card featured">
-        <img src="../../photos/garden/images/2025/gold-dust-aucuba-hosta-border-2025-reference.jpg" alt="Gold Dust aucuba and hosta border reference" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Gold Dust aucuba and hosta border</h2>
-          <p>A shaded foundation-style border with gold-dusted aucuba and hostas making a dense evergreen-and-perennial layer along the edge. Good reference for texture and massing in shade.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">aucuba</span><span class="pill">hosta border</span></div>
+      <div class="plant-card" data-title="Japanese maple &amp; hydrangea — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/japanese-maple-hydrangea-garden-2025-reference.jpg" alt="Japanese maple and hydrangea 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Japanese maple &amp; hydrangea — 2025</h3>
+          <p class="card-desc">The maple/hydrangea corner in full 2025 summer color.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card featured">
-        <img src="../../photos/garden/images/2025/hydrangea-allium-bed-2025-reference-1.jpg" alt="Hydrangea and allium bed — 2025 reference, wide view" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Hydrangea and allium bed</h2>
-          <p>A lush, high-impact perennial bed with creamy hydrangea panicles and a thick sweep of purple alliums below, all held together by a dark mulch edge and strong border lines.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">hydrangea</span><span class="pill">allium</span></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
-            <img src="../../photos/garden/images/2025/hydrangea-allium-bed-2025-reference-2.jpg" alt="Hydrangea and allium bed — 2025 reference, alternate angle" style="width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;grid-column:1/-1;" / loading="lazy" decoding="async">
-          </div>
+      <div class="plant-card" data-title="Peach, butterfly bush &amp; aster — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/peach-tree-butterfly-bush-purple-aster.jpg" alt="Peach, butterfly bush and aster 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Late 2025</div>
+          <h3 class="card-title">Peach, butterfly bush &amp; aster — 2025</h3>
+          <p class="card-desc">The peach bed composition from late 2025 showing the full season layering.</p>
         </div>
-      </article>
+      </div>
 
-      <article class="gallery-card">
-        <img src="../../photos/garden/images/2025/mixed-perennial-border-2025-reference.jpg" alt="Mixed perennial border with buddleia and milkweed" / loading="lazy" decoding="async">
-        <div class="gallery-copy">
-          <div class="mini-date">2025 reference</div>
-          <h2>Mixed perennial border in bloom</h2>
-          <p>A full, colorful mixed border with purple buddleia, orange milkweed, and white hydrangea building layers of texture and bloom in late summer.</p>
-          <div class="meta-pills"><span class="pill">historical photo</span><span class="pill">mixed border</span><span class="pill">perennials</span></div>
+      <div class="plant-card" data-title="Dwarf peach tree — 2025 summer">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="Dwarf peach tree 2025 summer reference" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Dwarf peach tree — 2025 summer</h3>
+          <p class="card-desc">Full-leaf reference from last summer — useful comparison with this year's spring progression.</p>
         </div>
-      </article>
-    </section>
-  </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+      </div>
+
+      <div class="plant-card" data-title="Rising Sun redbud — 2025 summer">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/rising-sun-redbud-summer-reference.jpg" alt="Rising Sun redbud 2025 summer reference" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Rising Sun redbud — 2025 summer</h3>
+          <p class="card-desc">The redbud in full summer leaf — gold-green gradient at its most subtle.</p>
+        </div>
+      </div>
+
+      <div class="plant-card" data-title="Grapevine close-up — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/grapevine-closeup-2025-reference.jpg" alt="Grapevine close-up 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Grapevine close-up — 2025</h3>
+          <p class="card-desc">Detail of the grape clusters and foliage on the arbor.</p>
+        </div>
+      </div>
+
+      <div class="plant-card" data-title="Raised veg beds — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/raised-veg-beds-2025-reference.jpg" alt="Raised vegetable beds 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Raised veg beds — 2025</h3>
+          <p class="card-desc">The raised beds in full production mode — tomatoes and peppers in their element.</p>
+        </div>
+      </div>
+
+      <div class="plant-card" data-title="Tomato tower bed — 2025 #1">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/tomato-tower-bed-2025-reference-1.jpg" alt="Tomato tower bed 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Tomato tower bed — 2025 #1</h3>
+          <p class="card-desc">The tomato setup in full summer swing, towers loaded with growth.</p>
+        </div>
+      </div>
+
+      <div class="plant-card" data-title="Tomato tower bed — 2025 #2">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/tomato-tower-bed-2025-reference-2.jpg" alt="Tomato tower bed 2025 angle 2" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Tomato tower bed — 2025 #2</h3>
+          <p class="card-desc">Second angle showing the full scale of the tomato operation.</p>
+        </div>
+      </div>
+
+      <div class="plant-card" data-title="Eastern black swallowtail on butterfly bush — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/eastern-black-swallowtail-butterfly-bush.jpg" alt="Eastern black swallowtail on butterfly bush 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Swallowtail on butterfly bush — 2025</h3>
+          <p class="card-desc">Eastern black swallowtail visiting the Pugster butterfly bush — the garden working as pollinator habitat.</p>
+        </div>
+      </div>
+
+      <div class="plant-card" data-title="Swallowtail close-up — 2025">
+        <div class="card-image-wrap"><img src="../../photos/garden/images/2025/eastern-black-swallowtail-butterfly-bush-close.jpg" alt="Eastern black swallowtail close-up 2025" loading="lazy" decoding="async"></div>
+        <div class="card-content">
+          <div class="card-kicker">Summer 2025</div>
+          <h3 class="card-title">Swallowtail close-up — 2025</h3>
+          <p class="card-desc">Detail shot of the swallowtail on the buddleia bloom.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Arrows to browse · Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">← Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next →</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('.gallery-card img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function(){
+    const cards = document.querySelectorAll('.plant-card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    let idx = 0;
+
+    function open(i) {
+      idx = i; show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title || '';
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target === lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
+    });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key === 'Escape') close();
+      if(e.key === 'ArrowLeft') { idx = (idx - 1 + cards.length) % cards.length; show(idx); }
+      if(e.key === 'ArrowRight') { idx = (idx + 1) % cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>
