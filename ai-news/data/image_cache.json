@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T18:00:01.611265+00:00",
+  "updatedAt": "2026-05-12T17:20:28.814900+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6521,41 +6521,29 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2246278980.jpg?quality=90&amp;strip=all&amp;crop=0%2C14.156078770601%2C100%2C71.687842458797&amp;w=1200",
       "checkedAt": "2026-05-12T17:00:01.667977+00:00"
     },
-    "https://techcrunch.com/2026/05/12/anthropic-warns-investors-against-secondary-platforms-offering-access-to-its-shares": {
-      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
-    },
-    "https://www.theverge.com/ai-artificial-intelligence/928861/openai-sam-altman-elon-musk-damage": {
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK201_SAM_ALTMAN_CVIRGINIA_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
-    },
-    "https://techcrunch.com/2026/05/12/report-google-and-spacex-in-talks-to-put-data-centers-into-orbit": {
-      "image": "https://techcrunch.com/wp-content/uploads/2024/02/starship-stacked-oft-3.jpeg?resize=1200,674",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
-    },
     "https://techcrunch.com/2026/05/12/everything-google-announced-at-its-android-show-from-googlebooks-to-vibe-coded-widgets": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/googlebook.png?resize=1200,843",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
+      "checkedAt": "2026-05-12T17:20:28.814900+00:00"
     },
     "https://techcrunch.com/2026/05/12/google-brings-agentic-ai-and-vibe-coded-widgets-to-android": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-2233653192.jpg?resize=1200,786",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
+      "checkedAt": "2026-05-12T17:20:28.814900+00:00"
     },
     "https://techcrunch.com/2026/05/12/the-ai-legal-services-industry-is-heating-up-anthropic-is-getting-in-on-the-action": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261514463.jpg?w=1024",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
+      "checkedAt": "2026-05-12T17:20:28.814900+00:00"
     },
     "https://techcrunch.com/2026/05/12/googles-create-my-widget-feature-will-let-you-vibe-code-your-own-widgets": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/create-my-widget.png?resize=1200,704",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
+      "checkedAt": "2026-05-12T17:20:28.814900+00:00"
     },
     "https://www.theverge.com/tech/928653/google-android-17-9-biggest-new-features-android-show-io": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/google-android-17-gemini-intelligence-create-my-widget.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
+      "checkedAt": "2026-05-12T17:20:28.814900+00:00"
     },
     "https://www.theverge.com/tech/928724/gemini-intelligence-android-io-autofill": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gemini_intell.jpg?quality=90&amp;strip=all&amp;crop=0%2C15.084784493477%2C100%2C69.830431013045&amp;w=1200",
-      "checkedAt": "2026-05-12T18:00:01.611265+00:00"
+      "checkedAt": "2026-05-12T17:20:28.814900+00:00"
     }
   }
 }
