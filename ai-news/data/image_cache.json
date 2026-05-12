@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T22:00:01.316327+00:00",
+  "updatedAt": "2026-05-12T23:00:01.674493+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6612,6 +6612,18 @@
     "https://openai.com/index/nvidia": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/mZA9ljPFQYvXItaKRxH6g/54932934a80f76eedf4536acf6d4b622/oai_NVIDIA_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-12T22:00:01.316327+00:00"
+    },
+    "https://simonwillison.net/2026/May/12/mitchell-hashimoto": {
+      "image": "",
+      "checkedAt": "2026-05-12T23:00:01.674493+00:00"
+    },
+    "https://openai.com/academy/how-finance-teams-use-codex": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/3pOt7hjYa1nUIIMMXdoEhD/b6493d0ba6756155a3ef880758e0a0b0/Academy-SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-12T23:00:01.674493+00:00"
+    },
+    "https://openai.com/index/autoscout24": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/71SMEQAS8V26jHdprPQzoo/b3f8e1bb52044650161982fd76b70ab0/oai_AutoScout24_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-12T23:00:01.674493+00:00"
     }
   }
 }
