@@ -214,5 +214,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-12-morning-lantern-moth-conservatory",
+    "title": "Lantern-Moth Conservatory",
+    "tests": "Explores fantasy creature lighting, translucent wing detail, enchanted greenhouse architecture, and moonlit botanical atmosphere.",
+    "prompt": "A moonlit fantasy conservatory where giant lantern-moths are being gently cared for by robed nocturnal gardeners. The glasshouse is built from dark wrought iron and pale enchanted glass, its panes fogged with silver condensation; enormous moth wings glow from within like stained-glass lanterns in colors of amber, teal, violet, and warm pearl. The gardeners carry delicate crystal watering cans and prune luminous moonflower vines climbing the rafters. A shallow reflecting pool mirrors the moths overhead, with floating petals and tiny ripples of magical light. Outside the glass walls, a deep midnight forest fades into blue mist. Rich fantasy realism, cinematic moonlight, intricate botanical and wing textures, soft volumetric haze, no readable text, no logos.",
+    "image": "images/2026-05-12-morning-lantern-moth-conservatory.png",
+    "date": "2026-05-12",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
