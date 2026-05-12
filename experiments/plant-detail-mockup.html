@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dwarf Peach Tree — Plant Progress (Mockup)</title>
+  <style>
+    :root {
+      --bg: #1d1512;
+      --panel: #2d221b;
+      --border: #624b37;
+      --text: #f2e7da;
+      --muted: #ccb9a4;
+      --accent: #d66c84;
+      --accent-2: #d39a67;
+      --accent-3: #9bb06f;
+      --warm: #e8c57a;
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    * { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #4a2d30 0%, #1d1512 56%, #120d0a 100%);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    .mockup-banner {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(200,60,60,0.92);
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(8px);
+    }
+    .mockup-banner a { color: #fff; text-decoration: underline; }
+
+    /* ---- Header ---- */
+    .page-header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 22px 0;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 18px;
+      transition: color 0.2s ease;
+    }
+    .back-link:hover { color: var(--warm); }
+    .back-link svg { width: 16px; height: 16px; }
+    .page-header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 6px;
+    }
+    .page-header .latin {
+      font-style: italic;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .page-header .one-liner {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .meta-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 14px;
+    }
+    .meta-pill {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .meta-pill.season { border-color: rgba(155,176,111,0.35); color: var(--accent-3); }
+    .meta-pill.type { border-color: rgba(211,154,103,0.3); color: var(--accent-2); }
+
+    /* ---- Photo Grid (the big visual at top) ---- */
+    .photo-grid-section {
+      max-width: 1100px;
+      margin: 28px auto 0;
+      padding: 0 22px;
+    }
+    .photo-grid {
+      display: grid;
+      gap: 6px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+    }
+    /* Dynamic grid layouts based on photo count — 7 photos shown here */
+    .photo-grid.grid-7 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+    .photo-grid.grid-7 .photo-cell:first-child {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+    .photo-grid.grid-7 .photo-cell:nth-child(2) { grid-column: 3; grid-row: 1; }
+    .photo-grid.grid-7 .photo-cell:nth-child(3) { grid-column: 4; grid-row: 1; }
+    .photo-grid.grid-7 .photo-cell:nth-child(4) { grid-column: 3; grid-row: 2; }
+    .photo-grid.grid-7 .photo-cell:nth-child(5) { grid-column: 4; grid-row: 2; }
+
+    /* Generic multi-photo grid */
+    .photo-grid.grid-many {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .photo-cell {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: #0a0705;
+    }
+    .photo-cell.featured {
+      aspect-ratio: auto;
+    }
+    .photo-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s var(--ease), filter 0.3s ease;
+      cursor: zoom-in;
+    }
+    .photo-cell:hover img {
+      transform: scale(1.05);
+      filter: saturate(1.08);
+    }
+    .photo-cell .date-tag {
+      position: absolute;
+      bottom: 8px; left: 8px;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .photo-cell:hover .date-tag { opacity: 1; }
+
+    /* ---- Timeline Entries (collapsed by default) ---- */
+    .timeline-section {
+      max-width: 1100px;
+      margin: 36px auto 0;
+      padding: 0 22px 80px;
+    }
+    .timeline-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--muted);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .entry {
+      background: linear-gradient(180deg, rgba(50,39,31,0.97), rgba(33,25,20,0.97));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .entry:hover {
+      border-color: rgba(232,197,122,0.25);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+    }
+    .entry-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .entry-thumb {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .entry-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .entry-header-text { min-width: 0; }
+    .entry-date {
+      font-size: 0.78rem;
+      color: var(--accent-2);
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .entry-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-top: 2px;
+    }
+    .entry-toggle {
+      color: var(--muted);
+      font-size: 1.2rem;
+      transition: transform 0.25s ease;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+    }
+    .entry[open] .entry-toggle { transform: rotate(90deg); }
+
+    .entry-body {
+      padding: 0 18px 18px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 16px;
+    }
+    .entry-copy {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.94rem;
+    }
+    .entry-copy .quote {
+      border-left: 3px solid var(--accent-2);
+      padding-left: 14px;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    .entry-photo {
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: #0a0705;
+    }
+    .entry-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+    }
+    .bullet-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 740px) {
+      .photo-grid.grid-7 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+      }
+      .photo-grid.grid-7 .photo-cell,
+      .photo-grid.grid-7 .photo-cell:first-child {
+        grid-column: auto;
+        grid-row: auto;
+      }
+      .photo-cell { aspect-ratio: 4/3; }
+      .entry-body { grid-template-columns: 1fr; }
+      .entry-photo { aspect-ratio: 16/9; }
+    }
+
+    /* ---- Lightbox ---- */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92); z-index: 2000;
+      align-items: center; justify-content: center;
+      padding: 24px; cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 92vw; max-height: 88vh;
+      border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    }
+
+    .mockup-footer {
+      text-align: center; padding: 40px 22px;
+      color: var(--muted); font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      max-width: 1100px; margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<div class="mockup-banner">
+  ⚠️ LAYOUT MOCKUP — New plant detail page design. <a href="../../plants/dwarf-peach-tree/">← Current live page</a> &nbsp;|&nbsp; <a href="plant-mockup-index.html">← Index mockup</a>
+</div>
+
+<div class="page-header">
+  <a class="back-link" href="plant-mockup-index.html">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+    Plant Progress
+  </a>
+  <h1>Dwarf Peach Tree</h1>
+  <div class="latin">Prunus persica, dwarf variety</div>
+  <div class="one-liner">From swelling buds to full pink bloom, a small tree with a surprisingly dramatic spring arc.</div>
+  <div class="meta-row">
+    <span class="meta-pill season">spring bloom</span>
+    <span class="meta-pill type">fruit tree</span>
+    <span class="meta-pill">7 photos</span>
+  </div>
+</div>
+
+<!-- Photo Grid: the hero visual — all plant photos at a glance -->
+<section class="photo-grid-section">
+  <div class="photo-grid grid-7">
+    <div class="photo-cell featured">
+      <img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in peak bloom" loading="lazy" decoding="async">
+      <span class="date-tag">Apr 12</span>
+    </div>
+    <div class="photo-cell">
+      <img src="../../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="Dwarf peach — 2025 summer reference" loading="lazy" decoding="async">
+      <span class="date-tag">2025</span>
+    </div>
+    <div class="photo-cell">
+      <img src="../../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="Dwarf peach tree before bloom" loading="lazy" decoding="async">
+      <span class="date-tag">Mar 29</span>
+    </div>
+    <div class="photo-cell">
+      <img src="../../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="Peach centered in the layered bed" loading="lazy" decoding="async">
+      <span class="date-tag">Apr 13</span>
+    </div>
+    <div class="photo-cell">
+      <img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="Dwarf peach leafing out" loading="lazy" decoding="async">
+      <span class="date-tag">Apr 17</span>
+    </div>
+  </div>
+</section>
+
+<!-- Expandable Timeline: words are here but collapsed by default -->
+<section class="timeline-section">
+  <div class="timeline-heading">Season Timeline</div>
+
+  <details class="entry" open>
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">April 12, 2026</div>
+        <div class="entry-title">Full spring pink</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          The dwarf peach is putting on a real spring show here, deep pink bloom clustered all along the branches while the first narrow green leaves start to slip out between the flowers. It still has that young upright shape, but the bloom is already strong enough to make it feel established, not tentative.
+          <div class="quote">Small tree, big entrance. The kind of spring color that completely changes the mood of a corner.</div>
+        </div>
+        <ul class="bullet-list">
+          <li>peak to near-peak bloom</li>
+          <li>early leaf-out underway</li>
+          <li>strong flowering across the canopy</li>
+          <li>nice contrast with the Pugster butterfly bush behind it</li>
+        </ul>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in peak bloom" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">April 13, 2026</div>
+        <div class="entry-title">Peach held inside the wider planting</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          A day after peak, the peach is still the center of gravity of the brick-edged bed, but now the surrounding cast is starting to matter too. Pugster butterfly bush anchors the lower layer on one side, salvia and buddleia fill in the other, and the whole bed is beginning to read as a designed garden room rather than a single specimen dropped in place.
+          <div class="quote">The peach is still the star, but the supporting cast is starting to take its places.</div>
+        </div>
+        <ul class="bullet-list">
+          <li>peach bloom still dominates the composition</li>
+          <li>Pugster, salvia, and buddleia defining the lower layer</li>
+          <li>bed geometry reads clearly with the brick edging</li>
+        </ul>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="Dwarf peach centered in layered bed" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">April 17, 2026</div>
+        <div class="entry-title">Leaf-out after bloom</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          The dwarf peach has moved past the first rush of bloom and into a stronger spring push, with fresh green growth now taking over most of the canopy while a few deeper pink blossoms still hang on. It feels less like a flowering stick now and more like a young tree settling into its framework.
+          <div class="quote">The flowers made the entrance, but the leaves are what make it start looking like a tree.</div>
+        </div>
+        <ul class="bullet-list">
+          <li>leaf-out is now doing most of the visual work</li>
+          <li>a handful of pink blossoms still hanging on</li>
+          <li>young branch structure easier to read than at peak bloom</li>
+        </ul>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="Dwarf peach leafing out" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-21.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">April 21, 2026</div>
+        <div class="entry-title">Leaf clusters taking over</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          The dwarf peach has clearly crossed into its leaf stage now, with clusters of long narrow foliage filling out each branch tip and very little of the earlier flower moment left. It looks healthy and orderly here, more settled than flashy.
+          <div class="quote">The blossoms were the announcement. This is the part where the tree gets down to work.</div>
+        </div>
+        <ul class="bullet-list">
+          <li>leaf clusters now dominating every branch tip</li>
+          <li>flower phase has mostly passed</li>
+          <li>tree looks healthy, evenly leafed, structurally clean</li>
+        </ul>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-21.jpg" alt="Dwarf peach with dense leaf clusters" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-27.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">April 27, 2026</div>
+        <div class="entry-title">Settled into green</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          Fully in its post-bloom leaf stage now, with dense green clusters rounding out the branch tips and giving the small tree a much fuller canopy. The brick-edged planting pocket makes the trunk and shape easy to read, while the surrounding perennials are beginning to fill in around it without stealing the scene.
+          <div class="quote">The spring show is over, and the little tree looks ready to spend the season growing.</div>
+        </div>
+        <ul class="bullet-list">
+          <li>fresh green leaf clusters filling the canopy evenly</li>
+          <li>tree form clear above the brick-edged planting pocket</li>
+          <li>nearby sedum and perennial foliage filling the lower layers</li>
+        </ul>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-27.jpg" alt="Dwarf peach fully leafed out" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">March 29, 2026</div>
+        <div class="entry-title">Before the show</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          A quieter look at the dwarf peach before the pink show started, bare branching still exposed, buds swelling along the stems, and just enough movement to hint that bloom was close. This is the useful stage to remember later, because once the tree explodes into flower it's easy to forget how quickly it turned.
+          <div class="quote">All structure and promise, the kind of in-between moment that only feels dramatic after you've seen what comes next.</div>
+        </div>
+        <ul class="bullet-list">
+          <li>buds swelling along the branches</li>
+          <li>tree still mostly bare</li>
+          <li>pre-bloom structure easy to see</li>
+        </ul>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="Dwarf peach before bloom" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-thumb"><img src="../../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="" loading="lazy"></div>
+      <div class="entry-header-text">
+        <div class="entry-date">2025 Summer</div>
+        <div class="entry-title">Summer reference — full leaf</div>
+      </div>
+      <div class="entry-toggle">▸</div>
+    </summary>
+    <div class="entry-body">
+      <div>
+        <div class="entry-copy">
+          A reference shot from last summer showing the tree in full leaf. Useful context for understanding what the canopy looks like once it's fully committed to the season — dense, rounded, surprisingly full for such a small tree.
+        </div>
+      </div>
+      <div class="entry-photo">
+        <img src="../../photos/garden/images/2025/dwarf-peach-tree-2025-summer-reference.jpg" alt="Dwarf peach — 2025 summer reference" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </details>
+
+</section>
+
+<footer class="mockup-footer">
+  Layout mockup — not the live site. <a href="../../plants/dwarf-peach-tree/">← Current live page</a> &nbsp;|&nbsp; <a href="plant-mockup-index.html">← Index mockup</a>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="" alt="" loading="lazy" decoding="async">
+</div>
+
+<script>
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.photo-cell img, .entry-photo img').forEach(img => {
+    img.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lightboxImg.src = img.src;
+      lightbox.classList.add('active');
+    });
+  });
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+    lightboxImg.src = '';
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') lightbox.classList.remove('active');
+  });
+</script>
+
+</body>
+</html>
