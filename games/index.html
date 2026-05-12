@@ -431,10 +431,13 @@
 
   <main class="container">
 
-    <section class="hero-editorial">
-      <div class="eyebrow">Playable prototypes</div>
-      <h1>GameMaster Arcade.</h1>
-      <p class="lede">Mobile-first HTML5 games — built by AI agents, tuned for touch, playable right here. Model showdowns, mechanics experiments, and rebuilds of 70s classics.</p>
+    <section class="hero-editorial" style="position:relative;overflow:hidden;border-radius:20px;padding:32px 20px 28px;margin-bottom:8px;">
+      <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+      <div style="position:relative;z-index:1;">
+        <div class="eyebrow">Playable prototypes</div>
+        <h1>GameMaster Arcade.</h1>
+        <p class="lede">Mobile-first HTML5 games — built by AI agents, tuned for touch, playable right here. Model showdowns, mechanics experiments, and rebuilds of 70s classics.</p>
+      </div>
     </section>
 
     <div class="game-filters" id="game-filters">
@@ -477,6 +480,7 @@
       { title: 'Asteroids',                     path: '2026-03-08/asteroids/',                 emoji: '☄️', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Classic asteroids, mobile controls' },
       { title: 'Lunar Lander',                  path: 'lunar-lander/lunar-lander.html',        emoji: '🌕', date: 'Apr 7',  cat: 'arcade',   tag: 'featured',     desc: 'Precision moon landing with retro vibes' },
       { title: 'Neon Qix',                      path: '2026-04-09/quix-modern/',               emoji: '⚡', date: 'Apr 9',  cat: 'arcade',   tag: 'featured',     desc: 'Modernized Qix with neon field capture' },
+      { title: 'Sky Joust',                      path: '2026-05-11/sky-joust/',                 emoji: '🦅', date: 'May 11', cat: 'arcade',   tag: 'featured',     desc: 'Aerial jousting over molten lava — knights on ostriches battle for the sky' },
 
       // Classic
       { title: 'Depth Charge',                  path: '2026-03-08/depth-charge/',              emoji: '🌊', date: 'Mar 8',  cat: 'arcade',   tag: 'classic',      desc: 'Sonar submarine hunt' },
@@ -540,7 +544,8 @@
       '🧙': 'float',    // wizard
       '⬡':  'spin',     // hexagon
       '🌌': 'float',    // void
-      '🕸️': 'sway'      // web
+      '🕸️': 'sway',     // web
+      '🦅': 'thrust'      // jousting bird
     };
     function animForEmoji(e) {
       return EMOJI_ANIM[e] || 'float';
@@ -597,6 +602,159 @@
     jitterIconDelays();
     // Re-jitter after each filter change (re-renders new cards)
     filters.addEventListener('click', jitterIconDelays);
+
+    // Hero canvas animation — mini jousting scene
+    (function(){
+      const c=document.getElementById('hero-canvas');
+      if(!c)return;
+      const ctx=c.getContext('2d');
+      let W,H;
+      function resize(){W=c.width=c.offsetWidth*devicePixelRatio;H=c.height=c.offsetHeight*devicePixelRatio;ctx.imageSmoothingEnabled=true;}
+      resize();window.addEventListener('resize',resize);
+
+      // Particles: embers, feathers, lava bubbles
+      let particles=[];
+      const colors=['#FF6B35','#FFD700','#FF4444','#FF8800','#FFAA00','#FF2200'];
+      function spawnParticle(x,y,type){
+        const angle=Math.random()*Math.PI*2;
+        const speed=type==='feather'?40+Math.random()*80:30+Math.random()*60;
+        particles.push({
+          x,y,vx:Math.cos(angle)*speed,vy:type==='feather'?-60-Math.random()*100:Math.sin(angle)*speed-50,
+          life:type==='feather'?1.5+Math.random()*1.5:0.8+Math.random()*1.2,
+          maxLife:0,r:type==='feather'?1+Math.random()*2:2+Math.random()*3,
+          type,color:colors[Math.floor(Math.random()*colors.length)],
+          rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-0.5)*6,
+          gravity:type==='feather'?100:200
+        });
+        particles[particles.length-1].maxLife=particles[particles.length-1].life;
+      }
+
+      // Mini knights (2-3) that bounce around
+      let knights=[];
+      function spawnKnight(){
+        knights.push({
+          x:Math.random()*W*0.6+W*0.2,y:H*0.2+Math.random()*H*0.4,
+          vx:(Math.random()-0.5)*60,vy:0,
+          facing:Math.random()>0.5?1:-1,
+          flapTimer:Math.random()*0.8,wingUp:false,
+          color:Math.random()>0.5?'#FFD700':'#4488FF'
+        });
+      }
+      spawnKnight();spawnKnight();spawnKnight();
+
+      let t=0;
+      function frame(dt){
+        t+=dt;
+        // Lava at bottom 30%
+        const lavaY=H*0.72;
+
+        // Background gradient (cave)
+        const bg=ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0818');
+        bg.addColorStop(0.5,'#120e2a');
+        bg.addColorStop(0.75,'#1a0a1e');
+        bg.addColorStop(1,'#2a0500');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+        // Lava glow from below
+        const glow=ctx.createLinearGradient(0,lavaY-40,0,H);
+        glow.addColorStop(0,'rgba(255,80,0,0)');
+        glow.addColorStop(0.3,'rgba(255,60,0,0.12)');
+        glow.addColorStop(1,'rgba(255,40,0,0.25)');
+        ctx.fillStyle=glow;ctx.fillRect(0,lavaY-40,W,H-lavaY+40);
+
+        // Lava surface
+        ctx.fillStyle='#FF3300';
+        for(let x=0;x<W;x+=6){
+          const waveH=4*Math.sin(x*0.02+t*4)+3*Math.sin(x*0.05+t*7);
+          ctx.fillStyle=(x%12<6)?'#FFAA00':'#FF5500';
+          ctx.fillRect(x,lavaY+waveH,6,4);
+        }
+
+        // Mini knights
+        for(const k of knights){
+          k.flapTimer-=dt;
+          if(k.flapTimer<=0){
+            k.vy=-120-Math.random()*60;
+            k.flapTimer=0.6+Math.random()*1.2;
+            k.wingUp=!k.wingUp;
+            // Feather burst on flap
+            for(let i=0;i<3;i++)spawnParticle(k.x,k.y+10,'feather');
+          }
+          k.vy+=180*dt;
+          k.y+=k.vy*dt;
+          k.x+=k.vx*dt;
+          if(k.y>lavaY-20){k.y=lavaY-20;k.vy=-100-Math.random()*60;}
+          if(k.y<20){k.y=20;k.vy=50;}
+          if(k.x<-30)k.x=W+30;
+          if(k.x>W+30)k.x=-30;
+          // Draw mini knight (simple but recognizable)
+          ctx.save();
+          ctx.translate(k.x,k.y);
+          ctx.scale(k.facing*1.2,1.2);
+          ctx.globalAlpha=0.5;
+          // Body
+          ctx.fillStyle=k.color;
+          ctx.beginPath();ctx.ellipse(0,0,14,10,0,0,Math.PI*2);ctx.fill();
+          // Head
+          ctx.beginPath();ctx.ellipse(12,-8,6,5,0.2,0,Math.PI*2);ctx.fill();
+          // Eye
+          ctx.fillStyle='#FFF';ctx.beginPath();ctx.arc(15,-9,1.5,0,Math.PI*2);ctx.fill();
+          ctx.fillStyle='#000';ctx.beginPath();ctx.arc(15.5,-9,0.7,0,Math.PI*2);ctx.fill();
+          // Beak
+          ctx.fillStyle='#FF9900';ctx.beginPath();ctx.moveTo(18,-8);ctx.lineTo(24,-6);ctx.lineTo(18,-4);ctx.closePath();ctx.fill();
+          // Wings
+          const wa=k.wingUp?-0.6:0.4;
+          ctx.save();ctx.translate(-6,-2);ctx.rotate(wa);
+          ctx.fillStyle=k.color==='#FFD700'?'#FFFFFF':'#88CCFF';
+          ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-18,k.wingUp?-12:10);ctx.lineTo(-8,k.wingUp?-8:6);ctx.closePath();ctx.fill();
+          ctx.restore();
+          // Helmet
+          ctx.fillStyle=k.color==='#FFD700'?'#FFD700':'#00A8FF';
+          ctx.beginPath();ctx.arc(2,-14,5,Math.PI,Math.PI*2);ctx.lineTo(7,-10);ctx.lineTo(-3,-10);ctx.closePath();ctx.fill();
+          // Plume
+          ctx.fillStyle='#FF3333';ctx.beginPath();ctx.moveTo(2,-19);ctx.quadraticCurveTo(-8,-24+Math.sin(t*6)*2,-14,-18);ctx.quadraticCurveTo(-6,-17,0,-15);ctx.closePath();ctx.fill();
+          ctx.restore();
+        }
+
+        // Particles
+        for(let i=particles.length-1;i>=0;i--){
+          const p=particles[i];
+          p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.gravity*dt;
+          p.vx*=0.99;p.rot+=p.rotSpeed*dt;p.life-=dt;
+          if(p.life<=0){particles.splice(i,1);continue;}
+          const alpha=Math.min(1,p.life/p.maxLife*2);
+          ctx.save();ctx.globalAlpha=alpha*0.6;
+          ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+          ctx.fillStyle=p.color;
+          if(p.type==='feather'){
+            ctx.beginPath();ctx.ellipse(0,0,p.r*2,p.r*0.6,0,0,Math.PI*2);ctx.fill();
+          } else {
+            ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();
+          }
+          ctx.restore();
+        }
+
+        // Occasional ember from lava
+        if(Math.random()<dt*8){
+          spawnParticle(Math.random()*W,lavaY+Math.random()*10,'ember');
+        }
+        // Occasional feather from knights
+        if(Math.random()<dt*2&&knights.length>0){
+          const k=knights[Math.floor(Math.random()*knights.length)];
+          spawnParticle(k.x+(Math.random()-0.5)*10,k.y,'feather');
+        }
+      }
+
+      let lastT=0;
+      function loop(ts){
+        requestAnimationFrame(loop);
+        const dt=lastT?Math.min((ts-lastT)/1000,0.05):0.016;
+        lastT=ts;
+        frame(dt);
+      }
+      requestAnimationFrame(loop);
+    })();
   </script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js" defer></script>
