@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T06:45:53.586323+00:00",
+  "updatedAt": "2026-05-12T08:00:01.937266+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6472,6 +6472,14 @@
     "https://www.marktechpost.com/2026/05/11/openai-introduces-daybreak-a-cybersecurity-initiative-that-puts-codex-security-at-the-center-of-vulnerability-detection-and-patch-validation": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-10.png",
       "checkedAt": "2026-05-12T06:00:02.088490+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/m002tzpf": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
+      "checkedAt": "2026-05-12T08:00:01.937266+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/12/a-coding-implementation-to-portfolio-optimization-with-skfolio-for-building-testing-tuning-and-comparing-modern-investment-strategies": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-11-1024x731.png",
+      "checkedAt": "2026-05-12T08:00:01.937266+00:00"
     }
   }
 }
