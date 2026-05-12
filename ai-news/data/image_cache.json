@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T14:00:02.030326+00:00",
+  "updatedAt": "2026-05-12T14:48:42.453930+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6496,6 +6496,10 @@
     "https://www.microsoft.com/en-us/research/blog/advancing-ai-for-materials-with-mattersim-experimental-synthesis-faster-simulation-and-multi-task-models": {
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/MatterSimv1_5-TWLIFB-1200x627-1-scaled.jpg",
       "checkedAt": "2026-05-12T14:00:02.030326+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-hackers-ai-zero-day-exploit": {
+      "image": "",
+      "checkedAt": "2026-05-12T14:48:42.453930+00:00"
     }
   }
 }
