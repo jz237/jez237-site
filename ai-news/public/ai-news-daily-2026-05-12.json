@@ -1,6 +1,6 @@
 {
   "date": "2026-05-12",
-  "updatedAt": "2026-05-12T01:00:01.673741+00:00",
+  "updatedAt": "2026-05-12T00:08:54.623007+00:00",
   "items": [
     {
       "title": "Enshuai Zhou, Yifan Hao, Chao Wang, Rui Zhang, Di Huang, Jiaming Guo, Xing Hu, Zidong Du, Qi Guo, Yunji Chen",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-12T01:00:07.788372+00:00",
+      "published": "2026-05-12T00:09:00.645915+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-12T01:00:01.673741+00:00",
+      "lastSeen": "2026-05-12T00:08:54.623007+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -35,5 +35,11 @@
       "score": 2.2643
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Microsoft Research Blog",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
 }
