@@ -1,147 +1,179 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Shaina — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <title>Shaina Japanese Maple — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1d1512;
-      --earth-panel: #2c201d;
-      --earth-border: #61463e;
-      --earth-text: #f2e5db;
-      --earth-muted: #ccb8ab;
-      --earth-accent: #b85152;
-      --earth-accent-2: #d0b06c;
-    }
-    body { background: radial-gradient(circle at top, #4e2c2d 0%, #1d1512 58%, #120d0b 100%); color: var(--earth-text); }
-    header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #e3c89f; }
-    .hero, .panel, .entry-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      box-shadow: 0 14px 32px rgba(0,0,0,.18);
-    }
-    .hero { background: linear-gradient(135deg, rgba(88,41,43,.95), rgba(72,42,33,.92)); padding: 24px; }
-    .panel, .entry-card { background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97)); padding: 18px; }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .shell { display:grid; gap:18px; margin-top:18px; }
-    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
-    .photo { width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover; border:1px solid rgba(255,255,255,.08); box-shadow:0 16px 34px rgba(0,0,0,.24); }
-    .section-title, .entry-title { margin:0 0 8px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); border-radius: 999px; padding: 6px 10px; font-size: 12px; }
-    .entry-copy { line-height:1.7; }
-    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote { border-left: 3px solid var(--earth-accent); padding-left: 14px; margin-top: 14px; font-style: italic; }
-    .photo-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:16px; }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } .photo-grid { grid-template-columns:1fr; } }
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; align-items: center; justify-content: center; padding: 24px; cursor: pointer; }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img, .feature-media { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Shaina Japanese maple</div>
-      <h1 class="title">Shaina</h1>
-      <p class="muted">A compact red mound in spring leaf-out, with that fine textured maple look showing against the brick and mulch.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Shaina Japanese Maple</h1>
+    <div class="latin">Acer palmatum &#x27;Shaina&#x27;</div>
+    <div class="one-liner">A compact red mound in spring leaf-out, with that fine textured maple look showing against the brick and mulch.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">spring leaf-out</span>
+      <span class="meta-pill type">japanese maple</span>
+      <span class="meta-pill">6 photos</span>
+    </div>
+  </div>
 
-    <div class="shell">
+  <main>
+    <div class="grid">
+      <div class="card" data-title="Red mound in spring" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/shaina-2026-04-21-1.jpg" alt="Red mound in spring" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Red mound in spring</h3>
+          <p class="card-desc">Deep red-maroon foliage pushing strong after winter dieback cleanup.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Foliage detail" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/shaina-2026-04-21-2.jpg" alt="Foliage detail" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Foliage detail</h3>
+          <p class="card-desc">The fine textured maple leaves catching light against the brick.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Close-up texture" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/shaina-2026-04-21-3.jpg" alt="Close-up texture" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Close-up texture</h3>
+          <p class="card-desc">Up close showing the dissected leaf form and deep color.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Full form" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/shaina-2026-04-21-4.jpg" alt="Full form" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Full form</h3>
+          <p class="card-desc">The compact rounded shape of Shaina, dense and well-behaved.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Spring context" data-date="Spring">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/twomblys-red-sentinel-close-spring.jpg" alt="Spring context" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">Spring</div>
+          <h3>Spring context</h3>
+          <p class="card-desc">Shaina visible alongside the Twombly&#x27;s Red Sentinel, two red maples complementing each other.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Reference board" data-date="April 23, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/shaina-2026-04-23-reference-board.png" alt="Reference board" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 23, 2026</div>
+          <h3>Reference board</h3>
+          <p class="card-desc">A detail reference showing the color and form up close.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 15, 2026</div>
-            <h2 class="entry-title">Spring color close-up</h2>
-            <div class="entry-copy">
-              The new leaves are already pushing in that fine, feathery red-purple layer that makes this maple feel almost filigreed against the brick wall behind it. The mounded form is still reading cleanly, but the foliage is doing the dramatic work now, softening the whole plant into something much fuller.
-              <div class="quote">A spring flush that looks almost like smoke caught on branches.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/twomblys-red-sentinel-close-spring.jpg" alt="Shaina Japanese maple spring close-up" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>deep red-purple new foliage</li>
-          <li>fine, lacey texture against the brick backdrop</li>
-          <li>mounded structure still holding well</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div>
-          <div class="entry-date">April 21, 2026</div>
-          <h2 class="entry-title">Winter loss, then a cleaner reset</h2>
-          <div class="entry-copy">
-            This sequence tells the story clearly, the left side of the Shaina died back over winter, leaving the plant lopsided and a little awkward just as the spring flush started. Once that dead side was cut away, the surviving right side read much better, still smaller than it should be, but healthy, leafing out well, and no longer wasting the eye on wood that was never coming back.
-            <div class="quote">Sometimes the spring job is not saving every branch. It is clearing the dead so the living part can read honestly again.</div>
-          </div>
-        </div>
-        <div class="photo-grid">
-          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-1.jpg" alt="Shaina Japanese maple with left side winter dieback visible" loading="lazy" decoding="async">
-          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-2.jpg" alt="Shaina Japanese maple showing dead left side and healthy right side" loading="lazy" decoding="async">
-          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-3.jpg" alt="Shaina Japanese maple after dead side was cut off" loading="lazy" decoding="async">
-          <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-21-4.jpg" alt="Shaina Japanese maple with healthy right side after cleanup" loading="lazy" decoding="async">
-        </div>
-        <ul class="bullet-list">
-          <li>left side suffered clear winter dieback</li>
-          <li>dead wood was removed instead of left in place</li>
-          <li>right side is healthy and leafing out well</li>
-          <li>overall shape is reduced, but cleaner and more honest after the cutback</li>
-        </ul>
-      </section>
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 23, 2026</div>
-            <h2 class="entry-title">Reference board added</h2>
-            <div class="entry-copy">
-              This is not a yard shot, but it is a useful companion piece for the page because it pulls the Shaina's tight dwarf habit, finely cut foliage, and compact maple structure into one readable frame. It also helps explain why the living side still matters so much after the winter dieback: even reduced, the plant is still carrying the exact dense red character that makes Shaina worth keeping.
-              <div class="quote">A good reference image can steady the eye and remind you what the plant is trying to be.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/shaina-2026-04-23-reference-board.png" alt="Shaina Japanese maple reference board with specimen photo and traits" loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>shows the cultivar's compact rounded habit and dense branching</li>
-          <li>matches the narrow deeply cut red foliage seen in spring</li>
-          <li>useful quick reference for bark, leaves, samaras, and mature size</li>
-          <li>helps anchor the page around the Shaina's intended form after cleanup</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
+    });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>

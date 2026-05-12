@@ -1,201 +1,149 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Climbing Hydrangea — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1d1712;
-      --earth-panel: #2a211a;
-      --earth-border: #594533;
-      --earth-text: #efe3d5;
-      --earth-muted: #c9b7a1;
-      --earth-accent: #8ea66a;
-      --earth-accent-2: #d39a68;
-    }
-    body { background: radial-gradient(circle at top, #3f3024 0%, #1d1712 56%, #120e0b 100%); color: var(--earth-text); }
-    header { background: rgba(29,23,18,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #dcc58f; }
-    .hero, .panel, .entry-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      box-shadow: 0 14px 32px rgba(0,0,0,.18);
-    }
-    .hero {
-      background: linear-gradient(135deg, rgba(68,54,39,.95), rgba(37,54,35,.92));
-      padding: 24px;
-    }
-    .panel, .entry-card {
-      background: linear-gradient(180deg, rgba(50,39,31,.97), rgba(32,25,20,.97));
-      padding: 18px;
-    }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .shell { display:grid; gap:18px; margin-top:18px; }
-    .split { display:grid; grid-template-columns: 1.1fr .9fr; gap:18px; }
-    .photo {
-      width:100%; display:block; border-radius:16px; aspect-ratio:4/3; object-fit:cover;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 16px 34px rgba(0,0,0,.24);
-    }
-    .section-title, .entry-title { margin:0 0 8px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill {
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-    .entry-copy { line-height:1.7; }
-    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote {
-      border-left: 3px solid var(--earth-accent-2);
-      padding-left: 14px;
-      margin-top: 14px;
-      font-style: italic;
-    }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
-  
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img, .feature-media { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Hydrangea anomala subsp. petiolaris</div>
-      <h1 class="title">Climbing Hydrangea</h1>
-      <p class="muted">A patient wall-claimer, slower to start, then suddenly full of intent.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Climbing Hydrangea</h1>
+    <div class="latin">Hydrangea anomala subsp. petiolaris</div>
+    <div class="one-liner">A patient wall-claimer, slower to start, then suddenly full of intent.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">spring wake-up</span>
+      <span class="meta-pill type">vine</span>
+      <span class="meta-pill">3 photos</span>
+    </div>
+  </div>
 
-    <div class="shell">
-      <section class="panel">
-        <div>
-          <h2 class="section-title">Early spring climb</h2>
-          <p class="note">This one feels quiet in the best way. The fresh foliage is clean, the line upward is clear, and the whole plant has that steady, deliberate energy of something settling in and beginning to claim space.</p>
-          <div class="meta-row">
-            <span class="meta-pill">strong upward reach</span>
-            <span class="meta-pill">healthy foliage</span>
-            <span class="meta-pill">training well</span>
-          </div>
+  <main>
+    <div class="grid">
+      <div class="card" data-title="Pushing hard now" data-date="April 27, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-27.jpg" alt="Pushing hard now" loading="lazy" decoding="async">
         </div>
-        </section>
+        <div class="card-content">
+          <div class="card-kicker">April 27, 2026</div>
+          <h3>Pushing hard now</h3>
+          <p class="card-desc">Vigorous new growth covering the support structure, the vine finally hitting its stride.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Leafing out" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-21.jpg" alt="Leafing out" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Leafing out</h3>
+          <p class="card-desc">Fresh green leaves spreading across the wall, the early spring push underway.</p>
+        </div>
+      </div>
+      <div class="card" data-title="First spring growth" data-date="April 12, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="First spring growth" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 12, 2026</div>
+          <h3>First spring growth</h3>
+          <p class="card-desc">Climbing hydrangea starting to push, still showing mostly bare framework from winter.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 12, 2026</div>
-            <h2 class="entry-title">Finding its path</h2>
-            <div class="entry-copy">
-              The climbing hydrangea is in that satisfying early push phase, clearly established enough to start reaching, but still young enough that every bit of new length feels like progress. The foliage looks clean and bright, and the vine is tracking nicely up the support with good energy from the base all the way to the tip.
-              <div class="quote">Fresh green against weathered wood and rusted metal, neat, calm, and full of future promise.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="Climbing hydrangea spring update" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>active spring leaf-out</li>
-          <li>good vertical extension</li>
-          <li>clean foliage with no visible stress</li>
-          <li>support structure is working well</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 21, 2026</div>
-            <h2 class="entry-title">Claiming more of the panel</h2>
-            <div class="entry-copy">
-              The climbing hydrangea has clearly moved beyond tentative spring growth and into real territory-claiming now, with longer reaches and a more confident line across the panel. The foliage is still glossy and clean, and the vine is starting to feel less like a young plant being trained and more like something that has decided it belongs exactly here.
-              <div class="quote">A quiet climber, but no longer a shy one.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-21.jpg" alt="Climbing hydrangea extending across the support panel in spring" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>clear new extension across the upper portion of the support</li>
-          <li>foliage remains clean, glossy, and healthy</li>
-          <li>vine is reading more confident and established than it did earlier in the month</li>
-          <li>training line across the panel is becoming more visually intentional</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 27, 2026</div>
-            <h2 class="entry-title">Filling the wire panel</h2>
-            <div class="entry-copy">
-              The climbing hydrangea has put on a clean, glossy flush and is starting to make the wire panel feel like its own structure rather than just a support. The trained stem now reads as a broader S-shaped framework, with fresh growth pushing left, right, and upward against the weathered fence.
-              <div class="quote">Still young, but already drawing the shape of the wall it wants to become.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/climbing-hydrangea-2026-04-27.jpg" alt="Climbing hydrangea spreading across a wire trellis" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>glossy green foliage looks clean and rain-fresh</li>
-          <li>vine is spreading across more of the wire support</li>
-          <li>trained framework is becoming wider and more intentional</li>
-          <li>raised bed and fence backdrop make this a useful progress reference</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    document.querySelectorAll('.feature-media').forEach((card) => {
-      const bg = card.style.backgroundImage;
-      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
-      if (match && match[1]) {
-        card.addEventListener('click', (e) => {
-          e.preventDefault();
-          lightboxImg.src = match[1];
-          lightbox.classList.add('active');
-        });
-      }
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
     });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>
