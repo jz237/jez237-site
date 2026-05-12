@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T11:00:01.713498+00:00",
+  "updatedAt": "2026-05-12T12:00:01.222217+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6484,6 +6484,10 @@
     "https://www.marktechpost.com/2026/05/12/tilde-research-introduces-aurora-a-leverage-aware-optimizer-that-fixes-a-hidden-neuron-death-problem-in-muon": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-12.png",
       "checkedAt": "2026-05-12T09:00:01.397589+00:00"
+    },
+    "https://techcrunch.com/2026/05/12/vapi-hits-500m-valuation-as-amazon-ring-chose-its-ai-platform-over-40-rivals": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/vapi-founders-jordan-dearsley-nikhil-gupta.jpg?resize=1200,800",
+      "checkedAt": "2026-05-12T12:00:01.222217+00:00"
     }
   }
 }
