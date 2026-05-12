@@ -1,6 +1,6 @@
 {
   "date": "2026-05-12",
-  "updatedAt": "2026-05-12T15:00:02.026544+00:00",
+  "updatedAt": "2026-05-12T14:48:42.453930+00:00",
   "items": [
     {
       "title": "OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-10.png",
       "published": "2026-05-12T05:47:54+00:00",
       "firstSeen": "2026-05-12T06:00:02.088490+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.9719
+      "score": 11.9764
     },
     {
       "title": "White Circle raises $11m Seed for production AI control platform",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.6486
+      "score": 8.6534
     },
     {
       "title": "NVIDIA and SAP Bring Trust to Specialized Agents",
@@ -45,10 +45,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/logo-lockup-blog-SAP-1920x1080-1.jpg",
       "published": "2026-05-12T12:30:56+00:00",
       "firstSeen": "2026-05-12T13:00:01.415263+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0166
+      "score": 6.022
     },
     {
       "title": "The US Commerce Department deletes website details of Microsoft, Google, and xAI security-test deal",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/US-Commerce-Department.avif",
       "published": "2026-05-12T09:15:57+00:00",
       "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.688
+      "score": 5.6929
     },
     {
       "title": "Ilya Sutskever discloses $7bn OpenAI stake during Musk-OpenAI litigation",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/Ilya-Sutskever.avif",
       "published": "2026-05-12T10:03:17+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0088
+      "score": 5.0138
     },
     {
       "title": "Advancing AI for materials with MatterSim: experimental synthesis, faster simulation, and multi-task models",
@@ -93,10 +93,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/MatterSimv1_5-TWLIFB-1200x627-1-scaled.jpg",
       "published": "2026-05-12T13:00:00+00:00",
       "firstSeen": "2026-05-12T14:00:02.030326+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8005
+      "score": 4.806
     },
     {
       "title": "AI voice startup Vapi hits $500M valuation after winning Amazon Ring over 40 rivals",
@@ -109,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vapi-founders-jordan-dearsley-nikhil-gupta.jpg?resize=1200%2C800",
       "published": "2026-05-12T11:30:00+00:00",
       "firstSeen": "2026-05-12T12:00:01.222217+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5881
+      "score": 4.5933
     },
     {
       "title": "Tilde Research Introduces Aurora: A Leverage-Aware Optimizer That Fixes a Hidden Neuron Death Problem in Muon",
@@ -125,10 +125,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-12.png",
       "published": "2026-05-12T08:07:28+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.4787
+      "score": 4.4835
     },
     {
       "title": "Vapi raises $50m Series B led by Peak XV for enterprise voice AI",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/Vapi-team.avif",
       "published": "2026-05-12T12:00:59+00:00",
       "firstSeen": "2026-05-12T13:00:01.415263+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4625
+      "score": 4.4678
     },
     {
       "title": "Duch Ditto raises €7.6M for patient-side AI summaries of medical appointments",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-05-12T12:10:24.328619+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7543
+      "score": 3.759
     },
     {
       "title": "Happl raises $11m Series A to scale its global benefits operating system",
@@ -176,7 +176,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7271
+      "score": 3.7317
     },
     {
       "title": "Google Says Hackers Used AI to Build Zero-Day Exploit",
@@ -186,13 +186,13 @@
       "sourceWeight": 0.75,
       "category": "AI",
       "summary": "Google says hackers used AI to help build a zero-day exploit targeting 2FA, raising concerns about AI-assisted hacking.\nThe post Google Says Hackers Used AI to Build Zero-Day Exploit appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05122026-google-hackers-ai-zero-day-exploit.jpg?f=jpeg",
+      "image": "",
       "published": "2026-05-12T12:56:06+00:00",
-      "firstSeen": "2026-05-12T15:00:02.026544+00:00",
-      "lastSeen": "2026-05-12T15:00:02.026544+00:00",
+      "firstSeen": "2026-05-12T14:48:42.453930+00:00",
+      "lastSeen": "2026-05-12T14:48:42.453930+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1887
+      "score": 3.1941
     }
   ],
   "errors": []
