@@ -1,6 +1,6 @@
 {
   "date": "2026-05-12",
-  "updatedAt": "2026-05-12T00:00:01.291817+00:00",
+  "updatedAt": "2026-05-12T01:00:01.673741+00:00",
   "items": [
     {
       "title": "Enshuai Zhou, Yifan Hao, Chao Wang, Rui Zhang, Di Huang, Jiaming Guo, Xing Hu, Zidong Du, Qi Guo, Yunji Chen",
@@ -11,12 +11,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-12T00:00:08.582304+00:00",
+      "published": "2026-05-12T01:00:07.788372+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-12T00:00:01.291817+00:00",
+      "lastSeen": "2026-05-12T01:00:01.673741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Riding an AI rally, Robinhood preps second retail venture IPO",
+      "url": "https://techcrunch.com/2026/05/11/riding-an-ai-rally-robinhood-preps-second-retail-venture-ipo",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Robinhood files confidentially for its second venture fund, this time targeting growth as well as early-stage startups.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/vlad-tenev-robinhood-GettyImages-2272038864.jpg?w=1024",
+      "published": "2026-05-12T00:09:01+00:00",
+      "firstSeen": "2026-05-12T01:00:01.673741+00:00",
+      "lastSeen": "2026-05-12T01:00:01.673741+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2643
     }
   ],
   "errors": []
