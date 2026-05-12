@@ -1,175 +1,149 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Twombly's Red Sentinel — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <title>Twombly&#x27;s Red Sentinel — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1d1512;
-      --earth-panel: #2c201d;
-      --earth-border: #61463e;
-      --earth-text: #f2e5db;
-      --earth-muted: #ccb8ab;
-      --earth-accent: #b85152;
-      --earth-accent-2: #d0b06c;
-    }
-    body { background: radial-gradient(circle at top, #4e2c2d 0%, #1d1512 58%, #120d0b 100%); color: var(--earth-text); }
-    header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #e3c89f; }
-    .hero, .panel, .entry-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      box-shadow: 0 14px 32px rgba(0,0,0,.18);
-    }
-    .hero { background: linear-gradient(135deg, rgba(88,41,43,.95), rgba(72,42,33,.92)); padding: 24px; }
-    .panel, .entry-card { background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97)); padding: 18px; }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .shell { display:grid; gap:18px; margin-top:18px; }
-    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
-    .photo {
-      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 16px 34px rgba(0,0,0,.24);
-    }
-    .section-title, .entry-title { margin:0 0 8px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill {
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-    .entry-copy { line-height:1.7; }
-    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote {
-      border-left: 3px solid var(--earth-accent);
-      padding-left: 14px;
-      margin-top: 14px;
-      font-style: italic;
-    }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
-  
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img, .feature-media { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Acer palmatum 'Twombly's Red Sentinel'</div>
-      <h1 class="title">Twombly Red Sentinel &amp; Shaina Japanese Maples</h1>
-      <p class="muted">A narrow red column with a spring glow, made even better by the gold-dusted green behind it.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Twombly&#x27;s Red Sentinel</h1>
+    <div class="latin">Acer palmatum &#x27;Twombly&#x27;s Red Sentinel&#x27;</div>
+    <div class="one-liner">A narrow red column with a spring glow, made even better by the gold-dusted green behind it.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">spring glow</span>
+      <span class="meta-pill type">japanese maple</span>
+      <span class="meta-pill">3 photos</span>
+    </div>
+  </div>
 
-      <section class="panel split">
-        <div>
-          <h2 class="section-title">Leafing out in red</h2>
-          <p class="note">This is that sharp early maple stage where the new growth looks almost lit from inside, bright red at the tips, deepening lower down, and already reading in the upright disciplined form this cultivar is known for.</p>
-          <div class="meta-row">
-            <span class="meta-pill">spring leaf-out</span>
-            <span class="meta-pill">upright columnar form</span>
-            <span class="meta-pill">great contrast planting</span>
-          </div>
+  <main>
+    <div class="grid">
+      <div class="card" data-title="Spring color emerging" data-date="April 12, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg" alt="Spring color emerging" loading="lazy" decoding="async">
         </div>
-        <div>
-          <img class="photo" src="../../photos/garden/images/2026/04/twomblys-red-sentinel-close-spring.jpg" alt="Twombly's Red Sentinel — close spring detail" / loading="lazy" decoding="async">
+        <div class="card-content">
+          <div class="card-kicker">April 12, 2026</div>
+          <h3>Spring color emerging</h3>
+          <p class="card-desc">The sentinel form showing its tight vertical habit with spring color just starting.</p>
         </div>
-      </section>
+      </div>
+      <div class="card" data-title="Close-up spring glow" data-date="Spring">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/twomblys-red-sentinel-close-spring.jpg" alt="Close-up spring glow" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">Spring</div>
+          <h3>Close-up spring glow</h3>
+          <p class="card-desc">The translucent red catching light differently than Shaina&#x27;s deeper maroon — these two complement each other.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Filling out" data-date="April 27, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-27.jpg" alt="Filling out" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 27, 2026</div>
+          <h3>Filling out</h3>
+          <p class="card-desc">The columnar form becoming more defined as foliage fills in.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 12, 2026</div>
-            <h2 class="entry-title">Red against gold dust</h2>
-            <div class="entry-copy">
-              The Twombly’s Red Sentinel is leafing out in that sharp spring red that almost looks backlit, bright at the tips, deeper burgundy through the older leaves, and still narrow and upright the way this cultivar should be. Even young, it already has that vertical, disciplined silhouette that makes it feel more architectural than soft.
-              <div class="quote">Fine-cut red foliage in front, gold-flecked evergreen behind it, one of those accidental color pairings that looks completely intentional.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg" alt="Twombly's Red Sentinel spring update" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>strong spring leaf-out</li>
-          <li>bright red new growth at the tips</li>
-          <li>narrow upright structure is already reading clearly</li>
-          <li>excellent contrast with the gold dust aucuba behind it</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 27, 2026</div>
-            <h2 class="entry-title">Column of red spring leaves</h2>
-            <div class="entry-copy">
-              Twombly’s Red Sentinel is fully leafed now, with red spring foliage stacked up the narrow column and spilling a little wider through the lower branches. The patio pot keeps the young tree legible from trunk to tip, while the brick wall behind it makes the color read even richer and more architectural.
-              <div class="quote">A small tree already doing the job of a vertical exclamation point.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-27.jpg" alt="Twombly’s Red Sentinel Japanese maple in a patio pot" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>deep red spring foliage is filled in from low branches to the top leader</li>
-          <li>narrow upright habit is clear even while young and potted</li>
-          <li>brick wall and patio door create a strong backdrop for the red leaves</li>
-          <li>support ties and pot placement make this a useful structure reference</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    document.querySelectorAll('.feature-media').forEach((card) => {
-      const bg = card.style.backgroundImage;
-      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
-      if (match && match[1]) {
-        card.addEventListener('click', (e) => {
-          e.preventDefault();
-          lightboxImg.src = match[1];
-          lightbox.classList.add('active');
-        });
-      }
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
     });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>

@@ -1,222 +1,169 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Grapevine — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1d1512;
-      --earth-panel: #2c201d;
-      --earth-border: #61463e;
-      --earth-text: #f2e5db;
-      --earth-muted: #ccb8ab;
-      --earth-accent: #b85152;
-      --earth-accent-2: #d0b06c;
-    }
-    body { background: radial-gradient(circle at top, #4e2c2d 0%, #1d1512 58%, #120d0b 100%); color: var(--earth-text); }
-    header { background: rgba(29,21,18,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #e3c89f; }
-    .hero, .entry-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      box-shadow: 0 14px 32px rgba(0,0,0,.18);
-      background: linear-gradient(180deg, rgba(51,36,33,.97), rgba(34,25,22,.97));
-    }
-    .hero { background: linear-gradient(135deg, rgba(88,41,43,.95), rgba(72,42,33,.92)); padding: 24px; }
-    .hero-grid, .entry-grid { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .photo {
-      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 16px 34px rgba(0,0,0,.24);
-    }
-    .section-shell { display:grid; gap:18px; margin-top:18px; }
-    .section-title, .entry-title { margin:0 0 8px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill {
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-    .entry-card { padding: 18px; }
-    .entry-copy { line-height:1.7; }
-    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote { border-left: 3px solid var(--earth-accent); padding-left: 14px; margin-top: 14px; font-style: italic; }
-    @media (max-width: 860px) { .hero-grid, .entry-grid { grid-template-columns:1fr; } }
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; align-items: center; justify-content: center; padding: 24px; cursor: pointer; }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Grapevine</div>
-      <h1 class="title">Grapevine</h1>
-      <p class="muted">A current-year record of the arch and its spring training, with the vine beginning to push and the structure still visible.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Grapevine</h1>
+    <div class="latin">Vitis, trained on arbor</div>
+    <div class="one-liner">A current-year record of the arch and its spring training, with the vine beginning to push and the structure still visible.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">spring training</span>
+      <span class="meta-pill type">vine</span>
+      <span class="meta-pill">5 photos</span>
+    </div>
+  </div>
 
-    <div class="section-shell">
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 30, 2026</div>
-            <h2 class="entry-title">Vine over the gate</h2>
-            <div class="entry-copy">
-              The grapevine has climbed past the side lattice and is starting to claim the arbor over the white gate, with fresh shoots rising above the wooden arch and leaves spreading across the top rail. The gate turns the vine into more than a screen here: it becomes the entry point into the side yard, with hostas and edge planting holding the shaded base below.
-              <div class="quote">The vine is beginning to make the gate feel planted, not just built.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-arbor-gate-2026-04-30.jpg" alt="Grapevine climbing over wooden arbor and white gate" loading="lazy" decoding="async" />
-          </div>
+  <main>
+    <div class="grid">
+      <div class="card" data-title="Arbor gate taking shape" data-date="April 30, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/grapevine-arbor-gate-2026-04-30.jpg" alt="Arbor gate taking shape" loading="lazy" decoding="async">
         </div>
-        <ul class="bullet-list">
-          <li>fresh grapevine shoots are pushing above the arbor and top rail</li>
-          <li>new leaves are spreading across both sides of the gate opening</li>
-          <li>the white gate gives the vine a strong doorway composition</li>
-          <li>hostas and low edge planting fill the shaded base below the arbor</li>
-        </ul>
-      </section>
+        <div class="card-content">
+          <div class="card-kicker">April 30, 2026</div>
+          <h3>Arbor gate taking shape</h3>
+          <p class="card-desc">The arch and gate structure with the vine beginning to cover it, early buds visible along the canes.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Leafing out on the arbor" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/grapevine-2026-04-21.jpg" alt="Leafing out on the arbor" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Leafing out on the arbor</h3>
+          <p class="card-desc">Fresh grape leaves unfurling along the trained canes, the arbor starting to fill in.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Spring push" data-date="April 19, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/grapevine-2026-04-19.jpg" alt="Spring push" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 19, 2026</div>
+          <h3>Spring push</h3>
+          <p class="card-desc">New growth pushing along the canes, tannin-red leaves just starting to open.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Early spring training" data-date="April 12, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/grapevine-2026-04-12-training.jpg" alt="Early spring training" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 12, 2026</div>
+          <h3>Early spring training</h3>
+          <p class="card-desc">The bare arbor structure with first growth just beginning, training ties visible.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Grape clusters forming" data-date="April 27, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/grapevine-clusters-2026-04-27.jpg" alt="Grape clusters forming" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 27, 2026</div>
+          <h3>Grape clusters forming</h3>
+          <p class="card-desc">Tiny grape clusters already visible on the trained canes, the promise of a real harvest.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 12, 2026</div>
-            <h2 class="entry-title">Grape arch in spring training</h2>
-            <div class="entry-copy">
-              The grape arch is still in its early-season framework stage, with pruned canes tied out and fresh growth just starting to fill the lattice. It’s the moment where the structure matters most, before the canopy closes in and the whole thing turns into shade.
-              <div class="quote">A grapevine always looks strongest right before it disappears into itself.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-12-training.jpg" alt="Grapevine trained on lattice in spring" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>spring training on the arch</li>
-          <li>pruned canes are still visible</li>
-          <li>fresh growth just starting to fill in</li>
-          <li>good year-to-year reference point</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 16, 2026</div>
-            <h2 class="entry-title">Through the grape arch into the rest of the garden</h2>
-            <div class="entry-copy">
-              Standing under the grape arch looking out, the vine frames the view like a living doorway — new spring growth on the lattice overhead, and the rest of the garden opening up beyond it. It's one of those moments where the structure of the arch stops feeling like a trellis and starts feeling like a threshold between two parts of the yard.
-              <div class="quote">The vine isn't the subject here — it's the frame. The garden behind it does the rest.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/side-house-bed-2026-04-16-ligustrum-loropetalum.jpg" alt="View through the grape arch into the rest of the garden" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>grape arch acts as a framing threshold, not just a vine support</li>
-          <li>new spring growth starting on the overhead lattice</li>
-          <li>the rest of the garden reads as a layered scene beyond the arch</li>
-          <li>good reference for how the vine structure shapes sightlines</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 19, 2026</div>
-            <h2 class="entry-title">Spring push with clusters forming</h2>
-            <div class="entry-copy">
-              The grapevine has shifted out of the tentative early phase and into a real spring run now, with long green shoots reaching upward and the first little clusters already showing along the stems. It looks healthy, fast, and fully awake, the kind of growth spurt that makes you feel the arch will close in quickly if warm weather holds.
-              <div class="quote">A few days ago it was framework. Now it looks like it means business.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-19.jpg" alt="Grapevine with vigorous spring shoots and early clusters" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>multiple upright shoots are extending quickly</li>
-          <li>fresh leaves look clean and healthy</li>
-          <li>early grape clusters are visible along the stems</li>
-          <li>vine has clearly moved from framework into active seasonal growth</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 21, 2026</div>
-            <h2 class="entry-title">Lattice starting to disappear behind the vine</h2>
-            <div class="entry-copy">
-              The grapevine is beginning to do exactly what you want a grapevine on a white lattice to do, turn structure into backdrop. New growth is stretching farther across the panel, the leaves are broadening, and the long trained arms are starting to read as one connected framework instead of separate canes. It still feels early, but you can already see the screen effect coming.
-              <div class="quote">A little more growth and the lattice stops being the point. The vine takes over the sentence.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-2026-04-21.jpg" alt="Grapevine spreading across the white lattice with fresh spring growth" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>new shoots are extending farther across the top and side sections of the lattice</li>
-          <li>leaves are broadening and beginning to soften the hard white grid behind them</li>
-          <li>trained vine structure is reading more continuously across the panel</li>
-          <li>strong sign that the arch and screen effect will fill in quickly with warm weather</li>
-        </ul>
-      </section>
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 27, 2026</div>
-            <h2 class="entry-title">Clusters beginning to declare themselves</h2>
-            <div class="entry-copy">
-              The grapevine is no longer just stretching leaves across the lattice; it is already showing distinct clusters tucked between the broad spring leaves. This close view catches the shift from green framework to fruiting intent, with the new pale leaf beside the clusters making the whole moment feel fresh and fast-moving.
-              <div class="quote">The vine is still building its canopy, but the crop is already writing itself in miniature.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/grapevine-clusters-2026-04-27.jpg" alt="Early grape clusters forming among broad spring leaves" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>early grape clusters are clearly visible and densely formed</li>
-          <li>large leaves look clean, textured, and healthy</li>
-          <li>pale new leaf growth shows the vine is still actively pushing</li>
-          <li>good close reference for the first real fruit-cluster stage</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
+    });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>
