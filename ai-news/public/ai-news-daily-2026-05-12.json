@@ -1,6 +1,6 @@
 {
   "date": "2026-05-12",
-  "updatedAt": "2026-05-12T12:00:01.222217+00:00",
+  "updatedAt": "2026-05-12T13:00:01.415263+00:00",
   "items": [
     {
       "title": "OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-10.png",
       "published": "2026-05-12T05:47:54+00:00",
       "firstSeen": "2026-05-12T06:00:02.088490+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.0459
+      "score": 12.0206
     },
     {
       "title": "White Circle raises $11m Seed for production AI control platform",
@@ -32,7 +32,23 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7267
+      "score": 8.7
+    },
+    {
+      "title": "NVIDIA and SAP Bring Trust to Specialized Agents",
+      "url": "https://blogs.nvidia.com/blog/sap-specialized-agents",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Announced today at SAP Sapphire — where NVIDIA founder and CEO Jensen Huang joined  SAP CEO Christian Klein’s keynote by video — SAP and NVIDIA’s expanded collaboration helps enterprises run specialized agents with security and governance controls.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/logo-lockup-blog-SAP-1920x1080-1.jpg",
+      "published": "2026-05-12T12:30:56+00:00",
+      "firstSeen": "2026-05-12T13:00:01.415263+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.0753
     },
     {
       "title": "The US Commerce Department deletes website details of Microsoft, Google, and xAI security-test deal",
@@ -45,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/US-Commerce-Department.avif",
       "published": "2026-05-12T09:15:57+00:00",
       "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7695
+      "score": 5.7416
     },
     {
       "title": "Ilya Sutskever discloses $7bn OpenAI stake during Musk-OpenAI litigation",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/Ilya-Sutskever.avif",
       "published": "2026-05-12T10:03:17+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0921
+      "score": 5.0636
     },
     {
       "title": "AI voice startup Vapi hits $500M valuation after winning Amazon Ring over 40 rivals",
@@ -77,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vapi-founders-jordan-dearsley-nikhil-gupta.jpg?resize=1200%2C800",
       "published": "2026-05-12T11:30:00+00:00",
       "firstSeen": "2026-05-12T12:00:01.222217+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6748
+      "score": 4.6451
     },
     {
       "title": "Tilde Research Introduces Aurora: A Leverage-Aware Optimizer That Fixes a Hidden Neuron Death Problem in Muon",
@@ -93,10 +109,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-12.png",
       "published": "2026-05-12T08:07:28+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.5577
+      "score": 4.5307
+    },
+    {
+      "title": "Vapi raises $50m Series B led by Peak XV for enterprise voice AI",
+      "url": "https://thenextweb.com/news/vapi-50m-series-b",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Peak XV leads. M12, Kleiner Perkins, and Bessemer Venture Partners join; earlier investors return. Amazon Ring, Intuit, and New York Life are named enterprise customers; total funding now stands at $72m. Vapi, the San Francisco-based enterprise voice-AI platform, has raised $50m in a Series B round to scale its voice-agent infrastructure, the company said on [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Vapi-team.avif",
+      "published": "2026-05-12T12:00:59+00:00",
+      "firstSeen": "2026-05-12T13:00:01.415263+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5203
     },
     {
       "title": "Duch Ditto raises €7.6M for patient-side AI summaries of medical appointments",
@@ -109,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/Ditto.avif",
       "published": "2026-05-12T07:56:52+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8329
+      "score": 3.806
     },
     {
       "title": "Happl raises $11m Series A to scale its global benefits operating system",
@@ -128,7 +160,7 @@
       "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8033
+      "score": 3.7772
     },
     {
       "title": "ServiceNow lines up $4bn bond sale to refinance Armis acquisition debt",
@@ -141,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/ServiceNow.avif",
       "published": "2026-05-12T09:53:55+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1876
+      "score": 3.1592
     },
     {
       "title": "Ursula Von der Leyen pushes EU-wide social-media age protections for children",
@@ -157,42 +189,10 @@
       "image": "https://media.thenextweb.com/2023/09/Untitled-design-1-2.avif",
       "published": "2026-05-12T09:27:00+00:00",
       "firstSeen": "2026-05-12T11:00:01.713498+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
+      "lastSeen": "2026-05-12T13:00:01.415263+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1748
-    },
-    {
-      "title": "Jensen Huang skips Trump’s China business delegation",
-      "url": "https://thenextweb.com/news/jensen-huang-skips-trumps-china-business-delegation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Nvidia CEO is not on the list of US executives travelling to Beijing for the Trump-Xi summit. Apple’s Tim Cook and Tesla’s Elon Musk are among those attending; the trip’s focus is reportedly agriculture, manufacturing, and aviation. NVIDIA CEO Jensen Huang will not join President Donald Trump’s business delegation to China this week, Reuters [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-1.avif",
-      "published": "2026-05-12T08:56:36+00:00",
-      "firstSeen": "2026-05-12T09:47:44.175990+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1604
-    },
-    {
-      "title": "Adfin raises $18m Series A from Index Ventures for agentic business finance",
-      "url": "https://thenextweb.com/news/dfin-18m-series-a-index-ventures-agentic-finance",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Visionaries Club returns; Stéphane Kurgan (ex-King COO) and Miro founder Andrey Khusid join. Total funding now over $30m in less than two years. The London fintech says its customers see late-payment rates 7x lower than the UK SME average. Adfin, the London-based fintech building an agentic money-movement platform, has raised $18m in a Series A [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Adfin.avif",
-      "published": "2026-05-12T07:48:41+00:00",
-      "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T12:00:01.222217+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 3.0292
+      "score": 3.1467
     }
   ],
   "errors": []
