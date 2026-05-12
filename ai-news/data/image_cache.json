@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T21:37:26.129790+00:00",
+  "updatedAt": "2026-05-12T22:00:01.316327+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6600,6 +6600,18 @@
     "https://www.theverge.com/tech/929091/meta-ai-threads-account-block": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24774110/STK156_Instagram_threads_1.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-12T21:00:02.045669+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/12/build-a-hybrid-memory-autonomous-agent-with-modular-architecture-and-tool-dispatch-using-openai": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-14-1024x731.png",
+      "checkedAt": "2026-05-12T22:00:01.316327+00:00"
+    },
+    "https://openai.com/academy/codex-for-work/how-finance-teams-use-codex": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/3pOt7hjYa1nUIIMMXdoEhD/b6493d0ba6756155a3ef880758e0a0b0/Academy-SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-12T22:00:01.316327+00:00"
+    },
+    "https://openai.com/index/nvidia": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/mZA9ljPFQYvXItaKRxH6g/54932934a80f76eedf4536acf6d4b622/oai_NVIDIA_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-12T22:00:01.316327+00:00"
     }
   }
 }
