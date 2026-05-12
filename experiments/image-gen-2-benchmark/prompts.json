@@ -202,5 +202,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-11-evening-orbital-salvage-cathedral",
+    "title": "Orbital Salvage Cathedral",
+    "tests": "Zero-gravity composition, large-scale orbital architecture, repair-drone detail, thermal foil reflections, Earth-from-orbit lighting, and believable mechanical salvage.",
+    "prompt": "A vast science-fiction orbital salvage cathedral in low Earth orbit, built from ribbed white trusses and dark carbon-fiber arches like a sacred hangar. Decommissioned satellites, broken solar panels, old probe bodies, and scorched heat-shield tiles float in organized zero-gravity lanes while small spiderlike maintenance drones repair them with tiny blue welding arcs. In the center, a half-restored exploration vessel hangs nose-down like a suspended relic, wrapped in gold thermal foil, exposed wiring, ceramic panels, and transparent service scaffolds. Through enormous open bay doors, Earth curves below with city lights on the night side and a thin blue atmospheric rim. Cinematic hard sunlight, deep shadow, crisp reflections on foil and glass, believable scale, rich mechanical detail, no readable text, no logos.",
+    "image": "images/2026-05-11-evening-orbital-salvage-cathedral.png",
+    "date": "2026-05-11",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
