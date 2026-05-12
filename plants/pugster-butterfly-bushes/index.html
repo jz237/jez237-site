@@ -1,183 +1,153 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Pugster Butterfly Bushes — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1c1612;
-      --earth-panel: #2b211a;
-      --earth-border: #5f4835;
-      --earth-text: #f0e6d8;
-      --earth-muted: #cab8a4;
-      --earth-accent: #a67c52;
-      --earth-accent-2: #8ea56c;
-    }
-    body { background: radial-gradient(circle at top, #433126 0%, #1c1612 56%, #120d0a 100%); color: var(--earth-text); }
-    header { background: rgba(28,22,18,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #e1c690; }
-    .hero, .panel, .entry-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
-    }
-    .hero { background: linear-gradient(135deg, rgba(74,56,40,.95), rgba(45,58,40,.92)); padding: 24px; }
-    .panel, .entry-card { background: linear-gradient(180deg, rgba(50,39,31,.97), rgba(33,25,20,.97)); padding: 18px; }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .shell { display:grid; gap:18px; margin-top:18px; }
-    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
-    .photo {
-      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 16px 34px rgba(0,0,0,.24);
-    }
-    .section-title, .entry-title { margin:0 0 8px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill {
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-    .entry-copy { line-height:1.7; }
-    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote {
-      border-left: 3px solid var(--earth-accent);
-      padding-left: 14px;
-      margin-top: 14px;
-      font-style: italic;
-    }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Pugster Butterfly Bushes</div>
-      <h1 class="title">Pugster Butterfly Bushes</h1>
-      <p class="muted">Early spring wake-up, woody structure first, then fresh green pushing back in around the cut-back framework.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Pugster Butterfly Bushes</h1>
+    <div class="latin">Buddleia &#x27;Pugster&#x27; series</div>
+    <div class="one-liner">Early spring wake-up, woody structure first, then fresh green pushing back in around the cut-back framework.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">spring wake-up</span>
+      <span class="meta-pill type">shrub</span>
+      <span class="meta-pill">3 photos</span>
+    </div>
+  </div>
 
-    <div class="shell">
-      <section class="panel">
-        <div>
-          <h2 class="section-title">Starting to push again</h2>
-          <p class="note">This is the early-season stage where the butterfly bushes still look more like framework than fullness, but the fresh green is there if you look for it. New growth is breaking low and along the stems, with the bed still mostly mulch and structure for now.</p>
-          <div class="meta-row">
-            <span class="meta-pill">early spring growth</span>
-            <span class="meta-pill">cut-back structure visible</span>
-            <span class="meta-pill">Pugster bed</span>
-          </div>
+  <main>
+    <div class="grid">
+      <div class="card" data-title="First new growth" data-date="April 14, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-14.jpg" alt="First new growth" loading="lazy" decoding="async">
         </div>
-        </section>
+        <div class="card-content">
+          <div class="card-kicker">April 14, 2026</div>
+          <h3>First new growth</h3>
+          <p class="card-desc">Fresh green pushing back in around the cut-back woody framework.</p>
+          <details>
+            <summary>Season notes</summary>
+            <div class="card-notes">Pugsters get cut back hard in late winter and look rough for a few weeks, then explode with new growth.</div>
+          </details>
+        </div>
+      </div>
+      <div class="card" data-title="Filling in" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-21.jpg" alt="Filling in" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Filling in</h3>
+          <p class="card-desc">The new growth spreading, starting to obscure the cut-back framework.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Looking established" data-date="April 27, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-27.jpg" alt="Looking established" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 27, 2026</div>
+          <h3>Looking established</h3>
+          <p class="card-desc">The butterfly bush looking like a proper plant again, full spring push underway.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 14, 2026</div>
-            <h2 class="entry-title">Fresh growth on the old framework</h2>
-            <div class="entry-copy">
-              The Pugsters are waking up in that unmistakable early-spring way, old woody stems still fully visible while fresh green breaks out low and along the remaining framework. It is not the showy phase yet, but it is exactly the stage that matters if you want to remember how hard they reset before filling back in.
-              <div class="quote">Right now they look half asleep and half determined, which is usually how the good spring rebounds start.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-14.jpg" alt="Pugster butterfly bushes early spring progress" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>new growth is emerging cleanly from the woody structure</li>
-          <li>bed is still in early-season framework mode</li>
-          <li>useful checkpoint before the shrubs leaf out and bulk up</li>
-          <li>worth tracking again once the bushes start throwing stronger length and flower growth</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 21, 2026</div>
-            <h2 class="entry-title">Pugsters with the supporting cast waking up</h2>
-            <div class="entry-copy">
-              This shot is really about the whole planting around the Pugsters, not just the shrubs by themselves. The butterfly bushes are pushing steadily from their cut-back framework, the orange milkweed is beginning to stand up in the middle zone, and the sedum along the front edge is already making a textured low carpet that keeps the whole bed from reading empty while everything else catches up.
-              <div class="quote">The Pugsters are the future bloom, but right now the bed is being held together by the plants around them.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-21.jpg" alt="Pugster butterfly bushes with orange milkweed and sedum in spring" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>Pugster butterfly bushes are pushing cleanly from the old framework</li>
-          <li>orange milkweed is emerging upright in the middle of the bed</li>
-          <li>sedum is already providing a dense low front edge</li>
-          <li>the bed reads as a layered composition even before bloom season starts</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 27, 2026</div>
-            <h2 class="entry-title">Green mass returning</h2>
-            <div class="entry-copy">
-              The Pugster bed has moved past the bare-framework stage and into real spring bulk, with the butterfly bushes now reading as dense green mounds rather than cut-back stems. The upright milkweed growth on the right and the sedum spilling along the front edge keep the bed layered while the grapevine above starts to soften the white lattice behind it.
-              <div class="quote">The bloom is still ahead, but the bed already has its shape back.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-27.jpg" alt="Pugster butterfly bushes leafing out in a raised bed" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>Pugster butterfly bushes are filling into dense low spring mounds</li>
-          <li>old woody framework is still visible but no longer dominates the bed</li>
-          <li>upright milkweed growth is emerging clearly on the right side</li>
-          <li>grapevine growth on the lattice ties this bed into the larger garden scene</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
+    });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>

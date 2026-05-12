@@ -1,155 +1,139 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Forsythia — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <title>Golden Architecture — Plant Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1c150f;
-      --earth-panel: #2b2119;
-      --earth-border: #614933;
-      --earth-text: #f3e7d8;
-      --earth-muted: #cfbca5;
-      --earth-accent: #d7b845;
-      --earth-accent-2: #cf9363;
-    }
-    body { background: radial-gradient(circle at top, #4a3524 0%, #1c150f 56%, #110d09 100%); color: var(--earth-text); }
-    header { background: rgba(28,21,15,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #e6cb8e; }
-    .hero, .panel, .entry-card {
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
-    }
-    .hero { background: linear-gradient(135deg, rgba(88,62,38,.95), rgba(74,59,26,.92)); padding: 24px; }
-    .panel, .entry-card { background: linear-gradient(180deg, rgba(51,39,31,.97), rgba(34,26,20,.97)); padding: 18px; }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .shell { display:grid; gap:18px; margin-top:18px; }
-    .split { display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; }
-    .gallery-two { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-    .photo {
-      width:100%; display:block; border-radius:16px; aspect-ratio:4/5; object-fit:cover;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 16px 34px rgba(0,0,0,.24);
-    }
-    .section-title, .entry-title { margin:0 0 8px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill {
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-    .entry-copy { line-height:1.7; }
-    .bullet-list { margin:12px 0 0; padding-left:18px; line-height:1.7; color: var(--earth-muted); }
-    .quote {
-      border-left: 3px solid var(--earth-accent);
-      padding-left: 14px;
-      margin-top: 14px;
-      font-style: italic;
-    }
-    @media (max-width: 860px) { .split, .gallery-two { grid-template-columns:1fr; } }
-  
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img, .feature-media { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Forsythia</div>
-      <h1 class="title">Golden Architecture</h1>
-      <p class="muted">A trained burst of yellow against lattice, less shrub, more spring calligraphy.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Golden Architecture</h1>
+    <div class="latin">Forsythia, trained on lattice</div>
+    <div class="one-liner">A trained burst of yellow against lattice, less shrub, more spring calligraphy.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">early spring bloom</span>
+      <span class="meta-pill type">shrub</span>
+      <span class="meta-pill">2 photos</span>
+    </div>
+  </div>
 
-    <div class="shell">
-      <section class="panel">
-        <div>
-          <h2 class="section-title">Peak yellow</h2>
-          <p class="note">This is forsythia at full volume, saturated with bloom and intentionally shaped so the branches read like lines on the lattice. It turns a familiar spring shrub into something almost architectural.</p>
-          <div class="meta-row">
-            <span class="meta-pill">peak bloom</span>
-            <span class="meta-pill">trained form</span>
-            <span class="meta-pill">spring exclamation point</span>
-          </div>
+  <main>
+    <div class="grid">
+      <div class="card" data-title="Full bloom on lattice" data-date="April 12, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/forsythia-2026-04-12-view-1.jpg" alt="Full bloom on lattice" loading="lazy" decoding="async">
         </div>
-        <div class="gallery-two">
-          <img class="photo" src="../../photos/garden/images/2026/04/forsythia-2026-04-12-view-1.jpg" alt="Forsythia view one — wider framing" / loading="lazy" decoding="async">
+        <div class="card-content">
+          <div class="card-kicker">April 12, 2026</div>
+          <h3>Full bloom on lattice</h3>
+          <p class="card-desc">The yellow explosion in its prime, every branch outlined in bloom against the lattice.</p>
         </div>
-      </section>
+      </div>
+      <div class="card" data-title="Second angle" data-date="April 12, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg" alt="Second angle" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 12, 2026</div>
+          <h3>Second angle</h3>
+          <p class="card-desc">A different view of the same peak moment, showing the trained form.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="split">
-          <div>
-            <div class="entry-date">April 12, 2026</div>
-            <h2 class="entry-title">Post views</h2>
-            <div class="entry-copy">
-              There’s something audacious about forsythia. No subtle transition, no waiting around, just a full-force yellow declaration that winter is over. Here, trained against the lattice, the branches feel less like a shrub and more like bright spring brushstrokes, moving upward, across, and back down again.
-              <div class="quote">Spring doesn’t ask permission. It just shows up bright, loud, and completely convinced.</div>
-            </div>
-          </div>
-          <div>
-            <img class="photo" src="../../photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg" alt="Forsythia close view" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>forsythia is at or near peak bloom</li>
-          <li>long stems are being trained into a sculptural form</li>
-          <li>fresh foliage is just starting to appear</li>
-          <li>the lattice background makes the bloom pattern even sharper</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    document.querySelectorAll('.feature-media').forEach((card) => {
-      const bg = card.style.backgroundImage;
-      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
-      if (match && match[1]) {
-        card.addEventListener('click', (e) => {
-          e.preventDefault();
-          lightboxImg.src = match[1];
-          lightbox.classList.add('active');
-        });
-      }
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
     });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>
