@@ -1,6 +1,6 @@
 {
   "date": "2026-05-12",
-  "updatedAt": "2026-05-12T10:00:01.601383+00:00",
+  "updatedAt": "2026-05-12T09:47:44.175990+00:00",
   "items": [
     {
       "title": "OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-05-12T10:00:01.601383+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.0988
+      "score": 12.1044
     },
     {
       "title": "White Circle raises $11m Seed for production AI control platform",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/White-Circle-team.avif",
       "published": "2026-05-12T07:43:20+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7825
+      "score": 8.7884
     },
     {
       "title": "The US Commerce Department deletes website details of Microsoft, Google, and xAI security-test deal",
@@ -44,11 +44,11 @@
       "summary": "The US Commerce Department has removed from its website the details of an agreement under which Microsoft, Google, and xAI agreed to submit new AI models to government scientists for security testing before release, Reuters reported on Monday. The original page, posted on 5 May, said the three companies would hand over their frontier AI [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/05/US-Commerce-Department.avif",
       "published": "2026-05-12T09:15:57+00:00",
-      "firstSeen": "2026-05-12T10:00:01.601383+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "firstSeen": "2026-05-12T09:47:44.175990+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8278
+      "score": 5.8339
     },
     {
       "title": "Tilde Research Introduces Aurora: A Leverage-Aware Optimizer That Fixes a Hidden Neuron Death Problem in Muon",
@@ -64,7 +64,7 @@
       "lastSeen": "2026-05-12T10:00:01.601383+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.6141
+      "score": 4.6201
     },
     {
       "title": "Duch Ditto raises €7.6M for patient-side AI summaries of medical appointments",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/Ditto.avif",
       "published": "2026-05-12T07:56:52+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.889
+      "score": 3.895
     },
     {
       "title": "Happl raises $11m Series A to scale its global benefits operating system",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/Happl.avif",
       "published": "2026-05-12T06:50:55+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8578
+      "score": 3.8635
     },
     {
       "title": "Jensen Huang skips Trump’s China business delegation",
@@ -108,11 +108,11 @@
       "summary": "The Nvidia CEO is not on the list of US executives travelling to Beijing for the Trump-Xi summit. Apple’s Tim Cook and Tesla’s Elon Musk are among those attending; the trip’s focus is reportedly agriculture, manufacturing, and aviation. NVIDIA CEO Jensen Huang will not join President Donald Trump’s business delegation to China this week, Reuters [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-1.avif",
       "published": "2026-05-12T08:56:36+00:00",
-      "firstSeen": "2026-05-12T10:00:01.601383+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "firstSeen": "2026-05-12T09:47:44.175990+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2182
+      "score": 3.2243
     },
     {
       "title": "Adfin raises $18m Series A from Index Ventures for agentic business finance",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Adfin.avif",
       "published": "2026-05-12T07:48:41+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.0851
+      "score": 3.091
     },
     {
       "title": "A Coding Implementation to Portfolio Optimization with skfolio for Building Testing, Tuning, and Comparing Modern Investment Strategies",
@@ -144,7 +144,7 @@
       "lastSeen": "2026-05-12T10:00:01.601383+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8344
+      "score": 2.8402
     },
     {
       "title": "Paymentology raises $175m co-led by Apis Partners and Aspirity Partners",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/Paymentology.avif",
       "published": "2026-05-12T07:24:18+00:00",
       "firstSeen": "2026-05-12T09:00:01.397589+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7735
+      "score": 2.7793
     },
     {
       "title": "Dario Coscia, Sindy L\\\"owe, Max Welling",
@@ -171,9 +171,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-12T10:00:07.831641+00:00",
+      "published": "2026-05-12T09:47:48.972707+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -189,11 +189,17 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T10:00:01.601383+00:00",
+      "lastSeen": "2026-05-12T09:47:44.175990+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1462
+      "score": 2.152
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
