@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Plant Progress — Layout Mockup</title>
+  <title>Plant Progress — Layout Mockup v2</title>
   <style>
     :root {
       --bg: #1e1712;
@@ -16,6 +16,8 @@
       --accent-2: #f4a7b9;
       --warm: #e8c57a;
       --glow: rgba(122,179,98,0.35);
+      --line: rgba(255,255,255,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
       --ease: cubic-bezier(0.23, 1, 0.32, 1);
     }
     * { box-sizing: border-box; margin: 0; }
@@ -24,13 +26,13 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.5;
       min-height: 100vh;
+      position: relative;
     }
     body::before {
       content: "";
-      position: fixed;
-      inset: -20%;
+      position: fixed; inset: -20%;
       background:
         radial-gradient(ellipse at 20% 10%, var(--glow), transparent 45%),
         radial-gradient(ellipse at 80% 80%, rgba(244,167,185,0.16), transparent 50%),
@@ -45,7 +47,6 @@
       100% { transform: translate(-1%, 3%) scale(1); }
     }
 
-    /* ---- Nav ---- */
     .mockup-banner {
       position: sticky; top: 0; z-index: 100;
       background: rgba(200,60,60,0.92);
@@ -54,556 +55,735 @@
       padding: 10px 16px;
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.5px;
       backdrop-filter: blur(8px);
     }
     .mockup-banner a { color: #fff; text-decoration: underline; }
 
+    /* ---- Header ---- */
     header {
       position: relative; z-index: 2;
       background: rgba(30,23,18,0.85);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(10px);
-      padding: 32px 22px 28px;
+      padding: 56px 22px 28px;
     }
     header h1 {
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
-      letter-spacing: -0.04em;
-      line-height: 1;
-      margin-bottom: 8px;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      letter-spacing: -0.07em;
+      line-height: .92;
+      margin-bottom: 12px;
     }
     header h1 span {
       background: linear-gradient(120deg, #fff 0%, var(--warm) 55%, var(--accent-2) 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-    header .lede {
+    .lede { max-width: 850px; color: var(--muted); font-size: 1.1rem; }
+    .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .pill, .control, button.control {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
       color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 620px;
-    }
-
-    /* ---- Plant Grid ---- */
-    main { max-width: 1220px; margin: 0 auto; padding: 28px 22px 80px; }
-    .plant-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 22px;
-    }
-
-    /* ---- Plant Card ---- */
-    .plant-card {
-      background: linear-gradient(180deg, rgba(57,42,31,0.42), rgba(39,29,22,0.48));
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 14px 36px rgba(0,0,0,0.22);
-      backdrop-filter: blur(12px);
-      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.3s ease;
-      position: relative;
-    }
-    .plant-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 24px 52px rgba(0,0,0,0.38);
-      border-color: rgba(232,197,122,0.35);
-    }
-
-    /* Photo strip — up to 4 thumbnails in a row */
-    .photo-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      gap: 0;
-      aspect-ratio: 16/9;
-      overflow: hidden;
-      position: relative;
-    }
-    .photo-strip img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s var(--ease), filter 0.4s ease;
-    }
-    .photo-strip:hover img { filter: saturate(1.08); }
-    .photo-strip .thumb-more {
-      position: absolute; inset: 0;
-      background: rgba(30,23,18,0.72);
-      backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff;
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    /* Single hero photo (when plant has 1 image) */
-    .photo-hero {
-      aspect-ratio: 16/9;
-      overflow: hidden;
-      position: relative;
-    }
-    .photo-hero img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.6s var(--ease);
-    }
-    .plant-card:hover .photo-hero img { transform: scale(1.04); }
-
-    /* Card body */
-    .card-body { padding: 18px 20px 20px; }
-    .card-name {
-      font-size: 1.25rem;
-      font-weight: 750;
-      letter-spacing: -0.02em;
-      margin-bottom: 2px;
-    }
-    .card-name a { color: inherit; text-decoration: none; }
-    .card-name a:hover { color: var(--warm); }
-    .card-latin {
-      font-size: 0.82rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-bottom: 8px;
-    }
-    .card-one-liner {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.55;
-      margin-bottom: 12px;
-    }
-    .card-meta {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin-bottom: 12px;
-    }
-    .meta-pill {
-      font-size: 11px;
-      padding: 4px 10px;
+      padding: 9px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-      font-weight: 600;
+      font: inherit;
     }
-    .meta-pill.season { border-color: rgba(122,179,98,0.35); color: var(--accent); }
-    .meta-pill.type { border-color: rgba(232,197,122,0.3); color: var(--warm); }
+    a.pill { text-decoration: none; color: var(--warm); }
+    .control { min-height: 40px; }
+    select.control, input.control { outline: none; }
+    button.control { cursor: pointer; color: var(--text); }
 
-    /* Expandable notes */
-    .card-notes details {
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding-top: 10px;
-      margin-top: 4px;
+    /* ---- Main ---- */
+    main { max-width: 1180px; margin: 0 auto; padding: 12px 22px 70px; }
+
+    /* ---- Section headings ---- */
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 0 4px 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+      margin-top: 36px;
     }
-    .card-notes summary {
+    .section-heading:first-child { margin-top: 0; }
+    .section-heading h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2.2rem); letter-spacing: -.04em; }
+    .section-heading span { color: var(--muted); }
+
+    /* ---- Gallery Cards (AI images pattern) ---- */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 22px; }
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 56px rgba(0,0,0,.42);
+      border-color: rgba(232,197,122,0.3);
+    }
+    .image-wrap {
+      background: #0a0705;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .image-wrap.portrait { aspect-ratio: 2 / 3; }
+    .image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      transition: transform 0.5s var(--ease), filter 0.3s ease;
+    }
+    .card:hover .image-wrap img { transform: scale(1.04); filter: saturate(1.08); }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 12px; bottom: 12px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(10,7,5,.62);
+      color: rgba(242,231,217,.86);
+      font-size: .78rem;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
+    .content {
+      padding: 18px 20px 20px;
+      background: linear-gradient(180deg, rgba(45,34,27,.95), rgba(45,34,27,.82));
+    }
+    .kicker {
+      color: var(--warm);
+      text-transform: uppercase;
+      font-size: .74rem;
+      letter-spacing: .14em;
+      font-weight: 800;
+    }
+    h3 { margin: 5px 0 8px; font-size: 1.25rem; line-height: 1.08; letter-spacing: -0.01em; }
+    .desc { color: var(--muted); font-size: .9rem; line-height: 1.55; margin: 0; }
+    details {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      margin-top: 12px;
+    }
+    summary {
       cursor: pointer;
-      color: var(--muted);
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      transition: color 0.2s ease;
+      color: var(--text);
+      font-weight: 750;
+      font-size: .85rem;
+      margin-bottom: 0;
       list-style: none;
       display: flex; align-items: center; gap: 6px;
     }
-    .card-notes summary::before {
+    summary::before {
       content: "▸";
-      transition: transform 0.25s ease;
-      font-size: 0.75rem;
+      font-size: .7rem;
+      transition: transform .2s ease;
+      color: var(--muted);
     }
-    .card-notes details[open] summary::before { transform: rotate(90deg); }
-    .card-notes summary:hover { color: var(--warm); }
-    .card-notes .notes-body {
+    details[open] summary::before { transform: rotate(90deg); }
+    summary:hover { color: var(--warm); }
+    .notes {
       margin-top: 10px;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: .86rem;
       line-height: 1.65;
     }
 
-    /* ---- Footer ---- */
-    .mockup-footer {
-      text-align: center;
-      padding: 40px 22px;
-      color: var(--muted);
-      font-size: 0.85rem;
+    /* ---- Plant Directory (compact sidebar section) ---- */
+    .plant-directory {
+      margin-top: 48px;
+      padding-top: 28px;
       border-top: 1px solid var(--border);
-      max-width: 1220px;
-      margin: 0 auto;
+    }
+    .plant-directory h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+    .plant-directory .dir-subtitle {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 18px;
+    }
+    .dir-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .dir-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(57,42,31,0.42), rgba(39,29,22,0.48));
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.35s var(--ease), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dir-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(232,197,122,0.3);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+    }
+    .dir-thumb {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #0a0705;
+    }
+    .dir-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s var(--ease);
+    }
+    .dir-item:hover .dir-thumb img { transform: scale(1.06); }
+    .dir-label {
+      padding: 6px 8px 8px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+    .dir-count {
+      font-size: .62rem;
+      color: var(--muted);
+      font-weight: 500;
     }
 
-    /* ---- Responsive ---- */
-    @media (max-width: 740px) {
-      .plant-grid { grid-template-columns: 1fr; }
-      .photo-strip { aspect-ratio: 4/3; }
+    /* ---- Lightbox ---- */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 50;
+      display: none;
+      background: rgba(3,5,8,.94);
+      backdrop-filter: blur(14px);
+      color: var(--text);
+    }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr auto; }
+    .lightbox-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(30,23,18,.78);
+    }
+    .lightbox-title { min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: var(--muted); font-size: .82rem; }
+    .lightbox-close {
+      border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
+      background: rgba(255,255,255,.06); color: var(--text); padding: 8px 12px;
+      cursor: pointer; font: inherit;
+    }
+    .lightbox-stage {
+      min-height: 0; overflow: auto;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .lightbox-stage img {
+      width: auto; height: auto;
+      max-width: 95vw; max-height: 88vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.55);
+      cursor: zoom-in;
+    }
+    .lightbox.actual .lightbox-stage img {
+      max-width: none; max-height: none;
+      cursor: zoom-out;
+    }
+    .lightbox-nav {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; padding: 10px 18px 14px;
+      background: rgba(30,23,18,.78);
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .lightbox-nav button {
+      border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
+      background: rgba(255,255,255,.06); color: var(--text); padding: 8px 18px;
+      cursor: pointer; font: inherit; font-weight: 600;
+    }
+    .lightbox-nav button:hover {
+      background: rgba(255,255,255,.12);
+      border-color: rgba(232,197,122,0.35);
+    }
+    .lightbox-nav .counter { color: var(--muted); font-size: .85rem; }
+
+    @media (max-width: 680px) {
+      .dir-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .lightbox-hint { display: none; }
+    }
+
+    footer {
+      max-width: 1180px; margin: 0 auto;
+      padding: 0 22px 50px;
+      color: var(--muted); font-size: .85rem;
+      border-top: 1px solid var(--border);
     }
   </style>
 </head>
 <body>
 
 <div class="mockup-banner">
-  ⚠️ LAYOUT MOCKUP — This is a prototype for the new plant section design. <a href="../plants/">← Back to live site</a>
+  ⚠️ LAYOUT MOCKUP v2 — New plant progress page design. <a href="../plants/">← Back to live site</a>
 </div>
 
 <header>
   <h1><span>Plant Progress</span></h1>
-  <p class="lede">Every plant in the yard, tracked through the season. Click any card to see the full timeline.</p>
+  <p class="lede">The yard through the season — garden scenes, bed compositions, and the plants that fill them. Click any image for full size, or jump to an individual plant below.</p>
+  <div class="meta">
+    <span class="pill">Zone 7a · Philadelphia</span>
+    <span class="pill" id="count-pill">Loading…</span>
+    <a class="pill" href="../">← Home</a>
+  </div>
+  <div class="controls">
+    <input class="control" id="search" type="search" placeholder="Search…">
+    <select class="control" id="date-filter">
+      <option value="all">All dates</option>
+      <option value="2025">2025</option>
+      <option value="2026-03">March 2026</option>
+      <option value="2026-04">April 2026</option>
+      <option value="2026-05">May 2026</option>
+    </select>
+  </div>
 </header>
 
 <main>
-  <div class="plant-grid">
+  <!-- Main gallery: multi-plant / garden scene photos -->
+  <div class="section-heading">
+    <h2>Garden Scenes</h2>
+    <span>Multi-plant views &amp; bed compositions</span>
+  </div>
 
-    <!-- Dwarf Peach Tree -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(4, 1fr);">
-        <img src="../photos/garden/images/2026/03/dwarf-peach-tree-2026-03-29.jpg" alt="Dwarf peach tree before bloom" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Dwarf peach tree in peak bloom" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-17.jpg" alt="Dwarf peach leafing out" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-21.jpg" alt="Dwarf peach with spring leaves" loading="lazy" decoding="async">
-      </div>
-      <div class="card-body">
-        <div class="card-name"><a href="plant-detail-mockup.html">Dwarf Peach Tree</a></div>
-        <div class="card-latin">Prunus persica, dwarf variety</div>
-        <div class="card-one-liner">From swelling buds to full pink bloom, a small tree with a surprisingly dramatic spring arc.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring bloom</span>
-          <span class="meta-pill type">fruit tree</span>
-          <span class="meta-pill">7 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Bare branches in late March, then an explosion of pink blossoms by mid-April. Peaches were treated with copper fungicide at pink bud stage. Leaf-out completes by late April. Watch for aphids in summer.
-            </div>
-          </details>
-        </div>
-      </div>
-    </article>
+  <div class="grid" id="gallery">
 
-    <!-- Rising Sun Redbud -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(4, 1fr);">
-        <img src="../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Rising Sun redbud in early April" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/rising-sun-redbud-2026-04-15.jpg" alt="Rising Sun redbud leafing" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/rising-sun-redbud-2026-04-17.jpg" alt="Rising Sun redbud neon leaves" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/rising-sun-redbud-2026-04-21-overview.jpg" alt="Rising Sun redbud overview" loading="lazy" decoding="async">
+    <div class="card" data-title="Garden overview" data-date="April 19, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/garden-overview-2026-04-19.jpg" alt="Garden overview mid-April" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="rising-sun-redbud/">Rising Sun Redbud</a></div>
-        <div class="card-latin">Cercis canadensis 'The Rising Sun'</div>
-        <div class="card-one-liner">A spring flare plant, all neon leaves and electric bloom, dramatic in exactly the right way.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring flare</span>
-          <span class="meta-pill type">deciduous tree</span>
-          <span class="meta-pill">7 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              The redbud kicks off with magenta blooms on bare wood, then the gold-orange leaves push through in waves. Each flush of new growth is a different color — starting lime, shifting through apricot, settling to chartreuse. One of the most photographed plants in the yard.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 19, 2026</div>
+        <h3>Garden overview</h3>
+        <p class="desc">The full yard in mid-spring push, everything leafing out and filling in at once.</p>
+        <details>
+          <summary>More</summary>
+          <div class="notes">
+            This is the wide shot that shows how all the beds relate to each other — the peach in the corner, the maples catching light, the raised bed mid-stride. The kind of photo that makes more sense the more times you come back to it.
+          </div>
+        </details>
       </div>
-    </article>
+    </div>
 
-    <!-- Shaina Japanese Maple -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(4, 1fr);">
-        <img src="../photos/garden/images/2026/04/shaina-2026-04-21-1.jpg" alt="Shaina Japanese maple" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/shaina-2026-04-21-2.jpg" alt="Shaina maple detail" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/shaina-2026-04-21-3.jpg" alt="Shaina maple foliage" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/shaina-2026-04-21-4.jpg" alt="Shaina maple spring color" loading="lazy" decoding="async">
+    <div class="card" data-title="Peach, salvia &amp; butterfly bush" data-date="April 13, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="Dwarf peach centered in a layered bed with salvia and butterfly bush" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="shaina/">Shaina Japanese Maple</a></div>
-        <div class="card-latin">Acer palmatum 'Shaina'</div>
-        <div class="card-one-liner">A compact red mound in spring leaf-out, with that fine textured maple look showing against the brick and mulch.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring leaf-out</span>
-          <span class="meta-pill type">japanese maple</span>
-          <span class="meta-pill">6 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Shaina pushes deep red-maroon foliage that holds well through the season. Winter dieback required some cleanup pruning, but the spring flush came back strong and full.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 13, 2026</div>
+        <h3>Peach, salvia &amp; butterfly bush</h3>
+        <p class="desc">The peach still dominating the composition, but Pugster, salvia, and buddleia defining the lower layer.</p>
+        <details>
+          <summary>More</summary>
+          <div class="notes">
+            The bed is starting to read as a designed garden room rather than a single specimen dropped in place. Brick edging gives it structure.
+          </div>
+        </details>
       </div>
-    </article>
+    </div>
 
-    <!-- Twombly's Red Sentinel -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(3, 1fr);">
-        <img src="../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg" alt="Twombly's Red Sentinel in April" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/twomblys-red-sentinel-close-spring.jpg" alt="Twombly's Red Sentinel close-up" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-27.jpg" alt="Twombly's Red Sentinel late April" loading="lazy" decoding="async">
+    <div class="card" data-title="Aster, peach &amp; Pugster" data-date="April 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/mixed-bed-aster-peach-pugster.jpg" alt="Aster, peach and Pugster butterfly bush in mixed bed" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="twomblys-red-sentinel/">Twombly's Red Sentinel</a></div>
-        <div class="card-latin">Acer palmatum 'Twombly's Red Sentinel'</div>
-        <div class="card-one-liner">A narrow red column with a spring glow, made even better by the gold-dusted green behind it.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring glow</span>
-          <span class="meta-pill type">japanese maple</span>
-          <span class="meta-pill">3 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              The sentinel form stays tight and vertical. Spring brings a translucent red that catches light differently than Shaina's deeper maroon — these two maples complement each other perfectly in the yard.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 2026</div>
+        <h3>Aster, peach &amp; Pugster</h3>
+        <p class="desc">Another angle on the layered peach bed with purple aster and butterfly bush in the foreground.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Climbing Hydrangea -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(3, 1fr);">
-        <img src="../photos/garden/images/2026/04/climbing-hydrangea-2026-04-12.jpg" alt="Climbing hydrangea early April" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/climbing-hydrangea-2026-04-21.jpg" alt="Climbing hydrangea leafing out" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/climbing-hydrangea-2026-04-27.jpg" alt="Climbing hydrangea late April" loading="lazy" decoding="async">
+    <div class="card" data-title="Hydrangea &amp; Gold Dust Aucuba" data-date="April 17, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/mixed-bed-hydrangea-gold-dust-2026-04-17.jpg" alt="Hydrangea and Gold Dust Aucuba in mixed bed" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="climbing-hydrangea/">Climbing Hydrangea</a></div>
-        <div class="card-latin">Hydrangea anomala subsp. petiolaris</div>
-        <div class="card-one-liner">A patient wall-claimer, slower to start, then suddenly full of intent.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring wake-up</span>
-          <span class="meta-pill type">vine</span>
-          <span class="meta-pill">3 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Climbing hydrangea takes its time establishing, but once it takes hold it covers walls and fences with a beautiful clinging habit. This year's spring push is looking vigorous.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 17, 2026</div>
+        <h3>Hydrangea &amp; Gold Dust Aucuba</h3>
+        <p class="desc">The Limelight hydrangea pushing up behind the variegated aucuba, two different greens working together.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Orange Rocket Barberry -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(4, 1fr);">
-        <img src="../photos/garden/images/2026/04/orange-rocket-barberry-2026-04-17.jpg" alt="Orange Rocket barberry April" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/orange-rocket-barberry-2026-04-19.jpg" alt="Orange Rocket barberry color pushing" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/05/orange-rocket-barberry-side-house-bed-2026-05-01.jpg" alt="Orange Rocket barberry May" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/orange-rocket-barberry-2026-04-23-reference-sheet.png" alt="Orange Rocket barberry reference sheet" loading="lazy" decoding="async">
+    <div class="card" data-title="Gold Dust Aucuba bed" data-date="April 27, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/mixed-bed-gold-dust-aucuba-2026-04-27.jpg" alt="Gold Dust Aucuba mixed bed" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="orange-rocket-barberry/">Orange Rocket Barberry</a></div>
-        <div class="card-latin">Berberis thunbergii 'Orange Rocket'</div>
-        <div class="card-one-liner">A narrow upright shrub with spring color already coming in hot, reading more ember than green.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring color</span>
-          <span class="meta-pill type">shrub</span>
-          <span class="meta-pill">4 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              One of the first shrubs to show real color in spring. The coral-to-red progression is visible week over week. Pairs well with the green backdrop of the side bed.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 27, 2026</div>
+        <h3>Gold Dust Aucuba bed</h3>
+        <p class="desc">The aucuba filling in nicely with hostas visible underneath, the shady side handling the speckled variegation well.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Pugster Butterfly Bushes -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(3, 1fr);">
-        <img src="../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-14.jpg" alt="Pugster butterfly bushes early April" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-21.jpg" alt="Pugster butterfly bushes pushing growth" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-27.jpg" alt="Pugster butterfly bushes late April" loading="lazy" decoding="async">
+    <div class="card" data-title="Limelight, Astilbe &amp; Alliums" data-date="April 21, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/limelight-prime-astilbe-ornamental-onions-2026-04-21.jpg" alt="Limelight Prime hydrangea with astilbe and ornamental onions" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="pugster-butterfly-bushes/">Pugster Butterfly Bushes</a></div>
-        <div class="card-latin">Buddleia 'Pugster' series</div>
-        <div class="card-one-liner">Early spring wake-up, woody structure first, then fresh green pushing back in around the cut-back framework.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring wake-up</span>
-          <span class="meta-pill type">shrub</span>
-          <span class="meta-pill">3 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Pugsters get cut back hard in late winter and look rough for a few weeks, then explode with new growth. Planted alongside orange milkweed and sedum in the same bed.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 21, 2026</div>
+        <h3>Limelight, Astilbe &amp; Alliums</h3>
+        <p class="desc">The hydrangea backdrop with astilbe and alliums pushing up through the front of the bed.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Grapevine -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(4, 1fr);">
-        <img src="../photos/garden/images/2026/04/grapevine-2026-04-12-training.jpg" alt="Grapevine spring training" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/grapevine-2026-04-19.jpg" alt="Grapevine mid April" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/grapevine-2026-04-21.jpg" alt="Grapevine leafing out" loading="lazy" decoding="async">
+    <div class="card" data-title="Mixed perennial bed" data-date="April 12, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg" alt="Mixed perennial bed early spring" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 12, 2026</div>
+        <h3>Mixed perennial bed</h3>
+        <p class="desc">Early spring structure visible before the perennials fill in, the bones of the garden showing clearly.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Mixed perennial bed — Salvia" data-date="May 9, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/05/mixed-perennial-bed-salvia-2026-05-09.jpg" alt="Mixed perennial bed with salvia in bloom" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">May 9, 2026</div>
+        <h3>Mixed perennial bed — Salvia</h3>
+        <p class="desc">Salvia taking over as the main color in the perennial bed, May heat pushing everything forward.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Side house bed — Barberry, Salvia &amp; Heuchera" data-date="April 16, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Side house bed with barberry, salvia, heuchera and holly" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 16, 2026</div>
+        <h3>Side house — Barberry, Salvia &amp; Heuchera</h3>
+        <p class="desc">The side foundation bed waking up, orange rocket barberry starting to show color against the green backdrop.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Side house — Ligustrum &amp; Loropetalum" data-date="April 16, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/side-house-bed-2026-04-16-ligustrum-loropetalum.jpg" alt="Side house bed with sunshine ligustrum and loropetalum" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 16, 2026</div>
+        <h3>Side house — Ligustrum &amp; Loropetalum</h3>
+        <p class="desc">Sunshine ligustrum lighting up the corner, purple loropetalum providing contrast behind it.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Side house — Shaina angle" data-date="April 16, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/side-house-bed-2026-04-16-shaina-angle.jpg" alt="Shaina Japanese maple angle from side house bed" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 16, 2026</div>
+        <h3>Side house — Shaina angle</h3>
+        <p class="desc">The Shaina maple visible from the side bed perspective, dark red foliage picking up against the warm brick.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Side house foundation bed overview" data-date="April 29, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/side-house-foundation-bed-overview-2026-04-29.jpg" alt="Side house foundation bed overview" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 29, 2026</div>
+        <h3>Side house foundation overview</h3>
+        <p class="desc">The full side foundation bed filling in late April, everything finding its place in the layering.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Side house — Rhododendron bed" data-date="April 29, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/side-house-rhododendron-bed-close-2026-04-29.jpg" alt="Rhododendron bed close-up" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 29, 2026</div>
+        <h3>Side house — Rhododendron bed</h3>
+        <p class="desc">The rhododendron pushing fat buds, close-up of the bed that anchors the shady side.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Sunshine Ligustrum, Loropetalum &amp; Liriope" data-date="April 21, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/sunshine-ligustrum-loropetalum-liriope-2026-04-21.jpg" alt="Sunshine ligustrum with loropetalum and liriope" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">April 21, 2026</div>
+        <h3>Ligustrum, Loropetalum &amp; Liriope</h3>
+        <p class="desc">A three-layer composition — gold, purple, and green — that reads as a designed vignette.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Side house — May bloom" data-date="May 7, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/05/side-house-foundation-bed-2026-05-07-overview.jpg" alt="Side house foundation bed May overview" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">May 7, 2026</div>
+        <h3>Side house — May bloom</h3>
+        <p class="desc">The foundation bed in full May push, rhododendron blooming and everything else catching up.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Rhododendron in bloom" data-date="May 7, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/05/side-house-rhododendron-bloom-2026-05-07-close.jpg" alt="Rhododendron bloom close-up" loading="lazy" decoding="async">
+      </div>
+      <div class="content">
+        <div class="kicker">May 7, 2026</div>
+        <h3>Rhododendron in bloom</h3>
+        <p class="desc">The rhododendron finally opening, big trusses of pale pink against the dark green foliage.</p>
+      </div>
+    </div>
+
+    <div class="card" data-title="Grapevine arbor &amp; gate" data-date="April 30, 2026">
+      <div class="image-wrap">
         <img src="../photos/garden/images/2026/04/grapevine-arbor-gate-2026-04-30.jpg" alt="Grapevine arbor gate" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="grapevine/">Grapevine</a></div>
-        <div class="card-latin">Vitis, trained on arbor</div>
-        <div class="card-one-liner">A current-year record of the arch and its spring training, with the vine beginning to push and the structure still visible.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring training</span>
-          <span class="meta-pill type">vine</span>
-          <span class="meta-pill">6 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              The grapevine is trained onto an arbor gate structure. Spring means tying in new canes and watching the tannin-red leaves unfurl. By late summer it forms a full canopy over the arch.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 30, 2026</div>
+        <h3>Grapevine arbor &amp; gate</h3>
+        <p class="desc">The arch and gate structure with the vine just beginning to cover it, early buds visible along the canes.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Forsythia -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(2, 1fr);">
-        <img src="../photos/garden/images/2026/04/forsythia-2026-04-12-view-1.jpg" alt="Forsythia view 1" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg" alt="Forsythia view 2" loading="lazy" decoding="async">
+    <div class="card" data-title="Grape clusters forming" data-date="April 27, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/grapevine-clusters-2026-04-27.jpg" alt="Grapevine clusters forming" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="forsythia/">Golden Architecture</a></div>
-        <div class="card-latin">Forsythia, trained on lattice</div>
-        <div class="card-one-liner">A trained burst of yellow against lattice, less shrub, more spring calligraphy.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">early spring bloom</span>
-          <span class="meta-pill type">shrub</span>
-          <span class="meta-pill">2 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Forsythia is the earliest color in the yard and the signal that pre-emergent timing is right. Prune right after bloom to keep the lattice training shape.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 27, 2026</div>
+        <h3>Grape clusters forming</h3>
+        <p class="desc">Tiny grape clusters already visible on the trained canes, the promise of a real harvest taking shape.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Lemony Lace Elderberry -->
-    <article class="plant-card">
-      <div class="photo-strip" style="grid-template-columns: repeat(2, 1fr);">
-        <img src="../photos/garden/images/2026/04/lemony-lace-elderberry-2026-04-17.jpg" alt="Lemony Lace elderberry" loading="lazy" decoding="async">
-        <img src="../photos/garden/images/2026/04/lemony-lace-elderberry-2026-04-27.jpg" alt="Lemony Lace elderberry late April" loading="lazy" decoding="async">
+    <div class="card" data-title="Orange Rocket &amp; side house bed — May" data-date="May 1, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/05/orange-rocket-barberry-side-house-bed-2026-05-01.jpg" alt="Orange Rocket barberry in side house bed" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="lemony-lace-elderberry/">Lemony Lace Elderberry</a></div>
-        <div class="card-latin">Sambucus racemosa 'Lemony Lace'</div>
-        <div class="card-one-liner">A bright cut-leaf elderberry that reads almost electric in spring, airy in texture but surprisingly assertive once the light hits it.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring bright</span>
-          <span class="meta-pill type">shrub</span>
-          <span class="meta-pill">3 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Lemony Lace is one of those plants that looks better in person than in photos — the chartreuse-gold dissected foliage catches light in a way cameras don't fully capture.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">May 1, 2026</div>
+        <h3>Orange Rocket &amp; side house — May</h3>
+        <p class="desc">The barberry embering up in May, the full side bed composition starting to gel.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Little Henry Sweetspire -->
-    <article class="plant-card">
-      <div class="photo-hero">
-        <img src="../photos/garden/images/2026/04/little-henry-sweetspire-2026-04-17.jpg" alt="Little Henry sweetspire" loading="lazy" decoding="async">
+    <div class="card" data-title="Heuchera, Salvia &amp; Bobo" data-date="April 19, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/bobo-heuchera-salvia-2026-04-19.jpg" alt="Heuchera, salvia and Bobo hydrangea" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="little-henry-sweetspire/">Little Henry Sweetspire</a></div>
-        <div class="card-latin">Itea virginica 'Little Henry'</div>
-        <div class="card-one-liner">A compact native shrub, waking up in clean bright green and starting the season low, dense, and quietly promising.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring wake-up</span>
-          <span class="meta-pill type">native shrub</span>
-          <span class="meta-pill">2 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Little Henry is a quiet achiever — clean form, fragrant white flower spikes in early summer, and reliable red-purple fall color.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 19, 2026</div>
+        <h3>Heuchera, Salvia &amp; Bobo</h3>
+        <p class="desc">A three-layer perennial composition coming into spring focus.</p>
       </div>
-    </article>
+    </div>
 
-    <!-- Narrow Upright Yew -->
-    <article class="plant-card">
-      <div class="photo-hero">
-        <img src="../photos/garden/images/2026/04/narrow-upright-yew-2026-04-20.jpg" alt="Stonehenge Skinny Yew" loading="lazy" decoding="async">
+    <div class="card" data-title="Side house bed — early April" data-date="April 12, 2026">
+      <div class="image-wrap">
+        <img src="../photos/garden/images/2026/04/side-house-bed-2026-04-12.jpg" alt="Side house bed early April" loading="lazy" decoding="async">
       </div>
-      <div class="card-body">
-        <div class="card-name"><a href="narrow-upright-yew/">Stonehenge Skinny Yew</a></div>
-        <div class="card-latin">Taxus, columnar form</div>
-        <div class="card-one-liner">A very narrow columnar yew, still juvenile but already showing the tidy vertical habit that makes it useful as a clean evergreen line.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">evergreen</span>
-          <span class="meta-pill type">conifer</span>
-          <span class="meta-pill">2 photos</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              The skinny yew provides a vertical dark-green punctuation mark along the lattice. Slow growing, but that's the point — it won't outgrow its space.
-            </div>
-          </details>
-        </div>
+      <div class="content">
+        <div class="kicker">April 12, 2026</div>
+        <h3>Side house bed — early April</h3>
+        <p class="desc">The side bed still looking sparse, but you can see the bones of the layering that's about to fill in.</p>
       </div>
-    </article>
-
-    <!-- White Rose Bush -->
-    <article class="plant-card">
-      <div class="photo-hero">
-        <img src="../photos/garden/images/2026/04/white-rose-bush-2026-04-16.jpg" alt="White rose bush" loading="lazy" decoding="async">
-      </div>
-      <div class="card-body">
-        <div class="card-name"><a href="white-rose-bush/">White Rose Bush</a></div>
-        <div class="card-latin">Rosa, white variety</div>
-        <div class="card-one-liner">An old, vigorous white rose bush in the yard, full of fresh spring leaves and already pushing hard for the season.</div>
-        <div class="card-meta">
-          <span class="meta-pill season">spring wake-up</span>
-          <span class="meta-pill type">shrub</span>
-          <span class="meta-pill">1 photo</span>
-        </div>
-        <div class="card-notes">
-          <details>
-            <summary>Season notes</summary>
-            <div class="notes-body">
-              Gets aphids early every summer. Treated with copper fungicide spray in spring alongside the peach tree.
-            </div>
-          </details>
-        </div>
-      </div>
-    </article>
+    </div>
 
   </div>
+
+  <!-- ============================================================ -->
+  <!-- PLANT DIRECTORY: compact thumbnails, click to see individual -->
+  <!-- ============================================================ -->
+  <div class="plant-directory">
+    <h2>Individual Plants</h2>
+    <p class="dir-subtitle">Click any plant to see its full progress timeline</p>
+
+    <div class="dir-grid">
+      <a class="dir-item" href="../../plants/climbing-hydrangea/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/climbing-hydrangea-2026-04-27.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Climbing Hydrangea <span class="dir-count">3</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/dwarf-peach-tree/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Dwarf Peach <span class="dir-count">7</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/forsythia/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/forsythia-2026-04-12-view-1.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Forsythia <span class="dir-count">2</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/grapevine/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/grapevine-arbor-gate-2026-04-30.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Grapevine <span class="dir-count">6</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/lemony-lace-elderberry/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/lemony-lace-elderberry-2026-04-27.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Lemony Lace <span class="dir-count">3</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/little-henry-sweetspire/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/little-henry-sweetspire-2026-04-17.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Little Henry <span class="dir-count">2</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/narrow-upright-yew/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/narrow-upright-yew-2026-04-20.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Skinny Yew <span class="dir-count">2</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/orange-rocket-barberry/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/orange-rocket-barberry-2026-04-17.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Orange Rocket <span class="dir-count">4</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/pugster-butterfly-bushes/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/pugster-butterfly-bushes-2026-04-21.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Pugster <span class="dir-count">3</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/rising-sun-redbud/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/rising-sun-redbud-2026-04-17.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Rising Sun <span class="dir-count">7</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/shaina/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/shaina-2026-04-21-1.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Shaina Maple <span class="dir-count">6</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/twomblys-red-sentinel/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/twomblys-red-sentinel-2026-04-12.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">Twombly's <span class="dir-count">3</span></div>
+      </a>
+      <a class="dir-item" href="../../plants/white-rose-bush/">
+        <div class="dir-thumb"><img src="../photos/garden/images/2026/04/white-rose-bush-2026-04-16.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="dir-label">White Rose <span class="dir-count">1</span></div>
+      </a>
+    </div>
+  </div>
+
 </main>
 
-<footer class="mockup-footer">
-  Layout mockup — not the live site. <a href="../plants/">← Back to live plants section</a>
+<footer>
+  Layout mockup v2 — garden scenes gallery + compact plant directory. <a href="../plants/">← Back to live site</a>
 </footer>
+
+<!-- Lightbox (same pattern as AI images page) -->
+<div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+  <div class="lightbox-bar">
+    <div class="lightbox-title" id="lightbox-title">Image preview</div>
+    <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Arrows to browse · Esc closes</div>
+    <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+  </div>
+  <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+  <div class="lightbox-nav">
+    <button id="lb-prev">← Prev</button>
+    <span class="counter" id="lb-counter"></span>
+    <button id="lb-next">Next →</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const gallery = document.getElementById('gallery');
+  const cards = gallery.querySelectorAll('.card');
+  const countPill = document.getElementById('count-pill');
+  const search = document.getElementById('search');
+  const dateFilter = document.getElementById('date-filter');
+  const lightbox = document.getElementById('image-lightbox');
+  const lbImg = document.getElementById('lightbox-image');
+  const lbTitle = document.getElementById('lightbox-title');
+  const lbCounter = document.getElementById('lb-counter');
+  const lbStage = document.getElementById('lightbox-stage');
+  let idx = 0;
+  let visible = [];
+
+  function rebuildVisible() {
+    const q = search.value.trim().toLowerCase();
+    const date = dateFilter.value;
+    visible = [];
+    cards.forEach((card, i) => {
+      const title = card.dataset.title || '';
+      const d = card.dataset.date || '';
+      let show = true;
+      if (date !== 'all' && !d.includes(date)) show = false;
+      if (q && !title.toLowerCase().includes(q) && !d.toLowerCase().includes(q)) show = false;
+      card.style.display = show ? '' : 'none';
+      if (show) visible.push({ card, index: i });
+    });
+    countPill.textContent = `Photos: ${visible.length}`;
+  }
+
+  function openLightbox(i) {
+    const match = visible[i];
+    if (!match) return;
+    idx = i;
+    showLb(i);
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showLb(i) {
+    const match = visible[i];
+    const img = match.card.querySelector('.image-wrap img');
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbTitle.textContent = match.card.dataset.title;
+    lbCounter.textContent = (i + 1) + ' / ' + visible.length;
+    lightbox.classList.remove('actual');
+  }
+
+  function closeLb() {
+    lightbox.classList.remove('open', 'actual');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  cards.forEach((card, i) => {
+    card.querySelector('.image-wrap').addEventListener('click', () => {
+      const vi = visible.findIndex(v => v.index === i);
+      if (vi >= 0) openLightbox(vi);
+    });
+  });
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLb);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLb(); });
+  document.getElementById('lb-prev').addEventListener('click', () => {
+    idx = (idx - 1 + visible.length) % visible.length;
+    showLb(idx);
+  });
+  document.getElementById('lb-next').addEventListener('click', () => {
+    idx = (idx + 1) % visible.length;
+    showLb(idx);
+  });
+  lbImg.addEventListener('click', () => { lightbox.classList.toggle('actual'); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') { idx = (idx - 1 + visible.length) % visible.length; showLb(idx); }
+    if (e.key === 'ArrowRight') { idx = (idx + 1) % visible.length; showLb(idx); }
+  });
+
+  search.addEventListener('input', rebuildVisible);
+  dateFilter.addEventListener('change', rebuildVisible);
+  rebuildVisible();
+})();
+</script>
 
 </body>
 </html>
