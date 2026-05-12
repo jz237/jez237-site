@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T19:00:01.596708+00:00",
+  "updatedAt": "2026-05-12T20:00:01.672117+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6568,6 +6568,34 @@
     "https://www.together.ai/blog/introducing-voice-finder-a-new-tool-to-quickly-find-the-right-voice-for-your-app-from-over-600-voices": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a036ecf9756224a4ce06ae7_OG-image_20260508_Inference%20model%20from%20HuggingFace%20(1).png",
       "checkedAt": "2026-05-12T19:00:01.596708+00:00"
+    },
+    "https://www.techrepublic.com/article/news-chatgpt-photo-editing-trends-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/chatgpt-photo-editing.jpg?f=jpeg",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
+    },
+    "https://www.techrepublic.com/article/powering-progress-the-economics-of-the-dell-ai-factory": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Powering-Progress-The-Economics-of-The-Dell-AI-Factory-.jpg?f=jpeg",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
+    },
+    "https://www.techrepublic.com/article/why-ai-agents-are-a-top-priority": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Why-AI-Agents-Are-A-Top-Priority-.jpg?f=jpeg",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
+    },
+    "https://www.techrepublic.com/article/how-ai-is-supporting-nurses": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/How-AI-Is-Supporting-Nurses.jpg?f=jpeg",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
+    },
+    "https://www.techrepublic.com/article/the-shift-to-agentic-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/The-Shift-to-Agentic-AI.jpg?f=jpeg",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
+    },
+    "https://www.techrepublic.com/article/how-agentic-ai-is-changing-work": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/How-Agentic-AI-Is-Changing-Work.jpg?f=jpeg",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
+    },
+    "https://openai.com/index/what-parameter-golf-taught-us": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/6PRLQARXtH3sfsTBcHlufc/ac545b82a82009609194d64e34538e62/SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-12T20:00:01.672117+00:00"
     }
   }
 }
