@@ -1,276 +1,189 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Rising Sun Redbud — Plant Progress</title>
-  <link rel="stylesheet" href="../../assets/styles.css" />
-  <link rel="stylesheet" href="../../assets/design.css" />
-  <link rel="stylesheet" href="../../assets/plant-page.css" />
-  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/plant-cards.css">
   <style>
-    :root {
-      --earth-bg: #1f1711;
-      --earth-panel: #2b2018;
-      --earth-border: #5e4733;
-      --earth-text: #f1e6d8;
-      --earth-muted: #ccb9a2;
-      --earth-accent: #d88c63;
-      --earth-leaf: #a8ba73;
-    }
-    body { background: radial-gradient(circle at top, #4c3325 0%, #201710 55%, #130e0b 100%); color: var(--earth-text); }
-    header { background: rgba(31,23,17,.84); border-bottom: 1px solid var(--earth-border); }
-    a { color: #e4c695; }
-    .hero {
-      background: linear-gradient(135deg, rgba(94,60,43,.96), rgba(78,49,36,.92));
-      border: 1px solid var(--earth-border);
-      box-shadow: 0 18px 48px rgba(0,0,0,.24);
-    }
-    .hero-grid, .entry-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:18px; }
-    .panel {
-      background: linear-gradient(180deg, rgba(50,37,28,.97), rgba(35,26,20,.97));
-      border: 1px solid var(--earth-border);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 12px 28px rgba(0,0,0,.16);
-    }
-    .muted, .kicker, .note, .entry-date, .meta-pill { color: var(--earth-muted); }
-    .hero-photo, .entry-photo {
-      width: 100%; border-radius: 16px; display:block; object-fit: cover;
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 16px 34px rgba(0,0,0,.25);
-    }
-    .hero-photo { aspect-ratio: 4/3; }
-    .section-shell { display:grid; gap:18px; margin-top:18px; }
-    .section-title { margin:0 0 8px; font-size:24px; }
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .meta-pill {
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-    .entry-card {
-      background: linear-gradient(180deg, rgba(59,43,33,.96), rgba(34,26,20,.96));
-      border: 1px solid rgba(216,140,99,.22);
-      border-radius: 18px;
-      padding: 18px;
-    }
-    .entry-title { margin: 0 0 6px; font-size: 22px; }
-    .entry-copy { line-height: 1.7; }
-    .bullet-list { margin: 12px 0 0; padding-left: 18px; line-height: 1.7; color: var(--earth-muted); }
-    .quote {
-      border-left: 3px solid var(--earth-accent);
-      padding-left: 14px;
-      margin-top: 14px;
-      color: var(--earth-text);
-      font-style: italic;
-    }
-    @media (max-width: 860px) { .hero-grid, .entry-grid { grid-template-columns: 1fr; } }
-  
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-    img, .feature-media { cursor: zoom-in; }
+    .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
+    .back-link:hover { color:#8eb6ff; }
+    .back-link svg { width:16px; height:16px; }
+    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
+    .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
+    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
+    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
   </style>
-  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">Plant Progress · Cercis canadensis 'The Rising Sun'</div>
-      <h1 class="title">Rising Sun Redbud</h1>
-      <p class="muted">A spring flare plant, all neon leaves and electric bloom, dramatic in exactly the right way.</p>
-    </section>
+  <div class="page-header">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>
+      Plant Progress
+    </a>
+    <h1>Rising Sun Redbud</h1>
+    <div class="latin">Cercis canadensis &#x27;The Rising Sun&#x27;</div>
+    <div class="one-liner">A spring flare plant, all neon leaves and electric bloom, dramatic in exactly the right way.</div>
+    <div class="meta-row">
+      <span class="meta-pill season">spring flare</span>
+      <span class="meta-pill type">deciduous tree</span>
+      <span class="meta-pill">7 photos</span>
+    </div>
+  </div>
 
-    <div class="section-shell">
-      <section class="panel hero-grid">
-        <div>
-          <h2 class="section-title">April pulse</h2>
-          <p class="note">This is one of its best windows of the year, flowers still glowing while the new leaves are just starting to unfurl in apricot-gold. For a few days, it looks almost backlit.</p>
-          <div class="meta-row">
-            <span class="meta-pill">spring highlight</span>
-            <span class="meta-pill">bloom + leaf overlap</span>
-            <span class="meta-pill">strong vigor</span>
-          </div>
+  <main>
+    <div class="grid">
+      <div class="card" data-title="Magenta bloom on bare wood" data-date="April 12, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Magenta bloom on bare wood" loading="lazy" decoding="async">
         </div>
-        <div>
-          <img class="hero-photo" src="../../photos/garden/images/2025/rising-sun-redbud-summer-reference.jpg" alt="Rising Sun redbud summer reference — full leaf color for context" / loading="lazy" decoding="async">
+        <div class="card-content">
+          <div class="card-kicker">April 12, 2026</div>
+          <h3>Magenta bloom on bare wood</h3>
+          <p class="card-desc">The redbud kicks off with magenta blooms on bare wood, the first color of the season.</p>
         </div>
-      </section>
+      </div>
+      <div class="card" data-title="Gold-orange leaves pushing" data-date="April 15, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-15.jpg" alt="Gold-orange leaves pushing" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 15, 2026</div>
+          <h3>Gold-orange leaves pushing</h3>
+          <p class="card-desc">Each flush of new growth is a different color — starting lime, shifting through apricot, settling to chartreuse.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Color shift underway" data-date="April 16, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-16.jpg" alt="Color shift underway" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 16, 2026</div>
+          <h3>Color shift underway</h3>
+          <p class="card-desc">The neon leaf progression becoming more visible as more growth pushes out.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Peak color explosion" data-date="April 17, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-17.jpg" alt="Peak color explosion" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 17, 2026</div>
+          <h3>Peak color explosion</h3>
+          <p class="card-desc">One of the most photographed plants in the yard, the gold-orange-green gradient at its most vivid.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Full overview" data-date="April 21, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-21-overview.jpg" alt="Full overview" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 21, 2026</div>
+          <h3>Full overview</h3>
+          <p class="card-desc">The whole tree showing its layered color progression from top to bottom.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Settling into green" data-date="April 27, 2026">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-27.jpg" alt="Settling into green" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">April 27, 2026</div>
+          <h3>Settling into green</h3>
+          <p class="card-desc">The early neon fading to chartreuse as the leaves mature, still a beautiful gradient.</p>
+        </div>
+      </div>
+      <div class="card" data-title="Summer reference" data-date="2025 Summer">
+        <div class="card-image-wrap">
+          <img src="../../photos/garden/images/2025/rising-sun-redbud-summer-reference.jpg" alt="Summer reference" loading="lazy" decoding="async">
+        </div>
+        <div class="card-content">
+          <div class="card-kicker">2025 Summer</div>
+          <h3>Summer reference</h3>
+          <p class="card-desc">What the tree looks like in full summer leaf — useful context for the spring progression.</p>
+        </div>
+      </div>
 
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 12, 2026</div>
-            <h2 class="entry-title">Spring ignition</h2>
-            <div class="entry-copy">
-              The Rising Sun redbud is really showing off here, bright magenta flowers still running up the stems while the new foliage is just starting to open in that soft golden-apricot stage. This is one of the best moments for this tree, when bloom and fresh leaf color overlap and the whole thing looks almost lit from inside.
-              <div class="quote">Hot pink bloom, golden new leaves, blue sky, brick behind it. Hard to ask for a better spring entrance.</div>
-            </div>
-          </div>
-          <div>
-            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Rising Sun redbud spring update" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>spring bloom in full color</li>
-          <li>fresh leaf-out underway</li>
-          <li>upright structure looks strong</li>
-          <li>great color contrast against the brick</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 15, 2026</div>
-            <h2 class="entry-title">Another angle on the same flush</h2>
-            <div class="entry-copy">
-              A second view of the same redbud, this time catching more of the branching and the way the flowers stack along the upright stems. It reads a little more structural, with the yellow new growth scattered through the canopy like bright punctuation.
-              <div class="quote">Same tree, different angle, same spring punch.</div>
-            </div>
-          </div>
-          <div>
-            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-15.jpg" alt="Rising Sun redbud alternate spring view" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>different angle on the same spring bloom</li>
-          <li>more of the branch structure shows through</li>
-          <li>gold foliage punctuates the canopy</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 16, 2026</div>
-            <h2 class="entry-title">The canopy going gold</h2>
-            <div class="entry-copy">
-              The redbud is really shifting now, with the yellow-gold leaves taking over the canopy while the pink bloom still clings to the lower stems. It has that airy, almost lantern-like look that makes this cultivar so distinctive in spring.
-              <div class="quote">A tree that looks like it’s carrying sunlight in its leaves.</div>
-            </div>
-          </div>
-          <div>
-            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-16.jpg" alt="Rising Sun redbud with golden leaves" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>gold leaves are now the main show</li>
-          <li>lower flowers still hold some pink</li>
-          <li>beautiful contrast against the fence and sky</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 17, 2026</div>
-            <h2 class="entry-title">Full gold against the lattice</h2>
-            <div class="entry-copy">
-              The Rising Sun has moved even farther into its yellow phase here, the canopy now reading almost entirely gold against the white lattice and blue sky. The bloom is mostly a lower-stem memory now, and what takes over instead is the tree's spring light, that bright translucent leaf color that makes it look less planted than illuminated.
-              <div class="quote">Less blossom-driven now, more like a small tree made of sunlight and thin spring air.</div>
-            </div>
-          </div>
-          <div>
-            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-17.jpg" alt="Rising Sun redbud with bright golden spring leaves against lattice" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>gold spring foliage is now carrying nearly the whole canopy</li>
-          <li>tree reads taller and more open against the lattice backdrop</li>
-          <li>pink bloom has mostly dropped to the background stage</li>
-          <li>strong contrast between yellow foliage, white lattice, and blue sky</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 21, 2026</div>
-            <h2 class="entry-title">Whole tree carrying spring light</h2>
-            <div class="entry-copy">
-              This wider view shows what the Rising Sun is doing to the whole yard now, not just to itself. The canopy has gone full clear gold, bright enough to hold the center of the scene against the white lattice and deep blue sky, while the darker maple behind it only makes the color read louder. At this stage it feels less like a specimen in a bed and more like a sheet of spring light suspended on branches.
-              <div class="quote">Some trees bloom. This one glows.</div>
-            </div>
-          </div>
-          <div>
-            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-21-overview.jpg" alt="Wide view of Rising Sun redbud glowing gold in front of white lattice" / loading="lazy" decoding="async">
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>canopy is now fully in its bright gold spring phase</li>
-          <li>tree reads as a major visual anchor in the yard, not just a detail plant</li>
-          <li>white lattice and blue sky make the foliage color even stronger</li>
-          <li>contrast with the darker maple behind it sharpens the whole scene</li>
-        </ul>
-      </section>
-
-      <section class="entry-card">
-        <div class="entry-grid">
-          <div>
-            <div class="entry-date">April 27, 2026</div>
-            <h2 class="entry-title">Gold above the bed</h2>
-            <div class="entry-copy">
-              The Rising Sun redbud has settled into its late-April gold, with the whole canopy now reading as a bright vertical flare above the raised bed. The angle catches the tree as part of the larger planting: hostas filling the shaded left edge, heuchera at the base, daylily foliage along the lattice, and the darker Japanese maple behind it making the yellow leaves stand out even more.
-              <div class="quote">By this point in spring, the tree is less a color accent than the thing organizing the whole corner.</div>
-            </div>
-          </div>
-          <div>
-            <img class="entry-photo" src="../../photos/garden/images/2026/04/rising-sun-redbud-2026-04-27.jpg" alt="Rising Sun redbud glowing gold above the raised bed" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <ul class="bullet-list">
-          <li>canopy is fully in the clear gold spring foliage phase</li>
-          <li>upright new growth is extending above the lattice line</li>
-          <li>hostas, heuchera, and daylily foliage frame the tree at bed level</li>
-          <li>darker maple foliage in the background deepens the contrast</li>
-        </ul>
-      </section>
     </div>
   </main>
-  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen &#x21C4; 1:1 size &middot; Arrows to browse &middot; Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <div class="lightbox-nav">
+      <button id="lb-prev">&larr; Prev</button>
+      <span class="counter" id="lb-counter"></span>
+      <button id="lb-next">Next &rarr;</button>
+    </div>
+  </div>
+
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
+  (function() {
+    const cards = document.querySelectorAll('.card');
+    const lightbox = document.getElementById('image-lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStage = document.getElementById('lightbox-stage');
+    let idx = 0;
+
+    function open(i) {
+      idx = i;
+      show(i);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function show(i) {
+      const card = cards[i];
+      lbImg.src = card.querySelector('.card-image-wrap img').src;
+      lbImg.alt = card.querySelector('.card-image-wrap img').alt;
+      lbTitle.textContent = card.dataset.title + ' \u2014 ' + card.dataset.date;
+      lbCounter.textContent = (i+1) + ' / ' + cards.length;
+      lightbox.classList.remove('actual');
+    }
+    function close() {
+      lightbox.classList.remove('open','actual');
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    cards.forEach((card, i) => {
+      card.querySelector('.card-image-wrap').addEventListener('click', () => open(i));
     });
-    document.querySelectorAll('.feature-media').forEach((card) => {
-      const bg = card.style.backgroundImage;
-      const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
-      if (match && match[1]) {
-        card.addEventListener('click', (e) => {
-          e.preventDefault();
-          lightboxImg.src = match[1];
-          lightbox.classList.add('active');
-        });
-      }
+
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    lightbox.addEventListener('click', e => { if(e.target===lightbox) close(); });
+    document.getElementById('lb-prev').addEventListener('click', () => {
+      idx = (idx - 1 + cards.length) % cards.length; show(idx);
     });
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+    document.getElementById('lb-next').addEventListener('click', () => {
+      idx = (idx + 1) % cards.length; show(idx);
     });
+    lbImg.addEventListener('click', () => lightbox.classList.toggle('actual'));
+    document.addEventListener('keydown', e => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') { idx=(idx-1+cards.length)%cards.length; show(idx); }
+      if(e.key==='ArrowRight') { idx=(idx+1)%cards.length; show(idx); }
+    });
+  })();
   </script>
-  <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
+  <script src="../../assets/plant-enhance.js" defer></script>
 </body>
 </html>
