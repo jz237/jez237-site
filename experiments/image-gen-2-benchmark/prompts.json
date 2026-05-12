@@ -226,5 +226,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-12-midday-clockwork-estuary-atlas",
+    "title": "Clockwork Estuary Atlas",
+    "tests": "Explores infographic cutaway clarity, mechanical-natural system integration, wetland textures, transparent sediment layers, readable title discipline, numbered callouts, and brass mechanism rendering.",
+    "prompt": "A vertical museum-quality infographic poster titled \"CLOCKWORK ESTUARY ATLAS\" showing an elegant cutaway diagram of a miniature tidal estuary powered by visible clockwork beneath the waterline. Top half: calm blue-green river water meeting the sea, marsh grasses, oyster beds, tiny shorebirds, ripples, and small wooden tide markers. Bottom half: a clean geological cutaway with transparent sediment layers revealing brass gears, escapements, pistons, and pearl-like bearings that mechanically raise and lower the tide. Use a limited set of clear numbered callout circles and thin leader lines, but avoid tiny unreadable paragraphs. Fine engraved illustration mixed with realistic watercolor, crisp educational layout, cream paper background, subtle grid marks, accurate reflections and wet mud textures, no logos, no copyrighted elements.",
+    "image": "images/2026-05-12-midday-clockwork-estuary-atlas.png",
+    "date": "2026-05-12",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
