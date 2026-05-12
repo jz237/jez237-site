@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-12T08:00:01.937266+00:00",
+  "updatedAt": "2026-05-12T09:00:01.397589+00:00",
   "items": [
     {
-      "title": "Dario Coscia, Sindy L\\\"owe, Max Welling",
+      "title": "TTCD:Transformer Integrated Temporal Causal Discovery from Non-Stationary Time Series Data",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-12T08:00:11.056440+00:00",
+      "published": "2026-05-12T09:00:10.226881+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Tilde Research Introduces Aurora: A Leverage-Aware Optimizer That Fixes a Hidden Neuron Death Problem in Muon",
+      "url": "https://www.marktechpost.com/2026/05/12/tilde-research-introduces-aurora-a-leverage-aware-optimizer-that-fixes-a-hidden-neuron-death-problem-in-muon",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Researchers at Tilde Research have released Aurora, a new optimizer for training neural networks that addresses a structural flaw in the widely-used Muon optimizer. The flaw quietly kills off a significant fraction of MLP neurons during training and keeps them permanently dead. Aurora comes with a 1.1B parameter pretraining experiment, a new state-of-the-art result on [&#8230;]\nThe post Tilde Research Introduces Aurora: A Leverage-Aware Optimizer That Fixes a Hidden Neuron Death Problem in Muon appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-12.png",
+      "published": "2026-05-12T08:07:28+00:00",
+      "firstSeen": "2026-05-12T09:00:01.397589+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.6436
+    },
+    {
+      "title": "Duch Ditto raises €7.6M for patient-side AI summaries of medical appointments",
+      "url": "https://thenextweb.com/news/ditto-7-6m-funding-patient-ai-summaries",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Ditto, an Amsterdam-based health-tech building AI-generated summaries of medical appointments for patients, has raised €7.6m, the company said on Monday. The round is led by Heal Capital with participation from Rubio Impact Ventures. Earlier backer Chris Oomen, chair of Optiverder, has also participated. The funding will support expansion into Germany, the UK, and Spain this [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Ditto.avif",
+      "published": "2026-05-12T07:56:52+00:00",
+      "firstSeen": "2026-05-12T09:00:01.397589+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9183
+    },
+    {
+      "title": "Adfin raises $18m Series A from Index Ventures for agentic business finance",
+      "url": "https://thenextweb.com/news/dfin-18m-series-a-index-ventures-agentic-finance",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Visionaries Club returns; Stéphane Kurgan (ex-King COO) and Miro founder Andrey Khusid join. Total funding now over $30m in less than two years. The London fintech says its customers see late-payment rates 7x lower than the UK SME average. Adfin, the London-based fintech building an agentic money-movement platform, has raised $18m in a Series A [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Adfin.avif",
+      "published": "2026-05-12T07:48:41+00:00",
+      "firstSeen": "2026-05-12T09:00:01.397589+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 3.1143
+    },
+    {
+      "title": "White Circle raises $11m Seed for production AI control platform",
+      "url": "https://thenextweb.com/news/white-circle-11m-seed-ai-control-platform",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Senior figures from OpenAI, Anthropic, DeepMind, Hugging Face, Mistral, Datadog and Sentry have backed the Seed. The platform claims more than one billion API requests served and lists Lovable and two of the world’s largest digital banks among its customers. White Circle, a platform that helps companies monitor, secure and control AI models in production, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/White-Circle-team.avif",
+      "published": "2026-05-12T07:43:20+00:00",
+      "firstSeen": "2026-05-12T09:00:01.397589+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.8116
+    },
+    {
+      "title": "Paymentology raises $175m co-led by Apis Partners and Aspirity Partners",
+      "url": "https://thenextweb.com/news/paymentology-175m-apis-aspirity-issuer-processor",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Paymentology, the London-based global issuer-processor, has raised $175m in a round co-led by Apis Partners and Aspirity Partners, the company said on Tuesday. Apis invested through its Apis Growth Fund III vehicle, which the firm said takes its total payments-sector investment count to 16. For Aspirity, a pan-European private-equity firm focused on financial technology and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Paymentology.avif",
+      "published": "2026-05-12T07:24:18+00:00",
+      "firstSeen": "2026-05-12T09:00:01.397589+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8023
     },
     {
       "title": "Nscale secures $790m financing for Narvik AI data centre",
@@ -28,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/Nscale-founder-Joshua-Payne.avif",
       "published": "2026-05-12T07:14:51+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1272
+      "score": 2.0977
     },
     {
       "title": "A Coding Implementation to Portfolio Optimization with skfolio for Building Testing, Tuning, and Comparing Modern Investment Strategies",
@@ -44,10 +124,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-11-1024x731.png",
       "published": "2026-05-12T07:05:02+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8923
+      "score": 2.863
     },
     {
       "title": "Happl raises $11m Series A to scale its global benefits operating system",
@@ -60,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/Happl.avif",
       "published": "2026-05-12T06:50:55+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9154
+      "score": 3.8862
     },
     {
       "title": "OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation",
@@ -76,10 +156,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-10.png",
       "published": "2026-05-12T05:47:54+00:00",
       "firstSeen": "2026-05-12T06:00:02.088490+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.1547
+      "score": 12.1264
     },
     {
       "title": "Thinking Machines wants to build an AI that actually listens while it talks",
@@ -92,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2271655163.jpg?resize=1200%2C879",
       "published": "2026-05-12T04:52:35+00:00",
       "firstSeen": "2026-05-12T06:00:02.088490+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1986
+      "score": 2.1709
     },
     {
       "title": "Riding an AI rally, Robinhood preps second retail venture IPO",
@@ -108,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vlad-tenev-robinhood-GettyImages-2272038864.jpg?w=1024",
       "published": "2026-05-12T00:09:01+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0745
+      "score": 2.0503
     },
     {
       "title": "Thoughts on GitLab's workforce reduction\" and \"structural and strategic decisions\"",
@@ -124,10 +204,10 @@
       "image": "",
       "published": "2026-05-11T23:58:55+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7704
+      "score": 3.7462
     },
     {
       "title": "Ilya Sutskever Stands by His Role in Sam Altman’s OpenAI Ouster: ‘I Didn’t Want It to Be Destroyed’",
@@ -140,10 +220,10 @@
       "image": "https://media.wired.com/photos/6a02504ee09a7c202c6b229b/master/pass/Model-Behavior-Musk-v-Altman-Ilya-Sutskever-Business-2275165628.jpg",
       "published": "2026-05-11T23:51:35+00:00",
       "firstSeen": "2026-05-12T00:08:54.623007+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0674
+      "score": 5.0433
     },
     {
       "title": "Building Blocks for Foundation Model Training and Inference on AWS",
@@ -156,10 +236,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/64d6b270c2eedf9af82baa23/YybsyZaGr5f0fLe0qDuLn.png",
       "published": "2026-05-11T23:18:26+00:00",
       "firstSeen": "2026-05-12T00:08:54.623007+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.794
+      "score": 2.7703
     },
     {
       "title": "OpenAI just released its answer to Claude Mythos",
@@ -172,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T23:05:01+00:00",
       "firstSeen": "2026-05-11T23:09:18.555762+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.2187
+      "score": 14.1951
     },
     {
       "title": "GM just laid off hundreds of IT workers to hire those with stronger AI skills",
@@ -188,10 +268,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/gm-headquarters-getty.jpg?resize=1200%2C800",
       "published": "2026-05-11T23:04:10+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7483
+      "score": 3.7248
     },
     {
       "title": "Linux bitten by second severe vulnerability in as many weeks",
@@ -204,10 +284,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2022/05/caution-tape-1000x648.jpeg",
       "published": "2026-05-11T22:28:19+00:00",
       "firstSeen": "2026-05-11T23:09:18.555762+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8942
+      "score": 1.8711
     },
     {
       "title": "Here&#8217;s what Mira Murati&#8217;s AI company is up to",
@@ -220,10 +300,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_Illo_mira-murati_stock_02.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T22:19:15+00:00",
       "firstSeen": "2026-05-11T23:00:01.222452+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1007
+      "score": 4.0776
     },
     {
       "title": "GitLab is cutting jobs for the agentic era. It does not yet know how many.",
@@ -236,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/05/gitlab-layoffs-agentic-era-devops-ai.avif",
       "published": "2026-05-11T21:55:06+00:00",
       "firstSeen": "2026-05-11T23:00:01.222452+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.0813
+      "score": 7.0585
     },
     {
       "title": "Wise left London for Nasdaq. It is also applying for a US banking charter. The migration is not just a listing change.",
@@ -252,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/05/wise-nasdaq-listing-london-stock-exchange-fintech.avif",
       "published": "2026-05-11T21:39:53+00:00",
       "firstSeen": "2026-05-11T23:00:01.222452+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9755
+      "score": 2.9529
     },
     {
       "title": "ZoomInfo beat earnings, cut 600 jobs, and lost 29 per cent of its stock price. Its database is being repriced by AI.",
@@ -268,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/05/zoominfo-q1-earnings-guidance-cut-saas-ai.avif",
       "published": "2026-05-11T21:25:29+00:00",
       "firstSeen": "2026-05-11T23:00:01.222452+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.87
+      "score": 1.8475
     },
     {
       "title": "I built a machine learning model to predict who leaves tech jobs early. The results surprised me.",
@@ -284,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/05/tech-employee-attrition-career-momentum.avif",
       "published": "2026-05-11T20:41:42+00:00",
       "firstSeen": "2026-05-11T21:39:14.483001+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2535
+      "score": 3.2315
     },
     {
       "title": "Lodestellar is a €7 EPD quality tool helping manufacturers win multi-million euro tenders",
@@ -303,7 +383,7 @@
       "lastSeen": "2026-05-12T08:00:01.937266+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.847
+      "score": 1.8252
     },
     {
       "title": "Understanding LLM Distillation Techniques",
@@ -316,10 +396,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-29-150x150.png",
       "published": "2026-05-11T20:20:16+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3156
+      "score": 3.2938
     },
     {
       "title": "How to Build Technical Analysis and Backtesting Workflow with pandas-ta-classic, Strategy Signals, and Performance Metrics",
@@ -332,10 +412,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-8-1024x731.png",
       "published": "2026-05-11T20:05:23+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.0899
+      "score": -0.1115
     },
     {
       "title": "Quoting James Shore",
@@ -348,10 +428,10 @@
       "image": "",
       "published": "2026-05-11T19:48:32+00:00",
       "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.074
+      "score": 5.0525
     },
     {
       "title": "Your AI Use Is Breaking My Brain",
@@ -364,10 +444,10 @@
       "image": "",
       "published": "2026-05-11T19:21:27+00:00",
       "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9642
+      "score": 1.943
     },
     {
       "title": "Using LLM in the shebang line of a script",
@@ -380,10 +460,10 @@
       "image": "",
       "published": "2026-05-11T18:48:57+00:00",
       "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1473
+      "score": -1.1682
     },
     {
       "title": "Mac Users Warned Over Fake Claude Install Instructions",
@@ -396,10 +476,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/Gemini_Generated_Image_kztlsskztlsskztl.jpg?f=jpeg",
       "published": "2026-05-11T18:28:55+00:00",
       "firstSeen": "2026-05-11T19:00:01.826030+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9056
+      "score": 8.8849
     },
     {
       "title": "Meta and Stanford Researchers Propose Fast Byte Latent Transformer That Reduces Inference Memory Bandwidth by Over 50% Without Tokenization",
@@ -412,10 +492,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-11-at-10.41.39-AM-150x150.png",
       "published": "2026-05-11T17:52:15+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.0629
+      "score": 8.0426
     },
     {
       "title": "Three things in AI to watch, according to a Nobel-winning economist",
@@ -428,10 +508,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260507_algo2.jpg?resize=1200%2C600",
       "published": "2026-05-11T17:35:12+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3771
+      "score": 3.3569
     },
     {
       "title": "SocialReasoning-Bench: Measuring whether AI agents act in users’ best interests",
@@ -444,10 +524,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/SocialReasoningBench-TWLIFB-1200x627-1.jpg",
       "published": "2026-05-11T17:19:28+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.8917
+      "score": 9.8717
     },
     {
       "title": "Digg tries again, this time as an AI news aggregator",
@@ -460,10 +540,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/digg-ver2-at-10.40.29-AM.jpg?resize=1200%2C888",
       "published": "2026-05-11T17:02:35+00:00",
       "firstSeen": "2026-05-11T18:00:01.343104+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.916
+      "score": 1.8961
     },
     {
       "title": "1.8 Billion Gmail Users May Want to Check This AI Privacy Setting",
@@ -476,10 +556,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/close-up-of-female-hands-using-laptop-on-cafe-tabl-2026-03-26-05-00-24-utc-1.jpg?f=jpeg",
       "published": "2026-05-11T16:13:12+00:00",
       "firstSeen": "2026-05-11T20:00:01.691832+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8596
+      "score": 2.8402
     },
     {
       "title": "Google stopped a zero-day hack that it says was developed with AI",
@@ -492,10 +572,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25330660/STK414_AI_CHATBOT_H.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-11T16:09:42+00:00",
       "firstSeen": "2026-05-11T16:10:14.611746+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9685
+      "score": 1.9491
     },
     {
       "title": "Santa Clara County sues Meta over scam ads on Facebook and Instagram",
@@ -511,7 +591,7 @@
       "lastSeen": "2026-05-12T08:00:01.937266+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7581
+      "score": 1.7387
     },
     {
       "title": "Novo Nordisk hands shelved Parkinson’s cell therapy to Zuckerberg-backed Cellular Intelligence",
@@ -527,7 +607,7 @@
       "lastSeen": "2026-05-12T08:00:01.937266+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8554
+      "score": 2.8361
     },
     {
       "title": "Learning on the Shop floor",
@@ -540,10 +620,10 @@
       "image": "",
       "published": "2026-05-11T15:46:36+00:00",
       "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.3909
+      "score": 6.3717
     },
     {
       "title": "Shein takes Temu to London’s High Court over “industrial-scale” copyright theft",
@@ -559,87 +639,7 @@
       "lastSeen": "2026-05-12T08:00:01.937266+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7505
-    },
-    {
-      "title": "Alphabet adds the yen to its bond programme, in a debut Samurai issue, funding the AI build",
-      "url": "https://thenextweb.com/news/alphabet-debut-yen-bond-ai-capex",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Mizuho, Bank of America, and Morgan Stanley have the mandate. Pricing is expected this month. The trade follows Alphabet’s record CHF, sterling and euro issuances in February and last week’s $17bn euro-Canadian-dollar combination, all targeted at the $180-190bn capex programme. Alphabet plans to sell yen-denominated bonds for the first time, the company disclosed in a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/03/Alphabet-handed-Sundar-Pichai-a-692M-pay-package.avif",
-      "published": "2026-05-11T15:30:23+00:00",
-      "firstSeen": "2026-05-11T17:00:01.595835+00:00",
-      "lastSeen": "2026-05-12T06:45:53.586323+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4457
-    },
-    {
-      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
-      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. Elon Musk, his financial [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-11T15:27:12+00:00",
-      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.9547
-    },
-    {
-      "title": "OpenAI launches $4bn Deployment Company with TPG, Advent, Bain, and Brookfield",
-      "url": "https://thenextweb.com/news/openai-deployment-company-4bn-tpg-tomoro",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI has set up a new venture called OpenAI Deployment Company, with more than $4bn in initial funding from a syndicate of 19 firms led by TPG and including Advent International, Bain Capital and Brookfield as co-lead founding partners, the company said on Monday. The new entity, which will be majority-owned and controlled by OpenAI, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
-      "published": "2026-05-11T15:15:55+00:00",
-      "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-12T06:45:53.586323+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.241
-    },
-    {
-      "title": "Apple, Intel Reportedly Near Chip Deal That Could Reduce TSMC Reliance",
-      "url": "https://www.techrepublic.com/article/news-apple-intel-chip-manufacturing-deal",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple and Intel reportedly reached an early chip manufacturing agreement that could reduce Apple’s TSMC reliance and boost Intel’s foundry ambitions.\nThe post Apple, Intel Reportedly Near Chip Deal That Could Reduce TSMC Reliance appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-17.png?f=jpeg",
-      "published": "2026-05-11T15:10:05+00:00",
-      "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8392
-    },
-    {
-      "title": "Bill Gates’s backed Fervo Energy raises IPO target to $1.82bn on $7.4bn",
-      "url": "https://thenextweb.com/news/fervo-energy-ipo-target-1-8bn-geothermal",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The geothermal developer increased its share count by 26% and its top-of-range price by about 8% in an SEC filing on Monday. The revision points to the demand for clean baseload power that AI data-centre buyers have been ready to pay for. Fervo Energy raised its IPO target on Monday to as much as $1.82bn, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2015/11/Bill-Gates-Breakthrough-Energy-Coalition.avif",
-      "published": "2026-05-11T15:06:27+00:00",
-      "firstSeen": "2026-05-11T16:00:01.427595+00:00",
-      "lastSeen": "2026-05-11T21:39:14.483001+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.138
+      "score": 1.7313
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2048
+      "score": 2.1751
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3782
+      "score": 3.3566
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2305
+      "score": 0.2302
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-12T08:00:01.937266+00:00",
+      "lastSeen": "2026-05-12T09:00:01.397589+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8974
+      "score": 1.8972
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",

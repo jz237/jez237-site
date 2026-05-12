@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T08:00:01.937266+00:00",
+  "updatedAt": "2026-05-12T09:00:01.397589+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6480,6 +6480,10 @@
     "https://www.marktechpost.com/2026/05/12/a-coding-implementation-to-portfolio-optimization-with-skfolio-for-building-testing-tuning-and-comparing-modern-investment-strategies": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-11-1024x731.png",
       "checkedAt": "2026-05-12T08:00:01.937266+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/12/tilde-research-introduces-aurora-a-leverage-aware-optimizer-that-fixes-a-hidden-neuron-death-problem-in-muon": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-12.png",
+      "checkedAt": "2026-05-12T09:00:01.397589+00:00"
     }
   }
 }
