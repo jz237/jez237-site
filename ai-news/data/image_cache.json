@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T00:08:54.623007+00:00",
+  "updatedAt": "2026-05-12T02:00:01.746623+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6452,6 +6452,18 @@
     "https://huggingface.co/blog/amazon/foundation-model-building-blocks": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/64d6b270c2eedf9af82baa23/YybsyZaGr5f0fLe0qDuLn.png",
       "checkedAt": "2026-05-12T00:08:54.623007+00:00"
+    },
+    "https://techcrunch.com/2026/05/11/riding-an-ai-rally-robinhood-preps-second-retail-venture-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/vlad-tenev-robinhood-GettyImages-2272038864.jpg?w=1024",
+      "checkedAt": "2026-05-12T02:00:01.746623+00:00"
+    },
+    "https://simonwillison.net/2026/May/11/gitlab-act-2": {
+      "image": "",
+      "checkedAt": "2026-05-12T02:00:01.746623+00:00"
+    },
+    "https://techcrunch.com/2026/05/11/gm-just-laid-off-hundreds-of-it-workers-to-hire-those-with-stronger-ai-skills": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/gm-headquarters-getty.jpg?resize=1200,800",
+      "checkedAt": "2026-05-12T02:00:01.746623+00:00"
     }
   }
 }
