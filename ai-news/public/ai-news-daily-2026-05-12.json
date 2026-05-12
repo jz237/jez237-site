@@ -1,9 +1,25 @@
 {
   "date": "2026-05-12",
-  "updatedAt": "2026-05-12T04:03:21.109043+00:00",
+  "updatedAt": "2026-05-12T06:00:02.088490+00:00",
   "items": [
     {
-      "title": "Jesse Ward-Bond, Ali Mashadian, Timothy C. Y. Chan, Edmond W. K. Young",
+      "title": "OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation",
+      "url": "https://www.marktechpost.com/2026/05/11/openai-introduces-daybreak-a-cybersecurity-initiative-that-puts-codex-security-at-the-center-of-vulnerability-detection-and-patch-validation",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "OpenAI on just launched Daybreak, a cybersecurity initiative that combines the company&#8217;s frontier AI models with Codex Security, its coding-focused agentic system, and a broad network of security partners. The program is aimed at developers, enterprise security teams, researchers, and government-linked defenders who need to find, validate, and patch software vulnerabilities earlier in the development [&#8230;]\nThe post OpenAI Introduces Daybreak: A Cybersecurity Initiative That Puts Codex Security at the Center of Vulnerability Detection and Patch Validation appeared first on MarkTechPos",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-10.png",
+      "published": "2026-05-12T05:47:54+00:00",
+      "firstSeen": "2026-05-12T06:00:02.088490+00:00",
+      "lastSeen": "2026-05-12T06:00:02.088490+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 12.2138
+    },
+    {
+      "title": "TTCD:Transformer Integrated Temporal Causal Discovery from Non-Stationary Time Series Data",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +27,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-12T04:03:26.621194+00:00",
+      "published": "2026-05-12T06:00:10.947352+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-12T04:03:21.109043+00:00",
+      "lastSeen": "2026-05-12T06:00:02.088490+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Thinking Machines wants to build an AI that actually listens while it talks",
+      "url": "https://techcrunch.com/2026/05/11/thinking-machines-wants-to-build-an-ai-that-actually-listens-while-it-talks",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Right now, every AI model you've ever used works the same way. You talk, it listens. It responds, you listen. Thinking Machines is trying to change that by building a model that processes your input and generates a response at the same time, so it's more like a phone call than a text chain.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2271655163.jpg?resize=1200%2C879",
+      "published": "2026-05-12T04:52:35+00:00",
+      "firstSeen": "2026-05-12T06:00:02.088490+00:00",
+      "lastSeen": "2026-05-12T06:00:02.088490+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2562
     },
     {
       "title": "Riding an AI rally, Robinhood preps second retail venture IPO",
@@ -29,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vlad-tenev-robinhood-GettyImages-2272038864.jpg?w=1024",
       "published": "2026-05-12T00:09:01+00:00",
       "firstSeen": "2026-05-12T02:00:01.746623+00:00",
-      "lastSeen": "2026-05-12T04:03:21.109043+00:00",
+      "lastSeen": "2026-05-12T06:00:02.088490+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1769
+      "score": 2.125
     }
   ],
   "errors": []
