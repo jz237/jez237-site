@@ -1,7 +1,23 @@
 {
   "date": "2026-05-13",
-  "updatedAt": "2026-05-13T04:09:58.206340+00:00",
+  "updatedAt": "2026-05-13T06:00:01.618521+00:00",
   "items": [
+    {
+      "title": "CSP Allow-list Experiment",
+      "url": "https://simonwillison.net/2026/May/13/csp-allow",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Tool: CSP Allow-list Experiment\n        An experiment that shows that you can load an app in a CSP-protected sandboxed iframe (see previous note) and have a custom fetch() that intercepts CSP errors and passes them up to the parent window... which can then prompt the user to add that domain to an allow-list and then refresh the page.\n\nI built this one with GPT-5.5 xhigh running in the Codex desktop app.\n    \n    \n        Tags: content-security-policy, iframes, security",
+      "image": "https://static.simonwillison.net/static/2026/csp-allow.jpg",
+      "published": "2026-05-13T04:50:45+00:00",
+      "firstSeen": "2026-05-13T06:00:01.618521+00:00",
+      "lastSeen": "2026-05-13T06:00:01.618521+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.3553
+    },
     {
       "title": "Elon Musk Had ‘Hair-Raising’ Idea of Passing OpenAI On to His Kids, Sam Altman Says",
       "url": "https://www.wired.com/story/sam-altman-testifies-musk-v-altman-trial",
@@ -13,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a0354a92a6c5e7b8bd892a8/master/pass/Model-Behavior-Musk-v-Altman-Sam-Testifies-Business-2273245180.jpg",
       "published": "2026-05-13T00:10:05+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T04:09:58.206340+00:00",
+      "lastSeen": "2026-05-13T06:00:01.618521+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1744
+      "score": 5.1255
     },
     {
       "title": "xAI Adds 19 New Gas Turbines Despite Ongoing Lawsuit",
@@ -29,10 +45,10 @@
       "image": "https://media.wired.com/photos/6a03856ecf0cbf2f8d86fffe/master/pass/xAI-Adds-16-New-Gas-Turbines-Science-2217198328.jpg",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T04:09:58.206340+00:00",
+      "lastSeen": "2026-05-13T06:00:01.618521+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1698
+      "score": 5.1211
     },
     {
       "title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
@@ -45,13 +61,13 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200%2C800",
       "published": "2026-05-13T00:26:48+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T04:09:58.206340+00:00",
+      "lastSeen": "2026-05-13T06:00:01.618521+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.882
+      "score": 3.8327
     },
     {
-      "title": "Navid Rezazadeh, Arash Gholami Davoodi",
+      "title": "Vertex-Softmax: Tight Transformer Verification via Exact Softmax Optimization",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -59,12 +75,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-13T04:10:03.978177+00:00",
+      "published": "2026-05-13T06:00:07.988529+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-13T04:09:58.206340+00:00",
+      "lastSeen": "2026-05-13T06:00:01.618521+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.66
     }
   ],
   "errors": []
