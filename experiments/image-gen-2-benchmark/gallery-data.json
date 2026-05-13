@@ -250,5 +250,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-12-evening-magnetar-harp-array",
+    "title": "Magnetar Harp Array",
+    "tests": "Explores hard-sci-fi megastructure scale, plasma filament lighting, electromagnetic field visualization, cold ice materials, tiny maintenance-drone detail, and warm-cool color contrast.",
+    "prompt": "A vast science-fiction observatory on the dark ice plain of a distant moon, built as a magnetar harp array: hundreds of towering silver tuning-fork antenna pylons arranged in concentric circles, each strung with glowing blue-white plasma filaments that arc gently between them like harp strings. On the horizon, a tiny blinding magnetar star floods the black sky with violet radiation halos, while thin aurora ribbons and magnetic field lines bend overhead. Small rover crews and spiderlike maintenance drones crawl along frost-covered cable trenches, with warm amber work lights contrasting against the cold cobalt ice. Fine levitating ice dust sparkles in the electromagnetic glow. Cinematic ultra-detailed hard sci-fi environment, believable engineering, dramatic scale, no text, no logos.",
+    "image": "images/2026-05-12-evening-magnetar-harp-array.png",
+    "date": "2026-05-12",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
