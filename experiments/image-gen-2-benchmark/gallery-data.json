@@ -262,5 +262,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-13-morning-rootbound-sky-citadel",
+    "title": "Rootbound Sky Citadel",
+    "tests": "Explores fantasy megastructure scale, organic-root architecture, cloud depth, waterfalls, tiny figure scale cues, and soft magical rune lighting.",
+    "prompt": "A grand fantasy sky citadel suspended above a sea of dawn clouds, held aloft by the enormous exposed roots of an ancient living world-tree. The castle is built from pale weathered stone, mossy terraces, copper-green roofs, arched bridges, and small hanging gardens glowing with soft blue rune-light. Waterfalls spill from the root-wrapped foundations and vanish into mist far below. Tiny robed gardeners and knights cross narrow bridges for scale, while two distant gryphons circle in warm sunrise haze. Rich cinematic lighting, intricate architectural detail, believable organic roots gripping stone, luminous magical atmosphere, no readable text, no logos.",
+    "image": "images/2026-05-13-morning-rootbound-sky-citadel.png",
+    "date": "2026-05-13",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
