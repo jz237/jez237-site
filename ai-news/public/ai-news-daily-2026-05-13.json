@@ -1,6 +1,6 @@
 {
   "date": "2026-05-13",
-  "updatedAt": "2026-05-13T14:00:01.706807+00:00",
+  "updatedAt": "2026-05-13T13:26:08.073250+00:00",
   "items": [
     {
       "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
       "published": "2026-05-13T08:16:06+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.9581
+      "score": 17.9729
     },
     {
       "title": "Anthropic in talks to raise $30bn at a $900bn valuation",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-13T08:41:51+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.3493
+      "score": 11.3643
     },
     {
       "title": "Alexa is moving into Amazon.com",
@@ -44,11 +44,11 @@
       "summary": "Amazon is bringing Alexa Plus to Amazon.com, integrating its LLM-powered AI assistant directly into the company's shopping experience. Beginning today, when you type a query into Amazon, you'll be talking to Alexa for Shopping, the company's new shopping assistant, powered by Alexa Plus. So, while a search for \"toilet paper\" will still return the expected [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-13-at-7.44.36AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5710757680529%2C100%2C92.857848463894&amp%3Bw=1200",
       "published": "2026-05-13T13:00:00+00:00",
-      "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "firstSeen": "2026-05-13T13:26:08.073250+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1799
+      "score": 9.1968
     },
     {
       "title": "Mythos goes to Tokyo: Japanese banks to get Anthropic’s vulnerability-hunting AI",
@@ -61,26 +61,10 @@
       "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
       "published": "2026-05-13T09:25:30+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0187
-    },
-    {
-      "title": "Anthropic now has more business customers than OpenAI, according to Ramp data",
-      "url": "https://techcrunch.com/2026/05/13/anthropic-now-has-more-business-customers-than-openai-according-to-ramp-data",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "For the first time, Anthropic has more verified business customers than OpenAI, according to this month’s AI Index from the fintech firm Ramp.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/modi-openai-anthropic-2261854815.jpg?resize=1200%2C800",
-      "published": "2026-05-13T14:00:00+00:00",
-      "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.29
+      "score": 9.034
     },
     {
       "title": "Mira Murati’s Thinking Machines Lab Introduces Interaction Models: A Native Multimodal Architecture for Real-Time Human-AI Collaboration",
@@ -93,26 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-2.05.10-AM-1-150x150.png",
       "published": "2026-05-13T09:21:33+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5869
-    },
-    {
-      "title": "Poppy debuts a proactive AI assistant to help organize your digital life",
-      "url": "https://techcrunch.com/2026/05/13/poppy-debuts-a-proactive-ai-assistant-to-help-organize-your-digital-life",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Poppy is an AI-powered app that connects your calendar, email, messages, and other services to surface reminders, suggestions, and tasks based on what’s happening in your life.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/poppy-header.jpeg?resize=1200%2C727",
-      "published": "2026-05-13T13:27:09+00:00",
-      "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1734
+      "score": 6.6022
     },
     {
       "title": "CSP Allow-list Experiment",
@@ -125,10 +93,10 @@
       "image": "https://static.simonwillison.net/static/2026/csp-allow.jpg",
       "published": "2026-05-13T04:50:45+00:00",
       "firstSeen": "2026-05-13T06:00:01.618521+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.143
+      "score": 5.1565
     },
     {
       "title": "Elon Musk Had ‘Hair-Raising’ Idea of Passing OpenAI On to His Kids, Sam Altman Says",
@@ -141,10 +109,10 @@
       "image": "https://media.wired.com/photos/6a0354a92a6c5e7b8bd892a8/master/pass/Model-Behavior-Musk-v-Altman-Sam-Testifies-Business-2273245180.jpg",
       "published": "2026-05-13T00:10:05+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9391
+      "score": 4.9509
     },
     {
       "title": "xAI Adds 19 New Gas Turbines Despite Ongoing Lawsuit",
@@ -157,10 +125,10 @@
       "image": "https://media.wired.com/photos/6a03856ecf0cbf2f8d86fffe/master/pass/xAI-Adds-16-New-Gas-Turbines-Science-2217198328.jpg",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9356
+      "score": 4.9474
     },
     {
       "title": "Corti opens its clinical-AI stack to startups as Europe’s regulatory bill rises",
@@ -173,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/Corti-founders.avif",
       "published": "2026-05-13T10:43:30+00:00",
       "firstSeen": "2026-05-13T12:00:01.131618+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7543
+      "score": 4.7702
     },
     {
       "title": "NVIDIA, Ineffable Intelligence Team Up to Build the Future of Reinforcement Learning Infrastructure",
@@ -188,11 +156,43 @@
       "summary": "Reinforcement-learning agents — AI systems that learn by trial and error — can convert computation into new knowledge. That’s the focus of a new engineering-level collaboration between NVIDIA and Ineffable Intelligence, the London-based AI lab founded by AlphaGo architect David Silver in the wake of Ineffable’s emergence from stealth last week. “The next frontier of [&#8230;]",
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/agentic-logo-lockup-Ineffable-press-1920x1080-1-scaled.png",
       "published": "2026-05-13T13:00:57+00:00",
-      "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T14:00:01.706807+00:00",
+      "firstSeen": "2026-05-13T13:26:08.073250+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9603
+      "score": 3.9772
+    },
+    {
+      "title": "Webidoo raises $25m to build an ‘AI operating layer’ for small businesses",
+      "url": "https://thenextweb.com/news/webidoo-25-million-azimut-smb-ai-funding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Milan- and Chicago-based startup, backed by Azimut Libera Impresa’s IXC3 fund, plans to scale agentic AI for SMBs and pursue acquisitions in the US. Webidoo, an Italian-American AI company building software for small and medium-sized businesses, has closed a $25m funding round led by the IXC3 fund managed by Azimut Libera Impresa SGR. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Webidoo.avif",
+      "published": "2026-05-13T07:24:49+00:00",
+      "firstSeen": "2026-05-13T08:00:01.932734+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.6806
+    },
+    {
+      "title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
+      "url": "https://techcrunch.com/2026/05/12/medicares-new-payment-model-is-built-for-ai-and-most-of-the-tech-world-has-no-idea",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "There is no governmental mechanism to pay for an AI agent that monitors a patient between visits, calls to check in, coordinates a housing referral, or makes sure someone picks up their medication. ACCESS creates that mechanism for the first time.",
+      "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200%2C800",
+      "published": "2026-05-13T00:26:48+00:00",
+      "firstSeen": "2026-05-13T01:00:01.340428+00:00",
+      "lastSeen": "2026-05-13T13:26:08.073250+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.6568
     }
   ],
   "errors": []
