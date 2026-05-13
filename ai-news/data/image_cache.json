@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T07:24:43.024845+00:00",
+  "updatedAt": "2026-05-13T09:00:01.625608+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6648,6 +6648,10 @@
     "https://techcrunch.com/2026/05/12/medicares-new-payment-model-is-built-for-ai-and-most-of-the-tech-world-has-no-idea": {
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200,800",
       "checkedAt": "2026-05-13T01:00:01.340428+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/13/google-deepmind-introduces-an-ai-enabled-mouse-pointer-powered-by-gemini-that-captures-visual-and-semantic-context-around-the-cursor": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
+      "checkedAt": "2026-05-13T09:00:01.625608+00:00"
     }
   }
 }
