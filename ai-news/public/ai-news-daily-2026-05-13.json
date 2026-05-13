@@ -1,6 +1,6 @@
 {
   "date": "2026-05-13",
-  "updatedAt": "2026-05-13T12:00:01.131618+00:00",
+  "updatedAt": "2026-05-13T13:00:01.337349+00:00",
   "items": [
     {
       "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
       "published": "2026-05-13T08:16:06+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.0117
+      "score": 17.9845
     },
     {
       "title": "Anthropic in talks to raise $30bn at a $900bn valuation",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-13T08:41:51+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4036
+      "score": 11.3761
     },
     {
       "title": "Mythos goes to Tokyo: Japanese banks to get Anthropic’s vulnerability-hunting AI",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
       "published": "2026-05-13T09:25:30+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0741
+      "score": 9.046
     },
     {
       "title": "Mira Murati’s Thinking Machines Lab Introduces Interaction Models: A Native Multimodal Architecture for Real-Time Human-AI Collaboration",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-2.05.10-AM-1-150x150.png",
       "published": "2026-05-13T09:21:33+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6422
+      "score": 6.6142
     },
     {
       "title": "CSP Allow-list Experiment",
@@ -77,10 +77,10 @@
       "image": "https://static.simonwillison.net/static/2026/csp-allow.jpg",
       "published": "2026-05-13T04:50:45+00:00",
       "firstSeen": "2026-05-13T06:00:01.618521+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1917
+      "score": 5.167
     },
     {
       "title": "Elon Musk Had ‘Hair-Raising’ Idea of Passing OpenAI On to His Kids, Sam Altman Says",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/6a0354a92a6c5e7b8bd892a8/master/pass/Model-Behavior-Musk-v-Altman-Sam-Testifies-Business-2273245180.jpg",
       "published": "2026-05-13T00:10:05+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9819
+      "score": 4.9602
     },
     {
       "title": "xAI Adds 19 New Gas Turbines Despite Ongoing Lawsuit",
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/6a03856ecf0cbf2f8d86fffe/master/pass/xAI-Adds-16-New-Gas-Turbines-Science-2217198328.jpg",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9782
+      "score": 4.9566
     },
     {
       "title": "Corti opens its clinical-AI stack to startups as Europe’s regulatory bill rises",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Corti-founders.avif",
       "published": "2026-05-13T10:43:30+00:00",
       "firstSeen": "2026-05-13T12:00:01.131618+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8117
+      "score": 4.7826
     },
     {
       "title": "Webidoo raises $25m to build an ‘AI operating layer’ for small businesses",
@@ -144,7 +144,7 @@
       "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7184
+      "score": 3.6919
     },
     {
       "title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
@@ -157,10 +157,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200%2C800",
       "published": "2026-05-13T00:26:48+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.688
+      "score": 3.6662
+    },
+    {
+      "title": "Adaption aims big with AutoScientist, an AI tool that helps models train themselves",
+      "url": "https://techcrunch.com/2026/05/13/adaption-aims-big-with-autoscientist-an-ai-tool-that-helps-models-train-themselves",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Adaption's new AutoScientist tool is designed to let models adapt to specific capabilities quickly through an automated approach to conventional fine-tuning.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/Sara-Hooker_headshot.jpg?resize=900%2C1200",
+      "published": "2026-05-13T12:11:33+00:00",
+      "firstSeen": "2026-05-13T13:00:01.337349+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3656
     },
     {
       "title": "Meta employees protest new mouse-tracking software days before mass layoffs",
@@ -173,26 +189,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-ceo-mark-zuckerberg.avif",
       "published": "2026-05-13T08:53:42+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T13:00:01.337349+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1591
-    },
-    {
-      "title": "TikTok asks Europe’s top court to scrap its gatekeeper status",
-      "url": "https://thenextweb.com/news/tiktok-dma-gatekeeper-appeal-cjeu",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Grand Chamber of the CJEU heard ByteDance’s appeal in Case C-627/24 P on Tuesday, the first DMA gatekeeper challenge to reach the bloc’s highest court. ByteDance’s TikTok went before the Grand Chamber of the Court of Justice of the European Union on Tuesday in a last attempt to escape its designation as a “gatekeeper” [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
-      "published": "2026-05-13T07:40:26+00:00",
-      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1254
+      "score": 3.1314
     }
   ],
   "errors": []
