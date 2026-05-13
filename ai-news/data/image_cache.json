@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T20:52:50.619113+00:00",
+  "updatedAt": "2026-05-13T22:00:02.059451+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6744,6 +6744,14 @@
     "https://techcrunch.com/2026/05/13/anthropics-cat-wu-says-that-in-the-future-ai-will-anticipate-your-needs-before-you-know-what-they-are": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cat-Wu.jpg?resize=1200,800",
       "checkedAt": "2026-05-13T20:00:01.975570+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/notion-just-turned-its-workspace-into-a-hub-for-ai-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Notion-Developer-Platform.jpg?w=686",
+      "checkedAt": "2026-05-13T22:00:02.059451+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/13/enterprise-ai-governance-in-2026-why-the-tools-employees-use-are-ahead-of-the-policies-that-cover-them": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-17.png",
+      "checkedAt": "2026-05-13T22:00:02.059451+00:00"
     }
   }
 }
