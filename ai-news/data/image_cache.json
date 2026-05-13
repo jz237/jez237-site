@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T00:00:01.964339+00:00",
+  "updatedAt": "2026-05-13T01:00:01.340428+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6644,6 +6644,10 @@
     "https://simonwillison.net/2026/May/12/llm": {
       "image": "",
       "checkedAt": "2026-05-13T00:00:01.964339+00:00"
+    },
+    "https://techcrunch.com/2026/05/12/medicares-new-payment-model-is-built-for-ai-and-most-of-the-tech-world-has-no-idea": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200,800",
+      "checkedAt": "2026-05-13T01:00:01.340428+00:00"
     }
   }
 }
