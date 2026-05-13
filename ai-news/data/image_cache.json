@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T23:15:50.645936+00:00",
+  "updatedAt": "2026-05-13T00:00:01.964339+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6632,6 +6632,18 @@
     "https://www.techrepublic.com/article/news-apple-wwdc-2026-ios-27-siri-ai-preview": {
       "image": "",
       "checkedAt": "2026-05-12T23:15:50.645936+00:00"
+    },
+    "https://simonwillison.net/2026/May/12/datasette": {
+      "image": "",
+      "checkedAt": "2026-05-13T00:00:01.964339+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/929129/sam-altman-testimony-elon-musk-openai-trial": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Vrg_illo_Sam_Altman_stock_trial.jpg?quality=90&amp;strip=all&amp;crop=0%2C12.339110464558%2C100%2C75.321779070884&amp;w=1200",
+      "checkedAt": "2026-05-13T00:00:01.964339+00:00"
+    },
+    "https://simonwillison.net/2026/May/12/llm": {
+      "image": "",
+      "checkedAt": "2026-05-13T00:00:01.964339+00:00"
     }
   }
 }
