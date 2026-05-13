@@ -1,6 +1,6 @@
 {
   "date": "2026-05-13",
-  "updatedAt": "2026-05-13T09:00:01.625608+00:00",
+  "updatedAt": "2026-05-13T10:00:01.627309+00:00",
   "items": [
     {
       "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
@@ -13,10 +13,58 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
       "published": "2026-05-13T08:16:06+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.0979
+      "score": 18.0683
+    },
+    {
+      "title": "Anthropic in talks to raise $30bn at a $900bn valuation",
+      "url": "https://thenextweb.com/news/anthropic-in-talks-to-raise-30bn-at-a-900bn-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A round at the proposed terms would push the Claude maker past OpenAI on paper, less than three months after its last record-setting raise. Anthropic is in early talks to raise at least $30bn in a new financing round at a pre-money valuation above $900bn, Bloomberg reported on Tuesday, citing people familiar with the matter. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
+      "published": "2026-05-13T08:41:51+00:00",
+      "firstSeen": "2026-05-13T10:00:01.627309+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.4609
+    },
+    {
+      "title": "Mythos goes to Tokyo: Japanese banks to get Anthropic’s vulnerability-hunting AI",
+      "url": "https://thenextweb.com/news/anthropic-mythos-japan-megabanks-access",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "MUFG, Mizuho, and SMFG would be the first Japanese institutions added to Anthropic’s restricted Project Glasswing rollout, a source familiar with the matter told Reuters Japan’s three megabanks are set to gain access to Claude Mythos, Anthropic’s vulnerability-hunting AI model, within roughly two weeks, a source familiar with the matter told Reuters on Tuesday. It [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
+      "published": "2026-05-13T09:25:30+00:00",
+      "firstSeen": "2026-05-13T10:00:01.627309+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.1326
+    },
+    {
+      "title": "Mira Murati’s Thinking Machines Lab Introduces Interaction Models: A Native Multimodal Architecture for Real-Time Human-AI Collaboration",
+      "url": "https://www.marktechpost.com/2026/05/13/mira-muratis-thinking-machines-lab-introduces-interaction-models-a-native-multimodal-architecture-for-real-time-human-ai-collaboration",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Thinking Machines Lab has introduced a research preview of TML-Interaction-Small, a 276B parameter Mixture-of-Experts model with 12B active parameters, built around a multi-stream, time-aligned micro-turn architecture that processes 200ms chunks of audio, video, and text simultaneously — eliminating the need for external voice-activity detection harnesses. Unlike standard turn-based models that freeze perception during generation, the system runs two components in parallel: a real-time interaction model that maintains continuous full-duplex exchange with the user, and an asynchronous backgroun",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-2.05.10-AM-1-150x150.png",
+      "published": "2026-05-13T09:21:33+00:00",
+      "firstSeen": "2026-05-13T10:00:01.627309+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.7006
     },
     {
       "title": "CSP Allow-list Experiment",
@@ -29,10 +77,10 @@
       "image": "https://static.simonwillison.net/static/2026/csp-allow.jpg",
       "published": "2026-05-13T04:50:45+00:00",
       "firstSeen": "2026-05-13T06:00:01.618521+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2701
+      "score": 5.2433
     },
     {
       "title": "Elon Musk Had ‘Hair-Raising’ Idea of Passing OpenAI On to His Kids, Sam Altman Says",
@@ -45,10 +93,10 @@
       "image": "https://media.wired.com/photos/6a0354a92a6c5e7b8bd892a8/master/pass/Model-Behavior-Musk-v-Altman-Sam-Testifies-Business-2273245180.jpg",
       "published": "2026-05-13T00:10:05+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0507
+      "score": 5.0271
     },
     {
       "title": "xAI Adds 19 New Gas Turbines Despite Ongoing Lawsuit",
@@ -61,10 +109,10 @@
       "image": "https://media.wired.com/photos/6a03856ecf0cbf2f8d86fffe/master/pass/xAI-Adds-16-New-Gas-Turbines-Science-2217198328.jpg",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0467
+      "score": 5.0232
     },
     {
       "title": "Webidoo raises $25m to build an ‘AI operating layer’ for small businesses",
@@ -77,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Webidoo.avif",
       "published": "2026-05-13T07:24:49+00:00",
       "firstSeen": "2026-05-13T08:00:01.932734+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8026
+      "score": 3.7737
     },
     {
       "title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
@@ -93,10 +141,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200%2C800",
       "published": "2026-05-13T00:26:48+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7574
+      "score": 3.7336
+    },
+    {
+      "title": "Meta employees protest new mouse-tracking software days before mass layoffs",
+      "url": "https://thenextweb.com/news/meta-mouse-tracking-protest-layoffs",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Flyers framing the Model Capability Initiative as an ‘Employee Data Extraction Factory’ appeared in US offices on Tuesday, with a petition and a UK unionisation drive in train By Tuesday afternoon, the flyers were everywhere. Meta employees at several US offices walked into meeting rooms, broke for coffee at vending machines, and used the restrooms [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/meta-ceo-mark-zuckerberg.avif",
+      "published": "2026-05-13T08:53:42+00:00",
+      "firstSeen": "2026-05-13T10:00:01.627309+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2167
     },
     {
       "title": "TikTok asks Europe’s top court to scrap its gatekeeper status",
@@ -109,58 +173,26 @@
       "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
       "published": "2026-05-13T07:40:26+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2102
+      "score": 3.1812
     },
     {
-      "title": "Europe’s cloud dependency is a political risk, not just a technical one",
-      "url": "https://thenextweb.com/news/europes-cloud-dependency-political-risk",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Europe’s external dependency exposes more than its AI sovereignty. It also affects its data sovereignty and creates political exposure. In a previous article, we discussed how Europe is heavily dependent on external providers for AI development, particularly through GPUaaS and the semiconductor industry. US companies such as Nvidia and AMD provide the GPU chips powering [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
-      "published": "2026-05-13T08:05:33+00:00",
-      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4226
-    },
-    {
-      "title": "Hangzhan Jin, Tianwei Ni, Lu Li, Pierre-Luc Bacon, Mohammad Hamdaqa, Doina Precup",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
+      "title": "Data centers are coming for rural America",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/928963/data-center-rural-america-jobs-jay-maine",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-13T09:00:09.980973+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "summary": "At its peak, the Androscoggin paper mill in Jay, Maine, a rural town about 67 miles northwest of Portland, employed about 1,500 people - until a pulp digester exploded in 2020, forcing the mill to close permanently. In 2023, the 1.4 million-square-foot facility was purchased through a joint venture by JGT2 Redevelopment and a number [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-13T09:00:00+00:00",
+      "firstSeen": "2026-05-13T10:00:01.627309+00:00",
+      "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "Meta loses Italian publisher pay case at EU’s top court",
-      "url": "https://thenextweb.com/news/meta-italy-cjeu-publishers-compensation-ruling",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Court of Justice has ruled that Italy’s AGCOM can require Meta to pay publishers for news snippets, the first time the bloc’s top court has weighed in directly. Meta lost its bid to overturn an Italian regulatory order requiring it to compensate publishers for the use of their news snippets, after the Court of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
-      "published": "2026-05-13T08:14:32+00:00",
-      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1271
+      "score": 2.6799
     }
   ],
   "errors": []
