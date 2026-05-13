@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-13T16:31:39.789461+00:00",
+  "updatedAt": "2026-05-13T17:00:01.453181+00:00",
   "items": [
     {
-      "title": "Vertex-Softmax: Tight Transformer Verification via Exact Softmax Optimization",
+      "title": "Navid Rezazadeh, Arash Gholami Davoodi",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-13T16:31:47.013249+00:00",
+      "published": "2026-05-13T17:00:08.694360+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.66
+      "score": 2.36
+    },
+    {
+      "title": "Mark Zuckerberg announces &#8216;completely private&#8217; encrypted Meta AI chat",
+      "url": "https://www.theverge.com/tech/929791/meta-ai-incognito-chats",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Meta CEO Mark Zuckerberg says its new Incognito Chat is \"the first major AI product where there is no log of your conversations stored on servers.\" Messages in Incognito Chat aren't saved or stored in users' chat history, similar to incognito modes on other AI chatbots, but Meta says its version is different because it [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/meta-ai-incognito-chats.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
+      "published": "2026-05-13T16:45:43+00:00",
+      "firstSeen": "2026-05-13T17:00:01.453181+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.1527
     },
     {
       "title": "Who trusts Sam Altman?",
@@ -28,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273246979.jpg?resize=1200%2C800",
       "published": "2026-05-13T16:31:04+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2897
+      "score": 2.2754
     },
     {
       "title": "Origin Lab raises $8M to help video game companies sell data to world-model builders",
@@ -44,10 +60,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Origin-Lab-Co-Founders.jpg?resize=1156%2C1200",
       "published": "2026-05-13T16:22:01+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2851
+      "score": 2.2708
     },
     {
       "title": "Quoting Boris Mann",
@@ -60,10 +76,10 @@
       "image": "",
       "published": "2026-05-13T16:15:50+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.382
+      "score": 5.3677
     },
     {
       "title": "GridSFM: A new, small foundation model for the electric grid",
@@ -76,10 +92,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/GridSFM-TWLIFB-1200x627-1.jpg",
       "published": "2026-05-13T16:00:20+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8442
+      "score": 4.83
     },
     {
       "title": "Anthropic courts a new kind of customer: small business owners",
@@ -92,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-1.jpg?w=1024",
       "published": "2026-05-13T16:00:00+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.274
+      "score": 5.2599
     },
     {
       "title": "Meta launches Incognito Chat on WhatsApp, the first AI mode it says even Meta cannot read",
@@ -108,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/Meta-Incognito-Chat-on-WhatsApp.avif",
       "published": "2026-05-13T15:57:00+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1325
+      "score": 8.1184
     },
     {
       "title": "Microsoft doesn’t want any of this",
@@ -124,10 +140,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Vrg_illo_Satya-Nadella_stock_trial.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-13T15:30:37+00:00",
       "firstSeen": "2026-05-13T16:00:01.300804+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3293
+      "score": 2.3154
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -140,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-13T15:28:21+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3282
+      "score": 9.3143
     },
     {
       "title": "Fractile raises $220m to take its in-memory-compute inference chip into production",
@@ -156,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/Fractile-CEO.avif",
       "published": "2026-05-13T15:18:01+00:00",
       "firstSeen": "2026-05-13T16:00:01.300804+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8131
+      "score": 6.7993
     },
     {
       "title": "Amazon puts Alexa inside the search bar as agentic commerce heats up",
@@ -172,10 +188,10 @@
       "image": "https://media.thenextweb.com/2019/04/Amazons-Alexa-powered-products-can-stream-music-and-audiobooks-via-the-companys-services.avif",
       "published": "2026-05-13T15:02:56+00:00",
       "firstSeen": "2026-05-13T16:00:01.300804+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3057
+      "score": 8.292
     },
     {
       "title": "Amazon launches an AI shopping assistant for the search bar, powered by Alexa+",
@@ -184,14 +200,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Alexa for Shopping is a new personalized AI shopping assistant in the Amazon search bar that replaces its Rufus assistant.",
+      "summary": "Alexa for Shopping offers a voice- and touch-enabled shopping experience across mobile, desktop, and Echo Show smart displays. Alexa for Shopping provides more personalized recommendations and automates the shopping experience across Amazon and other online retailers.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Alexa-for-Shopping-Chat-Window.jpg?w=1200",
       "published": "2026-05-13T14:59:32+00:00",
       "firstSeen": "2026-05-13T15:00:01.765533+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5441
+      "score": 13.5303
     },
     {
       "title": "LinkedIn becomes the latest name on a 100,000-job tech layoff list",
@@ -204,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/04/linkedin-browsergate-extension-scanning-privacy-fingerprint.avif",
       "published": "2026-05-13T14:53:21+00:00",
       "firstSeen": "2026-05-13T16:00:01.300804+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8011
+      "score": 2.7873
     },
     {
       "title": "Anthropic now has more business customers than OpenAI, according to Ramp data",
@@ -220,10 +236,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/modi-openai-anthropic-2261854815.jpg?resize=1200%2C800",
       "published": "2026-05-13T14:00:00+00:00",
       "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2154
+      "score": 8.202
     },
     {
       "title": "WhatsApp adds an incognito mode in Meta AI chats",
@@ -236,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Incognito-chat-with-Meta-AI_Image.jpeg?resize=1200%2C673",
       "published": "2026-05-13T14:00:00+00:00",
       "firstSeen": "2026-05-13T15:00:01.765533+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3154
+      "score": 6.302
     },
     {
       "title": "WhatsApp Adds Meta AI Chats That Are Built to Be Fully Private",
@@ -252,10 +268,10 @@
       "image": "https://media.wired.com/photos/6a034d2ce90cf7c0fd36d447/master/pass/GettyImages-2266672994.jpg",
       "published": "2026-05-13T14:00:00+00:00",
       "firstSeen": "2026-05-13T15:00:01.765533+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3154
+      "score": 6.302
     },
     {
       "title": "Introducing the 6 stages at TechCrunch Disrupt 2026 — built for today’s tougher startup market",
@@ -268,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/TC26_Disrupt_Stage_Article_Headers_1920x1080.png?resize=1200%2C675",
       "published": "2026-05-13T14:00:00+00:00",
       "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9154
+      "score": 2.902
     },
     {
       "title": "Poppy debuts a proactive AI assistant to help organize your digital life",
@@ -284,10 +300,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/poppy-header.jpeg?resize=1200%2C727",
       "published": "2026-05-13T13:27:09+00:00",
       "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0999
+      "score": 5.0868
     },
     {
       "title": "NVIDIA, Ineffable Intelligence Team Up to Build the Future of Reinforcement Learning Infrastructure",
@@ -300,10 +316,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/agentic-logo-lockup-Ineffable-press-1920x1080-1-scaled.png",
       "published": "2026-05-13T13:00:57+00:00",
       "firstSeen": "2026-05-13T13:26:08.073250+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8878
+      "score": 3.8747
     },
     {
       "title": "Hermes Unlocks Self-Improving AI Agents, Powered by NVIDIA RTX PCs and DGX Spark",
@@ -316,10 +332,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/rtx-ai-garage-hermes.jpeg",
       "published": "2026-05-13T13:00:10+00:00",
       "firstSeen": "2026-05-13T13:26:08.073250+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.4874
+      "score": 2.4744
     },
     {
       "title": "Alexa is moving into Amazon․com",
@@ -332,10 +348,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-13-at-7.44.36AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5710757680529%2C100%2C92.857848463894&amp%3Bw=1200",
       "published": "2026-05-13T13:00:00+00:00",
       "firstSeen": "2026-05-13T13:26:08.073250+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1073
+      "score": 9.0943
     },
     {
       "title": "Anduril raises $5bn at $61bn valuation, doubling in eleven months",
@@ -348,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/05/Anduril.avif",
       "published": "2026-05-13T12:15:35+00:00",
       "firstSeen": "2026-05-13T13:00:01.337349+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.727
+      "score": 2.7143
     },
     {
       "title": "Adaption aims big with AutoScientist, an AI tool that helps models train themselves",
@@ -364,10 +380,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/Sara-Hooker_headshot.jpg?resize=900%2C1200",
       "published": "2026-05-13T12:11:33+00:00",
       "firstSeen": "2026-05-13T13:00:01.337349+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2652
+      "score": 3.2525
     },
     {
       "title": "UK and Europe Land 33% of New Startups Founded by DeepMind Alumni",
@@ -380,10 +396,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/startup-team-giving-high-five-after-achieving-grow-2026-03-25-09-27-40-utc-1.jpg?f=jpeg",
       "published": "2026-05-13T12:00:02+00:00",
       "firstSeen": "2026-05-13T16:00:01.300804+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.82
+      "score": 6.8074
     },
     {
       "title": "China sharpens criticism of US chip-equipment bill as Trump arrives in Beijing",
@@ -396,10 +412,10 @@
       "image": "https://media.thenextweb.com/2026/04/Us-china.avif",
       "published": "2026-05-13T11:44:08+00:00",
       "firstSeen": "2026-05-13T13:00:01.337349+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0129
+      "score": 2.0003
     },
     {
       "title": "Submit Your Questions: AI Is Changing Your Job—Now What?",
@@ -412,10 +428,10 @@
       "image": "https://media.wired.com/photos/6a034ac22ca789364089d14f/master/pass/livestream-ama-AI-Is-Changing-Your-Job-Now-What.jpg",
       "published": "2026-05-13T11:00:00+00:00",
       "firstSeen": "2026-05-13T12:00:01.131618+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1334
+      "score": 2.1211
     },
     {
       "title": "Corti opens its clinical-AI stack to startups as Europe’s regulatory bill rises",
@@ -428,10 +444,10 @@
       "image": "https://media.thenextweb.com/2026/05/Corti-founders.avif",
       "published": "2026-05-13T10:43:30+00:00",
       "firstSeen": "2026-05-13T12:00:01.131618+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6862
+      "score": 4.674
     },
     {
       "title": "Most startups don’t have a burn problem. They have a decision problem",
@@ -444,10 +460,10 @@
       "image": "https://media.thenextweb.com/2026/05/Startup-problems.avif",
       "published": "2026-05-13T10:14:56+00:00",
       "firstSeen": "2026-05-13T10:40:19.375240+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6739
+      "score": 2.6619
     },
     {
       "title": "Meet the Sad Wives of AI",
@@ -460,10 +476,10 @@
       "image": "https://media.wired.com/photos/69f3fa0d219771de40b4163d/master/pass/Wired_Main_FINAL_WEB.jpg",
       "published": "2026-05-13T10:00:00+00:00",
       "firstSeen": "2026-05-13T10:40:19.375240+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1076
+      "score": 2.0956
     },
     {
       "title": "Mythos goes to Tokyo: Japanese banks to get Anthropic’s vulnerability-hunting AI",
@@ -476,10 +492,10 @@
       "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
       "published": "2026-05-13T09:25:30+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.953
+      "score": 8.9413
     },
     {
       "title": "Mira Murati’s Thinking Machines Lab Introduces Interaction Models: A Native Multimodal Architecture for Real-Time Human-AI Collaboration",
@@ -492,10 +508,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-2.05.10-AM-1-150x150.png",
       "published": "2026-05-13T09:21:33+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5214
+      "score": 6.5096
     },
     {
       "title": "Spain holds the line on social media and AI rules as US tech lobbying intensifies",
@@ -508,10 +524,10 @@
       "image": "https://media.thenextweb.com/2026/05/Oscar-Lopez.avif",
       "published": "2026-05-13T09:05:51+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9449
+      "score": 1.9332
     },
     {
       "title": "Data centers are coming for rural America",
@@ -524,10 +540,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-13T09:00:00+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5024
+      "score": 2.4908
     },
     {
       "title": "Meta employees protest new mouse-tracking software days before mass layoffs",
@@ -543,7 +559,7 @@
       "lastSeen": "2026-05-13T16:00:01.300804+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0398
+      "score": 3.0282
     },
     {
       "title": "Anthropic in talks to raise $30bn at a $900bn valuation",
@@ -559,7 +575,7 @@
       "lastSeen": "2026-05-13T15:00:01.765533+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.285
+      "score": 11.2734
     },
     {
       "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
@@ -572,10 +588,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
       "published": "2026-05-13T08:16:06+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.8945
+      "score": 17.8831
     },
     {
       "title": "Meta loses Italian publisher pay case at EU’s top court",
@@ -591,7 +607,7 @@
       "lastSeen": "2026-05-13T15:00:01.765533+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9239
+      "score": 1.9125
     },
     {
       "title": "Europe’s cloud dependency is a political risk, not just a technical one",
@@ -607,7 +623,7 @@
       "lastSeen": "2026-05-13T15:00:01.765533+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2202
+      "score": 2.2089
     },
     {
       "title": "TikTok asks Europe’s top court to scrap its gatekeeper status",
@@ -623,23 +639,7 @@
       "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0102
-    },
-    {
-      "title": "New quantum algorithm solves “impossible” materials problem in seconds",
-      "url": "https://www.sciencedaily.com/releases/2026/05/260512202355.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "A new quantum-inspired algorithm has cracked a problem so massive that conventional supercomputers struggle to even approach it. Researchers used the method to simulate extraordinarily complex quantum materials known as quasicrystals, opening the door to powerful new quantum devices and ultra-efficient electronics. The work could help scientists design advanced topological qubits and materials for future quantum computers.",
-      "image": "https://www.sciencedaily.com/images/1920/tensor-networks-illustration.webp",
-      "published": "2026-05-13T07:33:27+00:00",
-      "firstSeen": "2026-05-13T15:00:01.765533+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.4774
+      "score": 2.9989
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5595
+      "score": 1.5538
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9093
+      "score": 2.9052
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2242
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T17:00:01.453181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.893
