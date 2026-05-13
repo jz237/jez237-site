@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T19:00:01.993067+00:00",
+  "updatedAt": "2026-05-13T20:00:01.975570+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6736,6 +6736,14 @@
     "https://www.techrepublic.com/article/news-googlebook-gemini-ai-laptops": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/googlebook.jpg?f=jpeg",
       "checkedAt": "2026-05-13T19:00:01.993067+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/musks-xai-is-running-nearly-50-gas-turbines-unchecked-at-its-mississippi-data-center": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800",
+      "checkedAt": "2026-05-13T20:00:01.975570+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/anthropics-cat-wu-says-that-in-the-future-ai-will-anticipate-your-needs-before-you-know-what-they-are": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cat-Wu.jpg?resize=1200,800",
+      "checkedAt": "2026-05-13T20:00:01.975570+00:00"
     }
   }
 }
