@@ -286,5 +286,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-13-afternoon-aurora-marionette-theater",
+    "title": "Aurora Marionette Theater",
+    "tests": "Tests luminous translucent fabric effects, fine suspended thread details, theatrical depth, mixed warm/cool lighting, and surreal scale contrast.",
+    "prompt": "A visually striking surreal scene titled Aurora Marionette Theater: an abandoned Art Deco theater at night, seen from the center aisle looking toward the stage. The velvet curtains have transformed into flowing ribbons of green, violet, and gold aurora light, cascading from the proscenium like luminous fabric. Onstage, delicate marionette figures made from tiny brass bells, polished black wood, and glowing bead-joints hover in midair, suspended by fine visible threads of starlight from an ornate fly tower. The stage floor is a miniature desert canyon carved from dark salt and copper dust, with tiny footlights reflecting in shallow pools like mirrors. Empty burgundy seats recede into shadow, dust motes sparkle in the projector beam, warm gold Art Deco details contrast with cold aurora glow, cinematic depth, crisp fine details, magical realism, no readable text, no logos.",
+    "image": "images/2026-05-13-afternoon-aurora-marionette-theater.png",
+    "date": "2026-05-13",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
