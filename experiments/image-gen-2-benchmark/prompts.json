@@ -274,5 +274,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-13-midday-lava-tube-city-ventilation-map",
+    "title": "Lava Tube City Ventilation Map",
+    "tests": "Explores infographic cutaway clarity, airflow-system visualization, underground habitat scale, basalt material texture, simple readable title discipline, and color-coded technical arrows.",
+    "prompt": "Vertical museum-quality infographic poster titled \"LAVA TUBE CITY VENTILATION MAP\" showing a clean cutaway diagram of an underground city built inside a vast basalt lava tube on Mars. Composition: top strip shows rust-red desert surface with solar mirrors, pressure domes, rover tracks, and small ventilation towers; below is a large cross-section of the dark arched lava tube containing terraced habitats, warm-lit windows, algae bioreactor tanks, hydroponic gardens, water recycling columns, and tiny maintenance figures for scale. Use simple numbered callout circles and clear colored airflow arrows: cool blue intake air descending through shafts, warm amber exhaust rising through heat exchangers, green oxygen flow from algae farms. Include a small legend panel with only simple icons, no dense tiny text. Style: crisp educational science illustration mixed with cinematic detail, precise linework, realistic basalt texture, dust motes, soft rim lighting, high contrast, readable title text only, no logos, no copyrighted imagery.",
+    "image": "images/2026-05-13-midday-lava-tube-city-ventilation-map.png",
+    "date": "2026-05-13",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
