@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T18:00:01.629646+00:00",
+  "updatedAt": "2026-05-13T19:00:01.993067+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6724,6 +6724,18 @@
     "https://www.microsoft.com/en-us/research/blog/mimalloc-a-high-performance-scalable-memory-allocator-for-the-modern-era": {
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/Mimalloc-TWLIFB-1200x627-1.jpg",
       "checkedAt": "2026-05-13T18:00:01.629646+00:00"
+    },
+    "https://openai.com/index/building-codex-windows-sandbox": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4YUb3Fcl0pX59NNvNBcorz/cefb61587010ef97e5316db2d18927d2/SEO_images.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-13T19:00:01.993067+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/13/1137203/ai-chatbots-are-giving-out-peoples-real-phone-numbers": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/260507_callbots.jpg?resize=1200,600",
+      "checkedAt": "2026-05-13T19:00:01.993067+00:00"
+    },
+    "https://www.techrepublic.com/article/news-googlebook-gemini-ai-laptops": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/googlebook.jpg?f=jpeg",
+      "checkedAt": "2026-05-13T19:00:01.993067+00:00"
     }
   }
 }
