@@ -1,6 +1,6 @@
 {
   "date": "2026-05-13",
-  "updatedAt": "2026-05-13T19:04:52.265065+00:00",
+  "updatedAt": "2026-05-13T20:52:50.619113+00:00",
   "items": [
     {
       "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
       "published": "2026-05-13T08:16:06+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.8346
+      "score": 17.7949
     },
     {
       "title": "Amazon launches an AI shopping assistant for the search bar, powered by Alexa+",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Alexa-for-Shopping-Chat-Window.jpg?w=1200",
       "published": "2026-05-13T14:59:32+00:00",
       "firstSeen": "2026-05-13T15:00:01.765533+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.4719
+      "score": 13.424
     },
     {
       "title": "Anthropic in talks to raise $30bn at a $900bn valuation",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-13T15:00:01.765533+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2244
+      "score": 11.1842
     },
     {
       "title": "Google Introduces Googlebook, a Gemini-First Laptop Platform",
@@ -61,10 +61,42 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/googlebook.jpg?f=jpeg",
       "published": "2026-05-13T17:47:16+00:00",
       "firstSeen": "2026-05-13T19:00:01.993067+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9112
+      "score": 9.8594
+    },
+    {
+      "title": "AI tools are everywhere, so why do most people still use them like it’s 2015?",
+      "url": "https://thenextweb.com/news/ai-tools-everywhere-adoption-stuck",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "AI tools are everywhere, so why do most people still use them like it’s 2015? Artificial intelligence now sits inside almost every tool you open, from search engines and office apps to browsers, phones, and creative software. Updates keep adding assistants, copilots, and generators, each one promising to change how work gets done. On paper, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ai-tools-everywhere-adoption-stuck.avif",
+      "published": "2026-05-13T18:29:02+00:00",
+      "firstSeen": "2026-05-13T20:52:50.619113+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.4291
+    },
+    {
+      "title": "Anthropic’s Cat Wu says that, in the future, AI will anticipate your needs before you know what they are",
+      "url": "https://techcrunch.com/2026/05/13/anthropics-cat-wu-says-that-in-the-future-ai-will-anticipate-your-needs-before-you-know-what-they-are",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The head of product for Claude Code and Cowork says that the next big step for AI is proactivity.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cat-Wu.jpg?resize=1200%2C800",
+      "published": "2026-05-13T19:28:06+00:00",
+      "firstSeen": "2026-05-13T20:52:50.619113+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2477
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -77,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-13T15:28:21+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2551
+      "score": 9.2066
     },
     {
       "title": "Alexa is moving into Amazon․com",
@@ -93,10 +125,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-13-at-7.44.36AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.5710757680529%2C100%2C92.857848463894&amp%3Bw=1200",
       "published": "2026-05-13T13:00:00+00:00",
       "firstSeen": "2026-05-13T13:26:08.073250+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.039
+      "score": 8.9937
     },
     {
       "title": "Mythos goes to Tokyo: Japanese banks to get Anthropic’s vulnerability-hunting AI",
@@ -109,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
       "published": "2026-05-13T09:25:30+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8912
+      "score": 8.8502
     },
     {
       "title": "Amazon puts Alexa inside the search bar as agentic commerce heats up",
@@ -125,26 +157,10 @@
       "image": "https://media.thenextweb.com/2019/04/Amazons-Alexa-powered-products-can-stream-music-and-audiobooks-via-the-companys-services.avif",
       "published": "2026-05-13T15:02:56+00:00",
       "firstSeen": "2026-05-13T16:00:01.300804+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2334
-    },
-    {
-      "title": "Meta launches Incognito Chat on WhatsApp, the first AI mode it says even Meta cannot read",
-      "url": "https://thenextweb.com/news/meta-whatsapp-incognito-chat-private-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The new mode runs Meta AI on WhatsApp inside the company’s Private Processing enclave, with conversations deleted by default and no server-side record retained. Meta has launched an Incognito Chat mode for Meta AI on WhatsApp and the Meta AI app, an effort to address the awkward fact that its assistant, like every other major [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Meta-Incognito-Chat-on-WhatsApp.avif",
-      "published": "2026-05-13T15:57:00+00:00",
-      "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.0584
+      "score": 8.1855
     },
     {
       "title": "Introducing Claude for Small Business",
@@ -157,42 +173,26 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object+Store&amp%3BbackgroundColor=clay",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T16:31:39.789461+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0474
+      "score": 8.0159
     },
     {
-      "title": "Overworked AI Agents Turn Marxist, Researchers Find",
-      "url": "https://www.wired.com/story/overworked-ai-agents-turn-marxist-study",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
+      "title": "Meta launches Incognito Chat on WhatsApp, the first AI mode it says even Meta cannot read",
+      "url": "https://thenextweb.com/news/meta-whatsapp-incognito-chat-private-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "In a recent experiment, mistreated AI agents started grumbling about inequality and calling for collective bargaining rights.",
-      "image": "https://media.wired.com/photos/6a0377eed777b9d6a8aa4b70/master/pass/AI-Lab-AI-Overworked-Marxist-Business.jpg",
-      "published": "2026-05-13T18:08:33+00:00",
-      "firstSeen": "2026-05-13T19:00:01.993067+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
+      "summary": "The new mode runs Meta AI on WhatsApp inside the company’s Private Processing enclave, with conversations deleted by default and no server-side record retained. Meta has launched an Incognito Chat mode for Meta AI on WhatsApp and the Meta AI app, an effort to address the awkward fact that its assistant, like every other major [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Meta-Incognito-Chat-on-WhatsApp.avif",
+      "published": "2026-05-13T15:57:00+00:00",
+      "firstSeen": "2026-05-13T16:31:39.789461+00:00",
+      "lastSeen": "2026-05-13T20:52:50.619113+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.3617
-    },
-    {
-      "title": "Anthropic now has more business customers than OpenAI, according to Ramp data",
-      "url": "https://techcrunch.com/2026/05/13/anthropic-now-has-more-business-customers-than-openai-according-to-ramp-data",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A survey compiled from fintech firm Ramp’s clients’ expense data shows 34.4% of participating businesses are paying for Anthropic services, more than any other AI lab, while only 32.3% pay for OpenAI.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/modi-openai-anthropic-2261854815.jpg?resize=1200%2C800",
-      "published": "2026-05-13T14:00:00+00:00",
-      "firstSeen": "2026-05-13T14:00:01.706807+00:00",
-      "lastSeen": "2026-05-13T19:04:52.265065+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.2452
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.0092
     }
   ],
   "errors": []
