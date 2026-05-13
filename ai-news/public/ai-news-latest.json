@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T10:40:19.375240+00:00",
+  "updatedAt": "2026-05-13T12:00:01.131618+00:00",
   "items": [
     {
       "title": "Hangzhan Jin, Tianwei Ni, Lu Li, Pierre-Luc Bacon, Mohammad Hamdaqa, Doina Precup",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-13T10:40:23.388962+00:00",
+      "published": "2026-05-13T12:00:08.925135+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Submit Your Questions: AI Is Changing Your Job—Now What?",
+      "url": "https://www.wired.com/story/livestream-ai-is-changing-your-job-now-what",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Pose your questions ahead of our May 27 livestream AMA, where a panel of WIRED experts will discuss how AI is transforming work.",
+      "image": "https://media.wired.com/photos/6a034ac22ca789364089d14f/master/pass/livestream-ama-AI-Is-Changing-Your-Job-Now-What.jpg",
+      "published": "2026-05-13T11:00:00+00:00",
+      "firstSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
+    },
+    {
+      "title": "Corti opens its clinical-AI stack to startups as Europe’s regulatory bill rises",
+      "url": "https://thenextweb.com/news/corti-startup-acceleration-clinical-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Copenhagen company says its Symphony model has outscored OpenAI on HealthBench Professional, and is offering credits and regulatory help to founders building healthcare AI worldwide. Corti, the Copenhagen-based clinical AI company, has launched a no-equity accelerator for healthcare and life sciences startups, opening its Symphony model stack to founders worldwide at a moment when [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Corti-founders.avif",
+      "published": "2026-05-13T10:43:30+00:00",
+      "firstSeen": "2026-05-13T12:00:01.131618+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8117
     },
     {
       "title": "Most startups don’t have a burn problem. They have a decision problem",
@@ -28,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/05/Startup-problems.avif",
       "published": "2026-05-13T10:14:56+00:00",
       "firstSeen": "2026-05-13T10:40:19.375240+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8371
+      "score": 2.7978
     },
     {
       "title": "Meet the Sad Wives of AI",
@@ -44,10 +76,10 @@
       "image": "https://media.wired.com/photos/69f3fa0d219771de40b4163d/master/pass/Wired_Main_FINAL_WEB.jpg",
       "published": "2026-05-13T10:00:00+00:00",
       "firstSeen": "2026-05-13T10:40:19.375240+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2697
+      "score": 2.2305
     },
     {
       "title": "Mythos goes to Tokyo: Japanese banks to get Anthropic’s vulnerability-hunting AI",
@@ -60,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/04/workday-cto-bailis-anthropic-member-technical-staff.avif",
       "published": "2026-05-13T09:25:30+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1125
+      "score": 9.0741
     },
     {
       "title": "Mira Murati’s Thinking Machines Lab Introduces Interaction Models: A Native Multimodal Architecture for Real-Time Human-AI Collaboration",
@@ -76,10 +108,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-2.05.10-AM-1-150x150.png",
       "published": "2026-05-13T09:21:33+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6806
+      "score": 6.6422
     },
     {
       "title": "Spain holds the line on social media and AI rules as US tech lobbying intensifies",
@@ -92,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/Oscar-Lopez.avif",
       "published": "2026-05-13T09:05:51+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1029
+      "score": 2.0648
     },
     {
       "title": "Data centers are coming for rural America",
@@ -108,10 +140,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-13T09:00:00+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6601
+      "score": 2.622
     },
     {
       "title": "Meta employees protest new mouse-tracking software days before mass layoffs",
@@ -124,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/04/meta-ceo-mark-zuckerberg.avif",
       "published": "2026-05-13T08:53:42+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.197
+      "score": 3.1591
     },
     {
       "title": "Anthropic in talks to raise $30bn at a $900bn valuation",
@@ -140,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-13T08:41:51+00:00",
       "firstSeen": "2026-05-13T10:00:01.627309+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4413
+      "score": 11.4036
     },
     {
       "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
@@ -156,10 +188,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
       "published": "2026-05-13T08:16:06+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 18.049
+      "score": 18.0117
     },
     {
       "title": "Meta loses Italian publisher pay case at EU’s top court",
@@ -172,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-05-13T08:14:32+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0782
+      "score": 2.041
     },
     {
       "title": "Europe’s cloud dependency is a political risk, not just a technical one",
@@ -188,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
       "published": "2026-05-13T08:05:33+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3739
+      "score": 2.3368
     },
     {
       "title": "TikTok asks Europe’s top court to scrap its gatekeeper status",
@@ -204,10 +236,10 @@
       "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
       "published": "2026-05-13T07:40:26+00:00",
       "firstSeen": "2026-05-13T09:00:01.625608+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1621
+      "score": 3.1254
     },
     {
       "title": "Webidoo raises $25m to build an ‘AI operating layer’ for small businesses",
@@ -220,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/Webidoo.avif",
       "published": "2026-05-13T07:24:49+00:00",
       "firstSeen": "2026-05-13T08:00:01.932734+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7548
+      "score": 3.7184
     },
     {
       "title": "CSP Allow-list Experiment",
@@ -236,10 +268,10 @@
       "image": "https://static.simonwillison.net/static/2026/csp-allow.jpg",
       "published": "2026-05-13T04:50:45+00:00",
       "firstSeen": "2026-05-13T06:00:01.618521+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2256
+      "score": 5.1917
     },
     {
       "title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
@@ -252,10 +284,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200%2C800",
       "published": "2026-05-13T00:26:48+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.718
+      "score": 3.688
     },
     {
       "title": "Elon Musk Had ‘Hair-Raising’ Idea of Passing OpenAI On to His Kids, Sam Altman Says",
@@ -268,10 +300,10 @@
       "image": "https://media.wired.com/photos/6a0354a92a6c5e7b8bd892a8/master/pass/Model-Behavior-Musk-v-Altman-Sam-Testifies-Business-2273245180.jpg",
       "published": "2026-05-13T00:10:05+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0116
+      "score": 4.9819
     },
     {
       "title": "xAI Adds 19 New Gas Turbines Despite Ongoing Lawsuit",
@@ -284,10 +316,10 @@
       "image": "https://media.wired.com/photos/6a03856ecf0cbf2f8d86fffe/master/pass/xAI-Adds-16-New-Gas-Turbines-Science-2217198328.jpg",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0078
+      "score": 4.9782
     },
     {
       "title": "datasette 1.0a29",
@@ -300,10 +332,10 @@
       "image": "",
       "published": "2026-05-12T23:41:06+00:00",
       "firstSeen": "2026-05-13T00:00:01.964339+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7007
+      "score": 2.6713
     },
     {
       "title": "Sam Altman was winning on the stand, but it might not be enough",
@@ -316,10 +348,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Vrg_illo_Sam_Altman_stock_trial.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.339110464558%2C100%2C75.321779070884&amp%3Bw=1200",
       "published": "2026-05-12T23:23:14+00:00",
       "firstSeen": "2026-05-13T00:00:01.964339+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.064
+      "score": 2.0349
     },
     {
       "title": "Quoting Mo Bitar",
@@ -332,10 +364,10 @@
       "image": "",
       "published": "2026-05-12T22:59:58+00:00",
       "firstSeen": "2026-05-12T23:15:50.645936+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6854
+      "score": 2.6566
     },
     {
       "title": "The Unitree GD01 Is a Giant Mecha Robot You Can Actually Buy",
@@ -348,10 +380,10 @@
       "image": "https://media.wired.com/photos/6a03a0e42162ad5152e57fa7/master/pass/Unitree-Mecha-Robot-Business-3.jpg",
       "published": "2026-05-12T22:51:45+00:00",
       "firstSeen": "2026-05-12T23:00:01.674493+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9824
+      "score": 1.9537
     },
     {
       "title": "Quoting Mitchell Hashimoto",
@@ -364,10 +396,10 @@
       "image": "",
       "published": "2026-05-12T22:21:51+00:00",
       "firstSeen": "2026-05-12T23:00:01.674493+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4715
+      "score": 4.4432
     },
     {
       "title": "OpenAI just acquired the consulting firm it was born alongside. The model company is now the services company.",
@@ -383,7 +415,7 @@
       "lastSeen": "2026-05-13T10:40:19.375240+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5306
+      "score": 6.5024
     },
     {
       "title": "A Berlin side project just became the orchestration layer of SAP’s AI platform. n8n is now worth $5.2 billion.",
@@ -399,7 +431,7 @@
       "lastSeen": "2026-05-13T10:00:01.627309+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5252
+      "score": 3.4971
     },
     {
       "title": "Build a Hybrid-Memory Autonomous Agent with Modular Architecture and Tool Dispatch Using OpenAI",
@@ -412,10 +444,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-14-1024x731.png",
       "published": "2026-05-12T21:55:57+00:00",
       "firstSeen": "2026-05-12T22:00:01.316327+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5922
+      "score": 6.5642
     },
     {
       "title": "JPMorgan just filed for its second tokenized fund on Ethereum. Wall Street’s blockchain moment is no longer theoretical.",
@@ -431,7 +463,7 @@
       "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1704
+      "score": 2.1425
     },
     {
       "title": "Google killed the Chromebook. Its replacement turns your cursor into an AI agent.",
@@ -447,7 +479,7 @@
       "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.918
+      "score": 9.8902
     },
     {
       "title": "SAP’s CEO asked if it will still be a software company. Its stock price already answered.",
@@ -463,7 +495,7 @@
       "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0149
+      "score": 3.9872
     },
     {
       "title": "BMS just signed a $15.2 billion drug deal with China’s biggest pharma company. The patent cliff left it no choice.",
@@ -479,7 +511,7 @@
       "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5102
+      "score": 2.4827
     },
     {
       "title": "Meet AntAngelMed: A 103B-Parameter Open-Source Medical Language Model Built on a 1/32 Activation-Ratio MoE Architecture",
@@ -492,10 +524,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-12-at-2.21.07-PM-1-150x150.png",
       "published": "2026-05-12T21:21:47+00:00",
       "firstSeen": "2026-05-12T21:37:26.129790+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.18
+      "score": 5.1525
     },
     {
       "title": "Beijing put Huawei’s secret chip lab on national TV two days before Trump arrives. The message wasn’t for Chinese viewers.",
@@ -511,7 +543,7 @@
       "lastSeen": "2026-05-13T07:24:43.024845+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 5.7007
+      "score": 5.6735
     },
     {
       "title": "Meta won’t let you block its AI account on Threads",
@@ -524,10 +556,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24774110/STK156_Instagram_threads_1.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-12T20:35:23+00:00",
       "firstSeen": "2026-05-12T21:00:02.045669+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0039
+      "score": 3.9769
     },
     {
       "title": "The man who took Tesla public just joined JB Straubel’s battery startup. It’s no longer just a battery startup.",
@@ -543,7 +575,7 @@
       "lastSeen": "2026-05-13T07:24:43.024845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7913
+      "score": 1.7645
     },
     {
       "title": "WWDC 2026 Preview: Apple Readies Siri Overhaul, AI Updates, and More",
@@ -556,10 +588,10 @@
       "image": "",
       "published": "2026-05-12T19:10:38+00:00",
       "firstSeen": "2026-05-12T23:15:50.645936+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8653
+      "score": 2.8394
     },
     {
       "title": "Nadella feared Microsoft would become ‘the next IBM.’ The trial reveals how much he paid to make sure it didn’t.",
@@ -575,7 +607,7 @@
       "lastSeen": "2026-05-13T07:24:43.024845+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7648
+      "score": 3.7389
     },
     {
       "title": "Google found the first AI-generated zero-day exploit. It stopped the attack before it started.",
@@ -591,7 +623,7 @@
       "lastSeen": "2026-05-13T07:24:43.024845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7604
+      "score": 1.7347
     },
     {
       "title": "GM is firing 600 IT workers and hiring AI engineers. It calls it transformation, not termination.",
@@ -607,39 +639,7 @@
       "lastSeen": "2026-05-12T22:00:01.316327+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7546
-    },
-    {
-      "title": "6 Best ChatGPT Photo Editing Trends in 2026 (With Prompts to Try)",
-      "url": "https://www.techrepublic.com/article/news-chatgpt-photo-editing-trends-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Explore the biggest ChatGPT photo editing trends of 2026, from caricatures and toy-style portraits to nostalgic film edits and AI collages.\nThe post 6 Best ChatGPT Photo Editing Trends in 2026 (With Prompts to Try) appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/chatgpt-photo-editing.jpg?f=jpeg",
-      "published": "2026-05-12T18:30:35+00:00",
-      "firstSeen": "2026-05-12T20:00:01.672117+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.8521
-    },
-    {
-      "title": "Expanding pathways to opportunity through apprenticeship degrees in a changing workforce landscape",
-      "url": "https://thenextweb.com/news/expanding-pathways-to-opportunity-through-apprenticeship-degrees-in-a-changing-workforce-landscape",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Picture a woman in her mid-30s assessing her options, balancing household expenses with a long‑held ambition to enter a more purpose‑driven profession. A transition into teaching or nursing holds deep meaning, yet most degree pathways require time away from a steady income and a financial commitment that demands careful planning. The desire to move forward [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/apprenticeship-degrees-workforce-opportunity.avif",
-      "published": "2026-05-12T18:17:54+00:00",
-      "firstSeen": "2026-05-12T19:00:01.596708+00:00",
-      "lastSeen": "2026-05-12T22:00:01.316327+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.848
+      "score": 1.7291
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6371
+      "score": 1.6184
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9657
+      "score": 2.9521
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.225
+      "score": 0.2248
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-13T10:40:19.375240+00:00",
+      "lastSeen": "2026-05-13T12:00:01.131618+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8935
+      "score": 1.8934
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
