@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T13:00:01.337349+00:00",
+  "updatedAt": "2026-05-13T13:26:08.073250+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6664,6 +6664,10 @@
     "https://techcrunch.com/2026/05/13/adaption-aims-big-with-autoscientist-an-ai-tool-that-helps-models-train-themselves": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/Sara-Hooker_headshot.jpg?resize=900,1200",
       "checkedAt": "2026-05-13T13:00:01.337349+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/929457/amazon-announces-alexa-for-shopping-ai-assistant-rufus": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-13-at-7.44.36AM.png?quality=90&amp;strip=all&amp;crop=0%2C3.5710757680529%2C100%2C92.857848463894&amp;w=1200",
+      "checkedAt": "2026-05-13T13:26:08.073250+00:00"
     }
   }
 }
