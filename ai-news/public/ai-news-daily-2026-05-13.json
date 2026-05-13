@@ -1,7 +1,23 @@
 {
   "date": "2026-05-13",
-  "updatedAt": "2026-05-13T07:24:43.024845+00:00",
+  "updatedAt": "2026-05-13T09:00:01.625608+00:00",
   "items": [
+    {
+      "title": "Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor",
+      "url": "https://www.marktechpost.com/2026/05/13/google-deepmind-introduces-an-ai-enabled-mouse-pointer-powered-by-gemini-that-captures-visual-and-semantic-context-around-the-cursor",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Google DeepMind researchers have outlined four interaction principles and released experimental demos of an AI-enabled mouse pointer powered by Gemini — one that captures the visual and semantic context around the cursor so users can point, speak in natural shorthand, and get things done without switching to a separate AI window.\nThe post Google DeepMind Introduces an AI-Enabled Mouse Pointer Powered by Gemini That Captures Visual and Semantic Context Around the Cursor appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-15.png",
+      "published": "2026-05-13T08:16:06+00:00",
+      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 18.0979
+    },
     {
       "title": "CSP Allow-list Experiment",
       "url": "https://simonwillison.net/2026/May/13/csp-allow",
@@ -13,10 +29,10 @@
       "image": "https://static.simonwillison.net/static/2026/csp-allow.jpg",
       "published": "2026-05-13T04:50:45+00:00",
       "firstSeen": "2026-05-13T06:00:01.618521+00:00",
-      "lastSeen": "2026-05-13T07:24:43.024845+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3143
+      "score": 5.2701
     },
     {
       "title": "Elon Musk Had ‘Hair-Raising’ Idea of Passing OpenAI On to His Kids, Sam Altman Says",
@@ -29,10 +45,10 @@
       "image": "https://media.wired.com/photos/6a0354a92a6c5e7b8bd892a8/master/pass/Model-Behavior-Musk-v-Altman-Sam-Testifies-Business-2273245180.jpg",
       "published": "2026-05-13T00:10:05+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T07:24:43.024845+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0895
+      "score": 5.0507
     },
     {
       "title": "xAI Adds 19 New Gas Turbines Despite Ongoing Lawsuit",
@@ -45,10 +61,26 @@
       "image": "https://media.wired.com/photos/6a03856ecf0cbf2f8d86fffe/master/pass/xAI-Adds-16-New-Gas-Turbines-Science-2217198328.jpg",
       "published": "2026-05-13T00:00:00+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T07:24:43.024845+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0853
+      "score": 5.0467
+    },
+    {
+      "title": "Webidoo raises $25m to build an ‘AI operating layer’ for small businesses",
+      "url": "https://thenextweb.com/news/webidoo-25-million-azimut-smb-ai-funding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Milan- and Chicago-based startup, backed by Azimut Libera Impresa’s IXC3 fund, plans to scale agentic AI for SMBs and pursue acquisitions in the US. Webidoo, an Italian-American AI company building software for small and medium-sized businesses, has closed a $25m funding round led by the IXC3 fund managed by Azimut Libera Impresa SGR. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Webidoo.avif",
+      "published": "2026-05-13T07:24:49+00:00",
+      "firstSeen": "2026-05-13T08:00:01.932734+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8026
     },
     {
       "title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
@@ -61,13 +93,45 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/06/GettyImages-877394926.jpg?resize=1200%2C800",
       "published": "2026-05-13T00:26:48+00:00",
       "firstSeen": "2026-05-13T01:00:01.340428+00:00",
-      "lastSeen": "2026-05-13T07:24:43.024845+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7965
+      "score": 3.7574
     },
     {
-      "title": "Rotation-Preserving Supervised Fine-Tuning",
+      "title": "TikTok asks Europe’s top court to scrap its gatekeeper status",
+      "url": "https://thenextweb.com/news/tiktok-dma-gatekeeper-appeal-cjeu",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Grand Chamber of the CJEU heard ByteDance’s appeal in Case C-627/24 P on Tuesday, the first DMA gatekeeper challenge to reach the bloc’s highest court. ByteDance’s TikTok went before the Grand Chamber of the Court of Justice of the European Union on Tuesday in a last attempt to escape its designation as a “gatekeeper” [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
+      "published": "2026-05-13T07:40:26+00:00",
+      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2102
+    },
+    {
+      "title": "Europe’s cloud dependency is a political risk, not just a technical one",
+      "url": "https://thenextweb.com/news/europes-cloud-dependency-political-risk",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Europe’s external dependency exposes more than its AI sovereignty. It also affects its data sovereignty and creates political exposure. In a previous article, we discussed how Europe is heavily dependent on external providers for AI development, particularly through GPUaaS and the semiconductor industry. US companies such as Nvidia and AMD provide the GPU chips powering [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
+      "published": "2026-05-13T08:05:33+00:00",
+      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4226
+    },
+    {
+      "title": "Hangzhan Jin, Tianwei Ni, Lu Li, Pierre-Luc Bacon, Mohammad Hamdaqa, Doina Precup",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -75,12 +139,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-13T07:24:48.045870+00:00",
+      "published": "2026-05-13T09:00:09.980973+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-13T07:24:43.024845+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Meta loses Italian publisher pay case at EU’s top court",
+      "url": "https://thenextweb.com/news/meta-italy-cjeu-publishers-compensation-ruling",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Court of Justice has ruled that Italy’s AGCOM can require Meta to pay publishers for news snippets, the first time the bloc’s top court has weighed in directly. Meta lost its bid to overturn an Italian regulatory order requiring it to compensate publishers for the use of their news snippets, after the Court of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-05-13T08:14:32+00:00",
+      "firstSeen": "2026-05-13T09:00:01.625608+00:00",
+      "lastSeen": "2026-05-13T09:00:01.625608+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1271
     }
   ],
   "errors": []
