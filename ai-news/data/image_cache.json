@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T13:26:08.073250+00:00",
+  "updatedAt": "2026-05-13T15:00:01.765533+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6668,6 +6668,22 @@
     "https://www.theverge.com/ai-artificial-intelligence/929457/amazon-announces-alexa-for-shopping-ai-assistant-rufus": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-13-at-7.44.36AM.png?quality=90&amp;strip=all&amp;crop=0%2C3.5710757680529%2C100%2C92.857848463894&amp;w=1200",
       "checkedAt": "2026-05-13T13:26:08.073250+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/amazon-launches-an-ai-shopping-assistant-for-the-search-bar-powered-by-alexa": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Alexa-for-Shopping-Chat-Window.jpg?w=1200",
+      "checkedAt": "2026-05-13T15:00:01.765533+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/whatsapp-adds-an-incognito-mode-in-meta-ai-chats": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Incognito-chat-with-Meta-AI_Image.jpeg?resize=1200,673",
+      "checkedAt": "2026-05-13T15:00:01.765533+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/05/260512202355.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/tensor-networks-illustration.webp",
+      "checkedAt": "2026-05-13T15:00:01.765533+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/05/260512202333.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/brain-missing-puzzle-pieces-degenerative-diseases.webp",
+      "checkedAt": "2026-05-13T15:00:01.765533+00:00"
     }
   }
 }
