@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T16:00:01.300804+00:00",
+  "updatedAt": "2026-05-13T16:31:39.789461+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6692,6 +6692,30 @@
     "https://www.techrepublic.com/article/deepmind-alumni-startups-uk-europe-data": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/startup-team-giving-high-five-after-achieving-grow-2026-03-25-09-27-40-utc-1.jpg?f=jpeg",
       "checkedAt": "2026-05-13T16:00:01.300804+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/who-trusts-sam-altman": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273246979.jpg?resize=1200,800",
+      "checkedAt": "2026-05-13T16:31:39.789461+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/origin-lab-raises-8m-to-help-video-game-companies-sell-data-to-world-model-builders": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Origin-Lab-Co-Founders.jpg?resize=1156,1200",
+      "checkedAt": "2026-05-13T16:31:39.789461+00:00"
+    },
+    "https://simonwillison.net/2026/May/13/boris-mann": {
+      "image": "",
+      "checkedAt": "2026-05-13T16:31:39.789461+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/gridsfm-a-new-small-foundation-model-for-the-electric-grid": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/GridSFM-TWLIFB-1200x627-1.jpg",
+      "checkedAt": "2026-05-13T16:31:39.789461+00:00"
+    },
+    "https://techcrunch.com/2026/05/13/anthropic-courts-a-new-kind-of-customer-small-business-owners": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-1.jpg?w=1024",
+      "checkedAt": "2026-05-13T16:31:39.789461+00:00"
+    },
+    "https://www.anthropic.com/news/claude-for-small-business": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Store&amp;backgroundColor=clay",
+      "checkedAt": "2026-05-13T16:31:39.789461+00:00"
     }
   }
 }
