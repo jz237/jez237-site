@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T15:00:01.231752+00:00",
+  "updatedAt": "2026-05-14T15:29:19.402828+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6824,6 +6824,18 @@
     "https://huggingface.co/blog/continuous_async": {
       "image": "https://huggingface.co/blog/assets/continuous_async/thumbnail.png",
       "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/930477/ai-data-centers-gallup-survey-70-percent-opposition": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-14T15:29:19.402828+00:00"
+    },
+    "https://techcrunch.com/2026/05/14/khosla-ventures-is-betting-10m-on-ian-crosby-whose-last-startup-bench-imploded": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Synthetic-Ian-Crosby.jpg?resize=1200,800",
+      "checkedAt": "2026-05-14T15:29:19.402828+00:00"
+    },
+    "https://www.anthropic.com/news/gates-foundation-partnership": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=coral",
+      "checkedAt": "2026-05-14T15:29:19.402828+00:00"
     }
   }
 }
