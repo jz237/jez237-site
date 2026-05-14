@@ -1,6 +1,6 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T21:20:23.839863+00:00",
+  "updatedAt": "2026-05-14T23:00:01.594524+00:00",
   "items": [
     {
       "title": "OpenAI’s Codex is now in the ChatGPT mobile app",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/App-view.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-05-14T20:00:00+00:00",
       "firstSeen": "2026-05-14T21:00:01.177689+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4198
+      "score": 16.372
     },
     {
       "title": "Microsoft starts canceling Claude Code licenses",
@@ -29,10 +29,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832912/STK095_MICROSOFT_2_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T19:00:00+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.6908
+      "score": 11.6443
+    },
+    {
+      "title": "OpenAI is reportedly preparing legal action against Apple; it wouldn’t be the first partner to feel burned",
+      "url": "https://techcrunch.com/2026/05/14/openai-is-reportedly-preparing-legal-action-against-apple-it-wouldnt-be-the-first-partner-to-feel-burned",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "OpenAI is so frustrated with Apple over a ChatGPT integration that failed to deliver the subscribers and prominence it expected that the company is now actively exploring legal action against the iPhone maker.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/10/Screenshot-2025-10-06-at-1.13.28PM.png?resize=1200%2C670",
+      "published": "2026-05-14T19:12:03+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.2798
     },
     {
       "title": "Clawdmeter turns your Claude Code usage stats into a tiny desktop dashboard",
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/clawdmeter-edit.png?resize=1200%2C827",
       "published": "2026-05-14T19:05:01+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3232
+      "score": 10.2766
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -61,10 +77,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:46:04+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2023
+      "score": 9.1598
+    },
+    {
+      "title": "Cline Releases Cline SDK: An Open-Source Agent Runtime Now Powering Its CLI and Kanban, With IDE Extensions Being Migrated",
+      "url": "https://www.marktechpost.com/2026/05/14/cline-releases-cline-sdk-an-open-source-agent-runtime-now-powering-its-cli-and-kanban-with-ide-extensions-being-migrated",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Cline has extracted its internal agent harness into an open-source TypeScript SDK called @cline/sdk, the same runtime now powering its CLI and Kanban, with VS Code and JetBrains extensions being migrated. The SDK is structured as a four-layer stack — @cline/shared, @cline/llms, @cline/agents, and @cline/core — with native support for plugins, subagents, CRON scheduling, checkpointing, and MCP connectors. On Terminal Benchmark 2.0, Cline CLI scored 74.2% on claude-opus-4.7, compared to Anthropic's published 69.4% for Claude Code on the same model. Install via npm install @cline/sdk. Requires No",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-14-at-3.55.23-PM-1-150x150.png",
+      "published": "2026-05-14T22:57:17+00:00",
+      "firstSeen": "2026-05-14T23:00:01.594524+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.8686
+    },
+    {
+      "title": "Figma’s numbers say AI is a tailwind. Its stock price says the market isn’t sure.",
+      "url": "https://thenextweb.com/news/figma-q1-earnings-ai-monetization-stock-rebound",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "For ten months, Figma has been a case study in how quickly Wall Street can fall out of love. The company went public on 31 July 2025 at $33 a share, soared past $140 on its debut, and has spent most of 2026 in freefall,  battered by Google’s free Stitch design tool, Anthropic’s Claude [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/figma-q1-earnings-ai-monetization-stock-rebound.avif",
+      "published": "2026-05-14T21:04:21+00:00",
+      "firstSeen": "2026-05-14T22:00:01.759512+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.7926
     },
     {
       "title": "Work with Codex from anywhere",
@@ -77,10 +125,10 @@
       "image": "",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T21:00:01.177689+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7725
+      "score": 8.7332
     },
     {
       "title": "OpenAI is preparing to sue Apple over a partnership that was supposed to be the next Google search deal",
@@ -93,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/openai-apple-partnership-legal-fight-siri-chatgpt.avif",
       "published": "2026-05-14T19:57:49+00:00",
       "firstSeen": "2026-05-14T21:00:01.177689+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.6087
+      "score": 8.561
     },
     {
       "title": "Helping ChatGPT better recognize context in sensitive conversations",
@@ -109,10 +157,26 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1dJ8mhpIbtQbsP5wzMfoRe/a1bd2866bd1b5afb6b3e9d4bda5a42c2/SEO_Safety.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-14T00:00:00+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0081
+      "score": 7.9807
+    },
+    {
+      "title": "Correct Answers from Sound Reasoning: Verifiable Process Supervision for Language Models",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-14T23:00:10.040920+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.46
     },
     {
       "title": "Top New Features in Android 17 You’ll Notice This Year",
@@ -125,74 +189,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/android-17.jpg?f=jpeg",
       "published": "2026-05-14T16:16:49+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
+      "lastSeen": "2026-05-14T23:00:01.594524+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1058
-    },
-    {
-      "title": "Microsoft is quietly shopping for an OpenAI replacement",
-      "url": "https://thenextweb.com/news/microsoft-startup-deals-life-after-openai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The company that put $13bn into OpenAI now wants the option not to need it. Cursor was the first try and fell apart over GitHub Copilot; talks with Stanford diffusion-LLM startup Inception are alive, and the broader strategy belongs to Mustafa Suleyman. Reuters reported on Wednesday, citing five people familiar with the matter, that the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
-      "published": "2026-05-14T08:06:41+00:00",
-      "firstSeen": "2026-05-14T09:00:01.945725+00:00",
-      "lastSeen": "2026-05-14T12:00:01.901006+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.8117
-    },
-    {
-      "title": "OpenAI says no user data was touched in the TanStack npm worm",
-      "url": "https://thenextweb.com/news/openai-tanstack-npm-supply-chain-mini-shai-hulud",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two corporate laptops, some credential material, and a forced macOS app update. The interesting part is how the malicious packages got published in the first place: not by a stolen npm password, but by TanStack’s own legitimate release pipeline, after the attacker code took over the runner mid-build. OpenAI said on Wednesday that it found [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
-      "published": "2026-05-14T08:20:12+00:00",
-      "firstSeen": "2026-05-14T09:00:01.945725+00:00",
-      "lastSeen": "2026-05-14T12:00:01.901006+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.6165
-    },
-    {
-      "title": "OpenAI is reportedly preparing legal action against Apple; it wouldn’t be the first partner to feel burned",
-      "url": "https://techcrunch.com/2026/05/14/openai-is-reportedly-preparing-legal-action-against-apple-it-wouldnt-be-the-first-partner-to-feel-burned",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "According to Bloomberg, OpenAI has enlisted an outside law firm to work through its options.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/10/Screenshot-2025-10-06-at-1.13.28PM.png?resize=1200%2C670",
-      "published": "2026-05-14T19:12:03+00:00",
-      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.3265
-    },
-    {
-      "title": "BCG is training its AI sales agent on what not to do – and that might be the smarter bet",
-      "url": "https://thenextweb.com/news/bcg-jamie-ai-agent-sales-best-worst-sellers",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Boston Consulting Group is doing something slightly unusual with its new AI sales agent. It is teaching it how to fail. The agent, called Jamie, is being trained not only on the call transcripts, engagement patterns, and conversational habits of BCG’s strongest-performing sellers, but also on the behaviours that did not work, the approaches [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/bcg-jamie-ai-agent-sales-best-worst-sellers.avif",
-      "published": "2026-05-14T17:11:37+00:00",
-      "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.1303
+      "score": 7.0627
     }
   ],
   "errors": []
