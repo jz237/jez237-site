@@ -1,6 +1,6 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T21:00:01.177689+00:00",
+  "updatedAt": "2026-05-14T21:20:23.839863+00:00",
   "items": [
     {
       "title": "OpenAI’s Codex is now in the ChatGPT mobile app",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/App-view.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-05-14T20:00:00+00:00",
       "firstSeen": "2026-05-14T21:00:01.177689+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 16.4299
+      "score": 16.4198
     },
     {
       "title": "Microsoft starts canceling Claude Code licenses",
@@ -29,10 +29,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832912/STK095_MICROSOFT_2_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T19:00:00+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7005
+      "score": 11.6908
     },
     {
       "title": "Clawdmeter turns your Claude Code usage stats into a tiny desktop dashboard",
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/clawdmeter-edit.png?resize=1200%2C827",
       "published": "2026-05-14T19:05:01+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.333
+      "score": 10.3232
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -61,10 +61,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:46:04+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2112
+      "score": 9.2023
     },
     {
       "title": "Work with Codex from anywhere",
@@ -77,10 +77,10 @@
       "image": "",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T21:00:01.177689+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7808
+      "score": 8.7725
     },
     {
       "title": "OpenAI is preparing to sue Apple over a partnership that was supposed to be the next Google search deal",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/openai-apple-partnership-legal-fight-siri-chatgpt.avif",
       "published": "2026-05-14T19:57:49+00:00",
       "firstSeen": "2026-05-14T21:00:01.177689+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.6188
+      "score": 8.6087
     },
     {
       "title": "Helping ChatGPT better recognize context in sensitive conversations",
@@ -109,10 +109,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1dJ8mhpIbtQbsP5wzMfoRe/a1bd2866bd1b5afb6b3e9d4bda5a42c2/SEO_Safety.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-14T00:00:00+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0138
+      "score": 8.0081
     },
     {
       "title": "Top New Features in Android 17 You’ll Notice This Year",
@@ -125,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/android-17.jpg?f=jpeg",
       "published": "2026-05-14T16:16:49+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1148
+      "score": 7.1058
     },
     {
       "title": "Microsoft is quietly shopping for an OpenAI replacement",
@@ -144,7 +144,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.819
+      "score": 6.8117
     },
     {
       "title": "OpenAI says no user data was touched in the TanStack npm worm",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6238
+      "score": 6.6165
     },
     {
       "title": "OpenAI is reportedly preparing legal action against Apple; it wouldn’t be the first partner to feel burned",
@@ -173,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/Screenshot-2025-10-06-at-1.13.28PM.png?resize=1200%2C670",
       "published": "2026-05-14T19:12:03+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3364
+      "score": 6.3265
     },
     {
       "title": "BCG is training its AI sales agent on what not to do – and that might be the smarter bet",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/bcg-jamie-ai-agent-sales-best-worst-sellers.avif",
       "published": "2026-05-14T17:11:37+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:20:23.839863+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1396
+      "score": 6.1303
     }
   ],
   "errors": []
