@@ -1,7 +1,55 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T04:56:34.330631+00:00",
+  "updatedAt": "2026-05-14T06:00:01.255178+00:00",
   "items": [
+    {
+      "title": "Correct Answers from Sound Reasoning: Verifiable Process Supervision for Language Models",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-14T06:00:09.236545+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-14T06:00:01.255178+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.46
+    },
+    {
+      "title": "Clio’s $500M milestone arrives just as Anthropic ups the ante",
+      "url": "https://techcrunch.com/2026/05/13/clios-500m-milestone-arrives-just-as-anthropic-ups-the-ante",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Legal tech startups, including Clio, which just hit $500 million in ARR, are seeing massive customer adoption.",
+      "image": "https://techcrunch.com/wp-content/uploads/2023/11/gavel-messy-legal.jpg?resize=1200%2C675",
+      "published": "2026-05-14T05:24:39+00:00",
+      "firstSeen": "2026-05-14T06:00:01.255178+00:00",
+      "lastSeen": "2026-05-14T06:00:01.255178+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.2721
+    },
+    {
+      "title": "Nous Research Releases Token Superposition Training to Speed Up LLM Pre-Training by Up to 2.5x Across 270M to 10B Parameter Models",
+      "url": "https://www.marktechpost.com/2026/05/13/nous-research-releases-token-superposition-training-to-speed-up-llm-pre-training-by-up-to-2-5x-across-270m-to-10b-parameter-models",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Nous Research releases Token Superposition Training (TST), a two-phase pre-training method that cuts wall-clock training time by up to 2.5x at matched FLOPs by averaging contiguous token embeddings into bags during Phase 1 and reverting to standard next-token prediction in Phase 2 — without changing the model architecture, tokenizer, optimizer, or inference-time behavior. Validated at 270M, 600M, 3B dense, and 10B-A1B MoE scales.\nThe post Nous Research Releases Token Superposition Training to Speed Up LLM Pre-Training by Up to 2.5x Across 270M to 10B Parameter Models appeared first on MarkTech",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-10.33.23-PM-1-150x150.png",
+      "published": "2026-05-14T05:46:32+00:00",
+      "firstSeen": "2026-05-14T06:00:01.255178+00:00",
+      "lastSeen": "2026-05-14T06:00:01.255178+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 3.9132
+    },
     {
       "title": "How to Build a Dynamic Zero-Trust Network Simulation with Graph-Based Micro-Segmentation, Adaptive Policy Engine, and Insider Threat Detection",
       "url": "https://www.marktechpost.com/2026/05/13/how-to-build-a-dynamic-zero-trust-network-simulation-with-graph-based-micro-segmentation-adaptive-policy-engine-and-insider-threat-detection",
@@ -13,26 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-6-1024x731.png",
       "published": "2026-05-14T02:31:47+00:00",
       "firstSeen": "2026-05-14T03:00:02.011729+00:00",
-      "lastSeen": "2026-05-14T04:56:34.330631+00:00",
+      "lastSeen": "2026-05-14T06:00:01.255178+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2487
-    },
-    {
-      "title": "Liancheng Zhang, Xiaoxi Li, Zhicheng Dou",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T04:56:39.193946+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T04:56:34.330631+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.2189
     }
   ],
   "errors": []
