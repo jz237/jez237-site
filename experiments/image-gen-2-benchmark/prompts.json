@@ -322,5 +322,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-14-midday-tidal-octopus-color-lab",
+    "title": "Tidal Octopus Color Lab",
+    "tests": "Explores infographic clarity, biological texture rendering, octopus camouflage visualization, magnified cutaway panels, wet tidepool detail, and disciplined readable-title layout.",
+    "prompt": "Vertical museum-quality infographic poster titled \"TIDAL OCTOPUS COLOR LAB\" showing a clear educational cutaway of an intertidal marine research station studying octopus camouflage. Top section: a shallow rocky tidepool at low tide with clear water, kelp fronds, barnacles, small crabs, and one realistic octopus calmly resting against mottled stone while its skin displays crisp color patches. Middle section: transparent glass observation tank and magnified skin cross-section panels showing chromatophore layers as simple colored dots and radial muscle fibers, with thin leader lines and numbered callout circles. Bottom section: a clean schematic strip comparing four camouflage states using icon-like swatches: sand, kelp, basalt, coral. Use readable title text only; callout numbers and simple icons are okay, but avoid dense tiny paragraphs. Style: precise scientific illustration mixed with cinematic naturalist detail, cream paper margin, subtle grid marks, teal and warm ochre palette, wet reflections, accurate biological textures, no logos, no copyrighted imagery, no dancing, no dancers, no stage, no performance poses.",
+    "image": "images/2026-05-14-midday-tidal-octopus-color-lab.png",
+    "date": "2026-05-14",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
