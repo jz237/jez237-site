@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T08:00:01.207881+00:00",
+  "updatedAt": "2026-05-14T08:02:37.136994+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6776,6 +6776,10 @@
     "https://techcrunch.com/2026/05/13/who-decides-what-ai-tells-you-campbell-brown-once-metas-news-chief-has-thoughts": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55242809761_199f3d15fd_k.jpg?resize=1200,800",
       "checkedAt": "2026-05-14T07:00:02.025447+00:00"
+    },
+    "https://www.techrepublic.com/article/news-hpe-private-cloud-vmware-ai-juniper": {
+      "image": "",
+      "checkedAt": "2026-05-14T08:02:37.136994+00:00"
     }
   }
 }
