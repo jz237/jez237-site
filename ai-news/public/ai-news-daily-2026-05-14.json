@@ -1,7 +1,23 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T20:00:06.717414+00:00",
+  "updatedAt": "2026-05-14T21:00:01.177689+00:00",
   "items": [
+    {
+      "title": "OpenAI’s Codex is now in the ChatGPT mobile app",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/930763/openai-codex-chatgpt-ios-android-app-preview",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "OpenAI is going to let users access Codex, its desktop AI tool that can write code and use apps on your computer, from the ChatGPT app on your phone. Following the surge in popularity for Anthropic's Claude Code, OpenAI has been working quickly to try and catch up, including by cutting back on \"side quests,\" [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/App-view.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
+      "published": "2026-05-14T20:00:00+00:00",
+      "firstSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 16.4299
+    },
     {
       "title": "Microsoft starts canceling Claude Code licenses",
       "url": "https://www.theverge.com/tech/930447/microsoft-claude-code-discontinued-notepad",
@@ -13,10 +29,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832912/STK095_MICROSOFT_2_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T19:00:00+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7298
+      "score": 11.7005
     },
     {
       "title": "Clawdmeter turns your Claude Code usage stats into a tiny desktop dashboard",
@@ -29,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/clawdmeter-edit.png?resize=1200%2C827",
       "published": "2026-05-14T19:05:01+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3623
+      "score": 10.333
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -45,10 +61,42 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:46:04+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2379
+      "score": 9.2112
+    },
+    {
+      "title": "Work with Codex from anywhere",
+      "url": "https://openai.com/index/work-with-codex-from-anywhere",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Use Codex anywhere with the ChatGPT mobile app. Monitor, steer, and approve coding tasks in real time across devices and remote environments.",
+      "image": "",
+      "published": "2026-05-14T13:00:00+00:00",
+      "firstSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.7808
+    },
+    {
+      "title": "OpenAI is preparing to sue Apple over a partnership that was supposed to be the next Google search deal",
+      "url": "https://thenextweb.com/news/openai-apple-partnership-legal-fight-siri-chatgpt",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI’s partnership with Apple, announced to considerable fanfare in June 2024, is fracturing. The AI company’s lawyers are actively working with an outside legal firm on options that could include sending Apple a formal notice alleging breach of contract, according to Bloomberg, which cited people familiar with the deliberations. No lawsuit has been filed, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/openai-apple-partnership-legal-fight-siri-chatgpt.avif",
+      "published": "2026-05-14T19:57:49+00:00",
+      "firstSeen": "2026-05-14T21:00:01.177689+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.6188
     },
     {
       "title": "Helping ChatGPT better recognize context in sensitive conversations",
@@ -61,26 +109,10 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1dJ8mhpIbtQbsP5wzMfoRe/a1bd2866bd1b5afb6b3e9d4bda5a42c2/SEO_Safety.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-14T00:00:00+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0311
-    },
-    {
-      "title": "BoostTaxo: Zero-Shot Taxonomy Induction via Boosting-Style Agentic Reasoning and Constraint-Aware Calibration",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T20:00:14.608949+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.76
+      "score": 8.0138
     },
     {
       "title": "Top New Features in Android 17 You’ll Notice This Year",
@@ -93,10 +125,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/android-17.jpg?f=jpeg",
       "published": "2026-05-14T16:16:49+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.142
+      "score": 7.1148
     },
     {
       "title": "Microsoft is quietly shopping for an OpenAI replacement",
@@ -112,7 +144,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8406
+      "score": 6.819
     },
     {
       "title": "OpenAI says no user data was touched in the TanStack npm worm",
@@ -128,7 +160,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6455
+      "score": 6.6238
     },
     {
       "title": "OpenAI is reportedly preparing legal action against Apple; it wouldn’t be the first partner to feel burned",
@@ -141,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/10/Screenshot-2025-10-06-at-1.13.28PM.png?resize=1200%2C670",
       "published": "2026-05-14T19:12:03+00:00",
       "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3658
+      "score": 6.3364
     },
     {
       "title": "BCG is training its AI sales agent on what not to do – and that might be the smarter bet",
@@ -157,42 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/bcg-jamie-ai-agent-sales-best-worst-sellers.avif",
       "published": "2026-05-14T17:11:37+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T21:00:01.177689+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1675
-    },
-    {
-      "title": "Microsoft Retires ‘Copilot Mode’ as Edge Gets Built-In AI Tools",
-      "url": "https://www.techrepublic.com/article/news-microsoft-retires-copilot-mode-edge",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft is retiring “Copilot Mode” in Edge as it builds AI browsing tools directly into Edge on desktop and mobile.\nThe post Microsoft Retires ‘Copilot Mode’ as Edge Gets Built-In AI Tools appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/copilot-edge.jpg?f=jpeg",
-      "published": "2026-05-14T15:58:19+00:00",
-      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
-      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.1335
-    },
-    {
-      "title": "Google is doing to factory robots what Android did to phones. Fanuc just became the Samsung of the equation.",
-      "url": "https://thenextweb.com/news/fanuc-google-physical-ai-factory-robots",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Fanuc makes more industrial robots than anyone on the planet. Google makes more software platforms than anyone on the planet. On Wednesday, the two companies announced a partnership that merges those positions: Fanuc will integrate Google Cloud’s Gemini Enterprise and Google’s Intrinsic robotics platform into its industrial robot systems, giving the 1.1 million Fanuc [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/fanuc-google-physical-ai-factory-robots.avif",
-      "published": "2026-05-14T12:26:02+00:00",
-      "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9414
+      "score": 6.1396
     }
   ],
   "errors": []
