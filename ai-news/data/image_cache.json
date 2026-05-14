@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T10:30:44.513168+00:00",
+  "updatedAt": "2026-05-14T12:00:01.901006+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6784,6 +6784,10 @@
     "https://www.technologyreview.com/2026/05/14/1137161/ai-porn-nonconsensual-deepfakes-takedown-piracy-copyright": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Hoeckele-deepfake-01-social.jpg?resize=1200,600",
       "checkedAt": "2026-05-14T10:00:02.079406+00:00"
+    },
+    "https://www.theverge.com/tech/928905/vibe-code-personal-software-revolution": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268478_era_of_personal_software_CVirginia18.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-14T12:00:01.901006+00:00"
     }
   }
 }
