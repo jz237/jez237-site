@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T21:00:01.177689+00:00",
+  "updatedAt": "2026-05-14T22:00:01.759512+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6904,6 +6904,14 @@
     "https://openai.com/index/work-with-codex-from-anywhere": {
       "image": "",
       "checkedAt": "2026-05-14T21:00:01.177689+00:00"
+    },
+    "https://techcrunch.com/2026/05/14/elon-musks-spacexai-has-been-bleeding-staff-since-its-merger": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
+      "checkedAt": "2026-05-14T22:00:01.759512+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/930893/elon-musk-sam-altman-trial-ai-safety-jackass-statue": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/slack-upload-1778789721036.jpeg?quality=90&amp;strip=all&amp;crop=0%2C30.366492146597%2C100%2C39.267015706806&amp;w=1200",
+      "checkedAt": "2026-05-14T22:00:01.759512+00:00"
     }
   }
 }
