@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T13:02:23.001511+00:00",
+  "updatedAt": "2026-05-14T15:00:01.231752+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6796,6 +6796,34 @@
     "https://www.technologyreview.com/2026/05/14/1137168/establishing-ai-and-data-sovereignty-in-the-age-of-autonomous-systems": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/EDB-Social-Card-cover.png?resize=1200,600",
       "checkedAt": "2026-05-14T14:00:01.974838+00:00"
+    },
+    "https://techcrunch.com/2026/05/14/cisco-cuts-nearly-4000-jobs-to-spend-more-on-ai-reports-record-quarterly-revenue": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/chuck-robbins-2270936687.jpg?resize=1200,865",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://techcrunch.com/2026/05/14/two-weeks-left-startup-battlefield-200-applications-close-may-27": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/sb200_trophy.png?w=1080",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://techcrunch.com/2026/05/14/wirestock-raises-23m-to-supply-multi-modal-data-to-ai-labs": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Wirestock-team.jpg?resize=1200,675",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://www.techrepublic.com/article/news-blue-origin-outside-funding-spacex-rivalry": {
+      "image": "",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://www.techrepublic.com/article/how-ai-is-helping-hospitals-get-ahead": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/How-AI-is-Helping-Hospitals-Get-Ahead.jpg?f=jpeg",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://www.techrepublic.com/article/news-top-tech-conferences-events": {
+      "image": "",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
+    },
+    "https://huggingface.co/blog/continuous_async": {
+      "image": "https://huggingface.co/blog/assets/continuous_async/thumbnail.png",
+      "checkedAt": "2026-05-14T15:00:01.231752+00:00"
     }
   }
 }
