@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-14T18:05:04.752593+00:00",
+  "updatedAt": "2026-05-14T20:00:06.717414+00:00",
   "items": [
     {
-      "title": "Liancheng Zhang, Xiaoxi Li, Zhicheng Dou",
+      "title": "BoostTaxo: Zero-Shot Taxonomy Induction via Boosting-Style Agentic Reasoning and Constraint-Aware Calibration",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,108 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T18:05:08.756707+00:00",
+      "published": "2026-05-14T20:00:14.608949+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.76
+    },
+    {
+      "title": "What happens when AI starts building itself?",
+      "url": "https://techcrunch.com/2026/05/14/what-happens-when-ai-starts-building-itself",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Richard Socher's new $650 million startup wants to build an AI that can research and improve itself indefinitely — and he insists it will actually ship products.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2157738833.jpg?resize=1200%2C800",
+      "published": "2026-05-14T19:57:20+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.7886
+    },
+    {
+      "title": "OpenAI is reportedly preparing legal action against Apple; it wouldn’t be the first partner to feel burned",
+      "url": "https://techcrunch.com/2026/05/14/openai-is-reportedly-preparing-legal-action-against-apple-it-wouldnt-be-the-first-partner-to-feel-burned",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "According to Bloomberg, OpenAI has enlisted an outside law firm to work through its options.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/10/Screenshot-2025-10-06-at-1.13.28PM.png?resize=1200%2C670",
+      "published": "2026-05-14T19:12:03+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3658
+    },
+    {
+      "title": "66% of women felt more prepared for puberty than perimenopause. Flo Health is betting it can fix that.",
+      "url": "https://thenextweb.com/news/flo-health-perimenopause-tools-awareness-gap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Two-thirds of American women between 38 and 50 say they felt better prepared to go through puberty than perimenopause. The statistic, from a nationally representative survey commissioned by Flo Health and conducted by Wakefield Research, captures something that decades of public health messaging have failed to fix: most women arrive at one of the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/flo-health-perimenopause-tools-awareness-gap.avif",
+      "published": "2026-05-14T19:10:45+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 2.6251
+    },
+    {
+      "title": "Clawdmeter turns your Claude Code usage stats into a tiny desktop dashboard",
+      "url": "https://techcrunch.com/2026/05/14/clawdmeter-turns-your-claude-code-usage-stats-into-a-tiny-desktop-dashboard",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A new open source gadget called Clawdmeter turns Claude Code usage stats into a tiny desktop dashboard for AI coding power users.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/clawdmeter-edit.png?resize=1200%2C827",
+      "published": "2026-05-14T19:05:01+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.3623
+    },
+    {
+      "title": "Trump’s Tech Posse in China, Who’s Winning in Musk v. Altman, and Hantavirus Conspiracy Theories",
+      "url": "https://www.wired.com/story/uncanny-valley-podcast-trump-tech-posse-china-musk-v-altman-trial-hantavirus-conspiracy-theories",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Today on Uncanny Valley, we discuss how Donald Trump’s visit to China could influence conversations between world leaders at a moment when the economic and foreign policy stakes couldn’t be higher.",
+      "image": "https://media.wired.com/photos/6a04db151416c79bb924987e/master/pass/Uncanny-Valley-Trump-China-Visit-Politics-2276002216.jpg",
+      "published": "2026-05-14T19:04:47+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.2622
+    },
+    {
+      "title": "Microsoft starts canceling Claude Code licenses",
+      "url": "https://www.theverge.com/tech/930447/microsoft-claude-code-discontinued-notepad",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Microsoft first started opening up access to Claude Code in December, inviting thousands of its own developers to use Anthropic's AI coding tool daily. It was part of an effort to get project managers, designers, and other employees to experiment with coding for the first time, and sources tell me that Claude Code has proved [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832912/STK095_MICROSOFT_2_CVirginia_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-14T19:00:00+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.7298
     },
     {
       "title": "Granite Embedding Multilingual R2: Open Apache 2.0 Multilingual Embeddings with 32K Context — Best Sub-100M Retrieval Quality",
@@ -28,10 +124,26 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-embedding-multilingual-r2.png",
       "published": "2026-05-14T18:55:01+00:00",
       "firstSeen": "2026-05-14T19:00:01.859506+00:00",
-      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.6726
+      "score": -0.7027
+    },
+    {
+      "title": "Zero-day exploit completely defeats default Windows 11 BitLocker protections",
+      "url": "https://arstechnica.com/security/2026/05/zero-day-exploit-completely-defeats-default-windows-11-bitlocker-protections",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "It's not entirely clear how the exploit works. Microsoft says it's investigating.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2023/07/exploit-vulnerability-security.jpg",
+      "published": "2026-05-14T18:32:01+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.106
     },
     {
       "title": "Trump’s China Summit Turns Into a Big Tech Power Play",
@@ -44,10 +156,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/P20251029DT-2177.jpg?f=jpeg",
       "published": "2026-05-14T18:27:32+00:00",
       "firstSeen": "2026-05-14T19:00:01.859506+00:00",
-      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2336
+      "score": 3.2038
     },
     {
       "title": "Graphon AI exits stealth with $8.3M to build the data layer that LLMs are missing",
@@ -60,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/graphon-ai-pre-model-intelligence-layer-seed-funding.avif",
       "published": "2026-05-14T17:53:04+00:00",
       "firstSeen": "2026-05-14T19:00:01.859506+00:00",
-      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1164
+      "score": 2.0872
     },
     {
       "title": "Use this map to find the data centers in your backyard",
@@ -76,10 +188,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-14-at-1.06.40PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=8.9464411557435%2C0%2C82.107117688513%2C100&amp%3Bw=1200",
       "published": "2026-05-14T17:40:00+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3473
+      "score": 2.2909
     },
     {
       "title": "97% of marketers use AI daily – 78% of consumers wish they wouldn’t",
@@ -92,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/canva-ai-marketing-consumer-trust-gap-report.avif",
       "published": "2026-05-14T17:27:14+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1309
+      "score": 2.0748
     },
     {
       "title": "BCG is training its AI sales agent on what not to do – and that might be the smarter bet",
@@ -108,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/bcg-jamie-ai-agent-sales-best-worst-sellers.avif",
       "published": "2026-05-14T17:11:37+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2231
+      "score": 6.1675
     },
     {
       "title": "Cisco announces record revenue and 4,000 layoffs in the same day",
@@ -120,14 +232,14 @@
       "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Layoffs are \"not a savings-driven resutrcture,\" CFO says.",
+      "summary": "Layoffs are \"not a savings-driven restructure,\" CFO says.",
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2251821138-1024x648.jpg",
       "published": "2026-05-14T16:47:43+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9113
+      "score": 3.8563
     },
     {
       "title": "Cerebras raises $5.5B, then stock pops $108%, in the first huge tech IPO of 2026",
@@ -140,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cerebras-Nasdaq-opening-bell.png?resize=1200%2C695",
       "published": "2026-05-14T16:30:02+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3426
+      "score": 3.2881
     },
     {
       "title": "A four-month-old startup just raised $650 million to build AI that improves itself",
@@ -156,10 +268,42 @@
       "image": "https://media.thenextweb.com/2026/05/recursive-superintelligence-self-improving-ai-funding.avif",
       "published": "2026-05-14T16:23:13+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4993
+      "score": 3.4449
+    },
+    {
+      "title": "Top New Features in Android 17 You’ll Notice This Year",
+      "url": "https://www.techrepublic.com/article/news-android-17-gemini-ai-privacy-sharing",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google previewed Android 17 with Gemini AI tools, AirDrop-style sharing, privacy upgrades, multitasking changes, and stronger security controls.\nThe post Top New Features in Android 17 You’ll Notice This Year appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/android-17.jpg?f=jpeg",
+      "published": "2026-05-14T16:16:49+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.142
+    },
+    {
+      "title": "Microsoft Retires ‘Copilot Mode’ as Edge Gets Built-In AI Tools",
+      "url": "https://www.techrepublic.com/article/news-microsoft-retires-copilot-mode-edge",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft is retiring “Copilot Mode” in Edge as it builds AI browsing tools directly into Edge on desktop and mobile.\nThe post Microsoft Retires ‘Copilot Mode’ as Edge Gets Built-In AI Tools appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/copilot-edge.jpg?f=jpeg",
+      "published": "2026-05-14T15:58:19+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.1335
     },
     {
       "title": "Seven million cameras on seven million faces: the smart glasses privacy crisis no one can stop",
@@ -172,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-smart-glasses-privacy-crisis-apple-google-snap.avif",
       "published": "2026-05-14T15:47:49+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1823
+      "score": 3.1287
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -188,10 +332,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:46:04+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2914
+      "score": 9.2379
     },
     {
       "title": "The UK spent £900 million on Palantir. Now it is spending £175 million on a British AI company to fix the tax gap.",
@@ -204,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/05/quantexa-hmrc-ai-tax-fraud-sovereignty.avif",
       "published": "2026-05-14T15:34:37+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.076
+      "score": 2.0228
     },
     {
       "title": "Americans do not want AI data centers in their backyards",
@@ -220,10 +364,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:24:53+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3814
+      "score": 1.3284
     },
     {
       "title": "Coutts raised its minimum to £3 million. Revolut just set its at £500,000. The mass-affluent gap is the point.",
@@ -236,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/05/revolut-private-bank-wealth-management-ipo.avif",
       "published": "2026-05-14T15:24:49+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7713
+      "score": 2.7184
     },
     {
       "title": "Khosla Ventures is betting $10M on Ian Crosby, whose first startup, Bench, imploded",
@@ -252,10 +396,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Synthetic-Ian-Crosby.jpg?resize=1200%2C800",
       "published": "2026-05-14T15:20:18+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2092
+      "score": 2.1563
+    },
+    {
+      "title": "Kevin O’Leary’s ‘Wonder Valley’ Data Center Advances as Job Estimates Shift",
+      "url": "https://www.techrepublic.com/article/news-kevin-oleary-wonder-valley-utah-job-estimates",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Kevin O’Leary’s Wonder Valley data center project faces scrutiny as job estimates shift and Utah residents raise environmental concerns.\nThe post Kevin O’Leary’s ‘Wonder Valley’ Data Center Advances as Job Estimates Shift appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-4.png?f=jpeg",
+      "published": "2026-05-14T15:02:15+00:00",
+      "firstSeen": "2026-05-14T20:00:06.717414+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1083
     },
     {
       "title": "How Coinspaid became one of fintech’s top remote-first employers",
@@ -268,10 +428,10 @@
       "image": "https://media.thenextweb.com/2026/05/coinspaid-remote-first-fintech-employer.avif",
       "published": "2026-05-14T14:11:03+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.737
+      "score": 2.6859
     },
     {
       "title": "Cisco cuts nearly 4,000 jobs to spend more on AI, reports ‘record quarterly revenue’",
@@ -284,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/chuck-robbins-2270936687.jpg?resize=1200%2C865",
       "published": "2026-05-14T14:01:14+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1726
+      "score": 2.1216
     },
     {
       "title": "Wirestock raises $23M to supply creative multimodal data to AI labs",
@@ -300,10 +460,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Wirestock-team.jpg?resize=1200%2C675",
       "published": "2026-05-14T14:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.572
+      "score": 4.5211
     },
     {
       "title": "Two weeks left: Startup Battlefield 200 applications close May 27",
@@ -316,10 +476,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/sb200_trophy.png?w=1080",
       "published": "2026-05-14T14:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.172
+      "score": 0.1211
     },
     {
       "title": "10 best ITGC tools and software for automated IT controls in 2026",
@@ -332,10 +492,10 @@
       "image": "https://media.thenextweb.com/2026/05/ITGC-tools.avif",
       "published": "2026-05-14T13:47:50+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0265
+      "score": 1.9759
     },
     {
       "title": "Jeff Bezos’ Blue Origin May Need Outside Cash to Catch SpaceX",
@@ -348,10 +508,10 @@
       "image": "",
       "published": "2026-05-14T13:41:37+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9237
+      "score": 4.8732
     },
     {
       "title": "Jumia is cutting another 10% of staff. AI is the framing. Profitability is the deadline.",
@@ -367,7 +527,7 @@
       "lastSeen": "2026-05-14T18:05:04.752593+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1202
+      "score": 3.0699
     },
     {
       "title": "Sea You in the Cloud: ‘Subnautica 2’ Early Access Dives Onto GeForce NOW",
@@ -380,10 +540,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/gfn-thursday-5-14-nv-blog-1280x680-logo.jpg",
       "published": "2026-05-14T13:00:08+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8452
+      "score": 2.7956
     },
     {
       "title": "Data readiness for agentic AI in financial services",
@@ -396,10 +556,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Elastic-iStock-2224485239.jpg?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8451
+      "score": 4.7956
     },
     {
       "title": "Establishing AI and data sovereignty in the age of autonomous systems",
@@ -412,10 +572,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/EDB-Social-Card-cover.png?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6451
+      "score": 4.5956
     },
     {
       "title": "AI Promised the Audemars Piguet x Swatch Wristwatch. China Will Deliver It",
@@ -428,10 +588,10 @@
       "image": "https://media.wired.com/photos/6a04f275366b52a33cd08138/master/pass/GettyImages-458085231.jpg",
       "published": "2026-05-14T12:52:28+00:00",
       "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1418
+      "score": 2.0924
     },
     {
       "title": "Wall Street’s six largest banks cut 15,000 jobs and posted $47 billion in profits. The CEOs stopped pretending.",
@@ -447,7 +607,7 @@
       "lastSeen": "2026-05-14T18:05:04.752593+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9953
+      "score": 1.9463
     },
     {
       "title": "Google is doing to factory robots what Android did to phones. Fanuc just became the Samsung of the equation.",
@@ -463,7 +623,7 @@
       "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9902
+      "score": 5.9414
     },
     {
       "title": "The company that outsells Tesla on humanoid robots just unveiled a pilotable mecha. Unitree is filing for a $7 billion IPO.",
@@ -479,215 +639,7 @@
       "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0775
-    },
-    {
-      "title": "The CMA opens its fourth Strategic Market Status case into Microsoft",
-      "url": "https://thenextweb.com/news/cma-microsoft-sms-investigation-business-software",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Windows, Office, Teams, Copilot, server operating systems, and the cloud licensing the regulator already flagged last July. A nine-month investigation, a February 2027 designation decision, and the first CMA SMS case to walk straight through the door the cloud market inquiry left ajar. The UK’s Competition and Markets Authority has opened a Strategic Market Status [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/microsoft-mai-models-openai-independence.avif",
-      "published": "2026-05-14T11:32:25+00:00",
-      "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9672
-    },
-    {
-      "title": "After 25 years of writing the cheques himself, Bezos is opening Blue Origin to outsiders",
-      "url": "https://thenextweb.com/news/blue-origin-external-funding-spacex-ipo-bezos",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Dave Limp told an all-hands meeting that external funding is now on the table, weeks before SpaceX is expected to price the largest IPO in history at $1.75tn. The launch-cadence target is 100 a year. The cumulative bill so far is roughly $28bn. Blue Origin is preparing to take outside money for the first time [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jeff-bezos.avif",
-      "published": "2026-05-14T11:20:18+00:00",
-      "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.662
-    },
-    {
-      "title": "You can make an app for that",
-      "url": "https://www.theverge.com/tech/928905/vibe-code-personal-software-revolution",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "The tyranny of software is almost over. Since the first computer programmers wrote the first computer programs, we, the users of that software, have been forced to live in the worlds those programs create. The features are the features. The design is the design. Want something else, something better? Learn to code, I guess. Until [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268478_era_of_personal_software_CVirginia18.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-14T11:00:00+00:00",
-      "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2635
-    },
-    {
-      "title": "Gen Z Is Pioneering a New Understanding of Truth",
-      "url": "https://www.wired.com/story/book-excerpt-the-future-of-truth-steven-rosenbaum",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The first generation to truly grow up online, Generation Z and their cohort live in a social media ecosystem that blends facts and feelings. It’s significantly shifting how they understand what’s true.",
-      "image": "https://media.wired.com/photos/6a04da9bd7be752b48cba4fa/master/pass/Book-Excerpt-Gen-Z-Pioneering-New-Understanding-of-Truth-Culture.jpg",
-      "published": "2026-05-14T11:00:00+00:00",
-      "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0935
-    },
-    {
-      "title": "Meta and Google fund the kids groups they cite back at regulators",
-      "url": "https://thenextweb.com/news/meta-google-fund-us-kids-groups-conflict-of-interest",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "An eight-month investigation arc, a $6m bellwether verdict, and a National PTA that has now resigned its Meta sponsorship. The line between independent expert and corporate spokesperson is, on the evidence, a budget item. Meta and Google have spent years funding a network of US parent and child-safety organisations that turn up, again and again, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
-      "published": "2026-05-14T10:50:00+00:00",
-      "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9493
-    },
-    {
-      "title": "Why global businesses are moving to crypto mass payouts",
-      "url": "https://thenextweb.com/news/why-global-businesses-are-moving-to-crypto-mass-payouts",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "As gig platforms continue to expand globally, one of the biggest operational challenges they face is managing cross-border disbursements to an ever-growing network of freelancers, creators, and partners across multiple regions. While the gig economy thrives on flexibility and rapid growth, traditional banking systems, particularly wire transfers, struggle to keep up. These payment methods are [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/NowPayments.avif",
-      "published": "2026-05-14T10:09:33+00:00",
-      "firstSeen": "2026-05-14T10:30:44.513168+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6326
-    },
-    {
-      "title": "Samsung wants its union back at the table. The union wants the bonus formula in writing.",
-      "url": "https://thenextweb.com/news/samsung-union-strike-bonus-sk-hynix-precedent",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A week after Samsung Electronics passed $1tn in market value, its largest union is preparing an 18-day strike that could disrupt the AI memory chips inside that valuation. The wage gap with SK Hynix is the spark. The bonus formula is the fight. Samsung Electronics sent a letter to its two largest unions on Thursday [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
-      "published": "2026-05-14T09:18:46+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3121
-    },
-    {
-      "title": "The shock of seeing your body used in deepfake porn",
-      "url": "https://www.technologyreview.com/2026/05/14/1137161/ai-porn-nonconsensual-deepfakes-takedown-piracy-copyright",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "When Jennifer got a job doing research for a nonprofit in 2023, she ran her new professional headshot through a facial recognition program. She wanted to see if the tech would pull up the porn videos she’d made more than 10 years before, when she was in her early 20s. It did in fact return&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Hoeckele-deepfake-01-social.jpg?resize=1200%2C600",
-      "published": "2026-05-14T09:00:00+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4447
-    },
-    {
-      "title": "Meta’s New Reality: Record High Profits. Record Low Morale",
-      "url": "https://www.wired.com/story/meta-layoffs-bad-vibes-mark-zuckerberg-ai",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Next week, Meta is cutting about 10 percent of its staff. WIRED spoke with more than a dozen current and former employees about what it's like inside a company where “everyone is unhappy.”",
-      "image": "https://media.wired.com/photos/6a05290e9fce16b06df70c32/master/pass/Meta-New-Reality-Record-High-Profits-Record-Low-Morale-Business-2261835380.jpg",
-      "published": "2026-05-14T09:00:00+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1447
-    },
-    {
-      "title": "SK Hynix is about $50bn away from being a trillion-dollar company",
-      "url": "https://thenextweb.com/news/sk-hynix-cusp-trillion-dollar-hbm-rally",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two AI memory rallies, one country, and a market cap chart that has gone up 9x in two years. If SK Hynix crosses the threshold, South Korea becomes the first country outside the US to host two trillion-dollar companies at the same time. SK Hynix is roughly $50bn away from a trillion-dollar market capitalisation. Its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/SK-Hynix.avif",
-      "published": "2026-05-14T08:55:08+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0027
-    },
-    {
-      "title": "Cerebras raises $5.55bn in the biggest US tech IPO since Snowflake",
-      "url": "https://thenextweb.com/news/cerebras-ipo-5-55-billion-biggest-tech-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Priced at $185, above the marketed range, the wafer-scale chip company opens trading on Thursday at a $56.4bn valuation. The OpenAI deal is what got the book covered. The customer concentration footnote is what the next quarter has to answer. Cerebras Systems priced its IPO at $185 per share on Wednesday evening, above the marketed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
-      "published": "2026-05-14T08:35:06+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8949
-    },
-    {
-      "title": "This memory chip works at 700 degrees Celsius. The startup behind it is already building AI chips that compute where GPUs cannot.",
-      "url": "https://thenextweb.com/news/tetramem-memristor-700c-space-ai-computing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Every probe humanity has sent to Venus has died. The Soviet Venera landers survived between 23 minutes and two hours on a surface where the temperature exceeds 460 degrees Celsius. Their electronics, designed to endure heat that would melt lead, still failed. The longest-lived mission in the history of Venus exploration lasted 127 minutes. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/tetramem-memristor-700c-space-ai-computing.avif",
-      "published": "2026-05-14T08:20:27+00:00",
-      "firstSeen": "2026-05-14T09:00:01.945725+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5892
-    },
-    {
-      "title": "OpenAI says no user data was touched in the TanStack npm worm",
-      "url": "https://thenextweb.com/news/openai-tanstack-npm-supply-chain-mini-shai-hulud",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two corporate laptops, some credential material, and a forced macOS app update. The interesting part is how the malicious packages got published in the first place: not by a stolen npm password, but by TanStack’s own legitimate release pipeline, after the attacker code took over the runner mid-build. OpenAI said on Wednesday that it found [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
-      "published": "2026-05-14T08:20:12+00:00",
-      "firstSeen": "2026-05-14T09:00:01.945725+00:00",
-      "lastSeen": "2026-05-14T12:00:01.901006+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.6891
+      "score": 3.0294
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -700,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3361
+      "score": 1.3249
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -716,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.747
+      "score": 2.7389
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -732,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.222
@@ -748,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-14T18:05:04.752593+00:00",
+      "lastSeen": "2026-05-14T20:00:06.717414+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8914
