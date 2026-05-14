@@ -310,5 +310,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-14-morning-glassbone-leviathan-apothecary",
+    "title": "Glassbone Leviathan Apothecary",
+    "tests": "Explores translucent skeletal architecture, fantasy apothecary clutter, tidal cavern reflections, bioluminescent moss, opalescent bone material, and warm-cool moonlit lighting.",
+    "prompt": "A richly detailed fantasy apothecary built inside the enormous translucent ribcage of an ancient glassbone leviathan stranded in a moonlit tidal cavern. Curved opalescent bones arch overhead like cathedral vaults, glowing softly from trapped sea-magic; shelves of crystal bottles, dried kelp bundles, pearl mortars, starfish-shaped brass instruments, and luminous blue-green potions fill carved driftwood counters. A few calm robed healers stand still at worktables for scale, carefully preparing remedies under hanging lanterns made from nautilus shells. Shallow tide pools reflect the glowing ribs, tiny silver fish shimmer in the water, and bioluminescent moss traces runic patterns across wet black stone. Cinematic fantasy realism, intricate material textures, moonlit teal and warm amber lighting, no readable text, no logos, no dancing, no dancers, no performance poses.",
+    "image": "images/2026-05-14-morning-glassbone-leviathan-apothecary.png",
+    "date": "2026-05-14",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
