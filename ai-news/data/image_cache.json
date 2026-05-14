@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T08:02:37.136994+00:00",
+  "updatedAt": "2026-05-14T10:00:02.079406+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6780,6 +6780,10 @@
     "https://www.techrepublic.com/article/news-hpe-private-cloud-vmware-ai-juniper": {
       "image": "",
       "checkedAt": "2026-05-14T08:02:37.136994+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/14/1137161/ai-porn-nonconsensual-deepfakes-takedown-piracy-copyright": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Hoeckele-deepfake-01-social.jpg?resize=1200,600",
+      "checkedAt": "2026-05-14T10:00:02.079406+00:00"
     }
   }
 }
