@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-14T15:29:19.402828+00:00",
+  "updatedAt": "2026-05-14T17:00:01.282085+00:00",
   "items": [
     {
-      "title": "Correct Answers from Sound Reasoning: Verifiable Process Supervision for Language Models",
+      "title": "TimelineReasoner: Advancing Timeline Summarization with Large Reasoning Models",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,92 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T15:29:34.868614+00:00",
+      "published": "2026-05-14T17:00:07.633300+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
+    },
+    {
+      "title": "Cerebras raises $5.5B, kicking off 2026’s IPO season with a bang",
+      "url": "https://techcrunch.com/2026/05/14/cerebras-raises-5-5b-kicking-off-2026s-ipo-season-with-a-bang",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A year ago, it looked like this day would never happen for Cerebras.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cerebras-Nasdaq-opening-bell.png?resize=1200%2C695",
+      "published": "2026-05-14T16:30:02+00:00",
+      "firstSeen": "2026-05-14T17:00:01.282085+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3748
+    },
+    {
+      "title": "A four-month-old startup just raised $650 million to build AI that improves itself",
+      "url": "https://thenextweb.com/news/recursive-superintelligence-self-improving-ai-funding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The idea that an AI system could improve itself, then use those improvements to improve itself again, faster, in an accelerating loop that eventually outpaces every human researcher on earth, has been a fixture of computer science folklore since at least the 1960s. For most of that time, it remained comfortably theoretical. Now someone [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/recursive-superintelligence-self-improving-ai-funding.avif",
+      "published": "2026-05-14T16:23:13+00:00",
+      "firstSeen": "2026-05-14T17:00:01.282085+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5314
+    },
+    {
+      "title": "Seven million cameras on seven million faces: the smart glasses privacy crisis no one can stop",
+      "url": "https://thenextweb.com/news/meta-smart-glasses-privacy-crisis-apple-google-snap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The woman was shopping in London when she noticed something odd about the man approaching her. He wore sunglasses indoors, asked her name, told her she was gorgeous. What she did not notice was the almost invisible camera embedded in the frames of his Meta Ray-Ban smart glasses, quietly recording every second of the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/meta-smart-glasses-privacy-crisis-apple-google-snap.avif",
+      "published": "2026-05-14T15:47:49+00:00",
+      "firstSeen": "2026-05-14T17:00:01.282085+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2138
+    },
+    {
+      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. Elon Musk, his financial [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-14T15:46:04+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.46
+      "editorial_reason": "major_product_news",
+      "score": 9.323
+    },
+    {
+      "title": "The UK spent £900 million on Palantir. Now it is spending £175 million on a British AI company to fix the tax gap.",
+      "url": "https://thenextweb.com/news/quantexa-hmrc-ai-tax-fraud-sovereignty",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "HM Revenue and Customs has awarded a 175 million pound, ten-year contract to Quantexa, a London-based AI company, to modernise the tax authority’s data infrastructure and deploy artificial intelligence to detect fraud, fix errors, and close the tax gap. The contract is one of the largest AI deals in UK public sector history. It [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/quantexa-hmrc-ai-tax-fraud-sovereignty.avif",
+      "published": "2026-05-14T15:34:37+00:00",
+      "firstSeen": "2026-05-14T17:00:01.282085+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1074
     },
     {
       "title": "Americans do not want AI data centers in their backyards",
@@ -24,17 +104,33 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "Over 70 percent of Americans oppose AI data center construction in their area, according to a new Gallup survey. Just seven percent said they were \"strongly\" in favor of new data centers. According to Gallup, data centers are so strongly disliked that Americans would prefer to live near a nuclear power plant than a data [&#8230;]",
+      "summary": "Over 70 percent of Americans oppose AI data center construction in their area, according to a new Gallup survey. Just 7 percent said they were \"strongly\" in favor of new data centers. According to Gallup, data centers are so strongly disliked that Americans would prefer to live near a nuclear power plant than a data [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:24:53+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4577
+      "score": 1.4126
     },
     {
-      "title": "Khosla Ventures is betting $10M on Ian Crosby, whose last startup, Bench, imploded",
+      "title": "Coutts raised its minimum to £3 million. Revolut just set its at £500,000. The mass-affluent gap is the point.",
+      "url": "https://thenextweb.com/news/revolut-private-bank-wealth-management-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Revolut is planning to launch a private banking unit in the United Kingdom and parts of Europe as soon as this summer, according to a person with knowledge of the matter. The eligibility threshold is 500,000 pounds, roughly 675,000 dollars. Coutts, the private bank owned by NatWest that has served the British establishment since [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/revolut-private-bank-wealth-management-ipo.avif",
+      "published": "2026-05-14T15:24:49+00:00",
+      "firstSeen": "2026-05-14T17:00:01.282085+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8026
+    },
+    {
+      "title": "Khosla Ventures is betting $10M on Ian Crosby, whose first startup, Bench, imploded",
       "url": "https://techcrunch.com/2026/05/14/khosla-ventures-is-betting-10m-on-ian-crosby-whose-last-startup-bench-imploded",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
@@ -44,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Synthetic-Ian-Crosby.jpg?resize=1200%2C800",
       "published": "2026-05-14T15:20:18+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2854
+      "score": 2.2404
     },
     {
       "title": "How Coinspaid became one of fintech’s top remote-first employers",
@@ -60,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/coinspaid-remote-first-fintech-employer.avif",
       "published": "2026-05-14T14:11:03+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8109
+      "score": 2.7672
     },
     {
       "title": "Cisco cuts nearly 4,000 jobs to spend more on AI, reports ‘record quarterly revenue’",
@@ -76,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/chuck-robbins-2270936687.jpg?resize=1200%2C865",
       "published": "2026-05-14T14:01:14+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.246
+      "score": 2.2026
     },
     {
       "title": "Wirestock raises $23M to supply creative multi-modal data to AI labs",
@@ -92,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Wirestock-team.jpg?resize=1200%2C675",
       "published": "2026-05-14T14:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2454
+      "score": 2.202
     },
     {
       "title": "Two weeks left: Startup Battlefield 200 applications close May 27",
@@ -108,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/sb200_trophy.png?w=1080",
       "published": "2026-05-14T14:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.2454
+      "score": 0.202
     },
     {
       "title": "10 best ITGC tools and software for automated IT controls in 2026",
@@ -124,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/ITGC-tools.avif",
       "published": "2026-05-14T13:47:50+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0995
+      "score": 2.0564
     },
     {
       "title": "Jeff Bezos’ Blue Origin May Need Outside Cash to Catch SpaceX",
@@ -140,10 +236,10 @@
       "image": "",
       "published": "2026-05-14T13:41:37+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9965
+      "score": 4.9535
     },
     {
       "title": "Jumia is cutting another 10% of staff. AI is the framing. Profitability is the deadline.",
@@ -156,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jumia.avif",
       "published": "2026-05-14T13:33:52+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1927
+      "score": 3.1499
     },
     {
       "title": "Sea You in the Cloud: ‘Subnautica 2’ Early Access Dives Onto GeForce NOW",
@@ -172,10 +268,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/gfn-thursday-5-14-nv-blog-1280x680-logo.jpg",
       "published": "2026-05-14T13:00:08+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9166
+      "score": 2.8744
     },
     {
       "title": "Data readiness for agentic AI in financial services",
@@ -188,10 +284,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Elastic-iStock-2224485239.jpg?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9165
+      "score": 4.8743
     },
     {
       "title": "Establishing AI and data sovereignty in the age of autonomous systems",
@@ -204,10 +300,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/EDB-Social-Card-cover.png?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7165
+      "score": 4.6743
     },
     {
       "title": "AI Promised the Audemars Piguet x Swatch Wristwatch. China Will Deliver It",
@@ -220,10 +316,10 @@
       "image": "https://media.wired.com/photos/6a04f275366b52a33cd08138/master/pass/GettyImages-458085231.jpg",
       "published": "2026-05-14T12:52:28+00:00",
       "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.213
+      "score": 2.1709
     },
     {
       "title": "Wall Street’s six largest banks cut 15,000 jobs and posted $47 billion in profits. The CEOs stopped pretending.",
@@ -236,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/05/wall-street-banks-ai-headcount-earnings.avif",
       "published": "2026-05-14T12:37:49+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.066
+      "score": 2.0243
     },
     {
       "title": "Google is doing to factory robots what Android did to phones. Fanuc just became the Samsung of the equation.",
@@ -252,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/05/fanuc-google-physical-ai-factory-robots.avif",
       "published": "2026-05-14T12:26:02+00:00",
       "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0605
+      "score": 6.019
     },
     {
       "title": "The company that outsells Tesla on humanoid robots just unveiled a pilotable mecha. Unitree is filing for a $7 billion IPO.",
@@ -268,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/05/unitree-gd01-mecha-humanoid-robot-ipo.avif",
       "published": "2026-05-14T11:56:40+00:00",
       "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1469
+      "score": 3.1059
     },
     {
       "title": "The CMA opens its fourth Strategic Market Status case into Microsoft",
@@ -287,7 +383,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0357
+      "score": 3.9952
     },
     {
       "title": "After 25 years of writing the cheques himself, Bezos is opening Blue Origin to outsiders",
@@ -303,7 +399,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7302
+      "score": 2.6899
     },
     {
       "title": "You can make an app for that",
@@ -316,10 +412,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268478_era_of_personal_software_CVirginia18.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T11:00:00+00:00",
       "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3311
+      "score": 3.2911
     },
     {
       "title": "Gen Z Is Pioneering a New Understanding of Truth",
@@ -332,10 +428,10 @@
       "image": "https://media.wired.com/photos/6a04da9bd7be752b48cba4fa/master/pass/Book-Excerpt-Gen-Z-Pioneering-New-Understanding-of-Truth-Culture.jpg",
       "published": "2026-05-14T11:00:00+00:00",
       "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1611
+      "score": 2.1211
     },
     {
       "title": "Meta and Google fund the kids groups they cite back at regulators",
@@ -351,7 +447,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0166
+      "score": 1.9768
     },
     {
       "title": "Why global businesses are moving to crypto mass payouts",
@@ -367,7 +463,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6986
+      "score": 2.6596
     },
     {
       "title": "Samsung wants its union back at the table. The union wants the bonus formula in writing.",
@@ -383,7 +479,7 @@
       "lastSeen": "2026-05-14T13:02:23.001511+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3766
+      "score": 3.3385
     },
     {
       "title": "The shock of seeing your body used in deepfake porn",
@@ -396,10 +492,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Hoeckele-deepfake-01-social.jpg?resize=1200%2C600",
       "published": "2026-05-14T09:00:00+00:00",
       "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5086
+      "score": 3.4708
     },
     {
       "title": "Meta’s New Reality: Record High Profits. Record Low Morale",
@@ -408,14 +504,14 @@
       "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Next week, Meta is cutting about 10 percent of its staff. WIRED spoke with more than a dozen current and former employees about what it's like inside a company where \"everyone is unhappy.\"",
+      "summary": "Next week, Meta is cutting about 10 percent of its staff. WIRED spoke with more than a dozen current and former employees about what it's like inside a company where “everyone is unhappy.”",
       "image": "https://media.wired.com/photos/6a05290e9fce16b06df70c32/master/pass/Meta-New-Reality-Record-High-Profits-Record-Low-Morale-Business-2261835380.jpg",
       "published": "2026-05-14T09:00:00+00:00",
       "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2086
+      "score": 3.1708
     },
     {
       "title": "SK Hynix is about $50bn away from being a trillion-dollar company",
@@ -431,7 +527,7 @@
       "lastSeen": "2026-05-14T13:02:23.001511+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0665
+      "score": 4.0288
     },
     {
       "title": "Cerebras raises $5.55bn in the biggest US tech IPO since Snowflake",
@@ -447,7 +543,7 @@
       "lastSeen": "2026-05-14T13:02:23.001511+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.958
+      "score": 3.9207
     },
     {
       "title": "This memory chip works at 700 degrees Celsius. The startup behind it is already building AI chips that compute where GPUs cannot.",
@@ -463,7 +559,7 @@
       "lastSeen": "2026-05-14T13:02:23.001511+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6519
+      "score": 4.6148
     },
     {
       "title": "OpenAI says no user data was touched in the TanStack npm worm",
@@ -479,7 +575,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7518
+      "score": 6.7147
     },
     {
       "title": "Microsoft is quietly shopping for an OpenAI replacement",
@@ -495,7 +591,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9462
+      "score": 6.9093
     },
     {
       "title": "US clears H200 sales to 10 Chinese firms, but not a single chip has shipped",
@@ -511,7 +607,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0359
+      "score": 2.9995
     },
     {
       "title": "Who decides what AI tells you? Campbell Brown, once Meta’s news chief, has thoughts",
@@ -524,10 +620,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/55242809761_199f3d15fd_k.jpg?resize=1200%2C800",
       "published": "2026-05-14T06:05:31+00:00",
       "firstSeen": "2026-05-14T07:00:02.025447+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1373
+      "score": 3.1024
     },
     {
       "title": "Software engineering’s bottleneck is no longer code",
@@ -543,103 +639,7 @@
       "lastSeen": "2026-05-14T10:30:44.513168+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8954
-    },
-    {
-      "title": "Nous Research Releases Token Superposition Training to Speed Up LLM Pre-Training by Up to 2.5x Across 270M to 10B Parameter Models",
-      "url": "https://www.marktechpost.com/2026/05/13/nous-research-releases-token-superposition-training-to-speed-up-llm-pre-training-by-up-to-2-5x-across-270m-to-10b-parameter-models",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Nous Research releases Token Superposition Training (TST), a two-phase pre-training method that cuts wall-clock training time by up to 2.5x at matched FLOPs by averaging contiguous token embeddings into bags during Phase 1 and reverting to standard next-token prediction in Phase 2 — without changing the model architecture, tokenizer, optimizer, or inference-time behavior. Validated at 270M, 600M, 3B dense, and 10B-A1B MoE scales.\nThe post Nous Research Releases Token Superposition Training to Speed Up LLM Pre-Training by Up to 2.5x Across 270M to 10B Parameter Models appeared first on MarkTech",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-13-at-10.33.23-PM-1-150x150.png",
-      "published": "2026-05-14T05:46:32+00:00",
-      "firstSeen": "2026-05-14T06:00:01.255178+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 3.6599
-    },
-    {
-      "title": "Clio’s $500M milestone arrives just as Anthropic ups the ante",
-      "url": "https://techcrunch.com/2026/05/13/clios-500m-milestone-arrives-just-as-anthropic-ups-the-ante",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Legal tech startups, including Clio, which just hit $500 million in ARR, are seeing massive customer adoption.",
-      "image": "https://techcrunch.com/wp-content/uploads/2023/11/gavel-messy-legal.jpg?resize=1200%2C675",
-      "published": "2026-05-14T05:24:39+00:00",
-      "firstSeen": "2026-05-14T06:00:01.255178+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.0214
-    },
-    {
-      "title": "How AI is Helping Hospitals Get Ahead",
-      "url": "https://www.techrepublic.com/article/how-ai-is-helping-hospitals-get-ahead",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "See how Northwestern Medicine is using AI to predict disease earlier, improve radiology efficiency, and support a more proactive model of care with on-premise infrastructure from Dell Technologies and NVIDIA.\nThe post How AI is Helping Hospitals Get Ahead appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/How-AI-is-Helping-Hospitals-Get-Ahead.jpg?f=jpeg",
-      "published": "2026-05-14T05:17:31+00:00",
-      "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9787
-    },
-    {
-      "title": "Top Tech Conferences to Attend in 2026",
-      "url": "https://www.techrepublic.com/article/news-top-tech-conferences-events",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Explore the top tech conferences to attend in 2026. Discover key dates, locations, and must-see events in AI, cloud, cybersecurity, IT, and emerging tech.\nThe post Top Tech Conferences to Attend in 2026 appeared first on TechRepublic.",
-      "image": "",
-      "published": "2026-05-14T05:00:00+00:00",
-      "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.972
-    },
-    {
-      "title": "How to Build a Dynamic Zero-Trust Network Simulation with Graph-Based Micro-Segmentation, Adaptive Policy Engine, and Insider Threat Detection",
-      "url": "https://www.marktechpost.com/2026/05/13/how-to-build-a-dynamic-zero-trust-network-simulation-with-graph-based-micro-segmentation-adaptive-policy-engine-and-insider-threat-detection",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build a realistic Zero-Trust network simulation by modeling a micro-segmented environment as a directed graph and forcing every request to earn access through continuous verification. We implement a dynamic policy engine that blends ABAC-style permissions with device posture, MFA, path reachability, zone sensitivity, and live risk signals such as anomaly and [&#8230;]\nThe post How to Build a Dynamic Zero-Trust Network Simulation with Graph-Based Micro-Segmentation, Adaptive Policy Engine, and Insider Threat Detection appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-6-1024x731.png",
-      "published": "2026-05-14T02:31:47+00:00",
-      "firstSeen": "2026-05-14T03:00:02.011729+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9875
-    },
-    {
-      "title": "Anthropic forms $200 million partnership with the Gates Foundation",
-      "url": "https://www.anthropic.com/news/gates-foundation-partnership",
-      "source": "Anthropic News",
-      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "Anthropic forms $200 million partnership with the Gates Foundation",
-      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=coral",
-      "published": "2026-05-14T00:00:00+00:00",
-      "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.1154
+      "score": 1.8606
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3523
+      "score": 1.3427
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.7587
+      "score": 2.7518
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2222
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8916
+      "score": 1.8915
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",

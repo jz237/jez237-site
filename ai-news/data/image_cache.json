@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T15:29:19.402828+00:00",
+  "updatedAt": "2026-05-14T17:00:01.282085+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6836,6 +6836,14 @@
     "https://www.anthropic.com/news/gates-foundation-partnership": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=coral",
       "checkedAt": "2026-05-14T15:29:19.402828+00:00"
+    },
+    "https://techcrunch.com/2026/05/14/cerebras-raises-5-5b-kicking-off-2026s-ipo-season-with-a-bang": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cerebras-Nasdaq-opening-bell.png?resize=1200,695",
+      "checkedAt": "2026-05-14T17:00:01.282085+00:00"
+    },
+    "https://simonwillison.net/2026/May/14/datasette-ip-rate-limit": {
+      "image": "",
+      "checkedAt": "2026-05-14T17:00:01.282085+00:00"
     }
   }
 }

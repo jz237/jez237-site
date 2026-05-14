@@ -1,6 +1,6 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T15:29:19.402828+00:00",
+  "updatedAt": "2026-05-14T17:00:01.282085+00:00",
   "items": [
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -13,26 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:46:04+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-14T16:00:01.881534+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3529
-    },
-    {
-      "title": "Correct Answers from Sound Reasoning: Verifiable Process Supervision for Language Models",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T15:29:34.868614+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.46
+      "score": 9.323
     },
     {
       "title": "Microsoft is quietly shopping for an OpenAI replacement",
@@ -48,7 +32,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9462
+      "score": 6.9093
     },
     {
       "title": "OpenAI says no user data was touched in the TanStack npm worm",
@@ -64,7 +48,7 @@
       "lastSeen": "2026-05-14T12:00:01.901006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7518
+      "score": 6.7147
     },
     {
       "title": "Google is doing to factory robots what Android did to phones. Fanuc just became the Samsung of the equation.",
@@ -77,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/fanuc-google-physical-ai-factory-robots.avif",
       "published": "2026-05-14T12:26:02+00:00",
       "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0605
+      "score": 6.019
     },
     {
       "title": "Anthropic forms $200 million partnership with the Gates Foundation",
@@ -93,10 +77,26 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=coral",
       "published": "2026-05-14T00:00:00+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1154
+      "score": 5.086
+    },
+    {
+      "title": "TimelineReasoner: Advancing Timeline Summarization with Large Reasoning Models",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-14T17:00:07.633300+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "Clio’s $500M milestone arrives just as Anthropic ups the ante",
@@ -109,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/11/gavel-messy-legal.jpg?resize=1200%2C675",
       "published": "2026-05-14T05:24:39+00:00",
       "firstSeen": "2026-05-14T06:00:01.255178+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0214
+      "score": 4.9872
     },
     {
       "title": "Jeff Bezos’ Blue Origin May Need Outside Cash to Catch SpaceX",
@@ -125,10 +125,10 @@
       "image": "",
       "published": "2026-05-14T13:41:37+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9965
+      "score": 4.9535
     },
     {
       "title": "Data readiness for agentic AI in financial services",
@@ -141,10 +141,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Elastic-iStock-2224485239.jpg?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9165
+      "score": 4.8743
     },
     {
       "title": "Establishing AI and data sovereignty in the age of autonomous systems",
@@ -157,10 +157,26 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/EDB-Social-Card-cover.png?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7165
+      "score": 4.6743
+    },
+    {
+      "title": "datasette-ip-rate-limit 0.1a0",
+      "url": "https://simonwillison.net/2026/May/14/datasette-ip-rate-limit",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-ip-rate-limit 0.1a0\n        The datasette.io site was being hammered by poorly-behaved crawlers, so I had Codex (GPT-5.5 xhigh) build a configurable rate limiting plugin to block IPs that were hammering specific areas of the site too quickly.\nHere's the production configuration I'm using on that site for the new plugin:\n  datasette-ip-rate-limit:\n    header: Fly-Client-IP\n    max_keys: 10000\n    exempt_paths:\n    - \"/static/*\"\n    - \"/-/turnstile*\"\n    rules:\n    - name: public-demo-multi-parameter-table-pages\n      paths:\n      - \"/global-power-plants/*\"\n      - \"/legislato",
+      "image": "",
+      "published": "2026-05-14T04:10:23+00:00",
+      "firstSeen": "2026-05-14T17:00:01.282085+00:00",
+      "lastSeen": "2026-05-14T17:00:01.282085+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6603
     },
     {
       "title": "This memory chip works at 700 degrees Celsius. The startup behind it is already building AI chips that compute where GPUs cannot.",
@@ -176,39 +192,7 @@
       "lastSeen": "2026-05-14T13:02:23.001511+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6519
-    },
-    {
-      "title": "SK Hynix is about $50bn away from being a trillion-dollar company",
-      "url": "https://thenextweb.com/news/sk-hynix-cusp-trillion-dollar-hbm-rally",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two AI memory rallies, one country, and a market cap chart that has gone up 9x in two years. If SK Hynix crosses the threshold, South Korea becomes the first country outside the US to host two trillion-dollar companies at the same time. SK Hynix is roughly $50bn away from a trillion-dollar market capitalisation. Its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/SK-Hynix.avif",
-      "published": "2026-05-14T08:55:08+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0665
-    },
-    {
-      "title": "The CMA opens its fourth Strategic Market Status case into Microsoft",
-      "url": "https://thenextweb.com/news/cma-microsoft-sms-investigation-business-software",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Windows, Office, Teams, Copilot, server operating systems, and the cloud licensing the regulator already flagged last July. A nine-month investigation, a February 2027 designation decision, and the first CMA SMS case to walk straight through the door the cloud market inquiry left ajar. The UK’s Competition and Markets Authority has opened a Strategic Market Status [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/microsoft-mai-models-openai-independence.avif",
-      "published": "2026-05-14T11:32:25+00:00",
-      "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T15:29:19.402828+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0357
+      "score": 4.6148
     }
   ],
   "errors": []
