@@ -298,5 +298,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-13-evening-neutrino-ice-forge",
+    "title": "Neutrino Ice Forge",
+    "tests": "Explores translucent comet ice, hard-sci-fi fabrication machinery, particle-beam lighting, tiny scale figures, cold/warm color contrast, and refractive depth inside a hollow celestial body.",
+    "prompt": "A vast science-fiction starship hull forge built inside the hollow core of a transparent blue comet, titled conceptually Neutrino Ice Forge but with no visible text. The scene looks through layers of glassy ancient ice full of trapped dust and tiny bubbles; inside, autonomous fabrication arms and spiderlike maintenance drones guide glowing white-blue particle beams that slowly crystallize a sleek interstellar ship frame from vapor and frost. Warm amber habitat windows and red safety beacons contrast against cold cyan ice, with stars visible through fissures in the comet wall and a small distant gas giant outside. Include tiny suited engineers only as scale figures standing still on catwalks, not posing or performing. Cinematic hard-sci-fi realism, crisp mechanical detail, translucent ice refraction, volumetric beam light, no logos, no readable text, no dancing, no dancers, no stage performance.",
+    "image": "images/2026-05-13-evening-neutrino-ice-forge.png",
+    "date": "2026-05-13",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
