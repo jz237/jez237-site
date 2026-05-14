@@ -1,6 +1,6 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T00:13:05.042060+00:00",
+  "updatedAt": "2026-05-14T02:00:02.016080+00:00",
   "items": [
     {
       "title": "Navid Rezazadeh, Arash Gholami Davoodi",
@@ -11,19 +11,13 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T00:13:09.137668+00:00",
+      "published": "2026-05-14T02:00:09.249884+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T00:13:05.042060+00:00",
+      "lastSeen": "2026-05-14T02:00:02.016080+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": [
-    {
-      "source": "Microsoft Research Blog",
-      "url": "https://www.microsoft.com/en-us/research/feed/",
-      "error": "The read operation timed out"
-    }
-  ]
+  "errors": []
 }
