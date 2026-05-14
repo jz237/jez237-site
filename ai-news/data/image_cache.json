@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T04:00:02.041155+00:00",
+  "updatedAt": "2026-05-14T05:00:01.719017+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6764,6 +6764,10 @@
     "https://www.marktechpost.com/2026/05/13/how-to-build-a-dynamic-zero-trust-network-simulation-with-graph-based-micro-segmentation-adaptive-policy-engine-and-insider-threat-detection": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-6-1024x731.png",
       "checkedAt": "2026-05-14T03:00:02.011729+00:00"
+    },
+    "https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack": {
+      "image": "",
+      "checkedAt": "2026-05-14T05:00:01.719017+00:00"
     }
   }
 }
