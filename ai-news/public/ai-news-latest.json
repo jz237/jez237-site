@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T18:00:01.842382+00:00",
+  "updatedAt": "2026-05-14T19:00:01.859506+00:00",
   "items": [
     {
       "title": "Liancheng Zhang, Xiaoxi Li, Zhicheng Dou",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T18:00:09.174617+00:00",
+      "published": "2026-05-14T19:00:09.891373+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Granite Embedding Multilingual R2: Open Apache 2.0 Multilingual Embeddings with 32K Context — Best Sub-100M Retrieval Quality",
+      "url": "https://huggingface.co/blog/ibm-granite/granite-embedding-multilingual-r2",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-embedding-multilingual-r2.png",
+      "published": "2026-05-14T18:55:01+00:00",
+      "firstSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.6726
+    },
+    {
+      "title": "Trump’s China Summit Turns Into a Big Tech Power Play",
+      "url": "https://www.techrepublic.com/article/news-trump-china-summit-big-tech-apac",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Trump’s China summit brought Nvidia, Apple, and Tesla leaders into talks shaped by AI chips, trade pressure, and market-access demands.\nThe post Trump’s China Summit Turns Into a Big Tech Power Play appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/P20251029DT-2177.jpg?f=jpeg",
+      "published": "2026-05-14T18:27:32+00:00",
+      "firstSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2336
+    },
+    {
+      "title": "Graphon AI exits stealth with $8.3M to build the data layer that LLMs are missing",
+      "url": "https://thenextweb.com/news/graphon-ai-pre-model-intelligence-layer-seed-funding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The name is the tell. Graphon AI, which emerged from stealth on Wednesday with $8.3 million in seed funding, is named after a mathematical object that most people in AI have never heard of and that its two most prominent advisors helped invent. A graphon is the limit of a sequence of dense graphs: a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/graphon-ai-pre-model-intelligence-layer-seed-funding.avif",
+      "published": "2026-05-14T17:53:04+00:00",
+      "firstSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1164
     },
     {
       "title": "Use this map to find the data centers in your backyard",
@@ -28,10 +76,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-14-at-1.06.40PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=8.9464411557435%2C0%2C82.107117688513%2C100&amp%3Bw=1200",
       "published": "2026-05-14T17:40:00+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3498
+      "score": 2.32
     },
     {
       "title": "97% of marketers use AI daily – 78% of consumers wish they wouldn’t",
@@ -44,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/canva-ai-marketing-consumer-trust-gap-report.avif",
       "published": "2026-05-14T17:27:14+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1334
+      "score": 2.1037
     },
     {
       "title": "BCG is training its AI sales agent on what not to do – and that might be the smarter bet",
@@ -60,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/bcg-jamie-ai-agent-sales-best-worst-sellers.avif",
       "published": "2026-05-14T17:11:37+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2256
+      "score": 6.1962
     },
     {
       "title": "Cisco announces record revenue and 4,000 layoffs in the same day",
@@ -76,10 +124,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2251821138-1024x648.jpg",
       "published": "2026-05-14T16:47:43+00:00",
       "firstSeen": "2026-05-14T18:00:01.842382+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9138
+      "score": 3.8846
     },
     {
       "title": "Cerebras raises $5.5B, then stock pops $108%, in the first huge tech IPO of 2026",
@@ -92,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Cerebras-Nasdaq-opening-bell.png?resize=1200%2C695",
       "published": "2026-05-14T16:30:02+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3451
+      "score": 3.3162
     },
     {
       "title": "A four-month-old startup just raised $650 million to build AI that improves itself",
@@ -108,10 +156,42 @@
       "image": "https://media.thenextweb.com/2026/05/recursive-superintelligence-self-improving-ai-funding.avif",
       "published": "2026-05-14T16:23:13+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5018
+      "score": 3.473
+    },
+    {
+      "title": "Top New Features in Android 17 You’ll Notice This Year",
+      "url": "https://www.techrepublic.com/article/news-android-17-gemini-ai-privacy-sharing",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google previewed Android 17 with Gemini AI tools, AirDrop-style sharing, privacy upgrades, multitasking changes, and stronger security controls.\nThe post Top New Features in Android 17 You’ll Notice This Year appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/android-17.jpg?f=jpeg",
+      "published": "2026-05-14T16:16:49+00:00",
+      "firstSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.1699
+    },
+    {
+      "title": "Microsoft Retires ‘Copilot Mode’ as Edge Gets Built-In AI Tools",
+      "url": "https://www.techrepublic.com/article/news-microsoft-retires-copilot-mode-edge",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft is retiring “Copilot Mode” in Edge as it builds AI browsing tools directly into Edge on desktop and mobile.\nThe post Microsoft Retires ‘Copilot Mode’ as Edge Gets Built-In AI Tools appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/copilot-edge.jpg?f=jpeg",
+      "published": "2026-05-14T15:58:19+00:00",
+      "firstSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.1612
     },
     {
       "title": "Seven million cameras on seven million faces: the smart glasses privacy crisis no one can stop",
@@ -124,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-smart-glasses-privacy-crisis-apple-google-snap.avif",
       "published": "2026-05-14T15:47:49+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1847
+      "score": 3.1563
     },
     {
       "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
@@ -140,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:46:04+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2939
+      "score": 9.2655
     },
     {
       "title": "The UK spent £900 million on Palantir. Now it is spending £175 million on a British AI company to fix the tax gap.",
@@ -156,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/quantexa-hmrc-ai-tax-fraud-sovereignty.avif",
       "published": "2026-05-14T15:34:37+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0784
+      "score": 2.0502
     },
     {
       "title": "Americans do not want AI data centers in their backyards",
@@ -172,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STKS528_DATA_CENTERS_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T15:24:53+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3838
+      "score": 1.3557
     },
     {
       "title": "Coutts raised its minimum to £3 million. Revolut just set its at £500,000. The mass-affluent gap is the point.",
@@ -188,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/revolut-private-bank-wealth-management-ipo.avif",
       "published": "2026-05-14T15:24:49+00:00",
       "firstSeen": "2026-05-14T17:00:01.282085+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7737
+      "score": 2.7457
     },
     {
       "title": "Khosla Ventures is betting $10M on Ian Crosby, whose first startup, Bench, imploded",
@@ -204,10 +284,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Synthetic-Ian-Crosby.jpg?resize=1200%2C800",
       "published": "2026-05-14T15:20:18+00:00",
       "firstSeen": "2026-05-14T15:29:19.402828+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2116
+      "score": 2.1836
+    },
+    {
+      "title": "Kevin O’Leary’s ‘Wonder Valley’ Data Center Advances as Job Estimates Shift",
+      "url": "https://www.techrepublic.com/article/news-kevin-oleary-wonder-valley-utah-job-estimates",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Kevin O’Leary’s Wonder Valley data center project faces scrutiny as job estimates shift and Utah residents raise environmental concerns.\nThe post Kevin O’Leary’s ‘Wonder Valley’ Data Center Advances as Job Estimates Shift appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-4.png?f=jpeg",
+      "published": "2026-05-14T15:02:15+00:00",
+      "firstSeen": "2026-05-14T19:00:01.859506+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1353
     },
     {
       "title": "How Coinspaid became one of fintech’s top remote-first employers",
@@ -220,10 +316,10 @@
       "image": "https://media.thenextweb.com/2026/05/coinspaid-remote-first-fintech-employer.avif",
       "published": "2026-05-14T14:11:03+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7394
+      "score": 2.7123
     },
     {
       "title": "Cisco cuts nearly 4,000 jobs to spend more on AI, reports ‘record quarterly revenue’",
@@ -236,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/chuck-robbins-2270936687.jpg?resize=1200%2C865",
       "published": "2026-05-14T14:01:14+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1749
+      "score": 2.1479
     },
     {
       "title": "Wirestock raises $23M to supply creative multimodal data to AI labs",
@@ -248,14 +344,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Wirestock has over 700,000 creators on its platform, which supplies photos, videos and 3D content to AI labs.",
+      "summary": "The company pivoted to being a data provider in 2023 and now supplies datasets of images, videos, design assets, and gaming and 3D content to AI labs.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Wirestock-team.jpg?resize=1200%2C675",
       "published": "2026-05-14T14:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5743
+      "score": 4.5473
     },
     {
       "title": "Two weeks left: Startup Battlefield 200 applications close May 27",
@@ -268,10 +364,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/sb200_trophy.png?w=1080",
       "published": "2026-05-14T14:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1743
+      "score": 0.1473
     },
     {
       "title": "10 best ITGC tools and software for automated IT controls in 2026",
@@ -284,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/05/ITGC-tools.avif",
       "published": "2026-05-14T13:47:50+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0288
+      "score": 2.002
     },
     {
       "title": "Jeff Bezos’ Blue Origin May Need Outside Cash to Catch SpaceX",
@@ -300,10 +396,10 @@
       "image": "",
       "published": "2026-05-14T13:41:37+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.926
+      "score": 4.8992
     },
     {
       "title": "Jumia is cutting another 10% of staff. AI is the framing. Profitability is the deadline.",
@@ -316,10 +412,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jumia.avif",
       "published": "2026-05-14T13:33:52+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1225
+      "score": 3.0958
     },
     {
       "title": "Sea You in the Cloud: ‘Subnautica 2’ Early Access Dives Onto GeForce NOW",
@@ -332,10 +428,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/gfn-thursday-5-14-nv-blog-1280x680-logo.jpg",
       "published": "2026-05-14T13:00:08+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8474
+      "score": 2.8212
     },
     {
       "title": "Data readiness for agentic AI in financial services",
@@ -348,10 +444,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Elastic-iStock-2224485239.jpg?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8473
+      "score": 4.8211
     },
     {
       "title": "Establishing AI and data sovereignty in the age of autonomous systems",
@@ -364,10 +460,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/EDB-Social-Card-cover.png?resize=1200%2C600",
       "published": "2026-05-14T13:00:00+00:00",
       "firstSeen": "2026-05-14T15:00:01.231752+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6473
+      "score": 4.6211
     },
     {
       "title": "AI Promised the Audemars Piguet x Swatch Wristwatch. China Will Deliver It",
@@ -380,10 +476,10 @@
       "image": "https://media.wired.com/photos/6a04f275366b52a33cd08138/master/pass/GettyImages-458085231.jpg",
       "published": "2026-05-14T12:52:28+00:00",
       "firstSeen": "2026-05-14T13:00:01.680647+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.144
+      "score": 2.1179
     },
     {
       "title": "Wall Street’s six largest banks cut 15,000 jobs and posted $47 billion in profits. The CEOs stopped pretending.",
@@ -399,7 +495,7 @@
       "lastSeen": "2026-05-14T18:00:01.842382+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9976
+      "score": 1.9716
     },
     {
       "title": "Google is doing to factory robots what Android did to phones. Fanuc just became the Samsung of the equation.",
@@ -415,7 +511,7 @@
       "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9924
+      "score": 5.9666
     },
     {
       "title": "The company that outsells Tesla on humanoid robots just unveiled a pilotable mecha. Unitree is filing for a $7 billion IPO.",
@@ -431,7 +527,7 @@
       "lastSeen": "2026-05-14T17:00:01.282085+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0797
+      "score": 3.0542
     },
     {
       "title": "The CMA opens its fourth Strategic Market Status case into Microsoft",
@@ -447,7 +543,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9693
+      "score": 3.9441
     },
     {
       "title": "After 25 years of writing the cheques himself, Bezos is opening Blue Origin to outsiders",
@@ -463,7 +559,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6642
+      "score": 2.6391
     },
     {
       "title": "You can make an app for that",
@@ -476,10 +572,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268478_era_of_personal_software_CVirginia18.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-14T11:00:00+00:00",
       "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2656
+      "score": 3.2408
     },
     {
       "title": "Gen Z Is Pioneering a New Understanding of Truth",
@@ -492,10 +588,10 @@
       "image": "https://media.wired.com/photos/6a04da9bd7be752b48cba4fa/master/pass/Book-Excerpt-Gen-Z-Pioneering-New-Understanding-of-Truth-Culture.jpg",
       "published": "2026-05-14T11:00:00+00:00",
       "firstSeen": "2026-05-14T12:00:01.901006+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
+      "score": 2.0708
     },
     {
       "title": "Meta and Google fund the kids groups they cite back at regulators",
@@ -511,7 +607,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9514
+      "score": 1.9267
     },
     {
       "title": "Why global businesses are moving to crypto mass payouts",
@@ -527,7 +623,7 @@
       "lastSeen": "2026-05-14T15:29:19.402828+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6347
+      "score": 2.6105
     },
     {
       "title": "Samsung wants its union back at the table. The union wants the bonus formula in writing.",
@@ -543,103 +639,7 @@
       "lastSeen": "2026-05-14T13:02:23.001511+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3141
-    },
-    {
-      "title": "The shock of seeing your body used in deepfake porn",
-      "url": "https://www.technologyreview.com/2026/05/14/1137161/ai-porn-nonconsensual-deepfakes-takedown-piracy-copyright",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "When Jennifer got a job doing research for a nonprofit in 2023, she ran her new professional headshot through a facial recognition program. She wanted to see if the tech would pull up the porn videos she’d made more than 10 years before, when she was in her early 20s. It did in fact return&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Hoeckele-deepfake-01-social.jpg?resize=1200%2C600",
-      "published": "2026-05-14T09:00:00+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.4467
-    },
-    {
-      "title": "Meta’s New Reality: Record High Profits. Record Low Morale",
-      "url": "https://www.wired.com/story/meta-layoffs-bad-vibes-mark-zuckerberg-ai",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Next week, Meta is cutting about 10 percent of its staff. WIRED spoke with more than a dozen current and former employees about what it's like inside a company where “everyone is unhappy.”",
-      "image": "https://media.wired.com/photos/6a05290e9fce16b06df70c32/master/pass/Meta-New-Reality-Record-High-Profits-Record-Low-Morale-Business-2261835380.jpg",
-      "published": "2026-05-14T09:00:00+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1467
-    },
-    {
-      "title": "SK Hynix is about $50bn away from being a trillion-dollar company",
-      "url": "https://thenextweb.com/news/sk-hynix-cusp-trillion-dollar-hbm-rally",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two AI memory rallies, one country, and a market cap chart that has gone up 9x in two years. If SK Hynix crosses the threshold, South Korea becomes the first country outside the US to host two trillion-dollar companies at the same time. SK Hynix is roughly $50bn away from a trillion-dollar market capitalisation. Its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/SK-Hynix.avif",
-      "published": "2026-05-14T08:55:08+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0047
-    },
-    {
-      "title": "Cerebras raises $5.55bn in the biggest US tech IPO since Snowflake",
-      "url": "https://thenextweb.com/news/cerebras-ipo-5-55-billion-biggest-tech-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Priced at $185, above the marketed range, the wafer-scale chip company opens trading on Thursday at a $56.4bn valuation. The OpenAI deal is what got the book covered. The customer concentration footnote is what the next quarter has to answer. Cerebras Systems priced its IPO at $185 per share on Wednesday evening, above the marketed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Cerebras.avif",
-      "published": "2026-05-14T08:35:06+00:00",
-      "firstSeen": "2026-05-14T10:00:02.079406+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8968
-    },
-    {
-      "title": "This memory chip works at 700 degrees Celsius. The startup behind it is already building AI chips that compute where GPUs cannot.",
-      "url": "https://thenextweb.com/news/tetramem-memristor-700c-space-ai-computing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Every probe humanity has sent to Venus has died. The Soviet Venera landers survived between 23 minutes and two hours on a surface where the temperature exceeds 460 degrees Celsius. Their electronics, designed to endure heat that would melt lead, still failed. The longest-lived mission in the history of Venus exploration lasted 127 minutes. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/tetramem-memristor-700c-space-ai-computing.avif",
-      "published": "2026-05-14T08:20:27+00:00",
-      "firstSeen": "2026-05-14T09:00:01.945725+00:00",
-      "lastSeen": "2026-05-14T13:02:23.001511+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5911
-    },
-    {
-      "title": "OpenAI says no user data was touched in the TanStack npm worm",
-      "url": "https://thenextweb.com/news/openai-tanstack-npm-supply-chain-mini-shai-hulud",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two corporate laptops, some credential material, and a forced macOS app update. The interesting part is how the malicious packages got published in the first place: not by a stolen npm password, but by TanStack’s own legitimate release pipeline, after the attacker code took over the runner mid-build. OpenAI said on Wednesday that it found [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI-lawsuite.avif",
-      "published": "2026-05-14T08:20:12+00:00",
-      "firstSeen": "2026-05-14T09:00:01.945725+00:00",
-      "lastSeen": "2026-05-14T12:00:01.901006+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.691
+      "score": 3.2905
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3366
+      "score": 1.3307
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.7474
+      "score": 2.7431
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2221
+      "score": 0.222
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-14T18:00:01.842382+00:00",
+      "lastSeen": "2026-05-14T19:00:01.859506+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8915
+      "score": 1.8914
     },
     {
       "title": "Washington Yotto Ochieng on the navigation tech that keeps our world moving",
