@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T18:00:01.842382+00:00",
+  "updatedAt": "2026-05-14T19:00:01.859506+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6856,6 +6856,26 @@
     "https://www.together.ai/blog/violin-open-source-translation-skill": {
       "image": "",
       "checkedAt": "2026-05-14T18:00:01.842382+00:00"
+    },
+    "https://huggingface.co/blog/ibm-granite/granite-embedding-multilingual-r2": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/ibm-granite/granite-embedding-multilingual-r2.png",
+      "checkedAt": "2026-05-14T19:00:01.859506+00:00"
+    },
+    "https://www.techrepublic.com/article/news-trump-china-summit-big-tech-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/P20251029DT-2177.jpg?f=jpeg",
+      "checkedAt": "2026-05-14T19:00:01.859506+00:00"
+    },
+    "https://www.techrepublic.com/article/news-android-17-gemini-ai-privacy-sharing": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/android-17.jpg?f=jpeg",
+      "checkedAt": "2026-05-14T19:00:01.859506+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-retires-copilot-mode-edge": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/copilot-edge.jpg?f=jpeg",
+      "checkedAt": "2026-05-14T19:00:01.859506+00:00"
+    },
+    "https://www.techrepublic.com/article/news-kevin-oleary-wonder-valley-utah-job-estimates": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-4.png?f=jpeg",
+      "checkedAt": "2026-05-14T19:00:01.859506+00:00"
     }
   }
 }
