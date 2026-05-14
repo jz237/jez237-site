@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T17:00:01.282085+00:00",
+  "updatedAt": "2026-05-14T18:00:01.842382+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6844,6 +6844,18 @@
     "https://simonwillison.net/2026/May/14/datasette-ip-rate-limit": {
       "image": "",
       "checkedAt": "2026-05-14T17:00:01.282085+00:00"
+    },
+    "https://www.theverge.com/policy/930629/data-center-policy-map-interactive": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-14-at-1.06.40PM.png?quality=90&amp;strip=all&amp;crop=8.9464411557435%2C0%2C82.107117688513%2C100&amp;w=1200",
+      "checkedAt": "2026-05-14T18:00:01.842382+00:00"
+    },
+    "https://openai.com/index/chatgpt-recognize-context-in-sensitive-conversations": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1dJ8mhpIbtQbsP5wzMfoRe/a1bd2866bd1b5afb6b3e9d4bda5a42c2/SEO_Safety.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-14T18:00:01.842382+00:00"
+    },
+    "https://www.together.ai/blog/violin-open-source-translation-skill": {
+      "image": "",
+      "checkedAt": "2026-05-14T18:00:01.842382+00:00"
     }
   }
 }
