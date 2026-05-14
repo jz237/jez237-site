@@ -334,5 +334,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-14-afternoon-cloudforge-carousel",
+    "title": "Cloudforge Carousel",
+    "tests": "Explores industrial magical realism, circular composition, wet reflections, vapor and lightning effects, patinated metal detail, tiny robot scale cues, and warm-cool storm lighting.",
+    "prompt": "A visually striking surreal scene titled conceptually Cloudforge Carousel, but with no visible text and no dancing: inside a vast abandoned train roundhouse, a circular locomotive turntable has become a working storm-forge. Instead of trains, heavy brass rail tracks hold sculpted thundercloud anvils, copper lightning rods, suspended rain chains, glowing furnace vents, and half-formed cloud machines being assembled by tiny maintenance robots. The scene is viewed from a high three-quarter angle so the circular track geometry is clear; warm orange forge light glows from below while cool blue storm light pours through broken roof windows. Include crisp wet concrete reflections, drifting vapor, sparks, rivulets of rainwater, patinated metal, porcelain insulators, tiny tools, and layered depth. Magical-realism industrial atmosphere, richly detailed, cinematic lighting, coherent scale, no people performing, no dancers, no dance pose, no stage performance, no copyrighted logos or characters.",
+    "image": "images/2026-05-14-afternoon-cloudforge-carousel.png",
+    "date": "2026-05-14",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
