@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T05:00:01.719017+00:00",
+  "updatedAt": "2026-05-14T04:56:34.330631+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6766,8 +6766,8 @@
       "checkedAt": "2026-05-14T03:00:02.011729+00:00"
     },
     "https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack": {
-      "image": "",
-      "checkedAt": "2026-05-14T05:00:01.719017+00:00"
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/5sVkleeWkpnumrq0G1UkIW/138a18ce1af4678fc72e12fe691f3ad8/Frame-1.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-14T04:56:34.330631+00:00"
     }
   }
 }
