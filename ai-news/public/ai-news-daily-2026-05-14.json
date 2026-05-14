@@ -1,6 +1,6 @@
 {
   "date": "2026-05-14",
-  "updatedAt": "2026-05-14T05:00:01.719017+00:00",
+  "updatedAt": "2026-05-14T04:56:34.330631+00:00",
   "items": [
     {
       "title": "How to Build a Dynamic Zero-Trust Network Simulation with Graph-Based Micro-Segmentation, Adaptive Policy Engine, and Insider Threat Detection",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-6-1024x731.png",
       "published": "2026-05-14T02:31:47+00:00",
       "firstSeen": "2026-05-14T03:00:02.011729+00:00",
-      "lastSeen": "2026-05-14T05:00:01.719017+00:00",
+      "lastSeen": "2026-05-14T04:56:34.330631+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.247
+      "score": 3.2487
     },
     {
       "title": "Liancheng Zhang, Xiaoxi Li, Zhicheng Dou",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-14T05:00:06.049995+00:00",
+      "published": "2026-05-14T04:56:39.193946+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-14T05:00:01.719017+00:00",
+      "lastSeen": "2026-05-14T04:56:34.330631+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
