@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T22:00:01.229225+00:00",
+  "updatedAt": "2026-05-15T23:00:01.935005+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7048,6 +7048,10 @@
     "https://www.marktechpost.com/2026/05/15/how-to-build-an-mcp-style-routed-ai-agent-system-with-dynamic-tool-exposure-planning-execution-and-context-injection": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-9-1024x731.png",
       "checkedAt": "2026-05-15T22:00:01.229225+00:00"
+    },
+    "https://www.theverge.com/news/931884/youtube-likeness-detection-ai-deepfake-expansion-all-adults": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK419_DEEPFAKE_3_CVIRGINIA_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-15T23:00:01.935005+00:00"
     }
   }
 }
