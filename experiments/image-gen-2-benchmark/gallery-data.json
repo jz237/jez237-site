@@ -370,5 +370,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-15-midday-micro-rooftop-rain-garden-blueprint",
+    "title": "Micro Rooftop Rain Garden Blueprint",
+    "tests": "Explores practical environmental infographic clarity, layered planter cutaway rendering, stormwater-flow arrows, wet soil/root textures, rooftop gardening detail, and readable-title layout without dense text.",
+    "prompt": "Vertical museum-quality infographic poster titled \"MICRO ROOFTOP RAIN GARDEN BLUEPRINT\" showing a clear educational cutaway of a compact urban rooftop garden engineered to capture stormwater. Composition: top section shows a small city rooftop after rain with raised planters, native flowers, dwarf vegetables, gravel paths, and shallow puddles reflecting a cloudy sky; no people posing or performing. Main middle section is a precise layered cutaway through one planter bed: leaf canopy, mulch, living soil with visible roots and earthworms, mycorrhizal threads, biochar pockets, perforated drainage pipe, blue water storage cells, overflow spout, and a small cistern tucked beside brick parapet. Use clean colored arrows to show rain entering, roots absorbing moisture, filtered water moving down, and overflow leaving safely. Bottom section contains four simple icon panels for pollinator habitat, cooling shade, runoff reduction, and edible harvest; include simple numbered callout circles and thin leader lines, but avoid dense tiny paragraphs. Style: crisp scientific illustration mixed with cinematic natural texture, cream paper margin, subtle grid marks, teal-blue water arrows, warm brick and green plant palette, realistic wet soil and leaf detail, readable title text only, no logos, no copyrighted imagery, no dancing, no dancers, no dance poses, no stage or performance scene.",
+    "image": "images/2026-05-15-midday-micro-rooftop-rain-garden-blueprint.png",
+    "date": "2026-05-15",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
