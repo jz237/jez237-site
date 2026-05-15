@@ -1,6 +1,6 @@
 {
   "date": "2026-05-15",
-  "updatedAt": "2026-05-15T04:00:01.786584+00:00",
+  "updatedAt": "2026-05-15T05:00:01.615338+00:00",
   "items": [
     {
       "title": "Poetiq’s Meta-System Automatically Builds a Model-Agnostic Harness That Improved Every LLM Tested on LiveCodeBench Pro Without Fine-Tuning",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-14-at-8.33.46-PM-1-150x150.png",
       "published": "2026-05-15T03:38:10+00:00",
       "firstSeen": "2026-05-15T04:00:01.786584+00:00",
-      "lastSeen": "2026-05-15T04:00:01.786584+00:00",
+      "lastSeen": "2026-05-15T05:00:01.615338+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.6089
+      "score": 9.5791
     },
     {
       "title": "The Real Losers of the Musk v. Altman Trial",
@@ -29,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a063a9b1d5880149b6572f1/master/pass/Model-Behavior-We-Are-All-Losers-in-Musk-v-Altman-Business.jpg",
       "published": "2026-05-15T00:49:53+00:00",
       "firstSeen": "2026-05-15T01:00:02.090508+00:00",
-      "lastSeen": "2026-05-15T04:00:01.786584+00:00",
+      "lastSeen": "2026-05-15T05:00:01.615338+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1973
+      "score": 4.1697
     },
     {
       "title": "Merging Methods for Multilingual Knowledge Editing for Large Language Models: An Empirical Odyssey",
@@ -43,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-15T04:00:16.413562+00:00",
+      "published": "2026-05-15T05:00:09.656011+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-15T04:00:01.786584+00:00",
+      "lastSeen": "2026-05-15T05:00:01.615338+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
