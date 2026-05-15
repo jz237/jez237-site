@@ -1,6 +1,6 @@
 {
   "date": "2026-05-15",
-  "updatedAt": "2026-05-15T14:00:01.617479+00:00",
+  "updatedAt": "2026-05-15T14:30:50.247574+00:00",
   "items": [
     {
       "title": "Best AI Agents for Software Development Ranked: A Benchmark-Driven Look at the Current Field",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-8.png",
       "published": "2026-05-15T08:23:01+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.5111
+      "score": 12.4978
     },
     {
       "title": "Poetiq’s Meta-System Automatically Builds a Model-Agnostic Harness That Improved Every LLM Tested on LiveCodeBench Pro Without Fine-Tuning",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-14-at-8.33.46-PM-1-150x150.png",
       "published": "2026-05-15T03:38:10+00:00",
       "firstSeen": "2026-05-15T04:00:01.786584+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3448
+      "score": 9.3331
     },
     {
       "title": "The Winklevoss twins paid 2.5x the share price to lift Gemini off the floor",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/The-Winklevoss-twins.avif",
       "published": "2026-05-15T13:05:52+00:00",
       "firstSeen": "2026-05-15T14:00:01.617479+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8228
+      "score": 8.8076
     },
     {
       "title": "Federal judge holds back on Anthropic’s $1.5bn author settlement",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-mythos-preview-glasswing.avif",
       "published": "2026-05-15T09:15:40+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1143
+      "score": 6.1007
     },
     {
       "title": "Jury deliberations to begin in OpenAI nonprofit trial after Musk skips closing for Beijing",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-15T13:00:01.453007+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0763
+      "score": 6.0632
     },
     {
       "title": "Musk’s X commits to UK regulator on hate speech, with Grok probe still open",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/Elon-Musk.avif",
       "published": "2026-05-15T13:11:55+00:00",
       "firstSeen": "2026-05-15T14:00:01.617479+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0258
+      "score": 5.0105
     },
     {
       "title": "AI research papers are getting better, and it’s a big problem for scientists",
@@ -109,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268512_PHOTO-_Research_papers_are_overrun_with_AI_slop_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-15T11:00:00+00:00",
       "firstSeen": "2026-05-15T11:28:38.597854+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.022
+      "score": 5.0077
     },
     {
       "title": "Osaurus brings both local and cloud AI models to your Mac",
@@ -125,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/osaurus-techcrunch-2-1.png?resize=1200%2C675",
       "published": "2026-05-15T12:19:48+00:00",
       "firstSeen": "2026-05-15T13:00:01.453007+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7401
+      "score": 4.7253
     },
     {
       "title": "Mira Murati Wants Her AI to ‘Keep Humans in the Loop’",
@@ -141,10 +141,10 @@
       "image": "https://media.wired.com/photos/6a04e8e8e20de45ef884b2b7/master/pass/Mira-Murati-Wants-to-Keep-Human-Intelligence-in-Loop-As-Long-asPossible-Business-2266727283.jpg",
       "published": "2026-05-15T09:00:00+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1473
+      "score": 4.1338
     },
     {
       "title": "The Real Losers of the Musk v. Altman Trial",
@@ -157,42 +157,42 @@
       "image": "https://media.wired.com/photos/6a063a9b1d5880149b6572f1/master/pass/Model-Behavior-We-Are-All-Losers-in-Musk-v-Altman-Business.jpg",
       "published": "2026-05-15T00:49:53+00:00",
       "firstSeen": "2026-05-15T01:00:02.090508+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.953
+      "score": 3.9422
     },
     {
-      "title": "How to Build a Django-Unfold Admin Dashboard with Custom Models, Filters, Actions, and KPIs",
-      "url": "https://www.marktechpost.com/2026/05/14/how-to-build-a-django-unfold-admin-dashboard-with-custom-models-filters-actions-and-kpis",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
+      "title": "Runway started by helping filmmakers. Now it wants to beat Google at AI.",
+      "url": "https://techcrunch.com/2026/05/15/runway-started-by-helping-filmmakers-now-it-wants-to-beat-google-at-ai",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "In this tutorial, we build an advanced Django-Unfold admin dashboard. We start by installing Django, Django-Unfold, and the required dependencies, then we create a fresh Django project with a shop application. We configure Unfold with a modern admin theme, custom sidebar navigation, dashboard callbacks, product badges, tabs, filters, actions, and a custom admin homepage. We [&#8230;]\nThe post How to Build a Django-Unfold Admin Dashboard with Custom Models, Filters, Actions, and KPIs appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-3-1.png",
-      "published": "2026-05-15T05:54:47+00:00",
-      "firstSeen": "2026-05-15T06:00:01.702331+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "summary": "AI video generation startup Runway is betting that video generation is the path to world models. And that being an AI outsider is an advantage, not a liability.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/Runway-founders.jpg?resize=1200%2C960",
+      "published": "2026-05-15T14:00:00+00:00",
+      "firstSeen": "2026-05-15T14:30:50.247574+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0987
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.6744
     },
     {
-      "title": "Multiverse raises $70m at a $2.1bn valuation to push its AI-adoption pitch across Europe",
-      "url": "https://thenextweb.com/news/ultiverse-70-million-schroders-ai-adoption-europe",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "Figure Humanoid Robots Sort Packages Non-Stop in 24/7 Demo",
+      "url": "https://www.techrepublic.com/article/news-figure-robot-demo-tests-24-7-humanoid-fleet-work",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The round, led by Schroders Capital, follows January’s acquisition of Berlin-based StackFuel and 50% year-on-year revenue growth. Customers include the AA, Babcock, and Capital. Multiverse, the London-based AI- and tech-upskilling platform founded by Euan Blair, said on Friday it had raised $70m in primary funding led by Schroders Capital, at a $2.1bn valuation. Existing investors, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Multiverse.avif",
-      "published": "2026-05-15T09:20:27+00:00",
-      "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T14:00:01.617479+00:00",
+      "summary": "Figure AI’s Helix 02 humanoid robots neared 40 hours of autonomous work and almost 50,000 packages in a livestreamed warehouse demo.\nThe post Figure Humanoid Robots Sort Packages Non-Stop in 24/7 Demo appeared first on TechRepublic.",
+      "image": "",
+      "published": "2026-05-15T13:56:37+00:00",
+      "firstSeen": "2026-05-15T14:30:50.247574+00:00",
+      "lastSeen": "2026-05-15T14:30:50.247574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7165
+      "score": 3.2327
     }
   ],
   "errors": []
