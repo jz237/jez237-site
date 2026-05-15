@@ -346,5 +346,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-14-evening-eclipse-engine-port",
+    "title": "Eclipse Engine Port",
+    "tests": "Tests radial megastructure composition, artificial-eclipse lighting, prismatic edge effects, and dense autonomous construction detail.",
+    "prompt": "A vast hard-science-fiction megastructure called Eclipse Engine Port, with no visible text: an orbital construction harbor built around a perfectly black artificial eclipse disk suspended before a blazing white star. Concentric rings of matte black ceramic, brushed titanium, and translucent gold solar-sail fabric radiate around the dark disk like precise engineering, not a stage or performance. Hundreds of tiny autonomous tug drones and maintenance spiders move along illuminated rail tracks and docking arms, assembling mirror-shutter panels and heat radiators; a few small suited engineers stand still on observation catwalks only for scale. The star's corona spills around the central disk in a brilliant halo, casting sharp prismatic rim light, long blue-black shadows, and rainbow diffraction across glass control galleries. In the distance, a cobalt gas giant and thin icy rings curve through space. Ultra-detailed cinematic hard sci-fi realism, believable scale, crisp mechanical geometry, rich material contrast, volumetric light, no logos, no readable text, no dancing, no dancers, no dance poses, no stage performance, no copyrighted characters.",
+    "image": "images/2026-05-14-evening-eclipse-engine-port.png",
+    "date": "2026-05-14",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
