@@ -358,5 +358,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-15-morning-mirror-root-menagerie",
+    "title": "Mirror-Root Menagerie",
+    "tests": "Explores reflective fantasy architecture, living root habitats, tiny mythical creature detail, bioluminescent fungus lighting, and layered mirror depth without dance imagery.",
+    "prompt": "A richly detailed fantasy scene titled conceptually Mirror-Root Menagerie, with no visible text and no dancing: deep inside an ancient subterranean palace, colossal tree roots have grown through mirrored marble halls and become living habitats for tiny mythical creatures. Silver-backed root arches twist through cracked obsidian floors; small glass-winged foxes, moss-antlered rabbits, and pearl-scaled salamanders peer from glowing knot-holes and shallow reflecting pools. The mirrors reflect impossible moonlit forests instead of the room, creating layered depth without repeating the same view. Warm lantern fungi, dew on bark, tarnished gold inlays, soft blue moonlight, delicate dust motes, and tiny caretakers in plain travel cloaks standing still for scale. Cinematic fantasy realism, highly specific natural textures, reflective surfaces, bioluminescent accents, coherent spatial layout, no copyrighted characters, no logos, no dancers, no dance poses.",
+    "image": "images/2026-05-15-morning-mirror-root-menagerie.png",
+    "date": "2026-05-15",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
