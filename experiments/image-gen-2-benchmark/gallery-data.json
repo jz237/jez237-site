@@ -382,5 +382,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-15-afternoon-porcelain-thunder-orchard",
+    "title": "Porcelain Thunder Orchard",
+    "tests": "Explores porcelain crackle-glaze texture, storm-light reflections, surreal botanical structure, trapped-lightning glass materials, and wet landscape atmosphere while avoiding performance or dance imagery.",
+    "prompt": "A visually striking surreal landscape titled conceptually Porcelain Thunder Orchard, with no visible text: on a windswept hill after rain, an orchard of impossible porcelain trees stands under a huge dark thunderhead. Each tree has glossy blue-white ceramic bark with fine cobalt crackle glaze, copper grafting bands, and branches that dissolve upward into miniature storm clouds. Instead of fruit, the branches hold glowing glass capacitor pods filled with tiny trapped lightning bolts; copper grounding wires run from the trunks into wet black soil, sparking softly where puddles reflect the storm. Small brass field instruments, ceramic insulators, rain gauges, and mossy stone markers sit between rows for scale, all still and unoccupied. Dramatic silver rain light, warm amber sparks, crisp wet reflections, intricate porcelain texture, cinematic magical realism, high detail, no logos, no readable text, no dancers, no dance poses, no dancing, no performance.",
+    "image": "images/2026-05-15-afternoon-porcelain-thunder-orchard.png",
+    "date": "2026-05-15",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
