@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T14:30:50.247574+00:00",
+  "updatedAt": "2026-05-15T16:00:01.614960+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6980,6 +6980,10 @@
     "https://www.techrepublic.com/article/news-google-ai-crafted-zero-day-exploit": {
       "image": "",
       "checkedAt": "2026-05-15T14:30:50.247574+00:00"
+    },
+    "https://openai.com/index/personal-finance-chatgpt": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/LOx9hwb9FayMVDsvnMHBI/a50d14deb15ce97f1ae869a7e4afc964/SEO-Personal-Finance.jpg?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-15T16:00:01.614960+00:00"
     }
   }
 }
