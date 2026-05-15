@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T20:22:16.938113+00:00",
+  "updatedAt": "2026-05-15T22:00:01.229225+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7044,6 +7044,10 @@
     "https://www.theverge.com/science/931766/arxiv-ai-slop-ban-researchers": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKS511_AI_SLOP_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
       "checkedAt": "2026-05-15T21:00:01.931974+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/15/how-to-build-an-mcp-style-routed-ai-agent-system-with-dynamic-tool-exposure-planning-execution-and-context-injection": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-9-1024x731.png",
+      "checkedAt": "2026-05-15T22:00:01.229225+00:00"
     }
   }
 }
