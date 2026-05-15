@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T18:49:35.733053+00:00",
+  "updatedAt": "2026-05-15T20:00:01.939069+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7036,6 +7036,10 @@
     "https://www.anthropic.com/news/pwc-expanded-partnership": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20CodeGlobe&amp;backgroundColor=sky",
       "checkedAt": "2026-05-15T18:49:35.733053+00:00"
+    },
+    "https://techcrunch.com/podcast/the-openai-trial-wraps-up-and-the-musk-founder-machine-keeps-spinning": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544149.jpg?resize=1200,800",
+      "checkedAt": "2026-05-15T20:00:01.939069+00:00"
     }
   }
 }
