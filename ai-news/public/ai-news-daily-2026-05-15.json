@@ -1,22 +1,22 @@
 {
   "date": "2026-05-15",
-  "updatedAt": "2026-05-15T03:00:01.206617+00:00",
+  "updatedAt": "2026-05-15T04:00:01.786584+00:00",
   "items": [
     {
-      "title": "Correct Answers from Sound Reasoning: Verifiable Process Supervision for Language Models",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Poetiq’s Meta-System Automatically Builds a Model-Agnostic Harness That Improved Every LLM Tested on LiveCodeBench Pro Without Fine-Tuning",
+      "url": "https://www.marktechpost.com/2026/05/14/poetiqs-meta-system-automatically-builds-a-model-agnostic-harness-that-improved-every-llm-tested-on-livecodebench-pro-without-fine-tuning",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-15T03:00:05.591177+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-15T03:00:01.206617+00:00",
+      "summary": "Poetiq's Meta-System automatically constructed and optimized an inference harness for LiveCodeBench Pro using only Gemini 3.1 Pro — no fine-tuning, no model internals. The same harness, applied without modification to GPT 5.5 High, Kimi K2.6, Gemini 3.0 Flash, and four other models, improved every one of them.\nThe post Poetiq&#8217;s Meta-System Automatically Builds a Model-Agnostic Harness That Improved Every LLM Tested on LiveCodeBench Pro Without Fine-Tuning appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-14-at-8.33.46-PM-1-150x150.png",
+      "published": "2026-05-15T03:38:10+00:00",
+      "firstSeen": "2026-05-15T04:00:01.786584+00:00",
+      "lastSeen": "2026-05-15T04:00:01.786584+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.46
+      "editorial_reason": "major_product_news",
+      "score": 9.6089
     },
     {
       "title": "The Real Losers of the Musk v. Altman Trial",
@@ -29,10 +29,26 @@
       "image": "https://media.wired.com/photos/6a063a9b1d5880149b6572f1/master/pass/Model-Behavior-We-Are-All-Losers-in-Musk-v-Altman-Business.jpg",
       "published": "2026-05-15T00:49:53+00:00",
       "firstSeen": "2026-05-15T01:00:02.090508+00:00",
-      "lastSeen": "2026-05-15T03:00:01.206617+00:00",
+      "lastSeen": "2026-05-15T04:00:01.786584+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2257
+      "score": 4.1973
+    },
+    {
+      "title": "Merging Methods for Multilingual Knowledge Editing for Large Language Models: An Empirical Odyssey",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-15T04:00:16.413562+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-15T04:00:01.786584+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
     }
   ],
   "errors": []
