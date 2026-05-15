@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T23:00:01.594524+00:00",
+  "updatedAt": "2026-05-15T00:00:02.090005+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6928,6 +6928,10 @@
     "https://techcrunch.com/2026/05/14/elon-musks-spacexai-has-been-bleeding-staff-since-its-merger": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
       "checkedAt": "2026-05-14T23:00:01.594524+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/14/a-coding-implementation-to-master-gpu-computing-with-cupy-custom-cuda-kernels-streams-sparse-matrices-and-profiling": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-7-1024x731.png",
+      "checkedAt": "2026-05-15T00:00:02.090005+00:00"
     }
   }
 }
