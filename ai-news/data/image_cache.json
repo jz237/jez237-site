@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T03:00:01.206617+00:00",
+  "updatedAt": "2026-05-15T04:00:01.786584+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6932,6 +6932,10 @@
     "https://www.marktechpost.com/2026/05/14/a-coding-implementation-to-master-gpu-computing-with-cupy-custom-cuda-kernels-streams-sparse-matrices-and-profiling": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-7-1024x731.png",
       "checkedAt": "2026-05-15T00:00:02.090005+00:00"
+    },
+    "https://openai.com/index/sea-david-chen": {
+      "image": "",
+      "checkedAt": "2026-05-15T04:00:01.786584+00:00"
     }
   }
 }
