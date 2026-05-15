@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T20:00:01.939069+00:00",
+  "updatedAt": "2026-05-15T21:00:01.931974+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7040,6 +7040,10 @@
     "https://techcrunch.com/podcast/the-openai-trial-wraps-up-and-the-musk-founder-machine-keeps-spinning": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544149.jpg?resize=1200,800",
       "checkedAt": "2026-05-15T20:00:01.939069+00:00"
+    },
+    "https://www.theverge.com/science/931766/arxiv-ai-slop-ban-researchers": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKS511_AI_SLOP_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-05-15T21:00:01.931974+00:00"
     }
   }
 }
