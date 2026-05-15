@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T16:00:01.614960+00:00",
+  "updatedAt": "2026-05-15T16:59:34.556602+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6984,6 +6984,26 @@
     "https://openai.com/index/personal-finance-chatgpt": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/LOx9hwb9FayMVDsvnMHBI/a50d14deb15ce97f1ae869a7e4afc964/SEO-Personal-Finance.jpg?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-15T16:00:01.614960+00:00"
+    },
+    "https://www.theverge.com/gadgets/931347/trump-mobile-t1-phone-logo-flag-stars-stripes": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/trump-mobile-t1-phone-11-stripes.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.717271201674%2C100%2C78.565457596651&amp;w=1200",
+      "checkedAt": "2026-05-15T16:59:34.556602+00:00"
+    },
+    "https://www.theverge.com/tech/931416/google-ai-search-spam-policy": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK093_GOOGLE_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-15T16:59:34.556602+00:00"
+    },
+    "https://techcrunch.com/2026/05/15/openai-launches-chatgpt-for-personal-finance-will-let-you-connect-bank-accounts": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "checkedAt": "2026-05-15T16:59:34.556602+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/931122/openai-chatgpt-financial-accounts-plaid-connection": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/ChatGPT-financial-accounts.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-15T16:59:34.556602+00:00"
+    },
+    "https://www.together.ai/blog/together-ai-partners-with-pearl-research-labs": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a0742f027fc6f04110f6194_OG-image_20260508_Pearl.png",
+      "checkedAt": "2026-05-15T16:59:34.556602+00:00"
     }
   }
 }
