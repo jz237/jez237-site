@@ -1,6 +1,6 @@
 {
   "date": "2026-05-15",
-  "updatedAt": "2026-05-15T10:00:01.836689+00:00",
+  "updatedAt": "2026-05-15T11:00:01.384449+00:00",
   "items": [
     {
       "title": "Best AI Agents for Software Development Ranked: A Benchmark-Driven Look at the Current Field",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-8.png",
       "published": "2026-05-15T08:23:01+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.6217
+      "score": 12.5929
     },
     {
       "title": "Poetiq’s Meta-System Automatically Builds a Model-Agnostic Harness That Improved Every LLM Tested on LiveCodeBench Pro Without Fine-Tuning",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-14-at-8.33.46-PM-1-150x150.png",
       "published": "2026-05-15T03:38:10+00:00",
       "firstSeen": "2026-05-15T04:00:01.786584+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4418
+      "score": 9.4165
     },
     {
       "title": "Federal judge holds back on Anthropic’s $1.5bn author settlement",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/anthropic-mythos-preview-glasswing.avif",
       "published": "2026-05-15T09:15:40+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2276
+      "score": 6.1981
     },
     {
       "title": "Jury deliberations to begin in OpenAI nonprofit trial after Musk skips closing for Beijing",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
       "published": "2026-05-15T07:48:53+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1852
+      "score": 6.1568
     },
     {
       "title": "Mira Murati Wants Her AI to ‘Keep Humans in the Loop’",
@@ -77,10 +77,10 @@
       "image": "https://media.wired.com/photos/6a04e8e8e20de45ef884b2b7/master/pass/Mira-Murati-Wants-to-Keep-Human-Intelligence-in-Loop-As-Long-asPossible-Business-2266727283.jpg",
       "published": "2026-05-15T09:00:00+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2598
+      "score": 4.2305
     },
     {
       "title": "The Real Losers of the Musk v. Altman Trial",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/6a063a9b1d5880149b6572f1/master/pass/Model-Behavior-We-Are-All-Losers-in-Musk-v-Altman-Business.jpg",
       "published": "2026-05-15T00:49:53+00:00",
       "firstSeen": "2026-05-15T01:00:02.090508+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0427
+      "score": 4.0193
     },
     {
       "title": "How to Build a Django-Unfold Admin Dashboard with Custom Models, Filters, Actions, and KPIs",
@@ -109,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-3-1.png",
       "published": "2026-05-15T05:54:47+00:00",
       "firstSeen": "2026-05-15T06:00:01.702331+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2019
+      "score": 3.175
     },
     {
       "title": "Multiverse raises $70m at a $2.1bn valuation to push its AI-adoption pitch across Europe",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Multiverse.avif",
       "published": "2026-05-15T09:20:27+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.83
+      "score": 2.8004
     },
     {
       "title": "Iceotope raises $26m as AI rack densities push past what air cooling can do",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/Iceotope.avif",
       "published": "2026-05-15T08:33:20+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8067
+      "score": 2.7778
     },
     {
       "title": "Yumin Choi, Sangwoo Park, Minki Kang, Jinheon Baek, Sung Ju Hwang",
@@ -155,9 +155,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-15T10:00:12.018729+00:00",
+      "published": "2026-05-15T11:00:09.989728+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/Bill-Ackman.avif",
       "published": "2026-05-15T09:30:22+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.135
+      "score": 2.1053
     },
     {
       "title": "STT Global Data Centres lines up a $500m Mumbai listing, in front of a crowded 2026 IPO queue",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/STT-Global-Data-Centres-India-.avif",
       "published": "2026-05-15T09:08:03+00:00",
       "firstSeen": "2026-05-15T10:00:01.836689+00:00",
-      "lastSeen": "2026-05-15T10:00:01.836689+00:00",
+      "lastSeen": "2026-05-15T11:00:01.384449+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1238
+      "score": 2.0944
     }
   ],
   "errors": []
