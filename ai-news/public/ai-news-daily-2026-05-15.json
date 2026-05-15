@@ -1,7 +1,23 @@
 {
   "date": "2026-05-15",
-  "updatedAt": "2026-05-15T08:00:01.266606+00:00",
+  "updatedAt": "2026-05-15T09:00:01.298580+00:00",
   "items": [
+    {
+      "title": "Best AI Agents for Software Development Ranked: A Benchmark-Driven Look at the Current Field",
+      "url": "https://www.marktechpost.com/2026/05/15/best-ai-agents-for-software-development-ranked-a-benchmark-driven-look-at-the-current-field",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "The AI coding agent field in 2026 is more capable, more fragmented, and harder to benchmark than it looks. Claude Code leads on code quality at 87.6% SWE-bench Verified. GPT-5.5 tops Terminal-Bench at 82.7%. But the benchmark OpenAI itself declared contaminated in February 2026 is still being used to rank these tools — including by the labs publishing their own scores.\nThe post Best AI Agents for Software Development Ranked: A Benchmark-Driven Look at the Current Field appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-8.png",
+      "published": "2026-05-15T08:23:01+00:00",
+      "firstSeen": "2026-05-15T09:00:01.298580+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.6513
+    },
     {
       "title": "Poetiq’s Meta-System Automatically Builds a Model-Agnostic Harness That Improved Every LLM Tested on LiveCodeBench Pro Without Fine-Tuning",
       "url": "https://www.marktechpost.com/2026/05/14/poetiqs-meta-system-automatically-builds-a-model-agnostic-harness-that-improved-every-llm-tested-on-livecodebench-pro-without-fine-tuning",
@@ -13,10 +29,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-14-at-8.33.46-PM-1-150x150.png",
       "published": "2026-05-15T03:38:10+00:00",
       "firstSeen": "2026-05-15T04:00:01.786584+00:00",
-      "lastSeen": "2026-05-15T08:00:01.266606+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4944
+      "score": 9.4677
+    },
+    {
+      "title": "PREPING: Building Agent Memory without Tasks",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-15T09:00:06.858192+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.46
+    },
+    {
+      "title": "Jury deliberations to begin in OpenAI nonprofit trial after Musk skips closing for Beijing",
+      "url": "https://thenextweb.com/news/musk-openai-closing-arguments-jury-deliberations",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Three weeks of testimony in Judge Gonzalez Rogers’s Oakland courtroom end with Musk in Beijing on Trump’s state-visit delegation and deliberations beginning Monday. Closing arguments in Musk v. Altman wrapped on Thursday afternoon in Judge Yvonne Gonzalez Rogers’s Oakland courtroom, sending the nine-person jury home for the weekend and into deliberations that begin Monday. Three [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Sam-Altman-v-Elon-Musk-trial.avif",
+      "published": "2026-05-15T07:48:53+00:00",
+      "firstSeen": "2026-05-15T09:00:01.298580+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2144
     },
     {
       "title": "The Real Losers of the Musk v. Altman Trial",
@@ -29,10 +77,10 @@
       "image": "https://media.wired.com/photos/6a063a9b1d5880149b6572f1/master/pass/Model-Behavior-We-Are-All-Losers-in-Musk-v-Altman-Business.jpg",
       "published": "2026-05-15T00:49:53+00:00",
       "firstSeen": "2026-05-15T01:00:02.090508+00:00",
-      "lastSeen": "2026-05-15T08:00:01.266606+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0914
+      "score": 4.0667
     },
     {
       "title": "How to Build a Django-Unfold Admin Dashboard with Custom Models, Filters, Actions, and KPIs",
@@ -45,26 +93,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-3-1.png",
       "published": "2026-05-15T05:54:47+00:00",
       "firstSeen": "2026-05-15T06:00:01.702331+00:00",
-      "lastSeen": "2026-05-15T08:00:01.266606+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.258
+      "score": 3.2296
     },
     {
-      "title": "Merging Methods for Multilingual Knowledge Editing for Large Language Models: An Empirical Odyssey",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
+      "title": "Chip export controls were not a major topic in Beijing, US Trade Rep Greer says",
+      "url": "https://thenextweb.com/news/greer-chip-export-controls-not-major-china-talks",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-15T08:00:08.556365+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-15T08:00:01.266606+00:00",
+      "summary": "Greer told Bloomberg TV the bilateral did not address chip controls, even as Reuters reported the Trump administration cleared Nvidia H200 sales to several Chinese firms after the Xi meeting. Semiconductor export controls were not a major topic at this week’s US-China bilateral meetings in Beijing, US Trade Representative Jamieson Greer told Bloomberg TV on [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/beijing-warns-eu-china-russia-sanctions.avif",
+      "published": "2026-05-15T08:07:04+00:00",
+      "firstSeen": "2026-05-15T09:00:01.298580+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.1234
     },
     {
       "title": "Supertone Releases Supertonic v3: On-Device Text-to-Speech Model with 31-Language Support, Fewer Reading Failures, and Expression Tags",
@@ -77,10 +125,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-15-at-12.00.15-AM-1-150x150.png",
       "published": "2026-05-15T07:00:49+00:00",
       "firstSeen": "2026-05-15T08:00:01.266606+00:00",
-      "lastSeen": "2026-05-15T08:00:01.266606+00:00",
+      "lastSeen": "2026-05-15T09:00:01.298580+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.1903
+      "score": 1.1609
     }
   ],
   "errors": []

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T08:00:01.266606+00:00",
+  "updatedAt": "2026-05-15T09:00:01.298580+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -6940,6 +6940,10 @@
     "https://www.marktechpost.com/2026/05/14/how-to-build-a-django-unfold-admin-dashboard-with-custom-models-filters-actions-and-kpis": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-3-1.png",
       "checkedAt": "2026-05-15T06:00:01.702331+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/15/best-ai-agents-for-software-development-ranked-a-benchmark-driven-look-at-the-current-field": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-8.png",
+      "checkedAt": "2026-05-15T09:00:01.298580+00:00"
     }
   }
 }
