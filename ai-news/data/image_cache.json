@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-16T15:00:02.079659+00:00",
+  "updatedAt": "2026-05-16T16:00:02.024453+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7088,6 +7088,18 @@
     "https://openai.com/index/malta-chatgpt-plus-partnership": {
       "image": "",
       "checkedAt": "2026-05-16T10:36:17.617401+00:00"
+    },
+    "https://www.theverge.com/tech/932133/sony-xperia-1-xiii-ai-camera-assistant": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/HIW4oV0XgAEmtI2.jpeg?quality=90&amp;strip=all&amp;crop=0,29.168083278796,100,52.356020942408",
+      "checkedAt": "2026-05-16T16:00:02.024453+00:00"
+    },
+    "https://techcrunch.com/2026/05/16/openai-co-founder-greg-brockman-reportedly-takes-charge-of-product-strategy": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273248471.jpg?resize=1200,800",
+      "checkedAt": "2026-05-16T16:00:02.024453+00:00"
+    },
+    "https://www.techrepublic.com/article/news-vibe-coding-cheat-sheet": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/vibe-coding-cheat-sheet.png?f=jpeg",
+      "checkedAt": "2026-05-16T16:00:02.024453+00:00"
     }
   }
 }
