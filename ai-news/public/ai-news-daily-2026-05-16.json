@@ -1,7 +1,23 @@
 {
   "date": "2026-05-16",
-  "updatedAt": "2026-05-16T06:00:01.384550+00:00",
+  "updatedAt": "2026-05-16T07:00:01.819231+00:00",
   "items": [
+    {
+      "title": "How to Build Repository-Level Code Intelligence with Repowise Using Graph Analysis, Dead-Code Detection, Decisions, and AI Context",
+      "url": "https://www.marktechpost.com/2026/05/15/how-to-build-repository-level-code-intelligence-with-repowise-using-graph-analysis-dead-code-detection-decisions-and-ai-context",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we explore how to use Repowise to build repository-level intelligence for the itsdangerous Python project in a practical and reproducible way. We start with an already cloned repository, configure Repowise using the available LLM credentials, and initialize its indexing pipeline. We then inspect the generated .repowise artifacts, analyze the repository graph with [&#8230;]\nThe post How to Build Repository-Level Code Intelligence with Repowise Using Graph Analysis, Dead-Code Detection, Decisions, and AI Context appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2-3-1024x731.png",
+      "published": "2026-05-16T06:45:19+00:00",
+      "firstSeen": "2026-05-16T07:00:01.819231+00:00",
+      "lastSeen": "2026-05-16T07:00:01.819231+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3125
+    },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-16T06:00:08.212596+00:00",
+      "published": "2026-05-16T07:00:08.562838+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-16T06:00:01.384550+00:00",
+      "lastSeen": "2026-05-16T07:00:01.819231+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
