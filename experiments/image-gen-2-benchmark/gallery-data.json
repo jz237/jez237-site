@@ -418,5 +418,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-16-midday-seismic-mycelium-power-grid",
+    "title": "Seismic Mycelium Power Grid",
+    "tests": "Explores infographic cutaway clarity, fungal-network circuitry, seismic energy harvesting, layered soil textures, restrained callouts, readable title discipline, and bioelectric glow without dance imagery.",
+    "prompt": "Use case: infographic-diagram\\nAsset type: daily GPT Image 2 benchmark archive image\\nPrimary request: Create a vertical museum-quality educational infographic poster titled \"SEISMIC MYCELIUM POWER GRID\".\\n\\nComposition: a clean cutaway diagram of a temperate forest hillside after rain. The top third shows moss, ferns, wet leaves, small mushrooms, and a few slim sensor posts among tree trunks. The middle section reveals a glowing underground mycelium network spreading through soil layers like branching circuitry. The lower section shows piezoelectric basalt plates and ceramic vibration harvesters embedded along a fault line, converting tiny seismic tremors into stored power. Include three simple numbered callout circles with short readable labels only: \"1 TREMOR PLATES\", \"2 MYCELIUM BUS\", \"3 ROOT BATTERY\". Use thin arrows, restrained color coding, and lots of visual explanation rather than dense text.\\n\\nVisual style: highly detailed scientific illustration with crisp layered cutaway edges, warm amber bioelectric glow in the fungal filaments, cool blue-gray basalt, rich dark soil texture, damp forest greens, realistic materials, tidy poster layout, sharp legibility, premium natural-history museum display quality.\\n\\nConstraints: no dancing, no dancers, no dance poses, no ballet, no stage performance, no copyrighted characters or logos, no watermark, no unreadable dense paragraphs.",
+    "image": "images/2026-05-16-midday-seismic-mycelium-power-grid.png",
+    "date": "2026-05-16",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
