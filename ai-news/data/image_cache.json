@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-16T10:00:01.416610+00:00",
+  "updatedAt": "2026-05-16T11:00:01.724690+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7084,6 +7084,10 @@
     "https://openai.com/academy/codex-for-work/how-data-science-teams-use-codex": {
       "image": "",
       "checkedAt": "2026-05-16T08:00:01.469718+00:00"
+    },
+    "https://openai.com/index/malta-chatgpt-plus-partnership": {
+      "image": "",
+      "checkedAt": "2026-05-16T11:00:01.724690+00:00"
     }
   }
 }
