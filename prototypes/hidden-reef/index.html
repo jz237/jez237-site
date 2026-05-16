@@ -15,7 +15,7 @@
       --aqua: #13b8df;
       --sky: #e9f8fc;
       --surface: #ffffff;
-      --page: #f4f8fb;
+      --page: #eaf4f8;
       --ink: #123044;
       --muted: #657d8d;
       --line: #d8e8ef;
@@ -26,7 +26,12 @@
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; color: var(--ink); background: var(--page); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #ffffff 0, #f4fbfd 92px, var(--page) 320px, #dcecf3 100%);
+    }
     body.cart-open { overflow: hidden; }
     a { color: inherit; text-decoration: none; }
     button, input { font: inherit; }
@@ -40,13 +45,17 @@
       font-size: 13px;
       font-weight: 800;
     }
-    .page { max-width: 1220px; margin: 0 auto; padding: 0 clamp(12px, 2.5vw, 28px) 42px; }
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
     .header {
       display: grid;
       grid-template-columns: auto minmax(220px, 1fr) auto;
       align-items: center;
       gap: 18px;
-      padding: 16px 0 12px;
+      padding: 13px 0 10px;
       background: var(--surface);
     }
     .brand {
@@ -130,7 +139,7 @@
       align-items: center;
       justify-content: center;
       gap: clamp(10px, 2vw, 28px);
-      padding: 10px 0 13px;
+      padding: 9px 0 12px;
       border-top: 1px solid var(--line);
       background: var(--surface);
       color: #284f65;
@@ -139,16 +148,28 @@
     }
     .hero {
       position: relative;
-      min-height: 292px;
+      min-height: 300px;
       overflow: hidden;
       border-radius: 0 0 8px 8px;
       background:
-        linear-gradient(90deg, rgba(0,42,75,0.88), rgba(0,62,95,0.42), rgba(0,35,70,0.05)),
-        url("assets/site/hero-reef.jpg") center/cover no-repeat;
+        radial-gradient(circle at 82% 40%, rgba(19,184,223,0.08), transparent 34%),
+        linear-gradient(90deg, rgba(0,48,82,0.94) 0%, rgba(0,78,115,0.76) 42%, rgba(0,60,92,0.18) 70%),
+        url("assets/site/promo.jpg") right center/auto 118% no-repeat,
+        linear-gradient(90deg, #00486f, #0079a4);
       box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 34%;
+      background: linear-gradient(180deg, transparent, rgba(0,47,79,0.24));
+      pointer-events: none;
     }
     .hero-content {
       max-width: 540px;
+      position: relative;
+      z-index: 1;
       padding: 42px clamp(22px, 5vw, 66px);
       color: #fff;
     }
@@ -188,14 +209,14 @@
     .categories {
       display: grid;
       grid-template-columns: repeat(10, minmax(0, 1fr));
-      gap: 12px;
-      margin: 18px 0;
+      gap: 11px;
+      margin: 16px 0;
     }
     .cat {
-      min-height: 112px;
+      min-height: 104px;
       padding: 9px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 7px;
       background: var(--surface);
       text-align: center;
       box-shadow: 0 8px 18px rgba(0,65,105,0.08);
@@ -203,7 +224,7 @@
     }
     .cat img {
       width: 100%;
-      height: 58px;
+      height: 54px;
       object-fit: contain;
       display: block;
       margin-bottom: 7px;
@@ -217,7 +238,7 @@
     }
     .promo-card {
       position: relative;
-      min-height: 118px;
+      min-height: 112px;
       overflow: hidden;
       border-radius: 8px;
       background: var(--blue-900);
@@ -284,11 +305,11 @@
     .product-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 13px;
+      gap: 12px;
     }
     .product {
       position: relative;
-      min-height: 266px;
+      min-height: 254px;
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -297,7 +318,7 @@
     }
     .product img {
       width: 100%;
-      height: 116px;
+      height: 108px;
       object-fit: contain;
       display: block;
       margin-bottom: 10px;
@@ -399,7 +420,7 @@
       margin-top: 12px;
     }
     .guide {
-      min-height: 136px;
+      min-height: 126px;
       padding: 18px;
       border-radius: 8px;
       background: #fff;
