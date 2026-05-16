@@ -394,5 +394,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-15-evening-titan-methane-lens-farm",
+    "title": "Titan Methane Lens Farm",
+    "tests": "Explores Titan atmosphere, black methane reflections, translucent sapphire optics, cryogenic frost, floating habitat engineering, and warm-cold instrument lighting without dance imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed hard-science-fiction scene titled conceptually Titan Methane Lens Farm, with no visible text.\n\nScene/backdrop: the shore of a black liquid-methane lake on Saturn's moon Titan beneath a dense amber-orange sky. Saturn appears only as a faint huge ghostly arc through haze, not a dominant planet poster.\nSubject: a remote optical research habitat and lens farm built on floating cryogenic platforms: hundreds of clear hexagonal sapphire lens panels, frost-coated titanium pylons, pressure domes with warm interior light, narrow service bridges, cable bundles disappearing into the lake, and small autonomous rover-boats idling in still methane.\nComposition: wide cinematic three-quarter view from low shore level, showing mirrored reflections in the dark lake, receding lens arrays, and tiny stationary suited scientists only as scale figures inside protected walkways.\nMaterials and lighting: amber atmospheric haze, cold blue-white instrument lights, black mirrorlike methane, frost crystals on metal, translucent sapphire optics, nitrogen mist curling along the platforms, crisp mechanical detail, believable engineering, high contrast warm/cold lighting.\nConstraints: no logos, no readable text, no copyrighted characters, no dancing, no dancers, no dance poses, no stage performance, no ceremonial or theatrical action.",
+    "image": "images/2026-05-15-evening-titan-methane-lens-farm.png",
+    "date": "2026-05-15",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
