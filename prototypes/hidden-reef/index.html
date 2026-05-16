@@ -320,6 +320,14 @@
       font-size: 13px;
       line-height: 1.22;
     }
+    .product-link {
+      display: block;
+      color: inherit;
+    }
+    .product-link:hover h3 {
+      color: var(--blue-700);
+      text-decoration: underline;
+    }
     .product p { margin: 0 0 10px; color: var(--muted); font-size: 12px; line-height: 1.35; }
     .price-row {
       display: flex;
@@ -567,12 +575,12 @@
         <button type="button" data-filter="decor">Decor</button>
       </div>
       <div class="product-grid">
-        <article class="product" data-category="pond" data-name="easypro professional foam gun pond waterfall"><span class="badge">New</span><img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" /><h3>EasyPro Professional Foam Gun</h3><p>Waterfall foam application tool.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun" type="button">+</button></div></article>
-        <article class="product" data-category="freshwater" data-name="sera red parrot pellets fish food"><img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" /><h3>Sera Red Parrot Pellets</h3><p>Daily freshwater nutrition.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets" type="button">+</button></div></article>
-        <article class="product" data-category="equipment" data-name="innovative marine nuvo flip feed lid"><span class="badge">Hot</span><img src="assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed" /><h3>Innovative Marine Nuvo Flip Feed</h3><p>Hinged aquarium feeding lid.</p><div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed" type="button">+</button></div></article>
-        <article class="product" data-category="freshwater" data-name="sera vipan baby flakes food"><img src="assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" /><h3>Sera Vipan Baby Flakes</h3><p>Fine flakes for small fish.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes" type="button">+</button></div></article>
-        <article class="product" data-category="decor" data-name="underwater treasures mechanical skull"><img src="assets/site/skull.jpg" alt="Mechanical Skull Ornament" /><h3>Mechanical Skull Ornament</h3><p>Statement aquarium decor.</p><div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament" type="button">+</button></div></article>
-        <article class="product" data-category="decor" data-name="underwater treasures tropical fruit home"><span class="badge">New</span><img src="assets/site/fruit-home.jpg" alt="Tropical Fruit Home" /><h3>Tropical Fruit Home</h3><p>Bright hideaway decoration.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home" type="button">+</button></div></article>
+        <article class="product" data-category="pond" data-name="easypro professional foam gun pond waterfall"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-easypro-pro-black-waterfall-foam-24-oz-gun.html" target="_blank" rel="noopener"><img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" /><h3>EasyPro Professional Foam Gun</h3></a><p>Waterfall foam application tool.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun" type="button">+</button></div></article>
+        <article class="product" data-category="freshwater" data-name="sera red parrot pellets fish food"><a class="product-link" href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" /><h3>Sera Red Parrot Pellets</h3></a><p>Daily freshwater nutrition.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets" type="button">+</button></div></article>
+        <article class="product" data-category="equipment" data-name="innovative marine nuvo flip feed lid"><span class="badge">Hot</span><a class="product-link" href="https://www.thehiddenreef.com/im-nuvo-flip-feed-hinged-feeding-lid.html" target="_blank" rel="noopener"><img src="assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed" /><h3>Innovative Marine Nuvo Flip Feed</h3></a><p>Hinged aquarium feeding lid.</p><div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed" type="button">+</button></div></article>
+        <article class="product" data-category="freshwater" data-name="sera vipan baby flakes food"><a class="product-link" href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener"><img src="assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" /><h3>Sera Vipan Baby Flakes</h3></a><p>Fine flakes for small fish.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes" type="button">+</button></div></article>
+        <article class="product" data-category="decor" data-name="underwater treasures mechanical skull"><a class="product-link" href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener"><img src="assets/site/skull.jpg" alt="Mechanical Skull Ornament" /><h3>Mechanical Skull Ornament</h3></a><p>Statement aquarium decor.</p><div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament" type="button">+</button></div></article>
+        <article class="product" data-category="decor" data-name="underwater treasures tropical fruit home"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="assets/site/fruit-home.jpg" alt="Tropical Fruit Home" /><h3>Tropical Fruit Home</h3></a><p>Bright hideaway decoration.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home" type="button">+</button></div></article>
       </div>
     </section>
 
