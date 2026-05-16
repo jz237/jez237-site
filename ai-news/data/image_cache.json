@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-16T20:00:01.122579+00:00",
+  "updatedAt": "2026-05-16T21:00:02.101421+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7108,6 +7108,14 @@
     "https://techcrunch.com/2026/05/16/research-repository-arxiv-will-ban-authors-for-a-year-if-they-let-ai-do-all-the-work": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/business-research-getty.jpg?resize=1200,800",
       "checkedAt": "2026-05-16T19:00:01.163800+00:00"
+    },
+    "https://simonwillison.net/2026/May/16/openclaw-names": {
+      "image": "",
+      "checkedAt": "2026-05-16T21:00:02.101421+00:00"
+    },
+    "https://techcrunch.com/2026/05/16/the-haves-and-have-nots-of-the-ai-gold-rush": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/06/GettyImages-958260352.jpg?resize=1200,1074",
+      "checkedAt": "2026-05-16T21:00:02.101421+00:00"
     }
   }
 }
