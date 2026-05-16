@@ -7,449 +7,452 @@
   <link rel="icon" type="image/png" href="assets/site/logo.png" />
   <style>
     :root {
-      --bg: #020b10;
-      --deep: #061925;
-      --panel: rgba(7, 26, 39, 0.86);
-      --panel-2: rgba(10, 39, 55, 0.9);
-      --glass: rgba(255,255,255,0.065);
-      --line: rgba(154, 229, 250, 0.2);
-      --line-strong: rgba(154, 229, 250, 0.38);
-      --aqua: #48d9ff;
-      --mint: #35e6bd;
-      --coral: #ff8569;
-      --gold: #f4d483;
-      --ink: #f5fbff;
-      --muted: #a9c4ce;
-      --shadow: 0 30px 90px rgba(0,0,0,0.48);
+      --blue-950: #003b63;
+      --blue-900: #004c7c;
+      --blue-800: #006096;
+      --blue-700: #007ab0;
+      --teal: #00a7b7;
+      --aqua: #13b8df;
+      --sky: #e9f8fc;
+      --surface: #ffffff;
+      --page: #f4f8fb;
+      --ink: #123044;
+      --muted: #657d8d;
+      --line: #d8e8ef;
+      --orange: #ff7b32;
+      --green: #23a86b;
+      --shadow: 0 18px 44px rgba(0, 65, 105, 0.14);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 18% 2%, rgba(72,217,255,0.22), transparent 30%),
-        radial-gradient(circle at 82% 8%, rgba(255,133,105,0.14), transparent 26%),
-        linear-gradient(180deg, #062537 0%, var(--bg) 58%, #010609 100%);
-    }
+    body { margin: 0; color: var(--ink); background: var(--page); }
     body.cart-open { overflow: hidden; }
-    a { color: inherit; }
+    a { color: inherit; text-decoration: none; }
     button, input { font: inherit; }
-    .promo-bar {
+    .shipping-bar {
       display: flex;
       justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      padding: 9px 14px;
-      color: #04131b;
-      background: linear-gradient(90deg, var(--aqua), var(--mint), var(--gold));
+      gap: 8px;
+      padding: 8px 14px;
+      color: #fff;
+      background: linear-gradient(90deg, #007498, #00a7b7);
       font-size: 13px;
-      font-weight: 900;
+      font-weight: 800;
     }
-    .shell { max-width: 1240px; margin: 0 auto; padding: 16px clamp(14px, 3vw, 42px) 70px; }
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
+    .page { max-width: 1220px; margin: 0 auto; padding: 0 clamp(12px, 2.5vw, 28px) 42px; }
+    .header {
+      display: grid;
+      grid-template-columns: auto minmax(220px, 1fr) auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 0 calc(clamp(14px, 3vw, 42px) * -1);
-      padding: 12px clamp(14px, 3vw, 42px);
-      background: rgba(3, 14, 21, 0.76);
-      border-bottom: 1px solid rgba(154,229,250,0.16);
-      backdrop-filter: blur(16px) saturate(1.15);
+      gap: 18px;
+      padding: 16px 0 12px;
+      background: var(--surface);
     }
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      text-decoration: none;
-      min-width: 210px;
+      min-width: 220px;
     }
-    .brand img {
-      width: 64px;
-      height: 38px;
-      object-fit: contain;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-    }
+    .brand img { width: 76px; height: 46px; object-fit: contain; }
     .brand strong {
       display: block;
-      font-size: 17px;
-      letter-spacing: 0.02em;
-    }
-    .brand span {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .nav {
-      display: flex;
-      gap: 7px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .nav a,
-    .cart-toggle {
-      min-height: 38px;
-      padding: 9px 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      color: #e6f8fc;
-      background: rgba(255,255,255,0.055);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 850;
-      cursor: pointer;
-    }
-    .cart-toggle {
-      color: #031018;
-      border: 0;
-      background: linear-gradient(120deg, var(--aqua), var(--mint));
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.74fr);
-      gap: 18px;
-      margin-top: 18px;
-    }
-    .hero-main,
-    .hero-card,
-    .panel,
-    .product-card,
-    .dept-card,
-    .guide-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(145deg, rgba(10,39,55,0.88), rgba(3,16,24,0.95));
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.055);
-    }
-    .hero-main {
-      position: relative;
-      min-height: 650px;
-      overflow: hidden;
-      border-radius: 18px;
-      padding: clamp(28px, 4.5vw, 62px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background:
-        linear-gradient(90deg, rgba(2,10,15,0.45), rgba(2,10,15,0.78)),
-        url("assets/site/promo.jpg") center/cover no-repeat;
-    }
-    .hero-main::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(72,217,255,0.18), transparent 24%),
-        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.58));
-      pointer-events: none;
-    }
-    .hero-main > * { position: relative; z-index: 1; }
-    .kicker {
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: 950;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-    }
-    h1 {
-      max-width: 800px;
-      margin: 14px 0 16px;
+      color: var(--blue-950);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(46px, 7vw, 92px);
-      line-height: 0.91;
-      letter-spacing: 0;
-      text-shadow: 0 18px 42px rgba(0,0,0,0.55);
+      font-size: 25px;
+      line-height: 1;
     }
-    .lede {
-      max-width: 650px;
-      margin: 0;
-      color: #e3f5f9;
-      font-size: clamp(17px, 2vw, 22px);
-      line-height: 1.45;
-      text-shadow: 0 8px 22px rgba(0,0,0,0.48);
+    .brand span { display: block; color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 3px; }
+    .search-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      height: 42px;
+      border: 2px solid #cfe6ef;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #fff;
     }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 12px 16px;
-      border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 8px;
+    .search-box input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      padding: 0 18px;
       color: var(--ink);
-      background: rgba(255,255,255,0.08);
-      text-decoration: none;
+    }
+    .search-box button {
+      width: 54px;
+      border: 0;
+      color: #fff;
+      background: var(--teal);
       font-weight: 900;
       cursor: pointer;
     }
-    .cta.primary {
-      color: #031018;
-      border: 0;
-      background: linear-gradient(120deg, var(--aqua), var(--mint));
-    }
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 46px;
-    }
-    .hero-stats div {
-      min-height: 94px;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(154,229,250,0.18);
-      background: rgba(0,0,0,0.32);
-      backdrop-filter: blur(8px);
-    }
-    .hero-stats strong { display: block; color: var(--gold); font-size: 24px; }
-    .hero-stats span { display: block; margin-top: 6px; color: #d1e6ec; font-size: 13px; line-height: 1.35; }
-    .hero-side {
-      display: grid;
-      gap: 14px;
-    }
-    .hero-card {
-      overflow: hidden;
-      border-radius: 18px;
-    }
-    .hero-card img {
-      display: block;
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-    }
-    .hero-card .body { padding: 18px; }
-    .hero-card h2 { margin: 0 0 8px; font-family: Georgia, "Times New Roman", serif; font-size: 28px; line-height: 1.02; }
-    .hero-card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14px; }
-    .quick-shop {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-    }
-    .quick-shop button {
+    .header-actions {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      width: 100%;
-      padding: 10px 11px;
-      border-radius: 8px;
-      border: 1px solid rgba(154,229,250,0.16);
-      color: #e8f8fb;
-      background: rgba(255,255,255,0.055);
-      font-weight: 850;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      color: var(--blue-950);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .cart-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 45px;
+      height: 40px;
+      border: 0;
+      background: transparent;
+      color: var(--blue-900);
+      font-size: 24px;
       cursor: pointer;
     }
-    .quick-shop span { color: var(--gold); }
+    .cart-button span {
+      position: absolute;
+      top: -2px;
+      right: 0;
+      display: grid;
+      place-items: center;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--teal);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, 2vw, 28px);
+      padding: 10px 0 13px;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+      color: #284f65;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .hero {
+      position: relative;
+      min-height: 292px;
+      overflow: hidden;
+      border-radius: 0 0 8px 8px;
+      background:
+        linear-gradient(90deg, rgba(0,42,75,0.88), rgba(0,62,95,0.42), rgba(0,35,70,0.05)),
+        url("assets/site/hero-reef.jpg") center/cover no-repeat;
+      box-shadow: var(--shadow);
+    }
+    .hero-content {
+      max-width: 540px;
+      padding: 42px clamp(22px, 5vw, 66px);
+      color: #fff;
+    }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 58px);
+      line-height: 0.95;
+      letter-spacing: 0;
+      text-shadow: 0 6px 24px rgba(0,0,0,0.42);
+    }
+    .hero p {
+      max-width: 420px;
+      margin: 0 0 20px;
+      color: #dff8ff;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: rgba(0,72,110,0.68);
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .cat {
+      min-height: 112px;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      text-align: center;
+      box-shadow: 0 8px 18px rgba(0,65,105,0.08);
+      cursor: pointer;
+    }
+    .cat img {
+      width: 100%;
+      height: 58px;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 7px;
+    }
+    .cat strong { display: block; color: var(--blue-950); font-size: 12px; line-height: 1.15; }
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .promo-card {
+      position: relative;
+      min-height: 118px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--blue-900);
+      box-shadow: var(--shadow);
+    }
+    .promo-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .promo-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,50,83,0.92), rgba(0,50,83,0.25));
+    }
+    .promo-copy {
+      position: relative;
+      z-index: 1;
+      padding: 18px;
+      color: #fff;
+    }
+    .promo-copy span { color: #b6f6ff; font-size: 12px; font-weight: 900; text-transform: uppercase; }
+    .promo-copy strong { display: block; margin-top: 2px; font-size: 25px; line-height: 0.95; }
+    .promo-copy small { display: block; margin-top: 6px; color: #d9f8ff; font-weight: 700; }
     .section-head {
       display: flex;
+      align-items: baseline;
       justify-content: space-between;
-      align-items: end;
-      gap: 18px;
-      margin: 34px 0 14px;
+      gap: 16px;
+      margin: 26px 0 12px;
     }
     .section-head h2 {
       margin: 0;
+      color: var(--blue-950);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(30px, 4vw, 50px);
-      line-height: 1;
+      font-size: 26px;
     }
-    .section-head p { max-width: 560px; margin: 0; color: var(--muted); line-height: 1.5; }
-    .dept-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .dept-card {
-      min-height: 290px;
-      overflow: hidden;
-      border-radius: 15px;
-      text-decoration: none;
-    }
-    .dept-card img {
-      width: 100%;
-      height: 148px;
-      object-fit: cover;
-      display: block;
-      border-bottom: 1px solid rgba(154,229,250,0.12);
-    }
-    .dept-card .body { padding: 16px; }
-    .dept-card h3 { margin: 0 0 8px; font-family: Georgia, "Times New Roman", serif; font-size: 25px; }
-    .dept-card p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 14px; }
-    .dept-card span { display: inline-block; margin-top: 16px; color: var(--gold); font-size: 13px; font-weight: 950; }
-    .storefront {
-      display: grid;
-      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-      gap: 14px;
-    }
-    .panel {
-      border-radius: 16px;
-      padding: 22px;
-      overflow: hidden;
-    }
-    .panel.store-image {
-      min-height: 420px;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.58)),
-        url("assets/site/hero-store.jpg") center/cover no-repeat;
-    }
-    .panel h3 { margin: 0 0 8px; font-family: Georgia, "Times New Roman", serif; font-size: 32px; }
-    .panel p { margin: 0; color: var(--muted); line-height: 1.55; }
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 18px;
-    }
-    .info-grid div {
-      padding: 13px;
-      border-radius: 10px;
-      border: 1px solid rgba(154,229,250,0.16);
-      background: rgba(255,255,255,0.055);
-    }
-    .info-grid strong { display: block; color: var(--gold); }
-    .info-grid span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.35; }
+    .section-head a, .section-head p { color: var(--blue-700); font-size: 13px; font-weight: 850; margin: 0; }
     .filters {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin: 0 0 14px;
     }
-    .filters button,
-    .search {
-      min-height: 38px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.055);
-      color: #e9f9fd;
-      font-weight: 850;
-    }
-    .filters button { padding: 8px 11px; cursor: pointer; }
-    .filters button.active {
-      color: #031018;
-      border: 0;
-      background: linear-gradient(120deg, var(--aqua), var(--mint));
-    }
-    .search {
-      flex: 1 1 220px;
+    .filters button {
+      min-height: 34px;
       padding: 8px 12px;
-      outline: none;
+      border: 1px solid #cfe3eb;
+      border-radius: 999px;
+      color: var(--blue-900);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .filters button.active {
+      color: #fff;
+      border-color: var(--teal);
+      background: var(--teal);
     }
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 13px;
     }
-    .product-card {
-      border-radius: 14px;
-      overflow: hidden;
-      min-height: 380px;
-      display: flex;
-      flex-direction: column;
-    }
-    .product-card img {
-      display: block;
-      width: 100%;
-      height: 188px;
-      object-fit: contain;
-      background: #f6fbff;
+    .product {
+      position: relative;
+      min-height: 266px;
       padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0,65,105,0.08);
     }
-    .product-card .body {
-      padding: 15px;
-      display: flex;
-      flex: 1;
-      flex-direction: column;
+    .product img {
+      width: 100%;
+      height: 116px;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 10px;
     }
-    .product-card .tag {
-      align-self: flex-start;
-      margin-bottom: 9px;
-      padding: 5px 8px;
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 4px 7px;
       border-radius: 999px;
-      color: #04131b;
-      background: var(--gold);
-      font-size: 11px;
+      color: #fff;
+      background: var(--orange);
+      font-size: 10px;
       font-weight: 950;
-      text-transform: uppercase;
     }
-    .product-card h3 { margin: 0 0 7px; color: #fff; font-size: 17px; line-height: 1.2; }
-    .product-card p { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .product h3 {
+      min-height: 42px;
+      margin: 0 0 5px;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.22;
+    }
+    .product p { margin: 0 0 10px; color: var(--muted); font-size: 12px; line-height: 1.35; }
     .price-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 8px;
       margin-top: auto;
     }
-    .price { color: var(--gold); font-weight: 950; }
+    .price { color: var(--blue-900); font-weight: 950; }
     .add {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
       border: 0;
-      border-radius: 8px;
-      padding: 9px 10px;
-      color: #031018;
-      background: linear-gradient(120deg, var(--aqua), var(--mint));
-      font-size: 13px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--teal);
       font-weight: 950;
       cursor: pointer;
     }
-    .guides {
+    .visit-band {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: auto minmax(0,1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-top: 26px;
+      padding: 18px;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(0,65,105,0.94), rgba(0,132,164,0.78)),
+        url("assets/site/hero-store.jpg") center/cover no-repeat;
+      color: #fff;
+      box-shadow: var(--shadow);
     }
-    .guide-card {
-      min-height: 210px;
-      border-radius: 15px;
-      padding: 20px;
+    .pin {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--blue-900);
+      font-size: 26px;
     }
-    .guide-card h3 { margin: 0 0 8px; font-family: Georgia, "Times New Roman", serif; font-size: 28px; }
-    .guide-card p { margin: 0; color: var(--muted); line-height: 1.5; }
+    .visit-band h2 { margin: 0 0 5px; font-family: Georgia, "Times New Roman", serif; font-size: 25px; }
+    .visit-band p { margin: 0; color: #dff8ff; font-size: 14px; }
     .brands {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 10px;
+      gap: 12px;
+      margin-top: 12px;
     }
     .brand-tile {
       display: grid;
       place-items: center;
-      min-height: 74px;
+      min-height: 78px;
       padding: 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(154,229,250,0.15);
-      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(0,65,105,0.06);
     }
-    .brand-tile img {
-      width: 100%;
-      max-height: 48px;
-      object-fit: contain;
+    .brand-tile img { max-width: 100%; max-height: 50px; object-fit: contain; }
+    .guides {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .guide {
+      min-height: 136px;
+      padding: 18px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(0,65,105,0.06);
+    }
+    .guide h3 { margin: 0 0 7px; color: var(--blue-950); font-family: Georgia, "Times New Roman", serif; font-size: 22px; }
+    .guide p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 13px; }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: #003f6d;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.25fr repeat(4, 1fr);
+      gap: 22px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer p, .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .newsletter {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .newsletter input {
+      min-width: 0;
+      flex: 1;
+      border: 0;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .newsletter button {
+      border: 0;
+      border-radius: 5px;
+      padding: 10px 12px;
+      color: #fff;
+      background: var(--teal);
+      font-weight: 950;
     }
     .drawer {
       position: fixed;
       inset: 0 0 0 auto;
       z-index: 40;
-      width: min(420px, 100%);
+      width: min(390px, 100%);
       padding: 18px;
-      color: var(--ink);
-      background: rgba(3,14,21,0.98);
-      border-left: 1px solid var(--line);
-      box-shadow: -30px 0 90px rgba(0,0,0,0.48);
+      background: #fff;
+      box-shadow: -26px 0 70px rgba(0,65,105,0.25);
       transform: translateX(104%);
       transition: transform .25s ease;
     }
     body.cart-open .drawer { transform: translateX(0); }
-    .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .drawer-head h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 32px; }
+    .drawer-head { display: flex; justify-content: space-between; align-items: center; }
+    .drawer h2 { margin: 0; color: var(--blue-950); font-family: Georgia, "Times New Roman", serif; }
     .close-cart {
       border: 1px solid var(--line);
-      border-radius: 8px;
-      color: var(--ink);
-      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+      background: #fff;
       padding: 8px 10px;
       cursor: pointer;
     }
@@ -457,209 +460,147 @@
     .cart-item {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       padding: 12px;
-      border: 1px solid rgba(154,229,250,0.16);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.055);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--sky);
     }
-    .cart-item span { color: var(--muted); font-size: 13px; }
-    .empty-cart { color: var(--muted); margin-top: 18px; line-height: 1.5; }
-    .drawer .cta { width: 100%; margin-top: 18px; }
-    footer {
-      margin-top: 34px;
-      padding-top: 22px;
-      border-top: 1px solid rgba(154,229,250,0.14);
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-    }
+    .cart-item span, .empty-cart { color: var(--muted); font-size: 13px; }
+    .drawer .btn { width: 100%; margin-top: 18px; }
     @media (max-width: 1040px) {
-      .hero,
-      .storefront { grid-template-columns: 1fr; }
-      .dept-grid,
-      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .brands { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .categories { grid-template-columns: repeat(5, minmax(0,1fr)); }
+      .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
-    @media (max-width: 720px) {
-      .promo-bar { font-size: 12px; gap: 8px; }
-      .shell { padding: 10px 10px 42px; }
-      .topbar { position: static; display: block; margin: 0 -10px; padding: 12px 10px; }
-      .nav { justify-content: flex-start; margin-top: 12px; }
-      .hero-main { min-height: 560px; padding: 24px 18px; border-radius: 13px; }
-      h1 { font-size: 44px; }
-      .hero-stats,
-      .dept-grid,
-      .product-grid,
-      .guides,
-      .info-grid { grid-template-columns: 1fr; }
-      .section-head { display: block; }
-      .section-head p { margin-top: 8px; }
-      .hero-card img { height: 190px; }
-      .panel.store-image { min-height: 280px; }
-      .brands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 760px) {
+      .header { grid-template-columns: 1fr; gap: 10px; }
+      .header-actions { justify-content: space-between; }
+      .main-nav { justify-content: flex-start; overflow-x: auto; padding-bottom: 11px; }
+      .hero { min-height: 360px; }
+      .hero-content { padding: 32px 20px; }
+      .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .promo-grid, .guides { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .visit-band { grid-template-columns: 1fr; }
+      .brands { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .page { padding-inline: 8px; }
+      .product-grid { grid-template-columns: 1fr; }
+      .categories { gap: 8px; }
+      .cat { min-height: 98px; }
     }
   </style>
 </head>
 <body>
-  <div class="promo-bar">
-    <span>Free shipping on qualifying orders over $49</span>
-    <span>Prices may vary in store due to MAP pricing</span>
-    <span>Levittown, PA</span>
-  </div>
-  <main class="shell">
-    <header class="topbar">
+  <div class="shipping-bar">Free shipping on qualifying orders over $49 · Levittown, PA</div>
+
+  <main class="page">
+    <header class="header">
       <a class="brand" href="../../">
         <img src="assets/site/logo.png" alt="The Hidden Reef logo" />
-        <span><strong>The Hidden Reef</strong><span>Aquarium superstore since 1995</span></span>
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
       </a>
-      <nav class="nav" aria-label="Store navigation">
-        <a href="#departments">Departments</a>
-        <a href="#products">New & popular</a>
-        <a href="#guides">Guides</a>
-        <a href="#visit">Visit</a>
-      </nav>
-      <button class="cart-toggle" type="button">Cart <span id="cart-count">0</span></button>
+      <form class="search-box" action="#products">
+        <input id="search" type="search" placeholder="Search products, categories, brands..." />
+        <button type="submit" aria-label="Search">⌕</button>
+      </form>
+      <div class="header-actions">
+        <a href="#visit">My Account ▾</a>
+        <button class="cart-button" type="button" aria-label="Cart">🛒<span id="cart-count">0</span></button>
+      </div>
     </header>
 
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="#products" data-filter="all">Shop All Categories</a>
+      <a href="#products" data-filter="saltwater">Saltwater</a>
+      <a href="#products" data-filter="freshwater">Aquarium</a>
+      <a href="#products" data-filter="pond">Pond</a>
+      <a href="#products" data-filter="equipment">Lighting</a>
+      <a href="#products" data-filter="equipment">Food</a>
+      <a href="#products" data-filter="decor">Decorations</a>
+      <a href="#visit">Visit Us</a>
+    </nav>
+
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-main">
-        <div>
-          <span class="kicker">Fish, coral, ponds, plants, gear</span>
-          <h1 id="page-title">Build a tank you want to stare at.</h1>
-          <p class="lede">Shop aquarium supplies online, plan your next reef or freshwater setup, and visit the Levittown showroom for livestock, equipment, and real advice.</p>
-          <div class="cta-row">
-            <a class="cta primary" href="#products">Shop new arrivals</a>
-            <a class="cta" href="#visit">Plan a store visit</a>
-          </div>
+      <div class="hero-content">
+        <h1 id="page-title">Build Your Perfect Aquatic World</h1>
+        <p>Everything aquarium: freshwater, saltwater, ponds, plants, coral, equipment, food, and expert help from a real local store.</p>
+        <div class="button-row">
+          <a class="btn" href="#products">Shop Aquariums</a>
+          <a class="btn secondary" href="#visit">Explore Livestock</a>
         </div>
-        <div class="hero-stats">
-          <div><strong>20,000+</strong><span>Square feet of livestock, aquariums, supplies, and pond gear.</span></div>
-          <div><strong>Fresh</strong><span>New fish, coral, plants, and essentials rotating through the store.</span></div>
-          <div><strong>Local</strong><span>In-person help for compatibility, water care, filtration, and lighting.</span></div>
-        </div>
-      </div>
-      <aside class="hero-side">
-        <article class="hero-card">
-        <img src="assets/site/hero-reef.jpg" alt="Aquarium setup promotion" />
-          <div class="body">
-            <span class="kicker">Featured now</span>
-            <h2>Fresh reef room picks</h2>
-            <p>Coral color, cleanup crews, reef-safe livestock, salt mix, test kits, frozen food, and lighting upgrades.</p>
-            <div class="quick-shop">
-              <button type="button" data-filter="saltwater">Reef essentials <span>Shop</span></button>
-              <button type="button" data-filter="freshwater">Freshwater food <span>Shop</span></button>
-              <button type="button" data-filter="pond">Pond season <span>Shop</span></button>
-            </div>
-          </div>
-        </article>
-        <article class="hero-card">
-          <img src="assets/site/cta.jpg" alt="Aquarium store display" />
-          <div class="body">
-            <h2>Order dry goods. Visit for livestock.</h2>
-            <p>Use the site for supplies, refills, and planning. Use the store for the living stuff that deserves a real look.</p>
-          </div>
-        </article>
-      </aside>
-    </section>
-
-    <section id="departments" aria-labelledby="departments-title">
-      <div class="section-head">
-        <h2 id="departments-title">Shop by department.</h2>
-        <p>Clear paths for the main customer jobs: reef, freshwater, pond, and equipment.</p>
-      </div>
-      <div class="dept-grid">
-        <a class="dept-card" href="#products" data-filter="saltwater">
-          <img src="assets/site/hero-reef.jpg" alt="Reef aquarium" />
-          <div class="body"><h3>Saltwater & reef</h3><p>Coral, marine livestock, salt mix, lights, test kits, food, and dosing supplies.</p><span>Shop reef →</span></div>
-        </a>
-        <a class="dept-card" href="#products" data-filter="freshwater">
-          <img src="assets/site/hero-store.jpg" alt="Aquarium store aisle" />
-          <div class="body"><h3>Freshwater</h3><p>Tropical fish supplies, planted tank gear, shrimp care, food, heaters, and filters.</p><span>Shop freshwater →</span></div>
-        </a>
-        <a class="dept-card" href="#products" data-filter="pond">
-          <img src="assets/site/foam-gun.jpg" alt="Pond waterfall foam product" />
-          <div class="body"><h3>Ponds</h3><p>Pumps, treatments, water features, food, liners, maintenance, and seasonal opening supplies.</p><span>Shop pond →</span></div>
-        </a>
-        <a class="dept-card" href="#products" data-filter="equipment">
-          <img src="assets/site/flip-feed.jpg" alt="Aquarium feeding lid product" />
-          <div class="body"><h3>Equipment</h3><p>Tanks, lights, lids, filters, media, replacement parts, maintenance tools, and accessories.</p><span>Shop equipment →</span></div>
-        </a>
       </div>
     </section>
 
-    <section id="visit" class="storefront" aria-label="Store visit information">
-      <div class="panel store-image" role="img" aria-label="The Hidden Reef store and aquarium displays"></div>
-      <div class="panel">
-        <span class="kicker">Visit the showroom</span>
-        <h3>See the livestock before it goes home.</h3>
-        <p>The redesigned homepage should make the physical store feel like the advantage: rows of tanks, staff who know the products, and enough inventory to solve real aquarium problems in one trip.</p>
-        <div class="info-grid">
-          <div><strong>Location</strong><span>4501 New Falls Rd, Levittown, PA</span></div>
-          <div><strong>Best for</strong><span>Livestock, compatibility checks, setup planning, and pond season.</span></div>
-          <div><strong>Online</strong><span>Dry goods, food, equipment, replacement parts, and refills.</span></div>
-          <div><strong>Pickup mindset</strong><span>Let shoppers browse first, then bring them into the store.</span></div>
-        </div>
-      </div>
+    <section class="categories" aria-label="Popular categories">
+      <button class="cat" type="button" data-filter="freshwater"><img src="assets/site/hero-store.jpg" alt="" /><strong>Freshwater</strong></button>
+      <button class="cat" type="button" data-filter="saltwater"><img src="assets/site/hero-reef.jpg" alt="" /><strong>Saltwater</strong></button>
+      <button class="cat" type="button" data-filter="freshwater"><img src="assets/site/red-parrot-pellets.jpg" alt="" /><strong>Aquarium</strong></button>
+      <button class="cat" type="button" data-filter="equipment"><img src="assets/site/flip-feed.jpg" alt="" /><strong>Filtration</strong></button>
+      <button class="cat" type="button" data-filter="equipment"><img src="assets/site/brand-red-sea.jpg" alt="" /><strong>Lighting</strong></button>
+      <button class="cat" type="button" data-filter="freshwater"><img src="assets/site/baby-flakes.jpg" alt="" /><strong>Food</strong></button>
+      <button class="cat" type="button" data-filter="decor"><img src="assets/site/skull.jpg" alt="" /><strong>Decorations</strong></button>
+      <button class="cat" type="button" data-filter="pond"><img src="assets/site/foam-gun.jpg" alt="" /><strong>Ponds</strong></button>
+      <button class="cat" type="button" data-filter="freshwater"><img src="assets/site/fruit-home.jpg" alt="" /><strong>Plants</strong></button>
+      <button class="cat" type="button" data-filter="decor"><img src="assets/site/skull.jpg" alt="" /><strong>Dog Splash</strong></button>
+    </section>
+
+    <section class="promo-grid" aria-label="Promotions">
+      <article class="promo-card"><img src="assets/site/promo.jpg" alt="" /><div class="promo-copy"><span>Coral & livestock</span><strong>20% OFF</strong><small>Select aquarium favorites</small></div></article>
+      <article class="promo-card"><img src="assets/site/cta.jpg" alt="" /><div class="promo-copy"><span>Aquarium systems</span><strong>15% OFF</strong><small>Starter tank packages</small></div></article>
+      <article class="promo-card"><img src="assets/site/hero-reef.jpg" alt="" /><div class="promo-copy"><span>Pond supplies</span><strong>10% OFF</strong><small>Seasonal pond & koi food</small></div></article>
     </section>
 
     <section id="products" aria-labelledby="products-title">
       <div class="section-head">
-        <h2 id="products-title">New and popular.</h2>
-        <p>Prototype product grid with working search, filters, and cart buttons.</p>
+        <h2 id="products-title">New Arrivals</h2>
+        <a href="#products">View All Products →</a>
       </div>
       <div class="filters" aria-label="Product filters">
-        <input id="search" class="search" type="search" placeholder="Search products, brands, departments..." />
         <button type="button" class="active" data-filter="all">All</button>
-        <button type="button" data-filter="pond">Pond</button>
         <button type="button" data-filter="freshwater">Freshwater</button>
+        <button type="button" data-filter="pond">Pond</button>
         <button type="button" data-filter="equipment">Equipment</button>
         <button type="button" data-filter="decor">Decor</button>
       </div>
-      <div class="product-grid" id="product-grid">
-        <article class="product-card" data-category="pond" data-name="easypro professional foam gun pond waterfall">
-          <img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" />
-          <div class="body"><span class="tag">Pond</span><h3>EasyPro Professional Foam Gun</h3><p>Waterfall foam application tool for pond and water-feature projects.</p><div class="price-row"><span class="price">$89.99</span><button class="add" type="button" data-name="EasyPro Professional Foam Gun">Add</button></div></div>
-        </article>
-        <article class="product-card" data-category="freshwater" data-name="sera red parrot pellets fish food">
-          <img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" />
-          <div class="body"><span class="tag">Food</span><h3>Sera Red Parrot Pellets</h3><p>Daily nutrition for red parrots and similar ornamental freshwater fish.</p><div class="price-row"><span class="price">$14.49</span><button class="add" type="button" data-name="Sera Red Parrot Pellets">Add</button></div></div>
-        </article>
-        <article class="product-card" data-category="freshwater" data-name="sera vipan baby flakes fish food">
-          <img src="assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" />
-          <div class="body"><span class="tag">Freshwater</span><h3>Sera Vipan Baby Flakes</h3><p>Fine flake food for fry, small fish, and careful feeding routines.</p><div class="price-row"><span class="price">$6.99</span><button class="add" type="button" data-name="Sera Vipan Baby Flakes">Add</button></div></div>
-        </article>
-        <article class="product-card" data-category="equipment" data-name="innovative marine nuvo flip feed lid">
-          <img src="assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed Lid" />
-          <div class="body"><span class="tag">Equipment</span><h3>Innovative Marine Nuvo Flip Feed</h3><p>Hinged feeding lid accessory for clean, practical aquarium access.</p><div class="price-row"><span class="price">$24.99</span><button class="add" type="button" data-name="Innovative Marine Nuvo Flip Feed">Add</button></div></div>
-        </article>
-        <article class="product-card" data-category="decor" data-name="underwater treasures mechanical skull decor">
-          <img src="assets/site/skull.jpg" alt="Underwater Treasures Mechanical Skull" />
-          <div class="body"><span class="tag">Decor</span><h3>Mechanical Skull Ornament</h3><p>Statement aquarium decor for tanks that need a little attitude.</p><div class="price-row"><span class="price">$19.99</span><button class="add" type="button" data-name="Mechanical Skull Ornament">Add</button></div></div>
-        </article>
-        <article class="product-card" data-category="decor" data-name="underwater treasures tropical fruit home decor">
-          <img src="assets/site/fruit-home.jpg" alt="Underwater Treasures Tropical Fruit Home" />
-          <div class="body"><span class="tag">Decor</span><h3>Tropical Fruit Home</h3><p>Bright hideaway decor for playful freshwater and community tanks.</p><div class="price-row"><span class="price">$12.99</span><button class="add" type="button" data-name="Tropical Fruit Home">Add</button></div></div>
-        </article>
+      <div class="product-grid">
+        <article class="product" data-category="pond" data-name="easypro professional foam gun pond waterfall"><span class="badge">New</span><img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" /><h3>EasyPro Professional Foam Gun</h3><p>Waterfall foam application tool.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun" type="button">+</button></div></article>
+        <article class="product" data-category="freshwater" data-name="sera red parrot pellets fish food"><img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" /><h3>Sera Red Parrot Pellets</h3><p>Daily freshwater nutrition.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets" type="button">+</button></div></article>
+        <article class="product" data-category="equipment" data-name="innovative marine nuvo flip feed lid"><span class="badge">Hot</span><img src="assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed" /><h3>Innovative Marine Nuvo Flip Feed</h3><p>Hinged aquarium feeding lid.</p><div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed" type="button">+</button></div></article>
+        <article class="product" data-category="freshwater" data-name="sera vipan baby flakes food"><img src="assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" /><h3>Sera Vipan Baby Flakes</h3><p>Fine flakes for small fish.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes" type="button">+</button></div></article>
+        <article class="product" data-category="decor" data-name="underwater treasures mechanical skull"><img src="assets/site/skull.jpg" alt="Mechanical Skull Ornament" /><h3>Mechanical Skull Ornament</h3><p>Statement aquarium decor.</p><div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament" type="button">+</button></div></article>
+        <article class="product" data-category="decor" data-name="underwater treasures tropical fruit home"><span class="badge">New</span><img src="assets/site/fruit-home.jpg" alt="Tropical Fruit Home" /><h3>Tropical Fruit Home</h3><p>Bright hideaway decoration.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home" type="button">+</button></div></article>
       </div>
     </section>
 
-    <section id="guides" aria-labelledby="guides-title">
+    <section id="visit" class="visit-band" aria-label="Visit the store">
+      <div class="pin">⌖</div>
+      <div>
+        <h2>Visit Our Levittown Superstore</h2>
+        <p>4501 New Falls Rd, Levittown, PA 19056 · Browse the tanks, ask questions, and take home the right setup.</p>
+      </div>
+      <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+    </section>
+
+    <section aria-labelledby="guides-title">
       <div class="section-head">
-        <h2 id="guides-title">Advice that sells the right thing.</h2>
-        <p>Educational cards make the site useful before the customer knows exactly what to buy.</p>
+        <h2 id="guides-title">Aquarium Help</h2>
+        <p>Useful buying paths that turn store expertise into online guidance.</p>
       </div>
       <div class="guides">
-        <article class="guide-card"><span class="kicker">Starter path</span><h3>First freshwater tank</h3><p>Tank size, cycling, heater, filter, water conditioner, first fish, and food in one simple path.</p></article>
-        <article class="guide-card"><span class="kicker">Reef path</span><h3>Saltwater upgrade</h3><p>Lighting, salt, test kits, cleanup crew, coral selection, and realistic maintenance expectations.</p></article>
-        <article class="guide-card"><span class="kicker">Seasonal</span><h3>Open the pond</h3><p>Pumps, foam, beneficial bacteria, algae control, food, and water quality after winter.</p></article>
+        <article class="guide"><h3>First Freshwater Tank</h3><p>Tank, heater, filter, conditioner, food, cycling, and hardy first fish.</p></article>
+        <article class="guide"><h3>Reef Upgrade</h3><p>Lighting, salt mix, test kits, cleanup crew, coral choices, and maintenance rhythm.</p></article>
+        <article class="guide"><h3>Pond Opening</h3><p>Pumps, waterfall foam, bacteria, treatments, food, and seasonal water quality.</p></article>
       </div>
     </section>
 
     <section aria-labelledby="brands-title">
       <div class="section-head">
-        <h2 id="brands-title">Trusted brands.</h2>
-        <p>Brand tiles from the current store make the redesign feel immediately familiar.</p>
+        <h2 id="brands-title">Brands We Carry</h2>
+        <p>Familiar names from the current shop.</p>
       </div>
       <div class="brands">
         <div class="brand-tile"><img src="assets/site/brand-api.jpg" alt="API" /></div>
@@ -671,68 +612,61 @@
       </div>
     </section>
 
-    <footer>
-      Prototype storefront for The Hidden Reef. Product actions are demo-only.
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><p>Aquarium supplies, fish, coral, pond goods, and local advice from Levittown, PA.</p><p>Prototype redesign for demonstration.</p></div>
+        <div><h4>Shop</h4><a href="#products">Freshwater</a><a href="#products">Saltwater</a><a href="#products">Pond</a><a href="#products">Equipment</a></div>
+        <div><h4>Customer Service</h4><a href="#visit">Visit the store</a><a href="#products">Shipping info</a><a href="#products">Returns</a></div>
+        <div><h4>Brands</h4><a>Fluval</a><a>Seachem</a><a>Red Sea</a><a>Sera</a></div>
+        <div><h4>Stay in the Loop</h4><p>Get arrivals, pond-season reminders, and aquarium deals.</p><form class="newsletter"><input placeholder="Email" /><button type="button">→</button></form></div>
+      </div>
     </footer>
   </main>
 
   <aside class="drawer" aria-label="Cart drawer">
-    <div class="drawer-head">
-      <h2>Your cart</h2>
-      <button class="close-cart" type="button">Close</button>
-    </div>
+    <div class="drawer-head"><h2>Your cart</h2><button class="close-cart" type="button">Close</button></div>
     <div id="cart-items" class="cart-items"></div>
-    <p id="empty-cart" class="empty-cart">Your cart is empty. Add a few products to preview how the shopping flow would feel.</p>
-    <button class="cta primary" type="button">Demo checkout</button>
+    <p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the prototype flow.</p>
+    <button class="btn" type="button">Demo checkout</button>
   </aside>
 
   <script>
-    const cards = [...document.querySelectorAll('.product-card')];
-    const filterButtons = [...document.querySelectorAll('[data-filter]')];
+    const cards = [...document.querySelectorAll('.product')];
+    const filters = [...document.querySelectorAll('[data-filter]')];
     const search = document.getElementById('search');
     const cartCount = document.getElementById('cart-count');
     const cartItems = document.getElementById('cart-items');
     const emptyCart = document.getElementById('empty-cart');
     const cart = [];
-    let activeFilter = 'all';
+    let active = 'all';
 
-    function applyFilters(filter) {
-      if (filter) activeFilter = filter;
+    function applyFilter(next) {
+      if (next) active = next;
       const q = (search.value || '').trim().toLowerCase();
       cards.forEach(card => {
-        const matchFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
-        const matchSearch = !q || card.dataset.name.includes(q);
-        card.style.display = matchFilter && matchSearch ? '' : 'none';
+        const category = active === 'all' || card.dataset.category === active;
+        const text = !q || card.dataset.name.includes(q);
+        card.style.display = category && text ? '' : 'none';
       });
-      document.querySelectorAll('.filters [data-filter]').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.filter === activeFilter);
-      });
+      document.querySelectorAll('.filters [data-filter]').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === active));
     }
-
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        applyFilters(btn.dataset.filter);
-        if (btn.closest('.hero-card') || btn.closest('.dept-card')) {
-          document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-    search.addEventListener('input', () => applyFilters());
-
-    document.querySelectorAll('.add').forEach(btn => {
-      btn.addEventListener('click', () => {
-        cart.push(btn.dataset.name);
-        renderCart();
-        document.body.classList.add('cart-open');
-      });
-    });
-    document.querySelector('.cart-toggle').addEventListener('click', () => document.body.classList.add('cart-open'));
+    filters.forEach(el => el.addEventListener('click', () => {
+      applyFilter(el.dataset.filter);
+      if (!el.closest('.filters')) document.getElementById('products').scrollIntoView({behavior:'smooth'});
+    }));
+    search.addEventListener('input', () => applyFilter());
+    document.querySelector('.search-box').addEventListener('submit', e => { e.preventDefault(); applyFilter(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
+    document.querySelectorAll('.add').forEach(btn => btn.addEventListener('click', () => {
+      cart.push(btn.dataset.name);
+      renderCart();
+      document.body.classList.add('cart-open');
+    }));
+    document.querySelector('.cart-button').addEventListener('click', () => document.body.classList.add('cart-open'));
     document.querySelector('.close-cart').addEventListener('click', () => document.body.classList.remove('cart-open'));
-
     function renderCart() {
       cartCount.textContent = cart.length;
       emptyCart.style.display = cart.length ? 'none' : '';
-      cartItems.innerHTML = cart.map((name, i) => '<div class="cart-item"><strong>' + name + '</strong><span>Qty 1</span></div>').join('');
+      cartItems.innerHTML = cart.map(name => '<div class="cart-item"><strong>' + name + '</strong><span>Qty 1</span></div>').join('');
     }
   </script>
 </body>
