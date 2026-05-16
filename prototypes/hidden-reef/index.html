@@ -25,8 +25,9 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { overflow-x: hidden; scroll-behavior: smooth; }
     body {
+      overflow-x: hidden;
       margin: 0;
       color: var(--ink);
       background:
@@ -146,15 +147,16 @@
       font-size: 13px;
       font-weight: 850;
     }
+    .main-nav::-webkit-scrollbar { display: none; }
     .hero {
       position: relative;
-      min-height: 300px;
+      min-height: 220px;
       overflow: hidden;
       border-radius: 0 0 8px 8px;
       background:
-        radial-gradient(circle at 82% 40%, rgba(19,184,223,0.08), transparent 34%),
-        linear-gradient(90deg, rgba(0,48,82,0.94) 0%, rgba(0,78,115,0.76) 42%, rgba(0,60,92,0.18) 70%),
-        url("assets/site/promo.jpg") right center/auto 118% no-repeat,
+        radial-gradient(circle at 78% 42%, rgba(19,184,223,0.16), transparent 33%),
+        linear-gradient(90deg, rgba(0,48,82,0.96) 0%, rgba(0,78,115,0.7) 44%, rgba(0,60,92,0.08) 72%),
+        url("assets/site/hero-reef.jpg") right center/auto 116% no-repeat,
         linear-gradient(90deg, #00486f, #0079a4);
       box-shadow: var(--shadow);
     }
@@ -170,23 +172,23 @@
       max-width: 540px;
       position: relative;
       z-index: 1;
-      padding: 42px clamp(22px, 5vw, 66px);
+      padding: 30px clamp(22px, 5vw, 58px);
       color: #fff;
     }
     .hero h1 {
       margin: 0 0 10px;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(38px, 5vw, 58px);
+      font-size: clamp(32px, 4.4vw, 48px);
       line-height: 0.95;
       letter-spacing: 0;
       text-shadow: 0 6px 24px rgba(0,0,0,0.42);
     }
     .hero p {
-      max-width: 420px;
+      max-width: 390px;
       margin: 0 0 20px;
       color: #dff8ff;
       line-height: 1.5;
-      font-size: 15px;
+      font-size: 14px;
     }
     .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .btn {
@@ -505,9 +507,9 @@
     @media (max-width: 760px) {
       .header { grid-template-columns: 1fr; gap: 10px; }
       .header-actions { justify-content: space-between; }
-      .main-nav { justify-content: flex-start; overflow-x: auto; padding-bottom: 11px; }
-      .hero { min-height: 360px; }
-      .hero-content { padding: 32px 20px; }
+      .main-nav { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; padding-bottom: 11px; }
+      .hero { min-height: 300px; }
+      .hero-content { padding: 26px 18px; }
       .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .promo-grid, .guides { grid-template-columns: 1fr; }
       .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -577,10 +579,11 @@
     }
     .search-box input::placeholder { color: #89aab8; }
     .hero {
+      min-height: 220px;
       background:
         radial-gradient(circle at 74% 38%, rgba(39,194,232,0.18), transparent 28%),
         linear-gradient(90deg, rgba(1,22,37,0.98) 0%, rgba(1,54,77,0.82) 45%, rgba(0,45,71,0.26) 70%),
-        url("assets/site/promo.jpg") right center/auto 118% no-repeat,
+        url("assets/site/hero-reef.jpg") right center/auto 116% no-repeat,
         linear-gradient(90deg, #021421, #05344f);
       border: 1px solid rgba(116,205,235,0.16);
     }
@@ -633,8 +636,8 @@
     .brand {
       grid-column: 1 / -1;
       justify-content: center;
-      min-height: 128px;
-      padding: 20px;
+      min-height: 118px;
+      padding: 18px 20px;
       margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
       background:
         radial-gradient(circle at 50% 0%, rgba(64,217,255,0.2), transparent 38%),
@@ -644,30 +647,20 @@
       box-shadow: inset 0 -34px 60px rgba(0,0,0,0.42);
     }
     .brand img {
-      display: none;
-    }
-    .brand::before {
-      content: "HR";
-      display: grid;
-      place-items: center;
-      width: clamp(70px, 8vw, 104px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      color: #02111c;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(24px, 3vw, 38px);
-      font-weight: 950;
-      letter-spacing: -0.06em;
-      background:
-        radial-gradient(circle at 36% 30%, #fff8cc 0 10%, #4ff0ff 20%, #087eac 54%, #02385e 100%);
-      border: 3px solid rgba(235,252,255,0.92);
-      box-shadow: 0 0 0 6px rgba(7,26,39,0.74), 0 0 42px rgba(64,217,255,0.55);
+      display: block;
+      width: clamp(112px, 14vw, 176px);
+      height: auto;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(190,240,255,0.72);
+      border-radius: 10px;
+      box-shadow: 0 18px 36px rgba(0,0,0,0.5), 0 0 34px rgba(64,217,255,0.24);
     }
     .brand strong {
-      font-size: clamp(42px, 7vw, 82px);
+      font-size: clamp(40px, 6.4vw, 76px);
       line-height: 0.82;
       color: #fff;
-      text-shadow: 0 16px 38px rgba(0,0,0,0.58);
+      text-shadow: 0 7px 0 rgba(0,31,49,0.95), 0 20px 42px rgba(0,0,0,0.72), 0 0 22px rgba(72,217,255,0.22);
     }
     .brand span span {
       margin-top: 12px;
@@ -688,11 +681,12 @@
     }
     @media (max-width: 760px) {
       .brand {
-        min-height: 150px;
+        min-height: 160px;
         padding: 18px 12px;
         flex-direction: column;
         text-align: center;
       }
+      .brand img { width: 118px; }
       .brand strong { font-size: 40px; }
       .search-box,
       .header-actions {
