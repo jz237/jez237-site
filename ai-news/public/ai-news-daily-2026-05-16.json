@@ -1,7 +1,23 @@
 {
   "date": "2026-05-16",
-  "updatedAt": "2026-05-16T06:31:47.417860+00:00",
+  "updatedAt": "2026-05-16T08:00:01.469718+00:00",
   "items": [
+    {
+      "title": "NVIDIA Introduces SANA-WM: A 2.6B-Parameter Open-Source World Model That Generates Minute-Scale 720p Video on a Single GPU",
+      "url": "https://www.marktechpost.com/2026/05/16/nvidia-introduces-sana-wm-a-2-6b-parameter-open-source-world-model-that-generates-minute-scale-720p-video-on-a-single-gpu",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Researchers from NVIDIA introduce SANA-WM, an open-source camera-controlled world model that generates 60-second, 720p videos with precise 6-DoF camera control — trained on 64 H100 GPUs and deployable on a single RTX 5090.\nThe post NVIDIA Introduces SANA-WM: A 2.6B-Parameter Open-Source World Model That Generates Minute-Scale 720p Video on a Single GPU appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-16-at-12.42.46-AM-1-150x150.png",
+      "published": "2026-05-16T07:52:42+00:00",
+      "firstSeen": "2026-05-16T08:00:01.469718+00:00",
+      "lastSeen": "2026-05-16T08:00:01.469718+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7163
+    },
     {
       "title": "How to Build Repository-Level Code Intelligence with Repowise Using Graph Analysis, Dead-Code Detection, Decisions, and AI Context",
       "url": "https://www.marktechpost.com/2026/05/15/how-to-build-repository-level-code-intelligence-with-repowise-using-graph-analysis-dead-code-detection-decisions-and-ai-context",
@@ -13,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2-3-1024x731.png",
       "published": "2026-05-16T06:45:19+00:00",
       "firstSeen": "2026-05-16T07:00:01.819231+00:00",
-      "lastSeen": "2026-05-16T07:00:01.819231+00:00",
+      "lastSeen": "2026-05-16T08:00:01.469718+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3125
+      "score": 3.2826
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -27,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-16T06:31:53.741276+00:00",
+      "published": "2026-05-16T08:00:09.243212+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-16T06:31:47.417860+00:00",
+      "lastSeen": "2026-05-16T08:00:01.469718+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
