@@ -1,6 +1,6 @@
 {
   "date": "2026-05-16",
-  "updatedAt": "2026-05-16T06:00:01.384550+00:00",
+  "updatedAt": "2026-05-16T06:31:47.417860+00:00",
   "items": [
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -11,9 +11,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-16T06:00:08.212596+00:00",
+      "published": "2026-05-16T06:31:53.741276+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-16T06:00:01.384550+00:00",
+      "lastSeen": "2026-05-16T06:31:47.417860+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
