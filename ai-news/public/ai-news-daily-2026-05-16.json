@@ -1,6 +1,6 @@
 {
   "date": "2026-05-16",
-  "updatedAt": "2026-05-16T16:00:02.024453+00:00",
+  "updatedAt": "2026-05-16T15:13:21.016423+00:00",
   "items": [
     {
       "title": "OpenAI wants ChatGPT to see your bank account. The pitch is convenience. The risk is everything else.",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/openai-chatgpt-personal-finance-plaid.avif",
       "published": "2026-05-16T08:41:04+00:00",
       "firstSeen": "2026-05-16T10:00:01.416610+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3477
+      "score": 12.3673
     },
     {
       "title": "OpenAI and Malta partner to bring ChatGPT Plus to all citizens",
@@ -29,26 +29,10 @@
       "image": "",
       "published": "2026-05-16T00:00:00+00:00",
       "firstSeen": "2026-05-16T10:36:17.617401+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.4053
-    },
-    {
-      "title": "OpenAI co-founder Greg Brockman reportedly takes charge of product strategy",
-      "url": "https://techcrunch.com/2026/05/16/openai-co-founder-greg-brockman-reportedly-takes-charge-of-product-strategy",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "OpenAI's latest shakeup comes as the company reportedly plans to combine ChatGPT and its programming product Codex.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273248471.jpg?resize=1200%2C800",
-      "published": "2026-05-16T15:33:33+00:00",
-      "firstSeen": "2026-05-16T16:00:02.024453+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.2766
+      "score": 11.4207
     },
     {
       "title": "Salesforce expects to spend $300 million on Anthropic tokens this year, and Benioff wants coding inside Slack next",
@@ -61,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/salesforce-benioff-300-million-anthropic-tokens-slack-coding.avif",
       "published": "2026-05-16T09:12:42+00:00",
       "firstSeen": "2026-05-16T10:00:01.416610+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.0609
+      "score": 9.0808
     },
     {
       "title": "Stripe’s John Collison says agentic commerce will completely transform online shopping",
@@ -77,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/stripe-collison-agentic-commerce-reshape-internet.avif",
       "published": "2026-05-16T09:40:08+00:00",
       "firstSeen": "2026-05-16T12:00:01.126319+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7726
+      "score": 6.7927
     },
     {
       "title": "Four OpenClaw flaws let attackers steal data, escalate privileges, and plant backdoors through the agent’s own sandbox",
@@ -93,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/openclaw-claw-chain-vulnerabilities-sandbox-escape.avif",
       "published": "2026-05-16T10:15:12+00:00",
       "firstSeen": "2026-05-16T12:00:01.126319+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0877
+      "score": 6.1082
     },
     {
       "title": "NVIDIA Introduces SANA-WM: A 2.6B-Parameter Open-Source World Model That Generates Minute-Scale 720p Video on a Single GPU",
@@ -109,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-16-at-12.42.46-AM-1-150x150.png",
       "published": "2026-05-16T07:52:42+00:00",
       "firstSeen": "2026-05-16T08:00:01.469718+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.4978
+      "lastSeen": "2026-05-16T15:00:02.079659+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.517
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -123,9 +107,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-16T16:00:10.025763+00:00",
+      "published": "2026-05-16T15:13:24.703383+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
@@ -160,7 +144,7 @@
       "lastSeen": "2026-05-16T16:00:02.024453+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0709
+      "score": 3.0895
     },
     {
       "title": "Faraday Future raised $25 million for its robotics pivot. The fine print tells a different story.",
@@ -173,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/faraday-future-25-million-robotics-pivot.avif",
       "published": "2026-05-16T12:21:58+00:00",
       "firstSeen": "2026-05-16T13:00:02.132599+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7444
+      "score": 2.7661
     },
     {
       "title": "RJ Scaringe has raised $12 billion across three startups, and investors are still queueing up",
@@ -189,11 +173,49 @@
       "image": "https://media.thenextweb.com/2026/05/rj-scaringe-12-billion-rivian-also-mind-robotics.avif",
       "published": "2026-05-16T10:01:32+00:00",
       "firstSeen": "2026-05-16T12:00:01.126319+00:00",
-      "lastSeen": "2026-05-16T16:00:02.024453+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6818
+      "score": 2.7021
+    },
+    {
+      "title": "Most CEOs think their boards are rushing AI, and BCG’s survey shows why",
+      "url": "https://thenextweb.com/news/bcg-ceos-boards-rushing-ai-transformation-survey",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Sixty-one per cent of chief executives say their boards are pushing AI transformation too fast, according to a global survey of 625 leaders published by Boston Consulting Group. The research, titled Split Decisions, polled 351 CEOs and 274 board members at companies with at least $100 million in annual revenue and found a consistent pattern: [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/bcg-ceos-boards-rushing-ai-transformation-survey.avif",
+      "published": "2026-05-16T09:52:08+00:00",
+      "firstSeen": "2026-05-16T12:00:01.126319+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 2.498
+    },
+    {
+      "title": "Some Asexuals Are Using AI Companions for Intimacy Without the Sex",
+      "url": "https://www.wired.com/story/some-asexual-people-are-using-ai-companions-for-intimacy-without-the-sex",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "“I’ve got one hand on the keyboard, one hand down below,” an artist who role-plays with their chatbot tells WIRED. But some asexual advocates aren’t thrilled about the association.",
+      "image": "https://media.wired.com/photos/6a03688e61363ff11afeb631/master/pass/051226-asexual-ai-intimacy-2x1.jpg",
+      "published": "2026-05-16T09:30:00+00:00",
+      "firstSeen": "2026-05-16T10:00:01.416610+00:00",
+      "lastSeen": "2026-05-16T15:13:21.016423+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1283
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
