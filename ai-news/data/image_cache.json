@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-16T01:00:01.224224+00:00",
+  "updatedAt": "2026-05-16T00:05:46.485930+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7059,15 +7059,11 @@
     },
     "https://simonwillison.net/2026/May/15/inaturalist-clumper": {
       "image": "",
-      "checkedAt": "2026-05-16T01:00:01.224224+00:00"
+      "checkedAt": "2026-05-16T00:05:46.485930+00:00"
     },
     "https://simonwillison.net/2026/May/15/datasette-llm-limits": {
       "image": "",
-      "checkedAt": "2026-05-16T01:00:01.224224+00:00"
-    },
-    "https://openai.com/index/databricks": {
-      "image": "",
-      "checkedAt": "2026-05-16T01:00:01.224224+00:00"
+      "checkedAt": "2026-05-16T00:05:46.485930+00:00"
     }
   }
 }
