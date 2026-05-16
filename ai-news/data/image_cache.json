@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T22:09:37.142530+00:00",
+  "updatedAt": "2026-05-16T00:00:01.789795+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7052,6 +7052,10 @@
     "https://www.theverge.com/news/931884/youtube-likeness-detection-ai-deepfake-expansion-all-adults": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK419_DEEPFAKE_3_CVIRGINIA_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-15T23:00:01.935005+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/15/1137357/musk-v-altman-week-3": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/GettyImages-2273247036.jpg?resize=1200,600",
+      "checkedAt": "2026-05-16T00:00:01.789795+00:00"
     }
   }
 }
