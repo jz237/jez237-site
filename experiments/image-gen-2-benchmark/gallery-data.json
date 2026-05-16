@@ -430,5 +430,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-16-afternoon-cobalt-salt-observatory",
+    "title": "Cobalt Salt Observatory",
+    "tests": "Tests crystalline macro detail, refractive lens layering, mixed warm/cool workshop lighting, and surreal weather-in-mineral imagery without relying on prior archive subjects.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a visually rich surreal still-life scene titled conceptually Cobalt Salt Observatory, with no visible text and no dancing or performance implied.\n\nScene/backdrop: an old coastal navigation workshop at blue hour, windows fogged with sea mist, brass instruments and worn black slate surfaces lit by soft cyan moonlight and a few warm oil lamps.\nSubject: a tabletop observatory grown from deep cobalt-blue salt crystals, antique magnifying lenses, polished brass rings, and tiny tide gauges. The crystals form jagged miniature cliffs and translucent towers; inside them are suspended pinprick stars, miniature cloud bands, and tiny glowing weather systems like trapped memories of the sea.\nComposition: square 1024x1024 image, three-quarter view from slightly above, the crystalline observatory centered on a dark workbench, with layered lenses creating refractions and repeated ghost images. Include delicate details: etched brass calibration marks without readable words, condensation beads, scattered sea-glass fragments, a small compass, and thin copper wires holding lenses in arcs.\nLighting and style: cinematic macro realism mixed with fine-art surrealism, crisp material contrast between rough salt, smooth glass, tarnished brass, damp slate, and warm wood. High detail, atmospheric but readable, no logos, no branded objects, no readable text, no people, no animals, no dancers, no dance poses, no stage, no performance scene.",
+    "image": "images/2026-05-16-afternoon-cobalt-salt-observatory.png",
+    "date": "2026-05-16",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
