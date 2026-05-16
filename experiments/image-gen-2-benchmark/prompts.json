@@ -406,5 +406,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-16-morning-moonwell-bell-foundry",
+    "title": "Moonwell Bell Foundry",
+    "tests": "Explores fantasy craft architecture, molten moon-metal, engraved bell surfaces, moonwell reflections, smoke and spark lighting, and warm-cool material contrast without dance imagery.",
+    "prompt": "Use case: stylized-concept\\nAsset type: daily GPT Image 2 benchmark archive image\\nPrimary request: Create a richly detailed fantasy craft scene titled conceptually Moonwell Bell Foundry, with no visible text and no dancing or performance imagery.\\n\\nScene/backdrop: a cavernous underground bell foundry built around a circular moonwell of still silver water. The vaulted chamber is carved from dark basalt and pale limestone, with arched furnace alcoves, rope hoists, wooden scaffolds, and hanging chains disappearing into misty rafters.\\n\\nSubject: master artisans in simple still poses cast enchanted bells from molten moon-metal. Several enormous unfinished bells hang at different heights; each bell surface contains shallow engraved constellations, pearl inlay, hammered silver texture, and faint blue inner glow. One bell is being poured from a glowing crucible shaped like a crescent, with liquid metal flowing into a sand mold beside the moonwell.\\n\\nAtmosphere/materials: silver-blue moonlight rises from the water while warm amber furnace light glows from the sides, creating strong warm-cool contrast. Include realistic smoke, sparks, wet stone reflections, soot, chalk casting marks, coiled ropes, brass tools, ceramic molds, and dust motes. The moonwell reflection should show a starry sky that is not physically visible above.\\n\\nComposition: high three-quarter view with the circular moonwell and bell molds forming a clear visual structure; tiny still figures provide scale. Deep fantasy realism, intricate handcrafted detail, physically plausible metal, water, smoke, and stone.\\n\\nConstraints: no readable text, no logos, no copyrighted characters, no dancing, no dancers, no dance poses, no stage performance, no ballet, no ceremonial dance.",
+    "image": "images/2026-05-16-morning-moonwell-bell-foundry.png",
+    "date": "2026-05-16",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
