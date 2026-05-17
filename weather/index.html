@@ -171,6 +171,48 @@
       .weather-five-day { display: flex !important; grid-template-columns: none !important; gap: 8px !important; width: 100% !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; padding-bottom: 6px !important; scroll-snap-type: x mandatory !important; -webkit-overflow-scrolling: touch !important; }
       .weather-day { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
     }
+    .weather-locations-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .weather-locations-label {
+      font-size: 12px;
+      color: var(--ink-lo);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-right: 2px;
+    }
+    .weather-loc-btn {
+      background: rgba(40,33,26,0.5);
+      border: 1px solid rgba(232,197,122,0.2);
+      color: var(--ink-mid);
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+    .weather-loc-btn:hover {
+      background: rgba(232,197,122,0.12);
+      border-color: rgba(232,197,122,0.4);
+      color: var(--brand-gold);
+      transform: translateY(-1px);
+    }
+    .weather-loc-btn.active {
+      background: linear-gradient(135deg, rgba(232,197,122,0.22), rgba(224,102,126,0.2));
+      border-color: rgba(232,197,122,0.55);
+      color: var(--ink-hi);
+    }
+    @media (max-width: 760px) {
+      .weather-locations-bar { gap: 5px; margin-top: 8px; }
+      .weather-loc-btn { padding: 3px 8px; font-size: 11px; }
+      .weather-locations-label { font-size: 10px; }
+    }
   </style>
 </head>
 <body>
