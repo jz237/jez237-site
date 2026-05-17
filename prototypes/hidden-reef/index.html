@@ -1038,6 +1038,160 @@
         grid-column: auto;
       }
     }
+    /* Storefront polish pass: keep the reef drama in the hero, make the
+       shopping chrome quieter and more credible. */
+    .page {
+      max-width: 1180px;
+    }
+    .header {
+      grid-template-columns: auto minmax(260px, 1fr) auto;
+      gap: 18px;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background:
+        linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand {
+      grid-column: auto;
+      min-width: 230px;
+      min-height: 0;
+      justify-content: flex-start;
+      padding: 0;
+      margin: 0;
+      background: none;
+      border: 0;
+      box-shadow: none;
+    }
+    .brand img {
+      display: block;
+      width: 62px;
+      height: 38px;
+      padding: 2px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.94);
+    }
+    .brand strong {
+      font-size: 28px;
+      line-height: 0.9;
+      text-shadow: 0 3px 14px rgba(0,0,0,0.5);
+    }
+    .brand span span {
+      margin-top: 7px;
+      font-size: 11px;
+      letter-spacing: 0.13em;
+      text-align: left;
+    }
+    .search-box {
+      grid-column: auto;
+      max-width: none;
+      justify-self: stretch;
+      height: 44px;
+    }
+    .header-actions {
+      grid-column: auto;
+      align-self: center;
+    }
+    .main-nav {
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-top: 0;
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+    }
+    .main-nav a {
+      min-height: 44px;
+      padding-inline: 16px;
+    }
+    .hero {
+      margin-top: 18px;
+      min-height: 330px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(56,215,255,0.24), transparent 27%),
+        linear-gradient(90deg, rgba(1,13,27,0.96) 0%, rgba(1,35,62,0.84) 35%, rgba(0,48,75,0.16) 72%),
+        url("assets/site/hero-aquatic-world.jpg") center center/cover no-repeat,
+        linear-gradient(90deg, #021421, #05344f);
+    }
+    .hero-content {
+      padding-block: 52px;
+    }
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 62px);
+    }
+    .category-intro {
+      margin-top: 28px;
+    }
+    .cat img {
+      height: 132px;
+      filter: saturate(1.04) contrast(1.04);
+    }
+    .promo-grid {
+      margin-top: 22px;
+    }
+    .guides {
+      grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+    .guide {
+      min-height: 146px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.12), transparent 38%),
+        #071a27;
+    }
+    .guide h3 {
+      font-size: 20px;
+    }
+    @media (max-width: 1040px) {
+      .header {
+        grid-template-columns: 1fr;
+      }
+      .brand {
+        justify-content: center;
+        text-align: center;
+      }
+      .brand span span {
+        text-align: center;
+      }
+      .header-actions {
+        justify-content: center;
+      }
+      .guides {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+    }
+    @media (max-width: 760px) {
+      .header {
+        padding: 14px 12px;
+      }
+      .brand {
+        flex-direction: row;
+        min-height: 0;
+        text-align: left;
+      }
+      .brand strong {
+        font-size: clamp(25px, 8vw, 34px);
+      }
+      .brand span span {
+        text-align: left;
+        font-size: 10px;
+      }
+      .search-box {
+        height: 42px;
+      }
+      .hero {
+        min-height: 318px;
+        margin-top: 12px;
+        background-position: 62% center;
+      }
+      .hero-content {
+        padding: 30px 18px;
+      }
+      .hero h1 {
+        font-size: clamp(31px, 9vw, 42px);
+      }
+      .guides {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1139,48 +1293,16 @@
       <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
     </section>
 
-    <section aria-labelledby="live-links-title">
-      <div class="section-head">
-        <h2 id="live-links-title">Original Site Links</h2>
-        <p>Clickable sales paths that explain the opportunity first, then lead straight to matching pages on the current Hidden Reef website.</p>
-      </div>
-      <div class="live-links">
-        <a class="live-link" href="https://www.thehiddenreef.com/aquarium/" data-info="A stronger replacement site can still respect the existing catalog structure. This opens the current Aquarium department after showing why the path matters." data-price="215 products found on the current site" data-source="Original category page" data-details="Current site category: Aquarium|Search result showed 215 products|Use this popup to explain the department before sending customers to the live catalog">
-          <span>Department</span><strong>Aquarium Catalog</strong><em>Use this as the main shopping doorway for tanks, supplies, food, and maintenance.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/aquarium/kits/" data-info="Kits are a money-making page because they bundle the customer's decision instead of making them hunt item by item." data-price="177 kit products found on the current site" data-source="Original category page" data-details="Current site category: Aquarium Kits|Search result showed 177 products|Good candidate for bundles, starter paths, and higher average cart value">
-          <span>Bundles</span><strong>Aquarium Kits</strong><em>Starter kits, tank packages, and complete setup paths.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/im-ext-100-gallon-complete-reef-system-white.html" data-info="Large complete systems are high-ticket products. The demo can highlight them as premium reef build paths, then send buyers to the real product page." data-price="High-ticket reef system" data-source="Original product page" data-details="Product example: Innovative Marine EXT 100 gallon complete reef system|Search result identified this as a complete reef system page|Good place for financing, delivery, install, and consultation prompts">
-          <span>Premium</span><strong>100 Gallon Reef System</strong><em>Example of a high-value product page worth featuring.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/ns-gro-refugium-light-with-pipe-mount.html" data-info="Specific equipment pages are useful for serious hobbyists. The popup gives context, then hands off to the current product page." data-price="$179.99 listed in search result" data-source="Original product page" data-details="Product example: Neptune Systems GRO refugium light with pipe mount|Search result showed in stock-style product details and $179.99|Useful example of technical gear needing explanation">
-          <span>Equipment</span><strong>Refugium Light</strong><em>A focused product link for reef equipment shoppers.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/copy-of-im-custom-caddy-customizable-filter-media.html" data-info="Filter media baskets are the kind of practical accessory that can be merchandised with compatibility notes and related media." data-price="Original product page" data-source="Original product page" data-details="Innovative Marine Custom Caddy media basket page|Good candidate for compatibility callouts|Can cross-sell filter floss, carbon, and biological media">
-          <span>Filtration</span><strong>Custom Caddy Media Basket</strong><em>Accessory page with useful add-on sales potential.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/protein-skimmer/hang-on-skimmer/" data-info="Skimmer category pages should help customers choose by tank size, installation style, and maintenance needs before they buy." data-price="1 product listed in search result" data-source="Original category page" data-details="Current category: Hang On Skimmer|Search result showed Aquatop XYCLONE skimmer at $109.99|Good example of a technical category needing buyer guidance">
-          <span>Skimmers</span><strong>Hang On Skimmer</strong><em>Technical category link with decision-support value.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/im-int-50-aquarium-complete-reef-system-rfs22-sump.html" data-info="Complete reef systems can be presented as premium builds, with clear equipment, sump, pump, stand, and delivery expectations." data-price="$2,660.00 sale context shown in search result" data-source="Original product page" data-details="Innovative Marine INT 50 complete reef system page|Search result showed sale pricing context|Good place for consultation, delivery, and install prompts">
-          <span>Reef Build</span><strong>INT 50 Complete System</strong><em>Premium complete-system product handoff.</em>
-        </a>
-        <a class="live-link" href="https://www.thehiddenreef.com/im-ext-112-aquarium-lagoon-aquarium-complete-reef.html" data-info="Large lagoon systems are high-ticket products where a richer demo can make the sale feel guided instead of just catalog-driven." data-price="$6,393.00 / $3,196.50 context shown in search result" data-source="Original product page" data-details="Innovative Marine EXT 112 lagoon complete reef system page|Search result showed made-to-order and sale pricing context|Good page for financing, delivery, and expert setup messaging">
-          <span>Lagoon</span><strong>EXT 112 Lagoon System</strong><em>High-ticket reef system link with strong sales potential.</em>
-        </a>
-      </div>
-    </section>
-
     <section aria-labelledby="guides-title">
       <div class="section-head">
-        <h2 id="guides-title">Aquarium Help</h2>
-        <p>Useful buying paths that turn store expertise into online guidance.</p>
+        <h2 id="guides-title">Need Help Choosing?</h2>
+        <p>Shopping paths that turn local store expertise into practical online guidance.</p>
       </div>
       <div class="guides">
         <article class="guide"><h3>First Freshwater Tank</h3><p>Tank, heater, filter, conditioner, food, cycling, and hardy first fish.</p></article>
         <article class="guide"><h3>Reef Upgrade</h3><p>Lighting, salt mix, test kits, cleanup crew, coral choices, and maintenance rhythm.</p></article>
         <article class="guide"><h3>Pond Opening</h3><p>Pumps, waterfall foam, bacteria, treatments, food, and seasonal water quality.</p></article>
+        <article class="guide"><h3>Cloudy Water Fix</h3><p>Testing, filtration, bacteria, water changes, feeding, and quick staff-backed troubleshooting.</p></article>
       </div>
     </section>
 
