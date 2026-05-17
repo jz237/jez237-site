@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-17T11:23:00.099605+00:00",
+  "updatedAt": "2026-05-17T13:00:01.238967+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7124,6 +7124,10 @@
     "https://www.marktechpost.com/2026/05/17/vercel-labs-introduces-zero-a-systems-programming-language-designed-so-ai-agents-can-read-repair-and-ship-native-programs": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-25.png",
       "checkedAt": "2026-05-17T09:00:01.591768+00:00"
+    },
+    "https://www.theverge.com/column/928096/chatbots-ai-drive-thru-mcdonalds-wendys": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/mcdonalds.webp?quality=90&amp;strip=all&amp;crop=0%2C17.352141509707%2C100%2C78.541697009651&amp;w=1200",
+      "checkedAt": "2026-05-17T13:00:01.238967+00:00"
     }
   }
 }
