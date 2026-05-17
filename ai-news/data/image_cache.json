@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-17T21:00:01.374487+00:00",
+  "updatedAt": "2026-05-17T21:06:34.423101+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7156,6 +7156,10 @@
     "https://techcrunch.com/2026/05/17/why-trust-is-a-big-question-at-the-elon-musk-openai-trial": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200,800",
       "checkedAt": "2026-05-17T20:00:01.790736+00:00"
+    },
+    "https://techcrunch.com/2026/05/17/apples-siri-revamp-could-include-auto-deleting-chats": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200,800",
+      "checkedAt": "2026-05-17T21:06:34.423101+00:00"
     }
   }
 }
