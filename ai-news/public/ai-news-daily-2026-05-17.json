@@ -1,6 +1,6 @@
 {
   "date": "2026-05-17",
-  "updatedAt": "2026-05-17T09:00:01.591768+00:00",
+  "updatedAt": "2026-05-17T10:00:01.324936+00:00",
   "items": [
     {
       "title": "Vercel Labs Introduces Zero, a Systems Programming Language Designed So AI Agents Can Read, Repair, and Ship Native Programs",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-25.png",
       "published": "2026-05-17T08:11:49+00:00",
       "firstSeen": "2026-05-17T09:00:01.591768+00:00",
-      "lastSeen": "2026-05-17T09:00:01.591768+00:00",
+      "lastSeen": "2026-05-17T10:00:01.324936+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3957
+      "score": 7.3663
     },
     {
       "title": "A Coding Guide Implementing SHAP Explainability Workflows with Explainer Comparisons, Maskers, Interactions, Drift, and Black-Box Models",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-10.png",
       "published": "2026-05-17T07:25:10+00:00",
       "firstSeen": "2026-05-17T07:42:36.943920+00:00",
-      "lastSeen": "2026-05-17T09:00:01.591768+00:00",
+      "lastSeen": "2026-05-17T10:00:01.324936+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8727
+      "score": 2.8439
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -43,12 +43,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-17T09:00:09.480985+00:00",
+      "published": "2026-05-17T10:00:08.747566+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-17T09:00:01.591768+00:00",
+      "lastSeen": "2026-05-17T10:00:01.324936+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "A student with a laptop and a radio stopped four high-speed trains. The crypto keys hadn’t been changed in 19 years.",
+      "url": "https://thenextweb.com/news/taiwan-high-speed-rail-hacked-student-tetra-sdr",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "At 23:23 on 5 April, a 23-year-old university student in Taichung transmitted a falsified General Alarm signal into the Taiwan High Speed Rail Corporation’s internal radio system. Four trains travelling at up to 300 km/h received the highest-priority emergency alert and switched to manual braking. The entire high-speed rail network was disrupted for 48 minutes. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/taiwan-high-speed-rail-hacked-student-tetra-sdr.avif",
+      "published": "2026-05-17T09:35:13+00:00",
+      "firstSeen": "2026-05-17T10:00:01.324936+00:00",
+      "lastSeen": "2026-05-17T10:00:01.324936+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1374
+    },
+    {
+      "title": "The man who put a Roomba in every home wants to replace your dog with a plush robot",
+      "url": "https://thenextweb.com/news/roomba-creator-familiar-machines-ai-pet-robot",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Colin Angle, the robotics engineer who co-founded iRobot and spent 25 years turning the Roomba into the world’s most widely adopted home robot, has unveiled the prototype for his next act: a four-legged, plush-covered AI companion designed to follow you around your house, adapt to your daily habits, and make you feel something when it [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/roomba-creator-familiar-machines-ai-pet-robot.avif",
+      "published": "2026-05-17T09:15:18+00:00",
+      "firstSeen": "2026-05-17T10:00:01.324936+00:00",
+      "lastSeen": "2026-05-17T10:00:01.324936+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1275
     }
   ],
   "errors": []
