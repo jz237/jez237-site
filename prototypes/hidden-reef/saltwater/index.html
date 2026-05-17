@@ -178,30 +178,98 @@
       position: sticky;
       top: 14px;
       display: grid;
-      gap: 14px;
-      padding: 18px;
+      gap: 0;
+      padding: 0;
       border-color: var(--reef-line);
-      background:
-        radial-gradient(circle at 100% 0%, rgba(64,217,255,.12), transparent 36%),
-        var(--reef-panel);
+      background: var(--reef-panel);
+      border-radius: 8px;
+      overflow: hidden;
     }
-    .sidebar p {
-      margin: 0;
-      color: var(--reef-muted);
+    .sidebar-section {
+      border-bottom: 1px solid rgba(116,205,235,.12);
+    }
+    .sidebar-section:last-child { border-bottom: none; }
+    .sidebar-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 16px;
+      border: 0;
+      background: transparent;
+      color: #fff;
       font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .sidebar-toggle:hover { background: rgba(64,217,255,.08); }
+    .sidebar-toggle .arrow {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      transition: transform .2s;
+      font-size: 10px;
+      opacity: .6;
+    }
+    .sidebar-toggle[aria-expanded="true"] .arrow { transform: rotate(90deg); }
+    .sidebar-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .25s ease;
+    }
+    .sidebar-body.open {
+      max-height: 600px;
+    }
+    .sidebar-body-inner {
+      padding: 0 16px 14px;
+    }
+    .sidebar-body-inner a,
+    .sidebar-body-inner span {
+      display: block;
+      padding: 5px 0;
+      border-top: 1px solid rgba(116,205,235,.08);
+      color: #9fb8c7;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    .sidebar-body-inner a:hover { color: #40d9ff; }
+    .sidebar-body-inner .active-filter {
+      color: #40d9ff;
+      font-weight: 850;
+    }
+    .sidebar-body-inner p {
+      margin: 0 0 6px;
+      color: #a9cbd9;
+      font-size: 12.5px;
       line-height: 1.45;
     }
-    .sidebar .mini-list {
-      display: grid;
+    .sidebar-body-inner .check-item {
+      display: flex;
+      align-items: flex-start;
       gap: 8px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(116,205,235,.12);
-    }
-    .mini-list span {
-      padding: 0;
-      border: 0;
+      padding: 5px 0;
       color: #d8f4fb;
-      font-weight: 850;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .sidebar-body-inner .check-item::before {
+      content: "✓";
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      background: rgba(0,167,183,.2);
+      color: #40d9ff;
+      font-size: 11px;
+    }
+    .section-band {
+      padding: 24px 0 16px;
+      margin-top: 8px;
     }
 
     .grid {
@@ -398,10 +466,11 @@
 
     <div class="crumbs"><a href="../">Home</a><span>/</span><span>Saltwater & Reef</span></div>
 
-    <section class="section-head">
-      <h2>Shop Saltwater</h2>
-      <p>Guided category paths for serious reef shoppers</p>
-    </section>
+    <section class="section-band" aria-label="Saltwater paths">
+      <div class="section-head">
+        <h2>Shop Saltwater</h2>
+        <p>Guided category paths for serious reef shoppers</p>
+      </div>
     <section class="path-grid" aria-label="Saltwater shopping paths">
       <a class="path-card" href="#products"><span>Systems</span><h3>Complete Reef Builds</h3><p>Tanks, stands, sumps, pumps, lighting, and starter gear grouped as a setup path.</p></a>
       <a class="path-card" href="#products"><span>Livestock</span><h3>Fish & Coral Care</h3><p>Compatibility, feeding, acclimation, and weekly-changing in-store livestock.</p></a>
@@ -409,20 +478,59 @@
       <a class="path-card" href="../maintenance/"><span>Maintenance</span><h3>Salt, Tests & Dosing</h3><p>Salt mix, refractometers, test kits, water changes, dosing, and stability.</p></a>
     </section>
 
-    <section class="section-head">
-      <h2>Reef Essentials</h2>
-      <p>Example products and real handoff links</p>
-    </section>
+    <section class="section-band" aria-label="Reef products">
+      <div class="section-head">
+        <h2>Reef Essentials</h2>
+        <p>Example products and real handoff links</p>
+      </div>
     <div class="layout">
-      <aside class="sidebar">
-        <h3>Reef buying checklist</h3>
-        <p>Help shoppers avoid expensive mismatch decisions before they leave the page.</p>
-        <div class="mini-list">
-          <span>Tank size and sump plan</span>
-          <span>Lighting for coral goals</span>
-          <span>Flow and dead spots</span>
-          <span>Salt, testing, stability</span>
-          <span>Livestock compatibility</span>
+      <aside class="sidebar" aria-label="Saltwater filters">
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="true" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Saltwater & Reef <span class="arrow">▶</span></button>
+          <div class="sidebar-body open">
+            <div class="sidebar-body-inner">
+              <a href="#products" class="active-filter">All Saltwater & Reef</a>
+              <a href="#products">Fish & Livestock</a>
+              <a href="#products">Corals & Frags</a>
+              <a href="#products">Invertebrates</a>
+              <a href="#products">Cleanup Crew</a>
+              <a href="#products">Reef Systems & Tanks</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Equipment <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="#products">Skimmers & Filtration</a>
+              <a href="../equipment/">Lighting & Spectrum</a>
+              <a href="#products">Flow & Powerheads</a>
+              <a href="#products">Controllers & Monitors</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Food & Care <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="../food/">Salt Mix & Additives</a>
+              <a href="../maintenance/">Test Kits & Refractometers</a>
+              <a href="../maintenance/">Calcium, Alk & Magnesium</a>
+              <a href="../maintenance/">Water Conditioner</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Quick Tips <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <div class="check-item">Tank size and sump plan</div>
+              <div class="check-item">Lighting for coral goals</div>
+              <div class="check-item">Flow and dead spots</div>
+              <div class="check-item">Salt, testing, stability</div>
+              <div class="check-item">Livestock compatibility</div>
+            </div>
+          </div>
         </div>
       </aside>
       <div class="grid" id="products">
@@ -441,13 +549,15 @@
       <article class="panel"><h2>Weekly Reef Room Picks</h2><p>Use this category page to highlight fresh livestock and coral without rebuilding the whole site every week.</p></article>
     </section>
 
-    <section id="visit" class="visit-band" aria-label="Visit the store">
+    <section class="section-band" aria-label="Visit the store">
+      <div class="visit-band">
       <div class="pin">⌖</div>
       <div>
         <h2>Visit the Levittown reef room</h2>
         <p>4501 New Falls Rd, Levittown, PA 19056 · Bring tank details or a water sample and get staff guidance before buying.</p>
       </div>
       <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+      </div>
     </section>
 
     <footer class="footer"><div class="footer-top"><div><h3>The Hidden Reef</h3><p>Prototype saltwater category page.</p></div><div><h4>Departments</h4><a href="../freshwater/">Freshwater</a><a href="../pond/">Pond</a></div><div><h4>Store</h4><a href="../#visit">Visit</a><a href="../">Home</a></div><div><h4>Demo</h4><p>Product actions are prototype-only.</p></div></div></footer>

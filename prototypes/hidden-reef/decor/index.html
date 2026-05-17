@@ -91,16 +91,41 @@
     </section>
 
     <div class="layout">
-      <aside class="sidebar">
-        <h3>Before choosing decor</h3>
-        <p>The best-looking tank usually starts with a simple plan: one focal point, enough open swimming room, and places for fish to retreat.</p>
-        <div class="mini-list">
-          <span>Tank footprint and height</span>
-          <span>Fish size and temperament</span>
-          <span>Sharp edge check</span>
-          <span>Easy cleaning access</span>
-          <span>Foreground and background zones</span>
-          <span>Reef-safe or freshwater-safe material</span>
+      <aside class="sidebar" aria-label="Decor filters">
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="true" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Decorations <span class="arrow">▶</span></button>
+          <div class="sidebar-body open">
+            <div class="sidebar-body-inner">
+              <a href="#products" class="active-filter">All Decorations</a>
+              <a href="#products">Ornaments & Hides</a>
+              <a href="#products">Driftwood & Rock</a>
+              <a href="#products">Artificial Plants</a>
+              <a href="#products">Backgrounds</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Related Departments <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="../equipment/">Aquascaping Tools</a>
+              <a href="#products">Substrate & Gravel</a>
+              <a href="../freshwater/">Live Plants</a>
+              <a href="../equipment/">LED Plant Lighting</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Quick Tips <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <div class="check-item">Provide hides for shy fish</div>
+              <div class="check-item">Rinse all decor before adding</div>
+              <div class="check-item">Avoid sharp edges for bettas</div>
+              <div class="check-item">Match decor to fish temperament</div>
+              <div class="check-item">Leave swimming room in center</div>
+            </div>
+          </div>
         </div>
       </aside>
 

@@ -92,16 +92,41 @@
     </section>
 
     <div class="layout">
-      <aside class="sidebar">
-        <h3>Before buying treatment</h3>
-        <p>Water-care pages should teach customers to diagnose first. That prevents wasted money and protects the tank.</p>
-        <div class="mini-list">
-          <span>Tank or pond gallons</span>
-          <span>Freshwater, saltwater, or pond</span>
-          <span>Ammonia, nitrite, nitrate, pH</span>
-          <span>Recent livestock changes</span>
-          <span>Feeding amount and schedule</span>
-          <span>Water-change history</span>
+      <aside class="sidebar" aria-label="Food & Care filters">
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="true" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Food & Water Care <span class="arrow">▶</span></button>
+          <div class="sidebar-body open">
+            <div class="sidebar-body-inner">
+              <a href="#products" class="active-filter">All Food & Care</a>
+              <a href="#products">Flake Food</a>
+              <a href="#products">Pellets & Granules</a>
+              <a href="#products">Freeze-Dried Treats</a>
+              <a href="#products">Frozen Food</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Equipment <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="../equipment/">Automatic Feeders</a>
+              <a href="../equipment/">Feeding Lids & Clips</a>
+              <a href="#products">Water Conditioner</a>
+              <a href="#products">Bacteria & Additives</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Quick Tips <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <div class="check-item">Feed what fish eat in 2 minutes</div>
+              <div class="check-item">Variety prevents nutritional gaps</div>
+              <div class="check-item">Soak freeze-dried before feeding</div>
+              <div class="check-item">Match pellet size to fish mouth</div>
+              <div class="check-item">Test water before changing food</div>
+            </div>
+          </div>
         </div>
       </aside>
 
