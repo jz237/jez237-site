@@ -222,7 +222,7 @@
     }
     .categories {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
       margin: 16px 0;
     }
@@ -781,7 +781,7 @@
       cursor: pointer;
     }
     @media (max-width: 1040px) {
-      .categories { grid-template-columns: repeat(5, minmax(0,1fr)); }
+      .categories { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
       .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .footer-top { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -1083,25 +1083,23 @@
 
     <div class="category-intro">
       <h2>Shop by Department</h2>
-      <p>Each department is its own path, so the owner can see how freshwater, reef, pond, equipment, food, and decor would feel as separate storefront sections.</p>
+      <p>Cleaner shopping paths built around how aquarium customers actually browse: livestock, tanks, pond supplies, equipment, food, decor, and maintenance.</p>
     </div>
     <section class="categories" aria-label="Popular categories">
-      <a class="cat" href="freshwater/"><img src="assets/site/promo.jpg" alt="" /><strong>Freshwater</strong><span>Food, plants, care</span></a>
-      <a class="cat" href="saltwater/"><img src="assets/site/hero-aquatic-world.jpg" alt="" /><strong>Saltwater</strong><span>Coral, reef systems</span></a>
-      <a class="cat" href="freshwater/"><img src="assets/site/cta.jpg" alt="" /><strong>Aquarium</strong><span>Starter tank paths</span></a>
-      <a class="cat" href="equipment/"><img src="assets/site/foam-gun.jpg" alt="" /><strong>Filtration</strong><span>Maintenance gear</span></a>
-      <a class="cat" href="equipment/"><img src="assets/site/brand-red-sea.jpg" alt="" /><strong>Lighting</strong><span>Reef-ready brands</span></a>
-      <a class="cat" href="freshwater/"><img src="assets/site/red-parrot-pellets.jpg" alt="" /><strong>Food</strong><span>Daily nutrition</span></a>
-      <a class="cat" href="decor/"><img src="assets/site/skull.jpg" alt="" /><strong>Decorations</strong><span>Hides and accents</span></a>
-      <a class="cat" href="pond/"><img src="assets/site/hero-reef.jpg" alt="" /><strong>Pond</strong><span>Seasonal supplies</span></a>
-      <a class="cat" href="freshwater/"><img src="assets/site/baby-flakes.jpg" alt="" /><strong>Food Refills</strong><span>Flakes and pellets</span></a>
-      <a class="cat" href="decor/"><img src="assets/site/fruit-home.jpg" alt="" /><strong>Decor Accents</strong><span>Bright hideaways</span></a>
+      <a class="cat" href="saltwater/"><img src="assets/department/saltwater.jpg" alt="" /><strong>Saltwater</strong><span>Marine fish, coral, reef systems</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/department/freshwater.jpg" alt="" /><strong>Freshwater</strong><span>Community fish, plants, care</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/department/aquarium.jpg" alt="" /><strong>Aquariums</strong><span>Starter tanks and complete setups</span></a>
+      <a class="cat" href="pond/"><img src="assets/department/pond.jpg" alt="" /><strong>Pond</strong><span>Koi, pumps, treatments, season prep</span></a>
+      <a class="cat" href="equipment/"><img src="assets/site/cta.jpg" alt="" /><strong>Lighting</strong><span>Freshwater, planted, and reef lights</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/red-parrot-pellets.jpg" alt="" /><strong>Food</strong><span>Flakes, pellets, frozen, and treats</span></a>
+      <a class="cat" href="decor/"><img src="assets/site/fruit-home.jpg" alt="" /><strong>Decorations</strong><span>Hides, accents, rockwork, backgrounds</span></a>
+      <a class="cat" href="equipment/"><img src="assets/department/maintenance.jpg" alt="" /><strong>Maintenance</strong><span>Filters, media, pumps, cleaning gear</span></a>
     </section>
 
     <section class="promo-grid" aria-label="Promotions">
-      <article class="promo-card"><img src="assets/site/promo.jpg" alt="" /><div class="promo-copy"><span>Coral & livestock</span><strong>20% OFF</strong><small>Select aquarium favorites</small></div></article>
+      <article class="promo-card"><img src="assets/department/saltwater.jpg" alt="" /><div class="promo-copy"><span>Coral & livestock</span><strong>20% OFF</strong><small>Select aquarium favorites</small></div></article>
       <article class="promo-card"><img src="assets/site/cta.jpg" alt="" /><div class="promo-copy"><span>Aquarium systems</span><strong>15% OFF</strong><small>Starter tank packages</small></div></article>
-      <article class="promo-card"><img src="assets/site/hero-reef.jpg" alt="" /><div class="promo-copy"><span>Pond supplies</span><strong>10% OFF</strong><small>Seasonal pond & koi food</small></div></article>
+      <article class="promo-card"><img src="assets/department/pond.jpg" alt="" /><div class="promo-copy"><span>Pond supplies</span><strong>10% OFF</strong><small>Seasonal pond & koi food</small></div></article>
     </section>
 
     <section id="products" aria-labelledby="products-title">
@@ -1122,13 +1120,13 @@
         <article class="product" data-category="pond" data-name="easypro professional foam gun pond waterfall" data-source="Original product page" data-details="Waterfall foam gun product page from the current site|Useful pond construction and rockwork item|Popup can explain use before handing off to checkout"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-easypro-pro-black-waterfall-foam-24-oz-gun.html" target="_blank" rel="noopener"><img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" /><h3>EasyPro Professional Foam Gun</h3></a><p>Waterfall foam application tool.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun" type="button">+</button></div></article>
         <article class="product" data-category="freshwater" data-name="sera red parrot pellets fish food" data-source="Original product page" data-details="Sera Red Parrot Pellets product page|Good example of food item merchandising|Can cross-link into freshwater food and care paths"><a class="product-link" href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" /><h3>Sera Red Parrot Pellets</h3></a><p>Daily freshwater nutrition.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets" type="button">+</button></div></article>
         <article class="product" data-category="equipment" data-name="innovative marine nuvo flip feed lid" data-source="Original product page" data-details="Innovative Marine feeding lid product page|Small accessory with practical maintenance value|Popup gives quick context without moving the visitor away"><span class="badge">Hot</span><a class="product-link" href="https://www.thehiddenreef.com/im-nuvo-flip-feed-hinged-feeding-lid.html" target="_blank" rel="noopener"><img src="assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed" /><h3>Innovative Marine Nuvo Flip Feed</h3></a><p>Hinged aquarium feeding lid.</p><div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed" type="button">+</button></div></article>
-        <article class="product" data-category="saltwater" data-name="reef aquarium systems red sea saltwater coral" data-source="Original Hidden Reef site" data-details="Reef systems can point toward complete aquariums, coral care, lighting, salt, and test kits|High-value shoppers need guidance before they buy|Use popup content to explain the setup path first"><span class="badge">Reef</span><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/hero-aquatic-world.jpg" alt="Reef aquarium systems" /><h3>Reef Aquarium Systems</h3></a><p>Saltwater display paths, coral-ready gear, and reef setup inspiration.</p><div class="price-row"><span class="price">Shop reef</span><button class="add" data-name="Reef Aquarium Systems" type="button">+</button></div></article>
+        <article class="product" data-category="saltwater" data-name="reef aquarium systems red sea saltwater coral" data-source="Original Hidden Reef site" data-details="Reef systems can point toward complete aquariums, coral care, lighting, salt, and test kits|High-value shoppers need guidance before they buy|Use popup content to explain the setup path first"><span class="badge">Reef</span><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/department/saltwater.jpg" alt="Reef aquarium systems" /><h3>Reef Aquarium Systems</h3></a><p>Saltwater display paths, coral-ready gear, and reef setup inspiration.</p><div class="price-row"><span class="price">Shop reef</span><button class="add" data-name="Reef Aquarium Systems" type="button">+</button></div></article>
         <article class="product" data-category="equipment" data-name="red sea reef lighting aquarium led" data-source="Original Hidden Reef site" data-details="Lighting is a major decision point for reef customers|Good place for compatibility notes, spectrum, spread, and tank-size guidance|Original site handoff stays one click away"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/brand-red-sea.jpg" alt="Red Sea Reef Lighting" /><h3>Red Sea Reef Lighting</h3></a><p>Premium lighting cues for reef and display tanks.</p><div class="price-row"><span class="price">Shop lighting</span><button class="add" data-name="Red Sea Reef Lighting" type="button">+</button></div></article>
         <article class="product" data-category="freshwater" data-name="sera vipan baby flakes food"><a class="product-link" href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener"><img src="assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" /><h3>Sera Vipan Baby Flakes</h3></a><p>Fine flakes for small fish.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes" type="button">+</button></div></article>
-        <article class="product" data-category="pond" data-name="spring pond opening kit koi seasonal supplies"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/hero-store.jpg" alt="Spring Pond Opening Kit" /><h3>Spring Pond Opening Kit</h3></a><p>Seasonal pond care, treatments, pumps, and koi food grouped together.</p><div class="price-row"><span class="price">Build kit</span><button class="add" data-name="Spring Pond Opening Kit" type="button">+</button></div></article>
+        <article class="product" data-category="pond" data-name="spring pond opening kit koi seasonal supplies"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/department/pond.jpg" alt="Spring Pond Opening Kit" /><h3>Spring Pond Opening Kit</h3></a><p>Seasonal pond care, treatments, pumps, and koi food grouped together.</p><div class="price-row"><span class="price">Build kit</span><button class="add" data-name="Spring Pond Opening Kit" type="button">+</button></div></article>
         <article class="product" data-category="decor" data-name="underwater treasures mechanical skull"><a class="product-link" href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener"><img src="assets/site/skull.jpg" alt="Mechanical Skull Ornament" /><h3>Mechanical Skull Ornament</h3></a><p>Statement aquarium decor.</p><div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament" type="button">+</button></div></article>
         <article class="product" data-category="decor" data-name="underwater treasures tropical fruit home"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="assets/site/fruit-home.jpg" alt="Tropical Fruit Home" /><h3>Tropical Fruit Home</h3></a><p>Bright hideaway decoration.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home" type="button">+</button></div></article>
-        <article class="product" data-category="freshwater" data-name="planted freshwater starter aquarium plants care"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/promo.jpg" alt="Planted Freshwater Starter" /><h3>Planted Freshwater Starter</h3></a><p>A curated path for plants, food, filtration, and water care.</p><div class="price-row"><span class="price">Plan setup</span><button class="add" data-name="Planted Freshwater Starter" type="button">+</button></div></article>
+        <article class="product" data-category="freshwater" data-name="planted freshwater starter aquarium plants care"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/department/aquarium.jpg" alt="Planted Freshwater Starter" /><h3>Planted Freshwater Starter</h3></a><p>A curated path for plants, food, filtration, and water care.</p><div class="price-row"><span class="price">Plan setup</span><button class="add" data-name="Planted Freshwater Starter" type="button">+</button></div></article>
       </div>
     </section>
 
