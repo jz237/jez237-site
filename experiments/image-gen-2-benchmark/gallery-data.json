@@ -478,5 +478,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-17-afternoon-cyanotype-rain-press",
+    "title": "Cyanotype Rain Press",
+    "tests": "Explores cyanotype chemistry, rain-powered printmaking machinery, flooded reflections, botanical shadow imagery, and saturated blue/amber material contrast without dance or performance imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a visually rich surreal workshop scene titled conceptually Cyanotype Rain Press, with no visible text.\n\nScene/backdrop: a flooded underground printmaker's workshop carved into pale limestone beneath a city after a rainstorm. Clear rainwater has risen ankle-deep across black slate floors, reflecting old beams, arched stone walls, skylight grates, shelves of blank paper, and warm lamps sealed in glass housings.\n\nSubject: at the center, a large antique printing press has been transformed into a rain-powered cyanotype machine. Sheets of deep Prussian-blue photosensitive paper pass through brass rollers while falling droplets, fern shadows, glass negatives, and silver nitrate trays create luminous white botanical silhouettes. Thin copper gutters guide rainwater from the ceiling into small paddle wheels that turn the press slowly; no people are present.\n\nComposition: square 1024x1024 cinematic three-quarter view from slightly above, with the press centered and the flooded reflections creating depth. Foreground details include wet paper fibers, brass registration pins, glass plates with abstract plant shadows, porcelain chemical dishes, tiny bubbles, blue pigment blooms spreading through water, and stone steps disappearing into shadow.\n\nMaterials and lighting: saturated cyanotype blues, warm amber lamp glow, tarnished brass, clear glass, pale limestone, dark wet slate, crisp water reflections, floating paper edges, delicate botanical silhouettes, soft mist from rain shafts, high detail, coherent physical scale, magical realism grounded in printmaking craft.\n\nConstraints: no readable text, no logos, no copyrighted characters, no people posing, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no theatrical or performance scene, no motion study of bodies.",
+    "image": "images/2026-05-17-afternoon-cyanotype-rain-press.png",
+    "date": "2026-05-17",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
