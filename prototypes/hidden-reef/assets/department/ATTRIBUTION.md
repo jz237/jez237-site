@@ -18,3 +18,4 @@ Generated with GPT Image 2 for this Hidden Reef prototype image-quality pass. Th
 - food-care.png - fish food and water care department thumbnail.
 - aquascaping.png - decorations and aquascaping department thumbnail.
 - maintenance-care.png - maintenance and troubleshooting department thumbnail.
+- saltwater-reef.jpg - GPT Image 2 demo thumbnail for saltwater department, generated to show obvious marine fish and coral.
