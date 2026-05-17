@@ -226,6 +226,20 @@
       gap: 14px;
       margin: 16px 0;
     }
+    /* Section bands for visual separation */
+    .section-band {
+      padding: 32px 0 24px;
+      margin-top: 4px;
+    }
+    .section-band + .section-band {
+      border-top: 1px solid var(--line);
+    }
+    .section-band.alt {
+      border-radius: 12px;
+      padding: 32px 24px 24px;
+      margin: 12px -24px 0;
+      background: rgba(116, 205, 235, 0.04);
+    }
     .category-intro {
       display: flex;
       align-items: end;
@@ -908,6 +922,12 @@
     .section-head a {
       color: #9fc6d6;
     }
+    .section-band + .section-band {
+      border-color: rgba(116, 205, 235, 0.12);
+    }
+    .section-band.alt {
+      background: rgba(116, 205, 235, 0.03);
+    }
     .search-box {
       background: #102b3b;
       border-color: rgba(116,205,235,0.24);
@@ -1293,11 +1313,12 @@
       </div>
     </section>
 
-    <div class="category-intro">
-      <h2>Shop by Department</h2>
-      <p>Cleaner shopping paths built around how aquarium customers actually browse: livestock, tanks, pond supplies, equipment, food, decor, and maintenance.</p>
-    </div>
-    <section class="categories" aria-label="Popular categories">
+    <section class="section-band" aria-label="Departments">
+      <div class="category-intro">
+        <h2>Shop by Department</h2>
+        <p>Cleaner shopping paths built around how aquarium customers actually browse: livestock, tanks, pond supplies, equipment, food, decor, and maintenance.</p>
+      </div>
+      <div class="categories" aria-label="Department grid">
       <a class="cat" href="saltwater/"><img src="assets/department/saltwater-reef.jpg" alt="" /><strong>Saltwater</strong><span>Marine fish, coral, reef systems</span></a>
       <a class="cat" href="freshwater/"><img src="assets/department/freshwater.jpg" alt="" /><strong>Freshwater</strong><span>Community fish, plants, care</span></a>
       <a class="cat" href="freshwater/"><img src="assets/department/aquarium.jpg" alt="" /><strong>Aquariums</strong><span>Starter tanks and complete setups</span></a>
@@ -1306,22 +1327,34 @@
       <a class="cat" href="food/"><img src="assets/department/food-care.jpg" alt="" /><strong>Food</strong><span>Flakes, pellets, frozen, and water care</span></a>
       <a class="cat" href="decor/"><img src="assets/department/aquascaping.jpg" alt="" /><strong>Decorations</strong><span>Hides, accents, rockwork, backgrounds</span></a>
       <a class="cat" href="maintenance/"><img src="assets/department/maintenance-care.jpg" alt="" /><strong>Maintenance</strong><span>Filters, media, testing, cleaning gear</span></a>
+      </div>
     </section>
 
-    <section class="promo-grid" aria-label="Promotions">
+    <section class="section-band alt" aria-label="Promotions">
+      <div class="section-head">
+        <h2>Current Promotions</h2>
+      </div>
+      <div class="promo-grid">
       <article class="promo-card"><img src="assets/department/saltwater-reef.jpg" alt="" /><div class="promo-copy"><span>Coral & livestock</span><strong>20% OFF</strong><small>Select aquarium favorites</small></div></article>
       <article class="promo-card"><img src="assets/department/lighting.jpg" alt="" /><div class="promo-copy"><span>Aquarium systems</span><strong>15% OFF</strong><small>Starter tank packages</small></div></article>
       <article class="promo-card"><img src="assets/department/pond.jpg" alt="" /><div class="promo-copy"><span>Pond supplies</span><strong>10% OFF</strong><small>Seasonal pond & koi food</small></div></article>
+      </div>
     </section>
 
-    <section class="path-strip" aria-label="Popular shopping paths">
+    <section class="section-band" aria-label="Shopping paths">
+      <div class="section-head">
+        <h2>Shopping Paths</h2>
+        <p>Guided setups from blank tank to thriving aquarium.</p>
+      </div>
+      <div class="path-strip">
       <a class="path-link" href="freshwater/"><span>Start here</span><strong>First Freshwater Tank</strong><small>Tank, filter, heater, conditioner, food, and hardy starter fish.</small></a>
       <a class="path-link" href="saltwater/"><span>Upgrade</span><strong>Reef Setup Path</strong><small>Lighting, flow, salt, testing, coral placement, and cleanup crew.</small></a>
       <a class="path-link" href="pond/"><span>Seasonal</span><strong>Pond Opening</strong><small>Pumps, bacteria, treatments, waterfall supplies, and koi food.</small></a>
       <a class="path-link" href="maintenance/"><span>Fix it</span><strong>Cloudy Water Help</strong><small>Test first, then adjust feeding, filtration, bacteria, and water changes.</small></a>
+      </div>
     </section>
 
-    <section id="products" aria-labelledby="products-title">
+    <section class="section-band alt" id="products" aria-labelledby="products-title">
       <div class="section-head">
         <h2 id="products-title">New Arrivals</h2>
         <a href="#products">View All Products →</a>
@@ -1353,16 +1386,18 @@
       </div>
     </section>
 
-    <section id="visit" class="visit-band" aria-label="Visit the store">
+    <section class="section-band" id="visit" aria-label="Visit the store">
+      <div class="visit-band">
       <div class="pin">⌖</div>
       <div>
         <h2>Visit Our Levittown Superstore</h2>
         <p>4501 New Falls Rd, Levittown, PA 19056 · Browse the tanks, ask questions, and take home the right setup.</p>
       </div>
       <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+      </div>
     </section>
 
-    <section aria-labelledby="guides-title">
+    <section class="section-band alt" aria-labelledby="guides-title">
       <div class="section-head">
         <h2 id="guides-title">Need Help Choosing?</h2>
         <p>Shopping paths that turn local store expertise into practical online guidance.</p>
@@ -1375,7 +1410,7 @@
       </div>
     </section>
 
-    <section aria-labelledby="brands-title">
+    <section class="section-band" aria-labelledby="brands-title">
       <div class="section-head">
         <h2 id="brands-title">Brands We Carry</h2>
         <p>Familiar names from the current shop.</p>
