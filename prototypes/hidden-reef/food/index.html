@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Decorations & Aquascaping - The Hidden Reef</title>
+  <title>Food & Water Care - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
   <style>
@@ -56,7 +56,7 @@
     }
     .main-nav a {
       display:flex; justify-content:center; align-items:center; min-height:44px;
-      padding:10px 14px; border-left:1px solid rgba(116,205,235,.12);
+      padding:10px 12px; border-left:1px solid rgba(116,205,235,.12);
     }
     .main-nav a:first-child { border-left:0; }
     .main-nav a.active { color:var(--reef-cyan); }
@@ -72,7 +72,8 @@
       border-radius:8px;
       background:
         linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.84) 48%,rgba(0,48,75,.18)),
-        url("../assets/site/hero-store.jpg") right center/cover no-repeat;
+        url("../assets/site/red-parrot-pellets.jpg") right center/contain no-repeat,
+        linear-gradient(90deg,#021421,#dbeaf0);
       box-shadow:0 22px 54px rgba(0,0,0,.34);
     }
     .category-hero .copy { max-width:580px; padding:0; align-self:center; }
@@ -90,21 +91,21 @@
     .section-head h2,.sidebar h3,.panel h2,.product h3,.drawer h2 { color:#fff; }
     .section-head p { color:#8fdcf0; }
 
-    .style-grid {
+    .care-grid {
       display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:18px 0 26px;
     }
-    .style-card {
+    .care-card {
       min-height:150px; padding:18px; border:1px solid var(--reef-line); border-radius:8px;
       background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.16),transparent 38%),var(--reef-panel);
       box-shadow:0 12px 28px rgba(0,0,0,.22);
     }
-    .style-card span {
+    .care-card span {
       color:var(--reef-cyan); font-size:11px; font-weight:950; letter-spacing:.12em; text-transform:uppercase;
     }
-    .style-card h3 {
+    .care-card h3 {
       margin:8px 0 6px; color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; line-height:1.05;
     }
-    .style-card p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.4; }
+    .care-card p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.4; }
 
     .layout { grid-template-columns:260px minmax(0,1fr); align-items:start; }
     .sidebar {
@@ -138,7 +139,7 @@
     .footer { border:1px solid rgba(116,205,235,.14); }
     @media(max-width:1040px){
       .category-hero{grid-template-columns:1fr;min-height:auto}
-      .style-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .care-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .layout{grid-template-columns:1fr}.sidebar{position:static}
       .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .feature-row{grid-template-columns:1fr}
@@ -146,13 +147,13 @@
     @media(max-width:760px){
       .header{grid-template-columns:1fr;margin:0;padding:14px 0}.brand{justify-content:flex-start}
       .main-nav{display:flex;justify-content:flex-start;overflow-x:auto;margin:0}
-      .style-grid,.grid{grid-template-columns:1fr}
-      .category-hero{padding:24px 18px}
+      .care-grid,.grid{grid-template-columns:1fr}
+      .category-hero{padding:24px 18px;background:linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.82)),url("../assets/site/red-parrot-pellets.jpg") right bottom/80% auto no-repeat}
     }
   </style>
 </head>
 <body>
-  <div class="shipping-bar">Aquascaping, hides, ornaments, plants, backgrounds, substrate, and layout pieces</div>
+  <div class="shipping-bar">Fish food, coral food, pond food, conditioners, bacteria, test kits, and water care</div>
   <main class="page">
     <header class="header">
       <a class="brand" href="../">
@@ -160,7 +161,7 @@
         <span><strong>The Hidden Reef</strong><span>Aquariums - Fish - Coral - Ponds</span></span>
       </a>
       <form class="search-box" action="../#products">
-        <input placeholder="Search driftwood, rock, plants, ornaments..." />
+        <input placeholder="Search food, conditioner, bacteria, test kits..." />
         <button>⌕</button>
       </form>
       <div class="header-actions">
@@ -175,151 +176,151 @@
       <a href="../freshwater/">Aquarium</a>
       <a href="../pond/">Pond</a>
       <a href="../equipment/">Lighting</a>
-      <a href="../food/">Food</a>
-      <a class="active" href="./">Decorations</a>
+      <a class="active" href="./">Food</a>
+      <a href="../decor/">Decorations</a>
       <a href="../#visit">Visit Us</a>
     </nav>
 
     <section class="category-hero">
       <div class="copy">
-        <span class="eyebrow">Decorations & aquascaping</span>
-        <h1>Make the tank look good and work for the fish.</h1>
-        <p>Decor should do more than fill space. Good layouts create shelter, swim lanes, territories, visual depth, and a style that makes the aquarium feel intentional.</p>
+        <span class="eyebrow">Food & water care</span>
+        <h1>Keep the animals fed and the water stable.</h1>
+        <p>This is the department customers need when they are starting a tank, feeding picky fish, opening a pond, cycling a system, or trying to fix cloudy or algae-prone water.</p>
         <div class="button-row">
-          <a class="btn" href="#products">Shop decor</a>
-          <a class="btn secondary" href="../freshwater/">Plan a freshwater tank</a>
+          <a class="btn" href="#products">Shop food & care</a>
+          <a class="btn secondary" href="../freshwater/">Freshwater basics</a>
         </div>
       </div>
       <aside class="hero-card">
-        <strong>Style plus fish behavior</strong>
-        <span>Organize decor around how fish use the tank: hiding, grazing, nesting, exploring, and staying out of sight when they need to calm down.</span>
+        <strong>Advice-driven retail</strong>
+        <span>Food and water care is where the site can be genuinely useful: what to feed, how often, what to test, and when not to add another bottle.</span>
       </aside>
     </section>
 
-    <div class="crumbs"><a href="../">Home</a><span>/</span><span>Decorations & Aquascaping</span></div>
+    <div class="crumbs"><a href="../">Home</a><span>/</span><span>Food & Water Care</span></div>
 
     <section class="section-head">
-      <h2>Shop by tank style</h2>
-      <p>Natural, planted, themed, and reef-safe inspiration</p>
+      <h2>Shop by care problem</h2>
+      <p>Nutrition, cycling, testing, algae, and seasonal pond care</p>
     </section>
 
-    <section class="style-grid" aria-label="Decor styles">
-      <article class="style-card">
-        <span>Natural</span>
-        <h3>Rock, wood, and caves</h3>
-        <p>Build shelter and depth with pieces that look like they belong underwater.</p>
+    <section class="care-grid" aria-label="Food and water care paths">
+      <article class="care-card">
+        <span>Feed</span>
+        <h3>Daily nutrition</h3>
+        <p>Flakes, pellets, wafers, frozen food, treats, and species-specific feeding advice.</p>
       </article>
-      <article class="style-card">
-        <span>Planted</span>
-        <h3>Plants and substrate</h3>
-        <p>Use texture, height, and foreground/background planting zones to shape the display.</p>
+      <article class="care-card">
+        <span>Cycle</span>
+        <h3>New tank stability</h3>
+        <p>Conditioner, bacteria, test kits, and clear steps before adding more livestock.</p>
       </article>
-      <article class="style-card">
-        <span>Theme</span>
-        <h3>Fun ornaments</h3>
-        <p>Keep novelty decor grouped and intentional so playful tanks still look clean.</p>
+      <article class="care-card">
+        <span>Fix</span>
+        <h3>Cloudy water and algae</h3>
+        <p>Test first, then choose the right treatment instead of guessing from symptoms.</p>
       </article>
-      <article class="style-card">
-        <span>Reef</span>
-        <h3>Coral-safe layouts</h3>
-        <p>Prioritize flow, coral placement, open sand, and maintenance access.</p>
+      <article class="care-card">
+        <span>Pond</span>
+        <h3>Seasonal routines</h3>
+        <p>Koi food, bacteria, dechlorinator, algae control, and pond-opening checklists.</p>
       </article>
     </section>
 
     <section class="section-head">
-      <h2>Decor products</h2>
-      <p>Browseable ideas with practical layout notes</p>
+      <h2>Food & care products</h2>
+      <p>Starter examples with practical buying context</p>
     </section>
 
     <div class="layout">
       <aside class="sidebar">
-        <h3>Before choosing decor</h3>
-        <p>The best-looking tank usually starts with a simple plan: one focal point, enough open swimming room, and places for fish to retreat.</p>
+        <h3>Before buying treatment</h3>
+        <p>Water-care pages should teach customers to diagnose first. That prevents wasted money and protects the tank.</p>
         <div class="mini-list">
-          <span>Tank footprint and height</span>
-          <span>Fish size and temperament</span>
-          <span>Sharp edge check</span>
-          <span>Easy cleaning access</span>
-          <span>Foreground and background zones</span>
-          <span>Reef-safe or freshwater-safe material</span>
+          <span>Tank or pond gallons</span>
+          <span>Freshwater, saltwater, or pond</span>
+          <span>Ammonia, nitrite, nitrate, pH</span>
+          <span>Recent livestock changes</span>
+          <span>Feeding amount and schedule</span>
+          <span>Water-change history</span>
         </div>
       </aside>
 
       <div class="grid" id="products">
         <article class="product">
-          <span class="badge">Bold</span>
-          <a href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener">
-            <img src="../assets/site/skull.jpg" alt="Mechanical Skull aquarium ornament" />
-            <h3>Mechanical Skull Ornament</h3>
+          <span class="badge">Food</span>
+          <a href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener">
+            <img src="../assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" />
+            <h3>Sera Red Parrot Pellets</h3>
           </a>
-          <p>Statement decor that can double as a cave or territory marker in a themed aquarium.</p>
-          <div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament">+</button></div>
+          <p>Daily freshwater nutrition example with a clear place for feeding frequency and fish-size notes.</p>
+          <div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets">+</button></div>
         </article>
 
         <article class="product">
-          <span class="badge">Fun</span>
-          <a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener">
-            <img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home aquarium hide" />
-            <h3>Tropical Fruit Home</h3>
+          <span class="badge">Small fish</span>
+          <a href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener">
+            <img src="../assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" />
+            <h3>Sera Vipan Baby Flakes</h3>
           </a>
-          <p>Bright hideaway for playful freshwater tanks where personality is part of the point.</p>
-          <div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div>
+          <p>Fine food for small fish and fry, with guidance for feeding lightly and avoiding waste.</p>
+          <div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes">+</button></div>
         </article>
 
         <article class="product">
-          <span class="badge">Planted</span>
+          <span class="badge">Pond</span>
+          <a href="../pond/">
+            <img src="../assets/department/pond.jpg" alt="Koi and pond food care" />
+            <h3>Pond and koi food</h3>
+          </a>
+          <p>Seasonal feeding matters: water temperature should change the food and schedule.</p>
+          <div class="price-row"><span class="price">Pond care</span><button class="add" data-name="Pond and koi food">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Water</span>
           <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/department/freshwater.jpg" alt="Freshwater planted aquarium inspiration" />
-            <h3>Plants and natural accents</h3>
+            <img src="../assets/site/brand-seachem.jpg" alt="Seachem water care products" />
+            <h3>Conditioners and bacteria</h3>
           </a>
-          <p>Use plant height, color, and texture to create a clean aquascape without clutter.</p>
-          <div class="price-row"><span class="price">Shop plants</span><button class="add" data-name="Plants and natural accents">+</button></div>
+          <p>Dechlorinator, bacteria, and cycling products should be organized by what problem they solve.</p>
+          <div class="price-row"><span class="price">Shop water care</span><button class="add" data-name="Conditioners and bacteria">+</button></div>
         </article>
 
         <article class="product">
-          <span class="badge">Layout</span>
+          <span class="badge">Test</span>
           <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/site/hero-store.jpg" alt="Aquarium display layout" />
-            <h3>Rock, wood, and hardscape</h3>
+            <img src="../assets/site/brand-api.jpg" alt="API aquarium test kits and water care" />
+            <h3>Test kits and diagnosis</h3>
           </a>
-          <p>Create structure first, then add plants and accents around the fish behavior you want.</p>
-          <div class="price-row"><span class="price">Build layout</span><button class="add" data-name="Rock wood and hardscape">+</button></div>
+          <p>Make testing feel normal: ammonia, nitrite, nitrate, pH, phosphate, salinity, and pond basics.</p>
+          <div class="price-row"><span class="price">Shop tests</span><button class="add" data-name="Test kits and diagnosis">+</button></div>
         </article>
 
         <article class="product">
           <span class="badge">Reef</span>
           <a href="../saltwater/">
-            <img src="../assets/department/saltwater.jpg" alt="Reef aquarium rockwork and coral placement" />
-            <h3>Reef rock and coral placement</h3>
+            <img src="../assets/department/saltwater.jpg" alt="Saltwater reef coral food and water care" />
+            <h3>Reef food and supplements</h3>
           </a>
-          <p>Leave room for flow, coral growth, cleaning tools, and livestock that needs open sand.</p>
-          <div class="price-row"><span class="price">Reef ideas</span><button class="add" data-name="Reef rock and coral placement">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Care</span>
-          <a href="../equipment/">
-            <img src="../assets/department/maintenance.jpg" alt="Aquarium maintenance and cleaning tools" />
-            <h3>Cleaning-friendly decor</h3>
-          </a>
-          <p>Decor choices should still leave space for gravel vacs, algae tools, and water changes.</p>
-          <div class="price-row"><span class="price">Care tools</span><button class="add" data-name="Cleaning-friendly decor">+</button></div>
+          <p>Coral food, salt, additives, and testing should tie back to the reef plan and livestock.</p>
+          <div class="price-row"><span class="price">Reef care</span><button class="add" data-name="Reef food and supplements">+</button></div>
         </article>
       </div>
     </div>
 
     <section class="feature-row">
       <article class="panel">
-        <h2>Make decor useful</h2>
-        <p>Hides, plants, and hardscape reduce stress when they give fish clear shelter and break up sightlines.</p>
+        <h2>Feed less, test more</h2>
+        <p>Most beginner problems come from too much food, unstable water, or adding livestock before the tank is ready.</p>
       </article>
       <article class="panel">
-        <h2>Design in layers</h2>
-        <p>Foreground, midground, background, and one focal piece usually looks cleaner than filling every inch.</p>
+        <h2>Make repeat care easy</h2>
+        <p>Food, filter media, conditioner, and test refills are natural repeat purchases when the site groups them clearly.</p>
       </article>
       <article class="panel">
-        <h2>Keep maintenance possible</h2>
-        <p>The layout should still let someone clean glass, vacuum waste, move water, and catch a fish if needed.</p>
+        <h2>Use the store's judgment</h2>
+        <p>This page can later carry staff notes: what they actually recommend for common local tank problems.</p>
       </article>
     </section>
 
@@ -327,7 +328,7 @@
       <div class="footer-top">
         <div>
           <h3>The Hidden Reef</h3>
-          <p>Prototype decorations and aquascaping category page.</p>
+          <p>Prototype food and water care department page.</p>
         </div>
         <div>
           <h4>Departments</h4>
@@ -336,8 +337,8 @@
         </div>
         <div>
           <h4>Store</h4>
+          <a href="../pond/">Pond</a>
           <a href="../equipment/">Lighting</a>
-          <a href="../#visit">Visit</a>
         </div>
         <div>
           <h4>Demo</h4>
