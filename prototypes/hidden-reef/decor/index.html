@@ -1,1 +1,359 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Decorations - The Hidden Reef</title><link rel="icon" href="../assets/site/logo.png"><link rel="stylesheet" href="../assets/category.css"><style>.category-hero{--hero:url("../assets/site/fruit-home.jpg")}</style></head><body><div class="shipping-bar">Aquarium decorations, hides, ornaments, plants, and personality pieces</div><main class="page"><header class="header"><a class="brand" href="../"><img src="../assets/site/logo.png" alt="The Hidden Reef logo"><span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span></a><form class="search-box" action="../#products"><input placeholder="Search decorations and ornaments..."><button>⌕</button></form><div class="header-actions"><a href="../#visit">My Account ▾</a><button class="cart-button">🛒<span id="cart-count">0</span></button></div></header><nav class="main-nav"><a href="../">Home</a><a href="../saltwater/">Saltwater</a><a href="../freshwater/">Aquarium</a><a href="../pond/">Pond</a><a href="../equipment/">Lighting</a><a class="active" href="./">Decorations</a><a href="../#visit">Visit Us</a></nav><section class="category-hero"><div class="copy"><span class="eyebrow">Decorations</span><h1>Give the tank a place to hide and a reason to smile.</h1><p>Ornaments, hides, plants, texture, color, and playful accents for freshwater and community tanks.</p><a class="btn" href="#products">Shop decorations</a></div></section><div class="crumbs"><a href="../">Home</a><span>/</span><span>Decorations</span></div><section class="section-head"><h2>Decor products</h2><p>Hides, ornaments, artificial plants, and accents</p></section><div class="layout"><aside class="sidebar"><h3>Decor Shop</h3><a>Hides</a><a>Ornaments</a><a>Artificial plants</a><a>Natural look</a><a>Fun themes</a></aside><div class="grid" id="products"><article class="product"><span class="badge">New</span><a href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener"><img src="../assets/site/skull.jpg" alt="Mechanical Skull Ornament"><h3>Mechanical Skull Ornament</h3></a><p>Statement decor and hiding space for bold tank themes.</p><div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament">+</button></div></article><article class="product"><a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home"><h3>Tropical Fruit Home</h3></a><p>Bright hideaway for playful freshwater aquariums.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div></article><article class="product"><a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="../assets/site/promo.jpg" alt="Aquarium decor"><h3>Planted color accents</h3></a><p>Artificial plants and color pieces for low-maintenance tanks.</p><div class="price-row"><span class="price">Shop decor</span><button class="add" data-name="Planted color accents">+</button></div></article><article class="product"><a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="../assets/site/hero-store.jpg" alt="Aquarium display"><h3>Natural layout pieces</h3></a><p>Create caves, territories, and visual depth for fish behavior.</p><div class="price-row"><span class="price">Build layout</span><button class="add" data-name="Natural layout pieces">+</button></div></article></div></div><section class="feature-row"><article class="panel"><h2>More than novelty</h2><p>Decor pages can explain hiding spaces, territory, stress reduction, and cleaning-friendly layouts.</p></article><article class="panel"><h2>Easy impulse buys</h2><p>This is a strong category for browsing and add-on purchases in a modern ecommerce flow.</p></article></section><footer class="footer"><div class="footer-top"><div><h3>The Hidden Reef</h3><p>Prototype decorations category page.</p></div><div><h4>Departments</h4><a href="../freshwater/">Freshwater</a><a href="../equipment/">Equipment</a></div><div><h4>Store</h4><a href="../#visit">Visit</a><a href="../">Home</a></div><div><h4>Demo</h4><p>Product actions are prototype-only.</p></div></div></footer></main><aside class="drawer"><div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty.</p><button class="btn">Demo checkout</button></aside><script src="../assets/link-modal.js"></script><script src="../assets/category.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Decorations & Aquascaping - The Hidden Reef</title>
+  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="stylesheet" href="../assets/category.css" />
+  <style>
+    :root {
+      --reef-bg:#03111d; --reef-panel:#071a27; --reef-line:rgba(116,205,235,.2);
+      --reef-text:#f0fbff; --reef-muted:#a9cbd9; --reef-cyan:#40d9ff;
+      --reef-teal:#00a7b7; --reef-orange:#ff7b32;
+    }
+    body {
+      color:var(--reef-text);
+      background:
+        radial-gradient(circle at 18% 0%,rgba(14,159,204,.2),transparent 28%),
+        linear-gradient(180deg,#03111d 0,#061c2d 280px,#020912 100%);
+    }
+    .page { max-width:1180px; background:linear-gradient(180deg,rgba(7,26,39,.48),rgba(3,13,22,0)); }
+    .header {
+      grid-template-columns:auto minmax(260px,1fr) auto;
+      gap:18px;
+      padding:16px 20px;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      border-bottom:1px solid var(--reef-line);
+      background:linear-gradient(180deg,rgba(8,31,47,.98),rgba(5,22,34,.98));
+    }
+    .brand {
+      grid-column:auto; min-width:235px; min-height:0; justify-content:flex-start;
+      padding:0; margin:0; background:none; border:0; box-shadow:none;
+    }
+    .brand img {
+      display:block; width:74px; height:48px; object-fit:cover;
+      border:1px solid rgba(126,232,255,.38); border-radius:7px;
+      background:#061928; box-shadow:0 8px 20px rgba(0,0,0,.28);
+    }
+    .brand strong { font-size:28px; line-height:.9; color:#fff; text-shadow:0 3px 14px rgba(0,0,0,.5); }
+    .brand span span {
+      margin-top:7px; color:#bdefff; font-size:11px; letter-spacing:.13em;
+      text-align:left; text-transform:uppercase;
+    }
+    .search-box {
+      grid-column:auto; max-width:none; justify-self:stretch; height:44px;
+      background:#102b3b; border-color:rgba(116,205,235,.26);
+    }
+    .search-box input { color:#eaf8fc; background:transparent; }
+    .search-box input::placeholder { color:#8bb1bf; }
+    .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
+    .main-nav {
+      display:grid; grid-template-columns:repeat(7,minmax(max-content,1fr)); gap:0;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1); padding:0;
+      border-top:0; border-bottom:1px solid var(--reef-line);
+      background:rgba(3,18,29,.98); color:#a9d6e6;
+    }
+    .main-nav a {
+      display:flex; justify-content:center; align-items:center; min-height:44px;
+      padding:10px 14px; border-left:1px solid rgba(116,205,235,.12);
+    }
+    .main-nav a:first-child { border-left:0; }
+    .main-nav a.active { color:var(--reef-cyan); }
+
+    .category-hero {
+      display:grid;
+      grid-template-columns:minmax(0,.92fr) minmax(340px,1fr);
+      gap:24px;
+      min-height:390px;
+      margin-top:18px;
+      padding:clamp(22px,4vw,46px);
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:
+        linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.84) 48%,rgba(0,48,75,.18)),
+        url("../assets/site/hero-store.jpg") right center/cover no-repeat;
+      box-shadow:0 22px 54px rgba(0,0,0,.34);
+    }
+    .category-hero .copy { max-width:580px; padding:0; align-self:center; }
+    .category-hero h1 { max-width:620px; font-size:clamp(42px,5vw,66px); }
+    .category-hero p { max-width:525px; color:#d6f4fb; font-size:15px; }
+    .hero-card {
+      align-self:end; display:grid; gap:12px; padding:18px;
+      border:1px solid rgba(126,232,255,.22); border-radius:8px;
+      background:rgba(3,18,29,.76); backdrop-filter:blur(8px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero-card strong { color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; }
+    .hero-card span { color:var(--reef-muted); font-size:13px; line-height:1.45; }
+    .crumbs { color:var(--reef-muted); }
+    .section-head h2,.sidebar h3,.panel h2,.product h3,.drawer h2 { color:#fff; }
+    .section-head p { color:#8fdcf0; }
+
+    .style-grid {
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:18px 0 26px;
+    }
+    .style-card {
+      min-height:150px; padding:18px; border:1px solid var(--reef-line); border-radius:8px;
+      background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.16),transparent 38%),var(--reef-panel);
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+    }
+    .style-card span {
+      color:var(--reef-cyan); font-size:11px; font-weight:950; letter-spacing:.12em; text-transform:uppercase;
+    }
+    .style-card h3 {
+      margin:8px 0 6px; color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; line-height:1.05;
+    }
+    .style-card p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.4; }
+
+    .layout { grid-template-columns:260px minmax(0,1fr); align-items:start; }
+    .sidebar {
+      position:sticky; top:14px; display:grid; gap:14px; padding:18px;
+      border-color:var(--reef-line);
+      background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.12),transparent 36%),var(--reef-panel);
+    }
+    .sidebar p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.45; }
+    .mini-list {
+      display:grid; gap:8px; padding-top:12px; border-top:1px solid rgba(116,205,235,.12);
+    }
+    .mini-list span { padding:0; border:0; color:#d8f4fb; font-weight:850; }
+
+    .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .product {
+      display:flex; flex-direction:column; min-height:330px;
+      border-color:var(--reef-line); background:#fff; box-shadow:0 14px 30px rgba(0,0,0,.18);
+    }
+    .product img {
+      height:150px; padding:10px; object-fit:contain;
+      border:1px solid #e2eef3; background:linear-gradient(180deg,#f7fbfd,#e7f3f8);
+    }
+    .product h3 { color:#102f43; }
+    .product p { color:#5d7582; }
+    .price-row { margin-top:auto; padding-top:10px; border-top:1px solid #e2eef3; }
+    .feature-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .panel {
+      border-color:var(--reef-line);
+      background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.1),transparent 38%),var(--reef-panel);
+    }
+    .footer { border:1px solid rgba(116,205,235,.14); }
+    @media(max-width:1040px){
+      .category-hero{grid-template-columns:1fr;min-height:auto}
+      .style-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .layout{grid-template-columns:1fr}.sidebar{position:static}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .feature-row{grid-template-columns:1fr}
+    }
+    @media(max-width:760px){
+      .header{grid-template-columns:1fr;margin:0;padding:14px 0}.brand{justify-content:flex-start}
+      .main-nav{display:flex;justify-content:flex-start;overflow-x:auto;margin:0}
+      .style-grid,.grid{grid-template-columns:1fr}
+      .category-hero{padding:24px 18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="shipping-bar">Aquascaping, hides, ornaments, plants, backgrounds, substrate, and layout pieces</div>
+  <main class="page">
+    <header class="header">
+      <a class="brand" href="../">
+        <img src="../assets/site/header-fish.png" alt="The Hidden Reef fish logo" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums - Fish - Coral - Ponds</span></span>
+      </a>
+      <form class="search-box" action="../#products">
+        <input placeholder="Search driftwood, rock, plants, ornaments..." />
+        <button>⌕</button>
+      </form>
+      <div class="header-actions">
+        <a href="../#visit">My Account</a>
+        <button class="cart-button">🛒<span id="cart-count">0</span></button>
+      </div>
+    </header>
+
+    <nav class="main-nav">
+      <a href="../">Home</a>
+      <a href="../saltwater/">Saltwater</a>
+      <a href="../freshwater/">Aquarium</a>
+      <a href="../pond/">Pond</a>
+      <a href="../equipment/">Lighting</a>
+      <a class="active" href="./">Decorations</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="category-hero">
+      <div class="copy">
+        <span class="eyebrow">Decorations & aquascaping</span>
+        <h1>Make the tank look good and work for the fish.</h1>
+        <p>Decor should do more than fill space. Good layouts create shelter, swim lanes, territories, visual depth, and a style that makes the aquarium feel intentional.</p>
+        <div class="button-row">
+          <a class="btn" href="#products">Shop decor</a>
+          <a class="btn secondary" href="../freshwater/">Plan a freshwater tank</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <strong>Style plus fish behavior</strong>
+        <span>Organize decor around how fish use the tank: hiding, grazing, nesting, exploring, and staying out of sight when they need to calm down.</span>
+      </aside>
+    </section>
+
+    <div class="crumbs"><a href="../">Home</a><span>/</span><span>Decorations & Aquascaping</span></div>
+
+    <section class="section-head">
+      <h2>Shop by tank style</h2>
+      <p>Natural, planted, themed, and reef-safe inspiration</p>
+    </section>
+
+    <section class="style-grid" aria-label="Decor styles">
+      <article class="style-card">
+        <span>Natural</span>
+        <h3>Rock, wood, and caves</h3>
+        <p>Build shelter and depth with pieces that look like they belong underwater.</p>
+      </article>
+      <article class="style-card">
+        <span>Planted</span>
+        <h3>Plants and substrate</h3>
+        <p>Use texture, height, and foreground/background planting zones to shape the display.</p>
+      </article>
+      <article class="style-card">
+        <span>Theme</span>
+        <h3>Fun ornaments</h3>
+        <p>Keep novelty decor grouped and intentional so playful tanks still look clean.</p>
+      </article>
+      <article class="style-card">
+        <span>Reef</span>
+        <h3>Coral-safe layouts</h3>
+        <p>Prioritize flow, coral placement, open sand, and maintenance access.</p>
+      </article>
+    </section>
+
+    <section class="section-head">
+      <h2>Decor products</h2>
+      <p>Browseable ideas with practical layout notes</p>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h3>Before choosing decor</h3>
+        <p>The best-looking tank usually starts with a simple plan: one focal point, enough open swimming room, and places for fish to retreat.</p>
+        <div class="mini-list">
+          <span>Tank footprint and height</span>
+          <span>Fish size and temperament</span>
+          <span>Sharp edge check</span>
+          <span>Easy cleaning access</span>
+          <span>Foreground and background zones</span>
+          <span>Reef-safe or freshwater-safe material</span>
+        </div>
+      </aside>
+
+      <div class="grid" id="products">
+        <article class="product">
+          <span class="badge">Bold</span>
+          <a href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener">
+            <img src="../assets/site/skull.jpg" alt="Mechanical Skull aquarium ornament" />
+            <h3>Mechanical Skull Ornament</h3>
+          </a>
+          <p>Statement decor that can double as a cave or territory marker in a themed aquarium.</p>
+          <div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Fun</span>
+          <a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener">
+            <img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home aquarium hide" />
+            <h3>Tropical Fruit Home</h3>
+          </a>
+          <p>Bright hideaway for playful freshwater tanks where personality is part of the point.</p>
+          <div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Planted</span>
+          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
+            <img src="../assets/department/freshwater.jpg" alt="Freshwater planted aquarium inspiration" />
+            <h3>Plants and natural accents</h3>
+          </a>
+          <p>Use plant height, color, and texture to create a clean aquascape without clutter.</p>
+          <div class="price-row"><span class="price">Shop plants</span><button class="add" data-name="Plants and natural accents">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Layout</span>
+          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
+            <img src="../assets/site/hero-store.jpg" alt="Aquarium display layout" />
+            <h3>Rock, wood, and hardscape</h3>
+          </a>
+          <p>Create structure first, then add plants and accents around the fish behavior you want.</p>
+          <div class="price-row"><span class="price">Build layout</span><button class="add" data-name="Rock wood and hardscape">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Reef</span>
+          <a href="../saltwater/">
+            <img src="../assets/department/saltwater.jpg" alt="Reef aquarium rockwork and coral placement" />
+            <h3>Reef rock and coral placement</h3>
+          </a>
+          <p>Leave room for flow, coral growth, cleaning tools, and livestock that needs open sand.</p>
+          <div class="price-row"><span class="price">Reef ideas</span><button class="add" data-name="Reef rock and coral placement">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Care</span>
+          <a href="../equipment/">
+            <img src="../assets/department/maintenance.jpg" alt="Aquarium maintenance and cleaning tools" />
+            <h3>Cleaning-friendly decor</h3>
+          </a>
+          <p>Decor choices should still leave space for gravel vacs, algae tools, and water changes.</p>
+          <div class="price-row"><span class="price">Care tools</span><button class="add" data-name="Cleaning-friendly decor">+</button></div>
+        </article>
+      </div>
+    </div>
+
+    <section class="feature-row">
+      <article class="panel">
+        <h2>Make decor useful</h2>
+        <p>Hides, plants, and hardscape reduce stress when they give fish clear shelter and break up sightlines.</p>
+      </article>
+      <article class="panel">
+        <h2>Design in layers</h2>
+        <p>Foreground, midground, background, and one focal piece usually looks cleaner than filling every inch.</p>
+      </article>
+      <article class="panel">
+        <h2>Keep maintenance possible</h2>
+        <p>The layout should still let someone clean glass, vacuum waste, move water, and catch a fish if needed.</p>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div>
+          <h3>The Hidden Reef</h3>
+          <p>Prototype decorations and aquascaping category page.</p>
+        </div>
+        <div>
+          <h4>Departments</h4>
+          <a href="../freshwater/">Freshwater</a>
+          <a href="../saltwater/">Saltwater</a>
+        </div>
+        <div>
+          <h4>Store</h4>
+          <a href="../equipment/">Lighting</a>
+          <a href="../#visit">Visit</a>
+        </div>
+        <div>
+          <h4>Demo</h4>
+          <p>Product actions are prototype-only.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <aside class="drawer">
+    <div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div>
+    <div id="cart-items" class="cart-items"></div>
+    <p id="empty-cart" class="empty-cart">Your cart is empty.</p>
+    <button class="btn">Demo checkout</button>
+  </aside>
+
+  <script src="../assets/link-modal.js"></script>
+  <script src="../assets/category.js"></script>
+</body>
+</html>
