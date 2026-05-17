@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About The Hidden Reef — Levittown, PA</title>
+  <link rel="icon" type="image/png" href="../assets/site/logo.png" />
+  <style>
+    :root {
+      --blue-950: #003b63;
+      --blue-900: #004c7c;
+      --blue-800: #006096;
+      --blue-700: #007ab0;
+      --teal: #00a7b7;
+      --aqua: #13b8df;
+      --sky: #e9f8fc;
+      --surface: #ffffff;
+      --page: #eaf4f8;
+      --ink: #123044;
+      --muted: #657d8d;
+      --line: #d8e8ef;
+      --orange: #ff7b32;
+      --green: #23a86b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fff 0, #f4fbfd 92px, var(--page) 320px, #dcecf3 100%);
+      line-height: 1.65;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 14px;
+      color: #fff;
+      background: linear-gradient(90deg, #007498, #00a7b7);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .page-nav {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .page-nav a.back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .page-nav a.back:hover { color: var(--teal); }
+    .page-nav img { height: 36px; }
+
+    .content {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .hero-section {
+      max-width: 820px;
+      margin: 0 auto 32px;
+      padding: 48px 24px 0;
+    }
+    .hero-section h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 900;
+      margin: 0 0 12px;
+      color: var(--blue-950);
+      line-height: 1.15;
+    }
+    .hero-section p.tagline {
+      font-size: 18px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* Ziggy portrait */
+    .portrait-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+      box-shadow: 0 4px 16px rgba(0,60,100,0.06);
+      text-align: center;
+    }
+    .portrait-card img {
+      max-width: 100%;
+      max-height: 520px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .portrait-card .caption {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .content h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--blue-950);
+      margin: 48px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+    }
+    .content h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--blue-800);
+      margin: 24px 0 8px;
+    }
+    .content p {
+      margin: 0 0 16px;
+      font-size: 16px;
+    }
+    .content ul {
+      margin: 0 0 20px;
+      padding-left: 20px;
+    }
+    .content li {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,60,100,0.06);
+    }
+    .stat-card .number {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--teal);
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .callout {
+      background: var(--sky);
+      border-left: 4px solid var(--teal);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+    .callout strong { color: var(--blue-950); }
+
+    .next-step {
+      background: linear-gradient(135deg, var(--blue-950), var(--blue-800));
+      color: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 48px 0 0;
+      text-align: center;
+    }
+    .next-step h3 { margin: 0 0 8px; font-size: 20px; }
+    .next-step p { color: #c2e9f4; margin: 0 0 16px; }
+    .next-step a.btn {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .next-step a.btn:hover { background: #e86a1c; text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    footer.footer {
+      background: var(--blue-950);
+      color: #c2e9f4;
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 13px;
+    }
+    footer.footer a { color: #c2e9f4; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">FREE SHIPPING ON QUALIFYING ORDERS OVER $49 — EST IN 1995</div>
+
+  <nav class="page-nav">
+    <a class="back" href="../">← Back to Store</a>
+    <a href="../"><img src="../assets/site/logo.png" alt="The Hidden Reef" /></a>
+  </nav>
+
+  <div class="hero-section">
+    <h1>About The Hidden Reef</h1>
+    <p class="tagline">Levittown's neighborhood aquarium shop since 1995.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="portrait-card">
+      <img src="../assets/site/ziggy-portrait.png" alt='Ziggy — "Keeper of Corals. Teller of Truth. Master of Mayhem."' />
+      <div class="caption">Ziggy — Keeper of Corals. Teller of Truth. Master of Mayhem.</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="number">1995</div>
+        <div class="label">Year Established</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">30+</div>
+        <div class="label">Years in Business</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">10K+</div>
+        <div class="label">Happy Customers</div>
+      </div>
+    </div>
+
+    <h2>Our Story</h2>
+    <p>The building was originally a supermarket, then a ballroom. Then Ziggy got hold of it.</p>
+    <p>Siegfried Gutekunst — everyone calls him Ziggy — was born in the U.S. and moved to Germany with his mother when he was eight. He got his first aquarium at ten: mollies, guppies, gouramis, and plants. The usual start. But it stuck.</p>
+    <p>In 1987, Ziggy came back to the States and moved into an apartment above his father's barber shop. He met George Kunz, who had a 90-gallon reef tank. <em>"I was hooked the first time I saw an Australian sea apple,"</em> Ziggy said.</p>
+    <p>In 1995, after running a maintenance company (Sealife Aquarium Designs) and a wholesale operation (US Marine Imports), Ziggy opened the original Hidden Reef Aquarium — tucked into the basement of a hardware store in the back of a shopping center in Northeast Philadelphia.</p>
+    <p>Within a year, the hardware store's dry goods section became The Hidden Reef's. An adjacent store became the fish room. The shop grew from 1,400 to 5,600 square feet, all still technically hidden.</p>
+    <p>In 2003, Ziggy's friend and partner George died of Hodgkin's disease. George's reef tank and inspiration helped make The Hidden Reef a reality.</p>
+    <p>Right before Christmas 2005, a fire that started in another store destroyed The Hidden Reef. They lost almost all the animals. They saved most of the corals.</p>
+    <p>The store didn't have a new home until July 2006. The front of the current location opened in April 2007, followed by the fish room. Today, The Hidden Reef is over 20,000 square feet — 6,800 of that housing 450-plus aquariums: 40 devoted to corals, 145 saltwater, and more than 250 freshwater.</p>
+    <p>Ziggy credits loyal customers for helping The Hidden Reef survive and grow, especially after the fire.</p>
+
+    <h2>What Makes Us Different</h2>
+    <ul>
+      <li><strong>Live livestock you can see.</strong> Come browse our tanks in person. Healthy fish, coral, and plants — not mystery shipments from a distributor.</li>
+      <li><strong>Real expertise.</strong> Our staff are hobbyists first. We've dealt with the same algae outbreaks, cycling problems, and equipment questions you have.</li>
+      <li><strong>Honest advice.</strong> We'd rather sell you the right thing once than the wrong thing twice. If a cheaper filter works for your tank, we'll tell you.</li>
+      <li><strong>One stop.</strong> Freshwater, saltwater, pond, plants, coral, food, equipment, maintenance supplies — it's all under one roof.</li>
+    </ul>
+
+    <h2>The Store Today</h2>
+    <p>Walk through our doors and you'll find 450+ tanks stocked with freshwater fish, saltwater fish, inverts, corals, and pond fish — 40 tanks just for corals alone. We carry live plants for planted tanks, hardy starter fish for beginners, and rare specimens for experienced collectors. Our livestock changes weekly — there's almost always something new to see.</p>
+
+    <h2>Pond Season and Beyond</h2>
+    <p>When spring hits, we become the local pond headquarters. Koi, pond pumps, waterfall foam, treatments, and everything you need to open and maintain your pond through the season. Come fall, we help you winterize. Year-round, we're here for water quality, filtration, and fish health questions.</p>
+
+    <div class="callout">
+      <strong>"I don't sell corals. I sell happiness that grows."</strong><br>
+      — Ziggy, probably
+    </div>
+
+    <h2>Visit Us</h2>
+    <p><strong>The Hidden Reef</strong><br>
+    4501 New Falls Rd, Levittown, PA 19056</p>
+    <p>Stop by, browse the tanks, ask questions, and take home the right setup. We're here seven days a week.</p>
+
+    <div class="next-step">
+      <h3>Ready to explore?</h3>
+      <p>Browse departments, shopping paths, and new arrivals.</p>
+      <a class="btn" href="../">Browse the Store →</a>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>Prototype redesign for <a href="https://www.thehiddenreef.com">The Hidden Reef</a>, Levittown PA. For demonstration purposes.</p>
+  </footer>
+
+</body>
+</html>
