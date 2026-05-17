@@ -215,15 +215,44 @@
       gap: 11px;
       margin: 16px 0;
     }
+    .category-intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 20px 0 10px;
+    }
+    .category-intro h2 {
+      margin: 0;
+      color: var(--blue-950);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+    }
+    .category-intro p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
     .cat {
-      min-height: 104px;
-      padding: 9px;
+      display: grid;
+      align-content: start;
+      min-height: 132px;
+      padding: 10px;
       border: 1px solid var(--line);
       border-radius: 7px;
       background: var(--surface);
       text-align: center;
       box-shadow: 0 8px 18px rgba(0,65,105,0.08);
       cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .cat:hover {
+      transform: translateY(-2px);
+      border-color: rgba(64,217,255,0.65);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.26), 0 0 0 1px rgba(64,217,255,0.18);
     }
     .cat img {
       width: 100%;
@@ -233,6 +262,14 @@
       margin-bottom: 7px;
     }
     .cat strong { display: block; color: var(--blue-950); font-size: 12px; line-height: 1.15; }
+    .cat span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1.2;
+    }
     .promo-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -500,6 +537,69 @@
     }
     .cart-item span, .empty-cart { color: var(--muted); font-size: 13px; }
     .drawer .btn { width: 100%; margin-top: 18px; }
+    .link-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .link-modal.is-open { display: flex; }
+    .link-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,8,16,0.72);
+      backdrop-filter: blur(6px);
+    }
+    .link-modal__panel {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+      width: min(760px, 100%);
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.28);
+      border-radius: 8px;
+      background: #071a27;
+      box-shadow: 0 28px 90px rgba(0,0,0,0.55);
+    }
+    .link-modal__image {
+      width: 100%;
+      height: 100%;
+      min-height: 240px;
+      object-fit: contain;
+      background: #eef7fa;
+    }
+    .link-modal__body { padding: 26px; color: #eaf8fc; }
+    .link-modal__eyebrow {
+      color: #40d9ff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .link-modal h2 {
+      margin: 8px 0 10px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1;
+    }
+    .link-modal p { margin: 0 0 18px; color: #b9d9e7; line-height: 1.45; }
+    .link-modal__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 7px 10px;
+      color: #eaf8fc;
+      background: rgba(5,22,34,0.88);
+      cursor: pointer;
+    }
     @media (max-width: 1040px) {
       .categories { grid-template-columns: repeat(5, minmax(0,1fr)); }
       .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
@@ -515,6 +615,10 @@
       }
       .hero-content { padding: 26px 18px; }
       .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .category-intro { display: block; }
+      .category-intro p { margin-top: 6px; }
+      .link-modal__panel { grid-template-columns: 1fr; }
+      .link-modal__image { min-height: 170px; max-height: 240px; }
       .promo-grid, .guides { grid-template-columns: 1fr; }
       .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .visit-band { grid-template-columns: 1fr; }
@@ -525,7 +629,7 @@
       .page { padding-inline: 8px; }
       .product-grid { grid-template-columns: 1fr; }
       .categories { gap: 8px; }
-      .cat { min-height: 98px; }
+      .cat { min-height: 122px; }
     }
     /* Dark reef storefront skin */
     :root {
@@ -560,12 +664,15 @@
       padding: 2px;
     }
     .brand strong,
+    .category-intro h2,
     .section-head h2,
     .product h3,
     .guide h3 {
       color: #f7fcff;
     }
     .brand span,
+    .category-intro p,
+    .cat span,
     .main-nav,
     .header-actions,
     .section-head p,
@@ -600,6 +707,7 @@
       box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.035);
     }
     .cat strong { color: #dff8ff; }
+    .cat span { color: #9fc6d6; }
     .product p,
     .guide p { color: #9fb8c7; }
     .product img,
@@ -732,17 +840,21 @@
       </div>
     </section>
 
+    <div class="category-intro">
+      <h2>Shop by Department</h2>
+      <p>Each department is its own path, so the owner can see how freshwater, reef, pond, equipment, food, and decor would feel as separate storefront sections.</p>
+    </div>
     <section class="categories" aria-label="Popular categories">
-      <a class="cat" href="freshwater/"><img src="assets/site/hero-store.jpg" alt="" /><strong>Freshwater</strong></a>
-      <a class="cat" href="saltwater/"><img src="assets/site/hero-reef.jpg" alt="" /><strong>Saltwater</strong></a>
-      <a class="cat" href="freshwater/"><img src="assets/site/red-parrot-pellets.jpg" alt="" /><strong>Aquarium</strong></a>
-      <a class="cat" href="equipment/"><img src="assets/site/flip-feed.jpg" alt="" /><strong>Filtration</strong></a>
-      <a class="cat" href="equipment/"><img src="assets/site/brand-red-sea.jpg" alt="" /><strong>Lighting</strong></a>
-      <a class="cat" href="freshwater/"><img src="assets/site/baby-flakes.jpg" alt="" /><strong>Food</strong></a>
-      <a class="cat" href="decor/"><img src="assets/site/skull.jpg" alt="" /><strong>Decorations</strong></a>
-      <a class="cat" href="pond/"><img src="assets/site/foam-gun.jpg" alt="" /><strong>Ponds</strong></a>
-      <a class="cat" href="freshwater/"><img src="assets/site/fruit-home.jpg" alt="" /><strong>Plants</strong></a>
-      <a class="cat" href="decor/"><img src="assets/site/skull.jpg" alt="" /><strong>Dog Splash</strong></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/hero-store.jpg" alt="" /><strong>Freshwater</strong><span>Food, plants, care</span></a>
+      <a class="cat" href="saltwater/"><img src="assets/site/hero-aquatic-world.jpg" alt="" /><strong>Saltwater</strong><span>Coral, reef systems</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/red-parrot-pellets.jpg" alt="" /><strong>Aquarium</strong><span>Starter tank paths</span></a>
+      <a class="cat" href="equipment/"><img src="assets/site/flip-feed.jpg" alt="" /><strong>Filtration</strong><span>Maintenance gear</span></a>
+      <a class="cat" href="equipment/"><img src="assets/site/brand-red-sea.jpg" alt="" /><strong>Lighting</strong><span>Reef-ready brands</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/baby-flakes.jpg" alt="" /><strong>Food</strong><span>Daily nutrition</span></a>
+      <a class="cat" href="decor/"><img src="assets/site/skull.jpg" alt="" /><strong>Decorations</strong><span>Hides and accents</span></a>
+      <a class="cat" href="pond/"><img src="assets/site/foam-gun.jpg" alt="" /><strong>Ponds</strong><span>Seasonal supplies</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/fruit-home.jpg" alt="" /><strong>Plants</strong><span>Color and cover</span></a>
+      <a class="cat" href="decor/"><img src="assets/site/skull.jpg" alt="" /><strong>Dog Splash</strong><span>Pet crossover</span></a>
     </section>
 
     <section class="promo-grid" aria-label="Promotions">
@@ -758,6 +870,7 @@
       </div>
       <div class="filters" aria-label="Product filters">
         <button type="button" class="active" data-filter="all">All</button>
+        <button type="button" data-filter="saltwater">Saltwater</button>
         <button type="button" data-filter="freshwater">Freshwater</button>
         <button type="button" data-filter="pond">Pond</button>
         <button type="button" data-filter="equipment">Equipment</button>
@@ -767,9 +880,13 @@
         <article class="product" data-category="pond" data-name="easypro professional foam gun pond waterfall"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-easypro-pro-black-waterfall-foam-24-oz-gun.html" target="_blank" rel="noopener"><img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" /><h3>EasyPro Professional Foam Gun</h3></a><p>Waterfall foam application tool.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun" type="button">+</button></div></article>
         <article class="product" data-category="freshwater" data-name="sera red parrot pellets fish food"><a class="product-link" href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" /><h3>Sera Red Parrot Pellets</h3></a><p>Daily freshwater nutrition.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets" type="button">+</button></div></article>
         <article class="product" data-category="equipment" data-name="innovative marine nuvo flip feed lid"><span class="badge">Hot</span><a class="product-link" href="https://www.thehiddenreef.com/im-nuvo-flip-feed-hinged-feeding-lid.html" target="_blank" rel="noopener"><img src="assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed" /><h3>Innovative Marine Nuvo Flip Feed</h3></a><p>Hinged aquarium feeding lid.</p><div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed" type="button">+</button></div></article>
+        <article class="product" data-category="saltwater" data-name="reef aquarium systems red sea saltwater coral"><span class="badge">Reef</span><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/hero-aquatic-world.jpg" alt="Reef aquarium systems" /><h3>Reef Aquarium Systems</h3></a><p>Saltwater display paths, coral-ready gear, and reef setup inspiration.</p><div class="price-row"><span class="price">Shop reef</span><button class="add" data-name="Reef Aquarium Systems" type="button">+</button></div></article>
+        <article class="product" data-category="equipment" data-name="red sea reef lighting aquarium led"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/brand-red-sea.jpg" alt="Red Sea Reef Lighting" /><h3>Red Sea Reef Lighting</h3></a><p>Premium lighting cues for reef and display tanks.</p><div class="price-row"><span class="price">Shop lighting</span><button class="add" data-name="Red Sea Reef Lighting" type="button">+</button></div></article>
         <article class="product" data-category="freshwater" data-name="sera vipan baby flakes food"><a class="product-link" href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener"><img src="assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" /><h3>Sera Vipan Baby Flakes</h3></a><p>Fine flakes for small fish.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes" type="button">+</button></div></article>
+        <article class="product" data-category="pond" data-name="spring pond opening kit koi seasonal supplies"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/hero-store.jpg" alt="Spring Pond Opening Kit" /><h3>Spring Pond Opening Kit</h3></a><p>Seasonal pond care, treatments, pumps, and koi food grouped together.</p><div class="price-row"><span class="price">Build kit</span><button class="add" data-name="Spring Pond Opening Kit" type="button">+</button></div></article>
         <article class="product" data-category="decor" data-name="underwater treasures mechanical skull"><a class="product-link" href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener"><img src="assets/site/skull.jpg" alt="Mechanical Skull Ornament" /><h3>Mechanical Skull Ornament</h3></a><p>Statement aquarium decor.</p><div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament" type="button">+</button></div></article>
         <article class="product" data-category="decor" data-name="underwater treasures tropical fruit home"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="assets/site/fruit-home.jpg" alt="Tropical Fruit Home" /><h3>Tropical Fruit Home</h3></a><p>Bright hideaway decoration.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home" type="button">+</button></div></article>
+        <article class="product" data-category="freshwater" data-name="planted freshwater starter aquarium plants care"><a class="product-link" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="assets/site/promo.jpg" alt="Planted Freshwater Starter" /><h3>Planted Freshwater Starter</h3></a><p>A curated path for plants, food, filtration, and water care.</p><div class="price-row"><span class="price">Plan setup</span><button class="add" data-name="Planted Freshwater Starter" type="button">+</button></div></article>
       </div>
     </section>
 
@@ -827,6 +944,7 @@
     <button class="btn" type="button">Demo checkout</button>
   </aside>
 
+  <script src="assets/link-modal.js"></script>
   <script>
     const cards = [...document.querySelectorAll('.product')];
     const filters = [...document.querySelectorAll('[data-filter]')];
