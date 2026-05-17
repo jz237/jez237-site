@@ -1,6 +1,6 @@
 {
   "date": "2026-05-17",
-  "updatedAt": "2026-05-17T11:00:01.549225+00:00",
+  "updatedAt": "2026-05-17T12:00:01.766393+00:00",
   "items": [
     {
       "title": "Malta just became the first country to give every citizen free ChatGPT Plus. There’s one condition.",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/openai-malta-chatgpt-plus-free-citizens.avif",
       "published": "2026-05-17T10:22:03+00:00",
       "firstSeen": "2026-05-17T11:00:01.549225+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1308
+      "score": 10.1012
     },
     {
       "title": "Vercel Labs Introduces Zero, a Systems Programming Language Designed So AI Agents Can Read, Repair, and Ship Native Programs",
@@ -29,10 +29,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-25.png",
       "published": "2026-05-17T08:11:49+00:00",
       "firstSeen": "2026-05-17T09:00:01.591768+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3376
+      "score": 7.3097
+    },
+    {
+      "title": "Asus crammed an RTX 5080 into a 3-litre box. It costs $4,400 and the performance gain is 2.3%.",
+      "url": "https://thenextweb.com/news/asus-rog-nuc-16-rtx-5080-gaming-mini-pc-price",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Asus has launched the 2026 ROG NUC 16 in China, pairing Intel’s Core Ultra 9 290HX Plus processor with an Nvidia GeForce RTX 5080 laptop GPU inside a 3-litre chassis that weighs 3.12 kilograms. The black version starts at CNY 29,999 (approximately $4,400). A Moonlight White edition costs CNY 31,999 (approximately $4,700). Global pricing has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/asus-rog-nuc-16-rtx-5080-gaming-mini-pc-price.avif",
+      "published": "2026-05-17T11:09:34+00:00",
+      "firstSeen": "2026-05-17T12:00:01.766393+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.2246
+    },
+    {
+      "title": "Destinus is raising €200M ahead of an IPO. The cruise missile maker wants a €5B valuation.",
+      "url": "https://thenextweb.com/news/destinus-200-million-pre-ipo-cruise-missiles-drones",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Destinus, the Netherlands-headquartered defence startup that manufactures cruise missiles and autonomous drones, is in talks to raise approximately €200 million ahead of a planned initial public offering, Bloomberg reported on Friday, citing people familiar with the matter. The company is seeking a valuation north of €5 billion based on forecast annual revenues of roughly €500 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/destinus-200-million-pre-ipo-cruise-missiles-drones.avif",
+      "published": "2026-05-17T11:34:50+00:00",
+      "firstSeen": "2026-05-17T12:00:01.766393+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2372
     },
     {
       "title": "A Coding Guide Implementing SHAP Explainability Workflows with Explainer Comparisons, Maskers, Interactions, Drift, and Black-Box Models",
@@ -45,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-10.png",
       "published": "2026-05-17T07:25:10+00:00",
       "firstSeen": "2026-05-17T07:42:36.943920+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8158
+      "score": 2.7886
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -59,12 +91,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-17T11:00:07.887128+00:00",
+      "published": "2026-05-17T12:00:09.365903+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "Chinese EVs are arriving in Canada. Nearly 400 dealers are already fighting to sell them.",
+      "url": "https://thenextweb.com/news/chinese-evs-canada-dealers-byd-chery-geely",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Michael MacGillivray, the CEO of Century Auto Group and Sigma Auto Group, oversees 10 dealerships across Nova Scotia and New Brunswick. In April, he flew to the Beijing Auto Show to shake hands with Chinese automakers and drive their cars. He came back impressed. “They have materials that are second to none,” he told CNBC. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/chinese-evs-canada-dealers-byd-chery-geely.avif",
+      "published": "2026-05-17T10:51:04+00:00",
+      "firstSeen": "2026-05-17T12:00:01.766393+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1154
     },
     {
       "title": "Asus ROG and Xreal built the first 240Hz AR gaming glasses. They cost $849 and ship in June.",
@@ -77,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/asus-rog-xreal-r1-240hz-ar-gaming-glasses.avif",
       "published": "2026-05-17T09:53:45+00:00",
       "firstSeen": "2026-05-17T11:00:01.549225+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1168
+      "score": 2.0875
     },
     {
       "title": "A student with a laptop and a radio stopped four high-speed trains. The crypto keys hadn’t been changed in 19 years.",
@@ -93,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/taiwan-high-speed-rail-hacked-student-tetra-sdr.avif",
       "published": "2026-05-17T09:35:13+00:00",
       "firstSeen": "2026-05-17T09:58:18.457870+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1076
+      "score": 2.0787
     },
     {
       "title": "The man who put a Roomba in every home wants to replace your dog with a plush robot",
@@ -109,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/roomba-creator-familiar-machines-ai-pet-robot.avif",
       "published": "2026-05-17T09:15:18+00:00",
       "firstSeen": "2026-05-17T09:58:18.457870+00:00",
-      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T12:00:01.766393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0979
+      "score": 2.0692
     }
   ],
   "errors": []
