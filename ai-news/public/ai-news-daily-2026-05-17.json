@@ -1,6 +1,6 @@
 {
   "date": "2026-05-17",
-  "updatedAt": "2026-05-17T08:00:01.473772+00:00",
+  "updatedAt": "2026-05-17T07:42:36.943920+00:00",
   "items": [
     {
       "title": "A Coding Guide Implementing SHAP Explainability Workflows with Explainer Comparisons, Maskers, Interactions, Drift, and Black-Box Models",
@@ -12,11 +12,11 @@
       "summary": "In this tutorial, we implement SHAP workflows as a practical framework for interpreting machine learning models beyond basic feature-importance plots. We start by training tree-based models and then compare different SHAP explainers, including Tree, Exact, Permutation, and Kernel methods, to understand how accuracy and runtime change across model-aware and model-agnostic approaches. We also examine how [&#8230;]\nThe post A Coding Guide Implementing SHAP Explainability Workflows with Explainer Comparisons, Maskers, Interactions, Drift, and Black-Box Models appeared first on MarkTechPost.",
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-10.png",
       "published": "2026-05-17T07:25:10+00:00",
-      "firstSeen": "2026-05-17T08:00:01.473772+00:00",
-      "lastSeen": "2026-05-17T08:00:01.473772+00:00",
+      "firstSeen": "2026-05-17T07:42:36.943920+00:00",
+      "lastSeen": "2026-05-17T07:42:36.943920+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.9024
+      "score": 2.9111
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-17T08:00:09.271928+00:00",
+      "published": "2026-05-17T07:42:41.858581+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-17T08:00:01.473772+00:00",
+      "lastSeen": "2026-05-17T07:42:36.943920+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
