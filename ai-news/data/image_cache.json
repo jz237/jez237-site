@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-17T15:14:50.760228+00:00",
+  "updatedAt": "2026-05-17T17:00:01.303011+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7128,6 +7128,18 @@
     "https://www.theverge.com/column/928096/chatbots-ai-drive-thru-mcdonalds-wendys": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/mcdonalds.webp?quality=90&amp;strip=all&amp;crop=0%2C17.352141509707%2C100%2C78.541697009651&amp;w=1200",
       "checkedAt": "2026-05-17T13:00:01.238967+00:00"
+    },
+    "https://techcrunch.com/2026/05/17/if-youre-giving-a-commencement-speech-in-2026-maybe-dont-mention-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/01/university.jpg?resize=1200,641",
+      "checkedAt": "2026-05-17T17:00:01.303011+00:00"
+    },
+    "https://techcrunch.com/2026/05/17/techcrunch-mobility-the-ai-skills-arms-race-is-coming-for-automotive": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/rj-scaringe-Getty.jpg?resize=1200,800",
+      "checkedAt": "2026-05-17T17:00:01.303011+00:00"
+    },
+    "https://simonwillison.net/2026/May/17/gds-weighs-in": {
+      "image": "",
+      "checkedAt": "2026-05-17T17:00:01.303011+00:00"
     }
   }
 }
