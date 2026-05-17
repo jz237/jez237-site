@@ -6,6 +6,20 @@
   const root = document.getElementById('philly-weather-widget');
   if (!root) return;
 
+  const LOCATIONS = [
+    { name: 'Philadelphia', zip: '19111', lat: 40.0607, lon: -75.0802 },
+    { name: 'Ocean City, NJ', zip: '08226', lat: 39.153, lon: -74.685 },
+    { name: 'Wildwood, NJ', zip: '08260', lat: 38.99, lon: -74.82 },
+    { name: 'New York City', zip: '10001', lat: 40.748, lon: -73.997 },
+    { name: 'Los Angeles', zip: '90001', lat: 33.94, lon: -118.41 },
+    { name: 'Chicago', zip: '60601', lat: 41.88, lon: -87.63 },
+    { name: 'Miami', zip: '33101', lat: 25.77, lon: -80.19 },
+    { name: 'Denver', zip: '80201', lat: 39.74, lon: -104.99 },
+    { name: 'Seattle', zip: '98101', lat: 47.61, lon: -122.33 },
+    { name: 'London', zip: 'SW1A', lat: 51.507, lon: -0.128, tz: 'Europe/London' },
+    { name: 'Tokyo', zip: '100-0001', lat: 35.68, lon: 139.69, tz: 'Asia/Tokyo' },
+  ];
+
   const codeMap = {
     0: ['☀️', 'Sunny'],
     1: ['🌤️', 'Mostly sun'],
@@ -228,12 +242,13 @@
   async function loadWeather(place = loadSavedPlace()) {
     const lat = Number(place.lat);
     const lon = Number(place.lon);
+    const tz = place.tz || TZ;
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
       `&current=temperature_2m,apparent_temperature,relative_humidity_2m,dew_point_2m,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max` +
-      `&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${TZ}&forecast_days=6`;
-    const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=us_aqi,pm2_5,ozone&timezone=${TZ}&forecast_days=2`;
+      `&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${tz}&forecast_days=6`;
+    const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=us_aqi,pm2_5,ozone&timezone=${tz}&forecast_days=2`;
     const nwsUrl = `https://api.weather.gov/points/${lat},${lon}`;
     const alertsUrl = `https://api.weather.gov/alerts/active?point=${lat},${lon}`;
 
@@ -255,12 +270,12 @@
       try {
         const forecast = await fetchJson(points.properties.forecast);
         const periods = forecast?.properties?.periods || [];
-        const todayKey = localDateKey(new Date(), TZ);
-        todayPeriod = periods.find(p => p?.isDaytime === true && localDateKey(p.startTime, TZ) === todayKey) || null;
+        const todayKey = localDateKey(new Date(), useTz);
+        todayPeriod = periods.find(p => p?.isDaytime === true && localDateKey(p.startTime, useTz) === todayKey) || null;
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    const bundle = { weather, aq, todayPeriod, tonightPeriod, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
+    const bundle = { weather, aq, todayPeriod, tonightPeriod, alerts, place, source: weather.source || 'Open-Meteo', stale: false, tz };
     saveWeatherCache(bundle);
     return bundle;
   }
@@ -347,11 +362,11 @@
     times.forEach((ts, i) => {
       const val = Number(vals[i]);
       if (!Number.isFinite(val)) return;
-      const dateKey = localDateKey(ts, TZ);
-      const hour = localHour(ts, TZ);
+      const dateKey = localDateKey(ts, useTz);
+      const hour = localHour(ts, useTz);
       const tomorrow = new Date(`${targetDate}T12:00:00`);
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowKey = localDateKey(tomorrow, TZ);
+      const tomorrowKey = localDateKey(tomorrow, useTz);
       const include = night
         ? ((dateKey === targetDate && hour >= 18) || (dateKey === tomorrowKey && hour <= 6))
         : (dateKey === targetDate && hour >= 6 && hour <= 17);
@@ -369,10 +384,10 @@
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
-    const today = localDateKey(current.time || Date.now(), TZ);
-    const nowHour = localHour(current.time || Date.now(), TZ);
-    const daytimeIndexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === today && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
-    const remainingIndexes = daytimeIndexes.filter(i => localHour(hourly.time?.[i], TZ) >= Math.min(18, nowHour));
+    const today = localDateKey(current.time || Date.now(), useTz);
+    const nowHour = localHour(current.time || Date.now(), useTz);
+    const daytimeIndexes = (hourly.time || []).map((ts, i) => localDateKey(ts, useTz) === today && localHour(ts, useTz) >= 6 && localHour(ts, useTz) <= 18 ? i : -1).filter(i => i >= 0);
+    const remainingIndexes = daytimeIndexes.filter(i => localHour(hourly.time?.[i], useTz) >= Math.min(18, nowHour));
     const indexes = remainingIndexes.length ? remainingIndexes : daytimeIndexes;
     const codes = indexes.map(i => hourly.weather_code?.[i]).filter(v => v != null);
     const clouds = indexes.map(i => Number(hourly.cloud_cover?.[i])).filter(Number.isFinite);
@@ -422,11 +437,11 @@
 
   function daytimeOutlookForDate(hourly, daily, idx) {
     const date = daily.time?.[idx];
-    const indexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === date && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
+    const indexes = (hourly.time || []).map((ts, i) => localDateKey(ts, useTz) === date && localHour(ts, useTz) >= 6 && localHour(ts, useTz) <= 18 ? i : -1).filter(i => i >= 0);
     const rainVals = indexes.map(i => Number(hourly.precipitation_probability?.[i])).filter(Number.isFinite);
     const rain = rainVals.length ? Math.round(Math.max(...rainVals)) : Math.round(daily.precipitation_probability_max?.[idx] ?? 0);
     const wetIndexes = indexes.filter(i => Number(hourly.precipitation_probability?.[i] || 0) >= 30 && [51,53,55,61,63,65,80,81,82,95,96,99].includes(Number(hourly.weather_code?.[i])));
-    const codeSource = wetIndexes.length ? wetIndexes : indexes.filter(i => localHour(hourly.time?.[i], TZ) >= 10 && localHour(hourly.time?.[i], TZ) <= 16);
+    const codeSource = wetIndexes.length ? wetIndexes : indexes.filter(i => localHour(hourly.time?.[i], useTz) >= 10 && localHour(hourly.time?.[i], useTz) <= 16);
     const codes = (codeSource.length ? codeSource : indexes).map(i => Number(hourly.weather_code?.[i])).filter(Number.isFinite);
     const code = codes.length ? codes[Math.floor(codes.length / 2)] : daily.weather_code?.[idx];
     return { code, rain };
@@ -461,7 +476,8 @@
     }
   }
 
-  function render({ weather, aq, todayPeriod, tonightPeriod, alerts, place, source, stale, cachedAt, error }) {
+  function render({ weather, aq, todayPeriod, tonightPeriod, alerts, place, source, stale, cachedAt, error, tz }) {
+    const useTz = tz || (place?.tz) || TZ;
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -485,7 +501,7 @@
     const sunrise = daily.sunrise?.[0];
     const sunset = daily.sunset?.[0];
     const condition = conditionClass(current.weather_code ?? daily.weather_code?.[0], rain, Math.max(wind, gust));
-    const todayKey = localDateKey(current.time || Date.now(), TZ);
+    const todayKey = localDateKey(current.time || Date.now(), useTz);
     const dayAqi = summarizeAqWindow(aq, 'us_aqi', todayKey, false);
     const nightAqi = summarizeAqWindow(aq, 'us_aqi', todayKey, true);
     const dayPm25 = summarizeAqWindow(aq, 'pm2_5', todayKey, false);
@@ -526,7 +542,7 @@
         <div class="weather-dashboard-top">
           <div>
             <h2>${icon} ${label}</h2>
-            <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
+            <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now(), useTz)}</p>
             ${todaySummary ? `<p class="weather-day-summary"><strong>Today:</strong> ${escapeHtml(todaySummary)}</p>` : ''}
             <form class="weather-location-form" id="weather-location-form">
               <label for="weather-zip-input">ZIP forecast</label>
@@ -534,6 +550,10 @@
               <button type="submit" id="weather-update-location">Update</button>
               <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
             </form>
+            <div class="weather-locations-bar">
+              <span class="weather-locations-label">Other locations:</span>
+              ${LOCATIONS.map(loc => `<button type="button" class="weather-loc-btn${place?.zip === loc.zip ? ' active' : ''}" data-weather-zip="${loc.zip}">${escapeHtml(loc.name)}</button>`).join('')}
+            </div>
           </div>
           <div class="weather-now-badge">
             <strong>${temp}°</strong>
@@ -651,6 +671,19 @@
   });
 
   root.addEventListener('click', event => {
+    const locBtn = event.target?.closest?.('[data-weather-zip]');
+    if (locBtn) {
+      event.preventDefault();
+      const zip = locBtn.getAttribute('data-weather-zip');
+      const known = LOCATIONS.find(l => l.zip === zip);
+      if (known && known.lat != null) {
+        const tz = known.tz || TZ;
+        updatePlace({ name: known.name, lat: known.lat, lon: known.lon, zip: known.zip, tz });
+      } else {
+        updatePlace(zip);
+      }
+      return;
+    }
     if (!event.target?.closest?.('[data-weather-reset="true"]')) return;
     event.preventDefault();
     updatePlace(DEFAULT_PLACE);
