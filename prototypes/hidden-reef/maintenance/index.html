@@ -91,16 +91,41 @@
     </section>
 
     <div class="layout">
-      <aside class="sidebar">
-        <h3>Common symptoms</h3>
-        <p>This page gives the store a place to turn panic questions into practical steps.</p>
-        <div class="mini-list">
-          <span>Cloudy water</span>
-          <span>Algae bloom</span>
-          <span>Low flow or noisy pump</span>
-          <span>Dirty substrate</span>
-          <span>High ammonia or nitrite</span>
-          <span>Fish gasping or hiding</span>
+      <aside class="sidebar" aria-label="Maintenance filters">
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="true" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Maintenance <span class="arrow">▶</span></button>
+          <div class="sidebar-body open">
+            <div class="sidebar-body-inner">
+              <a href="#products" class="active-filter">All Maintenance</a>
+              <a href="#products">Test Kits</a>
+              <a href="#products">Filter Media</a>
+              <a href="#products">Algae Control</a>
+              <a href="#products">Cleaning Tools</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Equipment <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="#products">Gravel Vac & Siphons</a>
+              <a href="#products">Magnetic Cleaners</a>
+              <a href="#products">Filter Replacements</a>
+              <a href="#products">Water Change Systems</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Quick Tips <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <div class="check-item">Test before treating</div>
+              <div class="check-item">Change 25% water weekly</div>
+              <div class="check-item">Rinse media in tank water</div>
+              <div class="check-item">Replace carbon monthly</div>
+              <div class="check-item">Check heater calibration seasonally</div>
+            </div>
+          </div>
         </div>
       </aside>
 

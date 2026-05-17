@@ -91,16 +91,41 @@
     </section>
 
     <div class="layout">
-      <aside class="sidebar">
-        <h3>Bring these details</h3>
-        <p>The most useful in-store equipment advice starts with the tank and the goal, not just the brand name.</p>
-        <div class="mini-list">
-          <span>Tank length, width, height</span>
-          <span>Freshwater, planted, reef, or pond</span>
-          <span>Livestock or coral plan</span>
-          <span>Current filter and pump model</span>
-          <span>Replacement media schedule</span>
-          <span>Outlet and cabinet space limits</span>
+      <aside class="sidebar" aria-label="Equipment filters">
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="true" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Equipment <span class="arrow">▶</span></button>
+          <div class="sidebar-body open">
+            <div class="sidebar-body-inner">
+              <a href="#products" class="active-filter">All Equipment</a>
+              <a href="#products">Filters & Canisters</a>
+              <a href="#products">Heaters & Chillers</a>
+              <a href="#products">Lighting Fixtures</a>
+              <a href="#products">Air Pumps & Accessories</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Related Departments <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="../maintenance/">Filter Media & Replacement</a>
+              <a href="../food/">Food & Water Care</a>
+              <a href="../freshwater/">Freshwater</a>
+              <a href="../saltwater/">Saltwater</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Quick Tips <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <div class="check-item">Match filter to tank size</div>
+              <div class="check-item">Choose lighting for livestock</div>
+              <div class="check-item">Size heater for volume</div>
+              <div class="check-item">Plan flow for reef or planted</div>
+              <div class="check-item">Keep spare media on hand</div>
+            </div>
+          </div>
         </div>
       </aside>
 

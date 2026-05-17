@@ -84,3 +84,12 @@ body.department-page .panel{border-color:rgba(116,205,235,.2);background:radial-
 body.department-page .footer{border:1px solid rgba(116,205,235,.14)}
 @media(max-width:1040px){body.department-page .category-hero{grid-template-columns:1fr;min-height:auto}body.department-page .path-grid,body.department-page .style-grid,body.department-page .care-grid,body.department-page .routine-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body.department-page .layout{grid-template-columns:1fr}body.department-page .sidebar{position:static}body.department-page .grid{grid-template-columns:repeat(2,minmax(0,1fr))}body.department-page .feature-row{grid-template-columns:1fr}}
 @media(max-width:760px){body.department-page .header{grid-template-columns:1fr;margin:0;padding:14px 0}body.department-page .brand{justify-content:flex-start}body.department-page .main-nav{display:flex;justify-content:flex-start;overflow-x:auto;margin:0}body.department-page .path-grid,body.department-page .style-grid,body.department-page .care-grid,body.department-page .routine-grid,body.department-page .grid{grid-template-columns:1fr}body.department-page .category-hero{padding:24px 18px}}
+
+/* Section spacing for department pages */
+body.department-page .section-band {
+  padding: 24px 0 16px;
+  margin-top: 8px;
+}
+body.department-page .section-band + .section-band {
+  border-top: 1px solid rgba(116,205,235,.08);
+}
