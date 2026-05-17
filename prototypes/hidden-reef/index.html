@@ -136,17 +136,28 @@
       font-weight: 900;
     }
     .main-nav {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(max-content, 1fr));
       align-items: center;
       justify-content: center;
-      gap: clamp(10px, 2vw, 28px);
-      padding: 9px 0 12px;
+      gap: 0;
+      padding: 0;
       border-top: 1px solid var(--line);
       background: var(--surface);
       color: #284f65;
       font-size: 13px;
       font-weight: 850;
     }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      text-align: center;
+      border-left: 1px solid rgba(116,205,235,0.12);
+    }
+    .main-nav a:first-child { border-left: 0; }
     .main-nav::-webkit-scrollbar { display: none; }
     .hero {
       position: relative;
@@ -211,8 +222,8 @@
     }
     .categories {
       display: grid;
-      grid-template-columns: repeat(10, minmax(0, 1fr));
-      gap: 11px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
       margin: 16px 0;
     }
     .category-intro {
@@ -238,11 +249,10 @@
     }
     .cat {
       position: relative;
-      display: grid;
-      align-content: start;
-      min-height: 146px;
+      display: block;
+      min-height: 190px;
       overflow: hidden;
-      padding: 14px 10px 12px;
+      padding: 0;
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
       background:
@@ -254,28 +264,18 @@
       transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
     }
     .cat::before {
-      content: attr(data-code);
-      display: grid;
-      place-items: center;
-      width: 62px;
-      height: 62px;
-      margin: 0 auto 12px;
-      border: 1px solid rgba(190,240,255,0.45);
-      border-radius: 16px;
-      color: #f8fdff;
-      background:
-        radial-gradient(circle at 35% 25%, rgba(255,255,255,0.26), transparent 28%),
-        linear-gradient(145deg, rgba(0,184,203,0.95), rgba(0,66,104,0.95));
-      box-shadow: 0 12px 28px rgba(0,0,0,0.32), 0 0 26px rgba(64,217,255,0.18);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 18px;
-      font-weight: 950;
-      letter-spacing: 0.02em;
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, transparent 34%, rgba(2,17,29,0.9) 76%, rgba(2,17,29,0.98));
+      pointer-events: none;
     }
     .cat::after {
       content: "";
       position: absolute;
       inset: 0;
+      z-index: 2;
       background:
         linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent),
         radial-gradient(circle at 50% 0%, rgba(64,217,255,0.16), transparent 40%);
@@ -287,23 +287,29 @@
       box-shadow: 0 14px 30px rgba(0,0,0,0.26), 0 0 0 1px rgba(64,217,255,0.18);
     }
     .cat img {
-      display: none;
+      display: block;
+      width: 100%;
+      height: 116px;
+      object-fit: cover;
     }
     .cat strong {
       position: relative;
-      z-index: 1;
+      z-index: 3;
       display: block;
+      margin: 12px 12px 0;
       color: #f7fcff;
-      font-size: 13px;
+      text-align: left;
+      font-size: 15px;
       line-height: 1.15;
     }
     .cat span {
       position: relative;
-      z-index: 1;
+      z-index: 3;
       display: block;
-      margin-top: 5px;
+      margin: 5px 12px 13px;
       color: #9fc6d6;
-      font-size: 11px;
+      text-align: left;
+      font-size: 12px;
       font-weight: 800;
       line-height: 1.2;
     }
@@ -880,17 +886,17 @@
     #products {
       margin-top: 32px;
       padding: 24px;
-      border: 1px solid rgba(190,224,236,0.92);
+      border: 1px solid rgba(116,205,235,0.22);
       border-radius: 10px;
       background:
-        radial-gradient(circle at 85% 0%, rgba(64,217,255,0.14), transparent 30%),
-        linear-gradient(180deg, #f7fbfd 0%, #edf6f9 100%);
+        radial-gradient(circle at 85% 0%, rgba(64,217,255,0.16), transparent 30%),
+        linear-gradient(180deg, #071f32 0%, #041827 100%);
       box-shadow: 0 22px 54px rgba(0,0,0,0.28);
     }
     #products .section-head { margin-top: 0; }
-    #products .section-head h2 { color: #083047; }
+    #products .section-head h2 { color: #f7fcff; }
     #products .section-head a,
-    #products .arrival-note { color: #507285; }
+    #products .arrival-note { color: #8fdcf0; }
     #products .filters button {
       color: #18455b;
       border-color: #c7dfe8;
@@ -920,7 +926,6 @@
     #products .product-link::after { color: #007d9d; }
     #products .price { color: #004c7c; }
     #products .price-row { border-color: #e2eef3; }
-    .cat,
     .product,
     .guide,
     .brand-tile {
@@ -932,8 +937,7 @@
     .cat span { color: #9fc6d6; }
     .product p,
     .guide p { color: #9fb8c7; }
-    .product img,
-    .cat img {
+    .product img {
       background: #eef7fa;
       border-radius: 5px;
     }
@@ -970,15 +974,14 @@
     .brand {
       grid-column: 1 / -1;
       justify-content: center;
-      min-height: 118px;
-      padding: 18px 20px;
+      min-height: 128px;
+      padding: 22px 20px 18px;
       margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
       background:
-        radial-gradient(circle at 50% 0%, rgba(64,217,255,0.2), transparent 38%),
-        linear-gradient(90deg, rgba(2,17,29,0.92), rgba(7,39,58,0.72), rgba(2,17,29,0.92)),
+        linear-gradient(180deg, rgba(0,8,16,0.3), rgba(0,8,16,0.48)),
         url("assets/site/hero-reef.jpg") center 42%/cover no-repeat;
       border-bottom: 1px solid rgba(116,205,235,0.22);
-      box-shadow: inset 0 -34px 60px rgba(0,0,0,0.42);
+      box-shadow: inset 0 -18px 36px rgba(0,0,0,0.36);
     }
     .brand img {
       display: none;
@@ -987,7 +990,7 @@
       font-size: clamp(40px, 6.4vw, 76px);
       line-height: 0.82;
       color: #fff;
-      text-shadow: 0 7px 0 rgba(0,31,49,0.95), 0 20px 42px rgba(0,0,0,0.72), 0 0 22px rgba(72,217,255,0.22);
+      text-shadow: 0 4px 18px rgba(0,0,0,0.82), 0 1px 0 rgba(255,255,255,0.55);
     }
     .brand span span {
       margin-top: 12px;
@@ -1007,13 +1010,27 @@
       grid-column: 2;
     }
     @media (max-width: 760px) {
+      .main-nav {
+        display: flex;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .main-nav a { flex: 0 0 auto; }
       .brand {
         min-height: 134px;
         padding: 18px 12px;
         flex-direction: column;
         text-align: center;
       }
-      .brand strong { font-size: 40px; }
+      .brand strong {
+        font-size: clamp(31px, 10vw, 40px);
+        line-height: 0.92;
+      }
+      .brand span span {
+        font-size: 12px;
+        letter-spacing: 0.13em;
+      }
       .search-box,
       .header-actions {
         grid-column: auto;
@@ -1067,16 +1084,16 @@
       <p>Each department is its own path, so the owner can see how freshwater, reef, pond, equipment, food, and decor would feel as separate storefront sections.</p>
     </div>
     <section class="categories" aria-label="Popular categories">
-      <a class="cat" href="freshwater/" data-code="FW"><strong>Freshwater</strong><span>Food, plants, care</span></a>
-      <a class="cat" href="saltwater/" data-code="REEF"><strong>Saltwater</strong><span>Coral, reef systems</span></a>
-      <a class="cat" href="freshwater/" data-code="TANK"><strong>Aquarium</strong><span>Starter tank paths</span></a>
-      <a class="cat" href="equipment/" data-code="FLOW"><strong>Filtration</strong><span>Maintenance gear</span></a>
-      <a class="cat" href="equipment/" data-code="LED"><strong>Lighting</strong><span>Reef-ready brands</span></a>
-      <a class="cat" href="freshwater/" data-code="FOOD"><strong>Food</strong><span>Daily nutrition</span></a>
-      <a class="cat" href="decor/" data-code="HIDE"><strong>Decorations</strong><span>Hides and accents</span></a>
-      <a class="cat" href="pond/" data-code="POND"><strong>Ponds</strong><span>Seasonal supplies</span></a>
-      <a class="cat" href="freshwater/" data-code="PLANT"><strong>Plants</strong><span>Color and cover</span></a>
-      <a class="cat" href="decor/" data-code="PET"><strong>Dog Splash</strong><span>Pet crossover</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/promo.jpg" alt="" /><strong>Freshwater</strong><span>Food, plants, care</span></a>
+      <a class="cat" href="saltwater/"><img src="assets/site/hero-aquatic-world.jpg" alt="" /><strong>Saltwater</strong><span>Coral, reef systems</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/cta.jpg" alt="" /><strong>Aquarium</strong><span>Starter tank paths</span></a>
+      <a class="cat" href="equipment/"><img src="assets/site/foam-gun.jpg" alt="" /><strong>Filtration</strong><span>Maintenance gear</span></a>
+      <a class="cat" href="equipment/"><img src="assets/site/brand-red-sea.jpg" alt="" /><strong>Lighting</strong><span>Reef-ready brands</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/red-parrot-pellets.jpg" alt="" /><strong>Food</strong><span>Daily nutrition</span></a>
+      <a class="cat" href="decor/"><img src="assets/site/skull.jpg" alt="" /><strong>Decorations</strong><span>Hides and accents</span></a>
+      <a class="cat" href="pond/"><img src="assets/site/hero-reef.jpg" alt="" /><strong>Pond</strong><span>Seasonal supplies</span></a>
+      <a class="cat" href="freshwater/"><img src="assets/site/baby-flakes.jpg" alt="" /><strong>Food Refills</strong><span>Flakes and pellets</span></a>
+      <a class="cat" href="decor/"><img src="assets/site/fruit-home.jpg" alt="" /><strong>Decor Accents</strong><span>Bright hideaways</span></a>
     </section>
 
     <section class="promo-grid" aria-label="Promotions">
