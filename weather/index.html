@@ -15,68 +15,6 @@
     .weather-page-intro { margin-bottom: 18px; }
     .weather-page-intro h1 { margin-bottom: 8px; }
     .weather-page-intro p { color: var(--ink-lo); max-width: 760px; }
-    .weather-almanac-panel {
-      display: grid;
-      grid-template-columns: minmax(220px, 0.72fr) minmax(260px, 1fr);
-      gap: 18px;
-      align-items: stretch;
-      margin: 22px 0 0;
-      padding: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at 18% 16%, rgba(246,216,142,.18), transparent 38%),
-        linear-gradient(135deg, rgba(13,19,28,.92), rgba(11,15,20,.78));
-      box-shadow: 0 18px 46px rgba(0,0,0,.25);
-      overflow: hidden;
-    }
-    .weather-almanac-art {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: none;
-      object-fit: contain;
-      object-position: top center;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-    }
-    .weather-almanac-copy {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-width: 0;
-      padding: clamp(8px,2vw,22px);
-    }
-    .weather-almanac-copy > span {
-      color: var(--brand-gold);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-    .weather-almanac-copy h2 {
-      margin: 8px 0 10px;
-      font-size: clamp(46px,7vw,88px);
-      line-height: .86;
-      letter-spacing: -.055em;
-    }
-    .weather-almanac-copy h2 span { display: block; color: inherit; font: inherit; letter-spacing: inherit; text-transform: none; }
-    .weather-almanac-copy p {
-      margin: 0;
-      max-width: 560px;
-      color: var(--ink-lo);
-      font-size: 15px;
-      line-height: 1.55;
-    }
-    .weather-almanac-copy a {
-      align-self: flex-start;
-      margin-top: 18px;
-      color: var(--brand-gold);
-      font-weight: 800;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(246,216,142,.45);
-    }
     @media (max-width: 760px) {
       html, body { width: 100% !important; max-width: 100% !important; overflow-x: hidden !important; }
       main.container.workbench-home { width: 100% !important; padding: 0 !important; max-width: 100% !important; overflow-x: hidden !important; }
@@ -87,11 +25,6 @@
       .weather-page-intro { margin-bottom: 8px !important; }
       .weather-page-intro h1 { font-size: 30px !important; }
       .weather-page-intro p { font-size: 13px !important; line-height: 1.4 !important; }
-      .weather-almanac-panel { display: block !important; margin: 0 10px 12px !important; padding: 10px !important; border-radius: 14px !important; }
-      .weather-almanac-art { height: auto !important; max-height: none !important; aspect-ratio: 4 / 5 !important; }
-      .weather-almanac-copy { padding: 12px 4px 2px !important; }
-      .weather-almanac-copy h2 { font-size: 46px !important; line-height: .86 !important; letter-spacing: -.045em !important; }
-      .weather-almanac-copy p { font-size: 13px !important; line-height: 1.45 !important; }
       .topbar-actions { display: none !important; }
       .weather-dashboard { margin-top: 12px !important; }
       .weather-dashboard-card { padding: 12px !important; border-radius: 12px !important; box-shadow: none !important; }
@@ -204,15 +137,6 @@
 
         <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
           <div id="philly-weather-widget"></div>
-          <figure class="weather-almanac-panel" aria-labelledby="weather-almanac-title">
-            <img class="weather-almanac-art" src="almanac/latest.png" alt="Illustrated Philly 19111 weather almanac for today" loading="eager" decoding="async">
-            <figcaption class="weather-almanac-copy">
-              <span id="weather-almanac-date">Philly 19111</span>
-              <h2 id="weather-almanac-title"><span>Today’s</span><span>Weather</span><span>Almanac</span></h2>
-              <p>The generated almanac art stays here as a visual companion to the live ZIP forecast above.</p>
-              <a href="almanac/latest.png">Open the full image</a>
-            </figcaption>
-          </figure>
         </section>
       </div>
     </section>
@@ -226,18 +150,6 @@
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js" defer></script>
   <script src="../assets/nav.js" defer></script>
-  <script>
-    fetch('almanac/manifest.json', { headers: { Accept: 'application/json' } })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data) return;
-        const date = document.getElementById('weather-almanac-date');
-        const link = document.querySelector('.weather-almanac-copy a');
-        if (date && data.date) date.textContent = data.location ? data.location + ' · ' + data.date : data.date;
-        if (link && data.archiveImage) link.href = data.archiveImage;
-      })
-      .catch(() => {});
-  </script>
   <script src="../assets/weather-widget.js?v=20260506-forecast-audit" defer></script>
 </body>
 </html>
