@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-17T07:00:01.910871+00:00",
+  "updatedAt": "2026-05-17T07:42:36.943920+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7116,6 +7116,10 @@
     "https://techcrunch.com/2026/05/16/the-haves-and-have-nots-of-the-ai-gold-rush": {
       "image": "https://techcrunch.com/wp-content/uploads/2019/06/GettyImages-958260352.jpg?resize=1200,1074",
       "checkedAt": "2026-05-16T21:00:02.101421+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/17/a-coding-guide-implementing-shap-explainability-workflows-with-explainer-comparisons-maskers-interactions-drift-and-black-box-models": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-10.png",
+      "checkedAt": "2026-05-17T07:42:36.943920+00:00"
     }
   }
 }
