@@ -20,7 +20,7 @@
       grid-template-columns: minmax(220px, 0.72fr) minmax(260px, 1fr);
       gap: 18px;
       align-items: stretch;
-      margin: 0 0 18px;
+      margin: 22px 0 0;
       padding: 14px;
       border: 1px solid rgba(255,255,255,.12);
       border-radius: 22px;
@@ -77,49 +77,6 @@
       text-decoration: none;
       border-bottom: 1px solid rgba(246,216,142,.45);
     }
-    .weather-almanac-zip {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 8px;
-      width: min(100%, 360px);
-      margin-top: 18px;
-    }
-    .weather-almanac-zip label {
-      grid-column: 1 / -1;
-      color: var(--ink-lo);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-    .weather-almanac-zip input,
-    .weather-almanac-zip button {
-      min-height: 42px;
-      border-radius: 12px;
-      font: inherit;
-      box-sizing: border-box;
-    }
-    .weather-almanac-zip input {
-      width: 100%;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.08);
-      color: var(--ink-hi);
-      padding: 0 12px;
-    }
-    .weather-almanac-zip button {
-      border: 1px solid rgba(246,216,142,.45);
-      background: rgba(246,216,142,.16);
-      color: var(--brand-gold);
-      font-weight: 800;
-      padding: 0 14px;
-      cursor: pointer;
-    }
-    .weather-almanac-zip-status {
-      grid-column: 1 / -1;
-      min-height: 16px;
-      color: var(--ink-lo);
-      font-size: 12px;
-    }
     @media (max-width: 760px) {
       html, body { width: 100% !important; max-width: 100% !important; overflow-x: hidden !important; }
       main.container.workbench-home { width: 100% !important; padding: 0 !important; max-width: 100% !important; overflow-x: hidden !important; }
@@ -135,7 +92,6 @@
       .weather-almanac-copy { padding: 12px 4px 2px !important; }
       .weather-almanac-copy h2 { font-size: 46px !important; line-height: .86 !important; letter-spacing: -.045em !important; }
       .weather-almanac-copy p { font-size: 13px !important; line-height: 1.45 !important; }
-      .weather-almanac-zip { width: 100% !important; }
       .topbar-actions { display: none !important; }
       .weather-dashboard { margin-top: 12px !important; }
       .weather-dashboard-card { padding: 12px !important; border-radius: 12px !important; box-shadow: none !important; }
@@ -247,22 +203,16 @@
         </div>
 
         <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
+          <div id="philly-weather-widget"></div>
           <figure class="weather-almanac-panel" aria-labelledby="weather-almanac-title">
             <img class="weather-almanac-art" src="almanac/latest.png" alt="Illustrated Philly 19111 weather almanac for today" loading="eager" decoding="async">
             <figcaption class="weather-almanac-copy">
               <span id="weather-almanac-date">Philly 19111</span>
               <h2 id="weather-almanac-title"><span>Today’s</span><span>Weather</span><span>Almanac</span></h2>
-              <p>A daily visual plate for the forecast: temperature, rain, wind, UV, air quality, and the next few days, set apart from the live dashboard below.</p>
-              <form class="weather-almanac-zip" id="weather-almanac-zip-form">
-                <label for="weather-almanac-zip-input">ZIP forecast</label>
-                <input id="weather-almanac-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="19111">
-                <button type="submit">Update</button>
-                <span class="weather-almanac-zip-status" id="weather-almanac-zip-status"></span>
-              </form>
+              <p>The generated almanac art stays here as a visual companion to the live ZIP forecast above.</p>
               <a href="almanac/latest.png">Open the full image</a>
             </figcaption>
           </figure>
-          <div id="philly-weather-widget"></div>
         </section>
       </div>
     </section>
@@ -287,42 +237,6 @@
         if (link && data.archiveImage) link.href = data.archiveImage;
       })
       .catch(() => {});
-    (() => {
-      const STORAGE_KEY = 'jez237-weather-place-v1';
-      const form = document.getElementById('weather-almanac-zip-form');
-      const input = document.getElementById('weather-almanac-zip-input');
-      const status = document.getElementById('weather-almanac-zip-status');
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        if (saved?.zip && input) input.value = saved.zip;
-      } catch (_) {}
-      if (!form || !input) return;
-      form.addEventListener('submit', async event => {
-        event.preventDefault();
-        const zip = (input.value || '').trim().match(/^\d{5}$/)?.[0];
-        if (!zip) {
-          if (status) status.textContent = 'Enter a 5-digit ZIP.';
-          return;
-        }
-        if (status) status.textContent = 'Updating forecast...';
-        try {
-          const res = await fetch('https://api.zippopotam.us/us/' + zip, { headers: { Accept: 'application/json' } });
-          if (!res.ok) throw new Error('ZIP lookup failed');
-          const data = await res.json();
-          const place = data?.places?.[0];
-          if (!place) throw new Error('No location found.');
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({
-            name: place['place name'] + ', ' + place['state abbreviation'],
-            lat: Number(place.latitude),
-            lon: Number(place.longitude),
-            zip
-          }));
-          location.reload();
-        } catch (err) {
-          if (status) status.textContent = err?.message || 'Could not update that ZIP.';
-        }
-      });
-    })();
   </script>
   <script src="../assets/weather-widget.js?v=20260506-forecast-audit" defer></script>
 </body>
