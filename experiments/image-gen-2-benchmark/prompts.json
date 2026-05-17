@@ -466,5 +466,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-17-midday-fog-comb-watershed-atlas",
+    "title": "Fog Comb Watershed Atlas",
+    "tests": "Explores infographic cutaway clarity, fog-harvesting hydrology, droplet-scale inset diagrams, coastal mountain atmosphere, and disciplined readable labels without dance imagery.",
+    "prompt": "Use case: infographic-diagram\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a vertical museum-quality educational infographic poster titled \"FOG COMB WATERSHED ATLAS\".\n\nComposition: a clear cutaway diagram of a steep coastal mountain watershed engineered to harvest fog without pumps. Top third: wind-driven fog banks rolling across dark evergreen ridge lines and a row of tall comb-like collector towers made from fine mesh, ceramic ribs, and tension cables. Middle third: enlarged inset panels show droplets forming on the mesh, sliding into scalloped gutters, passing through sand-charcoal biofilters, and entering stone cisterns built into the slope. Bottom third: terraced village gardens, a small workshop, and dry streambeds restored by narrow channels, with blue water-flow arrows tracing the route from fog to storage to irrigation.\n\nVisual structure: vertical 1024x1536 poster, crisp readable title at top, numbered callout circles with very short labels only, restrained arrows, clean margin discipline, strong hierarchy between main cutaway and detail insets. The diagram should feel hand-rendered but technically precise, like a premium natural-history museum plate.\n\nMaterials and details: translucent fog layers, wet black pine needles, brushed ceramic collector ribs, taut stainless cables, droplets catching light, stone-lined cisterns, mossy retaining walls, tan soil strata, root zones, small measuring gauges, tiny stationary workers for scale, no brand marks.\n\nLighting and style: cool misty morning light with warm amber highlights from village windows, precise linework over painterly realism, high detail, clean color coding, believable hydrology, readable educational layout.\n\nConstraints: no copyrighted characters, no logos, no dense unreadable paragraphs, no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied performance, no motion study of bodies.",
+    "image": "images/2026-05-17-midday-fog-comb-watershed-atlas.png",
+    "date": "2026-05-17",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
