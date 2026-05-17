@@ -1,7 +1,23 @@
 {
   "date": "2026-05-17",
-  "updatedAt": "2026-05-17T09:58:18.457870+00:00",
+  "updatedAt": "2026-05-17T11:00:01.549225+00:00",
   "items": [
+    {
+      "title": "Malta just became the first country to give every citizen free ChatGPT Plus. There’s one condition.",
+      "url": "https://thenextweb.com/news/openai-malta-chatgpt-plus-free-citizens",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "OpenAI has signed a deal with the government of Malta to provide all Maltese citizens and residents with free access to ChatGPT Plus for one year. There is one condition: they must first complete an AI literacy course developed by the University of Malta. It is the first partnership of its kind between OpenAI and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/openai-malta-chatgpt-plus-free-citizens.avif",
+      "published": "2026-05-17T10:22:03+00:00",
+      "firstSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.1308
+    },
     {
       "title": "Vercel Labs Introduces Zero, a Systems Programming Language Designed So AI Agents Can Read, Repair, and Ship Native Programs",
       "url": "https://www.marktechpost.com/2026/05/17/vercel-labs-introduces-zero-a-systems-programming-language-designed-so-ai-agents-can-read-repair-and-ship-native-programs",
@@ -13,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-25.png",
       "published": "2026-05-17T08:11:49+00:00",
       "firstSeen": "2026-05-17T09:00:01.591768+00:00",
-      "lastSeen": "2026-05-17T09:58:18.457870+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3671
+      "score": 7.3376
     },
     {
       "title": "A Coding Guide Implementing SHAP Explainability Workflows with Explainer Comparisons, Maskers, Interactions, Drift, and Black-Box Models",
@@ -29,10 +45,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-10.png",
       "published": "2026-05-17T07:25:10+00:00",
       "firstSeen": "2026-05-17T07:42:36.943920+00:00",
-      "lastSeen": "2026-05-17T09:58:18.457870+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8447
+      "score": 2.8158
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -43,12 +59,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-17T09:58:23.372703+00:00",
+      "published": "2026-05-17T11:00:07.887128+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-17T09:58:18.457870+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "Asus ROG and Xreal built the first 240Hz AR gaming glasses. They cost $849 and ship in June.",
+      "url": "https://thenextweb.com/news/asus-rog-xreal-r1-240hz-ar-gaming-glasses",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Asus Republic of Gamers and Xreal have opened pre-orders for the ROG Xreal R1, the world’s first 240Hz micro-OLED gaming AR glasses. The device costs $849 on Best Buy, with Xreal’s own store accepting orders from 17 May. Worldwide shipping begins on 1 June. The headline specification is the refresh rate. At 240Hz, the R1 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/asus-rog-xreal-r1-240hz-ar-gaming-glasses.avif",
+      "published": "2026-05-17T09:53:45+00:00",
+      "firstSeen": "2026-05-17T11:00:01.549225+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1168
     },
     {
       "title": "A student with a laptop and a radio stopped four high-speed trains. The crypto keys hadn’t been changed in 19 years.",
@@ -61,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/taiwan-high-speed-rail-hacked-student-tetra-sdr.avif",
       "published": "2026-05-17T09:35:13+00:00",
       "firstSeen": "2026-05-17T09:58:18.457870+00:00",
-      "lastSeen": "2026-05-17T09:58:18.457870+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1383
+      "score": 2.1076
     },
     {
       "title": "The man who put a Roomba in every home wants to replace your dog with a plush robot",
@@ -77,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/roomba-creator-familiar-machines-ai-pet-robot.avif",
       "published": "2026-05-17T09:15:18+00:00",
       "firstSeen": "2026-05-17T09:58:18.457870+00:00",
-      "lastSeen": "2026-05-17T09:58:18.457870+00:00",
+      "lastSeen": "2026-05-17T11:00:01.549225+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1283
+      "score": 2.0979
     }
   ],
   "errors": []
