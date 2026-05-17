@@ -15,6 +15,37 @@
     .weather-page-intro { margin-bottom: 18px; }
     .weather-page-intro h1 { margin-bottom: 8px; }
     .weather-page-intro p { color: var(--ink-lo); max-width: 760px; }
+    .weather-almanac-card {
+      margin: 22px 0 0;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(13,19,28,.88), rgba(11,15,20,.7));
+      box-shadow: 0 18px 46px rgba(0,0,0,.22);
+    }
+    .weather-almanac-card img {
+      display: block;
+      width: min(100%, 760px);
+      height: auto;
+      margin: 0 auto;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+    }
+    .weather-almanac-card figcaption {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--ink-lo);
+      font-size: 13px;
+    }
+    .weather-almanac-card a {
+      color: var(--brand-gold);
+      font-weight: 800;
+      text-decoration: none;
+    }
     @media (max-width: 760px) {
       html, body { width: 100% !important; max-width: 100% !important; overflow-x: hidden !important; }
       main.container.workbench-home { width: 100% !important; padding: 0 !important; max-width: 100% !important; overflow-x: hidden !important; }
@@ -25,6 +56,8 @@
       .weather-page-intro { margin-bottom: 8px !important; }
       .weather-page-intro h1 { font-size: 30px !important; }
       .weather-page-intro p { font-size: 13px !important; line-height: 1.4 !important; }
+      .weather-almanac-card { margin: 14px 0 0 !important; padding: 10px !important; border-radius: 14px !important; }
+      .weather-almanac-card figcaption { font-size: 12px !important; }
       .topbar-actions { display: none !important; }
       .weather-dashboard { margin-top: 12px !important; }
       .weather-dashboard-card { padding: 12px !important; border-radius: 12px !important; box-shadow: none !important; }
@@ -137,6 +170,13 @@
 
         <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
           <div id="philly-weather-widget"></div>
+          <figure class="weather-almanac-card">
+            <img src="almanac/latest.png" alt="Illustrated Philly 19111 weather almanac" loading="lazy" decoding="async">
+            <figcaption>
+              <span>Generated Philly 19111 weather almanac</span>
+              <a href="almanac/latest.png">Open full image</a>
+            </figcaption>
+          </figure>
         </section>
       </div>
     </section>
