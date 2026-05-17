@@ -337,6 +337,13 @@
       font-weight: 850;
       cursor: pointer;
     }
+    .arrival-note {
+      margin: -4px 0 14px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
     .filters button.active {
       color: #fff;
       border-color: var(--teal);
@@ -344,24 +351,56 @@
     }
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
     }
     .product {
       position: relative;
-      min-height: 254px;
-      padding: 12px;
-      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      min-height: 304px;
+      padding: 13px;
+      border: 1px solid rgba(116,205,235,0.22);
       border-radius: 8px;
-      background: #fff;
-      box-shadow: 0 8px 20px rgba(0,65,105,0.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%),
+        #fff;
+      box-shadow: 0 12px 30px rgba(0,65,105,0.1);
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .product:hover {
+      transform: translateY(-3px);
+      border-color: rgba(64,217,255,0.65);
+      box-shadow: 0 20px 42px rgba(0,0,0,0.28), 0 0 0 1px rgba(64,217,255,0.14);
     }
     .product img {
       width: 100%;
-      height: 108px;
+      height: 142px;
       object-fit: contain;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      padding: 10px;
+      border: 1px solid rgba(207,230,239,0.85);
+      border-radius: 7px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(64,217,255,0.18), transparent 46%),
+        linear-gradient(180deg, #f4fbfd, #e6f2f6);
+    }
+    .product[data-category]::before {
+      content: attr(data-category);
+      position: absolute;
+      top: 11px;
+      right: 11px;
+      z-index: 1;
+      padding: 4px 7px;
+      border-radius: 999px;
+      color: #dff8ff;
+      background: rgba(3,24,38,0.84);
+      border: 1px solid rgba(116,205,235,0.34);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
     .badge {
       position: absolute;
@@ -375,27 +414,37 @@
       font-weight: 950;
     }
     .product h3 {
-      min-height: 42px;
-      margin: 0 0 5px;
+      min-height: 38px;
+      margin: 0 0 6px;
       color: var(--ink);
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.22;
     }
     .product-link {
       display: block;
       color: inherit;
     }
+    .product-link::after {
+      content: "View item";
+      display: inline-flex;
+      margin: 2px 0 9px;
+      color: #40d9ff;
+      font-size: 12px;
+      font-weight: 900;
+    }
     .product-link:hover h3 {
       color: var(--blue-700);
       text-decoration: underline;
     }
-    .product p { margin: 0 0 10px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .product p { margin: 0 0 12px; color: var(--muted); font-size: 12px; line-height: 1.35; }
     .price-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       margin-top: auto;
+      padding-top: 11px;
+      border-top: 1px solid rgba(116,205,235,0.16);
     }
     .price { color: var(--blue-900); font-weight: 950; }
     .add {
@@ -409,6 +458,7 @@
       background: var(--teal);
       font-weight: 950;
       cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,167,183,0.24);
     }
     .visit-band {
       display: grid;
@@ -621,6 +671,8 @@
       .link-modal__image { min-height: 170px; max-height: 240px; }
       .promo-grid, .guides { grid-template-columns: 1fr; }
       .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .product { min-height: 286px; }
+      .product img { height: 122px; }
       .visit-band { grid-template-columns: 1fr; }
       .brands { grid-template-columns: repeat(3, minmax(0,1fr)); }
       .footer-top { grid-template-columns: 1fr; }
@@ -876,6 +928,7 @@
         <button type="button" data-filter="equipment">Equipment</button>
         <button type="button" data-filter="decor">Decor</button>
       </div>
+      <p class="arrival-note">Curated examples across departments, with real Hidden Reef links opening in a quick-view popup.</p>
       <div class="product-grid">
         <article class="product" data-category="pond" data-name="easypro professional foam gun pond waterfall"><span class="badge">New</span><a class="product-link" href="https://www.thehiddenreef.com/copy-of-easypro-pro-black-waterfall-foam-24-oz-gun.html" target="_blank" rel="noopener"><img src="assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun" /><h3>EasyPro Professional Foam Gun</h3></a><p>Waterfall foam application tool.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun" type="button">+</button></div></article>
         <article class="product" data-category="freshwater" data-name="sera red parrot pellets fish food"><a class="product-link" href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" /><h3>Sera Red Parrot Pellets</h3></a><p>Daily freshwater nutrition.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets" type="button">+</button></div></article>
