@@ -1,9 +1,374 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Freshwater Aquarium - The Hidden Reef</title><link rel="icon" href="../assets/site/logo.png"><link rel="stylesheet" href="../assets/category.css"><style>.category-hero{--hero:url("../assets/site/hero-store.jpg")}</style></head><body>
-<div class="shipping-bar">Freshwater fish, plants, food, filtration, and beginner setups</div><main class="page"><header class="header"><a class="brand" href="../"><img src="../assets/site/logo.png" alt="The Hidden Reef logo"><span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span></a><form class="search-box" action="../#products"><input placeholder="Search freshwater food, filters, plants..."><button>⌕</button></form><div class="header-actions"><a href="../#visit">My Account ▾</a><button class="cart-button">🛒<span id="cart-count">0</span></button></div></header><nav class="main-nav"><a href="../">Home</a><a href="../saltwater/">Saltwater</a><a class="active" href="./">Aquarium</a><a href="../pond/">Pond</a><a href="../equipment/">Lighting</a><a href="../decor/">Decorations</a><a href="../#visit">Visit Us</a></nav>
-<section class="category-hero"><div class="copy"><span class="eyebrow">Freshwater aquarium</span><h1>Start simple. Grow into something beautiful.</h1><p>Food, filtration, plants, heaters, decor, and product paths for community tanks, planted aquariums, and small setups.</p><a class="btn" href="#products">Shop freshwater</a></div></section><div class="crumbs"><a href="../">Home</a><span>/</span><span>Freshwater</span></div>
-<section class="section-head"><h2>Freshwater products</h2><p>Food, plants, decor, and care basics</p></section><div class="layout"><aside class="sidebar"><h3>Aquarium Shop</h3><a>Food</a><a>Conditioners</a><a>Plants</a><a>Filters</a><a>Beginner tanks</a></aside><div class="grid" id="products">
-<article class="product"><a href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="../assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets"><h3>Sera Red Parrot Pellets</h3></a><p>Daily nutrition for ornamental freshwater fish.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets">+</button></div></article>
-<article class="product"><span class="badge">New</span><a href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener"><img src="../assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes"><h3>Sera Vipan Baby Flakes</h3></a><p>Fine flakes for fry and small community fish.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes">+</button></div></article>
-<article class="product"><a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home"><h3>Tropical Fruit Home</h3></a><p>Bright hideaway for playful freshwater tanks.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div></article>
-<article class="product"><a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="../assets/site/promo.jpg" alt="Freshwater tank"><h3>Planted tank starter path</h3></a><p>Plants, light, substrate, food, and water care grouped together.</p><div class="price-row"><span class="price">Plan setup</span><button class="add" data-name="Planted tank starter path">+</button></div></article>
-</div></div><section class="feature-row"><article class="panel"><h2>Beginner-friendly shopping</h2><p>Guide customers by tank size and experience level instead of dumping them into a catalog.</p></article><article class="panel"><h2>Store advice matters</h2><p>Compatibility and cycling guidance are what make a local fish store valuable online.</p></article></section><footer class="footer"><div class="footer-top"><div><h3>The Hidden Reef</h3><p>Prototype freshwater category page.</p></div><div><h4>Departments</h4><a href="../saltwater/">Saltwater</a><a href="../pond/">Pond</a></div><div><h4>Store</h4><a href="../#visit">Visit</a><a href="../">Home</a></div><div><h4>Demo</h4><p>Product actions are prototype-only.</p></div></div></footer></main><aside class="drawer"><div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty.</p><button class="btn">Demo checkout</button></aside><script src="../assets/link-modal.js"></script><script src="../assets/category.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Freshwater Aquarium - The Hidden Reef</title>
+  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="stylesheet" href="../assets/category.css" />
+  <style>
+    :root {
+      --reef-bg:#03111d; --reef-panel:#071a27; --reef-line:rgba(116,205,235,.2);
+      --reef-text:#f0fbff; --reef-muted:#a9cbd9; --reef-cyan:#40d9ff;
+      --reef-teal:#00a7b7; --reef-orange:#ff7b32;
+    }
+    body {
+      color: var(--reef-text);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(14,159,204,.2), transparent 28%),
+        linear-gradient(180deg,#03111d 0,#061c2d 280px,#020912 100%);
+    }
+    .page { max-width:1180px; background:linear-gradient(180deg,rgba(7,26,39,.48),rgba(3,13,22,0)); }
+    .header {
+      grid-template-columns:auto minmax(260px,1fr) auto;
+      gap:18px;
+      padding:16px 20px;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      border-bottom:1px solid var(--reef-line);
+      background:linear-gradient(180deg,rgba(8,31,47,.98),rgba(5,22,34,.98));
+    }
+    .brand {
+      grid-column:auto;
+      min-width:235px;
+      min-height:0;
+      justify-content:flex-start;
+      padding:0;
+      margin:0;
+      background:none;
+      border:0;
+      box-shadow:none;
+    }
+    .brand img {
+      display:block;
+      width:74px;
+      height:48px;
+      object-fit:cover;
+      border:1px solid rgba(126,232,255,.38);
+      border-radius:7px;
+      background:#061928;
+      box-shadow:0 8px 20px rgba(0,0,0,.28);
+    }
+    .brand strong {
+      font-size:28px;
+      line-height:.9;
+      color:#fff;
+      text-shadow:0 3px 14px rgba(0,0,0,.5);
+    }
+    .brand span span {
+      margin-top:7px;
+      color:#bdefff;
+      font-size:11px;
+      letter-spacing:.13em;
+      text-align:left;
+      text-transform:uppercase;
+    }
+    .search-box {
+      grid-column:auto;
+      max-width:none;
+      justify-self:stretch;
+      height:44px;
+      background:#102b3b;
+      border-color:rgba(116,205,235,.26);
+    }
+    .search-box input { color:#eaf8fc; background:transparent; }
+    .search-box input::placeholder { color:#8bb1bf; }
+    .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
+    .main-nav {
+      display:grid;
+      grid-template-columns:repeat(7,minmax(max-content,1fr));
+      gap:0;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      padding:0;
+      border-top:0;
+      border-bottom:1px solid var(--reef-line);
+      background:rgba(3,18,29,.98);
+      color:#a9d6e6;
+    }
+    .main-nav a {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:44px;
+      padding:10px 14px;
+      border-left:1px solid rgba(116,205,235,.12);
+    }
+    .main-nav a:first-child { border-left:0; }
+    .main-nav a.active { color:var(--reef-cyan); }
+
+    .category-hero {
+      display:grid;
+      grid-template-columns:minmax(0,.92fr) minmax(340px,1fr);
+      gap:24px;
+      min-height:390px;
+      margin-top:18px;
+      padding:clamp(22px,4vw,46px);
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:
+        linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.82) 46%,rgba(0,48,75,.22)),
+        url("../assets/department/freshwater.jpg") right center/cover no-repeat;
+      box-shadow:0 22px 54px rgba(0,0,0,.34);
+    }
+    .category-hero .copy { max-width:580px; padding:0; align-self:center; }
+    .category-hero h1 { max-width:580px; font-size:clamp(42px,5vw,66px); }
+    .category-hero p { max-width:525px; color:#d6f4fb; font-size:15px; }
+    .hero-card {
+      align-self:end;
+      display:grid;
+      gap:12px;
+      padding:18px;
+      border:1px solid rgba(126,232,255,.22);
+      border-radius:8px;
+      background:rgba(3,18,29,.76);
+      backdrop-filter:blur(8px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero-card strong { color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; }
+    .hero-card span { color:var(--reef-muted); font-size:13px; line-height:1.45; }
+    .crumbs { color:var(--reef-muted); }
+    .section-head h2,.sidebar h3,.panel h2,.product h3,.drawer h2 { color:#fff; }
+    .section-head p { color:#8fdcf0; }
+
+    .path-grid {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin:18px 0 26px;
+    }
+    .path-card {
+      min-height:150px;
+      padding:18px;
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:
+        radial-gradient(circle at 100% 0%,rgba(64,217,255,.16),transparent 38%),
+        var(--reef-panel);
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+    }
+    .path-card span {
+      color:var(--reef-cyan);
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .path-card h3 {
+      margin:8px 0 6px;
+      color:#fff;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:22px;
+      line-height:1.05;
+    }
+    .path-card p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.4; }
+
+    .layout { grid-template-columns:260px minmax(0,1fr); align-items:start; }
+    .sidebar {
+      position:sticky;
+      top:14px;
+      display:grid;
+      gap:14px;
+      padding:18px;
+      border-color:var(--reef-line);
+      background:
+        radial-gradient(circle at 100% 0%,rgba(64,217,255,.12),transparent 36%),
+        var(--reef-panel);
+    }
+    .sidebar p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.45; }
+    .mini-list {
+      display:grid;
+      gap:8px;
+      padding-top:12px;
+      border-top:1px solid rgba(116,205,235,.12);
+    }
+    .mini-list span { padding:0; border:0; color:#d8f4fb; font-weight:850; }
+
+    .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .product {
+      display:flex;
+      flex-direction:column;
+      min-height:330px;
+      border-color:var(--reef-line);
+      background:#fff;
+      box-shadow:0 14px 30px rgba(0,0,0,.18);
+    }
+    .product img {
+      height:150px;
+      padding:10px;
+      object-fit:contain;
+      border:1px solid #e2eef3;
+      background:linear-gradient(180deg,#f7fbfd,#e7f3f8);
+    }
+    .product h3 { color:#102f43; }
+    .product p { color:#5d7582; }
+    .price-row {
+      margin-top:auto;
+      padding-top:10px;
+      border-top:1px solid #e2eef3;
+    }
+    .feature-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .panel {
+      border-color:var(--reef-line);
+      background:
+        radial-gradient(circle at 100% 0%,rgba(64,217,255,.12),transparent 38%),
+        var(--reef-panel);
+    }
+    .panel p { color:var(--reef-muted); }
+    .visit-band {
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      gap:18px;
+      align-items:center;
+      margin-top:22px;
+      padding:18px;
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:
+        linear-gradient(90deg,rgba(1,37,61,.95),rgba(0,91,122,.72)),
+        url("../assets/site/hero-store.jpg") center/cover no-repeat;
+      color:#fff;
+      box-shadow:0 16px 34px rgba(0,0,0,.3);
+    }
+    .visit-band h2 { margin:0 0 5px; font-family:Georgia,"Times New Roman",serif; font-size:24px; }
+    .visit-band p { margin:0; color:#dff8ff; font-size:14px; }
+    .pin {
+      display:grid;
+      place-items:center;
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      background:#fff;
+      color:#004c7c;
+      font-size:24px;
+    }
+    @media(max-width:1040px) {
+      .header { grid-template-columns:1fr; }
+      .brand { justify-content:center; text-align:center; }
+      .brand span span { text-align:center; }
+      .header-actions { justify-content:center; }
+      .category-hero { grid-template-columns:1fr; }
+      .path-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .feature-row { grid-template-columns:1fr; }
+    }
+    @media(max-width:760px) {
+      .header { padding:14px 12px; }
+      .brand { justify-content:flex-start; text-align:left; }
+      .brand strong { font-size:clamp(25px,8vw,34px); }
+      .brand span span { text-align:left; font-size:10px; }
+      .main-nav { display:flex; justify-content:flex-start; overflow-x:auto; scrollbar-width:none; }
+      .main-nav a { flex:0 0 auto; }
+      .category-hero {
+        min-height:330px;
+        padding:28px 18px;
+        background-position:58% center;
+      }
+      .hero-card { display:none; }
+      .path-grid,.grid { grid-template-columns:1fr; }
+      .section-head { display:block; }
+      .section-head p { margin-top:6px; }
+      .visit-band { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shipping-bar">Freshwater fish, plants, food, filtration, and beginner setups</div>
+  <main class="page">
+    <header class="header">
+      <a class="brand" href="../">
+        <img src="../assets/site/header-fish.png" alt="Yellow reef fish" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+      <form class="search-box" action="#products">
+        <input placeholder="Search freshwater food, filters, plants..." />
+        <button aria-label="Search">⌕</button>
+      </form>
+      <div class="header-actions">
+        <a href="../#visit">My Account ▾</a>
+        <button class="cart-button" aria-label="Cart">🛒<span id="cart-count">0</span></button>
+      </div>
+    </header>
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../saltwater/">Saltwater</a>
+      <a class="active" href="./">Aquarium</a>
+      <a href="../pond/">Pond</a>
+      <a href="../equipment/">Lighting</a>
+      <a href="../decor/">Decorations</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="category-hero">
+      <div class="copy">
+        <span class="eyebrow">Freshwater aquarium</span>
+        <h1>Make the first tank feel doable.</h1>
+        <p>Freshwater shoppers need simple paths: the right tank size, cycling basics, filtration, heater, water conditioner, food, plants, and fish that actually belong together.</p>
+        <a class="btn" href="#products">Shop freshwater essentials</a>
+      </div>
+      <aside class="hero-card">
+        <strong>Beginner help is the product.</strong>
+        <span>A good freshwater page should reduce anxiety: what to buy first, what can wait, which fish are compatible, and how to avoid cloudy water or early livestock loss.</span>
+      </aside>
+    </section>
+
+    <div class="crumbs"><a href="../">Home</a><span>/</span><span>Freshwater Aquarium</span></div>
+
+    <section class="section-head">
+      <h2>Shop Freshwater</h2>
+      <p>Guided paths for first tanks, planted tanks, and daily care</p>
+    </section>
+    <section class="path-grid" aria-label="Freshwater shopping paths">
+      <a class="path-card" href="#products"><span>Start</span><h3>First Tank Setup</h3><p>Tank, heater, filter, conditioner, food, cycling, and hardy starter fish.</p></a>
+      <a class="path-card" href="#products"><span>Plants</span><h3>Planted Aquarium</h3><p>Plants, light, substrate, root tabs, fertilizer, and low-maintenance growth.</p></a>
+      <a class="path-card" href="#products"><span>Care</span><h3>Food & Water Care</h3><p>Daily feeding, conditioner, bacteria, testing, algae control, and water changes.</p></a>
+      <a class="path-card" href="#products"><span>Fish</span><h3>Community Fish</h3><p>Compatibility by size, temperament, school count, water parameters, and tank level.</p></a>
+    </section>
+
+    <section class="section-head">
+      <h2>Freshwater Essentials</h2>
+      <p>Example products and real handoff links</p>
+    </section>
+    <div class="layout">
+      <aside class="sidebar">
+        <h3>Beginner checklist</h3>
+        <p>Keep the page useful before anyone adds a product to cart.</p>
+        <div class="mini-list">
+          <span>Choose tank size first</span>
+          <span>Cycle before stocking</span>
+          <span>Match fish temperament</span>
+          <span>Do not overfeed</span>
+          <span>Test water before guessing</span>
+        </div>
+      </aside>
+      <div class="grid" id="products">
+        <article class="product" data-source="Original product page" data-details="Sera Red Parrot Pellets product page|Good example of food item merchandising|Can cross-link into freshwater food and care paths"><a href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="../assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets"><h3>Sera Red Parrot Pellets</h3></a><p>Daily nutrition for ornamental freshwater fish.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets">+</button></div></article>
+        <article class="product" data-source="Original product page" data-details="Sera Vipan Baby Flakes product page|Small food item for fry and small fish|Good recurring-purchase example"><span class="badge">New</span><a href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener"><img src="../assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes"><h3>Sera Vipan Baby Flakes</h3></a><p>Fine flakes for fry, small community fish, and gentle feeding.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes">+</button></div></article>
+        <article class="product" data-source="Original product page" data-details="Decoration and hide product page|Useful for beginner tanks where fish need cover|Can cross-link with compatible decor and substrate"><a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home"><h3>Tropical Fruit Home</h3></a><p>Bright hideaway that gives shy fish cover and visual structure.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div></article>
+        <article class="product" data-source="Original Hidden Reef site" data-details="Starter setup path for beginner freshwater tanks|This can become a guided bundle instead of a single product|Good owner-friendly example of helpful site organization"><span class="badge">Setup</span><a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="../assets/department/aquarium.jpg" alt="Freshwater starter aquarium"><h3>Starter Aquarium Setup</h3></a><p>Tank, heater, filter, conditioner, food, and cycling basics grouped together.</p><div class="price-row"><span class="price">Plan setup</span><button class="add" data-name="Starter Aquarium Setup">+</button></div></article>
+        <article class="product" data-source="Original Hidden Reef site" data-details="Planted tank path for beginners and hobbyists|Plants need light, substrate, fertilizer, and compatible fish|Good place for simple education"><a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="../assets/department/freshwater.jpg" alt="Planted freshwater aquarium"><h3>Planted Tank Basics</h3></a><p>Easy plants, substrate, lighting, root tabs, fertilizer, and algae balance.</p><div class="price-row"><span class="price">Build path</span><button class="add" data-name="Planted Tank Basics">+</button></div></article>
+        <article class="product" data-source="Original Hidden Reef site" data-details="Water care is where local advice matters|Good place for testing guidance, conditioner, bacteria, and algae control|Supports repeat visits"><a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener"><img src="../assets/department/maintenance.jpg" alt="Freshwater filter media"><h3>Water Care & Filtration</h3></a><p>Conditioner, bacteria, filter media, testing, algae control, and maintenance.</p><div class="price-row"><span class="price">Fix water</span><button class="add" data-name="Water Care & Filtration">+</button></div></article>
+      </div>
+    </div>
+
+    <section class="feature-row">
+      <article class="panel"><h2>First Tank Guidance</h2><p>Show the exact starter path so beginners avoid random baskets, incompatible fish, and preventable early failures.</p></article>
+      <article class="panel"><h2>Bring a Water Sample</h2><p>Turn “my water is cloudy” into a store visit with testing, diagnosis, and a simple corrective plan.</p></article>
+      <article class="panel"><h2>Community Compatibility</h2><p>Group fish by temperament, adult size, school count, and water needs instead of just listing species.</p></article>
+    </section>
+
+    <section id="visit" class="visit-band" aria-label="Visit the store">
+      <div class="pin">⌖</div>
+      <div>
+        <h2>Visit with tank size, water sample, or stocking idea</h2>
+        <p>4501 New Falls Rd, Levittown, PA 19056 · Get practical help before buying fish, plants, or gear.</p>
+      </div>
+      <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+    </section>
+
+    <footer class="footer"><div class="footer-top"><div><h3>The Hidden Reef</h3><p>Prototype freshwater category page.</p></div><div><h4>Departments</h4><a href="../saltwater/">Saltwater</a><a href="../pond/">Pond</a></div><div><h4>Store</h4><a href="../#visit">Visit</a><a href="../">Home</a></div><div><h4>Demo</h4><p>Product actions are prototype-only.</p></div></div></footer>
+  </main>
+  <aside class="drawer"><div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty.</p><button class="btn">Demo checkout</button></aside>
+  <script src="../assets/link-modal.js"></script>
+  <script src="../assets/category.js"></script>
+</body>
+</html>
+
