@@ -1,6 +1,6 @@
 {
   "date": "2026-05-17",
-  "updatedAt": "2026-05-17T00:00:01.824658+00:00",
+  "updatedAt": "2026-05-17T00:04:37.553500+00:00",
   "items": [
     {
       "title": "What Is a CUDA Kernel? A Visual Explainer",
@@ -11,13 +11,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-17T00:00:09.761067+00:00",
+      "published": "2026-05-17T00:04:47.150072+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-17T00:00:01.824658+00:00",
+      "lastSeen": "2026-05-17T00:04:37.553500+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
