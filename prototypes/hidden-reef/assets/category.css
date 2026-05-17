@@ -93,3 +93,4 @@ body.department-page .section-band {
 body.department-page .section-band + .section-band {
   border-top: 1px solid rgba(116,205,235,.08);
 }
+@media(max-width:760px){body.department-page .layout{grid-template-columns:1fr}body.department-page .sidebar{position:static}}
