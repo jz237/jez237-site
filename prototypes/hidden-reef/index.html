@@ -519,6 +519,51 @@
     }
     .guide h3 { margin: 0 0 7px; color: var(--blue-950); font-family: Georgia, "Times New Roman", serif; font-size: 22px; }
     .guide p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 13px; }
+    .live-links {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 12px;
+    }
+    .live-link {
+      display: grid;
+      gap: 10px;
+      min-height: 150px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 8px;
+      color: #eaf8fc;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.14), transparent 36%),
+        #071a27;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.035);
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .live-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(64,217,255,0.58);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.32), 0 0 0 1px rgba(64,217,255,0.14);
+    }
+    .live-link span {
+      color: #40d9ff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .live-link strong {
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.02;
+    }
+    .live-link em {
+      color: #9fc6d6;
+      font-style: normal;
+      font-size: 13px;
+      line-height: 1.35;
+    }
     .footer {
       margin-top: 28px;
       overflow: hidden;
@@ -638,6 +683,23 @@
       line-height: 1;
     }
     .link-modal p { margin: 0 0 18px; color: #b9d9e7; line-height: 1.45; }
+    .link-modal__meta {
+      display: grid;
+      gap: 7px;
+      margin: 0 0 18px;
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 7px;
+      background: rgba(8,35,52,0.72);
+      color: #c7eaf4;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .link-modal__url {
+      overflow-wrap: anywhere;
+      color: #7ee8ff;
+      font-size: 12px;
+    }
     .link-modal__close {
       position: absolute;
       top: 12px;
@@ -653,6 +715,7 @@
     @media (max-width: 1040px) {
       .categories { grid-template-columns: repeat(5, minmax(0,1fr)); }
       .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .footer-top { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
     @media (max-width: 760px) {
@@ -671,6 +734,7 @@
       .link-modal__image { min-height: 170px; max-height: 240px; }
       .promo-grid, .guides { grid-template-columns: 1fr; }
       .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .live-links { grid-template-columns: 1fr; }
       .product { min-height: 286px; }
       .product img { height: 122px; }
       .visit-band { grid-template-columns: 1fr; }
@@ -993,6 +1057,27 @@
         <p>4501 New Falls Rd, Levittown, PA 19056 · Browse the tanks, ask questions, and take home the right setup.</p>
       </div>
       <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+    </section>
+
+    <section aria-labelledby="live-links-title">
+      <div class="section-head">
+        <h2 id="live-links-title">Live Site Pathways</h2>
+        <p>Clickable examples that explain the idea, then lead straight to the matching page on the current Hidden Reef website.</p>
+      </div>
+      <div class="live-links">
+        <a class="live-link" href="https://www.thehiddenreef.com/aquarium/" data-info="A stronger replacement site can still respect the existing catalog structure. This opens the current Aquarium department after showing why the path matters." data-price="215 products found on the current site">
+          <span>Department</span><strong>Aquarium Catalog</strong><em>Use this as the main shopping doorway for tanks, supplies, food, and maintenance.</em>
+        </a>
+        <a class="live-link" href="https://www.thehiddenreef.com/aquarium/kits/" data-info="Kits are a money-making page because they bundle the customer's decision instead of making them hunt item by item." data-price="177 kit products found on the current site">
+          <span>Bundles</span><strong>Aquarium Kits</strong><em>Starter kits, tank packages, and complete setup paths.</em>
+        </a>
+        <a class="live-link" href="https://www.thehiddenreef.com/im-ext-100-gallon-complete-reef-system-white.html" data-info="Large complete systems are high-ticket products. The demo can highlight them as premium reef build paths, then send buyers to the real product page." data-price="High-ticket reef system">
+          <span>Premium</span><strong>100 Gallon Reef System</strong><em>Example of a high-value product page worth featuring.</em>
+        </a>
+        <a class="live-link" href="https://www.thehiddenreef.com/ns-gro-refugium-light-with-pipe-mount.html" data-info="Specific equipment pages are useful for serious hobbyists. The popup gives context, then hands off to the current product page." data-price="$179.99 listed in search result">
+          <span>Equipment</span><strong>Refugium Light</strong><em>A focused product link for reef equipment shoppers.</em>
+        </a>
+      </div>
     </section>
 
     <section aria-labelledby="guides-title">
