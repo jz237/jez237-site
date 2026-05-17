@@ -454,5 +454,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-17-morning-saffron-mirage-loom",
+    "title": "Saffron Mirage Loom",
+    "tests": "Explores fantasy craft detail, heat-haze mirage effects, woven miniature landscapes, desert-temple architecture, mineral pigments, and warm/cool lighting without dance or performance imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed fantasy craft scene titled conceptually Saffron Mirage Loom, with no visible text and no dancing or performance imagery.\n\nScene/backdrop: a sunken desert temple workshop revealed beneath cracked sandstone dunes at late afternoon. Carved columns, broken stairways, clay water jars, brass astrolabes, and quiet alcoves sit half-buried in warm saffron sand. Shafts of sunlight enter through roof fissures and catch floating dust.\n\nSubject: at the center, an enormous stationary loom made from carved acacia wood, lapis inlay, polished brass weights, and taut strands of luminous mirage-light. The loom is weaving a hovering tapestry that is partly fabric and partly living desert: tiny dunes, miniature palm shadows, impossible blue oases, faint star maps, and translucent heat-haze geometry. Calm robed artisans stand still at worktables only as scale figures, sorting dyed threads, glass beads, and sand-filled bobbins.\n\nComposition: square 1024x1024 cinematic three-quarter view from slightly above, with the loom as the clear focal point, receding temple architecture behind it, and the woven mirage-tapestry glowing across the center like a suspended landscape. Include crisp foreground details: frayed thread fibers, carved glyph-like ornament that is decorative but not readable text, scattered lapis chips, amber glass lenses, woven reed mats, and small brass measuring tools.\n\nMaterials and lighting: warm gold sunlight, deep cool blue shadows, glowing cyan mirage strands, rough sandstone, polished brass, dry fabric fibers, colored mineral pigments, tiny sparkling sand grains, realistic dust, and subtle heat shimmer. Fantasy realism, intricate handcrafted detail, coherent scale, atmospheric but readable.\n\nConstraints: no readable text, no logos, no copyrighted characters, no dancing, no dancers, no dance poses, no ballet, no stage performance, no ceremonial dance, no theatrical action, no motion study of bodies.",
+    "image": "images/2026-05-17-morning-saffron-mirage-loom.png",
+    "date": "2026-05-17",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
