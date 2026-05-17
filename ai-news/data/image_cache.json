@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-17T17:00:01.303011+00:00",
+  "updatedAt": "2026-05-17T18:00:02.003585+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7140,6 +7140,10 @@
     "https://simonwillison.net/2026/May/17/gds-weighs-in": {
       "image": "",
       "checkedAt": "2026-05-17T17:00:01.303011+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/932203/university-of-arizona-students-boo-eric-schmidt-ai-commencement": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23350482/1328571726.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.675926728958%2C100%2C78.648146542083&amp;w=1200",
+      "checkedAt": "2026-05-17T18:00:02.003585+00:00"
     }
   }
 }
