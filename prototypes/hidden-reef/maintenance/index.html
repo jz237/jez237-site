@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maintenance & Troubleshooting - The Hidden Reef</title>
+  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="stylesheet" href="../assets/category.css" />
+  <style>
+    :root {
+      --reef-bg:#03111d; --reef-panel:#071a27; --reef-line:rgba(116,205,235,.2);
+      --reef-text:#f0fbff; --reef-muted:#a9cbd9; --reef-cyan:#40d9ff;
+      --reef-teal:#00a7b7; --reef-orange:#ff7b32;
+    }
+    body {
+      color:var(--reef-text);
+      background:
+        radial-gradient(circle at 18% 0%,rgba(14,159,204,.2),transparent 28%),
+        linear-gradient(180deg,#03111d 0,#061c2d 280px,#020912 100%);
+    }
+    .page { max-width:1180px; background:linear-gradient(180deg,rgba(7,26,39,.48),rgba(3,13,22,0)); }
+    .header {
+      grid-template-columns:auto minmax(260px,1fr) auto;
+      gap:18px;
+      padding:16px 20px;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      border-bottom:1px solid var(--reef-line);
+      background:linear-gradient(180deg,rgba(8,31,47,.98),rgba(5,22,34,.98));
+    }
+    .brand {
+      grid-column:auto; min-width:235px; min-height:0; justify-content:flex-start;
+      padding:0; margin:0; background:none; border:0; box-shadow:none;
+    }
+    .brand img {
+      display:block; width:74px; height:48px; object-fit:cover;
+      border:1px solid rgba(126,232,255,.38); border-radius:7px;
+      background:#061928; box-shadow:0 8px 20px rgba(0,0,0,.28);
+    }
+    .brand strong { font-size:28px; line-height:.9; color:#fff; text-shadow:0 3px 14px rgba(0,0,0,.5); }
+    .brand span span {
+      margin-top:7px; color:#bdefff; font-size:11px; letter-spacing:.13em;
+      text-align:left; text-transform:uppercase;
+    }
+    .search-box {
+      grid-column:auto; max-width:none; justify-self:stretch; height:44px;
+      background:#102b3b; border-color:rgba(116,205,235,.26);
+    }
+    .search-box input { color:#eaf8fc; background:transparent; }
+    .search-box input::placeholder { color:#8bb1bf; }
+    .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
+    .main-nav {
+      display:grid; grid-template-columns:repeat(8,minmax(max-content,1fr)); gap:0;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1); padding:0;
+      border-top:0; border-bottom:1px solid var(--reef-line);
+      background:rgba(3,18,29,.98); color:#a9d6e6;
+    }
+    .main-nav a {
+      display:flex; justify-content:center; align-items:center; min-height:44px;
+      padding:10px 12px; border-left:1px solid rgba(116,205,235,.12);
+    }
+    .main-nav a:first-child { border-left:0; }
+    .main-nav a.active { color:var(--reef-cyan); }
+
+    .category-hero {
+      display:grid;
+      grid-template-columns:minmax(0,.92fr) minmax(340px,1fr);
+      gap:24px;
+      min-height:390px;
+      margin-top:18px;
+      padding:clamp(22px,4vw,46px);
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:
+        linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.84) 48%,rgba(0,48,75,.18)),
+        url("../assets/department/maintenance.jpg") right center/cover no-repeat;
+      box-shadow:0 22px 54px rgba(0,0,0,.34);
+    }
+    .category-hero .copy { max-width:580px; padding:0; align-self:center; }
+    .category-hero h1 { max-width:620px; font-size:clamp(42px,5vw,66px); }
+    .category-hero p { max-width:525px; color:#d6f4fb; font-size:15px; }
+    .hero-card {
+      align-self:end; display:grid; gap:12px; padding:18px;
+      border:1px solid rgba(126,232,255,.22); border-radius:8px;
+      background:rgba(3,18,29,.76); backdrop-filter:blur(8px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero-card strong { color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; }
+    .hero-card span { color:var(--reef-muted); font-size:13px; line-height:1.45; }
+    .crumbs { color:var(--reef-muted); }
+    .section-head h2,.sidebar h3,.panel h2,.product h3,.drawer h2 { color:#fff; }
+    .section-head p { color:#8fdcf0; }
+
+    .routine-grid {
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:18px 0 26px;
+    }
+    .routine-card {
+      min-height:150px; padding:18px; border:1px solid var(--reef-line); border-radius:8px;
+      background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.16),transparent 38%),var(--reef-panel);
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+    }
+    .routine-card span {
+      color:var(--reef-cyan); font-size:11px; font-weight:950; letter-spacing:.12em; text-transform:uppercase;
+    }
+    .routine-card h3 {
+      margin:8px 0 6px; color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; line-height:1.05;
+    }
+    .routine-card p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.4; }
+
+    .layout { grid-template-columns:260px minmax(0,1fr); align-items:start; }
+    .sidebar {
+      position:sticky; top:14px; display:grid; gap:14px; padding:18px;
+      border-color:var(--reef-line);
+      background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.12),transparent 36%),var(--reef-panel);
+    }
+    .sidebar p { margin:0; color:var(--reef-muted); font-size:13px; line-height:1.45; }
+    .mini-list {
+      display:grid; gap:8px; padding-top:12px; border-top:1px solid rgba(116,205,235,.12);
+    }
+    .mini-list span { padding:0; border:0; color:#d8f4fb; font-weight:850; }
+
+    .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .product {
+      display:flex; flex-direction:column; min-height:330px;
+      border-color:var(--reef-line); background:#fff; box-shadow:0 14px 30px rgba(0,0,0,.18);
+    }
+    .product img {
+      height:150px; padding:10px; object-fit:contain;
+      border:1px solid #e2eef3; background:linear-gradient(180deg,#f7fbfd,#e7f3f8);
+    }
+    .product h3 { color:#102f43; }
+    .product p { color:#5d7582; }
+    .price-row { margin-top:auto; padding-top:10px; border-top:1px solid #e2eef3; }
+    .feature-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .panel {
+      border-color:var(--reef-line);
+      background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.1),transparent 38%),var(--reef-panel);
+    }
+    .footer { border:1px solid rgba(116,205,235,.14); }
+    @media(max-width:1040px){
+      .category-hero{grid-template-columns:1fr;min-height:auto}
+      .routine-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .layout{grid-template-columns:1fr}.sidebar{position:static}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .feature-row{grid-template-columns:1fr}
+    }
+    @media(max-width:760px){
+      .header{grid-template-columns:1fr;margin:0;padding:14px 0}.brand{justify-content:flex-start}
+      .main-nav{display:flex;justify-content:flex-start;overflow-x:auto;margin:0}
+      .routine-grid,.grid{grid-template-columns:1fr}
+      .category-hero{padding:24px 18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="shipping-bar">Filters, media, test kits, algae tools, water-change gear, parts, and troubleshooting supplies</div>
+  <main class="page">
+    <header class="header">
+      <a class="brand" href="../">
+        <img src="../assets/site/header-fish.png" alt="The Hidden Reef fish logo" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums - Fish - Coral - Ponds</span></span>
+      </a>
+      <form class="search-box" action="../#products">
+        <input placeholder="Search filters, media, test kits, cleaning tools..." />
+        <button>⌕</button>
+      </form>
+      <div class="header-actions">
+        <a href="../#visit">My Account</a>
+        <button class="cart-button">🛒<span id="cart-count">0</span></button>
+      </div>
+    </header>
+
+    <nav class="main-nav">
+      <a href="../">Home</a>
+      <a href="../saltwater/">Saltwater</a>
+      <a href="../freshwater/">Aquarium</a>
+      <a href="../pond/">Pond</a>
+      <a href="../equipment/">Lighting</a>
+      <a href="../food/">Food</a>
+      <a href="../decor/">Decorations</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="category-hero">
+      <div class="copy">
+        <span class="eyebrow">Maintenance & troubleshooting</span>
+        <h1>Make tank care easier to keep up with.</h1>
+        <p>Maintenance should be simple enough that people actually do it: test water, clean glass, change media, remove waste, control algae, and keep pumps moving.</p>
+        <div class="button-row">
+          <a class="btn" href="#products">Shop maintenance</a>
+          <a class="btn secondary" href="../food/">Water care basics</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <strong>Fix the cause first</strong>
+        <span>Cloudy water, algae, stressed fish, and dead spots usually need testing and routine changes before another random bottle goes in the tank.</span>
+      </aside>
+    </section>
+
+    <div class="crumbs"><a href="../">Home</a><span>/</span><span>Maintenance & Troubleshooting</span></div>
+
+    <section class="section-head">
+      <h2>Shop by routine</h2>
+      <p>Testing, cleaning, filtration, and replacement parts</p>
+    </section>
+
+    <section class="routine-grid" aria-label="Maintenance routines">
+      <article class="routine-card">
+        <span>Weekly</span>
+        <h3>Water changes</h3>
+        <p>Conditioner, buckets, siphons, hoses, and simple reminders for repeat care.</p>
+      </article>
+      <article class="routine-card">
+        <span>Filter</span>
+        <h3>Media and parts</h3>
+        <p>Pads, cartridges, biological media, impellers, tubing, and pump replacements.</p>
+      </article>
+      <article class="routine-card">
+        <span>Glass</span>
+        <h3>Algae and cleanup</h3>
+        <p>Scrapers, magnets, brushes, phosphate clues, and clean-up crew guidance.</p>
+      </article>
+      <article class="routine-card">
+        <span>Diagnose</span>
+        <h3>Test before treating</h3>
+        <p>Ammonia, nitrite, nitrate, pH, salinity, phosphate, and pond water checks.</p>
+      </article>
+    </section>
+
+    <section class="section-head">
+      <h2>Maintenance products</h2>
+      <p>Tools and supplies grouped by the job they solve</p>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h3>Common symptoms</h3>
+        <p>This page gives the store a place to turn panic questions into practical steps.</p>
+        <div class="mini-list">
+          <span>Cloudy water</span>
+          <span>Algae bloom</span>
+          <span>Low flow or noisy pump</span>
+          <span>Dirty substrate</span>
+          <span>High ammonia or nitrite</span>
+          <span>Fish gasping or hiding</span>
+        </div>
+      </aside>
+
+      <div class="grid" id="products">
+        <article class="product">
+          <span class="badge">Water</span>
+          <a href="../food/">
+            <img src="../assets/site/brand-api.jpg" alt="Aquarium test kit and water care brand" />
+            <h3>Test kits and water checks</h3>
+          </a>
+          <p>Put testing front and center so customers solve the actual water problem.</p>
+          <div class="price-row"><span class="price">Test first</span><button class="add" data-name="Test kits and water checks">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Filter</span>
+          <a href="../equipment/">
+            <img src="../assets/site/brand-fluval.jpg" alt="Aquarium filter brand" />
+            <h3>Filter media and cartridges</h3>
+          </a>
+          <p>Replacement pads, sponges, carbon, biological media, and cartridges by filter model.</p>
+          <div class="price-row"><span class="price">Shop media</span><button class="add" data-name="Filter media and cartridges">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Clean</span>
+          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
+            <img src="../assets/department/maintenance.jpg" alt="Aquarium maintenance tools" />
+            <h3>Scrapers, siphons, and tools</h3>
+          </a>
+          <p>Glass cleaning, substrate vacuuming, water changes, hoses, brushes, and small tools.</p>
+          <div class="price-row"><span class="price">Shop tools</span><button class="add" data-name="Scrapers siphons and tools">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Pond</span>
+          <a href="../pond/">
+            <img src="../assets/department/pond.jpg" alt="Pond maintenance supplies" />
+            <h3>Pond maintenance supplies</h3>
+          </a>
+          <p>Seasonal bacteria, dechlorinator, algae control, pump checks, and waterfall care.</p>
+          <div class="price-row"><span class="price">Pond routine</span><button class="add" data-name="Pond maintenance supplies">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Flow</span>
+          <a href="../equipment/">
+            <img src="../assets/site/cta.jpg" alt="Aquarium system with pumps and filtration" />
+            <h3>Pumps and replacement parts</h3>
+          </a>
+          <p>Flow problems are easier to shop when parts are grouped by pump, filter, and tank system.</p>
+          <div class="price-row"><span class="price">Find parts</span><button class="add" data-name="Pumps and replacement parts">+</button></div>
+        </article>
+
+        <article class="product">
+          <span class="badge">Routine</span>
+          <a href="../freshwater/">
+            <img src="../assets/department/aquarium.jpg" alt="Freshwater aquarium maintenance routine" />
+            <h3>Beginner maintenance kit</h3>
+          </a>
+          <p>A simple starter bundle: conditioner, test strips or liquid tests, siphon, net, and food.</p>
+          <div class="price-row"><span class="price">Build kit</span><button class="add" data-name="Beginner maintenance kit">+</button></div>
+        </article>
+      </div>
+    </div>
+
+    <section class="feature-row">
+      <article class="panel">
+        <h2>Maintenance is retention</h2>
+        <p>When customers know what to do every week, they stay in the hobby longer and come back for the right supplies.</p>
+      </article>
+      <article class="panel">
+        <h2>Bundle by routine</h2>
+        <p>Water-change kits, filter media refills, algae-control tools, and pond-opening supplies are easier to understand as routines.</p>
+      </article>
+      <article class="panel">
+        <h2>Use staff knowledge</h2>
+        <p>This page can carry simple, store-backed troubleshooting steps for the common problems people bring in.</p>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div>
+          <h3>The Hidden Reef</h3>
+          <p>Prototype maintenance and troubleshooting department page.</p>
+        </div>
+        <div>
+          <h4>Departments</h4>
+          <a href="../freshwater/">Freshwater</a>
+          <a href="../saltwater/">Saltwater</a>
+        </div>
+        <div>
+          <h4>Store</h4>
+          <a href="../food/">Food & Water Care</a>
+          <a href="../equipment/">Lighting</a>
+        </div>
+        <div>
+          <h4>Demo</h4>
+          <p>Product actions are prototype-only.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <aside class="drawer">
+    <div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div>
+    <div id="cart-items" class="cart-items"></div>
+    <p id="empty-cart" class="empty-cart">Your cart is empty.</p>
+    <button class="btn">Demo checkout</button>
+  </aside>
+
+  <script src="../assets/link-modal.js"></script>
+  <script src="../assets/category.js"></script>
+</body>
+</html>
