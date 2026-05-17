@@ -165,10 +165,19 @@
     }[ch]));
   }
 
-  async function fetchJson(url) {
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!res.ok) throw new Error(`${res.status} from ${url}`);
-    return res.json();
+  async function fetchJson(url, timeoutMs = 9000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, {
+        headers: { Accept: 'application/json' },
+        signal: controller.signal
+      });
+      if (!res.ok) throw new Error(`${res.status} from ${url}`);
+      return res.json();
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   async function lookupZip(zip) {
