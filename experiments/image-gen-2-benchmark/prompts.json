@@ -442,5 +442,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-16-evening-europa-brine-beacon-yard",
+    "title": "Europa Brine Beacon Yard",
+    "tests": "Explores alien-ocean engineering, translucent ice and brine optics, under-ice scale, warm/cool lighting contrast, and complex sci-fi infrastructure without performance imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed hard-science-fiction scene titled conceptually Europa Brine Beacon Yard, with no visible text.\n\nScene/backdrop: beneath the cracked ice shell of Europa, in a vast naturally hollowed blue-white ice cavern where a dark subsurface ocean is visible through a clear brine window in the floor. Faint Jupiter-light filters down through kilometers of fractured ice as soft gold veins and cold cyan refractions.\n\nSubject: a remote alien-ocean communications yard built from pressure-rated ceramic pylons, transparent diamondoid brine lenses, braided superconducting cables, small sealed maintenance pods, and hovering autonomous probe drones. The beacon array forms a broad spiral of upright lens towers around a central dark water aperture, each lens filled with slow glowing saline gradients and tiny suspended calibration beads.\n\nComposition: square 1024x1024 cinematic three-quarter view from an elevated ice ledge, showing the spiral array receding into mist, the black ocean aperture at center, tiny stationary suited technicians only inside sealed observation bubbles for scale, and layered fractured ice walls rising behind them.\n\nMaterials and lighting: translucent blue ice, black glassy water, pale ceramic engineering, frosted metal, pearl-white pressure domes, amber habitat lights, cyan instrument beams, drifting ice dust, condensation halos, crisp mechanical detail, believable scale, high contrast warm/cold lighting.\n\nConstraints: no logos, no readable text, no copyrighted characters, no dancing, no dancers, no dance poses, no ballet, no stage performance, no ceremonial or theatrical action, no motion study of bodies.",
+    "image": "images/2026-05-16-evening-europa-brine-beacon-yard.png",
+    "date": "2026-05-16",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
