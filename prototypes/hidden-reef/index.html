@@ -1602,7 +1602,26 @@
       const slugs = homeProductSlugs[filter] || homeProductSlugs.all;
       if (!window.THR_PRODUCTS) return [];
       const perSlug = filter === 'all' ? 3 : 6;
-      return slugs.flatMap(slug => (THR_PRODUCTS[slug] || []).slice(0, perSlug)).slice(0, 24);
+      const seen = new Set();
+      const products = [];
+      const normalizeVariant = product => (product.name || '')
+        .toLowerCase()
+        .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver)\b/g, '')
+        .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|gal|g|w|lb|lbs|pk|pack|in|inch|\")\b/g, '')
+        .replace(/[^a-z0-9]+/g, '');
+      for (const slug of slugs) {
+        let addedForSlug = 0;
+        for (const product of (THR_PRODUCTS[slug] || [])) {
+          const key = normalizeVariant(product);
+          if (!key || seen.has(key)) continue;
+          seen.add(key);
+          products.push(product);
+          addedForSlug += 1;
+          if (addedForSlug >= perSlug) break;
+          if (products.length >= 24) return products;
+        }
+      }
+      return products;
     }
 
     function applyFilter(next) {
