@@ -7,6 +7,8 @@
   const PRODUCTS_PER_PAGE = 24;
   let currentPage = 1;
   let currentProducts = [];
+  let baseProducts = [];
+  let currentSubcategory = null;
 
   function getParams() {
     const p = new URLSearchParams(window.location.search);
@@ -73,9 +75,37 @@
     return price;
   }
 
+  function parsePrice(price) {
+    const number = parseFloat(String(price || '').replace(/[^0-9.]/g, ''));
+    return Number.isFinite(number) ? number : null;
+  }
+
   // Extract brand name from product name (first word, unless it's a common non-brand prefix)
   function extractBrand(name) {
     if (!name) return '';
+    const knownBrands = [
+      'Innovative Marine',
+      'Red Sea',
+      'Two Little Fishies',
+      'Zoo Med',
+      'San Francisco Bay',
+      'Seachem',
+      'Fluval',
+      'Hikari',
+      'Sera',
+      'Tetra',
+      'Omega',
+      'API',
+      'Aquatop',
+      'Eheim',
+      'GloFish',
+      'Maxspect',
+      'Neptune',
+      'Xtreme'
+    ];
+    const normalized = name.trim().toLowerCase();
+    const known = knownBrands.find(brand => normalized.startsWith(brand.toLowerCase()));
+    if (known) return known;
     const skipWords = ['copy', 'new', 'the', 'a', 'an'];
     const parts = name.trim().split(/\s+/);
     if (parts.length <= 1) return '';
@@ -88,6 +118,66 @@
       return '';
     }
     return first;
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
+  }
+
+  function getActiveControls() {
+    return {
+      query: (document.getElementById('search')?.value || '').trim(),
+      brand: document.getElementById('brand-filter')?.value || '',
+      sort: document.getElementById('sort-products')?.value || 'featured'
+    };
+  }
+
+  function sortProducts(products, sort) {
+    const sorted = products.slice();
+    if (sort === 'name-asc') {
+      sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else if (sort === 'price-asc') {
+      sorted.sort((a, b) => (parsePrice(a.price) ?? Infinity) - (parsePrice(b.price) ?? Infinity));
+    } else if (sort === 'price-desc') {
+      sorted.sort((a, b) => (parsePrice(b.price) ?? -Infinity) - (parsePrice(a.price) ?? -Infinity));
+    }
+    return sorted;
+  }
+
+  function applyProductControls(products) {
+    const controls = getActiveControls();
+    const query = controls.query.toLowerCase();
+    let filtered = products.filter(product => {
+      const name = product.name || '';
+      const brand = extractBrand(name);
+      const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
+      const matchesBrand = !controls.brand || brand === controls.brand;
+      return matchesQuery && matchesBrand;
+    });
+    filtered = sortProducts(filtered, controls.sort);
+    return filtered;
+  }
+
+  function renderProductControls(products) {
+    const el = document.getElementById('product-controls');
+    if (!el) return;
+
+    const brands = Array.from(new Set(products.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const brandOptions = brands.map(brand => '<option value="' + escapeHtml(brand) + '">' + escapeHtml(brand) + '</option>').join('');
+    el.innerHTML = '<label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button>';
+
+    el.querySelectorAll('select').forEach(control => {
+      control.addEventListener('change', () => updateProductView(1));
+    });
+    el.querySelector('#reset-products')?.addEventListener('click', () => {
+      const searchInput = document.getElementById('search');
+      const brandFilter = document.getElementById('brand-filter');
+      const sortControl = document.getElementById('sort-products');
+      if (searchInput) searchInput.value = '';
+      if (brandFilter) brandFilter.value = '';
+      if (sortControl) sortControl.value = 'featured';
+      updateProductView(1);
+    });
   }
 
   function renderBreadcrumb(cat, sub) {
@@ -238,18 +328,21 @@
     el.innerHTML = `<span>${label}</span><span class="total">${shown} of ${total} products shown</span>`;
   }
 
-  function filterBySearch(products, query) {
-    if (!query) return products;
-    const q = query.toLowerCase();
-    return products.filter(p => (p.name || '').toLowerCase().includes(q));
+  function updateProductView(page) {
+    currentPage = page || 1;
+    currentProducts = applyProductControls(baseProducts);
+    const totalPages = Math.max(1, Math.ceil(currentProducts.length / PRODUCTS_PER_PAGE));
+    currentPage = Math.min(currentPage, totalPages);
+    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const shown = Math.max(0, Math.min(PRODUCTS_PER_PAGE, currentProducts.length - start));
+    renderProducts(currentProducts, currentPage);
+    renderCountBar(shown, currentProducts.length, currentSubcategory);
+    renderPagination(currentProducts.length, currentPage);
   }
 
   window.goPage = function(page) {
-    const params = getParams();
-    let url = `?cat=${params.cat}`;
-    if (params.sub) url += `&sub=${params.sub}`;
-    if (page > 1) url += `&page=${page}`;
-    window.location.href = url;
+    updateProductView(page);
+    document.getElementById('product-controls')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   function init() {
@@ -258,6 +351,7 @@
 
     const cat = findCategory(params.cat);
     const sub = params.sub ? findSubcategory(cat, params.sub) : null;
+    currentSubcategory = sub;
 
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
@@ -282,29 +376,16 @@
         }
       }
     }
+    baseProducts = products;
     currentProducts = products;
+    renderProductControls(products);
 
-    // Search filter
     const searchInput = document.getElementById('search');
     if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const q = e.target.value.trim();
-        const filtered = filterBySearch(products, q);
-        currentPage = 1;
-        renderProducts(filtered, 1);
-        renderCountBar(Math.min(PRODUCTS_PER_PAGE, filtered.length), filtered.length, sub);
-        renderPagination(filtered.length, 1);
-      });
+      searchInput.addEventListener('input', () => updateProductView(1));
     }
 
-    // Render
-    const filtered = filterBySearch(products, '');
-    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    const shown = Math.min(PRODUCTS_PER_PAGE, filtered.length - start);
-
-    renderProducts(filtered, currentPage);
-    renderCountBar(shown > 0 ? shown : filtered.length, filtered.length, sub);
-    renderPagination(filtered.length, currentPage);
+    updateProductView(currentPage);
   }
 
   if (document.readyState === 'loading') {

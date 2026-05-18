@@ -141,6 +141,55 @@
     .count-bar span { color:var(--reef-muted); font-size:13px; font-weight:800; }
     .count-bar .total { color:var(--reef-cyan); }
 
+    /* Product controls */
+    .product-controls {
+      display:grid;
+      grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) auto;
+      gap:10px;
+      align-items:end;
+      margin:0 0 14px;
+      padding:12px;
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:rgba(7,26,39,.72);
+    }
+    .product-controls label {
+      display:grid;
+      gap:5px;
+      min-width:0;
+    }
+    .product-controls span {
+      color:var(--reef-cyan);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .product-controls select {
+      width:100%;
+      min-height:40px;
+      padding:8px 10px;
+      border:1px solid rgba(116,205,235,.22);
+      border-radius:6px;
+      color:#eaf8fc;
+      background:#102b3b;
+      font-weight:800;
+    }
+    .product-controls button {
+      min-height:40px;
+      padding:8px 14px;
+      border:1px solid rgba(116,205,235,.22);
+      border-radius:6px;
+      color:#dff8ff;
+      background:rgba(8,35,52,.72);
+      font-weight:900;
+      cursor:pointer;
+    }
+    .product-controls button:hover {
+      border-color:var(--reef-cyan);
+      color:#fff;
+    }
+
     /* Product grid uses shared thr-cards.css */
     #product-grid { gap:10px; }
     #product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
@@ -195,11 +244,12 @@
         border-top:1px solid rgba(116,205,235,.1);
       }
       .subcat-tabs { padding:8px 0; }
+      .product-controls { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
-  <main class="page">
+  <main class="page" id="top">
     <header class="header">
       <a class="brand" href="../">
         <img src="../assets/site/header-fish.png" alt="Yellow reef fish" />
@@ -229,6 +279,7 @@
     <div class="breadcrumb" id="breadcrumb"></div>
     <section class="cat-header" id="cat-header"></section>
     <div class="subcat-tabs" id="subcat-tabs"></div>
+    <div class="product-controls" id="product-controls"></div>
     <div class="count-bar" id="count-bar"></div>
     <div class="thr-product-grid" id="product-grid"></div>
     <div class="pagination" id="pagination"></div>

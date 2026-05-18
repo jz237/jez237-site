@@ -9,6 +9,29 @@
 
   function extractBrand(name) {
     if (!name) return '';
+    var knownBrands = [
+      'Innovative Marine',
+      'Red Sea',
+      'Two Little Fishies',
+      'Zoo Med',
+      'San Francisco Bay',
+      'Seachem',
+      'Fluval',
+      'Hikari',
+      'Sera',
+      'Tetra',
+      'Omega',
+      'API',
+      'Aquatop',
+      'Eheim',
+      'GloFish',
+      'Maxspect',
+      'Neptune',
+      'Xtreme'
+    ];
+    var normalized = name.trim().toLowerCase();
+    var known = knownBrands.find(function(brand) { return normalized.indexOf(brand.toLowerCase()) === 0; });
+    if (known) return known;
     var skip = ['copy','new','the','a','an'];
     var parts = name.trim().split(/\s+/);
     if (parts.length <= 1) return '';
