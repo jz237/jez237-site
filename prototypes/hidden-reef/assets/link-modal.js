@@ -5,7 +5,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><img class="link-modal__image" alt=""><div class="link-modal__body"><span class="link-modal__eyebrow">Opens on thehiddenreef.com</span><h2 id="link-modal-title"></h2><p></p><ul class="link-modal__details"></ul><div class="link-modal__meta"></div><a class="btn link-modal__open" target="_blank" rel="noopener">Open original Hidden Reef page</a></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><img class="link-modal__image" alt=""><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><p></p><ul class="link-modal__details"></ul><div class="link-modal__meta"></div><a class="btn link-modal__open" target="_blank" rel="noopener">View product on Hidden Reef</a></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);

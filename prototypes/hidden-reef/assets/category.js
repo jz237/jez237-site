@@ -184,13 +184,9 @@
       const brandHtml = brand ? `<span class="thr-brand">${brand}</span>` : '';
       const badge = pageLabel ? `<span class="thr-page">${pageLabel}</span>` : '';
 
-      // Row striping: determine column count approximation
-      const rowIndex = Math.floor(i / 5); // assume ~5 cols on desktop
-      const rowClass = (rowIndex % 2 === 1) ? ' product-row-even' : '';
-
       html += `
-        <article class="product${rowClass}">
-          <a href="${url}" target="_blank" rel="noopener" class="thr-ext" title="View on Hidden Reef">↗</a>
+        <a class="thr-product" href="${url}" target="_blank" rel="noopener">
+          <span class="thr-ext" title="View on Hidden Reef">↗</span>
           ${brandHtml}
           <div class="thr-img">
             <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
@@ -198,9 +194,9 @@
           </div>
           <div class="thr-info">
             <span class="thr-price">${price}</span>
-            <h3>${name}</h3>
+            <h3 class="thr-name">${name}</h3>
           </div>
-        </article>`;
+        </a>`;
     });
     el.innerHTML = html;
   }
