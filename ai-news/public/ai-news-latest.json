@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T19:00:01.818437+00:00",
+  "updatedAt": "2026-05-18T19:01:27.050537+00:00",
   "items": [
     {
       "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T19:00:11.687582+00:00",
+      "published": "2026-05-18T19:01:32.401554+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
@@ -28,10 +28,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-layoffs-8000-zuckerberg-ai-reality-may-2026.avif",
       "published": "2026-05-18T18:37:02+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2384
+      "score": 3.2376
     },
     {
       "title": "Amazon’s new Alexa feature generates entire podcast episodes using AI and licensed journalism from 200+ newsrooms",
@@ -44,10 +44,10 @@
       "image": "https://media.thenextweb.com/2026/05/amazon-alexa-podcasts-ai-generated-episodes.avif",
       "published": "2026-05-18T18:19:00+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.2293
+      "score": 8.2286
     },
     {
       "title": "Hackers stole fingerprints and medical data from 1.8 million people in NYC’s largest public hospital breach",
@@ -60,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/05/nyc-health-hospitals-data-breach-biometrics-fingerprints.avif",
       "published": "2026-05-18T18:06:20+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.123
+      "score": 2.1223
     },
     {
       "title": "Musk loses OpenAI lawsuit as jury unanimously rules his claims were filed too late",
@@ -76,10 +76,26 @@
       "image": "https://media.thenextweb.com/2026/05/musk-loses-openai-lawsuit-altman-jury-verdict.avif",
       "published": "2026-05-18T17:53:52+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1168
+      "score": 5.1161
+    },
+    {
+      "title": "All of the updates from Elon Musk and Sam Altman’s battle over OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. After nearly a month [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-18T17:49:49+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3241
     },
     {
       "title": "Elon Musk Loses Landmark Lawsuit Against OpenAI",
@@ -92,13 +108,13 @@
       "image": "https://media.wired.com/photos/6a07b49c3e66727feabf05fc/master/pass/Model-Behavior-Altman-v-Musk-Verdict-Business.jpg",
       "published": "2026-05-18T17:40:30+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2502
+      "score": 5.2495
     },
     {
-      "title": "Elon Musk lost his case against Sam Altman",
+      "title": "Elon Musk loses his case against Sam Altman",
       "url": "https://www.theverge.com/ai-artificial-intelligence/932383/jury-verdict-musk-v-altman-openai-trial",
       "source": "The Verge AI",
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
@@ -108,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKE010_MuskvAltman_AParkin05.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-18T17:39:32+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T18:00:01.523310+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3198
+      "score": 2.3191
     },
     {
       "title": "HistoSonics gets Taiwan approval for its tumour-destroying ultrasound system as it pushes into Asia",
@@ -124,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/histosonics-tfda-taiwan-approval-histotripsy-edison.avif",
       "published": "2026-05-18T17:36:13+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2081
+      "score": 3.2074
     },
     {
       "title": "What to expect from Google this week",
@@ -140,11 +156,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/GettyImages-532150054.jpg?resize=1200%2C600",
       "published": "2026-05-18T17:35:43+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.6479
+      "score": 11.6472
     },
     {
       "title": "Elon Musk has lost his lawsuit against Sam Altman and OpenAI",
@@ -157,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200%2C800",
       "published": "2026-05-18T17:34:43+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2474
+      "score": 5.2467
     },
     {
       "title": "Sigma Computing doubles valuation to $3 billion in Series E as agentic analytics race heats up",
@@ -173,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/sigma-computing-series-e-80-million-3-billion-valuation.avif",
       "published": "2026-05-18T17:28:41+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5045
+      "score": 5.5038
     },
     {
       "title": "Apple’s Siri Revamp May Add Auto-Deleting Chats",
@@ -189,10 +205,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/siri-delete.jpg?f=jpeg",
       "published": "2026-05-18T17:16:06+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1983
+      "score": 3.1976
     },
     {
       "title": "Coursera announces $500 million buyback one week after closing its $2.5 billion Udemy merger",
@@ -205,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/05/coursera-500-million-share-repurchase-udemy-merger.avif",
       "published": "2026-05-18T16:59:14+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9902
+      "score": 4.9895
     },
     {
       "title": "Grafana Labs refuses ransom after hackers steal already-open-source code",
@@ -221,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/05/Grafana-Labs-Hackers.avif",
       "published": "2026-05-18T16:49:08+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4853
+      "score": 3.4846
     },
     {
       "title": "Banned Nvidia AI Chips Keep Reaching China Despite US Crackdown",
@@ -237,10 +253,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/chip-smuggle.jpg?f=jpeg",
       "published": "2026-05-18T16:47:18+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1844
+      "score": 3.1838
     },
     {
       "title": "Apple’s Fall Lineup Could Include Foldable iPhone, New Macs",
@@ -253,10 +269,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/apple-launch-1024x559.png?f=jpeg",
       "published": "2026-05-18T16:40:25+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1811
+      "score": 3.1805
     },
     {
       "title": "Anthropic’s co-founder will speak at the Vatican launch of the pope’s AI encyclical",
@@ -269,26 +285,10 @@
       "image": "https://media.thenextweb.com/2026/05/pope-leo-encyclical-magnifica-humanitas-anthropic-olah.avif",
       "published": "2026-05-18T16:27:01+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7748
-    },
-    {
-      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
-      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. Elon Musk, his financial [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-18T16:24:03+00:00",
-      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.2834
+      "score": 5.7741
     },
     {
       "title": "Inside Anduril and Meta’s quest to make smart glasses for warfare",
@@ -301,10 +301,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/2026-EE-Mar-Studio-Config2-WM-1_1.jpg?resize=1200%2C600",
       "published": "2026-05-18T16:01:39+00:00",
       "firstSeen": "2026-05-18T16:32:20.006951+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6028
+      "score": 3.6021
     },
     {
       "title": "Fine-Tuning NVIDIA Cosmos Predict 2.5 with LoRA/DoRA for Robot Video Generation",
@@ -317,10 +317,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation.png",
       "published": "2026-05-18T16:00:21+00:00",
       "firstSeen": "2026-05-18T16:32:20.006951+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7422
+      "score": 4.7415
     },
     {
       "title": "Amazon Alexa Plus can now create AI-generated podcasts",
@@ -333,10 +333,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-18T15:55:25+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.1699
+      "score": 13.1692
     },
     {
       "title": "Omnia and Casa dos Ventos sign $2bn power deal anchoring TikTok’s Brazil data centre",
@@ -349,10 +349,10 @@
       "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
       "published": "2026-05-18T15:46:22+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0557
+      "score": 2.055
     },
     {
       "title": "Your next pipeline miss may start in AI Search",
@@ -368,7 +368,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4449
+      "score": 4.4443
     },
     {
       "title": "PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend",
@@ -381,10 +381,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/Bl-qDWU9OfuXZ06hNxZE7.jpeg",
       "published": "2026-05-18T15:12:46+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3201
+      "score": 2.3195
     },
     {
       "title": "Amazon’s new Alexa+ powered feature can generate podcast episodes",
@@ -397,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/alexa-podcasts-hero.png?w=1200",
       "published": "2026-05-18T14:56:47+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0728
+      "score": 12.0722
     },
     {
       "title": "Glaucous-winged Gull, Brown Pelican, Snowy Egret, Canada Goose",
@@ -413,10 +413,10 @@
       "image": "https://static.inaturalist.org/photos/662161673/large.jpg",
       "published": "2026-05-18T14:51:00+00:00",
       "firstSeen": "2026-05-18T16:32:20.006951+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1702
+      "score": 2.1696
     },
     {
       "title": "NextEra agrees $67bn all-stock deal for Dominion in largest power acquisition ever",
@@ -432,7 +432,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0197
+      "score": 2.0191
     },
     {
       "title": "Musk’s xAI promised employees $420 for their tax data. Two months later, nothing.",
@@ -448,7 +448,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0144
+      "score": 9.0138
     },
     {
       "title": "The Open Agent Leaderboard",
@@ -461,10 +461,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png",
       "published": "2026-05-18T14:12:58+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9931
+      "score": 4.9925
     },
     {
       "title": "Decart raises $300M to put a real-time world model in front of Amazon’s chips",
@@ -480,7 +480,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7565
+      "score": 3.7559
     },
     {
       "title": "Google has sold so much TPU capacity that its own researchers are queueing for the rest",
@@ -496,7 +496,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3965
+      "score": 6.3959
     },
     {
       "title": "XPeng starts its robotaxi line in Guangzhou, three years behind the leaders and ahead of any other Chinese automaker",
@@ -512,7 +512,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9862
+      "score": 1.9856
     },
     {
       "title": "The US is building a 4,000-acre AI hub in the Philippines, and the sovereignty questions are already piling up",
@@ -528,7 +528,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.96
+      "score": 1.9594
     },
     {
       "title": "Dust raises $40M to push enterprise AI past the single-player era",
@@ -544,7 +544,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9557
+      "score": 1.9551
     },
     {
       "title": "Google I/O 2026: everything announced so far, from Gemini Intelligence to the death of the Chromebook",
@@ -560,7 +560,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0492
+      "score": 9.0486
     },
     {
       "title": "Pope Leo XIV calls AI-directed warfare a “spiral of annihilation” in historic La Sapienza address",
@@ -576,7 +576,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6464
+      "score": 2.6458
     },
     {
       "title": "South Korea’s LetinAR is building optics behind AI glasses",
@@ -589,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/GettyImages-1446311598.jpg?resize=1200%2C800",
       "published": "2026-05-18T11:00:00+00:00",
       "firstSeen": "2026-05-18T12:00:01.515688+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0708
+      "score": 2.0702
     },
     {
       "title": "OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments",
@@ -605,10 +605,10 @@
       "image": "",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3567
+      "score": 8.3561
     },
     {
       "title": "I’m a Normie. Can Normies Really Vibe Code?",
@@ -621,10 +621,10 @@
       "image": "https://media.wired.com/photos/69f9d501e8aff66a9d0732d2/master/pass/WIRED-YanBastard-Normie-Vibe-Coders-RGB-02.jpg",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T11:00:01.424144+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1467
+      "score": 7.1461
     },
     {
       "title": "Two crypto billionaires sit behind both the Trump family token and Iran’s sanctions-evasion engine",
@@ -640,7 +640,7 @@
       "lastSeen": "2026-05-18T15:00:01.680996+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8984
+      "score": 1.8979
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -653,7 +653,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1346
@@ -669,7 +669,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.6006
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2201
@@ -701,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-18T19:00:01.818437+00:00",
+      "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8901
@@ -739,5 +739,11 @@
       "score": 1.19
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
