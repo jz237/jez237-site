@@ -94,3 +94,42 @@ body.department-page .section-band + .section-band {
   border-top: 1px solid rgba(116,205,235,.08);
 }
 @media(max-width:760px){body.department-page .layout{grid-template-columns:1fr}body.department-page .sidebar{position:static}}
+
+/* Catalog footer */
+.catalog-footer {
+  margin-top: 28px;
+}
+.catalog-footer__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  padding: 18px 26px;
+}
+.catalog-footer__brand {
+  display: grid;
+  gap: 4px;
+}
+.catalog-footer__brand strong {
+  color: #fff;
+}
+.catalog-footer__brand span,
+.catalog-footer__links {
+  color: #9fc6d6;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.catalog-footer__brand a,
+.catalog-footer__links a {
+  display: inline;
+  margin: 0;
+  color: #40d9ff;
+}
+.catalog-footer__links {
+  display: block;
+  max-width: 100%;
+}
+@media (max-width: 560px) {
+  .catalog-footer__inner {
+    padding: 16px 18px;
+  }
+}
