@@ -1,7 +1,23 @@
 {
   "date": "2026-05-18",
-  "updatedAt": "2026-05-18T08:00:01.704809+00:00",
+  "updatedAt": "2026-05-18T08:51:12.422766+00:00",
   "items": [
+    {
+      "title": "Anthropic is briefing the Financial Stability Board on what Mythos has been finding",
+      "url": "https://thenextweb.com/news/anthropic-mythos-fsb-briefing-banking-cyber",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Bank of England Governor Andrew Bailey, who chairs the global financial-risk watchdog, has invited the company to present to G20 finance ministries and central banks. The model that worried him is the model now being explained. Anthropic is preparing to brief the Financial Stability Board on the cybersecurity vulnerabilities its Mythos model has been identifying [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
+      "published": "2026-05-18T07:58:02+00:00",
+      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1233
+    },
     {
       "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
       "url": "https://llm-stats.com/ai-news",
@@ -11,12 +27,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T08:00:24.144140+00:00",
+      "published": "2026-05-18T08:51:17.733810+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon",
+      "url": "https://www.marktechpost.com/2026/05/18/nvidia-introduces-a-4-bit-pretraining-methodology-using-nvfp4-validated-on-a-12b-hybrid-mamba-transformer-at-10t-token-horizon",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "NVIDIA introduces a 4-bit pretraining methodology built around the NVFP4 microscaling format — combining selective BF16 layers, 16×16 Random Hadamard Transforms on Wgrad inputs, 2D weight scaling, and stochastic rounding on gradients — validated on a 12B hybrid Mamba-Transformer trained on 10 trillion tokens, the longest publicly documented 4-bit pretraining run, with downstream accuracy closely tracking the FP8 baseline (62.58% vs 62.62% on MMLU-Pro).\nThe post NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon appear",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-1.35.42-AM-1-150x150.png",
+      "published": "2026-05-18T08:42:52+00:00",
+      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.3158
+    },
+    {
+      "title": "Apple’s India App Store case gets a procedural compromise from the Delhi bench",
+      "url": "https://thenextweb.com/news/delhi-high-court-apple-cci-antitrust-cooperate",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "An order posted on Saturday tells Apple to hand over financial information to India’s competition regulator. It also tells the regulator not to issue a final ruling before 15 July.  The Delhi High Court told Apple over the weekend to ‘fully cooperate’ with the Competition Commission of India in its ongoing antitrust investigation of the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Apple.avif",
+      "published": "2026-05-18T08:12:05+00:00",
+      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2303
+    },
+    {
+      "title": "Exadel buys London consultancy Tangent to bolt experience design onto its AI engineering line",
+      "url": "https://thenextweb.com/news/exadel-acquires-tangent-uk-ai-digital-experience",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Tampa-based, Sun Capital-owned software services firm is folding the SAP- and IWG-trusted UK digital agency into its Digital Experiences practice. Deal terms were not disclosed. Exadel, the Tampa-based software-development and consulting firm, has acquired Tangent, the London-based digital experience consultancy, the company said on Monday. Terms were not disclosed. Tangent will continue to operate [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Tangent.avif",
+      "published": "2026-05-18T08:19:14+00:00",
+      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8338
     },
     {
       "title": "Berlin’s LawX raises €7.5m to build the backoffice layer of legal AI",
@@ -29,10 +93,26 @@
       "image": "https://media.thenextweb.com/2026/05/LawX.avif",
       "published": "2026-05-18T07:08:46+00:00",
       "firstSeen": "2026-05-18T08:00:01.704809+00:00",
-      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8242
+      "score": 2.799
+    },
+    {
+      "title": "HSBC opens a $4bn credit line for Chinese clean-tech to go global",
+      "url": "https://thenextweb.com/news/hsbc-4-billion-china-clean-tech-credit-facility",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Europe’s largest bank is putting a dedicated facility behind Chinese solar, battery, EV and data-centre exporters expanding overseas, citing demand that has accelerated alongside the Iran war. HSBC has set up a dedicated $4bn credit facility to help Chinese clean-technology companies expand overseas, the bank said on Monday. The ‘Sustainability and Transition Credit Facility’ covers [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/HSBC.avif",
+      "published": "2026-05-18T07:44:42+00:00",
+      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1166
     },
     {
       "title": "Samsung union holds 21 May strike date as Monday mediation opens in Sejong",
@@ -45,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
       "published": "2026-05-18T07:29:50+00:00",
       "firstSeen": "2026-05-18T08:00:01.704809+00:00",
-      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
+      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1347
+      "score": 2.1093
     }
   ],
   "errors": []
