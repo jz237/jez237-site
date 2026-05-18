@@ -38,6 +38,7 @@
   }
 
   const CART_KEY = 'hiddenReefDemoCart';
+  const LIGHTSPEED_CART_URL = 'https://www.thehiddenreef.com/cart/';
 
   function parsePrice(price) {
     const value = parseFloat(String(price || '').replace(/[^0-9.]/g, ''));
@@ -84,7 +85,7 @@
     if (handoff) {
       handoff.classList.add('cart-handoff');
       handoff.textContent = 'Continue in Lightspeed →';
-      handoff.setAttribute('href', 'https://www.thehiddenreef.com/');
+      handoff.setAttribute('href', LIGHTSPEED_CART_URL);
       handoff.setAttribute('target', '_blank');
       handoff.setAttribute('rel', 'noopener');
     }
@@ -93,8 +94,9 @@
 
   function updateCartCount(items) {
     const count = items.reduce((sum, item) => sum + item.qty, 0);
-    const countNode = document.getElementById('cart-count') || document.querySelector('.cart-button span');
-    if (countNode) countNode.textContent = String(count);
+    document.querySelectorAll('.cart-button span').forEach(countNode => {
+      countNode.textContent = String(count);
+    });
     document.querySelectorAll('.cart-button').forEach(button => {
       button.setAttribute('aria-label', count ? 'Open demo cart with ' + count + ' item' + (count === 1 ? '' : 's') : 'Open empty demo cart');
     });
@@ -111,7 +113,7 @@
 
     if (empty) empty.style.display = items.length ? 'none' : '';
     if (list) {
-      list.innerHTML = items.map((item, index) => '<div class="cart-item"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.price || 'See site') + ' · Qty ' + item.qty + '</span></div><button type="button" data-cart-remove="' + index + '">Remove</button></div>').join('');
+      list.innerHTML = items.map((item, index) => '<div class="cart-item"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.price || 'See site') + '</span><div class="cart-qty" aria-label="Quantity controls"><button type="button" data-cart-dec="' + index + '" aria-label="Decrease quantity">−</button><strong>' + item.qty + '</strong><button type="button" data-cart-inc="' + index + '" aria-label="Increase quantity">+</button></div></div><button type="button" data-cart-remove="' + index + '">Remove</button></div>').join('');
     }
     if (summary) {
       summary.innerHTML = items.length ? '<span>Demo subtotal</span><strong>$' + total.toFixed(2) + '</strong>' : '<span>Demo subtotal</span><strong>$0.00</strong>';
@@ -165,6 +167,26 @@
       if (remove) {
         const items = readCart();
         items.splice(Number(remove.dataset.cartRemove), 1);
+        writeCart(items);
+        renderCart();
+      }
+      const inc = event.target.closest('[data-cart-inc]');
+      if (inc) {
+        const items = readCart();
+        const item = items[Number(inc.dataset.cartInc)];
+        if (item) item.qty += 1;
+        writeCart(items);
+        renderCart();
+      }
+      const dec = event.target.closest('[data-cart-dec]');
+      if (dec) {
+        const items = readCart();
+        const index = Number(dec.dataset.cartDec);
+        const item = items[index];
+        if (item) {
+          item.qty -= 1;
+          if (item.qty <= 0) items.splice(index, 1);
+        }
         writeCart(items);
         renderCart();
       }
