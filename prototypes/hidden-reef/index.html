@@ -1282,7 +1282,7 @@
       </form>
       <div class="header-actions">
         <a href="#visit">My Account ▾</a>
-        <button class="cart-button" type="button" aria-label="Cart">🛒<span id="cart-count">0</span></button>
+        <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span id="cart-count">↗</span></a>
       </div>
     </header>
 
@@ -1472,7 +1472,6 @@
     }));
     search.addEventListener('input', () => applyFilter());
     document.querySelector('.search-box').addEventListener('submit', e => { e.preventDefault(); applyFilter(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
-    document.querySelector('.cart-button').addEventListener('click', () => document.body.classList.add('cart-open'));
     document.querySelector('.close-cart').addEventListener('click', () => document.body.classList.remove('cart-open'));
     function renderCart() {
       cartCount.textContent = cart.length;
