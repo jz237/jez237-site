@@ -133,12 +133,7 @@
 
       <div class="thr-product-grid" id="products"></div>
     </div>
-    <script>
-      // Render food department products from live data
-      if (window.THR && THR.renderProducts) {
-        THR.renderProducts('products', ['flake-tropical', 'freeze-dry', 'feeders', 'pond-food']);
-      }
-    </script>
+    
 
     <section class="feature-row">
       <article class="panel">
@@ -190,6 +185,9 @@
   <script src="../assets/products.js"></script>
   <script src="../assets/product-data.js"></script>
   <script src="../assets/thr-cards.js"></script>
-  <script src="../assets/category.js"></script>
+  <script>
+    // Render food department products from live data
+    THR.renderProducts('products', ['flake-tropical', 'freeze-dry', 'feeders', 'pond-food']);
+  </script>
 </body>
 </html>
