@@ -126,6 +126,21 @@
   text-transform: uppercase;
   letter-spacing: .04em;
 }
+.thr-product .thr-options {
+  position: absolute;
+  bottom: 6px; left: 6px;
+  z-index: 4;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255,123,50,.94);
+  border: 1px solid rgba(255,255,255,.42);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  box-shadow: 0 2px 8px rgba(0,0,0,.28);
+}
 
 /* Info bar */
 .thr-product .thr-info {

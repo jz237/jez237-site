@@ -5,7 +5,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__media"><img class="link-modal__image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__media"><img class="link-modal__image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -20,6 +20,16 @@
         closeModal(modal);
         openCart();
       }
+    });
+    modal.addEventListener('change', event => {
+      if (!event.target.matches('.link-modal__variant-select')) return;
+      const selected = event.target.selectedOptions[0];
+      if (selected) setModalVariant(modal, {
+        name: selected.dataset.name,
+        price: selected.dataset.price,
+        url: selected.value,
+        image: selected.dataset.image
+      });
     });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(modal);
@@ -257,21 +267,71 @@
     const target = normalizeUrl(href);
     const groups = getCatalogGroups();
     const productsBySlug = window.THR_PRODUCTS || {};
+    const normalizeVariantKey = window.THR?.normalizeVariantKey || fallbackVariantKey;
 
     for (const slug of Object.keys(productsBySlug)) {
       const products = productsBySlug[slug] || [];
       const product = products.find(item => normalizeUrl(item.productUrl) === target);
       if (product) {
+        const variantKey = normalizeVariantKey(product);
+        const variants = products.filter(item => normalizeVariantKey(item) === variantKey);
         return {
           product,
           slug,
-          related: products.filter(item => normalizeUrl(item.productUrl) !== target).slice(0, 3),
+          variants,
+          related: products
+            .filter(item => normalizeUrl(item.productUrl) !== target && normalizeVariantKey(item) !== variantKey)
+            .slice(0, 3),
           category: groups[slug] || {}
         };
       }
     }
 
-    return { product: null, slug: '', related: [], category: {} };
+    return { product: null, slug: '', variants: [], related: [], category: {} };
+  }
+
+  function fallbackVariantKey(product) {
+    return (product?.name || '')
+      .toLowerCase()
+      .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted)\b/g, '')
+      .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|g|w|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
+      .replace(/[^a-z0-9]+/g, '');
+  }
+
+  function setModalVariant(modal, variant) {
+    const title = variant.name || 'Hidden Reef item';
+    const price = variant.price || 'See site';
+    const url = variant.url || 'https://www.thehiddenreef.com/';
+    const image = variant.image || '';
+    modal.querySelector('h2').textContent = title;
+    modal.querySelector('.link-modal__open').href = url;
+    const addButton = modal.querySelector('.link-modal__add');
+    addButton.dataset.name = title;
+    addButton.dataset.price = price;
+    addButton.dataset.url = url;
+    addButton.dataset.image = image;
+    const imageNode = modal.querySelector('.link-modal__image');
+    if (image) imageNode.src = image;
+    imageNode.alt = title;
+    const priceFact = modal.querySelector('[data-modal-price]');
+    if (priceFact) priceFact.textContent = price;
+    const urlNode = modal.querySelector('.link-modal__url');
+    if (urlNode) urlNode.textContent = url;
+  }
+
+  function renderVariantSelector(modal, variants, activeUrl) {
+    const wrap = modal.querySelector('.link-modal__variants');
+    if (!wrap) return;
+    if (!variants || variants.length <= 1) {
+      wrap.innerHTML = '';
+      wrap.style.display = 'none';
+      return;
+    }
+    wrap.style.display = '';
+    wrap.innerHTML = '<label for="link-modal-variant">Options</label><select id="link-modal-variant" class="link-modal__variant-select">' + variants.map(item => {
+      const selected = normalizeUrl(item.productUrl) === normalizeUrl(activeUrl) ? ' selected' : '';
+      return '<option value="' + escapeHtml(item.productUrl || '') + '" data-name="' + escapeHtml(item.name || '') + '" data-price="' + escapeHtml(item.price || 'See site') + '" data-image="' + escapeHtml(item.imageUrl || '') + '"' + selected + '>' + escapeHtml(item.name || 'Option') + ' - ' + escapeHtml(item.price || 'See site') + '</option>';
+    }).join('') + '</select><span>Select the exact color, size, or package before adding it to the demo cart.</span>';
   }
 
   document.addEventListener('click', event => {
@@ -310,7 +370,8 @@
     addButton.dataset.price = price;
     addButton.dataset.url = link.href;
     addButton.dataset.image = product.imageUrl || img?.getAttribute('src') || '';
-    modal.querySelector('.link-modal__facts').innerHTML = '<span><strong>Brand</strong>' + escapeHtml(brand) + '</span><span><strong>Price</strong>' + escapeHtml(price) + '</span><span><strong>Department</strong>' + escapeHtml(departmentName) + '</span><span><strong>Category</strong>' + escapeHtml(categoryName) + '</span>';
+    modal.querySelector('.link-modal__facts').innerHTML = '<span><strong>Brand</strong>' + escapeHtml(brand) + '</span><span><strong>Price</strong><em data-modal-price>' + escapeHtml(price) + '</em></span><span><strong>Department</strong>' + escapeHtml(departmentName) + '</span><span><strong>Category</strong>' + escapeHtml(categoryName) + '</span>';
+    renderVariantSelector(modal, context.variants, link.href);
     modal.querySelector('.link-modal__status').innerHTML = '<strong>Store availability</strong><span>Confirm current stock before visiting. Live inventory comes later when API access is available.</span>';
     modal.querySelector('.link-modal__details').innerHTML = detailItems.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
     modal.querySelector('.link-modal__details').style.display = detailItems.length ? '' : 'none';
