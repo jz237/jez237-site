@@ -12,7 +12,12 @@
 
   function getParams() {
     const p = new URLSearchParams(window.location.search);
-    return { cat: p.get('cat') || '', sub: p.get('sub') || '', page: parseInt(p.get('page')) || 1 };
+    return {
+      cat: p.get('cat') || '',
+      sub: p.get('sub') || '',
+      brand: p.get('brand') || '',
+      page: parseInt(p.get('page')) || 1
+    };
   }
 
   function findCategory(catSlug) {
@@ -379,6 +384,10 @@
     baseProducts = products;
     currentProducts = products;
     renderProductControls(products);
+    if (params.brand) {
+      const brandFilter = document.getElementById('brand-filter');
+      if (brandFilter) brandFilter.value = params.brand;
+    }
 
     const searchInput = document.getElementById('search');
     if (searchInput) {
