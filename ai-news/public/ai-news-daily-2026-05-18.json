@@ -1,6 +1,6 @@
 {
   "date": "2026-05-18",
-  "updatedAt": "2026-05-18T07:00:01.527939+00:00",
+  "updatedAt": "2026-05-18T08:00:01.704809+00:00",
   "items": [
     {
       "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
@@ -11,12 +11,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T07:00:15.485694+00:00",
+      "published": "2026-05-18T08:00:24.144140+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T07:00:01.527939+00:00",
+      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Berlin’s LawX raises €7.5m to build the backoffice layer of legal AI",
+      "url": "https://thenextweb.com/news/lawx-berlin-7-5-m-motive-partners-legal-operating-system",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Motive Partners is leading the seed round, with WENVEST Capital, xdeck, and SIVentures alongside. The 2025-founded startup is targeting case management, billing, and document handling rather than the parts of legal work most AI vendors are chasing. LawX, the Berlin legal-tech startup founded by Dr Norman Koschmieder, has raised a €7.5M seed round led by [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/LawX.avif",
+      "published": "2026-05-18T07:08:46+00:00",
+      "firstSeen": "2026-05-18T08:00:01.704809+00:00",
+      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8242
+    },
+    {
+      "title": "Samsung union holds 21 May strike date as Monday mediation opens in Sejong",
+      "url": "https://thenextweb.com/news/samsung-union-bonus-formula-sejong-strike",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Talks resumed in Sejong on Monday. Choi Seung-ho walked into the National Labor Relations Commission building in Sejong on Monday morning, about 110 km south of Seoul, and told reporters he would ‘participate in this second round in good faith’. The head of Samsung Electronics’ largest union, on Friday’s evidence, had been preparing to talk [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
+      "published": "2026-05-18T07:29:50+00:00",
+      "firstSeen": "2026-05-18T08:00:01.704809+00:00",
+      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1347
     }
   ],
   "errors": []
