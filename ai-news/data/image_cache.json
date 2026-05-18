@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T15:00:01.680996+00:00",
+  "updatedAt": "2026-05-18T16:00:01.430114+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7172,6 +7172,14 @@
     "https://huggingface.co/blog/ibm-research/open-agent-leaderboard": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png",
       "checkedAt": "2026-05-18T15:00:01.680996+00:00"
+    },
+    "https://www.theverge.com/tech/932375/amazon-alexa-plus-ai-podcasts": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp;strip=all&amp;crop=0,16.342557965595,100,67.314884068811",
+      "checkedAt": "2026-05-18T16:00:01.430114+00:00"
+    },
+    "https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/Bl-qDWU9OfuXZ06hNxZE7.jpeg",
+      "checkedAt": "2026-05-18T16:00:01.430114+00:00"
     }
   }
 }
