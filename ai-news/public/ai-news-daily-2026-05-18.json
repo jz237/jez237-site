@@ -1,6 +1,6 @@
 {
   "date": "2026-05-18",
-  "updatedAt": "2026-05-18T11:00:01.424144+00:00",
+  "updatedAt": "2026-05-18T12:00:01.515688+00:00",
   "items": [
     {
       "title": "I’m a Normie. Can Normies Really Vibe Code?",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/69f9d501e8aff66a9d0732d2/master/pass/WIRED-YanBastard-Normie-Vibe-Coders-RGB-02.jpg",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T11:00:01.424144+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3599
+      "score": 7.3305
     },
     {
       "title": "CBA names AI researcher Professor Mary-Anne Williams as Chief AI Scientist",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/Commonwealth-Bank-of-Australia.avif",
       "published": "2026-05-18T09:03:54+00:00",
       "firstSeen": "2026-05-18T10:00:01.140262+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5924
+      "score": 5.5639
     },
     {
       "title": "Anthropic is briefing the Financial Stability Board on what Mythos has been finding",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-18T07:58:02+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0611
+      "score": 5.0334
     },
     {
       "title": "NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-1.35.42-AM-1-150x150.png",
       "published": "2026-05-18T08:42:52+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.2523
+      "score": 4.224
     },
     {
       "title": "Shein buys Everlane at $100M, and the radical-transparency brand becomes a fast-fashion asset",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/Shein.avif",
       "published": "2026-05-18T08:50:29+00:00",
       "firstSeen": "2026-05-18T10:00:01.140262+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.186
+      "score": 3.1576
     },
     {
       "title": "Apple’s India App Store case gets a procedural compromise from the Delhi bench",
@@ -93,10 +93,26 @@
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-05-18T08:12:05+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1677
+      "score": 3.1398
+    },
+    {
+      "title": "Pope Leo XIV calls AI-directed warfare a “spiral of annihilation” in historic La Sapienza address",
+      "url": "https://thenextweb.com/news/pope-leo-ai-warfare-spiral-annihilation-sapienza",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Pope Leo XIV used a historic visit to Europe’s largest university to denounce the growing role of artificial intelligence in warfare, warning that investments in AI-directed weaponry are driving the world toward what he called a “spiral of annihilation.” Speaking at Rome’s La Sapienza University on Wednesday, the pontiff called for tighter monitoring of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/pope-leo-ai-warfare-spiral-annihilation-sapienza.avif",
+      "published": "2026-05-18T11:38:01+00:00",
+      "firstSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8388
     },
     {
       "title": "Exadel buys London consultancy Tangent to bolt experience design onto its AI engineering line",
@@ -109,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Tangent.avif",
       "published": "2026-05-18T08:19:14+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7711
+      "score": 2.7431
     },
     {
       "title": "Berlin’s LawX raises €7.5m to build the backoffice layer of legal AI",
@@ -125,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/LawX.avif",
       "published": "2026-05-18T07:08:46+00:00",
       "firstSeen": "2026-05-18T08:00:01.704809+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7383
+      "score": 2.7112
     },
     {
       "title": "Dzung Pham, Kleomenis Katevas, Ali Shahin Shamsabadi, Hamed Haddadi",
@@ -139,12 +155,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T11:00:17.540529+00:00",
+      "published": "2026-05-18T12:00:09.831475+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "South Korea’s LetinAR is building optics behind AI glasses",
+      "url": "https://techcrunch.com/2026/05/18/south-koreas-letinar-is-building-the-optics-behind-ai-glasses",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A lens the size of a thumbnail — and the South Korean startup that makes it could become the optical backbone of the AI glasses era.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/GettyImages-1446311598.jpg?resize=1200%2C800",
+      "published": "2026-05-18T11:00:00+00:00",
+      "firstSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
     },
     {
       "title": "Two crypto billionaires sit behind both the Trump family token and Iran’s sanctions-evasion engine",
@@ -157,42 +189,10 @@
       "image": "https://media.thenextweb.com/2017/02/trump-domains.avif",
       "published": "2026-05-18T09:39:10+00:00",
       "firstSeen": "2026-05-18T10:00:01.140262+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
+      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1096
-    },
-    {
-      "title": "HSBC opens a $4bn credit line for Chinese clean-tech to go global",
-      "url": "https://thenextweb.com/news/hsbc-4-billion-china-clean-tech-credit-facility",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Europe’s largest bank is putting a dedicated facility behind Chinese solar, battery, EV and data-centre exporters expanding overseas, citing demand that has accelerated alongside the Iran war. HSBC has set up a dedicated $4bn credit facility to help Chinese clean-technology companies expand overseas, the bank said on Monday. The ‘Sustainability and Transition Credit Facility’ covers [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/HSBC.avif",
-      "published": "2026-05-18T07:44:42+00:00",
-      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0549
-    },
-    {
-      "title": "Samsung union holds 21 May strike date as Monday mediation opens in Sejong",
-      "url": "https://thenextweb.com/news/samsung-union-bonus-formula-sejong-strike",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Talks resumed in Sejong on Monday. Choi Seung-ho walked into the National Labor Relations Commission building in Sejong on Monday morning, about 110 km south of Seoul, and told reporters he would ‘participate in this second round in good faith’. The head of Samsung Electronics’ largest union, on Friday’s evidence, had been preparing to talk [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
-      "published": "2026-05-18T07:29:50+00:00",
-      "firstSeen": "2026-05-18T08:00:01.704809+00:00",
-      "lastSeen": "2026-05-18T11:00:01.424144+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.048
+      "score": 2.0806
     }
   ],
   "errors": []
