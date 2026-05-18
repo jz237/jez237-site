@@ -597,14 +597,14 @@
     .brand-tile {
       display: grid;
       place-items: center;
-      min-height: 78px;
-      padding: 12px;
+      min-height: 64px;
+      padding: 9px 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
       box-shadow: 0 8px 18px rgba(0,65,105,0.06);
     }
-    .brand-tile img { max-width: 100%; max-height: 50px; object-fit: contain; }
+    .brand-tile img { max-width: 100%; max-height: 42px; object-fit: contain; }
     .guides {
       display: grid;
       grid-template-columns: repeat(3, minmax(0,1fr));
@@ -1167,11 +1167,15 @@
     #products .price { color: #004c7c; }
     #products .price-row { border-color: #e2eef3; }
     .product,
-    .guide,
-    .brand-tile {
+    .guide {
       background: #071a27;
       border-color: rgba(116,205,235,0.18);
       box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.035);
+    }
+    .brand-tile {
+      background: #fff;
+      border-color: rgba(195,222,232,0.74);
+      box-shadow: 0 8px 18px rgba(0,65,105,0.12);
     }
     .cat strong { color: #dff8ff; }
     .cat span { color: #9fc6d6; }
