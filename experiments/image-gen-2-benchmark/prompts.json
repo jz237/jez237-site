@@ -514,5 +514,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-18-midday-fulgurite-aquifer-battery",
+    "title": "Fulgurite Aquifer Battery",
+    "tests": "Explores infographic cutaway clarity, glassy lightning-formed geology, groundwater flow, buried energy-storage infrastructure, restrained readable labels, and warm desert storm lighting without dance imagery.",
+    "prompt": "Use case: infographic-diagram\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a vertical museum-quality educational infographic poster titled \"FULGURITE AQUIFER BATTERY\".\n\nComposition: a clean cutaway diagram of a desert mesa after a thunderstorm, showing how lightning-formed fulgurite tubes in sandy soil could become a fictional groundwater-cooled energy storage system. Top third: storm clouds breaking over a quiet desert plateau with a single lightning-scarred ridge, sparse scrub plants, wet sand, and small utility huts for scale. Middle and lower sections: an exposed geological cross-section with branching glassy fulgurite tubes descending through tan sand, red clay bands, gravel layers, and a blue aquifer lens.\n\nInfographic details: use a small number of clear readable labels and arrows only: \"storm charge\", \"glassy fulgurite tubes\", \"cool aquifer\", \"storage chamber\", and \"return flow\". Include simple numbered callout circles 1-4, thin white leader lines, and restrained color-coded arrows: electric violet for charge paths, blue for groundwater cooling, amber for stored heat. Add two small inset diagrams: one magnified cross-section of a hollow glassy fulgurite tube, one simplified flow loop showing water cooling the storage chamber.\n\nVisual style: polished scientific illustration mixed with tactile geological realism, crisp diagram hierarchy, believable sediment textures, glossy black-brown glass tubes, damp sand, mineral flecks, subtle rain puddles on the surface, precise lighting, high detail, strong depth, professional layout. Keep text sparse, large, and readable.\n\nConstraints: no people as central subjects, no dancers, no dancing, no dance poses, no performance stage, no copyrighted characters or logos, no tiny paragraphs of unreadable text, no watermark.",
+    "image": "images/2026-05-18-midday-fulgurite-aquifer-battery.png",
+    "date": "2026-05-18",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
