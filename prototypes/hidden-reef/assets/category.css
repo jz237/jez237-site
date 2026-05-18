@@ -201,19 +201,32 @@ body.department-page .section-band + .section-band {
   text-transform: uppercase;
 }
 @media (max-width: 760px) {
+  .link-modal {
+    align-items: stretch;
+    padding: 10px;
+  }
   .link-modal__panel {
-    grid-template-columns: 1fr;
-    max-height: calc(100vh - 24px);
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    width: 100%;
+    max-height: calc(100vh - 20px);
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
   }
   .link-modal__media {
-    min-height: 260px;
-    padding: 18px;
+    flex: 0 0 auto;
+    min-height: 180px;
+    max-height: 34vh;
+    padding: 14px;
   }
   .link-modal__image {
-    max-height: 260px;
+    max-height: 30vh;
   }
   .link-modal__body {
-    padding: 22px;
+    flex: 0 0 auto;
+    overflow: visible;
+    padding: 18px;
   }
   .link-modal__facts {
     grid-template-columns: 1fr;
