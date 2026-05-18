@@ -257,6 +257,7 @@
     const el = document.getElementById('product-grid');
     if (!el) return;
 
+    products = window.THR?.groupProductVariants ? THR.groupProductVariants(products) : products;
     const start = (page - 1) * PRODUCTS_PER_PAGE;
     const end = start + PRODUCTS_PER_PAGE;
     const pageProducts = products.slice(start, end);
@@ -278,6 +279,7 @@
       const pageLabel = p.page > 1 ? `Page ${p.page}` : '';
       const brandHtml = brand ? `<span class="thr-brand">${brand}</span>` : '';
       const badge = pageLabel ? `<span class="thr-page">${pageLabel}</span>` : '';
+      const optionBadge = p.variants && p.variants.length > 1 ? `<span class="thr-options">${p.variants.length} options</span>` : '';
 
       html += `
         <a class="thr-product" href="${url}" target="_blank" rel="noopener">
@@ -286,6 +288,7 @@
           <div class="thr-img">
             <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
             ${badge}
+            ${optionBadge}
           </div>
           <div class="thr-info">
             <span class="thr-price">${price}</span>
@@ -335,7 +338,8 @@
 
   function updateProductView(page) {
     currentPage = page || 1;
-    currentProducts = applyProductControls(baseProducts);
+    const filteredProducts = applyProductControls(baseProducts);
+    currentProducts = window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
     const totalPages = Math.max(1, Math.ceil(currentProducts.length / PRODUCTS_PER_PAGE));
     currentPage = Math.min(currentPage, totalPages);
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;

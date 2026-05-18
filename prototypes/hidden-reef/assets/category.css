@@ -224,6 +224,40 @@ body.department-page .section-band + .section-band {
   letter-spacing: .1em;
   text-transform: uppercase;
 }
+.link-modal__facts em {
+  font-style: normal;
+}
+.link-modal__variants {
+  display: grid;
+  gap: 7px;
+  margin: 0 0 18px;
+  padding: 12px;
+  border: 1px solid rgba(116,205,235,.18);
+  border-radius: 7px;
+  background: rgba(8,35,52,.72);
+}
+.link-modal__variants label {
+  color: #40d9ff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.link-modal__variants select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid rgba(116,205,235,.34);
+  border-radius: 6px;
+  padding: 0 10px;
+  color: #eaf8fc;
+  background: #071a27;
+  font-weight: 800;
+}
+.link-modal__variants span {
+  color: #9fc6d6;
+  font-size: 12px;
+  line-height: 1.35;
+}
 .link-modal__status {
   display: grid;
   gap: 4px;
