@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title id="page-title">Category — The Hidden Reef</title>
+  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="stylesheet" href="../assets/category.css" />
+  <style>
+    :root {
+      --reef-bg:#03111d; --reef-panel:#071a27; --reef-line:rgba(116,205,235,.2);
+      --reef-text:#f0fbff; --reef-muted:#a9cbd9; --reef-cyan:#40d9ff;
+      --reef-teal:#00a7b7; --reef-orange:#ff7b32;
+    }
+    body {
+      color: var(--reef-text);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(14,159,204,.2), transparent 28%),
+        linear-gradient(180deg,#03111d 0,#061c2d 280px,#020912 100%);
+    }
+    .page { max-width:1180px; background:linear-gradient(180deg,rgba(7,26,39,.48),rgba(3,13,22,0)); }
+    /* Header - reused from index */
+    .header {
+      grid-template-columns:auto minmax(260px,1fr) auto;
+      gap:18px; padding:16px 20px;
+      margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      border-bottom:1px solid var(--reef-line);
+      background:linear-gradient(180deg,rgba(8,31,47,.98),rgba(5,22,34,.98));
+    }
+    .brand {
+      grid-column:auto; min-width:235px; min-height:0;
+      justify-content:flex-start; padding:0; margin:0;
+      background:none; border:0; box-shadow:none;
+    }
+    .brand img {
+      display:block; width:74px; height:48px; object-fit:cover;
+      border:1px solid rgba(126,232,255,.38); border-radius:7px;
+      background:#061928; box-shadow:0 8px 20px rgba(0,0,0,.28);
+    }
+    .brand strong { font-size:28px; line-height:.9; color:#fff; text-shadow:0 3px 14px rgba(0,0,0,.5); }
+    .brand span span { margin-top:7px; color:#bdefff; font-size:11px; letter-spacing:.13em; text-align:left; text-transform:uppercase; }
+    .search-box {
+      grid-column:auto; max-width:none; justify-self:stretch;
+      height:44px; background:#102b3b; border-color:rgba(116,205,235,.26);
+    }
+    .search-box input { color:#eaf8fc; background:transparent; }
+    .search-box input::placeholder { color:#8bb1bf; }
+    .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
+    .main-nav {
+      display:grid; grid-template-columns:repeat(8,minmax(max-content,1fr));
+      gap:0; margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      border-top:0; border-bottom:1px solid var(--reef-line);
+      background:rgba(3,18,29,.98);
+    }
+    .main-nav a { min-height:44px; padding-inline:16px; }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display:flex; flex-wrap:wrap; align-items:center; gap:6px;
+      padding:18px 0 4px; font-size:13px; font-weight:700;
+    }
+    .breadcrumb a { color:var(--reef-cyan); }
+    .breadcrumb span { color:var(--reef-muted); }
+
+    /* Category header */
+    .cat-header {
+      margin:12px 0 28px;
+    }
+    .cat-header h1 {
+      margin:0 0 6px;
+      color:#fff;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(28px,4vw,38px);
+      line-height:1.05;
+    }
+    .cat-header p {
+      margin:0;
+      color:var(--reef-muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+    .cat-header .source-link {
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:10px; padding:8px 14px;
+      border:1px solid rgba(116,205,235,.28); border-radius:6px;
+      color:var(--reef-cyan); font-size:12px; font-weight:800;
+      text-transform:uppercase; letter-spacing:.06em;
+      background:rgba(8,35,52,.72);
+      transition:border-color .16s ease;
+    }
+    .cat-header .source-link:hover {
+      border-color:rgba(64,217,255,.65);
+    }
+
+    /* Subcategory tabs */
+    .subcat-tabs {
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-bottom:20px;
+    }
+    .subcat-tab {
+      padding:8px 14px; border:1px solid var(--reef-line); border-radius:999px;
+      color:var(--reef-muted); font-size:13px; font-weight:800;
+      background:transparent; cursor:pointer;
+      transition:border-color .16s ease, color .16s ease, background .16s ease;
+    }
+    .subcat-tab:hover, .subcat-tab.active {
+      border-color:var(--reef-cyan); color:#fff;
+      background:rgba(64,217,255,.12);
+    }
+    .subcat-tab.active {
+      background:linear-gradient(180deg,#0db6c6,#0089a8);
+      color:#fff; border-color:#0089a8;
+    }
+
+    /* Product grid */
+    .product-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+      gap:14px;
+    }
+    .product {
+      position:relative; display:flex; flex-direction:column;
+      min-height:280px; padding:13px;
+      border:1px solid rgba(116,205,235,.18); border-radius:8px;
+      background:#071a27;
+      box-shadow:0 10px 24px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035);
+      transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .product:hover {
+      transform:translateY(-3px);
+      border-color:rgba(64,217,255,.65);
+      box-shadow:0 18px 38px rgba(0,0,0,.32),0 0 0 1px rgba(64,217,255,.14);
+    }
+    .product img {
+      width:100%; height:140px; object-fit:contain;
+      display:block; margin-bottom:10px; padding:8px;
+      border:1px solid rgba(207,230,239,.85); border-radius:7px;
+      background:radial-gradient(circle at 50% 0%,rgba(64,217,255,.18),transparent 46%),linear-gradient(180deg,#f4fbfd,#e6f2f6);
+    }
+    .product .price-tag {
+      display:inline-block; padding:3px 8px; border-radius:4px;
+      background:rgba(0,167,183,.18); color:#40d9ff;
+      font-size:13px; font-weight:900; margin-bottom:4px;
+    }
+    .product h3 {
+      min-height:36px; margin:0 0 4px;
+      color:#f0fbff; font-size:13px; line-height:1.22;
+    }
+    .product a {
+      color:inherit; text-decoration:none;
+    }
+    .product a:hover h3 {
+      color:var(--reef-cyan); text-decoration:underline;
+    }
+    .product .view-link {
+      display:inline-flex; align-items:center; gap:4px;
+      margin-top:auto; padding-top:8px;
+      color:var(--reef-cyan); font-size:11px; font-weight:800;
+      text-transform:uppercase; letter-spacing:.06em;
+    }
+    .product .view-link::after { content:"↗"; font-size:13px; }
+    .product .page-badge {
+      position:absolute; top:8px; right:8px;
+      padding:2px 6px; border-radius:999px;
+      background:rgba(3,24,38,.84); border:1px solid rgba(116,205,235,.34);
+      color:#dff8ff; font-size:9px; font-weight:900;
+      text-transform:uppercase; letter-spacing:.04em;
+    }
+
+    /* Pagination */
+    .pagination {
+      display:flex; justify-content:center; gap:8px;
+      margin:28px 0 12px;
+    }
+    .pagination button {
+      min-height:38px; padding:8px 16px;
+      border:1px solid var(--reef-line); border-radius:6px;
+      color:var(--reef-muted); background:transparent;
+      font-size:14px; font-weight:800; cursor:pointer;
+      transition:border-color .16s ease, color .16s ease, background .16s ease;
+    }
+    .pagination button:hover, .pagination button.active {
+      border-color:var(--reef-cyan); color:#fff;
+      background:linear-gradient(180deg,#0db6c6,#0089a8);
+    }
+    .pagination .info {
+      display:flex; align-items:center;
+      color:var(--reef-muted); font-size:13px; font-weight:700;
+    }
+
+    /* Count summary */
+    .count-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:14px; padding-bottom:10px;
+      border-bottom:1px solid var(--reef-line);
+    }
+    .count-bar span {
+      color:var(--reef-muted); font-size:13px; font-weight:800;
+    }
+    .count-bar .total { color:var(--reef-cyan); }
+
+    /* Back to top */
+    .back-top {
+      display:flex; justify-content:center; margin:24px 0;
+    }
+    .back-top a {
+      padding:10px 18px; border:1px solid var(--reef-line); border-radius:6px;
+      color:var(--reef-muted); font-size:13px; font-weight:800;
+      text-transform:uppercase; letter-spacing:.06em;
+      transition:border-color .16s ease, color .16s ease;
+    }
+    .back-top a:hover {
+      border-color:var(--reef-cyan); color:var(--reef-cyan);
+    }
+
+    @media (max-width:760px) {
+      .header { grid-template-columns:1fr; }
+      .main-nav { display:flex; justify-content:flex-start; overflow-x:auto; scrollbar-width:none; }
+      .main-nav a { flex:0 0 auto; }
+      .product-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .product { min-height:260px; }
+      .product img { height:110px; }
+    }
+    @media (max-width:480px) {
+      .product-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <a class="brand" href="../">
+        <img src="../assets/site/header-fish.png" alt="Yellow reef fish" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+      <form class="search-box" action="#products" onsubmit="return false;">
+        <input id="search" type="search" placeholder="Search products..." />
+        <button type="submit" aria-label="Search">⌕</button>
+      </form>
+      <div class="header-actions">
+        <a href="../">Home ▾</a>
+        <button class="cart-button" type="button" aria-label="Cart">🛒<span id="cart-count">0</span></button>
+      </div>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../saltwater/">Saltwater</a>
+      <a href="../freshwater/">Aquarium</a>
+      <a href="../pond/">Pond</a>
+      <a href="../equipment/">Lighting</a>
+      <a href="../food/">Food</a>
+      <a href="../decor/">Decorations</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <div class="breadcrumb" id="breadcrumb"></div>
+
+    <section class="cat-header" id="cat-header"></section>
+
+    <div class="subcat-tabs" id="subcat-tabs"></div>
+
+    <div class="count-bar" id="count-bar"></div>
+
+    <div class="product-grid" id="product-grid"></div>
+
+    <div class="pagination" id="pagination"></div>
+
+    <div class="back-top"><a href="#top">↑ Back to top</a></div>
+
+    <footer class="footer" style="margin-top:28px;">
+      <div style="padding:18px 26px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <strong style="color:#fff;">The Hidden Reef</strong>
+          <span style="color:#9fc6d6; font-size:13px; margin-left:12px;">Prototype redesign · Product data from <a href="https://www.thehiddenreef.com/" style="color:#40d9ff;">thehiddenreef.com</a></span>
+        </div>
+        <div style="color:#9fc6d6; font-size:13px;">
+          <a href="../" style="color:#40d9ff;">Home</a> ·
+          <a href="../freshwater/">Freshwater</a> ·
+          <a href="../saltwater/">Saltwater</a> ·
+          <a href="../pond/">Pond</a> ·
+          <a href="../equipment/">Equipment</a> ·
+          <a href="../food/">Food</a> ·
+          <a href="../decor/">Decorations</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/category.js"></script>
+</body>
+</html>
