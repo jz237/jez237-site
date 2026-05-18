@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T14:00:01.549884+00:00",
+  "updatedAt": "2026-05-18T15:00:01.680996+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7164,6 +7164,14 @@
     "https://techcrunch.com/2026/05/18/south-koreas-letinar-is-building-the-optics-behind-ai-glasses": {
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/GettyImages-1446311598.jpg?resize=1200,800",
       "checkedAt": "2026-05-18T12:00:01.515688+00:00"
+    },
+    "https://techcrunch.com/2026/05/18/amazons-new-alexa-powered-feature-can-generate-podcast-episodes": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/alexa-podcasts-hero.png?w=1200",
+      "checkedAt": "2026-05-18T15:00:01.680996+00:00"
+    },
+    "https://huggingface.co/blog/ibm-research/open-agent-leaderboard": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png",
+      "checkedAt": "2026-05-18T15:00:01.680996+00:00"
     }
   }
 }
