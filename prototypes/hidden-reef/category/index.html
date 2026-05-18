@@ -184,8 +184,16 @@
     /* Mobile overrides handled by thr-cards.css */
     @media (max-width:760px) {
       .header { grid-template-columns:1fr; }
-      .main-nav { display:flex; justify-content:flex-start; overflow-x:auto; scrollbar-width:none; }
-      .main-nav a { flex:0 0 auto; }
+      .main-nav {
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        overflow:visible;
+      }
+      .main-nav a {
+        justify-content:center;
+        padding-inline:10px;
+        border-top:1px solid rgba(116,205,235,.1);
+      }
       .subcat-tabs { padding:8px 0; }
     }
   </style>
@@ -203,7 +211,7 @@
       </form>
       <div class="header-actions">
         <a href="../">Home ▾</a>
-        <button class="cart-button" type="button" aria-label="Cart">🛒<span id="cart-count">0</span></button>
+        <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span>↗</span></a>
       </div>
     </header>
 
@@ -226,21 +234,14 @@
     <div class="pagination" id="pagination"></div>
     <div class="back-top"><a href="#top">↑ Back to top</a></div>
 
-    <footer class="footer catalog-footer">
-      <div class="catalog-footer__inner">
-        <div class="catalog-footer__brand">
-          <strong>The Hidden Reef</strong>
-          <span>Prototype redesign · Product data from <a href="https://www.thehiddenreef.com/">thehiddenreef.com</a></span>
-        </div>
-        <nav class="catalog-footer__links" aria-label="Footer navigation">
-          <a href="../">Home</a> ·
-          <a href="../freshwater/">Freshwater</a> ·
-          <a href="../saltwater/">Saltwater</a> ·
-          <a href="../pond/">Pond</a> ·
-          <a href="../equipment/">Equipment</a> ·
-          <a href="../food/">Food</a> ·
-          <a href="../decor/">Decorations</a>
-        </nav>
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><p>Aquarium supplies, fish, coral, pond goods, and local advice from Levittown, PA.</p><p>Prototype redesign for demonstration.</p></div>
+        <div><h4>Shop</h4><a href="../freshwater/">Freshwater</a><a href="../saltwater/">Saltwater</a><a href="../pond/">Pond</a><a href="../equipment/">Equipment</a><a href="../maintenance/">Maintenance</a></div>
+        <div><h4>Customer Service</h4><a href="../contact/">Visit the store</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../contact/">Contact &amp; Hours</a></div>
+        <div><h4>About This Demo</h4><a href="../lightspeed-integration/">How it works with Lightspeed POS</a></div>
+        <div><h4>Brands</h4><a>Fluval</a><a>Seachem</a><a>Red Sea</a><a>Sera</a></div>
+        <div><h4>Stay in the Loop</h4><p>Get arrivals, pond-season reminders, and aquarium deals.</p><form class="newsletter"><input placeholder="Email" /><button type="button">→</button></form></div>
       </div>
     </footer>
   </main>
