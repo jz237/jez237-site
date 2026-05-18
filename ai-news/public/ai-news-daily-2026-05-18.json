@@ -1,7 +1,23 @@
 {
   "date": "2026-05-18",
-  "updatedAt": "2026-05-18T12:00:01.515688+00:00",
+  "updatedAt": "2026-05-18T12:46:17.762486+00:00",
   "items": [
+    {
+      "title": "Google I/O 2026: everything announced so far, from Gemini Intelligence to the death of the Chromebook",
+      "url": "https://thenextweb.com/news/google-io-2026-gemini-intelligence-android-xr-glasses",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google I/O 2026 begins on Monday at the Shoreline Amphitheatre in Mountain View, California, and the company has already shown much of its hand. The two-day developer conference, which runs 19–20 May with a keynote at 10 a.m. PT, is expected to formalise a set of announcements that Google began rolling out a week early [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/google-io-2026-gemini-intelligence-android-xr-glasses.avif",
+      "published": "2026-05-18T11:44:35+00:00",
+      "firstSeen": "2026-05-18T12:46:17.762486+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.219
+    },
     {
       "title": "I’m a Normie. Can Normies Really Vibe Code?",
       "url": "https://www.wired.com/story/normie-vibe-code",
@@ -13,10 +29,10 @@
       "image": "https://media.wired.com/photos/69f9d501e8aff66a9d0732d2/master/pass/WIRED-YanBastard-Normie-Vibe-Coders-RGB-02.jpg",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T11:00:01.424144+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3305
+      "score": 7.3085
     },
     {
       "title": "CBA names AI researcher Professor Mary-Anne Williams as Chief AI Scientist",
@@ -29,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/Commonwealth-Bank-of-Australia.avif",
       "published": "2026-05-18T09:03:54+00:00",
       "firstSeen": "2026-05-18T10:00:01.140262+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5639
+      "score": 5.5424
     },
     {
       "title": "Anthropic is briefing the Financial Stability Board on what Mythos has been finding",
@@ -45,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-18T07:58:02+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0334
+      "score": 5.0126
     },
     {
       "title": "NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon",
@@ -61,10 +77,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-1.35.42-AM-1-150x150.png",
       "published": "2026-05-18T08:42:52+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.224
+      "score": 4.2028
     },
     {
       "title": "Shein buys Everlane at $100M, and the radical-transparency brand becomes a fast-fashion asset",
@@ -77,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/Shein.avif",
       "published": "2026-05-18T08:50:29+00:00",
       "firstSeen": "2026-05-18T10:00:01.140262+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1576
+      "score": 3.1362
     },
     {
       "title": "Apple’s India App Store case gets a procedural compromise from the Delhi bench",
@@ -93,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/Apple.avif",
       "published": "2026-05-18T08:12:05+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1398
+      "score": 3.1189
     },
     {
       "title": "Pope Leo XIV calls AI-directed warfare a “spiral of annihilation” in historic La Sapienza address",
@@ -109,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/pope-leo-ai-warfare-spiral-annihilation-sapienza.avif",
       "published": "2026-05-18T11:38:01+00:00",
       "firstSeen": "2026-05-18T12:00:01.515688+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8388
+      "score": 2.8158
     },
     {
       "title": "Exadel buys London consultancy Tangent to bolt experience design onto its AI engineering line",
@@ -125,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/Tangent.avif",
       "published": "2026-05-18T08:19:14+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7431
+      "score": 2.7221
     },
     {
       "title": "Berlin’s LawX raises €7.5m to build the backoffice layer of legal AI",
@@ -144,7 +160,7 @@
       "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7112
+      "score": 2.6909
     },
     {
       "title": "Dzung Pham, Kleomenis Katevas, Ali Shahin Shamsabadi, Hamed Haddadi",
@@ -155,9 +171,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T12:00:09.831475+00:00",
+      "published": "2026-05-18T12:46:21.109563+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
+      "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -176,23 +192,7 @@
       "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
-    },
-    {
-      "title": "Two crypto billionaires sit behind both the Trump family token and Iran’s sanctions-evasion engine",
-      "url": "https://thenextweb.com/news/trump-world-liberty-financial-iran-nobitex-reuters",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Reuters traced $2.3bn in Iranian exchange Nobitex’s flows since 2023 to Tron and BNB Chain, the blockchains established by World Liberty Financial’s two most prominent early backers. No party at WLF has been accused of knowing about it. A Reuters investigation published on Monday documents that Nobitex, Iran’s largest crypto exchange, has processed at least [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2017/02/trump-domains.avif",
-      "published": "2026-05-18T09:39:10+00:00",
-      "firstSeen": "2026-05-18T10:00:01.140262+00:00",
-      "lastSeen": "2026-05-18T12:00:01.515688+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0806
+      "score": 2.2372
     }
   ],
   "errors": []
