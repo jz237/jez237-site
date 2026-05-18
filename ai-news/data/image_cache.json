@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T16:32:20.006951+00:00",
+  "updatedAt": "2026-05-18T18:00:01.523310+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7188,6 +7188,38 @@
     "https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation.png",
       "checkedAt": "2026-05-18T16:32:20.006951+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/932383/jury-verdict-musk-v-altman-openai-trial": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKE010_MuskvAltman_AParkin05.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/18/1137439/what-to-expect-from-google-this-week": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/GettyImages-532150054.jpg?resize=1200,600",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://techcrunch.com/2026/05/18/elon-musk-has-lost-his-lawsuit-against-sam-altman-and-openai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200,800",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-siri-revamp-auto-deleting-chats": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/siri-delete.jpg?f=jpeg",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://www.techrepublic.com/article/news-nvidia-ai-chip-smuggling-export-controls-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/chip-smuggle.jpg?f=jpeg",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-rumored-fall-lineup-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/apple-launch-1024x559.png?f=jpeg",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://openai.com/index/dell-codex-enterprise-partnership": {
+      "image": "",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
+    },
+    "https://www.anthropic.com/news/anthropic-acquires-stainless": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Node%20Shapes&amp;backgroundColor=coral",
+      "checkedAt": "2026-05-18T18:00:01.523310+00:00"
     }
   }
 }
