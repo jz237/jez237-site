@@ -86,6 +86,16 @@
     renderCards(container, products, page);
   };
 
+  THR.renderProductList = function(containerId, products, page) {
+    page = page || 1;
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    if (!container.classList.contains('thr-product-grid')) {
+      container.classList.add('thr-product-grid');
+    }
+    renderCards(container, products || [], page);
+  };
+
   THR.renderAllInto = function(containerId, page) {
     page = page || 1;
     var container = document.getElementById(containerId);
