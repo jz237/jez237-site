@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T20:42:45.878006+00:00",
+  "updatedAt": "2026-05-18T22:00:01.422497+00:00",
   "items": [
     {
       "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T20:42:52.441900+00:00",
+      "published": "2026-05-18T22:00:09.101995+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Vera Arrives: NVIDIA’s First CPU Built for Agents Lands at Top AI Labs",
+      "url": "https://blogs.nvidia.com/blog/vera-cpu-delivery",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The first NVIDIA Vera CPUs arrived at three of the world's leading AI labs on Friday — Anthropic in San Francisco, OpenAI in Mission Bay, SpaceXAI in Palo Alto — followed by a delivery to Oracle Cloud Infrastructure in Santa Clara on Monday. NVIDIA Vice President of Hyperscale and High-Performance Computing Ian Buck hand-delivered them.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Vera-CPU_Tray_Open-34_Wide_R6C-FNL-5260651.jpg",
+      "published": "2026-05-18T21:48:17+00:00",
+      "firstSeen": "2026-05-18T22:00:01.422497+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 10.984
+    },
+    {
+      "title": "SandboxAQ brings its drug discovery models to Claude — no PhD in computing required",
+      "url": "https://techcrunch.com/2026/05/18/sandboxaq-brings-its-drug-discovery-models-to-claude-no-phd-in-computing-required",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Other venture-backed companies like Chai Discovery and Isomorphic Labs have raced to build better models. SandboxAQ is betting that the bigger obstacle is access, and that Claude solves it.",
+      "image": "https://techcrunch.com/wp-content/uploads/2017/12/gettyimages-5339511481.jpg?w=640",
+      "published": "2026-05-18T21:29:31+00:00",
+      "firstSeen": "2026-05-18T22:00:01.422497+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2746
+    },
+    {
+      "title": "Meet MemPrivacy: An Edge-Cloud Framework that Uses Local Reversible Pseudonymization to Protect User Data Without Breaking Memory Utility",
+      "url": "https://www.marktechpost.com/2026/05/18/meet-memprivacy-an-edge-cloud-framework-that-uses-local-reversible-pseudonymization-to-protect-user-data-without-breaking-memory-utility",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "As LLM-powered agents move from research to production, one design tension is becoming harder to ignore: the more useful cloud-hosted memory becomes, the more private user data it exposes. Researchers from MemTensor (Shanghai), HONOR Device and Tongji University have introduced MemPrivacy, a framework that attempts to resolve this tension without sacrificing the utility that makes [&#8230;]\nThe post Meet MemPrivacy: An Edge-Cloud Framework that Uses Local Reversible Pseudonymization to Protect User Data Without Breaking Memory Utility appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-2.14.57-PM-1-150x150.png",
+      "published": "2026-05-18T21:26:04+00:00",
+      "firstSeen": "2026-05-18T22:00:01.422497+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7028
     },
     {
       "title": "Stochastic Gradient Descent (SGD’s) Frequency Bias and How Adam Fixes It",
@@ -28,10 +76,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-36-150x150.png",
       "published": "2026-05-18T20:18:55+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6079
+      "score": 3.5697
     },
     {
       "title": "Anthropic has acquired the dev tools startup used by OpenAI, Google, and Cloudflare",
@@ -44,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
       "published": "2026-05-18T19:27:52+00:00",
       "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8525
+      "score": 5.8152
     },
     {
       "title": "OpenClaw creator’s $1.3 million monthly OpenAI bill reveals the real cost of autonomous AI coding at scale",
@@ -60,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/openclaw-peter-steinberger-1-3-million-openai-token-bill.avif",
       "published": "2026-05-18T19:01:57+00:00",
       "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2998
+      "score": 9.263
     },
     {
       "title": "Musk v. Altman proved that AI is led by the wrong people",
@@ -76,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25739950/247386_Elon_Musk_Open_AI_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-18T19:00:00+00:00",
       "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3089
+      "score": 4.272
     },
     {
       "title": "SpaceX raises Starlink prices across every consumer plan and doubles the cost of Standby Mode",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/starlink-price-increase-standby-mode-roam-residential.avif",
       "published": "2026-05-18T18:51:08+00:00",
       "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1946
+      "score": 3.1579
     },
     {
       "title": "Meta begins cutting 8,000 jobs this week as record profits fund a $145 billion AI infrastructure bet",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-layoffs-8000-zuckerberg-ai-reality-may-2026.avif",
       "published": "2026-05-18T18:37:02+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1878
+      "score": 3.1513
     },
     {
       "title": "Amazon’s new Alexa feature generates entire podcast episodes using AI and licensed journalism from 200+ newsrooms",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/amazon-alexa-podcasts-ai-generated-episodes.avif",
       "published": "2026-05-18T18:19:00+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.1792
+      "score": 8.143
     },
     {
       "title": "Hackers stole fingerprints and medical data from 1.8 million people in NYC’s largest public hospital breach",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/nyc-health-hospitals-data-breach-biometrics-fingerprints.avif",
       "published": "2026-05-18T18:06:20+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0732
+      "score": 2.0372
     },
     {
       "title": "Musk loses OpenAI lawsuit as jury unanimously rules his claims were filed too late",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/musk-loses-openai-lawsuit-altman-jury-verdict.avif",
       "published": "2026-05-18T17:53:52+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0673
+      "score": 5.0315
     },
     {
       "title": "All of the updates from Elon Musk and Sam Altman’s battle over OpenAI",
@@ -172,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-18T17:49:49+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2754
+      "score": 9.2397
     },
     {
       "title": "Elon Musk Loses Landmark Lawsuit Against OpenAI",
@@ -188,10 +236,10 @@
       "image": "https://media.wired.com/photos/6a07b49c3e66727feabf05fc/master/pass/Model-Behavior-Altman-v-Musk-Verdict-Business.jpg",
       "published": "2026-05-18T17:40:30+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.201
+      "score": 5.1655
     },
     {
       "title": "Elon Musk loses his case against Sam Altman",
@@ -204,10 +252,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKE010_MuskvAltman_AParkin05.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-18T17:39:32+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2705
+      "score": 2.235
     },
     {
       "title": "HistoSonics gets Taiwan approval for its tumour-destroying ultrasound system as it pushes into Asia",
@@ -220,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/histosonics-tfda-taiwan-approval-histotripsy-edison.avif",
       "published": "2026-05-18T17:36:13+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.159
+      "score": 3.1235
     },
     {
       "title": "What to expect from Google this week",
@@ -236,11 +284,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/GettyImages-532150054.jpg?resize=1200%2C600",
       "published": "2026-05-18T17:35:43+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.5988
+      "score": 11.5633
     },
     {
       "title": "Elon Musk has lost his lawsuit against Sam Altman and OpenAI",
@@ -253,10 +301,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200%2C800",
       "published": "2026-05-18T17:34:43+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1983
+      "score": 5.1629
     },
     {
       "title": "Sigma Computing doubles valuation to $3 billion in Series E as agentic analytics race heats up",
@@ -269,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/05/sigma-computing-series-e-80-million-3-billion-valuation.avif",
       "published": "2026-05-18T17:28:41+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4555
+      "score": 5.4201
     },
     {
       "title": "Apple’s Siri Revamp May Add Auto-Deleting Chats",
@@ -285,10 +333,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/siri-delete.jpg?f=jpeg",
       "published": "2026-05-18T17:16:06+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1496
+      "score": 3.1145
     },
     {
       "title": "Coursera announces $500 million buyback one week after closing its $2.5 billion Udemy merger",
@@ -301,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/coursera-500-million-share-repurchase-udemy-merger.avif",
       "published": "2026-05-18T16:59:14+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9419
+      "score": 4.907
     },
     {
       "title": "Grafana Labs refuses ransom after hackers steal already-open-source code",
@@ -317,10 +365,10 @@
       "image": "https://media.thenextweb.com/2026/05/Grafana-Labs-Hackers.avif",
       "published": "2026-05-18T16:49:08+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4372
+      "score": 3.4025
     },
     {
       "title": "Banned Nvidia AI Chips Keep Reaching China Despite US Crackdown",
@@ -333,10 +381,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/chip-smuggle.jpg?f=jpeg",
       "published": "2026-05-18T16:47:18+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1364
+      "score": 3.1017
     },
     {
       "title": "Apple’s Fall Lineup Could Include Foldable iPhone, New Macs",
@@ -349,10 +397,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/apple-launch-1024x559.png?f=jpeg",
       "published": "2026-05-18T16:40:25+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1333
+      "score": 3.0987
     },
     {
       "title": "Anthropic’s co-founder will speak at the Vatican launch of the pope’s AI encyclical",
@@ -368,7 +416,7 @@
       "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7272
+      "score": 5.6928
     },
     {
       "title": "Inside Anduril and Meta’s quest to make smart glasses for warfare",
@@ -381,10 +429,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/2026-EE-Mar-Studio-Config2-WM-1_1.jpg?resize=1200%2C600",
       "published": "2026-05-18T16:01:39+00:00",
       "firstSeen": "2026-05-18T16:32:20.006951+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5558
+      "score": 3.5218
     },
     {
       "title": "Fine-Tuning NVIDIA Cosmos Predict 2.5 with LoRA/DoRA for Robot Video Generation",
@@ -397,10 +445,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation.png",
       "published": "2026-05-18T16:00:21+00:00",
       "firstSeen": "2026-05-18T16:32:20.006951+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6952
+      "score": 4.6613
     },
     {
       "title": "Amazon Alexa Plus can now create AI-generated podcasts",
@@ -413,10 +461,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-18T15:55:25+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.123
+      "score": 13.0891
     },
     {
       "title": "Omnia and Casa dos Ventos sign $2bn power deal anchoring TikTok’s Brazil data centre",
@@ -432,7 +480,7 @@
       "lastSeen": "2026-05-18T19:01:27.050537+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.009
+      "score": 1.9753
     },
     {
       "title": "Your next pipeline miss may start in AI Search",
@@ -448,7 +496,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3987
+      "score": 4.3654
     },
     {
       "title": "PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend",
@@ -461,10 +509,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/Bl-qDWU9OfuXZ06hNxZE7.jpeg",
       "published": "2026-05-18T15:12:46+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2742
+      "score": 2.241
     },
     {
       "title": "Amazon’s new Alexa+ powered feature can generate podcast episodes",
@@ -477,10 +525,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/alexa-podcasts-hero.png?w=1200",
       "published": "2026-05-18T14:56:47+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0272
+      "score": 11.9943
     },
     {
       "title": "Glaucous-winged Gull, Brown Pelican, Snowy Egret, Canada Goose",
@@ -493,10 +541,10 @@
       "image": "https://static.inaturalist.org/photos/662161673/large.jpg",
       "published": "2026-05-18T14:51:00+00:00",
       "firstSeen": "2026-05-18T16:32:20.006951+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1247
+      "score": 2.0918
     },
     {
       "title": "NextEra agrees $67bn all-stock deal for Dominion in largest power acquisition ever",
@@ -512,7 +560,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9747
+      "score": 1.9422
     },
     {
       "title": "Musk’s xAI promised employees $420 for their tax data. Two months later, nothing.",
@@ -528,7 +576,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9696
+      "score": 8.9373
     },
     {
       "title": "The Open Agent Leaderboard",
@@ -541,10 +589,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png",
       "published": "2026-05-18T14:12:58+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9484
+      "score": 4.9161
     },
     {
       "title": "Decart raises $300M to put a real-time world model in front of Amazon’s chips",
@@ -560,7 +608,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7121
+      "score": 3.68
     },
     {
       "title": "Google has sold so much TPU capacity that its own researchers are queueing for the rest",
@@ -576,7 +624,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3526
+      "score": 6.3209
     },
     {
       "title": "XPeng starts its robotaxi line in Guangzhou, three years behind the leaders and ahead of any other Chinese automaker",
@@ -592,55 +640,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9427
-    },
-    {
-      "title": "The US is building a 4,000-acre AI hub in the Philippines, and the sovereignty questions are already piling up",
-      "url": "https://thenextweb.com/news/us-philippines-pax-silica-ai-hub-clark-city",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The United States and the Philippines are moving “very, very quickly” on a planned 4,000-acre artificial intelligence and supply chain hub in New Clark City, north of Manila, according to Jacob Helberg, the Under Secretary of State for Economic Affairs. Helberg visited the proposed site on Monday with more than a dozen American companies, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/us-philippines-pax-silica-ai-hub-clark-city.avif",
-      "published": "2026-05-18T12:10:21+00:00",
-      "firstSeen": "2026-05-18T12:46:17.762486+00:00",
-      "lastSeen": "2026-05-18T16:32:20.006951+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9177
-    },
-    {
-      "title": "Dust raises $40M to push enterprise AI past the single-player era",
-      "url": "https://thenextweb.com/news/dust-series-b-40-million-multiplayer-ai-enterprise",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Paris- and San Francisco-based platform’s Series B is co-led by Abstract and Sequoia, with Snowflake and Datadog participating. Total funding is now north of $60m. Dust, the Paris- and San Francisco-based enterprise AI platform, has raised a $40m Series B co-led by Abstract and Sequoia, with participation from Snowflake and Datadog, the company said [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Dust-founders.avif",
-      "published": "2026-05-18T12:00:19+00:00",
-      "firstSeen": "2026-05-18T12:46:17.762486+00:00",
-      "lastSeen": "2026-05-18T16:32:20.006951+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9137
-    },
-    {
-      "title": "Google I/O 2026: everything announced so far, from Gemini Intelligence to the death of the Chromebook",
-      "url": "https://thenextweb.com/news/google-io-2026-gemini-intelligence-android-xr-glasses",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google I/O 2026 begins on Monday at the Shoreline Amphitheatre in Mountain View, California, and the company has already shown much of its hand. The two-day developer conference, which runs 19–20 May with a keynote at 10 a.m. PT, is expected to formalise a set of announcements that Google began rolling out a week early [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/google-io-2026-gemini-intelligence-android-xr-glasses.avif",
-      "published": "2026-05-18T11:44:35+00:00",
-      "firstSeen": "2026-05-18T12:46:17.762486+00:00",
-      "lastSeen": "2026-05-18T16:32:20.006951+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.0074
+      "score": 1.9113
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.8316
+      "score": -0.8695
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.134
+      "score": 1.1335
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6001
+      "score": 2.5998
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -701,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-18T20:42:45.878006+00:00",
+      "lastSeen": "2026-05-18T22:00:01.422497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 0.2201
