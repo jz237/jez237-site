@@ -574,54 +574,6 @@
       color: #fff;
       box-shadow: var(--shadow);
     }
-    .quick-glance {
-      padding: 28px 24px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, rgba(0,60,96,0.95), rgba(0,100,130,0.85));
-      box-shadow: var(--shadow);
-    }
-    .quick-glance h2 {
-      margin: 0 0 18px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 22px;
-      color: #fff;
-    }
-    .glance-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .glance-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 14px 16px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(116,205,235,0.15);
-    }
-    .glance-icon {
-      flex-shrink: 0;
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: rgba(0,167,183,0.2);
-      font-size: 18px;
-    }
-    .glance-card strong {
-      display: block;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-    .glance-card span {
-      color: #b6e8f4;
-      font-size: 12px;
-      font-weight: 700;
-    }
     .pin {
       display: grid;
       place-items: center;
@@ -1260,9 +1212,6 @@
       .glance-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .brand {
-        justify-content: center;
-        text-align: center;
       }
       .brand span span {
         text-align: center;
@@ -1313,9 +1262,7 @@
       .path-strip {
         grid-template-columns: 1fr;
       }
-      .glance-grid {
-        grid-template-columns: 1fr;
-      }
+
     }
   </style>
 </head>
@@ -1434,52 +1381,13 @@
     </section>
 
     <section class="section-band" id="visit" aria-label="Visit the store">
-      <div class="quick-glance">
-        <h2>Quick Glance</h2>
-        <div class="glance-grid">
-          <div class="glance-card">
-            <span class="glance-icon">🕐</span>
-            <div>
-              <strong>Open 7 Days</strong>
-              <span>10 AM – 7 PM daily</span>
-            </div>
-          </div>
-          <div class="glance-card">
-            <span class="glance-icon">📍</span>
-            <div>
-              <strong>Levittown, PA</strong>
-              <span>4501 New Falls Rd</span>
-            </div>
-          </div>
-          <div class="glance-card">
-            <span class="glance-icon">📞</span>
-            <div>
-              <strong>(215) 269-4930</strong>
-              <span>Call for livestock availability</span>
-            </div>
-          </div>
-          <div class="glance-card">
-            <span class="glance-icon">🐟</span>
-            <div>
-              <strong>450+ Tanks</strong>
-              <span>Freshwater, saltwater, coral, pond</span>
-            </div>
-          </div>
-          <div class="glance-card">
-            <span class="glance-icon">🚚</span>
-            <div>
-              <strong>Free Shipping $49+</strong>
-              <span>On qualifying orders</span>
-            </div>
-          </div>
-          <div class="glance-card">
-            <span class="glance-icon">🧪</span>
-            <div>
-              <strong>Free Water Testing</strong>
-              <span>Bring a sample anytime</span>
-            </div>
-          </div>
-        </div>
+      <div class="visit-band">
+      <div class="pin">⌖</div>
+      <div>
+        <h2>Visit Our Levittown Superstore</h2>
+        <p>4501 New Falls Rd, Levittown, PA 19056 · Browse the tanks, ask questions, and take home the right setup.</p>
+      </div>
+      <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
       </div>
     </section>
 
