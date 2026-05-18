@@ -6,6 +6,7 @@
   <title>Freshwater Aquarium - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     :root {
       --reef-bg:#03111d; --reef-panel:#071a27; --reef-line:rgba(116,205,235,.2);
@@ -126,7 +127,7 @@
     .hero-card strong { color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; }
     .hero-card span { color:var(--reef-muted); font-size:13px; line-height:1.45; }
     .crumbs { color:var(--reef-muted); }
-    .section-head h2,.sidebar h3,.panel h2,.product h3,.drawer h2 { color:#fff; }
+    .section-head h2,.sidebar h3,.panel h2,.drawer h2 { color:#fff; }
     .section-head p { color:#8fdcf0; }
 
     .path-grid {
@@ -255,30 +256,6 @@
       color: #40d9ff;
       font-size: 11px;
     }
-
-    .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-    .product {
-      display:flex;
-      flex-direction:column;
-      min-height:330px;
-      border-color:var(--reef-line);
-      background:#fff;
-      box-shadow:0 14px 30px rgba(0,0,0,.18);
-    }
-    .product img {
-      height:150px;
-      padding:10px;
-      object-fit:contain;
-      border:1px solid #e2eef3;
-      background:linear-gradient(180deg,#f7fbfd,#e7f3f8);
-    }
-    .product h3 { color:#102f43; }
-    .product p { color:#5d7582; }
-    .price-row {
-      margin-top:auto;
-      padding-top:10px;
-      border-top:1px solid #e2eef3;
-    }
     .feature-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
     .panel {
       border-color:var(--reef-line);
@@ -323,7 +300,6 @@
       .layout { grid-template-columns:1fr; }
       .sidebar { position:static; }
       .path-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .feature-row { grid-template-columns:1fr; }
     }
     @media(max-width:760px) {
@@ -339,7 +315,7 @@
         background-position:58% center;
       }
       .hero-card { display:none; }
-      .path-grid,.grid { grid-template-columns:1fr; }
+      .path-grid,
       .layout { grid-template-columns:1fr; }
       .sidebar { position:static; }
       .section-head { display:block; }
@@ -458,15 +434,14 @@
           </div>
         </div>
       </aside>
-      <div class="grid" id="products">
-        <article class="product" data-source="Original product page" data-details="Sera Red Parrot Pellets product page|Good example of food item merchandising|Can cross-link into freshwater food and care paths"><a href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener"><img src="../assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets"><h3>Sera Red Parrot Pellets</h3></a><p>Daily nutrition for ornamental freshwater fish.</p><div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets">+</button></div></article>
-        <article class="product" data-source="Original product page" data-details="Sera Vipan Baby Flakes product page|Small food item for fry and small fish|Good recurring-purchase example"><span class="badge">New</span><a href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener"><img src="../assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes"><h3>Sera Vipan Baby Flakes</h3></a><p>Fine flakes for fry, small community fish, and gentle feeding.</p><div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes">+</button></div></article>
-        <article class="product" data-source="Original product page" data-details="Decoration and hide product page|Useful for beginner tanks where fish need cover|Can cross-link with compatible decor and substrate"><a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener"><img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home"><h3>Tropical Fruit Home</h3></a><p>Bright hideaway that gives shy fish cover and visual structure.</p><div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Starter setup path for beginner freshwater tanks|This can become a guided bundle instead of a single product|Good owner-friendly example of helpful site organization"><span class="badge">Setup</span><a href="https://www.thehiddenreef.com/aquarium/kits/" target="_blank" rel="noopener"><img src="../assets/department/aquarium.jpg" alt="Freshwater starter aquarium"><h3>Starter Aquarium Setup</h3></a><p>Tank, heater, filter, conditioner, food, and cycling basics grouped together.</p><div class="price-row"><span class="price">Plan setup</span><button class="add" data-name="Starter Aquarium Setup">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Planted tank path for beginners and hobbyists|Plants need light, substrate, fertilizer, and compatible fish|Good place for simple education"><a href="https://www.thehiddenreef.com/additives/planted/" target="_blank" rel="noopener"><img src="../assets/department/freshwater.jpg" alt="Planted freshwater aquarium"><h3>Planted Tank Basics</h3></a><p>Easy plants, substrate, lighting, root tabs, fertilizer, and algae balance.</p><div class="price-row"><span class="price">Build path</span><button class="add" data-name="Planted Tank Basics">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Water care is where local advice matters|Good place for testing guidance, conditioner, bacteria, and algae control|Supports repeat visits"><a href="https://www.thehiddenreef.com/additives/water-conditioners/" target="_blank" rel="noopener"><img src="../assets/department/maintenance.jpg" alt="Freshwater filter media"><h3>Water Care & Filtration</h3></a><p>Conditioner, bacteria, filter media, testing, algae control, and maintenance.</p><div class="price-row"><span class="price">Fix water</span><button class="add" data-name="Water Care & Filtration">+</button></div></article>
-      </div>
-    </div>
+      <div class="thr-product-grid" id="products"></div>
+    <script>
+      // Render freshwater department products from live data
+      if (window.THR && THR.renderProducts) {
+        THR.renderProducts('products', ['starter-kits', 'aquarium-and-stand', 'water-conditioners', 'planted', 'test-kits', 'canister-filters', 'filter-media', 'gravel-cleaners', 'heaters', 'air-pumps', 'led-fixtures']);
+      }
+    </script>
+  </div>
 
     <section class="feature-row">
       <article class="panel"><h2>First Tank Guidance</h2><p>Show the exact starter path so beginners avoid random baskets, incompatible fish, and preventable early failures.</p></article>
@@ -487,6 +462,9 @@
   </main>
   <aside class="drawer"><div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty.</p><a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef →</a></aside>
   <script src="../assets/link-modal.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/thr-cards.js"></script>
   <script src="../assets/category.js"></script>
 </body>
 </html>

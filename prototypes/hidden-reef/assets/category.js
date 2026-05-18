@@ -130,8 +130,8 @@
       const price = formatPrice(p.price);
       const url = p.productUrl || '#';
       const pageLabel = p.page > 1 ? `Page ${p.page}` : '';
-      const brandHtml = brand ? `<span class="brand-pill">${brand}</span>` : '';
-      const badge = pageLabel ? `<span class="page-badge">${pageLabel}</span>` : '';
+      const brandHtml = brand ? `<span class="thr-brand">${brand}</span>` : '';
+      const badge = pageLabel ? `<span class="thr-page">${pageLabel}</span>` : '';
 
       // Row striping: determine column count approximation
       const rowIndex = Math.floor(i / 5); // assume ~5 cols on desktop
@@ -139,14 +139,14 @@
 
       html += `
         <article class="product${rowClass}">
-          <a href="${url}" target="_blank" rel="noopener" class="ext-link" title="View on Hidden Reef">↗</a>
+          <a href="${url}" target="_blank" rel="noopener" class="thr-ext" title="View on Hidden Reef">↗</a>
           ${brandHtml}
-          <div class="img-wrap">
+          <div class="thr-img">
             <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
             ${badge}
           </div>
-          <div class="info-bar">
-            <span class="price-tag">${price}</span>
+          <div class="thr-info">
+            <span class="thr-price">${price}</span>
             <h3>${name}</h3>
           </div>
         </article>`;

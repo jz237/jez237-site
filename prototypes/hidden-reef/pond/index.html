@@ -6,6 +6,7 @@
   <title>Pond Supplies - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     :root {
       --reef-bg:#03111d; --reef-panel:#071a27; --reef-line:rgba(116,205,235,.2);
@@ -87,7 +88,7 @@
     .hero-card strong { color:#fff; font-family:Georgia,"Times New Roman",serif; font-size:22px; }
     .hero-card span { color:var(--reef-muted); font-size:13px; line-height:1.45; }
     .crumbs { color:var(--reef-muted); }
-    .section-head h2,.sidebar h3,.panel h2,.product h3,.drawer h2 { color:#fff; }
+    .section-head h2,.sidebar h3,.panel h2,.drawer h2 { color:#fff; }
     .section-head p { color:#8fdcf0; }
 
     .path-grid {
@@ -127,19 +128,6 @@
     .sidebar-body-inner .check-item { display:flex; align-items:flex-start; gap:8px; padding:5px 0; color:#d8f4fb; font-size:13px; font-weight:800; }
     .sidebar-body-inner .check-item::before { content:"✓"; flex-shrink:0; width:18px; height:18px; display:grid; place-items:center; border-radius:4px; background:rgba(0,167,183,.2); color:#40d9ff; font-size:11px; }
     .section-band { padding:24px 0 16px; margin-top:8px; }
-
-    .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-    .product {
-      display:flex; flex-direction:column; min-height:330px;
-      border-color:var(--reef-line); background:#fff; box-shadow:0 14px 30px rgba(0,0,0,.18);
-    }
-    .product img {
-      height:150px; padding:10px; object-fit:contain;
-      border:1px solid #e2eef3; background:linear-gradient(180deg,#f7fbfd,#e7f3f8);
-    }
-    .product h3 { color:#102f43; }
-    .product p { color:#5d7582; }
-    .price-row { margin-top:auto; padding-top:10px; border-top:1px solid #e2eef3; }
     .feature-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
     .panel {
       border-color:var(--reef-line);
@@ -168,7 +156,6 @@
       .layout { grid-template-columns:1fr; }
       .sidebar { position:static; }
       .path-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .feature-row { grid-template-columns:1fr; }
     }
     @media(max-width:760px) {
@@ -182,7 +169,7 @@
         min-height:330px; padding:28px 18px; background-position:58% center;
       }
       .hero-card { display:none; }
-      .path-grid,.grid { grid-template-columns:1fr; }
+      .path-grid,
       .layout { grid-template-columns:1fr; }
       .sidebar { position:static; }
       .section-head { display:block; }
@@ -298,15 +285,14 @@
           </div>
         </div>
       </aside>
-      <div class="grid" id="products">
-        <article class="product" data-source="Original product page" data-details="Waterfall foam gun product page from the current site|Useful pond construction and rockwork item|Popup can explain use before handing off to checkout"><span class="badge">Pond</span><a href="https://www.thehiddenreef.com/copy-of-easypro-pro-black-waterfall-foam-24-oz-gun.html" target="_blank" rel="noopener"><img src="../assets/site/foam-gun.jpg" alt="EasyPro Professional Foam Gun"><h3>EasyPro Professional Foam Gun</h3></a><p>Waterfall foam application tool for rockwork, leaks, and pond builds.</p><div class="price-row"><span class="price">$89.99</span><button class="add" data-name="EasyPro Professional Foam Gun">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Spring opening can be a guided seasonal kit|This should change by time of year|Good place for checklist-driven shopping"><span class="badge">Spring</span><a href="https://www.thehiddenreef.com/pond/" target="_blank" rel="noopener"><img src="../assets/department/pond.jpg" alt="Koi pond"><h3>Spring Pond Opening Kit</h3></a><p>Clean start path for bacteria, conditioner, pump checks, and early feeding.</p><div class="price-row"><span class="price">Build kit</span><button class="add" data-name="Spring Pond Opening Kit">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Pump and flow decisions depend on pond volume and waterfall height|Useful place for staff guidance|Good category education path"><a href="https://www.thehiddenreef.com/pond/pumps/" target="_blank" rel="noopener"><img src="../assets/site/cta.jpg" alt="Pond pump planning"><h3>Pump & Flow Planning</h3></a><p>Choose flow for pond size, waterfall height, circulation, and filtration.</p><div class="price-row"><span class="price">Plan flow</span><button class="add" data-name="Pump & Flow Planning">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Water care should be test-driven to avoid over-treating|Good practical local-store guidance|Supports return visits and water testing"><a href="https://www.thehiddenreef.com/pond/additives/" target="_blank" rel="noopener"><img src="../assets/site/brand-api.jpg" alt="Water treatment basics"><h3>Water Treatment Basics</h3></a><p>Conditioners, bacteria, test support, algae control, and clarity basics.</p><div class="price-row"><span class="price">Shop care</span><button class="add" data-name="Water Treatment Basics">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Koi feeding changes with temperature|Useful seasonal advice that reduces fish stress|Good place to group foods by water temperature"><a href="https://www.thehiddenreef.com/pond/food/" target="_blank" rel="noopener"><img src="../assets/department/pond.jpg" alt="Koi food"><h3>Koi Food by Season</h3></a><p>Food paths for cool water, active summer feeding, and transition seasons.</p><div class="price-row"><span class="price">Feed right</span><button class="add" data-name="Koi Food by Season">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Fall and winter prep should appear before customers need it|Good place for nets, de-icers, bacteria, and pump guidance|Seasonal content can rotate"><a href="https://www.thehiddenreef.com/pond/additives/bacteria/" target="_blank" rel="noopener"><img src="../assets/site/hero-store.jpg" alt="Fall pond prep"><h3>Fall & Winter Prep</h3></a><p>Leaf nets, cold-weather bacteria, pump decisions, and shutdown planning.</p><div class="price-row"><span class="price">Prep early</span><button class="add" data-name="Fall & Winter Prep">+</button></div></article>
-      </div>
-    </div>
+      <div class="thr-product-grid" id="products"></div>
+    <script>
+      // Render pond department products from live data
+      if (window.THR && THR.renderProducts) {
+        THR.renderProducts('products', ['pond-supplies', 'pond-pumps', 'pond-additives', 'pond-bacteria', 'pond-food']);
+      }
+    </script>
+  </div>
 
     <section class="feature-row">
       <article class="panel"><h2>Ask Before Treating</h2><p>Water clarity problems can come from different causes. Encourage testing before adding more chemicals.</p></article>
@@ -327,6 +313,9 @@
   </main>
   <aside class="drawer"><div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty.</p><a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef →</a></aside>
   <script src="../assets/link-modal.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/thr-cards.js"></script>
   <script src="../assets/category.js"></script>
 </body>
 </html>

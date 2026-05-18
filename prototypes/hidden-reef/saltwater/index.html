@@ -6,6 +6,7 @@
   <title>Saltwater & Reef - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     :root {
       --reef-bg: #03111d;
@@ -271,33 +272,6 @@
       padding: 24px 0 16px;
       margin-top: 8px;
     }
-
-    .grid {
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 14px;
-    }
-    .product {
-      display: flex;
-      flex-direction: column;
-      min-height: 330px;
-      border-color: var(--reef-line);
-      background: #fff;
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
-    }
-    .product img {
-      height: 150px;
-      padding: 10px;
-      object-fit: contain;
-      border: 1px solid #e2eef3;
-      background: linear-gradient(180deg,#f7fbfd,#e7f3f8);
-    }
-    .product h3 { color: #102f43; }
-    .product p { color: #5d7582; }
-    .price-row {
-      margin-top: auto;
-      padding-top: 10px;
-      border-top: 1px solid #e2eef3;
-    }
     .path-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
@@ -389,7 +363,6 @@
       .layout { grid-template-columns: 1fr; }
       .sidebar { position: static; }
       .path-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .feature-row { grid-template-columns: 1fr; }
     }
     @media (max-width: 760px) {
@@ -411,9 +384,6 @@
       }
       .hero-card { display: none; }
       .path-grid,
-      .grid {
-        grid-template-columns: 1fr;
-      }
       .layout { grid-template-columns: 1fr; }
       .sidebar { position: static; }
       .section-head {
@@ -537,15 +507,14 @@
           </div>
         </div>
       </aside>
-      <div class="grid" id="products">
-        <article class="product" data-source="Original product page" data-details="Innovative Marine feeding lid product page|Small accessory with practical maintenance value|Popup gives quick context without moving the visitor away"><span class="badge">Hot</span><a href="https://www.thehiddenreef.com/im-nuvo-flip-feed-hinged-feeding-lid.html" target="_blank" rel="noopener"><img src="../assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed"><h3>Innovative Marine Nuvo Flip Feed</h3></a><p>Hinged feeding access for reef and nano systems.</p><div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed">+</button></div></article>
-        <article class="product" data-source="Original product page" data-details="Large complete reef systems are high-ticket products|Good place for delivery, install, financing, and consultation prompts|A guided category page makes this less intimidating"><span class="badge">Build</span><a href="https://www.thehiddenreef.com/im-ext-100-gallon-complete-reef-system-white.html" target="_blank" rel="noopener"><img src="../assets/site/cta.jpg" alt="Complete reef system"><h3>Complete Reef Systems</h3></a><p>Premium reef-ready tank paths with stand, sump, and equipment planning.</p><div class="price-row"><span class="price">Plan build</span><button class="add" data-name="Complete Reef Systems">+</button></div></article>
-        <article class="product" data-source="Original product page" data-details="Refugium lighting is a focused technical product|Good candidate for compatibility and installation notes|Links to the current Hidden Reef product page"><a href="https://www.thehiddenreef.com/ns-gro-refugium-light-with-pipe-mount.html" target="_blank" rel="noopener"><img src="../assets/site/brand-red-sea.jpg" alt="Reef lighting"><h3>Reef Lighting & Refugium</h3></a><p>Lighting choices for coral growth, refugiums, and display color.</p><div class="price-row"><span class="price">Shop lighting</span><button class="add" data-name="Reef Lighting & Refugium">+</button></div></article>
-        <article class="product" data-source="Original category page" data-details="Skimmer category pages should help customers choose by tank size and install style|Use the popup to explain the decision before handoff|Good technical category example"><a href="https://www.thehiddenreef.com/protein-skimmer/hang-on-skimmer/" target="_blank" rel="noopener"><img src="../assets/department/maintenance.jpg" alt="Protein skimmer and filtration"><h3>Skimmers & Filtration</h3></a><p>Protein skimmers, media baskets, reactors, filter socks, and nutrient export.</p><div class="price-row"><span class="price">Choose gear</span><button class="add" data-name="Skimmers & Filtration">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Salt and testing supplies are recurring purchases|Good for subscription/reorder prompts|Useful place for staff-backed water parameter guidance"><a href="https://www.thehiddenreef.com/testing/marine/" target="_blank" rel="noopener"><img src="../assets/department/saltwater-reef.jpg" alt="Saltwater fish and coral"><h3>Salt Mix & Test Kits</h3></a><p>Refractometers, alkalinity, calcium, magnesium, nitrate, phosphate, and stability.</p><div class="price-row"><span class="price">Reorder path</span><button class="add" data-name="Salt Mix & Test Kits">+</button></div></article>
-        <article class="product" data-source="Original Hidden Reef site" data-details="Living inventory changes regularly|The category page should drive customers into the store|Good place for fresh arrivals and staff recommendations"><a href="https://www.thehiddenreef.com/additives/saltwater/coral/" target="_blank" rel="noopener"><img src="../assets/site/hero-aquatic-world.jpg" alt="Reef livestock"><h3>Fish, Coral & Cleanup Crew</h3></a><p>Store-visit focused path for livestock, coral color, and reef-safe compatibility.</p><div class="price-row"><span class="price">Visit store</span><button class="add" data-name="Fish, Coral & Cleanup Crew">+</button></div></article>
-      </div>
-    </div>
+      <div class="thr-product-grid" id="products"></div>
+    <script>
+      // Render saltwater department products from live data
+      if (window.THR && THR.renderProducts) {
+        THR.renderProducts('products', ['skimmers', 'coral-supplements', 'marine-test-kits', 'led-fixtures']);
+      }
+    </script>
+  </div>
 
     <section class="feature-row">
       <article class="panel"><h2>Before You Buy</h2><p>Ask about tank size, target coral, livestock temperament, water source, lighting spread, and maintenance budget.</p></article>
@@ -569,6 +538,9 @@
 
   <aside class="drawer"><div class="drawer-head"><h2>Your cart</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty.</p><a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef →</a></aside>
   <script src="../assets/link-modal.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/thr-cards.js"></script>
   <script src="../assets/category.js"></script>
 </body>
 </html>

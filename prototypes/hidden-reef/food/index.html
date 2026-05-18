@@ -6,6 +6,7 @@
   <title>Food & Water Care - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     body.department-page { --department-hero: url("../assets/department/food-care.jpg"); --department-hero-size: cover; --department-hero-base: linear-gradient(90deg,#021421,#dbeaf0); }
     @media(max-width:760px){body.department-page .category-hero{background:linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.82)),url("../assets/department/food-care.jpg") right bottom/cover no-repeat}}
@@ -130,68 +131,14 @@
         </div>
       </aside>
 
-      <div class="grid" id="products">
-        <article class="product">
-          <span class="badge">Food</span>
-          <a href="https://www.thehiddenreef.com/sera-red-parrot-pellets-118-oz.html" target="_blank" rel="noopener">
-            <img src="../assets/site/red-parrot-pellets.jpg" alt="Sera Red Parrot Pellets" />
-            <h3>Sera Red Parrot Pellets</h3>
-          </a>
-          <p>Daily freshwater nutrition example with a clear place for feeding frequency and fish-size notes.</p>
-          <div class="price-row"><span class="price">$14.49</span><button class="add" data-name="Sera Red Parrot Pellets">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Small fish</span>
-          <a href="https://www.thehiddenreef.com/copy-of-sera-vipan-baby-flakes-19-oz.html" target="_blank" rel="noopener">
-            <img src="../assets/site/baby-flakes.jpg" alt="Sera Vipan Baby Flakes" />
-            <h3>Sera Vipan Baby Flakes</h3>
-          </a>
-          <p>Fine food for small fish and fry, with guidance for feeding lightly and avoiding waste.</p>
-          <div class="price-row"><span class="price">$6.99</span><button class="add" data-name="Sera Vipan Baby Flakes">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Pond</span>
-          <a href="../pond/">
-            <img src="../assets/department/pond.jpg" alt="Koi and pond food care" />
-            <h3>Pond and koi food</h3>
-          </a>
-          <p>Seasonal feeding matters: water temperature should change the food and schedule.</p>
-          <div class="price-row"><span class="price">Pond care</span><button class="add" data-name="Pond and koi food">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Water</span>
-          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/department/food-care.jpg" alt="Fish food and aquarium water care supplies" />
-            <h3>Conditioners and bacteria</h3>
-          </a>
-          <p>Dechlorinator, bacteria, and cycling products should be organized by what problem they solve.</p>
-          <div class="price-row"><span class="price">Shop water care</span><button class="add" data-name="Conditioners and bacteria">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Test</span>
-          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/site/brand-api.jpg" alt="API aquarium test kits and water care" />
-            <h3>Test kits and diagnosis</h3>
-          </a>
-          <p>Make testing feel normal: ammonia, nitrite, nitrate, pH, phosphate, salinity, and pond basics.</p>
-          <div class="price-row"><span class="price">Shop tests</span><button class="add" data-name="Test kits and diagnosis">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Reef</span>
-          <a href="../saltwater/">
-            <img src="../assets/department/saltwater-reef.jpg" alt="Saltwater reef coral food and water care" />
-            <h3>Reef food and supplements</h3>
-          </a>
-          <p>Coral food, salt, additives, and testing should tie back to the reef plan and livestock.</p>
-          <div class="price-row"><span class="price">Reef care</span><button class="add" data-name="Reef food and supplements">+</button></div>
-        </article>
-      </div>
-    </div>
+      <div class="thr-product-grid" id="products"></div>
+    <script>
+      // Render food department products from live data
+      if (window.THR && THR.renderProducts) {
+        THR.renderProducts('products', ['flake-tropical', 'freeze-dry', 'feeders', 'pond-food']);
+      }
+    </script>
+  </div>
 
     <section class="feature-row">
       <article class="panel">
@@ -240,6 +187,9 @@
   </aside>
 
   <script src="../assets/link-modal.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/thr-cards.js"></script>
   <script src="../assets/category.js"></script>
 </body>
 </html>

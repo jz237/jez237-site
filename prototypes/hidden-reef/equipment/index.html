@@ -6,6 +6,7 @@
   <title>Lighting & Equipment - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     body.department-page { --department-hero: url("../assets/department/lighting.jpg"); --department-hero-fade: rgba(0,48,75,.2); --department-title-width: 600px; }
   </style>
@@ -129,68 +130,14 @@
         </div>
       </aside>
 
-      <div class="grid" id="products">
-        <article class="product">
-          <span class="badge">Access</span>
-          <a href="https://www.thehiddenreef.com/im-nuvo-flip-feed-hinged-feeding-lid.html" target="_blank" rel="noopener">
-            <img src="../assets/site/flip-feed.jpg" alt="Innovative Marine Nuvo Flip Feed hinged feeding lid" />
-            <h3>Innovative Marine Nuvo Flip Feed</h3>
-          </a>
-          <p>Hinged feeding access for Nuvo tanks, useful when a clean lid still needs daily practicality.</p>
-          <div class="price-row"><span class="price">$24.99</span><button class="add" data-name="Innovative Marine Nuvo Flip Feed">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Systems</span>
-          <a href="https://www.thehiddenreef.com/aquarium/kits/aquarium-and-stand/" target="_blank" rel="noopener">
-            <img src="../assets/department/lighting.jpg" alt="Modern aquarium lighting and planted tank equipment" />
-            <h3>Complete aquarium systems</h3>
-          </a>
-          <p>Tank, filtration, and cabinet paths for customers who want a clean setup from the start.</p>
-          <div class="price-row"><span class="price">Shop systems</span><button class="add" data-name="Complete aquarium systems">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Lighting</span>
-          <a href="https://www.thehiddenreef.com/ns-gro-refugium-light-with-pipe-mount.html" target="_blank" rel="noopener">
-            <img src="../assets/site/brand-red-sea.jpg" alt="Aquarium lighting and reef equipment" />
-            <h3>Refugium and reef lighting</h3>
-          </a>
-          <p>Lighting needs change by use: viewing, plant growth, refugium growth, or coral intensity.</p>
-          <div class="price-row"><span class="price">Shop lights</span><button class="add" data-name="Refugium and reef lighting">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Filtration</span>
-          <a href="https://www.thehiddenreef.com/filtration/filters/canister/" target="_blank" rel="noopener">
-            <img src="../assets/site/brand-fluval.jpg" alt="Fluval aquarium filtration and lighting" />
-            <h3>Filtration and media</h3>
-          </a>
-          <p>Filters, cartridges, biological media, carbon, pads, and replacement parts by tank size.</p>
-          <div class="price-row"><span class="price">Shop filtration</span><button class="add" data-name="Filtration and media">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Flow</span>
-          <a href="https://www.thehiddenreef.com/protein-skimmer/" target="_blank" rel="noopener">
-            <img src="../assets/department/saltwater-reef.jpg" alt="Reef aquarium flow and coral equipment" />
-            <h3>Pumps, flow, and returns</h3>
-          </a>
-          <p>Return pumps and powerheads should match the aquarium volume, rockwork, and livestock.</p>
-          <div class="price-row"><span class="price">Shop flow</span><button class="add" data-name="Pumps flow and returns">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Care</span>
-          <a href="https://www.thehiddenreef.com/testing/" target="_blank" rel="noopener">
-            <img src="../assets/department/maintenance.jpg" alt="Aquarium maintenance equipment" />
-            <h3>Testing and maintenance tools</h3>
-          </a>
-          <p>Test kits, scrapers, hoses, water-change tools, and accessories that prevent neglected tanks.</p>
-          <div class="price-row"><span class="price">Shop care</span><button class="add" data-name="Testing and maintenance tools">+</button></div>
-        </article>
-      </div>
-    </div>
+      <div class="thr-product-grid" id="products"></div>
+    <script>
+      // Render equipment department products from live data
+      if (window.THR && THR.renderProducts) {
+        THR.renderProducts('products', ['canister-filters', 'filter-media', 'led-fixtures', 'heaters', 'air-pumps', 'gravel-cleaners']);
+      }
+    </script>
+  </div>
 
     <section class="feature-row">
       <article class="panel">
@@ -239,6 +186,9 @@
   </aside>
 
   <script src="../assets/link-modal.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/thr-cards.js"></script>
   <script src="../assets/category.js"></script>
 </body>
 </html>
