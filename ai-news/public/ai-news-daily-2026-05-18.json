@@ -1,6 +1,6 @@
 {
   "date": "2026-05-18",
-  "updatedAt": "2026-05-18T22:11:50.057903+00:00",
+  "updatedAt": "2026-05-18T23:00:01.770241+00:00",
   "items": [
     {
       "title": "Amazon Alexa Plus can now create AI-generated podcasts",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-18T15:55:25+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.0841
+      "score": 13.0637
     },
     {
       "title": "Amazon’s new Alexa+ powered feature can generate podcast episodes",
@@ -29,10 +29,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/alexa-podcasts-hero.png?w=1200",
       "published": "2026-05-18T14:56:47+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9893
+      "score": 11.9695
     },
     {
       "title": "What to expect from Google this week",
@@ -45,11 +45,11 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/GettyImages-532150054.jpg?resize=1200%2C600",
       "published": "2026-05-18T17:35:43+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.558
+      "score": 11.5366
     },
     {
       "title": "Vera Arrives: NVIDIA’s First CPU Built for Agents Lands at Top AI Labs",
@@ -62,10 +62,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Vera-CPU_Tray_Open-34_Wide_R6C-FNL-5260651.jpg",
       "published": "2026-05-18T21:48:17+00:00",
       "firstSeen": "2026-05-18T22:00:01.422497+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.9781
+      "score": 10.9541
     },
     {
       "title": "OpenClaw creator’s $1.3 million monthly OpenAI bill reveals the real cost of autonomous AI coding at scale",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/05/openclaw-peter-steinberger-1-3-million-openai-token-bill.avif",
       "published": "2026-05-18T19:01:57+00:00",
       "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.2574
+      "score": 9.2352
     },
     {
       "title": "All of the updates from Elon Musk and Sam Altman’s battle over OpenAI",
@@ -94,10 +94,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-18T17:49:49+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2343
+      "score": 9.2128
     },
     {
       "title": "Google I/O 2026: everything announced so far, from Gemini Intelligence to the death of the Chromebook",
@@ -113,7 +113,7 @@
       "lastSeen": "2026-05-18T16:32:20.006951+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9728
+      "score": 8.9546
     },
     {
       "title": "Musk’s xAI promised employees $420 for their tax data. Two months later, nothing.",
@@ -129,7 +129,7 @@
       "lastSeen": "2026-05-18T18:00:01.523310+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9325
+      "score": 8.913
     },
     {
       "title": "OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments",
@@ -142,10 +142,10 @@
       "image": "",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T18:00:01.523310+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.2839
+      "score": 8.2666
     },
     {
       "title": "SandboxAQ brings its drug discovery models to Claude — no PhD in computing required",
@@ -158,10 +158,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2017/12/gettyimages-5339511481.jpg?w=640",
       "published": "2026-05-18T21:29:31+00:00",
       "firstSeen": "2026-05-18T22:00:01.422497+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2687
+      "score": 8.2449
     },
     {
       "title": "Amazon’s new Alexa feature generates entire podcast episodes using AI and licensed journalism from 200+ newsrooms",
@@ -174,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/05/amazon-alexa-podcasts-ai-generated-episodes.avif",
       "published": "2026-05-18T18:19:00+00:00",
       "firstSeen": "2026-05-18T19:00:01.818437+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.1376
+      "score": 8.1158
     },
     {
       "title": "I’m a Normie. Can Normies Really Vibe Code?",
@@ -190,10 +190,10 @@
       "image": "https://media.wired.com/photos/69f9d501e8aff66a9d0732d2/master/pass/WIRED-YanBastard-Normie-Vibe-Coders-RGB-02.jpg",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T11:00:01.424144+00:00",
-      "lastSeen": "2026-05-18T22:11:50.057903+00:00",
+      "lastSeen": "2026-05-18T23:00:01.770241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0739
+      "score": 7.0566
     }
   ],
   "errors": []
