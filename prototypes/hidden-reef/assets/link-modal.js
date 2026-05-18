@@ -5,10 +5,21 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__media"><img class="link-modal__image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><a class="btn link-modal__open" target="_blank" rel="noopener">View product on Hidden Reef</a></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__media"><img class="link-modal__image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
+      if (event.target.matches('.link-modal__add')) {
+        const button = event.target;
+        addToCart({
+          name: button.dataset.name,
+          price: button.dataset.price,
+          url: button.dataset.url,
+          image: button.dataset.image
+        });
+        closeModal(modal);
+        openCart();
+      }
     });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(modal);
@@ -24,6 +35,140 @@
 
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
+  }
+
+  const CART_KEY = 'hiddenReefDemoCart';
+
+  function parsePrice(price) {
+    const value = parseFloat(String(price || '').replace(/[^0-9.]/g, ''));
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function readCart() {
+    try {
+      return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeCart(items) {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+  }
+
+  function ensureCartDrawer() {
+    let drawer = document.querySelector('.drawer');
+    if (!drawer) {
+      drawer = document.createElement('aside');
+      drawer.className = 'drawer';
+      drawer.setAttribute('aria-label', 'Demo cart drawer');
+      drawer.innerHTML = '<div class="drawer-head"><h2>Demo cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the Lightspeed handoff.</p><div class="cart-summary"></div><p class="drawer-note">Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue in Lightspeed →</a>';
+      document.body.appendChild(drawer);
+    }
+    const title = drawer.querySelector('.drawer-head h2');
+    if (title) title.textContent = 'Demo cart';
+    const empty = drawer.querySelector('#empty-cart');
+    if (empty) empty.textContent = 'Your cart is empty. Add products to preview the Lightspeed handoff.';
+    if (!drawer.querySelector('.cart-summary')) {
+      const summary = document.createElement('div');
+      summary.className = 'cart-summary';
+      drawer.querySelector('#empty-cart')?.after(summary);
+    }
+    if (!drawer.querySelector('.drawer-note')) {
+      const note = document.createElement('p');
+      note.className = 'drawer-note';
+      note.textContent = 'Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.';
+      drawer.querySelector('.cart-summary')?.after(note);
+    }
+    const handoff = drawer.querySelector('.cart-handoff') || drawer.querySelector('.drawer .btn, .btn');
+    if (handoff) {
+      handoff.classList.add('cart-handoff');
+      handoff.textContent = 'Continue in Lightspeed →';
+      handoff.setAttribute('href', 'https://www.thehiddenreef.com/');
+      handoff.setAttribute('target', '_blank');
+      handoff.setAttribute('rel', 'noopener');
+    }
+    return drawer;
+  }
+
+  function updateCartCount(items) {
+    const count = items.reduce((sum, item) => sum + item.qty, 0);
+    const countNode = document.getElementById('cart-count') || document.querySelector('.cart-button span');
+    if (countNode) countNode.textContent = String(count);
+    document.querySelectorAll('.cart-button').forEach(button => {
+      button.setAttribute('aria-label', count ? 'Open demo cart with ' + count + ' item' + (count === 1 ? '' : 's') : 'Open empty demo cart');
+    });
+  }
+
+  function renderCart() {
+    const drawer = ensureCartDrawer();
+    const items = readCart();
+    updateCartCount(items);
+    const list = drawer.querySelector('#cart-items');
+    const empty = drawer.querySelector('#empty-cart');
+    const summary = drawer.querySelector('.cart-summary');
+    const total = items.reduce((sum, item) => sum + parsePrice(item.price) * item.qty, 0);
+
+    if (empty) empty.style.display = items.length ? 'none' : '';
+    if (list) {
+      list.innerHTML = items.map((item, index) => '<div class="cart-item"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.price || 'See site') + ' · Qty ' + item.qty + '</span></div><button type="button" data-cart-remove="' + index + '">Remove</button></div>').join('');
+    }
+    if (summary) {
+      summary.innerHTML = items.length ? '<span>Demo subtotal</span><strong>$' + total.toFixed(2) + '</strong>' : '<span>Demo subtotal</span><strong>$0.00</strong>';
+    }
+  }
+
+  function addToCart(product) {
+    const items = readCart();
+    const key = normalizeUrl(product.url || product.name);
+    const existing = items.find(item => item.key === key);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      items.push({
+        key,
+        name: product.name || 'Hidden Reef item',
+        price: product.price || 'See site',
+        url: product.url || 'https://www.thehiddenreef.com/',
+        image: product.image || '',
+        qty: 1
+      });
+    }
+    writeCart(items);
+    renderCart();
+  }
+
+  function openCart() {
+    const drawer = ensureCartDrawer();
+    renderCart();
+    drawer.classList.add('is-open');
+    drawer.style.transform = 'translateX(0)';
+    document.body.classList.add('cart-open');
+  }
+
+  function initDemoCart() {
+    ensureCartDrawer();
+    renderCart();
+    document.addEventListener('click', event => {
+      const cartButton = event.target.closest('.cart-button');
+      if (cartButton) {
+        event.preventDefault();
+        openCart();
+      }
+      if (event.target.matches('.close-cart')) {
+        const drawer = document.querySelector('.drawer');
+        drawer?.classList.remove('is-open');
+        if (drawer) drawer.style.transform = '';
+        document.body.classList.remove('cart-open');
+      }
+      const remove = event.target.closest('[data-cart-remove]');
+      if (remove) {
+        const items = readCart();
+        items.splice(Number(remove.dataset.cartRemove), 1);
+        writeCart(items);
+        renderCart();
+      }
+    });
   }
 
   function normalizeUrl(value) {
@@ -138,6 +283,11 @@
     modal.querySelector('h2').textContent = title;
     modal.querySelector('p').textContent = desc;
     modal.querySelector('.link-modal__open').href = link.href;
+    const addButton = modal.querySelector('.link-modal__add');
+    addButton.dataset.name = title;
+    addButton.dataset.price = price;
+    addButton.dataset.url = link.href;
+    addButton.dataset.image = product.imageUrl || img?.getAttribute('src') || '';
     modal.querySelector('.link-modal__facts').innerHTML = '<span><strong>Brand</strong>' + escapeHtml(brand) + '</span><span><strong>Price</strong>' + escapeHtml(price) + '</span><span><strong>Department</strong>' + escapeHtml(departmentName) + '</span><span><strong>Category</strong>' + escapeHtml(categoryName) + '</span>';
     modal.querySelector('.link-modal__status').innerHTML = '<strong>Store availability</strong><span>Confirm current stock before visiting. Live inventory comes later when API access is available.</span>';
     modal.querySelector('.link-modal__details').innerHTML = detailItems.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
@@ -153,4 +303,10 @@
     modal.querySelector('.link-modal__panel').scrollTop = 0;
     modal.querySelector('.link-modal__close').focus();
   });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDemoCart);
+  } else {
+    initDemoCart();
+  }
 }());
