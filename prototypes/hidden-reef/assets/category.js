@@ -6,8 +6,7 @@
 
   const PRODUCTS_PER_PAGE = 24;
   let currentPage = 1;
-  let currentSubcat = null;
-  let searchQuery = '';
+  let currentProducts = [];
 
   function getParams() {
     const p = new URLSearchParams(window.location.search);
@@ -42,6 +41,23 @@
     return price;
   }
 
+  // Extract brand name from product name (first word, unless it's a common non-brand prefix)
+  function extractBrand(name) {
+    if (!name) return '';
+    const skipWords = ['copy', 'new', 'the', 'a', 'an'];
+    const parts = name.trim().split(/\s+/);
+    if (parts.length <= 1) return '';
+    const first = parts[0];
+    // If first word is all caps or starts with caps and looks like a brand
+    if (first.length <= 1) return '';
+    if (skipWords.some(w => w === first.toLowerCase())) {
+      // Try second word
+      if (parts.length > 2 && parts[1].length > 1) return parts[1];
+      return '';
+    }
+    return first;
+  }
+
   function renderBreadcrumb(cat, sub) {
     const el = document.getElementById('breadcrumb');
     if (!el) return;
@@ -50,8 +66,6 @@
       html += `<a href="?cat=${cat.slug}">${cat.name}</a>`;
       if (sub) {
         html += `<span>›</span><span style="color:#fff;">${sub.name}</span>`;
-      } else {
-        html = html.replace(`<span style="color:#fff;">`, `<span>`);
       }
     }
     el.innerHTML = html;
@@ -87,9 +101,7 @@
     el.querySelectorAll('.subcat-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         const subSlug = btn.dataset.sub;
-        const url = subSlug
-          ? `?cat=${cat.slug}&sub=${subSlug}`
-          : `?cat=${cat.slug}`;
+        const url = subSlug ? `?cat=${cat.slug}&sub=${subSlug}` : `?cat=${cat.slug}`;
         window.location.href = url;
       });
     });
@@ -108,27 +120,37 @@
       return;
     }
 
+    // Calculate how many columns for row striping
     let html = '';
-    for (const p of pageProducts) {
+    pageProducts.forEach((p, i) => {
+      const brand = extractBrand(p.name);
       const imgSrc = p.imageUrl || '../assets/site/product-placeholder.jpg';
       const imgAlt = (p.name || 'Product').replace(/"/g, '&quot;');
       const name = (p.name || 'Unknown Product').replace(/</g, '&lt;');
       const price = formatPrice(p.price);
       const url = p.productUrl || '#';
       const pageLabel = p.page > 1 ? `Page ${p.page}` : '';
+      const brandHtml = brand ? `<span class="brand-pill">${brand}</span>` : '';
       const badge = pageLabel ? `<span class="page-badge">${pageLabel}</span>` : '';
 
+      // Row striping: determine column count approximation
+      const rowIndex = Math.floor(i / 5); // assume ~5 cols on desktop
+      const rowClass = (rowIndex % 2 === 1) ? ' product-row-even' : '';
+
       html += `
-        <article class="product">
-          ${badge}
-          <a href="${url}" target="_blank" rel="noopener">
-            <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.style.display='none'" />
+        <article class="product${rowClass}">
+          <a href="${url}" target="_blank" rel="noopener" class="ext-link" title="View on Hidden Reef">↗</a>
+          ${brandHtml}
+          <div class="img-wrap">
+            <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
+            ${badge}
+          </div>
+          <div class="info-bar">
+            <span class="price-tag">${price}</span>
             <h3>${name}</h3>
-          </a>
-          <span class="price-tag">${price}</span>
-          <a class="view-link" href="${url}" target="_blank" rel="noopener">View on Hidden Reef</a>
+          </div>
         </article>`;
-    }
+    });
     el.innerHTML = html;
   }
 
@@ -159,7 +181,6 @@
     }
 
     html += `<span class="info">Page ${page} of ${totalPages}</span>`;
-
     el.innerHTML = html;
   }
 
@@ -191,43 +212,37 @@
     const cat = findCategory(params.cat);
     const sub = params.sub ? findSubcategory(cat, params.sub) : null;
 
-    // Update breadcrumb and header
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
     renderSubcatTabs(cat, params.sub);
 
     // Get products
     let products;
-    let total;
     if (sub) {
       products = getProducts(sub.slug);
-      total = products.length;
     } else if (cat) {
-      // All subcategories combined
       products = [];
       if (cat.children) {
         for (const child of Object.values(cat.children)) {
           products = products.concat(getProducts(child.slug));
         }
       }
-      total = products.length;
     } else {
-      // No category specified - show all
       products = [];
       if (window.THR_PRODUCTS) {
         for (const key of Object.keys(THR_PRODUCTS)) {
           products = products.concat(THR_PRODUCTS[key]);
         }
       }
-      total = products.length;
     }
+    currentProducts = products;
 
     // Search filter
     const searchInput = document.getElementById('search');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
-        searchQuery = e.target.value.trim();
-        const filtered = filterBySearch(products, searchQuery);
+        const q = e.target.value.trim();
+        const filtered = filterBySearch(products, q);
         currentPage = 1;
         renderProducts(filtered, 1);
         renderCountBar(Math.min(PRODUCTS_PER_PAGE, filtered.length), filtered.length, sub);
@@ -236,7 +251,7 @@
     }
 
     // Render
-    const filtered = filterBySearch(products, searchQuery);
+    const filtered = filterBySearch(products, '');
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const shown = Math.min(PRODUCTS_PER_PAGE, filtered.length - start);
 
