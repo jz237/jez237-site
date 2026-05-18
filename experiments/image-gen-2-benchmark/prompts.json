@@ -526,5 +526,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-18-afternoon-mica-cloud-memory-mill",
+    "title": "Mica Cloud Memory Mill",
+    "tests": "Explores translucent layered mica, cloudlike vapor machinery, archival storage as a tactile industrial landscape, and warm/cool lighting without relying on prior glass-orchard or sci-fi observatory motifs.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a visually rich surreal industrial scene titled conceptually \"Mica Cloud Memory Mill\", with no visible text.\n\nScene/backdrop: an abandoned riverside paper mill converted into a quiet atmospheric archive. Tall brick walls, old iron beams, arched windows, wooden catwalks, and shallow water channels run through the building; outside, late-afternoon light filters through mist over a slow river.\n\nSubject: the mill no longer makes paper. Instead, enormous brass rollers and belt-driven presses compress soft white cloud vapor into thin translucent mica sheets, each sheet holding faint luminous memory-like landscapes inside: tiny forests, rainstorms, city lights, constellations, and geological strata. The sheets hang from drying racks like delicate mineral pages, catching prismatic highlights.\n\nComposition: square 1024x1024 cinematic three-quarter view from slightly above, with the central press and suspended mica sheets forming a strong diagonal through the image. Foreground details include wet brick reflections, mica flakes, brass pressure gauges with unreadable faces, cottony vapor, leather belts, pulley wheels, mineral dust, small glass jars of pigment, and a narrow waterwheel turning slowly in a side channel. No people are present.\n\nMaterials and lighting: pearlescent mica layers, warm tarnished brass, dark wet brick, old oak, soft white cloud vapor, pale gold sunlight, cool blue river mist, crisp reflections, gentle volumetric shafts, intricate tactile detail, coherent physical scale, magical realism grounded in industrial machinery.\n\nConstraints: no readable text, no logos, no copyrighted characters, no people posing, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no theatrical or performance scene, no motion study of bodies, no watermark, no signature.",
+    "image": "images/2026-05-18-afternoon-mica-cloud-memory-mill.png",
+    "date": "2026-05-18",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
