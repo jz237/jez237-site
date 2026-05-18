@@ -19,6 +19,38 @@
       const cat = THR.categories[key];
       if (cat.slug === catSlug) return cat;
     }
+    if (THR.departmentMap && THR.departmentMap[catSlug]) {
+      const departmentNames = {
+        freshwater: 'Freshwater',
+        saltwater: 'Saltwater',
+        pond: 'Pond',
+        equipment: 'Equipment',
+        food: 'Food',
+        decor: 'Decorations'
+      };
+      const departmentDescriptions = {
+        freshwater: 'Aquariums, planted tank care, water conditioners, and testing',
+        saltwater: 'Reef systems, protein skimmers, coral supplements, and marine testing',
+        pond: 'Koi, pumps, treatments, season prep, and pond food',
+        equipment: 'Filtration, lighting, heating, air equipment, and maintenance',
+        food: 'Flakes, freeze-dried food, feeders, and pond nutrition',
+        decor: 'Ornaments, accents, rockwork, and aquascaping pieces'
+      };
+      const children = {};
+      THR.departmentMap[catSlug].forEach(groupSlug => {
+        const group = THR.categories[groupSlug];
+        if (!group || !group.children) return;
+        Object.values(group.children).forEach(child => {
+          children[child.slug] = child;
+        });
+      });
+      return {
+        name: departmentNames[catSlug] || catSlug,
+        slug: catSlug,
+        description: departmentDescriptions[catSlug] || 'Browse department products',
+        children
+      };
+    }
     return null;
   }
 
@@ -77,6 +109,25 @@
     const title = sub ? sub.name : (cat ? cat.name : 'All Products');
     const desc = sub ? sub.description : (cat ? cat.description : 'Browse our full catalog');
     const sourceUrl = sub ? sub.sourceUrl : '';
+    const heroImages = {
+      saltwater: '../assets/department/saltwater-reef.jpg',
+      aquariums: '../assets/department/freshwater.jpg',
+      additives: '../assets/department/aquarium.jpg',
+      pond: '../assets/department/pond.jpg',
+      equipment: '../assets/department/lighting.jpg',
+      lighting: '../assets/department/lighting.jpg',
+      food: '../assets/department/food-care.jpg',
+      decor: '../assets/department/aquascaping.jpg',
+      decorations: '../assets/department/aquascaping.jpg',
+      maintenance: '../assets/department/maintenance-care.jpg',
+      filtration: '../assets/department/maintenance-care.jpg',
+      testing: '../assets/department/maintenance-care.jpg',
+      'air-equipment': '../assets/department/maintenance-care.jpg',
+      'heating-temperature': '../assets/department/lighting.jpg',
+      'protein-skimmers': '../assets/department/saltwater-reef.jpg'
+    };
+    const heroImage = cat ? heroImages[cat.slug] : '../assets/site/hero-aquatic-world.jpg';
+    el.style.setProperty('--cat-hero-image', 'url("' + heroImage + '")');
     let html = `<h1>${title}</h1><p>${desc}</p>`;
     if (sourceUrl) {
       html += `<a class="source-link" href="${sourceUrl}" target="_blank" rel="noopener">View on Hidden Reef site ↗</a>`;
