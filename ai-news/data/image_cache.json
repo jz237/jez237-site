@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T17:00:01.617989+00:00",
+  "updatedAt": "2026-05-18T16:32:20.006951+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7183,11 +7183,11 @@
     },
     "https://www.technologyreview.com/2026/05/18/1137412/inside-anduril-and-metas-quest-to-make-smart-glasses-for-warfare": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/2026-EE-Mar-Studio-Config2-WM-1_1.jpg?resize=1200,600",
-      "checkedAt": "2026-05-18T17:00:01.617989+00:00"
+      "checkedAt": "2026-05-18T16:32:20.006951+00:00"
     },
     "https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation": {
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation.png",
-      "checkedAt": "2026-05-18T17:00:01.617989+00:00"
+      "checkedAt": "2026-05-18T16:32:20.006951+00:00"
     }
   }
 }
