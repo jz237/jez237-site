@@ -175,11 +175,11 @@
   .thr-product .thr-brand { font-size: 8px; padding: 2px 5px; top: 4px; left: 4px; }
   .thr-product .thr-ext { width: 20px; height: 20px; top: 4px; right: 4px; font-size: 10px; }
   .thr-product .thr-price { font-size: 10px; padding: 1px 6px; }
-  .thr-product .thr-name { font-size: 10px; }
+  .thr-product .thr-name { font-size: 11px; -webkit-line-clamp: 3; }
 }
 @media (max-width: 380px) {
   .thr-product-grid { gap: 5px; }
   .thr-product .thr-img { aspect-ratio: 1 / 0.88; }
   .thr-product .thr-info { padding: 5px 6px 7px; }
-  .thr-product .thr-name { font-size: 9px; }
+  .thr-product .thr-name { font-size: 10px; }
 }

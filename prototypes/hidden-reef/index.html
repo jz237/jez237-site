@@ -911,7 +911,9 @@
     @media (max-width: 760px) {
       .header { grid-template-columns: 1fr; gap: 10px; }
       .header-actions { justify-content: space-between; }
-      .main-nav { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; padding-bottom: 11px; }
+      .main-nav { justify-content: flex-start; overflow-x: auto; scrollbar-width: thin; padding-bottom: 11px; }
+      .main-nav::-webkit-scrollbar { display: block; height: 6px; }
+      .main-nav::-webkit-scrollbar-thumb { background: rgba(116,205,235,0.35); border-radius: 999px; }
       .hero {
         min-height: 282px;
         background-position: 62% center;
@@ -1159,8 +1161,10 @@
         display: flex;
         justify-content: flex-start;
         overflow-x: auto;
-        scrollbar-width: none;
+        scrollbar-width: thin;
       }
+      .main-nav::-webkit-scrollbar { display: block; height: 6px; }
+      .main-nav::-webkit-scrollbar-thumb { background: rgba(116,205,235,0.35); border-radius: 999px; }
       .main-nav a { flex: 0 0 auto; }
       .brand {
         min-height: 134px;

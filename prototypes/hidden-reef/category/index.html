@@ -117,6 +117,7 @@
       backdrop-filter:blur(12px);
       -webkit-backdrop-filter:blur(12px);
     }
+    .subcat-tabs:empty { display:none; }
     .subcat-tab {
       padding:8px 14px; border:1px solid var(--reef-line); border-radius:999px;
       color:var(--reef-muted); font-size:13px; font-weight:800;
@@ -234,12 +235,16 @@
     @media (max-width:760px) {
       .header { grid-template-columns:1fr; }
       .main-nav {
-        display:grid;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        overflow:visible;
+        display:flex;
+        justify-content:flex-start;
+        overflow-x:auto;
+        padding-bottom:8px;
+        scrollbar-width:thin;
       }
+      .main-nav::-webkit-scrollbar { display:block; height:6px; }
+      .main-nav::-webkit-scrollbar-thumb { background:rgba(116,205,235,.35); border-radius:999px; }
       .main-nav a {
-        justify-content:center;
+        flex:0 0 auto;
         padding-inline:10px;
         border-top:1px solid rgba(116,205,235,.1);
       }

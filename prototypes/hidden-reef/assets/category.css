@@ -95,6 +95,24 @@ body.department-page .section-band + .section-band {
 }
 @media(max-width:760px){body.department-page .layout{grid-template-columns:1fr}body.department-page .sidebar{position:static}}
 
+@media(max-width:760px){
+  .main-nav,
+  body.department-page .main-nav{
+    padding-bottom:8px;
+    scrollbar-width:thin;
+  }
+  .main-nav::-webkit-scrollbar,
+  body.department-page .main-nav::-webkit-scrollbar{
+    display:block;
+    height:6px;
+  }
+  .main-nav::-webkit-scrollbar-thumb,
+  body.department-page .main-nav::-webkit-scrollbar-thumb{
+    border-radius:999px;
+    background:rgba(116,205,235,.35);
+  }
+}
+
 .cart-button {
   display: inline-flex;
   align-items: center;
