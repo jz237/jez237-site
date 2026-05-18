@@ -1,6 +1,6 @@
 {
   "date": "2026-05-18",
-  "updatedAt": "2026-05-18T16:00:01.430114+00:00",
+  "updatedAt": "2026-05-18T17:00:01.617989+00:00",
   "items": [
     {
       "title": "Amazon Alexa Plus can now create AI-generated podcasts",
@@ -13,10 +13,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-18T15:55:25+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.2577
+      "score": 13.2276
     },
     {
       "title": "Amazon’s new Alexa+ powered feature can generate podcast episodes",
@@ -29,10 +29,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/alexa-podcasts-hero.png?w=1200",
       "published": "2026-05-18T14:56:47+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1583
+      "score": 12.129
+    },
+    {
+      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. Elon Musk, his financial [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-18T16:24:03+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3418
     },
     {
       "title": "Google I/O 2026: everything announced so far, from Gemini Intelligence to the death of the Chromebook",
@@ -48,7 +64,7 @@
       "lastSeen": "2026-05-18T16:00:01.430114+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1273
+      "score": 9.1005
     },
     {
       "title": "Musk’s xAI promised employees $420 for their tax data. Two months later, nothing.",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/04/Elon-Musk.avif",
       "published": "2026-05-18T14:15:55+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0982
+      "score": 9.0695
     },
     {
       "title": "I’m a Normie. Can Normies Really Vibe Code?",
@@ -77,10 +93,10 @@
       "image": "https://media.wired.com/photos/69f9d501e8aff66a9d0732d2/master/pass/WIRED-YanBastard-Normie-Vibe-Coders-RGB-02.jpg",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T11:00:01.424144+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2211
+      "score": 7.1956
     },
     {
       "title": "Google has sold so much TPU capacity that its own researchers are queueing for the rest",
@@ -93,10 +109,26 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
       "published": "2026-05-18T13:35:30+00:00",
       "firstSeen": "2026-05-18T14:00:01.549884+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4788
+      "score": 6.4506
+    },
+    {
+      "title": "Anthropic’s co-founder will speak at the Vatican launch of the pope’s AI encyclical",
+      "url": "https://thenextweb.com/news/pope-leo-encyclical-magnifica-humanitas-anthropic-olah",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Pope Leo XIV will personally present his first encyclical, Magnifica Humanitas, on 25 May at the Vatican’s Synod Hall, and one of the speakers alongside him will be Christopher Olah, co-founder of Anthropic. The Vatican announced the details on Monday, confirming that the document will address the protection of human dignity in the age of artificial [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/pope-leo-encyclical-magnifica-humanitas-anthropic-olah.avif",
+      "published": "2026-05-18T16:27:01+00:00",
+      "firstSeen": "2026-05-18T17:00:01.617989+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8333
     },
     {
       "title": "CBA names AI researcher Professor Mary-Anne Williams as Chief AI Scientist",
@@ -112,7 +144,23 @@
       "lastSeen": "2026-05-18T14:00:01.549884+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4572
+      "score": 5.4324
+    },
+    {
+      "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-18T17:00:09.919542+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.06
     },
     {
       "title": "The Open Agent Leaderboard",
@@ -125,26 +173,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png",
       "published": "2026-05-18T14:12:58+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0768
-    },
-    {
-      "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T16:00:11.137212+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 5.0481
     },
     {
       "title": "Anthropic is briefing the Financial Stability Board on what Mythos has been finding",
@@ -160,39 +192,7 @@
       "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.93
-    },
-    {
-      "title": "Your next pipeline miss may start in AI Search",
-      "url": "https://thenextweb.com/news/your-next-pipeline-miss-may-start-in-ai-search",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Across the B2B SaaS teams I work with, a pattern is starting to repeat. Pipeline feels less predictable. Sales cycles stretch. Conversion conversations require more explanation than before. At the same time, traffic often looks stable – sometimes even growing. The disconnect comes from a shift that isn’t immediately visible in dashboards. Buyers are forming [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/AI-search.avif",
-      "published": "2026-05-18T15:23:09+00:00",
-      "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5314
-    },
-    {
-      "title": "NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon",
-      "url": "https://www.marktechpost.com/2026/05/18/nvidia-introduces-a-4-bit-pretraining-methodology-using-nvfp4-validated-on-a-12b-hybrid-mamba-transformer-at-10t-token-horizon",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "NVIDIA introduces a 4-bit pretraining methodology built around the NVFP4 microscaling format — combining selective BF16 layers, 16×16 Random Hadamard Transforms on Wgrad inputs, 2D weight scaling, and stochastic rounding on gradients — validated on a 12B hybrid Mamba-Transformer trained on 10 trillion tokens, the longest publicly documented 4-bit pretraining run, with downstream accuracy closely tracking the FP8 baseline (62.58% vs 62.62% on MMLU-Pro).\nThe post NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon appear",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-1.35.42-AM-1-150x150.png",
-      "published": "2026-05-18T08:42:52+00:00",
-      "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.1185
+      "score": 4.9059
     }
   ],
   "errors": []

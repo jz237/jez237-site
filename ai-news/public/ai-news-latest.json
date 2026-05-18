@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-18T16:00:01.430114+00:00",
+  "updatedAt": "2026-05-18T17:00:01.617989+00:00",
   "items": [
     {
       "title": "AgentStop: Terminating Local AI Agents Early to Save Energy in Consumer Devices",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-18T16:00:11.137212+00:00",
+      "published": "2026-05-18T17:00:09.919542+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 5.06
+    },
+    {
+      "title": "Anthropic’s co-founder will speak at the Vatican launch of the pope’s AI encyclical",
+      "url": "https://thenextweb.com/news/pope-leo-encyclical-magnifica-humanitas-anthropic-olah",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Pope Leo XIV will personally present his first encyclical, Magnifica Humanitas, on 25 May at the Vatican’s Synod Hall, and one of the speakers alongside him will be Christopher Olah, co-founder of Anthropic. The Vatican announced the details on Monday, confirming that the document will address the protection of human dignity in the age of artificial [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/pope-leo-encyclical-magnifica-humanitas-anthropic-olah.avif",
+      "published": "2026-05-18T16:27:01+00:00",
+      "firstSeen": "2026-05-18T17:00:01.617989+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8333
+    },
+    {
+      "title": "Live updates from Elon Musk and Sam Altman’s court battle over the future of OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. Elon Musk, his financial [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-18T16:24:03+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3418
+    },
+    {
+      "title": "Inside Anduril and Meta’s quest to make smart glasses for warfare",
+      "url": "https://www.technologyreview.com/2026/05/18/1137412/inside-anduril-and-metas-quest-to-make-smart-glasses-for-warfare",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The defense-tech company Anduril has shared new details about the augmented-reality headset for the military it’s prototyping with Meta, including a vision for ordering drone strikes via eye-tracking and voice commands. Quay Barnett, who leads the efforts as a vice president at Anduril following a career in the Army’s Special Operations Command, says his fundamental&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/2026-EE-Mar-Studio-Config2-WM-1_1.jpg?resize=1200%2C600",
+      "published": "2026-05-18T16:01:39+00:00",
+      "firstSeen": "2026-05-18T17:00:01.617989+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.6607
+    },
+    {
+      "title": "Fine-Tuning NVIDIA Cosmos Predict 2.5 with LoRA/DoRA for Robot Video Generation",
+      "url": "https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation.png",
+      "published": "2026-05-18T16:00:21+00:00",
+      "firstSeen": "2026-05-18T17:00:01.617989+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8
     },
     {
       "title": "Amazon Alexa Plus can now create AI-generated podcasts",
@@ -28,10 +92,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-18T15:55:25+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.2577
+      "score": 13.2276
+    },
+    {
+      "title": "Omnia and Casa dos Ventos sign $2bn power deal anchoring TikTok’s Brazil data centre",
+      "url": "https://thenextweb.com/news/omnia-casa-dos-ventos-tiktok-brazil-data-centre",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Pátria-controlled data-centre developer is buying renewable power from Brazil’s largest independent generator to underwrite a 200 MW campus in Pecém, the first ByteDance facility in Latin America. Omnia, the Pátria Investimentos-backed data-centre developer, has signed a roughly $2bn energy-supply agreement with Casa dos Ventos, Brazil’s largest independent renewable-power generator, according to Reuters. The contract [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
+      "published": "2026-05-18T15:46:22+00:00",
+      "firstSeen": "2026-05-18T17:00:01.617989+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1131
     },
     {
       "title": "Your next pipeline miss may start in AI Search",
@@ -44,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/AI-search.avif",
       "published": "2026-05-18T15:23:09+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5314
+      "score": 4.5018
     },
     {
       "title": "PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend",
@@ -60,10 +140,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/Bl-qDWU9OfuXZ06hNxZE7.jpeg",
       "published": "2026-05-18T15:12:46+00:00",
       "firstSeen": "2026-05-18T16:00:01.430114+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4062
+      "score": 2.3767
     },
     {
       "title": "Amazon’s new Alexa+ powered feature can generate podcast episodes",
@@ -76,10 +156,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/alexa-podcasts-hero.png?w=1200",
       "published": "2026-05-18T14:56:47+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1583
+      "score": 12.129
+    },
+    {
+      "title": "Glaucous-winged Gull, Brown Pelican, Snowy Egret, Canada Goose",
+      "url": "https://simonwillison.net/2026/May/18/sighting-362781627",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Glaucous-winged Gull, Brown Pelican, Snowy Egret, Canada Goose, in Los Angeles River, CA, USI'm heading home from PyCon US today so I went on a last morning walk to try and spot a pelican. I saw one! Didn't get a great photo of that, but I did see some goslings down by the swan boat lake.",
+      "image": "https://static.inaturalist.org/photos/662161673/large.jpg",
+      "published": "2026-05-18T14:51:00+00:00",
+      "firstSeen": "2026-05-18T17:00:01.617989+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2262
     },
     {
       "title": "NextEra agrees $67bn all-stock deal for Dominion in largest power acquisition ever",
@@ -92,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/NextEra-Energy.avif",
       "published": "2026-05-18T14:27:48+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.104
+      "score": 2.0751
     },
     {
       "title": "Musk’s xAI promised employees $420 for their tax data. Two months later, nothing.",
@@ -108,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/04/Elon-Musk.avif",
       "published": "2026-05-18T14:15:55+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0982
+      "score": 9.0695
     },
     {
       "title": "The Open Agent Leaderboard",
@@ -124,10 +220,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png",
       "published": "2026-05-18T14:12:58+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0768
+      "score": 5.0481
     },
     {
       "title": "Decart raises $300M to put a real-time world model in front of Amazon’s chips",
@@ -140,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/Decart-Founders.avif",
       "published": "2026-05-18T13:58:07+00:00",
       "firstSeen": "2026-05-18T15:00:01.680996+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8396
+      "score": 3.8112
     },
     {
       "title": "Google has sold so much TPU capacity that its own researchers are queueing for the rest",
@@ -156,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
       "published": "2026-05-18T13:35:30+00:00",
       "firstSeen": "2026-05-18T14:00:01.549884+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4788
+      "score": 6.4506
     },
     {
       "title": "XPeng starts its robotaxi line in Guangzhou, three years behind the leaders and ahead of any other Chinese automaker",
@@ -172,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/XPeng-robotaxi.avif",
       "published": "2026-05-18T13:11:41+00:00",
       "firstSeen": "2026-05-18T14:00:01.549884+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0675
+      "score": 2.0396
     },
     {
       "title": "The US is building a 4,000-acre AI hub in the Philippines, and the sovereignty questions are already piling up",
@@ -188,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-philippines-pax-silica-ai-hub-clark-city.avif",
       "published": "2026-05-18T12:10:21+00:00",
       "firstSeen": "2026-05-18T12:46:17.762486+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.039
+      "score": 2.0119
     },
     {
       "title": "Dust raises $40M to push enterprise AI past the single-player era",
@@ -204,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/05/Dust-founders.avif",
       "published": "2026-05-18T12:00:19+00:00",
       "firstSeen": "2026-05-18T12:46:17.762486+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0345
+      "score": 2.0075
     },
     {
       "title": "Google I/O 2026: everything announced so far, from Gemini Intelligence to the death of the Chromebook",
@@ -223,7 +319,7 @@
       "lastSeen": "2026-05-18T16:00:01.430114+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1273
+      "score": 9.1005
     },
     {
       "title": "Pope Leo XIV calls AI-directed warfare a “spiral of annihilation” in historic La Sapienza address",
@@ -239,7 +335,7 @@
       "lastSeen": "2026-05-18T16:00:01.430114+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7243
+      "score": 2.6977
     },
     {
       "title": "South Korea’s LetinAR is building optics behind AI glasses",
@@ -248,14 +344,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "A lens the size of a thumbnail — and the South Korean startup that makes it could become the optical backbone of the AI glasses era.",
+      "summary": "A lens the size of a thumbnail — and the South Korean startup that makes it — could become the optical backbone of the AI glasses era.",
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/GettyImages-1446311598.jpg?resize=1200%2C800",
       "published": "2026-05-18T11:00:00+00:00",
       "firstSeen": "2026-05-18T12:00:01.515688+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "I’m a Normie. Can Normies Really Vibe Code?",
@@ -268,10 +364,10 @@
       "image": "https://media.wired.com/photos/69f9d501e8aff66a9d0732d2/master/pass/WIRED-YanBastard-Normie-Vibe-Coders-RGB-02.jpg",
       "published": "2026-05-18T10:00:00+00:00",
       "firstSeen": "2026-05-18T11:00:01.424144+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2211
+      "score": 7.1956
     },
     {
       "title": "Two crypto billionaires sit behind both the Trump family token and Iran’s sanctions-evasion engine",
@@ -287,7 +383,7 @@
       "lastSeen": "2026-05-18T15:00:01.680996+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9722
+      "score": 1.9469
     },
     {
       "title": "CBA names AI researcher Professor Mary-Anne Williams as Chief AI Scientist",
@@ -303,7 +399,7 @@
       "lastSeen": "2026-05-18T14:00:01.549884+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4572
+      "score": 5.4324
     },
     {
       "title": "Shein buys Everlane at $100M, and the radical-transparency brand becomes a fast-fashion asset",
@@ -319,7 +415,7 @@
       "lastSeen": "2026-05-18T14:00:01.549884+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0516
+      "score": 3.0269
     },
     {
       "title": "NVIDIA Introduces a 4-Bit Pretraining Methodology Using NVFP4, Validated on a 12B Hybrid Mamba-Transformer at 10T Token Horizon",
@@ -332,10 +428,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-1.35.42-AM-1-150x150.png",
       "published": "2026-05-18T08:42:52+00:00",
       "firstSeen": "2026-05-18T08:51:12.422766+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1185
+      "score": 4.0938
     },
     {
       "title": "Exadel buys London consultancy Tangent to bolt experience design onto its AI engineering line",
@@ -351,7 +447,7 @@
       "lastSeen": "2026-05-18T14:00:01.549884+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6387
+      "score": 2.6143
     },
     {
       "title": "Apple’s India App Store case gets a procedural compromise from the Delhi bench",
@@ -367,7 +463,7 @@
       "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0357
+      "score": 3.0115
     },
     {
       "title": "Anthropic is briefing the Financial Stability Board on what Mythos has been finding",
@@ -383,7 +479,7 @@
       "lastSeen": "2026-05-18T12:46:17.762486+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.93
+      "score": 4.9059
     },
     {
       "title": "HSBC opens a $4bn credit line for Chinese clean-tech to go global",
@@ -399,7 +495,7 @@
       "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9246
+      "score": 1.9006
     },
     {
       "title": "Samsung union holds 21 May strike date as Monday mediation opens in Sejong",
@@ -415,7 +511,7 @@
       "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9186
+      "score": 1.8948
     },
     {
       "title": "Berlin’s LawX raises €7.5m to build the backoffice layer of legal AI",
@@ -431,7 +527,7 @@
       "lastSeen": "2026-05-18T12:00:01.515688+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6102
+      "score": 2.5866
     },
     {
       "title": "Apple’s Siri revamp could include auto-deleting chats",
@@ -444,10 +540,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/10/apple-siri-header.jpg?resize=1200%2C800",
       "published": "2026-05-17T20:15:00+00:00",
       "firstSeen": "2026-05-17T21:06:34.423101+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9255
+      "score": 2.9081
     },
     {
       "title": "Why trust is a big question at the Elon Musk-OpenAI trial",
@@ -460,10 +556,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200%2C800",
       "published": "2026-05-17T19:46:34+00:00",
       "firstSeen": "2026-05-17T20:00:01.790736+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8172
+      "score": 4.8
     },
     {
       "title": "Revamped Siri will reportedly offer autodeleting chats",
@@ -476,10 +572,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/10817647/acastro_180510_1777_siri_0001.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-17T18:40:28+00:00",
       "firstSeen": "2026-05-17T19:00:01.845164+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6683
+      "score": 3.6516
     },
     {
       "title": "A Coding Implementation to Compress and Benchmark Instruction-Tuned LLMs with FP8, GPTQ, and SmoothQuant Quantization using llmcompressor",
@@ -492,10 +588,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-11-1024x731.png",
       "published": "2026-05-17T18:19:09+00:00",
       "firstSeen": "2026-05-17T19:00:01.845164+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8723
+      "score": 5.8558
     },
     {
       "title": "Apple’s Siri app in iOS 27 will auto-delete your chats. It may also launch as a beta, again.",
@@ -511,7 +607,7 @@
       "lastSeen": "2026-05-18T11:00:01.424144+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4416
+      "score": 3.4254
     },
     {
       "title": "University of Arizona students boo Eric Schmidt’s AI cheerleading during commencement",
@@ -524,10 +620,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23350482/1328571726.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.675926728958%2C100%2C78.648146542083&amp%3Bw=1200",
       "published": "2026-05-17T17:22:23+00:00",
       "firstSeen": "2026-05-17T18:00:02.003585+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8467
+      "score": 1.8306
     },
     {
       "title": "The seven new job titles that AI created, from Claude Evangelist to Chief AI Officer",
@@ -543,103 +639,7 @@
       "lastSeen": "2026-05-18T08:51:12.422766+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.6364
-    },
-    {
-      "title": "Soderbergh used Meta’s AI in his Lennon documentary. Critics hated it. He says that’s the point.",
-      "url": "https://thenextweb.com/news/soderbergh-lennon-documentary-ai-meta-cannes",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Steven Soderbergh’s “John Lennon: The Last Interview” premiered on Saturday at the 79th Cannes Film Festival. Built around a never-before-released two-hour-and-45-minute radio interview that Lennon and Yoko Ono gave to a San Francisco KFRC radio crew from their home in New York’s Dakota Apartments on December 8, 1980, hours before Lennon was shot and killed, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/soderbergh-lennon-documentary-ai-meta-cannes.avif",
-      "published": "2026-05-17T16:54:44+00:00",
-      "firstSeen": "2026-05-17T18:00:02.003585+00:00",
-      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3292
-    },
-    {
-      "title": "If you’re giving a commencement speech in 2026, maybe don’t mention AI",
-      "url": "https://techcrunch.com/2026/05/17/if-youre-giving-a-commencement-speech-in-2026-maybe-dont-mention-ai",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "It's tough to get graduating students excited about a future shaped by artificial intelligence.",
-      "image": "https://techcrunch.com/wp-content/uploads/2019/01/university.jpg?resize=1200%2C641",
-      "published": "2026-05-17T16:32:04+00:00",
-      "firstSeen": "2026-05-17T17:00:01.303011+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7632
-    },
-    {
-      "title": "OpenAI merges ChatGPT and Codex under Greg Brockman. The side quests are over.",
-      "url": "https://thenextweb.com/news/openai-brockman-chatgpt-codex-unified-agentic-platform",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "OpenAI co-founder and president Greg Brockman has permanently taken charge of the company’s product strategy, merging ChatGPT, Codex, and the developer API into a single product organisation. In an internal memo seen by Wired, Brockman wrote that OpenAI will “invest in a single agentic platform and to merge ChatGPT and Codex into one unified agentic [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/openai-brockman-chatgpt-codex-unified-agentic-platform.avif",
-      "published": "2026-05-17T16:21:19+00:00",
-      "firstSeen": "2026-05-17T17:00:01.303011+00:00",
-      "lastSeen": "2026-05-18T08:51:12.422766+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 13.0204
-    },
-    {
-      "title": "TechCrunch Mobility: The AI skills arms race is coming for automotive",
-      "url": "https://techcrunch.com/2026/05/17/techcrunch-mobility-the-ai-skills-arms-race-is-coming-for-automotive",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Welcome back to TechCrunch Mobility — your central hub for news and insights on the future of transportation.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/rj-scaringe-Getty.jpg?resize=1200%2C800",
-      "published": "2026-05-17T16:05:00+00:00",
-      "firstSeen": "2026-05-17T17:00:01.303011+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7561
-    },
-    {
-      "title": "GDS weighs in on the NHS's decision to retreat from Open Source",
-      "url": "https://simonwillison.net/2026/May/17/gds-weighs-in",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "GDS weighs in on the NHS&#x27;s decision to retreat from Open Source\nTerence Eden continues his coverage of the NHS' poorly considered decision to close down access to their open source repositories in response to vulnerabilities reported to them as part of Project Glasswing.\nNow the Government Digital Service have joined the conversation with AI, open code and vulnerability risk in the public sector, published May 14th. Their key recommendation:\n\nKeep open by default. Making everything private adds additional delivery and policy costs, and can reduce reuse and scrutiny. Openness should remain",
-      "image": "",
-      "published": "2026-05-17T15:59:41+00:00",
-      "firstSeen": "2026-05-17T17:00:01.303011+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.6453
-    },
-    {
-      "title": "Dr. Jeffrey L. Brown on rethinking hormone health through advanced testing",
-      "url": "https://thenextweb.com/news/dr-jeffrey-brown-hormone-health-advanced-testing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "In a healthcare environment shaped by protocols and time constraints, many people often experience long journeys marked by inconclusive answers and persistent symptoms. Dr. Jeffrey L. Brown, founder of Hormone Health with Dr. Brown, positions his work in response to this gap. According to him, his approach centers on uncovering underlying imbalances rather than assigning clinical labels, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/dr-jeffrey-brown-hormone-health-advanced-testing.avif",
-      "published": "2026-05-17T15:01:10+00:00",
-      "firstSeen": "2026-05-17T16:00:01.481609+00:00",
-      "lastSeen": "2026-05-18T08:00:01.704809+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6996
+      "score": 7.6204
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1359
+      "score": 1.1355
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6016
+      "score": 2.6012
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-05T08:30:00+00:00",
       "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.2202
+      "score": 0.2201
     },
     {
       "title": "The Life Scientific: Jens Juul Holst",
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-04T20:00:00+00:00",
       "firstSeen": "2026-05-04T20:39:44.277899+00:00",
-      "lastSeen": "2026-05-18T16:00:01.430114+00:00",
+      "lastSeen": "2026-05-18T17:00:01.617989+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.8901
