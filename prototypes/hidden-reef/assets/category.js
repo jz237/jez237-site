@@ -72,7 +72,30 @@
 
   function getProducts(subSlug) {
     if (!window.THR_PRODUCTS || !THR_PRODUCTS[subSlug]) return [];
-    return THR_PRODUCTS[subSlug];
+    const meta = getCategoryMeta(subSlug);
+    return THR_PRODUCTS[subSlug].map(product => Object.assign({}, product, {
+      categorySlug: subSlug,
+      categoryName: meta.childName || '',
+      groupSlug: meta.groupSlug || '',
+      groupName: meta.groupName || ''
+    }));
+  }
+
+  function getCategoryMeta(subSlug) {
+    const categories = window.THR?.categories || {};
+    for (const groupSlug of Object.keys(categories)) {
+      const group = categories[groupSlug];
+      for (const child of Object.values(group.children || {})) {
+        if (child.slug === subSlug) {
+          return {
+            groupSlug,
+            groupName: group.name,
+            childName: child.name
+          };
+        }
+      }
+    }
+    return {};
   }
 
   function formatPrice(price) {
@@ -132,6 +155,7 @@
   function getActiveControls() {
     return {
       query: (document.getElementById('search')?.value || '').trim(),
+      category: document.getElementById('category-filter')?.value || '',
       brand: document.getElementById('brand-filter')?.value || '',
       sort: document.getElementById('sort-products')?.value || 'featured'
     };
@@ -156,8 +180,9 @@
       const name = product.name || '';
       const brand = extractBrand(name);
       const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
+      const matchesCategory = !controls.category || product.groupSlug === controls.category;
       const matchesBrand = !controls.brand || brand === controls.brand;
-      return matchesQuery && matchesBrand;
+      return matchesQuery && matchesCategory && matchesBrand;
     });
     filtered = sortProducts(filtered, controls.sort);
     return filtered;
@@ -169,16 +194,24 @@
 
     const brands = Array.from(new Set(products.map(product => extractBrand(product.name)).filter(Boolean))).sort((a, b) => a.localeCompare(b));
     const brandOptions = brands.map(brand => '<option value="' + escapeHtml(brand) + '">' + escapeHtml(brand) + '</option>').join('');
-    el.innerHTML = '<label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button>';
+    const categories = Array.from(new Map(products
+      .filter(product => product.groupSlug && product.groupName)
+      .map(product => [product.groupSlug, product.groupName]))
+      .entries())
+      .sort((a, b) => a[1].localeCompare(b[1]));
+    const categoryOptions = categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
+    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button>';
 
     el.querySelectorAll('select').forEach(control => {
       control.addEventListener('change', () => updateProductView(1));
     });
     el.querySelector('#reset-products')?.addEventListener('click', () => {
       const searchInput = document.getElementById('search');
+      const categoryFilter = document.getElementById('category-filter');
       const brandFilter = document.getElementById('brand-filter');
       const sortControl = document.getElementById('sort-products');
       if (searchInput) searchInput.value = '';
+      if (categoryFilter) categoryFilter.value = '';
       if (brandFilter) brandFilter.value = '';
       if (sortControl) sortControl.value = 'featured';
       updateProductView(1);
@@ -331,7 +364,11 @@
   function renderCountBar(shown, total, sub) {
     const el = document.getElementById('count-bar');
     if (!el) return;
-    const label = sub ? sub.name : 'All products';
+    const controls = getActiveControls();
+    const selectedCategory = controls.category
+      ? document.querySelector('#category-filter option:checked')?.textContent || ''
+      : '';
+    const label = sub ? sub.name : (selectedCategory || 'All products');
     el.innerHTML = `<span>${label}</span><span class="total">${shown} of ${total} products shown</span>`;
   }
 
@@ -380,7 +417,7 @@
       products = [];
       if (window.THR_PRODUCTS) {
         for (const key of Object.keys(THR_PRODUCTS)) {
-          products = products.concat(THR_PRODUCTS[key]);
+          products = products.concat(getProducts(key));
         }
       }
     }
