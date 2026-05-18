@@ -190,7 +190,7 @@ THR.categories = {
     children: {
       all: {
         name: "Protein Skimmers",
-        slug: "all",
+        slug: "skimmers",
         description: "Protein skimmers",
         sourceUrl: "https://www.thehiddenreef.com/protein-skimmer/"
       }

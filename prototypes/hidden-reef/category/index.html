@@ -117,8 +117,9 @@
     .count-bar .total { color:var(--reef-cyan); }
 
     /* Product grid uses shared thr-cards.css */
-    .product-grid { gap:10px; }
-    /* Override product grid to use shared card classes */
+    #product-grid { gap:10px; }
+    #product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+    /* Mobile overrides handled by thr-cards.css */
 
     /* Pagination */
     .pagination {
@@ -196,7 +197,7 @@
     <section class="cat-header" id="cat-header"></section>
     <div class="subcat-tabs" id="subcat-tabs"></div>
     <div class="count-bar" id="count-bar"></div>
-    <div class="product-grid" id="product-grid"></div>
+    <div class="thr-product-grid" id="product-grid"></div>
     <div class="pagination" id="pagination"></div>
     <div class="back-top"><a href="#top">↑ Back to top</a></div>
 
