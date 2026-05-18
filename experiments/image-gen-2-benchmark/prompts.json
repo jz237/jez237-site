@@ -502,5 +502,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-18-morning-selenite-oracle-apiary",
+    "title": "Selenite Oracle Apiary",
+    "tests": "Explores pearlescent fantasy materials, prophetic micro-scenes inside honeycomb cells, and calm ritual staging without relying on dragons, castles, forests, or dance-like motion.",
+    "prompt": "Use case: stylized-concept\\nAsset type: daily GPT Image 2 benchmark archive image\\nPrimary request: Create a richly detailed fantasy image titled conceptually \"Selenite Oracle Apiary\", with no visible text and no dancing of any kind.\\nScene/backdrop: A hidden moonlit cavern-temple carved from pale selenite crystal, its walls glowing softly with milky translucence. Narrow stone channels carry silver-blue moonwater through the floor. Hanging crystal combs and small brass reliquaries catch the light. Beyond an arched opening, a night sky is visible through a vertical shaft in the mountain.\\nSubject: A quiet magical apiary where tiny luminous moon-bees gather around crystalline honeycombs that contain miniature prophetic scenes inside each cell: storm clouds, distant ships, falling stars, blooming thorns. Three still-robed oracle keepers stand in calm, upright poses, studying the combs with lanterns and polished obsidian mirrors.\\nComposition: Square 1024x1024 image, deep central perspective into the cavern, layered foreground crystals and honeycomb frames, strong readable silhouette, intricate but not cluttered.\\nStyle/lighting: High-end fantasy concept art, cinematic moonlight, pearlescent whites, cool silver, muted brass, small warm amber lantern accents, realistic material detail, sharp focus, atmospheric depth.\\nConstraints: No copyrighted characters or logos. No visible text, labels, watermark, signature, UI, or border. No dancers, no dance poses, no ballet, no ballroom, no stage performance, no ceremonial dancing, no implied dancing. The figures must be standing still or calmly observing.",
+    "image": "images/2026-05-18-morning-selenite-oracle-apiary.png",
+    "date": "2026-05-18",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
