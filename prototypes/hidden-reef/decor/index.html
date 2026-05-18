@@ -6,6 +6,7 @@
   <title>Decorations & Aquascaping - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     body.department-page { --department-hero: url("../assets/department/aquascaping.jpg"); --department-hero-fade: rgba(0,48,75,.18); }
   </style>
@@ -129,68 +130,14 @@
         </div>
       </aside>
 
-      <div class="grid" id="products">
-        <article class="product">
-          <span class="badge">Bold</span>
-          <a href="https://www.thehiddenreef.com/copy-of-ut-tropical-fruit-home.html" target="_blank" rel="noopener">
-            <img src="../assets/site/skull.jpg" alt="Mechanical Skull aquarium ornament" />
-            <h3>Mechanical Skull Ornament</h3>
-          </a>
-          <p>Statement decor that can double as a cave or territory marker in a themed aquarium.</p>
-          <div class="price-row"><span class="price">$19.99</span><button class="add" data-name="Mechanical Skull Ornament">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Fun</span>
-          <a href="https://www.thehiddenreef.com/copy-of-ut-dragonfruit-home.html" target="_blank" rel="noopener">
-            <img src="../assets/site/fruit-home.jpg" alt="Tropical Fruit Home aquarium hide" />
-            <h3>Tropical Fruit Home</h3>
-          </a>
-          <p>Bright hideaway for playful freshwater tanks where personality is part of the point.</p>
-          <div class="price-row"><span class="price">$12.99</span><button class="add" data-name="Tropical Fruit Home">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Planted</span>
-          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/department/freshwater.jpg" alt="Freshwater planted aquarium inspiration" />
-            <h3>Plants and natural accents</h3>
-          </a>
-          <p>Use plant height, color, and texture to create a clean aquascape without clutter.</p>
-          <div class="price-row"><span class="price">Shop plants</span><button class="add" data-name="Plants and natural accents">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Layout</span>
-          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/department/aquascaping.jpg" alt="Aquarium aquascaping materials and layout display" />
-            <h3>Rock, wood, and hardscape</h3>
-          </a>
-          <p>Create structure first, then add plants and accents around the fish behavior you want.</p>
-          <div class="price-row"><span class="price">Build layout</span><button class="add" data-name="Rock wood and hardscape">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Reef</span>
-          <a href="../saltwater/">
-            <img src="../assets/department/saltwater-reef.jpg" alt="Reef aquarium rockwork and coral placement" />
-            <h3>Reef rock and coral placement</h3>
-          </a>
-          <p>Leave room for flow, coral growth, cleaning tools, and livestock that needs open sand.</p>
-          <div class="price-row"><span class="price">Reef ideas</span><button class="add" data-name="Reef rock and coral placement">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Care</span>
-          <a href="../equipment/">
-            <img src="../assets/department/maintenance.jpg" alt="Aquarium maintenance and cleaning tools" />
-            <h3>Cleaning-friendly decor</h3>
-          </a>
-          <p>Decor choices should still leave space for gravel vacs, algae tools, and water changes.</p>
-          <div class="price-row"><span class="price">Care tools</span><button class="add" data-name="Cleaning-friendly decor">+</button></div>
-        </article>
-      </div>
-    </div>
+      <div class="thr-product-grid" id="products"></div>
+    <script>
+      // Render decor department products from live data
+      if (window.THR && THR.renderProducts) {
+        THR.renderProducts('products', ['ornaments', 'all-decorations']);
+      }
+    </script>
+  </div>
 
     <section class="feature-row">
       <article class="panel">
@@ -239,6 +186,9 @@
   </aside>
 
   <script src="../assets/link-modal.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/thr-cards.js"></script>
   <script src="../assets/category.js"></script>
 </body>
 </html>
