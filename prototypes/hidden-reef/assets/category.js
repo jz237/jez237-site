@@ -257,7 +257,6 @@
     const el = document.getElementById('product-grid');
     if (!el) return;
 
-    products = window.THR?.groupProductVariants ? THR.groupProductVariants(products) : products;
     const start = (page - 1) * PRODUCTS_PER_PAGE;
     const end = start + PRODUCTS_PER_PAGE;
     const pageProducts = products.slice(start, end);
