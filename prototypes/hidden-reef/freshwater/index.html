@@ -436,12 +436,7 @@
       </aside>
       <div class="thr-product-grid" id="products"></div>
     </div>
-    <script>
-      // Render freshwater department products from live data
-      if (window.THR && THR.renderProducts) {
-        THR.renderProducts('products', ['starter-kits', 'aquarium-and-stand', 'water-conditioners', 'planted', 'test-kits', 'canister-filters', 'filter-media', 'gravel-cleaners', 'heaters', 'air-pumps', 'led-fixtures']);
-      }
-    </script>
+    
 
     <section class="feature-row">
       <article class="panel"><h2>First Tank Guidance</h2><p>Show the exact starter path so beginners avoid random baskets, incompatible fish, and preventable early failures.</p></article>
@@ -465,6 +460,9 @@
   <script src="../assets/products.js"></script>
   <script src="../assets/product-data.js"></script>
   <script src="../assets/thr-cards.js"></script>
-  <script src="../assets/category.js"></script>
+  <script>
+    // Render freshwater department products from live data
+    THR.renderProducts('products', ['starter-kits', 'aquarium-and-stand', 'water-conditioners', 'planted', 'test-kits', 'canister-filters', 'filter-media', 'gravel-cleaners', 'heaters', 'air-pumps', 'led-fixtures']);
+  </script>
 </body>
 </html>

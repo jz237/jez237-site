@@ -132,12 +132,7 @@
 
       <div class="thr-product-grid" id="products"></div>
     </div>
-    <script>
-      // Render equipment department products from live data
-      if (window.THR && THR.renderProducts) {
-        THR.renderProducts('products', ['canister-filters', 'filter-media', 'led-fixtures', 'heaters', 'air-pumps', 'gravel-cleaners']);
-      }
-    </script>
+    
 
     <section class="feature-row">
       <article class="panel">
@@ -189,6 +184,9 @@
   <script src="../assets/products.js"></script>
   <script src="../assets/product-data.js"></script>
   <script src="../assets/thr-cards.js"></script>
-  <script src="../assets/category.js"></script>
+  <script>
+    // Render equipment department products from live data
+    THR.renderProducts('products', ['canister-filters', 'filter-media', 'led-fixtures', 'heaters', 'air-pumps', 'gravel-cleaners']);
+  </script>
 </body>
 </html>

@@ -509,12 +509,7 @@
       </aside>
       <div class="thr-product-grid" id="products"></div>
     </div>
-    <script>
-      // Render saltwater department products from live data
-      if (window.THR && THR.renderProducts) {
-        THR.renderProducts('products', ['skimmers', 'coral-supplements', 'marine-test-kits', 'led-fixtures']);
-      }
-    </script>
+    
 
     <section class="feature-row">
       <article class="panel"><h2>Before You Buy</h2><p>Ask about tank size, target coral, livestock temperament, water source, lighting spread, and maintenance budget.</p></article>
@@ -541,6 +536,9 @@
   <script src="../assets/products.js"></script>
   <script src="../assets/product-data.js"></script>
   <script src="../assets/thr-cards.js"></script>
-  <script src="../assets/category.js"></script>
+  <script>
+    // Render saltwater department products from live data
+    THR.renderProducts('products', ['skimmers', 'coral-supplements', 'marine-test-kits', 'led-fixtures']);
+  </script>
 </body>
 </html>
