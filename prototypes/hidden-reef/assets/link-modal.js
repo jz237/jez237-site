@@ -150,6 +150,7 @@
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('link-modal-open');
-    modal.querySelector('.link-modal__open').focus();
+    modal.querySelector('.link-modal__panel').scrollTop = 0;
+    modal.querySelector('.link-modal__close').focus();
   });
 }());
