@@ -490,5 +490,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-17-evening-kuiper-seed-vault-relay",
+    "title": "Kuiper Seed Vault Relay",
+    "tests": "Tests how GPT Image 2 handles a dense hard-sci-fi interior with transparent cryo-capsules, biological micro-detail, mixed cold/warm lighting, and strong depth without relying on spaceships or cityscapes.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed hard-science-fiction scene titled conceptually Kuiper Seed Vault Relay, with no visible text.\n\nScene/backdrop: the shadowed interior of a hollowed Kuiper Belt ice asteroid converted into a deep-time biological archive and communications relay. The cavern walls are blue-black ancient ice veined with copper thermal conduits, frost crystals, and small embedded windows looking out to distant stars.\nSubject: a central zero-gravity seed vault: thousands of transparent hexagonal cryo-capsules containing tiny preserved plants, algae, fungi, and engineered spores, arranged around a quiet golden radio-laser mast that sends a narrow beam through a circular aperture into space.\nComposition: square image, cinematic wide interior view from slightly above, strong depth with capsule rings receding into the cavern, no humans, no robots as characters, no spacecraft dominating the scene.\nVisual details: condensation halos, amber status lights, thin fiber-optic roots connecting capsules, ceramic white maintenance gantries, dark basalt anchor ribs, drifting ice particles, realistic scale cues from tiny access ladders and inspection platforms.\nLighting/color: cold cyan and indigo ice shadows balanced by warm amber and pale gold relay light; crisp specular highlights on glass capsules; high dynamic range but readable details.\nStyle: polished cinematic sci-fi concept art, plausible engineering, intricate materials, sharp focus, no visible text, no logos, no copyrighted characters, no dancing, no dancers, no dance poses, no performance imagery.",
+    "image": "images/2026-05-17-evening-kuiper-seed-vault-relay.png",
+    "date": "2026-05-17",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
