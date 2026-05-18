@@ -26,31 +26,32 @@
     return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
   }
 
-  document.querySelectorAll('.product a[href^="https://www.thehiddenreef.com"], .product-link, .live-link[href^="https://www.thehiddenreef.com"]').forEach(link => {
-    link.addEventListener('click', event => {
-      event.preventDefault();
-      const card = link.closest('.product') || link.closest('.live-link');
-      const modal = ensureModal();
-      const title = card?.querySelector('h3, strong')?.textContent?.trim() || link.textContent.trim() || 'Hidden Reef item';
-      const desc = card?.dataset.info || card?.querySelector('p, em')?.textContent?.trim() || 'View this item on the real Hidden Reef site.';
-      const img = card?.querySelector('img');
-      const category = card?.dataset.category || card?.querySelector('span')?.textContent?.trim() || 'Current site link';
-      const price = card?.dataset.price || card?.querySelector('.price')?.textContent?.trim() || 'More details available on the original site.';
-      const source = card?.dataset.source || 'Original Hidden Reef page';
-      const details = (card?.dataset.details || '').split('|').map(item => item.trim()).filter(Boolean);
+  document.addEventListener('click', event => {
+    const link = event.target.closest('.product a[href^="https://www.thehiddenreef.com"], .product-link, .live-link[href^="https://www.thehiddenreef.com"], .thr-product[href^="https://www.thehiddenreef.com"]');
+    if (!link) return;
 
-      modal.querySelector('h2').textContent = title;
-      modal.querySelector('p').textContent = desc;
-      modal.querySelector('.link-modal__open').href = link.href;
-      modal.querySelector('.link-modal__details').innerHTML = details.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
-      modal.querySelector('.link-modal__details').style.display = details.length ? '' : 'none';
-      modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(category) + '</strong><span>' + escapeHtml(price) + '</span><span>' + escapeHtml(source) + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
-      modal.querySelector('.link-modal__image').src = img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg';
-      modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
-      modal.classList.add('is-open');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('link-modal-open');
-      modal.querySelector('.link-modal__open').focus();
-    });
+    event.preventDefault();
+    const card = link.closest('.product') || link.closest('.thr-product') || link.closest('.live-link');
+    const modal = ensureModal();
+    const title = card?.querySelector('h3, strong')?.textContent?.trim() || link.textContent.trim() || 'Hidden Reef item';
+    const desc = card?.dataset.info || card?.querySelector('p, em')?.textContent?.trim() || 'View this item on the real Hidden Reef site.';
+    const img = card?.querySelector('img');
+    const category = card?.dataset.category || card?.querySelector('.thr-brand, span')?.textContent?.trim() || 'Current site link';
+    const price = card?.dataset.price || card?.querySelector('.price, .thr-price')?.textContent?.trim() || 'More details available on the original site.';
+    const source = card?.dataset.source || 'Original Hidden Reef page';
+    const details = (card?.dataset.details || '').split('|').map(item => item.trim()).filter(Boolean);
+
+    modal.querySelector('h2').textContent = title;
+    modal.querySelector('p').textContent = desc;
+    modal.querySelector('.link-modal__open').href = link.href;
+    modal.querySelector('.link-modal__details').innerHTML = details.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
+    modal.querySelector('.link-modal__details').style.display = details.length ? '' : 'none';
+    modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(category) + '</strong><span>' + escapeHtml(price) + '</span><span>' + escapeHtml(source) + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
+    modal.querySelector('.link-modal__image').src = img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg';
+    modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('link-modal-open');
+    modal.querySelector('.link-modal__open').focus();
   });
 }());
