@@ -1276,14 +1276,19 @@
     }
     @media (max-width: 760px) {
       .main-nav {
-        display: flex;
-        justify-content: flex-start;
-        overflow-x: auto;
-        scrollbar-width: thin;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        justify-content: stretch;
+        overflow: visible;
+        scrollbar-width: none;
       }
-      .main-nav::-webkit-scrollbar { display: block; height: 6px; }
-      .main-nav::-webkit-scrollbar-thumb { background: rgba(116,205,235,0.35); border-radius: 999px; }
-      .main-nav a { flex: 0 0 auto; }
+      .main-nav::-webkit-scrollbar { display: none; }
+      .main-nav a {
+        flex: 0 1 auto;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
+      }
       .brand {
         min-height: 134px;
         padding: 18px 12px;
@@ -1421,7 +1426,6 @@
       .glance-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      }
       .brand span span {
         text-align: center;
       }
@@ -1438,6 +1442,8 @@
     @media (max-width: 760px) {
       .header {
         padding: 14px 12px;
+        margin-left: 0;
+        margin-right: 0;
       }
       .brand {
         flex-direction: row;
@@ -1457,6 +1463,11 @@
       .search-box {
         height: 42px;
       }
+      .main-nav {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+      }
       .hero {
         min-height: 318px;
         margin-top: 12px;
@@ -1468,13 +1479,25 @@
       .hero h1 {
         font-size: clamp(31px, 9vw, 42px);
       }
+      .section-band.alt {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+      }
       .guides {
         grid-template-columns: 1fr;
       }
       .path-strip {
         grid-template-columns: 1fr;
       }
-
+      body .page .header,
+      body .page .main-nav {
+        width: auto;
+        max-width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
     }
   </style>
 </head>
@@ -1501,9 +1524,10 @@
       <a href="saltwater/">Saltwater</a>
       <a href="category/?cat=aquariums">Aquariums</a>
       <a href="pond/">Pond</a>
-      <a href="category/?cat=lighting">Lighting</a>
+      <a href="equipment/">Equipment</a>
       <a href="food/">Food</a>
       <a href="decor/">Decorations</a>
+      <a href="maintenance/">Maintenance</a>
       <a href="#visit">Visit Us</a>
     </nav>
 
@@ -1513,7 +1537,7 @@
         <p>Everything aquarium: freshwater, saltwater, ponds, plants, coral, equipment, food, and expert help from a real local store.</p>
         <div class="button-row">
           <a class="btn" href="#products">Shop Aquariums</a>
-          <a class="btn secondary" href="#visit">Explore Livestock Pictures</a>
+          <a class="btn secondary" href="#visit">Visit the Store</a>
         </div>
       </div>
     </section>
