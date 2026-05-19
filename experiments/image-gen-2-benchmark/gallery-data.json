@@ -574,5 +574,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-19-afternoon-whispering-rainbow-archive",
+    "title": "Whispering Rainbow Archive",
+    "tests": "Tests luminous transparent materials, rainbow caustics, calm surreal still-life composition, and no-text discipline in a novel wild-card setting.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a visually rich surreal still-life scene titled conceptually \"Whispering Rainbow Archive\", with no visible text, no logos, and no dancing, dancers, performance, ballet, or dance-like poses of any kind.\n\nScene/backdrop: a quiet abandoned radio observatory has been converted into an archive for captured rainbows after a storm. The room is circular, with old cream-painted acoustic wall panels, brass instrument racks, cracked terrazzo floor, and tall windows looking out onto wet pine trees under clearing gray sky.\n\nMain subject: dozens of delicate glass vacuum tubes, prism jars, and clear bell cloches sit on long wooden worktables, each containing a different physical fragment of rainbow light: curled ribbons of spectral color, tiny luminous arcs, misty color gradients, and suspended droplets that split light into fine bands. In the center, a large parabolic radio dish made from translucent frosted glass rests horizontally like a shallow bowl, gathering a soft hovering aurora-like ribbon just above its surface.\n\nDetails/materials: raindrops bead on window glass; old copper cables coil neatly around ceramic insulators; handwritten catalog tags exist only as blank cream labels with no readable words; small mirrors, lenses, prisms, tuning dials, and calibration weights catch colored reflections. The atmosphere is calm, tactile, and mysterious, with crisp macro-level detail.\n\nLighting/composition: square composition, three-quarter view from slightly above table height, strong central silhouette from the glass dish, moody post-rain daylight mixed with luminous rainbow caustics, deep but natural shadows, high detail, cinematic realism with subtle surrealism, no visible text.",
+    "image": "images/2026-05-19-afternoon-whispering-rainbow-archive.png",
+    "date": "2026-05-19",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
