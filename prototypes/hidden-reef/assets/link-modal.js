@@ -359,7 +359,7 @@
       'Availability and final price should be confirmed on the store page or in person.'
     ];
     const relatedHtml = context.related.length
-      ? '<strong>Related products</strong><div>' + context.related.map(item => '<a href="' + escapeHtml(item.productUrl) + '" target="_blank" rel="noopener">' + escapeHtml(item.name) + '</a>').join('') + '</div>'
+      ? '<strong>Related products</strong><div>' + context.related.map(item => '<a class="product-link" href="' + escapeHtml(item.productUrl) + '">' + escapeHtml(item.name) + '</a>').join('') + '</div>'
       : '';
 
     modal.querySelector('h2').textContent = title;
