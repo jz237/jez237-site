@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T16:30:10.348188+00:00",
+  "updatedAt": "2026-05-19T18:00:01.650335+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7280,6 +7280,86 @@
     "https://www.theverge.com/tech/933653/ai-graduation-commencement-glendale-community-college": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/glendale.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-19T16:30:10.348188+00:00"
+    },
+    "https://www.theverge.com/tech/933415/google-io-2026-biggest-announcements-ai-gemini": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/io2026.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/googles-genie-world-model-can-now-simulate-real-streets-with-street-view": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Genie-Street-View-NYC.png?resize=1200,662",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/with-gemini-3-5-flash-google-bets-its-next-ai-wave-on-agents-not-chatbots": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/IMG_1192.jpg?resize=1200,900",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/how-to-use-googles-new-information-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/G-information-agents.png?resize=1200,750",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://www.theverge.com/tech/933921/google-wants-to-compete-with-anthropics-mythos": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STK453_PRIVACY_B_CVirginia.jpg?quality=90&amp;strip=all&amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;w=1200",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-search-as-you-know-it-is-over": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2196352264.jpg?w=1024",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/googles-ai-now-lets-you-talk-to-your-gmail-inbox": {
+      "image": "https://techcrunch.com/wp-content/uploads/2020/10/gmail-icon-2020-ios.jpg?resize=1200,675",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-updates-its-gemini-app-to-take-on-chatgpt-and-claude": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200,800",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/ai-design-tools-are-the-next-big-battleground-and-google-is-going-all-in": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-pics.png?resize=1200,736",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/googles-ai-studio-now-lets-anyone-build-android-apps-in-minutes": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/Pixel-10-Pro-feat-.jpg?resize=1200,675",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/agentic-app-coding-gets-an-upgrade-with-googles-release-of-android-cli": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/03/google-android-logo.jpg?resize=1200,800",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/googles-new-universal-cart-wants-to-follow-you-across-the-entire-internet": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Universal-Cart-icon.jpg?resize=1200,675",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-introduces-gemini-spark-a-24-7-agentic-assistant-with-gmail-integration": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/spark.jpg?resize=1200,673",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-adds-voice-based-prompting-to-docs-and-keep": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Docs-Live-1.png?resize=1200,675",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/googles-gemini-omni-turns-images-audio-and-text-into-video-and-thats-just-the-start": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Google-Omni-Flash.png?resize=1200,683",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/openai-is-making-it-easier-to-check-if-an-image-was-made-by-their-models": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/09/GettyImages-1470340715.jpg?resize=1200,802",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-launches-antigravity-2-0-with-an-updated-desktop-app-and-cli-tool": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-developer-antigravity.jpg?resize=1200,900",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://www.theverge.com/tech/932364/google-ai-studio-native-android-apps-vibe-code-google-io-2026": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24007892/acastro_STK112_android_01.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://www.theverge.com/news/932927/google-io-agentic-ai-shopping-universal-cart": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Universal-Cart-intelligent-insights.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://www.theverge.com/tech/932970/google-search-ai-update-io-2026": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/google-search-box-update.png?quality=90&amp;strip=all&amp;crop=0%2C13.840708999971%2C100%2C72.318582000059&amp;w=1200",
+      "checkedAt": "2026-05-19T18:00:01.650335+00:00"
     }
   }
 }
