@@ -562,5 +562,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-19-midday-cryovolcano-seed-ark-diagram",
+    "title": "Cryovolcano Seed Ark Diagram",
+    "tests": "Explores whether GPT Image 2 can make a readable scientific cutaway with layered facility systems, controlled thermal-flow arrows, and crisp labels while preserving cinematic material detail.",
+    "prompt": "Use case: infographic-diagram\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a vertical museum-quality educational infographic poster titled \"CRYOVOLCANO SEED ARK DIAGRAM\".\n\nComposition: a clean annotated cutaway of a polar cryovolcano on an icy dwarf planet that has been converted into a protected seed-archive facility. Top third shows the blue-white ice surface, a squat insulated observatory dome, frost-covered solar mirrors, antenna masts, and a quiet plume of sparkling ice crystals venting upward. Middle section reveals a cross-section through layered ice and mineral strata, with clearly separated sealed vault rings, robotic sample elevators, seed capsule libraries, thermal buffer chambers, and chilled access tunnels. Bottom third shows the warm subsurface brine reservoir and geothermal heat exchangers, with arrows explaining how controlled heat keeps the archive stable without thawing the vaults.\n\nVisual language: precise scientific illustration mixed with cinematic concept art, crisp vector-like labels, thin leader lines, small numbered callouts, readable but minimal text, pale cyan ice, graphite rock, seed-capsule amber, sterile white facility lights, subtle frost particles, careful scale cues, rich material detail, high contrast, sharp focus, no brand logos, no copyrighted characters.\n\nHard exclusions: no dancing, no dancers, no ballet, no dance poses, no stage performance, no implied choreography.",
+    "image": "images/2026-05-19-midday-cryovolcano-seed-ark-diagram.png",
+    "date": "2026-05-19",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
