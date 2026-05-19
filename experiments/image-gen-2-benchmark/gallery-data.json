@@ -550,5 +550,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-19-morning-thunder-egg-familiar-nursery",
+    "title": "Thunder Egg Familiar Nursery",
+    "tests": "Explores geode-as-nursery fantasy worldbuilding, crystalline micro-creatures, wet basalt and brass material contrast, stormlit cavern atmosphere, and calm non-performance figure staging.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed fantasy image titled conceptually \"Thunder Egg Familiar Nursery\", with no visible text.\n\nScene/backdrop: a hidden mountain nursery carved into dark volcanic stone after a storm, with arched alcoves, wet basalt floors, copper drainage channels, shelves of mineral tools, and a high crack in the ceiling revealing a calm violet night sky. Rainwater drips into shallow reflecting pools, and faint stormlight glows in the distance.\n\nSubject: dozens of large thunder eggs and geodes resting in brass cradle stands and moss-lined stone nests. Some geodes are cracked open, revealing tiny magical familiars forming inside crystalline chambers: miniature salamanders made of ember light, moth-sized cloud spirits, pebble-backed turtles with glowing quartz veins, and seedling-like sprites curled quietly among amethyst points. The creatures are resting or being carefully observed, not posing or performing. Small hooded keepers stand still at worktables for scale, using glass pipettes, silver tuning forks, soft brushes, and moonlit lanterns.\n\nComposition: square 1024x1024 cinematic three-quarter view from slightly above, with one large open geode nursery cradle in the foreground as the focal point and rows of smaller cradles receding into the cavern. Include crisp details: mineral dust, condensation beads, copper labels without readable writing, velvet pads, tiny lightning-like filaments trapped inside quartz, moss, wet reflections, and warm lantern halos.\n\nMaterials and lighting: rugged black basalt, polished brass, translucent agate bands, violet amethyst, milky quartz, damp green moss, amber lantern light, cool blue storm reflections, pearlescent mist, high detail, fantasy realism, coherent scale, atmospheric depth, sharp material contrast.\n\nConstraints: no readable text, no logos, no copyrighted characters, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no theatrical performance, no motion study of bodies, no watermark, no signature.",
+    "image": "images/2026-05-19-morning-thunder-egg-familiar-nursery.png",
+    "date": "2026-05-19",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
