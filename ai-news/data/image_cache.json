@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T21:00:01.324802+00:00",
+  "updatedAt": "2026-05-19T21:42:47.081270+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7440,6 +7440,30 @@
     "https://techcrunch.com/2026/05/19/elon-musk-said-sam-altman-stole-a-non-profit-but-the-trial-showed-he-had-similar-aims": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200,801",
       "checkedAt": "2026-05-19T21:00:01.324802+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/ai-design-tools-are-the-next-big-battleground-and-google-is-going-all-in-at-io-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-pics.png?resize=1200,736",
+      "checkedAt": "2026-05-19T21:42:47.081270+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/you-can-now-talk-to-your-gmail-inbox-as-seen-at-google-io-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2020/10/gmail-icon-2020-ios.jpg?resize=1200,675",
+      "checkedAt": "2026-05-19T21:42:47.081270+00:00"
+    },
+    "https://www.theverge.com/tech/934217/google-search-box-does-everything-ai-io-2026": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/lcimg-036c9a25-7169-4853-846e-94fd035c259f.jpeg?quality=90&amp;strip=all&amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;w=1200",
+      "checkedAt": "2026-05-19T21:42:47.081270+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/how-to-use-googles-new-ai-agents-to-go-beyond-your-standard-searches": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/G-information-agents.png?resize=1200,750",
+      "checkedAt": "2026-05-19T21:42:47.081270+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/from-teen-hacker-to-iron-dome-researcher-this-founder-raised-28m-to-fight-ai-phishing": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Copy-of-IMG_8655.jpg?resize=1200,800",
+      "checkedAt": "2026-05-19T21:42:47.081270+00:00"
+    },
+    "https://www.theverge.com/tech/934172/google-io-gemini-ai-trust-personal-data": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gemini-spark-tasks.png?quality=90&amp;strip=all&amp;crop=0.50140845070423%2C0%2C98.997183098592%2C100&amp;w=1200",
+      "checkedAt": "2026-05-19T21:42:47.081270+00:00"
     }
   }
 }
