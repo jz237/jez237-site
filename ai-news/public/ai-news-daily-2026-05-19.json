@@ -1,7 +1,23 @@
 {
   "date": "2026-05-19",
-  "updatedAt": "2026-05-19T16:00:01.145065+00:00",
+  "updatedAt": "2026-05-19T16:30:10.348188+00:00",
   "items": [
+    {
+      "title": "OpenAI co-founder Andrej Karpathy joins Anthropic’s pre-training team",
+      "url": "https://techcrunch.com/2026/05/19/openai-co-founder-andrej-karpathy-joins-anthropics-pre-training-team",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Pre-training is responsible for the large-scale training runs that give Claude its core knowledge and capabilities, according to the company. It's also one of the most expensive, compute-intensive phases of building a frontier model.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-1321808956.jpg?w=1024",
+      "published": "2026-05-19T15:43:04+00:00",
+      "firstSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.5663
+    },
     {
       "title": "Gemini is in danger of going full Copilot",
       "url": "https://www.theverge.com/tech/931752/google-io-2026-gemini-icon-docs-workspace",
@@ -13,10 +29,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/DSC02315_processed_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-05-19T10:30:00+00:00",
       "firstSeen": "2026-05-19T11:00:01.705848+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3041
+      "score": 12.2911
     },
     {
       "title": "Hitachi partners with Anthropic to deploy Claude across 290,000 employees and strengthen Lumada 3.0",
@@ -29,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/hitachi-anthropic-lumada-3-claude-enterprise.avif",
       "published": "2026-05-19T13:01:03+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1625
+      "score": 12.1485
     },
     {
       "title": "How to Build an Advanced Agentic AI System with Planning, Tool Calling, Memory, and Self-Critique Using OpenAI API",
@@ -45,26 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-28-1024x731.png",
       "published": "2026-05-19T05:29:40+00:00",
       "firstSeen": "2026-05-19T06:00:01.767227+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.8416
-    },
-    {
-      "title": "OpenAI co-founder Andrej Karpathy joins Anthropic’s pre-training team",
-      "url": "https://techcrunch.com/2026/05/19/openai-co-founder-andrej-karpathy-joins-anthropics-pre-training-team",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Andrej Karpathy has joined Anthropic to work on pre-training. He previously co-founded and worked at OpenAI and led computer vision and AI at Tesla.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-1321808956.jpg?w=1024",
-      "published": "2026-05-19T15:43:04+00:00",
-      "firstSeen": "2026-05-19T16:00:01.145065+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 9.9814
+      "score": 11.8302
     },
     {
       "title": "Former OpenAI Staffers Warn That xAI’s Poor Safety Record Could Complicate SpaceX’s IPO",
@@ -77,10 +77,10 @@
       "image": "https://media.wired.com/photos/6a0c7b88cffddde770352b0c/master/pass/GettyImages-2158701398.jpg",
       "published": "2026-05-19T15:00:28+00:00",
       "firstSeen": "2026-05-19T16:00:01.145065+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.2601
+      "score": 8.2453
     },
     {
       "title": "KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance",
@@ -93,10 +93,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=heather",
       "published": "2026-05-19T00:00:00+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1053
+      "score": 8.0955
     },
     {
       "title": "Best Enterprise Level Agentic AI Platforms for 2026",
@@ -109,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-13-1024x731.png",
       "published": "2026-05-19T08:24:58+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.811
+      "score": 7.7987
     },
     {
       "title": "Project Glasswing partners can now share Mythos findings beyond the programme",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-05-19T10:00:01.317044+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0143
+      "score": 7.0023
     },
     {
       "title": "Here’s why Elon Musk lost his suit against OpenAI",
@@ -141,10 +141,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/AP26138721148129.jpg?resize=1200%2C600",
       "published": "2026-05-19T00:53:10+00:00",
       "firstSeen": "2026-05-19T02:00:01.564207+00:00",
-      "lastSeen": "2026-05-19T16:00:01.145065+00:00",
+      "lastSeen": "2026-05-19T16:30:10.348188+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0129
+      "score": 6.0028
     },
     {
       "title": "Mistral buys Vienna’s Emmi AI to put physics into its industrial pitch",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-05-19T08:37:13.454426+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9035
+      "score": 4.8916
     },
     {
       "title": "Meta moves 7,000 people into AI roles the same week it cuts 10%",
@@ -176,7 +176,7 @@
       "lastSeen": "2026-05-19T10:00:01.317044+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7075
+      "score": 4.6956
     },
     {
       "title": "Australia’s largest pension fund sees agentic AI as a disruption-class technology",
@@ -192,7 +192,7 @@
       "lastSeen": "2026-05-19T12:18:46.295393+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6273
+      "score": 4.6151
     }
   ],
   "errors": []
