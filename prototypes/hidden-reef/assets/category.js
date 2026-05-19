@@ -239,8 +239,8 @@
     const sourceUrl = sub ? sub.sourceUrl : '';
     const heroImages = {
       saltwater: '../assets/department/saltwater-reef.jpg',
-      aquariums: '../assets/department/freshwater.jpg',
-      additives: '../assets/department/aquarium.jpg',
+      aquariums: '../assets/department/aquarium.jpg',
+      additives: '../assets/department/additives.png',
       pond: '../assets/department/pond.jpg',
       equipment: '../assets/department/lighting.jpg',
       lighting: '../assets/department/lighting.jpg',
