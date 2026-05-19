@@ -49,7 +49,7 @@
     .search-box input::placeholder { color:#8bb1bf; }
     .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
     .main-nav {
-      display:grid; grid-template-columns:repeat(8,minmax(max-content,1fr));
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
       gap:0; margin:0 calc(clamp(12px,2.5vw,28px) * -1);
       border-top:0; border-bottom:1px solid var(--reef-line);
       background:rgba(3,18,29,.98);
@@ -234,20 +234,27 @@
 
     /* Mobile overrides handled by thr-cards.css */
     @media (max-width:760px) {
+      .page { overflow:hidden; }
+      .header,
+      .main-nav { max-width:100%; margin-left:0; margin-right:0; }
       .header { grid-template-columns:1fr; }
       .main-nav {
-        display:flex;
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
         justify-content:flex-start;
-        overflow-x:auto;
-        padding-bottom:8px;
-        scrollbar-width:thin;
+        overflow:visible;
+        padding-bottom:0;
+        scrollbar-width:none;
       }
-      .main-nav::-webkit-scrollbar { display:block; height:6px; }
-      .main-nav::-webkit-scrollbar-thumb { background:rgba(116,205,235,.35); border-radius:999px; }
+      .main-nav::-webkit-scrollbar { display:none; }
       .main-nav a {
-        flex:0 0 auto;
+        flex:0 1 auto;
         padding-inline:10px;
         border-top:1px solid rgba(116,205,235,.1);
+        justify-content:center;
+        min-width:0;
+        white-space:normal;
+        text-align:center;
       }
       .subcat-tabs { padding:8px 0; }
       .product-controls { grid-template-columns:1fr; }
@@ -266,7 +273,7 @@
         <button type="submit" aria-label="Search">⌕</button>
       </form>
       <div class="header-actions">
-        <a href="../">Home ▾</a>
+        <a href="../">Home</a>
         <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span>↗</span></a>
       </div>
     </header>
@@ -276,9 +283,10 @@
       <a href="../saltwater/">Saltwater</a>
       <a href="../category/?cat=aquariums">Aquariums</a>
       <a href="../pond/">Pond</a>
-      <a href="../category/?cat=lighting">Lighting</a>
+      <a href="../equipment/">Equipment</a>
       <a href="../food/">Food</a>
       <a href="../decor/">Decorations</a>
+      <a href="../maintenance/">Maintenance</a>
       <a href="../#visit">Visit Us</a>
     </nav>
 
