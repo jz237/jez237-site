@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T07:00:01.578735+00:00",
+  "updatedAt": "2026-05-19T08:00:01.281130+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7244,6 +7244,10 @@
     "https://www.marktechpost.com/2026/05/18/how-to-build-an-advanced-agentic-ai-system-with-planning-tool-calling-memory-and-self-critique-using-openai-api": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-28-1024x731.png",
       "checkedAt": "2026-05-19T06:00:01.767227+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/05/260518041341.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/photonic-computing-component.webp",
+      "checkedAt": "2026-05-19T08:00:01.281130+00:00"
     }
   }
 }
