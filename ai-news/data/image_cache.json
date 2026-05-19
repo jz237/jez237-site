@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T13:00:01.624216+00:00",
+  "updatedAt": "2026-05-19T14:00:01.532275+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7260,6 +7260,10 @@
     "https://www.theverge.com/tech/931752/google-io-2026-gemini-icon-docs-workspace": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/DSC02315_processed_2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
       "checkedAt": "2026-05-19T11:00:01.705848+00:00"
+    },
+    "https://www.anthropic.com/news/anthropic-kpmg": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=heather",
+      "checkedAt": "2026-05-19T14:00:01.532275+00:00"
     }
   }
 }
