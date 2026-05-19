@@ -6,6 +6,7 @@
   <title>Maintenance & Troubleshooting - The Hidden Reef</title>
   <link rel="icon" href="../assets/site/header-fish.png" />
   <link rel="stylesheet" href="../assets/category.css" />
+  <link rel="stylesheet" href="../assets/thr-cards.css" />
   <style>
     body.department-page { --department-hero: url("../assets/department/maintenance-care.jpg"); }
   </style>
@@ -23,7 +24,6 @@
         <button>⌕</button>
       </form>
       <div class="header-actions">
-        <a href="../#visit">My Account</a>
         <button class="cart-button">🛒<span id="cart-count">0</span></button>
       </div>
     </header>
@@ -129,67 +129,7 @@
         </div>
       </aside>
 
-      <div class="grid" id="products">
-        <article class="product">
-          <span class="badge">Water</span>
-          <a href="../category/?cat=testing">
-            <img src="../assets/site/brand-api.jpg" alt="Aquarium test kit and water care brand" />
-            <h3>Test kits and water checks</h3>
-          </a>
-          <p>Put testing front and center so customers solve the actual water problem.</p>
-          <div class="price-row"><span class="price">Test first</span><button class="add" data-name="Test kits and water checks">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Filter</span>
-          <a href="../category/?cat=filtration&amp;sub=filter-media">
-            <img src="../assets/site/brand-fluval.jpg" alt="Aquarium filter brand" />
-            <h3>Filter media and cartridges</h3>
-          </a>
-          <p>Replacement pads, sponges, carbon, biological media, and cartridges by filter model.</p>
-          <div class="price-row"><span class="price">Shop media</span><button class="add" data-name="Filter media and cartridges">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Clean</span>
-          <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">
-            <img src="../assets/department/maintenance-care.jpg" alt="Aquarium maintenance tools" />
-            <h3>Scrapers, siphons, and tools</h3>
-          </a>
-          <p>Glass cleaning, substrate vacuuming, water changes, hoses, brushes, and small tools.</p>
-          <div class="price-row"><span class="price">Shop tools</span><button class="add" data-name="Scrapers siphons and tools">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Pond</span>
-          <a href="../pond/">
-            <img src="../assets/department/pond.jpg" alt="Pond maintenance supplies" />
-            <h3>Pond maintenance supplies</h3>
-          </a>
-          <p>Seasonal bacteria, dechlorinator, algae control, pump checks, and waterfall care.</p>
-          <div class="price-row"><span class="price">Pond routine</span><button class="add" data-name="Pond maintenance supplies">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Flow</span>
-          <a href="../category/?cat=pumps">
-            <img src="../assets/site/cta.jpg" alt="Aquarium system with pumps and filtration" />
-            <h3>Pumps and replacement parts</h3>
-          </a>
-          <p>Flow problems are easier to shop when parts are grouped by pump, filter, and tank system.</p>
-          <div class="price-row"><span class="price">Find parts</span><button class="add" data-name="Pumps and replacement parts">+</button></div>
-        </article>
-
-        <article class="product">
-          <span class="badge">Routine</span>
-          <a href="../freshwater/">
-            <img src="../assets/department/aquarium.jpg" alt="Freshwater aquarium maintenance routine" />
-            <h3>Beginner maintenance kit</h3>
-          </a>
-          <p>A simple starter bundle: conditioner, test strips or liquid tests, siphon, net, and food.</p>
-          <div class="price-row"><span class="price">Build kit</span><button class="add" data-name="Beginner maintenance kit">+</button></div>
-        </article>
-      </div>
+      <div class="thr-product-grid" id="products"></div>
     </div>
 
     <section class="feature-row">
@@ -247,6 +187,8 @@
   <script src="../assets/catalog-utils.js"></script>
   <script src="../assets/thr-cards.js"></script>
   <script src="../assets/link-modal.js"></script>
-  <script src="../assets/category.js"></script>
+  <script>
+    THR.renderProducts('products', ['gravel-cleaners', 'filter-media', 'test-kits', 'marine-test-kits', 'pond-additives', 'pond-bacteria', 'pond-pumps', 'pumps']);
+  </script>
 </body>
 </html>
