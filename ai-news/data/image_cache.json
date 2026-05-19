@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T15:00:01.998626+00:00",
+  "updatedAt": "2026-05-19T16:00:01.145065+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7272,6 +7272,10 @@
     "https://huggingface.co/blog/ettin-reranker": {
       "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
       "checkedAt": "2026-05-19T15:00:01.998626+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/openai-co-founder-andrej-karpathy-joins-anthropics-pre-training-team": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-1321808956.jpg?w=1024",
+      "checkedAt": "2026-05-19T16:00:01.145065+00:00"
     }
   }
 }
