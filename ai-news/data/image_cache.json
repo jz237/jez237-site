@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T14:00:01.532275+00:00",
+  "updatedAt": "2026-05-19T15:00:01.998626+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7264,6 +7264,14 @@
     "https://www.anthropic.com/news/anthropic-kpmg": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20ShapeBuild&amp;backgroundColor=heather",
       "checkedAt": "2026-05-19T14:00:01.532275+00:00"
+    },
+    "https://www.theverge.com/policy/933518/take-it-down-act-notice-removal-social-media-deepfake": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK419_DEEPFAKE_3_CVIRGINIA_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-19T15:00:01.998626+00:00"
+    },
+    "https://huggingface.co/blog/ettin-reranker": {
+      "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+      "checkedAt": "2026-05-19T15:00:01.998626+00:00"
     }
   }
 }

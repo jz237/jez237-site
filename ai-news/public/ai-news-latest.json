@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T14:00:01.532275+00:00",
+  "updatedAt": "2026-05-19T15:00:01.998626+00:00",
   "items": [
     {
       "title": "Fei Ding, Yongkang Zhang, Yeling Peng, Youwei Wang, Guoxiong Zhou, Zijian Zeng",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-19T14:00:12.370584+00:00",
+      "published": "2026-05-19T15:00:12.570622+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "America’s dangerous, messy deepfakes crackdown is here",
+      "url": "https://www.theverge.com/policy/933518/take-it-down-act-notice-removal-social-media-deepfake",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "A law requiring social networks to quickly remove sexual deepfakes and other nonconsensual imagery is now fully in force. But experts warn the policy could do little to help victims - and at worst could facilitate censorship online. Last May, President Donald Trump signed the Take It Down Act, a law addressing nonconsensual intimate imagery [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK419_DEEPFAKE_3_CVIRGINIA_C.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-19T14:58:19+00:00",
+      "firstSeen": "2026-05-19T15:00:01.998626+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3591
+    },
+    {
+      "title": "ICE plans compute futures contracts as Wall Street races to turn GPU power into a tradable commodity",
+      "url": "https://thenextweb.com/news/ice-nyse-compute-futures-market-gpu-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Intercontinental Exchange, the parent company of the New York Stock Exchange, is preparing to launch futures contracts tied to the cost of computing power, marking the latest sign that Wall Street sees AI infrastructure as the next great commodity market. ICE announced on Monday that it will team with Ornn, a financial-infrastructure firm whose [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ice-nyse-compute-futures-market-gpu-ai.avif",
+      "published": "2026-05-19T14:43:13+00:00",
+      "firstSeen": "2026-05-19T15:00:01.998626+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1415
+    },
+    {
+      "title": "Cropin scales global AgTech analytics with Sisense-powered intelligence",
+      "url": "https://thenextweb.com/news/cropin-scales-global-agtech-analytics-with-sisense-powered-intelligence",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "When it comes to feeding the planet, the old ways of farming are running up against hard limits. Climate volatility, supply-chain disruption, and the sheer complexity of managing crops across dozens of countries have made data-driven agriculture not just a nice-to-have but an operational imperative. Cropin, the India-headquartered SaaS AgTech company, is leaning into that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/cropin-sisense-agtech-analytics-global-agriculture.avif",
+      "published": "2026-05-19T14:04:17+00:00",
+      "firstSeen": "2026-05-19T15:00:01.998626+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.122
     },
     {
       "title": "Temasek-backed motif launches Clarity, an AI system that wants to give wealth platforms a brain",
@@ -28,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/05/motif-clarity-ai-financial-intelligence-temasek.avif",
       "published": "2026-05-19T13:44:44+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9422
+      "score": 3.9123
     },
     {
       "title": "Amprius and Matternet partner to bring silicon anode batteries to drone delivery",
@@ -44,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/amprius-matternet-drone-delivery-silicon-anode-battery.avif",
       "published": "2026-05-19T13:30:33+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1351
+      "score": 2.1054
     },
     {
       "title": "Panasonic buys UK media server maker HIVE in push beyond hardware",
@@ -60,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/panasonic-acquires-hive-media-control-immersive-visual.avif",
       "published": "2026-05-19T13:08:34+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1241
+      "score": 2.0947
     },
     {
       "title": "Hitachi partners with Anthropic to deploy Claude across 290,000 employees and strengthen Lumada 3.0",
@@ -76,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/hitachi-anthropic-lumada-3-claude-enterprise.avif",
       "published": "2026-05-19T13:01:03+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.2204
+      "score": 12.191
     },
     {
       "title": "GTA 6 is entirely handcrafted with zero generative AI, Take-Two CEO confirms",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/take-two-gta6-no-generative-ai-handcrafted.avif",
       "published": "2026-05-19T12:50:58+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1154
+      "score": 2.0862
     },
     {
       "title": "AMD’s Lisa Su meets China’s vice premier in Beijing as chip diplomacy intensifies",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/amd-lisa-su-china-he-lifeng-chip-cooperation.avif",
       "published": "2026-05-19T12:25:07+00:00",
       "firstSeen": "2026-05-19T13:00:01.624216+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1027
+      "score": 2.0739
     },
     {
       "title": "Meta’s $200 billion Hyperion data centre in Louisiana is the most expensive private infrastructure project in American history",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-200-billion-hyperion-data-center-louisiana.avif",
       "published": "2026-05-19T12:10:40+00:00",
       "firstSeen": "2026-05-19T13:00:01.624216+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0957
+      "score": 2.067
     },
     {
       "title": "Geely-backed ECARX signs $750 million deal to build purpose-built robotaxis for May Mobility",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/ecarx-may-mobility-robotaxi-geely-li-shufu.avif",
       "published": "2026-05-19T12:02:51+00:00",
       "firstSeen": "2026-05-19T13:00:01.624216+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0919
+      "score": 0.0634
     },
     {
       "title": "Unframe takes $50M more from Highland Europe on $100M TCV in 12 months",
@@ -159,7 +207,7 @@
       "lastSeen": "2026-05-19T14:00:01.532275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0907
+      "score": 2.0622
     },
     {
       "title": "Gemini is in danger of going full Copilot",
@@ -172,10 +220,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/DSC02315_processed_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-05-19T10:30:00+00:00",
       "firstSeen": "2026-05-19T11:00:01.705848+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3581
+      "score": 12.3307
     },
     {
       "title": "Tom Steyer Wants to Save California From Billionaires. But Also Doesn’t Want Them to Leave",
@@ -188,10 +236,10 @@
       "image": "https://media.wired.com/photos/6a0765c0ba6912ba20f92c03/master/pass/Big-Interview-UV-Solo-Tom-Steyer-Politics-2274236211.jpg",
       "published": "2026-05-19T10:30:00+00:00",
       "firstSeen": "2026-05-19T11:00:01.705848+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2881
+      "score": 3.2607
     },
     {
       "title": "Feldwerke pulls a €12M revolving credit facility behind a 100 MW agri-PV roll-out",
@@ -207,7 +255,7 @@
       "lastSeen": "2026-05-19T14:00:01.532275+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7449
+      "score": 2.7176
     },
     {
       "title": "Hypershell takes $50M more on $120M Series B series as consumer exoskeletons step out of niche",
@@ -223,7 +271,7 @@
       "lastSeen": "2026-05-19T13:00:01.624216+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3615
+      "score": -0.3886
     },
     {
       "title": "Barclays says humanoid robots can offset 60% of China’s 37M worker shortfall by 2035",
@@ -239,7 +287,7 @@
       "lastSeen": "2026-05-19T13:00:01.624216+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4315
+      "score": 3.4046
     },
     {
       "title": "$20bn Kimi developer Moonshot abandons VIE structure for HK listing",
@@ -255,7 +303,7 @@
       "lastSeen": "2026-05-19T13:00:01.624216+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.026
+      "score": 1.9992
     },
     {
       "title": "Nintendo jumps 6.8% as Japanese investors rotate out of AI",
@@ -271,7 +319,7 @@
       "lastSeen": "2026-05-19T13:00:01.624216+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0121
+      "score": 1.9858
     },
     {
       "title": "Best Enterprise Level Agentic AI Platforms for 2026",
@@ -284,10 +332,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-13-1024x731.png",
       "published": "2026-05-19T08:24:58+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.8619
+      "score": 7.8361
     },
     {
       "title": "Standard Chartered will cut 7,800 back-office jobs to ‘the machines’ by 2030",
@@ -303,7 +351,7 @@
       "lastSeen": "2026-05-19T13:00:01.624216+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9843
+      "score": 1.9587
     },
     {
       "title": "Italy’s Lexroom hits $73M total raised on $50M Series B for civil-law legal AI",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-05-19T12:18:46.295393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6805
+      "score": 2.655
     },
     {
       "title": "Australia’s largest pension fund sees agentic AI as a disruption-class technology",
@@ -335,7 +383,7 @@
       "lastSeen": "2026-05-19T12:18:46.295393+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6774
+      "score": 4.652
     },
     {
       "title": "Blackstone takes the majority position in Google’s new TPU cloud",
@@ -351,7 +399,7 @@
       "lastSeen": "2026-05-19T12:18:46.295393+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1285
+      "score": -1.1538
     },
     {
       "title": "Intel and Qualcomm circle Tenstorrent as the NVIDIA-alternative trade comes due",
@@ -367,7 +415,7 @@
       "lastSeen": "2026-05-19T12:18:46.295393+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9675
+      "score": 1.9423
     },
     {
       "title": "Project Glasswing partners can now share Mythos findings beyond the programme",
@@ -383,7 +431,7 @@
       "lastSeen": "2026-05-19T10:00:01.317044+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0636
+      "score": 7.0386
     },
     {
       "title": "Analog Devices near $1.5bn cash deal for Empower Semiconductor’s AI power chips",
@@ -399,7 +447,7 @@
       "lastSeen": "2026-05-19T10:00:01.317044+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2603
+      "score": 2.2354
     },
     {
       "title": "Meta moves 7,000 people into AI roles the same week it cuts 10%",
@@ -415,7 +463,7 @@
       "lastSeen": "2026-05-19T10:00:01.317044+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7565
+      "score": 4.7317
     },
     {
       "title": "Mistral buys Vienna’s Emmi AI to put physics into its industrial pitch",
@@ -431,7 +479,7 @@
       "lastSeen": "2026-05-19T08:37:13.454426+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9522
+      "score": 4.9275
     },
     {
       "title": "How to Build an Advanced Agentic AI System with Planning, Tool Calling, Memory, and Self-Critique Using OpenAI API",
@@ -444,10 +492,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-28-1024x731.png",
       "published": "2026-05-19T05:29:40+00:00",
       "firstSeen": "2026-05-19T06:00:01.767227+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.8885
+      "score": 11.8647
     },
     {
       "title": "The last six months in LLMs in five minutes",
@@ -460,10 +508,10 @@
       "image": "https://static.simonwillison.net/static/2026/5-minutes-llms/5-minutes-llms.001.jpeg",
       "published": "2026-05-19T01:09:44+00:00",
       "firstSeen": "2026-05-19T02:00:01.564207+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.36
+      "score": 3.3389
     },
     {
       "title": "Here’s why Elon Musk lost his suit against OpenAI",
@@ -476,10 +524,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/AP26138721148129.jpg?resize=1200%2C600",
       "published": "2026-05-19T00:53:10+00:00",
       "firstSeen": "2026-05-19T02:00:01.564207+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0542
+      "score": 6.0332
     },
     {
       "title": "Forget electrons, this breakthrough uses light-matter particles to power AI",
@@ -492,10 +540,10 @@
       "image": "https://www.sciencedaily.com/images/1920/photonic-computing-component.webp",
       "published": "2026-05-19T00:23:26+00:00",
       "firstSeen": "2026-05-19T08:00:01.281130+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2737
+      "score": 3.2531
     },
     {
       "title": "KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance",
@@ -508,10 +556,26 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+ShapeBuild&amp%3BbackgroundColor=heather",
       "published": "2026-05-19T00:00:00+00:00",
       "firstSeen": "2026-05-19T14:00:01.532275+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1456
+      "score": 8.1252
+    },
+    {
+      "title": "Introducing the Ettin Reranker Family",
+      "url": "https://huggingface.co/blog/ettin-reranker",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+      "published": "2026-05-19T00:00:00+00:00",
+      "firstSeen": "2026-05-19T15:00:01.998626+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0552
     },
     {
       "title": "NVIDIA CEO Jensen Huang at Dell Technologies World: ‘Demand Is Going Parabolic, Utterly Parabolic’",
@@ -524,10 +588,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/26-dtw-keynote-jhh-dell-CG3A2688_Option2-scaled.jpg",
       "published": "2026-05-18T22:28:59+00:00",
       "firstSeen": "2026-05-18T23:00:01.770241+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9048
+      "score": 3.8852
     },
     {
       "title": "Vera Arrives: NVIDIA’s First CPU Built for Agents Lands at Top AI Labs",
@@ -540,10 +604,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Vera-CPU_Tray_Open-34_Wide_R6C-FNL-5260651.jpg",
       "published": "2026-05-18T21:48:17+00:00",
       "firstSeen": "2026-05-18T22:00:01.422497+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 10.5915
+      "score": 10.5723
     },
     {
       "title": "SandboxAQ brings its drug discovery models to Claude — no PhD in computing required",
@@ -556,10 +620,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2017/12/gettyimages-5339511481.jpg?w=640",
       "published": "2026-05-18T21:29:31+00:00",
       "firstSeen": "2026-05-18T22:00:01.422497+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8854
+      "score": 7.8664
     },
     {
       "title": "Meet MemPrivacy: An Edge-Cloud Framework that Uses Local Reversible Pseudonymization to Protect User Data Without Breaking Memory Utility",
@@ -572,74 +636,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-18-at-2.14.57-PM-1-150x150.png",
       "published": "2026-05-18T21:26:04+00:00",
       "firstSeen": "2026-05-18T22:00:01.422497+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 5.3143
-    },
-    {
-      "title": "Stochastic Gradient Descent (SGD’s) Frequency Bias and How Adam Fixes It",
-      "url": "https://www.marktechpost.com/2026/05/18/stochastic-gradient-descent-sgds-frequency-bias-and-how-adam-fixes-it",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Modern language models are trained on data with extremely uneven token distributions. A small number of words appear in almost every sentence, while many rare but meaningful tokens occur only occasionally. This creates a hidden optimization challenge: parameters associated with common tokens receive constant gradient updates, while parameters tied to rare tokens may go hundreds [&#8230;]\nThe post Stochastic Gradient Descent (SGD&#8217;s) Frequency Bias and How Adam Fixes It  appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-36-150x150.png",
-      "published": "2026-05-18T20:18:55+00:00",
-      "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.193
-    },
-    {
-      "title": "Anthropic has acquired the dev tools startup used by OpenAI, Google, and Cloudflare",
-      "url": "https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Stainless, a New York-based startup, founded in 2022, rose to prominence in the emerging AI industry for automating the creation and maintenance of software development kits, or SDKs — the libraries developers use to interact with APIs.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024",
-      "published": "2026-05-18T19:27:52+00:00",
-      "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 5.4473
-    },
-    {
-      "title": "OpenClaw creator’s $1.3 million monthly OpenAI bill reveals the real cost of autonomous AI coding at scale",
-      "url": "https://thenextweb.com/news/openclaw-peter-steinberger-1-3-million-openai-token-bill",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Peter Steinberger, the creator of OpenClaw and an engineer at OpenAI, racked up $1.3 million in API costs in a single month by running approximately 100 Codex instances simultaneously on his open-source project. The bill, which covered 603 billion tokens across 7.6 million requests over 30 days, is the most visible demonstration yet of what [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/openclaw-peter-steinberger-1-3-million-openai-token-bill.avif",
-      "published": "2026-05-18T19:01:57+00:00",
-      "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-19T08:37:13.454426+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 8.8995
-    },
-    {
-      "title": "Musk v. Altman proved that AI is led by the wrong people",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/932464/musk-v-altman-proved-that-ai-is-led-by-the-wrong-people",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "The tech trial of the year, Musk v. Altman, was ultimately a fight for control. Elon Musk argued that Sam Altman, with whom he helped found the now-massive company OpenAI, shouldn't direct the future of AI. Altman's lawyers, in turn, poked at Musk's own credibility. A jury came to a verdict on Monday after just [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25739950/247386_Elon_Musk_Open_AI_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-18T19:00:00+00:00",
-      "firstSeen": "2026-05-18T20:00:01.407083+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9089
+      "score": 5.2953
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0641
+      "score": 2.0383
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2428
+      "score": -1.2611
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1286
+      "score": 1.1284
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-19T14:00:01.532275+00:00",
+      "lastSeen": "2026-05-19T15:00:01.998626+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5963
+      "score": 2.5961
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
