@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-19T22:00:01.463234+00:00",
+  "updatedAt": "2026-05-19T23:00:01.860070+00:00",
   "items": [
     {
-      "title": "ANNEAL: Adapting LLM Agents via Governed Symbolic Patch Learning",
+      "title": "Fei Ding, Yongkang Zhang, Yeling Peng, Youwei Wang, Guoxiong Zhou, Zijian Zeng",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,93 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-19T22:00:09.671935+00:00",
+      "published": "2026-05-19T23:00:08.931514+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Literary Prizewinners Are Facing AI Allegations. It Feels Like the New Normal",
+      "url": "https://www.wired.com/story/commonwealth-short-story-prize-ai-allegations",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Three of five regional winners of the prestigious Commonwealth Short Story Prize are suspected of relying on chatbots. They're certainly not alone.",
+      "image": "https://media.wired.com/photos/6a0ce86f98983a3fe2d17459/master/pass/Commonwealth-Prize-AI-Scandal-Culture.jpg",
+      "published": "2026-05-19T22:53:04+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2865
+    },
+    {
+      "title": "Gemini 3.5 Flash: more expensive, but Google plan to use it for everything",
+      "url": "https://simonwillison.net/2026/May/19/gemini-35-flash",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Today at Google I/O, Google released Gemini 3.5 Flash. This one skipped the -preview modifier and went straight to general availability, and Google appear to be using it for a whole lot of their key products:\n\n3.5 Flash is available today to billions of people globally:\n\nFor everyone via the Gemini app and AI Mode in Google Search\n\nFor developers in our agent-first development platform Google Antigravity and Gemini API in Google AI Studio and Android Studio\nFor enterprises in Gemini Enterprise Agent Platform and Gemini Enterprise.\n\n\nAs usual with Gemini, the most interesting details are tucked",
+      "image": "https://static.simonwillison.net/static/2026/gemini-3.5-flash.png",
+      "published": "2026-05-19T22:40:25+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 24.3801
+    },
+    {
+      "title": "Demis Hassabis said this might be the &#8216;foothills of the singularity.&#8217; What?",
+      "url": "https://www.theverge.com/tech/934260/google-io-ai-singularity-demis-hassabis",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Welcome to a \"profound moment for humanity,\" according to Google DeepMind CEO Demis Hassabis, who closed out Google I/O's keynote presentation on Tuesday, saying: Google's cutting-edge research and products will help unlock AGI's incredible potential for the benefit of the entire world. When we look back at this time, I think we will realize that [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Demis_GDM.OMNI_.AI-in-Real-World_3.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C19.091304550468%2C100%2C61.817390899063&amp%3Bw=1200",
+      "published": "2026-05-19T22:16:02+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 7.7378
+    },
+    {
+      "title": "Upstash for Redis vs Supabase vs Neon: Which One Fits Vibe Coding Workflows in 2026?",
+      "url": "https://www.marktechpost.com/2026/05/19/upstash-for-redis-vs-supabase-vs-neon-which-one-fits-vibe-coding-workflows-in-2026",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Not all database platforms are built for the same job.Not all database platforms are built for the same job. Here is how Upstash, Supabase, and Neon actually differ — and which one fits your vibe coding workflow in 2026.\nThe post Upstash for Redis vs Supabase vs Neon: Which One Fits Vibe Coding Workflows in 2026? appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-30-1024x731.png",
+      "published": "2026-05-19T22:10:39+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6951
+    },
+    {
+      "title": "US regulators pause bank cyber exams so Wall Street can patch Mythos vulnerabilities",
+      "url": "https://thenextweb.com/news/us-regulators-pause-bank-cyber-exams-mythos",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Weeks after Anthropic’s Mythos AI model sent shockwaves through the financial system, America’s top banking regulators are stepping back from the exam room to give the country’s largest lenders time to shore up their defences. The Federal Reserve and the Office of the Comptroller of the Currency are pausing some cyber-related examinations of the biggest [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/us-regulators-pause-bank-cyber-exams-mythos.avif",
+      "published": "2026-05-19T21:54:28+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.06
+      "score": 4.1171
     },
     {
       "title": "Google just declared itself a contender in AI design at IO 2026",
@@ -28,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-pics.png?resize=1200%2C736",
       "published": "2026-05-19T21:33:30+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3766
+      "score": 3.3468
     },
     {
       "title": "You can now talk to your Gmail inbox, as seen at Google IO 2026",
@@ -44,10 +125,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/10/gmail-icon-2020-ios.jpg?resize=1200%2C675",
       "published": "2026-05-19T21:25:31+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0726
+      "score": 10.0429
+    },
+    {
+      "title": "Google gives Gemini a morning routine, a new look, and an AI agent that never sleeps",
+      "url": "https://thenextweb.com/news/google-gemini-app-daily-brief-redesign-io-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google used the opening keynote of I/O 2026 to unveil a wave of updates to its Gemini app, headlined by a feature called Daily Brief, a personalised morning digest that pulls from a user’s inbox, calendar, and task list to deliver a prioritised overview of the day ahead. The feature does not merely summarise, it also suggests [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/google-gemini-app-daily-brief-redesign-io-2026.avif",
+      "published": "2026-05-19T21:24:52+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.9026
     },
     {
       "title": "The future of Google is a search box that does everything",
@@ -60,10 +157,27 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/lcimg-036c9a25-7169-4853-846e-94fd035c259f.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-05-19T21:24:14+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7419
+      "score": 4.7123
+    },
+    {
+      "title": "Google launches Android CLI 1.0 so AI coding agents can tap into Android Studio’s full power",
+      "url": "https://thenextweb.com/news/google-android-cli-agentic-coding-tools-io-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google has released Android CLI at a stable version 1.0, giving AI coding agents a direct line into Android Studio’s capabilities without ever opening the IDE. The announcement, made at Google I/O 2026 on 19 May, is a frank acknowledgement that many developers now build for Android using third-party AI agents rather than Google’s own tools. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2021/06/denny-muller-HfWA-Axq6Ek-unsplash.avif",
+      "published": "2026-05-19T21:18:45+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.9996
     },
     {
       "title": "How to use Google’s new AI agents to go beyond your standard searches",
@@ -76,10 +190,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/G-information-agents.png?resize=1200%2C750",
       "published": "2026-05-19T21:16:25+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.068
+      "score": 8.0385
+    },
+    {
+      "title": "Google wants to own your entire shopping journey with Universal Cart and agent-led payments",
+      "url": "https://thenextweb.com/news/google-universal-cart-agent-payments-shopping-io-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google has unveiled Universal Cart, an AI-powered shopping hub announced at I/O 2026 that lets users add products from across its ecosystem, Search, Gemini, YouTube, and Gmail, into a single persistent cart. The feature, rolling out in the US today, represents the company’s most ambitious bid yet to become the default middleman in online commerce. Universal Cart [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/google-universal-cart-agent-payments-shopping-io-2026.avif",
+      "published": "2026-05-19T21:11:24+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.296
     },
     {
       "title": "From teen hacker to Iron Dome researcher, this founder raised $28M to fight AI phishing",
@@ -92,10 +222,27 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Copy-of-IMG_8655.jpg?resize=1200%2C800",
       "published": "2026-05-19T21:08:51+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3642
+      "score": 6.3348
+    },
+    {
+      "title": "Google launches Gemini Spark, a 24/7 agentic assistant you can email like a colleague",
+      "url": "https://thenextweb.com/news/google-gemini-spark-agentic-assistant-gmail-io-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Google announced Gemini Spark at I/O 2026, an always-on agentic AI assistant built on Gemini 3.5 and the Antigravity harness. It runs on dedicated cloud VMs, integrates natively with Gmail and Workspace, and will be available to AI Ultra subscribers next week.[/tldr] Google has unveiled Gemini Spark, an always-on personal AI agent that can receive [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/google-classified-ai-pentagon-drone-swarm-exit.avif",
+      "published": "2026-05-19T21:03:16+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 21.9921
     },
     {
       "title": "Google’s AI future demands trust — and your personal data",
@@ -108,10 +255,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gemini-spark-tasks.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0.50140845070423%2C0%2C98.997183098592%2C100&amp%3Bw=1200",
       "published": "2026-05-19T21:00:00+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.0299
+      "score": 8.0005
     },
     {
       "title": "Google wants you to talk to Docs, Keep, and Gmail instead of typing",
@@ -124,10 +271,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-voice-prompting-docs-keep-gmail-io-2026.avif",
       "published": "2026-05-19T20:56:36+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1182
+      "score": 6.0889
     },
     {
       "title": "Google turns Antigravity into a full agentic development platform with desktop app, CLI, and SDK",
@@ -140,10 +287,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-antigravity-2-desktop-cli-sdk-io-2026.avif",
       "published": "2026-05-19T20:49:13+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.9145
+      "score": 4.8854
     },
     {
       "title": "Google wants you to talk to your Gmail inbox, and it might actually work",
@@ -156,10 +303,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-gmail-live-ai-voice-search-inbox-.avif",
       "published": "2026-05-19T20:39:59+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.51
+      "score": 7.4809
     },
     {
       "title": "Google Launches Antigravity 2.0 at I/O 2026: A Standalone Agent-First Platform with CLI, SDK, Managed Execution, and Enterprise Support",
@@ -172,11 +319,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-29.png",
       "published": "2026-05-19T20:30:58+00:00",
       "firstSeen": "2026-05-19T21:00:01.324802+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.6756
+      "score": 17.6466
     },
     {
       "title": "NVIDIA and Google Cloud Empower the Next Wave of AI Builders",
@@ -189,10 +336,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/google-cloud-nvidia-1920x1080-1.jpg",
       "published": "2026-05-19T20:30:09+00:00",
       "firstSeen": "2026-05-19T21:00:01.324802+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9452
+      "score": 2.9163
     },
     {
       "title": "Google just replaced the search box with an AI agent, and the web will never be the same",
@@ -205,10 +352,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-search-ai-overhaul-information-agents-io-2026.avif",
       "published": "2026-05-19T20:25:36+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2029
+      "score": 7.1741
     },
     {
       "title": "Google wants Search to work while you sleep, and its new information agents are the plan",
@@ -221,10 +368,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-information-agents-search-ai-mode-io-2026-1.avif",
       "published": "2026-05-19T20:13:53+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1973
+      "score": 7.1686
     },
     {
       "title": "Elon Musk said Sam Altman “stole” a non-profit — but the trial showed he had similar aims",
@@ -237,10 +384,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200%2C801",
       "published": "2026-05-19T20:11:00+00:00",
       "firstSeen": "2026-05-19T21:00:01.324802+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2359
+      "score": 2.2072
     },
     {
       "title": "Everything Announced at Google I/O 2026: Gemini, Search, Smart Glasses",
@@ -253,10 +400,10 @@
       "image": "https://media.wired.com/photos/6a047ecbec98d3bd8037fdbe/master/pass/GettyImages-2215577882.jpg",
       "published": "2026-05-19T20:00:48+00:00",
       "firstSeen": "2026-05-19T21:00:01.324802+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3309
+      "score": 12.3024
     },
     {
       "title": "Google’s Gemini 3.5 Flash doesn’t just write code, it builds entire operating systems",
@@ -273,7 +420,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.4395
+      "score": 18.411
     },
     {
       "title": "Google DeepMind plugs Street View into its world model, and you can explore simulated cities today",
@@ -289,7 +436,7 @@
       "lastSeen": "2026-05-19T22:00:01.463234+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.087
+      "score": 8.0586
     },
     {
       "title": "Google partners with Warby Parker and Gentle Monster for Gemini-powered smart glasses",
@@ -306,7 +453,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.3825
+      "score": 16.3542
     },
     {
       "title": "Google takes a page out of Meta’s book, announces new audio-powered smart glasses",
@@ -322,7 +469,23 @@
       "lastSeen": "2026-05-19T22:00:01.463234+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.1093
+      "score": 9.0814
+    },
+    {
+      "title": "Google takes a page out of Meta’s book, announces new audio-powered smart glasses at IO 2026",
+      "url": "https://techcrunch.com/2026/05/19/google-takes-a-page-out-of-metas-book-announces-new-audio-powered-smart-glasses-at-io-2026",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google is calling the new devices \"audio glasses,\" in that users will be able to issue verbal commands to them and get things done via its ecosystem of apps and services, including Gemini.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/IMG_1421.jpg?resize=1200%2C900",
+      "published": "2026-05-19T19:15:31+00:00",
+      "firstSeen": "2026-05-19T23:00:01.860070+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.0814
     },
     {
       "title": "Meta Employees Are Scrambling to Use Up Benefits Ahead of Layoffs",
@@ -335,10 +498,10 @@
       "image": "https://media.wired.com/photos/6a0cb2b791b600abc11af14d/master/pass/Meta-Employees-Scrambling-to-Use-Up-Benefits-Ahead-of-Layoffs-Business-2272777092.jpg",
       "published": "2026-05-19T19:00:46+00:00",
       "firstSeen": "2026-05-19T19:15:56.409941+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2024
+      "score": 2.1747
     },
     {
       "title": "OlmoEarth v1.1: A more efficient family of models",
@@ -351,10 +514,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/19ZFgyFbi-kj2Yf0WUPGk.png",
       "published": "2026-05-19T18:38:09+00:00",
       "firstSeen": "2026-05-19T19:00:01.187122+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3319
+      "score": 2.3044
     },
     {
       "title": "In stunning display of stupid, secret CISA credentials found in public GitHub repo",
@@ -367,10 +530,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-1303783356-1152x648.jpg",
       "published": "2026-05-19T18:27:08+00:00",
       "firstSeen": "2026-05-19T20:00:01.967833+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0468
+      "score": 2.0194
     },
     {
       "title": "Gemini will use Volvo’s external cameras to interpret parking signs",
@@ -383,10 +546,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Volvo-EX60-Oculus-6.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.449964994521%2C100%2C75.100070010958&amp%3Bw=1200",
       "published": "2026-05-19T18:00:00+00:00",
       "firstSeen": "2026-05-19T19:00:01.187122+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3443
+      "score": 9.3173
     },
     {
       "title": "The 13 biggest announcements at Google I/O 2026",
@@ -399,11 +562,11 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/io2026.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-19T17:54:33+00:00",
       "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.9418
+      "score": 15.9149
     },
     {
       "title": "Google’s Genie world model can now simulate real streets with Street View",
@@ -416,10 +579,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Genie-Street-View-NYC.png?resize=1200%2C662",
       "published": "2026-05-19T17:51:39+00:00",
       "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.5705
+      "score": 8.5436
     },
     {
       "title": "With Gemini 3.5 Flash, Google bets its next AI wave on agents, not chatbots",
@@ -432,11 +595,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/IMG_1192.jpg?resize=1200%2C900",
       "published": "2026-05-19T17:51:30+00:00",
       "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 21.2704
+      "score": 21.2436
     },
     {
       "title": "How to use Google’s new information agents",
@@ -452,7 +615,7 @@
       "lastSeen": "2026-05-19T21:00:01.324802+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5698
+      "score": 5.5429
     },
     {
       "title": "Google wants to compete with Anthropic’s Mythos",
@@ -465,10 +628,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STK453_PRIVACY_B_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-05-19T17:48:22+00:00",
       "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.339
+      "score": 8.3122
     },
     {
       "title": "Google Search as you know it is over",
@@ -481,173 +644,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2196352264.jpg?w=1024",
       "published": "2026-05-19T17:46:00+00:00",
       "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.268
-    },
-    {
-      "title": "Google updates its Gemini app to take on ChatGPT and Claude at IO 2026",
-      "url": "https://techcrunch.com/2026/05/19/google-updates-its-gemini-app-to-take-on-chatgpt-and-claude",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The updates signal Google’s push to turn its Gemini app into an all-purpose AI hub rather than a stand-alone chatbot.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T21:42:47.081270+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 17.2675
-    },
-    {
-      "title": "Google updates its Gemini app to take on ChatGPT and Claude at IO 2026",
-      "url": "https://techcrunch.com/2026/05/19/google-updates-its-gemini-app-to-take-on-chatgpt-and-claude-at-io-2026",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The updates signal Google’s push to turn its Gemini app into an all-purpose AI hub rather than a stand-alone chatbot.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T22:00:01.463234+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 17.2675
-    },
-    {
-      "title": "Gemini 3.5: frontier intelligence with action",
-      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5",
-      "source": "Google AI Blog",
-      "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "Gemini 3.5 text and multi-colored star icon on an abstract blue background.",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5__keyword__blog-heade.max-600x600.format-webp.webp",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 16.6075
-    },
-    {
-      "title": "Agentic app coding gets an upgrade with Google’s release of Android CLI",
-      "url": "https://techcrunch.com/2026/05/19/agentic-app-coding-gets-an-upgrade-with-googles-release-of-android-cli",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google is embracing the rise of AI coding agents with new Android tools designed to work with platforms like Claude Code and OpenAI’s Codex, allowing developers — or their AI assistants — to build Android apps faster from the command line.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/03/google-android-logo.jpg?resize=1200%2C800",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 16.1675
-    },
-    {
-      "title": "Google launches Antigravity 2.0 with an updated desktop app and CLI tool",
-      "url": "https://techcrunch.com/2026/05/19/google-launches-antigravity-2-0-with-an-updated-desktop-app-and-cli-tool",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google is debuting a new AI Ultra plan priced at $100, which will give users 5x more usage limit than the AI Pro plan alongside the Antigravity 2.0 launch.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-developer-antigravity.jpg?resize=1200%2C900",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T21:42:47.081270+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 14.0675
-    },
-    {
-      "title": "Google launches Antigravity 2.0 with an updated desktop app and CLI tool at IO 2026",
-      "url": "https://techcrunch.com/2026/05/19/google-launches-antigravity-2-0-with-an-updated-desktop-app-and-cli-tool-at-io-2026",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google is debuting a new AI Ultra plan priced at $100, which will give users 5x more usage limit than the AI Pro plan alongside the Antigravity 2.0 launch.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-developer-antigravity.jpg?resize=1200%2C900",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T22:00:01.463234+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 14.0675
-    },
-    {
-      "title": "Google introduces Gemini Spark, a 24/7 agentic assistant with Gmail integration, at IO 2026",
-      "url": "https://techcrunch.com/2026/05/19/google-introduces-gemini-spark-a-24-7-agentic-assistant-with-gmail-integration",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "At the Google I/O developer conference, the company announced a new agentic personal assistant called Gemini Spark, built from Gemini's base models and an agentic harness from Google Antigravity.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/spark.jpg?resize=1200%2C673",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.6675
-    },
-    {
-      "title": "I/O 2026: Welcome to the agentic Gemini era",
-      "url": "https://blog.google/innovation-and-ai/sundar-pichai-io-2026",
-      "source": "Google AI Blog",
-      "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "a series of colorful icons representing Google I/O against a black background",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/SundarKeynote-hero.max-600x600.format-webp.webp",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.0075
-    },
-    {
-      "title": "Gemini Spark Is Google’s Response to OpenClaw’s 24/7 AI Agent",
-      "url": "https://www.wired.com/story/googles-response-to-openclaws-24-7-ai-agent",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Google’s always-running, data-hungry AI agent is designed to spend your money and send your emails.",
-      "image": "https://media.wired.com/photos/6a0c6cfd9c99983d4686dc1a/master/pass/GettyImages-2215580727.jpg",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.8675
-    },
-    {
-      "title": "Gmail is going to start talking to you",
-      "url": "https://www.theverge.com/tech/932973/google-gmail-live-ai-keep-docs-io-2026",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Google is launching a big new feature for Gmail called Gmail Live, a new AI-powered voice mode that's basically the Gemini Live experience but built specifically for your inbox. To use Gmail Live, tap an icon that will appear in your search bar and just start talking. In a press briefing, a Google employee showed [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/acastro_STK459_09.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-19T17:45:00+00:00",
-      "firstSeen": "2026-05-19T18:00:01.650335+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.8375
+      "score": 6.2412
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -660,10 +660,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.876
+      "score": 1.8553
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -676,10 +676,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.3758
+      "score": -1.3904
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -692,10 +692,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1269
+      "score": 1.1267
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -708,10 +708,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-19T22:00:01.463234+00:00",
+      "lastSeen": "2026-05-19T23:00:01.860070+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.595
+      "score": 2.5949
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
