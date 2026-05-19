@@ -215,35 +215,7 @@
   }
 
   function extractBrand(name) {
-    if (!name) return '';
-    const knownBrands = [
-      'Innovative Marine',
-      'Red Sea',
-      'Two Little Fishies',
-      'Zoo Med',
-      'San Francisco Bay',
-      'Seachem',
-      'Fluval',
-      'Hikari',
-      'Sera',
-      'Tetra',
-      'Omega',
-      'API',
-      'Aquatop',
-      'Eheim',
-      'GloFish',
-      'Maxspect',
-      'Neptune',
-      'Xtreme'
-    ];
-    const normalized = name.trim().toLowerCase();
-    const known = knownBrands.find(brand => normalized.startsWith(brand.toLowerCase()));
-    if (known) return known;
-    const skip = ['copy', 'new', 'the', 'a', 'an'];
-    const parts = name.trim().split(/\s+/);
-    if (parts.length <= 1) return '';
-    if (skip.includes(parts[0].toLowerCase())) return parts[1] || '';
-    return parts[0];
+    return window.THR?.extractBrand ? THR.extractBrand(name) : '';
   }
 
   function getCatalogGroups() {

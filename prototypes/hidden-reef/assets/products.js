@@ -232,17 +232,147 @@ THR.categories = {
         sourceUrl: "https://www.thehiddenreef.com/pond/food/"
       }
     }
+  },
+  co2: {
+    name: "CO2",
+    slug: "co2",
+    description: "CO2 systems, regulators, diffusers, and planted tank parts",
+    children: {
+      all: {
+        name: "CO2 Systems & Parts",
+        slug: "co2",
+        description: "CO2 equipment for planted aquariums",
+        sourceUrl: "https://www.thehiddenreef.com/co2/"
+      }
+    }
+  },
+  controllers: {
+    name: "Controllers",
+    slug: "controllers",
+    description: "Aquarium controllers, probes, dosing, and monitoring equipment",
+    children: {
+      all: {
+        name: "Controllers",
+        slug: "controllers",
+        description: "Control and monitoring equipment",
+        sourceUrl: "https://www.thehiddenreef.com/controllers/"
+      }
+    }
+  },
+  pumps: {
+    name: "Pumps",
+    slug: "pumps",
+    description: "Aquarium return pumps, utility pumps, and pump accessories",
+    children: {
+      all: {
+        name: "Pumps",
+        slug: "pumps",
+        description: "Return, utility, and specialty pumps",
+        sourceUrl: "https://www.thehiddenreef.com/pumps/"
+      }
+    }
+  },
+  "plumbing-parts": {
+    name: "Plumbing Parts",
+    slug: "plumbing-parts",
+    description: "Valves, fittings, tubing, bulkheads, and plumbing hardware",
+    children: {
+      all: {
+        name: "Plumbing Parts",
+        slug: "plumbing-parts",
+        description: "Aquarium and pond plumbing parts",
+        sourceUrl: "https://www.thehiddenreef.com/plumbing-parts/"
+      }
+    }
+  },
+  reactors: {
+    name: "Reactors",
+    slug: "reactors",
+    description: "Media reactors and reactor accessories",
+    children: {
+      all: {
+        name: "Reactors",
+        slug: "reactors",
+        description: "Media reactors for aquarium systems",
+        sourceUrl: "https://www.thehiddenreef.com/reactors/"
+      }
+    }
+  },
+  "r-o": {
+    name: "R-O",
+    slug: "r-o",
+    description: "Reverse-osmosis equipment and replacement parts",
+    children: {
+      all: {
+        name: "R-O",
+        slug: "r-o",
+        description: "Reverse-osmosis filtration equipment",
+        sourceUrl: "https://www.thehiddenreef.com/r-o/"
+      }
+    }
+  },
+  "uv-clarifiers": {
+    name: "UV Clarifiers",
+    slug: "uv-clarifiers",
+    description: "UV sterilizers, clarifiers, bulbs, and replacement parts",
+    children: {
+      all: {
+        name: "UV Clarifiers",
+        slug: "uv-clarifiers",
+        description: "UV clarifiers and sterilizer parts",
+        sourceUrl: "https://www.thehiddenreef.com/uv-clarifiers/"
+      }
+    }
+  },
+  "wave-makers": {
+    name: "Wave Makers",
+    slug: "wave-makers",
+    description: "Powerheads, gyres, wave pumps, and flow-control equipment",
+    children: {
+      all: {
+        name: "Wave Makers",
+        slug: "wave-makers",
+        description: "Flow and circulation equipment",
+        sourceUrl: "https://www.thehiddenreef.com/wave-makers/"
+      }
+    }
+  },
+  reptile: {
+    name: "Reptile",
+    slug: "reptile",
+    description: "Reptile lighting, habitat, food, and maintenance supplies",
+    children: {
+      all: {
+        name: "Reptile Supplies",
+        slug: "reptile",
+        description: "Reptile products carried by The Hidden Reef",
+        sourceUrl: "https://www.thehiddenreef.com/reptile/"
+      }
+    }
+  },
+  "dog-supplies": {
+    name: "Dog Supplies",
+    slug: "dog-supplies",
+    description: "Dog and pet supplies listed in the current catalog",
+    children: {
+      all: {
+        name: "Dog Supplies",
+        slug: "dog-supplies",
+        description: "Dog and pet supplies",
+        sourceUrl: "https://www.thehiddenreef.com/dog-supplies/"
+      }
+    }
   }
 };
 
 // Map of department page slugs to category groups
 THR.departmentMap = {
-  freshwater: ["aquariums", "additives", "testing"],
-  saltwater: ["protein-skimmers", "additives"],
+  freshwater: ["aquariums", "additives", "testing", "co2"],
+  saltwater: ["protein-skimmers", "additives", "controllers", "pumps", "reactors", "r-o", "uv-clarifiers", "wave-makers"],
   pond: ["pond"],
-  equipment: ["filtration", "lighting", "heating-temperature", "air-equipment", "maintenance"],
+  equipment: ["filtration", "lighting", "heating-temperature", "air-equipment", "maintenance", "controllers", "pumps", "plumbing-parts", "reactors", "r-o", "uv-clarifiers", "wave-makers"],
   food: ["food"],
-  decor: ["decorations"]
+  decor: ["decorations", "reptile", "dog-supplies"]
 };
 
 window.THR = THR;
