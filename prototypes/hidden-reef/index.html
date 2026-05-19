@@ -1629,6 +1629,7 @@
 
   <script src="assets/products.js"></script>
   <script src="assets/product-data.js"></script>
+  <script src="assets/catalog-utils.js"></script>
   <script src="assets/thr-cards.js"></script>
   <script src="assets/link-modal.js"></script>
   <script>
@@ -1640,13 +1641,13 @@
     const cart = [];
     let active = 'all';
     const homeProductSlugs = {
-      all: ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners'],
-      saltwater: ['skimmers', 'marine-test-kits', 'coral-supplements'],
-      freshwater: ['starter-kits', 'planted', 'water-conditioners', 'test-kits'],
+      all: ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'],
+      saltwater: ['skimmers', 'marine-test-kits', 'coral-supplements', 'controllers', 'wave-makers', 'reactors'],
+      freshwater: ['starter-kits', 'planted', 'water-conditioners', 'test-kits', 'co2'],
       pond: ['pond-supplies', 'pond-pumps', 'pond-additives', 'pond-food', 'pond-bacteria'],
-      equipment: ['led-fixtures', 'canister-filters', 'heaters', 'air-pumps', 'filter-media'],
+      equipment: ['led-fixtures', 'canister-filters', 'heaters', 'air-pumps', 'filter-media', 'controllers', 'pumps', 'plumbing-parts', 'r-o'],
       food: ['flake-tropical', 'feeders', 'freeze-dry', 'pond-food'],
-      decor: ['ornaments', 'all-decorations'],
+      decor: ['ornaments', 'all-decorations', 'reptile', 'dog-supplies'],
       maintenance: ['gravel-cleaners', 'filter-media', 'water-conditioners', 'test-kits']
     };
 

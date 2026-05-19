@@ -108,44 +108,8 @@
     return Number.isFinite(number) ? number : null;
   }
 
-  // Extract brand name from product name (first word, unless it's a common non-brand prefix)
   function extractBrand(name) {
-    if (!name) return '';
-    const knownBrands = [
-      'Innovative Marine',
-      'Red Sea',
-      'Two Little Fishies',
-      'Zoo Med',
-      'San Francisco Bay',
-      'Seachem',
-      'Fluval',
-      'Hikari',
-      'Sera',
-      'Tetra',
-      'Omega',
-      'API',
-      'Aquatop',
-      'Eheim',
-      'GloFish',
-      'Maxspect',
-      'Neptune',
-      'Xtreme'
-    ];
-    const normalized = name.trim().toLowerCase();
-    const known = knownBrands.find(brand => normalized.startsWith(brand.toLowerCase()));
-    if (known) return known;
-    const skipWords = ['copy', 'new', 'the', 'a', 'an'];
-    const parts = name.trim().split(/\s+/);
-    if (parts.length <= 1) return '';
-    const first = parts[0];
-    // If first word is all caps or starts with caps and looks like a brand
-    if (first.length <= 1) return '';
-    if (skipWords.some(w => w === first.toLowerCase())) {
-      // Try second word
-      if (parts.length > 2 && parts[1].length > 1) return parts[1];
-      return '';
-    }
-    return first;
+    return window.THR?.extractBrand ? THR.extractBrand(name) : '';
   }
 
   function escapeHtml(value) {
