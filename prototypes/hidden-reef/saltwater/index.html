@@ -50,14 +50,15 @@
     }
     .brand img {
       display: block;
-      width: 74px;
-      height: 48px;
-      object-fit: cover;
-      border: 1px solid rgba(126,232,255,.38);
-      border-radius: 7px;
-      background: #061928;
-      box-shadow: 0 8px 20px rgba(0,0,0,.28);
+      width: clamp(190px,24vw,278px);
+      height: auto;
+      object-fit: contain;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
+    .brand > span { display: none; }
     .brand strong {
       font-size: 28px;
       line-height: .9;
@@ -401,7 +402,7 @@
   <main class="page">
     <header class="header">
       <a class="brand" href="../">
-        <img src="../assets/site/header-fish.png" alt="Yellow reef fish" />
+        <img src="../assets/site/logo-full.png" alt="The Hidden Reef" />
         <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
       </a>
       <form class="search-box" action="#products">
