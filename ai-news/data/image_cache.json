@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T18:00:01.650335+00:00",
+  "updatedAt": "2026-05-19T19:00:01.187122+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7360,6 +7360,70 @@
     "https://www.theverge.com/tech/932970/google-search-ai-update-io-2026": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/google-search-box-update.png?quality=90&amp;strip=all&amp;crop=0%2C13.840708999971%2C100%2C72.318582000059&amp;w=1200",
       "checkedAt": "2026-05-19T18:00:01.650335+00:00"
+    },
+    "https://huggingface.co/blog/allenai/olmoearth-v1-1": {
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/19ZFgyFbi-kj2Yf0WUPGk.png",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.theverge.com/transportation/933556/google-io-gemini-volvo-ex60-camera-ai-parking": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Volvo-EX60-Oculus-6.jpg?quality=90&amp;strip=all&amp;crop=0%2C12.449964994521%2C100%2C75.100070010958&amp;w=1200",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.theverge.com/tech/932973/google-gmail-live-ai-keep-docs-io-2026": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/acastro_STK459_09.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.theverge.com/tech/933424/google-synthid-c2pa-content-credentials-expansion": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/SynthID-C2PA-Google-IO-hed.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.theverge.com/tech/932996/google-gemini-spark-antigravity-io-2026": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-19-at-1.35.50PM.png?quality=90&amp;strip=all&amp;crop=3.9697318007663%2C0%2C92.060536398467%2C100&amp;w=1200",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.theverge.com/tech/933026/google-pics-app-workspace-ai-images-io-2026": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/lcimg-07e42b2a-4aa9-42b9-8411-0aa6df0c6611.jpeg?quality=90&amp;strip=all&amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;w=1200",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/933442/openai-synthid-content-credentials-c2pa-expansion": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-ai-spending-job-cuts-may-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/02/unnamed-11.jpg?f=jpeg",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://openai.com/index/advancing-content-provenance": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/7qrOAES4m86YSNSeLjDFI3/2a82d6af71882438b33811ad5c1e5fdc/SEO_Card_-_new_title.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.together.ai/blog/coding-agent-benchmarks": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/69f1a3b5587202cb099d02b4_OG-image_20260429_BLOG_Coding%20agent%20benchmark.png",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://www.techrepublic.com/article/news-7-gemini-ai-photo-editing-trends": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/gemini-photo-editing-trends.png?f=jpeg",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://deepmind.google/blog/simulate-real-world-places-with-project-genie-and-street-view": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/projectgenie-social.width-1300.png",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://deepmind.google/blog/introducing-gemini-omni": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GeminiOmni_social.width-1300.png",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://deepmind.google/blog/introducing-google-antigravity-2-0": {
+      "image": "",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://deepmind.google/blog/gemini-for-science-ai-experiments-and-tools-for-a-new-era-of-discovery": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/science__keyword__blog-header.width-1300.jpg",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://deepmind.google/blog/making-it-easier-to-understand-how-content-was-created-and-edited": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/FINAL_SOCIAL_HERO.width-1300.png",
+      "checkedAt": "2026-05-19T19:00:01.187122+00:00"
     }
   }
 }
