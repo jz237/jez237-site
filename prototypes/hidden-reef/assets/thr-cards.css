@@ -38,20 +38,15 @@
   width: calc(100% - 14px);
   border: 1px solid rgba(195,222,232,.74);
   border-radius: 7px;
-  background:
-    radial-gradient(circle at 50% 18%, rgba(255,255,255,.98), rgba(248,252,253,.96) 46%, rgba(229,241,246,.94) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.96), inset 0 -18px 28px rgba(20,72,96,.08);
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.96);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 .thr-product .thr-img::after {
-  content: "";
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 38%;
-  background: linear-gradient(transparent, rgba(202,225,234,.4));
+  content: none;
   pointer-events: none;
 }
 .thr-product .thr-img img {
