@@ -51,10 +51,23 @@
     .main-nav {
       display:grid; grid-template-columns:repeat(9,minmax(0,1fr));
       gap:0; margin:0 calc(clamp(12px,2.5vw,28px) * -1);
+      padding:0;
       border-top:0; border-bottom:1px solid var(--reef-line);
       background:rgba(3,18,29,.98);
+      color:#a9d6e6;
     }
-    .main-nav a { min-width:0; min-height:44px; padding-inline:10px; white-space:nowrap; text-align:center; }
+    .main-nav a {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-width:0;
+      min-height:44px;
+      padding:10px 10px;
+      border-left:1px solid rgba(116,205,235,.12);
+      white-space:nowrap;
+      text-align:center;
+    }
+    .main-nav a:first-child { border-left:0; }
 
     /* Breadcrumb */
     .breadcrumb {
