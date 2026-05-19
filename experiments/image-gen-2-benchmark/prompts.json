@@ -538,5 +538,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-18-evening-mercury-terminator-rail-city",
+    "title": "Mercury Terminator Rail City",
+    "tests": "Explores extreme warm/cold lighting, mobile hard-sci-fi architecture, Mercury surface engineering, heat-shield ceramics, molten-salt thermal systems, frost-rimmed radiators, and strong diagonal scale cues without performance imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed hard-science-fiction scene titled conceptually \"Mercury Terminator Rail City\", with no visible text.\n\nScene/backdrop: the twilight boundary on Mercury, where a mobile city slowly crawls along enormous rail tracks to stay between the blazing white sunlight side and the frozen black night side. One half of the horizon is searing gold-white glare over cratered regolith; the other half drops into deep blue-black starfield and frost.\n\nSubject: segmented ceramic habitat modules mounted on colossal heat-shielded rail bogies, reflective sunshade fins, molten-salt heat exchanger pipes glowing orange, frost-rimmed radiator towers extending into shadow, and small autonomous maintenance rovers inspecting the rails. The city should feel engineered, inhabited, and physically plausible, not a fantasy castle or theatrical stage.\n\nComposition: wide cinematic three-quarter view from slightly above the rail line, strong diagonal tracks leading into the city, clear scale contrast between tiny rovers and massive mobile architecture, high detail without clutter.\n\nMaterials and lighting: white ceramic heat shields, brushed titanium, graphite-black radiators, copper-orange thermal loops, dusty gray regolith, razor-sharp warm/cold lighting split across the scene, hard shadows, subtle heat shimmer on the sunward side, crisp frost crystals on the nightward side.\n\nConstraints: no visible text, no logos, no copyrighted characters, no dancing, no dancers, no ballet, no dance poses, no stage performance, no ceremonial movement.",
+    "image": "images/2026-05-18-evening-mercury-terminator-rail-city.png",
+    "date": "2026-05-18",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
