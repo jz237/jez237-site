@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T21:42:47.081270+00:00",
+  "updatedAt": "2026-05-19T22:00:01.463234+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7464,6 +7464,18 @@
     "https://www.theverge.com/tech/934172/google-io-gemini-ai-trust-personal-data": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gemini-spark-tasks.png?quality=90&amp;strip=all&amp;crop=0.50140845070423%2C0%2C98.997183098592%2C100&amp;w=1200",
       "checkedAt": "2026-05-19T21:42:47.081270+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/googles-new-universal-cart-wants-to-follow-your-entire-shopping-journey-across-the-internet": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/1_Price_insights___Wayfair_examp.width-1000.format-webp.webp?w=1000",
+      "checkedAt": "2026-05-19T22:00:01.463234+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-launches-antigravity-2-0-with-an-updated-desktop-app-and-cli-tool-at-io-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-developer-antigravity.jpg?resize=1200,900",
+      "checkedAt": "2026-05-19T22:00:01.463234+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-updates-its-gemini-app-to-take-on-chatgpt-and-claude-at-io-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200,800",
+      "checkedAt": "2026-05-19T22:00:01.463234+00:00"
     }
   }
 }
