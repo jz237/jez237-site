@@ -28,7 +28,8 @@
         name: selected.dataset.name,
         price: selected.dataset.price,
         url: selected.value,
-        image: selected.dataset.image
+        image: selected.dataset.image,
+        barcode: selected.dataset.barcode
       });
     });
     document.addEventListener('keydown', event => {
@@ -303,6 +304,7 @@
     const price = variant.price || 'See site';
     const url = variant.url || 'https://www.thehiddenreef.com/';
     const image = variant.image || '';
+    const barcode = variant.barcode || '';
     modal.querySelector('h2').textContent = title;
     modal.querySelector('.link-modal__open').href = url;
     const addButton = modal.querySelector('.link-modal__add');
@@ -317,6 +319,11 @@
     if (priceFact) priceFact.textContent = price;
     const urlNode = modal.querySelector('.link-modal__url');
     if (urlNode) urlNode.textContent = url;
+    const barcodeNode = modal.querySelector('.link-modal__barcode');
+    if (barcodeNode) {
+      barcodeNode.textContent = barcode ? 'Barcode: ' + barcode : '';
+      barcodeNode.style.display = barcode ? '' : 'none';
+    }
   }
 
   function renderVariantSelector(modal, variants, activeUrl) {
@@ -330,7 +337,7 @@
     wrap.style.display = '';
     wrap.innerHTML = '<label for="link-modal-variant">Options</label><select id="link-modal-variant" class="link-modal__variant-select">' + variants.map(item => {
       const selected = normalizeUrl(item.productUrl) === normalizeUrl(activeUrl) ? ' selected' : '';
-      return '<option value="' + escapeHtml(item.productUrl || '') + '" data-name="' + escapeHtml(item.name || '') + '" data-price="' + escapeHtml(item.price || 'See site') + '" data-image="' + escapeHtml(item.imageUrl || '') + '"' + selected + '>' + escapeHtml(item.name || 'Option') + ' - ' + escapeHtml(item.price || 'See site') + '</option>';
+      return '<option value="' + escapeHtml(item.productUrl || '') + '" data-name="' + escapeHtml(item.name || '') + '" data-price="' + escapeHtml(item.price || 'See site') + '" data-image="' + escapeHtml(item.imageUrl || '') + '" data-barcode="' + escapeHtml(item.barcode || '') + '"' + selected + '>' + escapeHtml(item.name || 'Option') + ' - ' + escapeHtml(item.price || 'See site') + '</option>';
     }).join('') + '</select><span>Select the exact color, size, or package before adding it to the demo cart.</span>';
   }
 
@@ -350,6 +357,7 @@
     const img = card?.querySelector('img');
     const price = product.price || card?.dataset.price || card?.querySelector('.price, .thr-price')?.textContent?.trim() || 'See site';
     const source = card?.dataset.source || 'Original Hidden Reef page';
+    const barcode = product.barcode || '';
     const details = (card?.dataset.details || '').split('|').map(item => item.trim()).filter(Boolean);
     const url = new URL(link.href);
     const brand = card?.querySelector('.thr-brand')?.textContent?.trim() || extractBrand(title) || 'Hidden Reef';
@@ -377,7 +385,7 @@
     modal.querySelector('.link-modal__details').style.display = detailItems.length ? '' : 'none';
     modal.querySelector('.link-modal__related').innerHTML = relatedHtml;
     modal.querySelector('.link-modal__related').style.display = relatedHtml ? '' : 'none';
-    modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
+    modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__barcode"' + (barcode ? '' : ' style="display:none"') + '>' + (barcode ? 'Barcode: ' + escapeHtml(barcode) : '') + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
     modal.querySelector('.link-modal__image').src = product.imageUrl || img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg';
     modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
     modal.classList.add('is-open');
