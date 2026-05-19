@@ -31,7 +31,8 @@ body.department-page{color:#f0fbff;background:radial-gradient(circle at 18% 0%,r
 body.department-page .page{max-width:1180px;background:linear-gradient(180deg,rgba(7,26,39,.48),rgba(3,13,22,0))}
 body.department-page .header{grid-template-columns:auto minmax(260px,1fr) auto;gap:18px;padding:16px 20px;margin:0 calc(clamp(12px,2.5vw,28px)*-1);border-bottom:1px solid rgba(116,205,235,.2);background:linear-gradient(180deg,rgba(8,31,47,.98),rgba(5,22,34,.98))}
 body.department-page .brand{grid-column:auto;min-width:235px;min-height:0;justify-content:flex-start;padding:0;margin:0;background:none;border:0;box-shadow:none}
-body.department-page .brand img{display:block;width:74px;height:48px;padding:0;object-fit:cover;border:1px solid rgba(126,232,255,.38);border-radius:7px;background:#061928;box-shadow:0 8px 20px rgba(0,0,0,.28)}
+body.department-page .brand img{display:block;width:clamp(190px,24vw,278px);height:auto;padding:0;object-fit:contain;border:0;border-radius:0;background:transparent;box-shadow:none}
+body.department-page .brand>span{display:none}
 body.department-page .brand strong{font-size:28px;line-height:.9;color:#fff;text-shadow:0 3px 14px rgba(0,0,0,.5)}
 body.department-page .brand span span{margin-top:7px;color:#bdefff;font-size:11px;letter-spacing:.13em;text-align:left;text-transform:uppercase}
 body.department-page .search-box{grid-column:auto;max-width:none;justify-self:stretch;height:44px;background:#102b3b;border-color:rgba(116,205,235,.26)}
@@ -84,7 +85,7 @@ body.department-page .feature-row{grid-template-columns:repeat(3,minmax(0,1fr))}
 body.department-page .panel{border-color:rgba(116,205,235,.2);background:radial-gradient(circle at 100% 0%,rgba(64,217,255,.1),transparent 38%),#071a27}
 body.department-page .footer{border:1px solid rgba(116,205,235,.14)}
 @media(max-width:1040px){body.department-page .category-hero{grid-template-columns:1fr;min-height:auto}body.department-page .path-grid,body.department-page .style-grid,body.department-page .care-grid,body.department-page .routine-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body.department-page .layout{grid-template-columns:1fr}body.department-page .sidebar{position:static}body.department-page .grid{grid-template-columns:repeat(2,minmax(0,1fr))}body.department-page .feature-row{grid-template-columns:1fr}}
-@media(max-width:760px){body.department-page .header{grid-template-columns:1fr;margin:0;padding:14px 0}body.department-page .brand{justify-content:flex-start}body.department-page .main-nav{display:flex;justify-content:flex-start;overflow-x:auto;margin:0}body.department-page .path-grid,body.department-page .style-grid,body.department-page .care-grid,body.department-page .routine-grid,body.department-page .grid{grid-template-columns:1fr}body.department-page .category-hero{padding:24px 18px}}
+@media(max-width:760px){body.department-page .header{grid-template-columns:1fr;margin:0;padding:14px 0}body.department-page .brand{justify-content:flex-start}body.department-page .brand img{width:min(100%,246px)}body.department-page .main-nav{display:flex;justify-content:flex-start;overflow-x:auto;margin:0}body.department-page .path-grid,body.department-page .style-grid,body.department-page .care-grid,body.department-page .routine-grid,body.department-page .grid{grid-template-columns:1fr}body.department-page .category-hero{padding:24px 18px}}
 
 /* Section spacing for department pages */
 body.department-page .section-band {
