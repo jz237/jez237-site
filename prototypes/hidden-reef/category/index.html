@@ -49,12 +49,12 @@
     .search-box input::placeholder { color:#8bb1bf; }
     .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
     .main-nav {
-      display:grid; grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+      display:grid; grid-template-columns:repeat(9,minmax(0,1fr));
       gap:0; margin:0 calc(clamp(12px,2.5vw,28px) * -1);
       border-top:0; border-bottom:1px solid var(--reef-line);
       background:rgba(3,18,29,.98);
     }
-    .main-nav a { min-height:44px; padding-inline:16px; }
+    .main-nav a { min-width:0; min-height:44px; padding-inline:10px; white-space:nowrap; text-align:center; }
 
     /* Breadcrumb */
     .breadcrumb {
@@ -233,7 +233,10 @@
     }
 
     /* Mobile overrides handled by thr-cards.css */
-    @media (max-width:760px) {
+    @media (max-width:1180px) and (min-width:981px) {
+      .main-nav a { padding-inline:7px; font-size:12px; }
+    }
+    @media (max-width:980px) {
       .page { overflow:hidden; }
       .header,
       .main-nav { max-width:100%; margin-left:0; margin-right:0; }
@@ -256,6 +259,9 @@
         white-space:normal;
         text-align:center;
       }
+      .main-nav a:nth-child(3n+1) { border-left:0; }
+    }
+    @media (max-width:760px) {
       .subcat-tabs { padding:8px 0; }
       .product-controls { grid-template-columns:1fr; }
     }
