@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T22:00:01.463234+00:00",
+  "updatedAt": "2026-05-19T23:00:01.860070+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7476,6 +7476,18 @@
     "https://techcrunch.com/2026/05/19/google-updates-its-gemini-app-to-take-on-chatgpt-and-claude-at-io-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200,800",
       "checkedAt": "2026-05-19T22:00:01.463234+00:00"
+    },
+    "https://www.theverge.com/tech/934260/google-io-ai-singularity-demis-hassabis": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Demis_GDM.OMNI_.AI-in-Real-World_3.jpg?quality=90&amp;strip=all&amp;crop=0%2C19.091304550468%2C100%2C61.817390899063&amp;w=1200",
+      "checkedAt": "2026-05-19T23:00:01.860070+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/19/upstash-for-redis-vs-supabase-vs-neon-which-one-fits-vibe-coding-workflows-in-2026": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-30-1024x731.png",
+      "checkedAt": "2026-05-19T23:00:01.860070+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-takes-a-page-out-of-metas-book-announces-new-audio-powered-smart-glasses-at-io-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/IMG_1421.jpg?resize=1200,900",
+      "checkedAt": "2026-05-19T23:00:01.860070+00:00"
     }
   }
 }
