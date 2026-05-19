@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T19:00:01.187122+00:00",
+  "updatedAt": "2026-05-19T19:15:56.409941+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7424,6 +7424,14 @@
     "https://deepmind.google/blog/making-it-easier-to-understand-how-content-was-created-and-edited": {
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/FINAL_SOCIAL_HERO.width-1300.png",
       "checkedAt": "2026-05-19T19:00:01.187122+00:00"
+    },
+    "https://techcrunch.com/2026/05/19/google-takes-a-page-out-of-metas-book-announces-new-audio-powered-smart-glasses": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/IMG_1421.jpg?resize=1200,900",
+      "checkedAt": "2026-05-19T19:15:56.409941+00:00"
+    },
+    "https://deepmind.google/blog/gemini-3-5-frontier-intelligence-with-action": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5__keywordstatement__metacard__light.width-1300.png",
+      "checkedAt": "2026-05-19T19:15:56.409941+00:00"
     }
   }
 }
