@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>How This Can Work With Lightspeed POS — The Hidden Reef</title>
+  <title>Cart Handoff and Lightspeed POS Plan - The Hidden Reef</title>
   <link rel="icon" type="image/png" href="../assets/site/logo.png" />
   <style>
     :root {
@@ -224,133 +224,156 @@
   </nav>
 
   <div class="hero">
-    <h1>How This Can Work With Lightspeed POS</h1>
-    <p class="sub">This demo site is a redesign concept for The Hidden Reef. Here's how it could connect to the real Lightspeed-powered store — from simple redirects to a fully integrated storefront.</p>
+    <h1>Cart Handoff and Lightspeed POS Plan</h1>
+    <p class="sub">A practical way this redesigned storefront could work next to the existing Lightspeed site while keeping checkout, discounts, customer accounts, and inventory inside the system Hidden Reef already uses.</p>
   </div>
 
   <div class="content">
 
-    <p>The current Hidden Reef website runs on <strong>Lightspeed eCom</strong> (Shop ID 648211), which is directly connected to their in-store POS system. That means product inventory, pricing, orders, and customer data all flow through Lightspeed already.</p>
+    <p>The current Hidden Reef website runs on <strong>Lightspeed eCom</strong> (Shop ID 648211), which is connected to the store's point-of-sale workflow. Product inventory, sale pricing, orders, checkout, customer accounts, and customer-specific discounts already belong in Lightspeed.</p>
 
-    <p>Any new storefront needs to work <em>with</em> that system — not replace it. Here are three ways to do that, from simplest to most integrated.</p>
-
-
-    <!-- Option 1 -->
-    <h2>Option 1: Cart Redirect <span class="badge badge-easy">Easiest</span></h2>
-
-    <div class="option-card">
-      <h3>How it works</h3>
-      <p>When someone clicks "Add to Cart" on this demo site, it opens the matching product page on the real Hidden Reef website. The user finishes their purchase there like they normally would.</p>
-      <p>This demo site acts as a <strong>prettier front door</strong> — customers browse here, buy on the real site.</p>
-      <div class="pros-cons">
-        <div class="pros">
-          <h4>Pros</h4>
-          <ul>
-            <li>Zero backend work needed</li>
-            <li>No API keys or developer access required</li>
-            <li>Works today — could be set up in an hour</li>
-            <li>The real cart, checkout, and payments all stay untouched</li>
-          </ul>
-        </div>
-        <div class="cons">
-          <h4>Cons</h4>
-          <ul>
-            <li>No cart experience on the demo side</li>
-            <li>User leaves the demo to add items</li>
-            <li>Feels like two separate sites, not one</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Option 2 -->
-    <h2>Option 2: Shared Cart via Lightspeed API <span class="badge badge-medium">Medium</span></h2>
-
-    <div class="option-card">
-      <h3>How it works</h3>
-      <p>The demo site connects to the Lightspeed eCom API behind the scenes. When a customer adds a product to their cart here, the demo sends that item to their real Lightspeed cart. When they click "Checkout," they're taken to the real Hidden Reef checkout — with their items already in the cart.</p>
-      <p>From the customer's perspective, it feels like <strong>one seamless experience</strong>: browse the pretty site, add items, and check out on the trusted real site.</p>
-      <div class="pros-cons">
-        <div class="pros">
-          <h4>Pros</h4>
-          <ul>
-            <li>Real cart experience on the demo site</li>
-            <li>Items land in the actual Lightspeed cart</li>
-            <li>Checkout, payments, and inventory stay accurate</li>
-            <li>Customers never see the old site until checkout</li>
-          </ul>
-        </div>
-        <div class="cons">
-          <h4>Cons</h4>
-          <ul>
-            <li>Requires a Lightspeed API key (from store admin)</li>
-
-            <li>Cart sync can occasionally lag if the API is slow</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Option 3 -->
-    <h2>Option 3: Headless Commerce <span class="badge badge-advanced">Most Integrated</span></h2>
-
-    <div class="option-card">
-      <h3>How it works</h3>
-      <p>The demo site becomes the <strong>actual storefront</strong>. It pulls real product data, pricing, and inventory directly from the Lightspeed API. The cart and checkout can either redirect to Lightspeed or be fully handled here. Lightspeed becomes the behind-the-scenes engine — the POS, inventory manager, and order processor — while this site is what customers actually see and use.</p>
-      <p>This is how many modern stores run: a custom-designed frontend on top of a proven commerce backend.</p>
-      <div class="pros-cons">
-        <div class="pros">
-          <h4>Pros</h4>
-          <ul>
-            <li>Full brand control — the site looks exactly how you want</li>
-            <li>Real-time pricing and inventory from POS</li>
-            <li>Fast, modern user experience</li>
-            <li>The old frontend can be fully retired</li>
-          </ul>
-        </div>
-        <div class="cons">
-          <h4>Cons</h4>
-          <ul>
-
-
-
-            <li>Payment handling is more complex if done on-site</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
+    <p>The safest approach is not to replace that system. The redesigned site can run beside the existing Lightspeed site as a better shopping front end, while Lightspeed remains the final source of truth.</p>
 
     <div class="callout">
-      <strong>What we're doing right now:</strong> The demo site uses Option 1-style cart redirects as a working proof of concept. "Add to Cart" links point to the real product pages on thehiddenreef.com. This shows the design and flow without needing any API access. When you're ready to go deeper, upgrading to Option 2 or 3 is a natural next step.
+      <strong>Recommended direction:</strong> let customers browse and build a cart on the new site, then hand that cart to Lightspeed checkout. At checkout, Lightspeed handles login, final pricing, customer discounts, taxes, payment, and the order record.
     </div>
 
+    <h2>Step 1: Keep The Existing Store Live <span class="badge badge-easy">Lowest Risk</span></h2>
 
-    <!-- Getting API Access -->
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>The redesigned site runs on a separate domain or subdomain, such as <strong>new.thehiddenreef.com</strong> or <strong>shop.thehiddenreef.com</strong>. The current Lightspeed site stays online and continues to work normally.</p>
+      <p>If the new site has a problem, customers and staff still have the existing tested store available.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>What stays safe</h4>
+          <ul>
+            <li>Existing checkout remains available</li>
+            <li>Staff keep using the Lightspeed admin they already know</li>
+            <li>No payment or order workflow changes are required at launch</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>The new site should launch as an optional front end first</li>
+            <li>The old site should not be turned off until the new flow is proven</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 2: Let The Demo Cart Behave Like A Real Cart</h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Customers browse the redesigned site and add products to the cart here. The cart can show product names, quantities, images, and an estimated subtotal.</p>
+      <p>The cart should also make the pricing boundary clear: <strong>log in at checkout to see account discounts, rewards, and final pricing.</strong></p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Customer experience</h4>
+          <ul>
+            <li>Browsing feels modern and fast</li>
+            <li>Customers can build a cart before leaving the new site</li>
+            <li>The site can show public prices and sale badges</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>Customer-specific discounts should not be guessed on the new site</li>
+            <li>Lightspeed checkout should calculate the final total after login</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 3: Send The Cart To Lightspeed Checkout <span class="badge badge-medium">API Phase</span></h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Each product on the redesigned site needs to map to its real Lightspeed product or variant ID. When the customer clicks checkout, a small private backend sends those cart items to Lightspeed and then redirects the customer to the Lightspeed cart or checkout page.</p>
+      <p>API credentials stay on the private backend. They should never be placed in browser JavaScript.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>What Lightspeed handles</h4>
+          <ul>
+            <li>Customer login</li>
+            <li>Special customer discounts</li>
+            <li>Final price, tax, and shipping rules</li>
+            <li>Payment and order creation</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>What must be confirmed</h4>
+          <ul>
+            <li>The exact Lightspeed API/cart capabilities available on their plan</li>
+            <li>How product variants are represented</li>
+            <li>Whether cart creation or checkout links are supported directly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 4: Sync Inventory And Sale Items</h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Lightspeed should remain the place where staff add products, receive stock, change inventory, and create or remove sale items. The redesigned site should copy that information from Lightspeed instead of becoming another admin system.</p>
+      <p>For inventory that changes constantly, the best setup is a combination of webhooks and scheduled checks. Webhooks catch updates quickly; scheduled checks are the backup in case any webhook is missed.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Can sync from Lightspeed</h4>
+          <ul>
+            <li>Product names, images, categories, and brands</li>
+            <li>Inventory availability</li>
+            <li>Sale products and sale pricing</li>
+            <li>Product additions and removals</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>The new site should not require staff to update products twice</li>
+            <li>If the API is unavailable, checkout should still fall back to Lightspeed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 5: Avoid An Ongoing Webmaster Job</h2>
+
+    <div class="option-card">
+      <h3>Maintenance boundary</h3>
+      <p>The new site should be built so regular store work still happens in Lightspeed. Staff should not need a web developer every time they add fish food, remove a sold-out item, start a sale, or change a product photo.</p>
+      <ul>
+        <li>Hidden Reef keeps managing products, customers, sales, and orders in Lightspeed.</li>
+        <li>The redesigned site automatically reads from Lightspeed where possible.</li>
+        <li>Any custom code should be limited to the storefront, cart handoff, and sync layer.</li>
+        <li>Future changes should be treated as defined updates, not open-ended emergency support.</li>
+      </ul>
+    </div>
+
     <h2>Getting Lightspeed API Access</h2>
 
-    <p>To move from Option 1 to Option 2 or 3, you'll need an API key from the Lightspeed admin panel:</p>
+    <p>To move beyond simple product links, Hidden Reef would need API access from the Lightspeed admin area:</p>
 
     <ul>
-      <li>Log into <strong>Lightspeed eCom admin</strong> (the same dashboard used to manage the store)</li>
-      <li>Go to <strong>Settings → Apps</strong></li>
-      <li>Find or create an API integration — this generates a client ID and secret</li>
-      <li>That credential pair lets the demo site talk to Lightspeed securely</li>
+      <li>Log into <strong>Lightspeed eCom admin</strong></li>
+      <li>Go to <strong>Settings - Apps</strong></li>
+      <li>Create or locate an API integration</li>
+      <li>Store the generated client ID and secret on a private backend only</li>
     </ul>
 
-    <p>The API provides access to products, categories, inventory, carts, orders, and customers — everything needed to build a connected storefront.</p>
+    <p>The exact integration depends on the Lightspeed plan and API features available to this store. The first technical check should confirm product, variant, inventory, cart, customer, and sale-data access.</p>
 
     <div class="callout">
-      <strong>No rush.</strong> Option 1 works well enough to show the concept. API access can happen whenever the store owner is ready — the design and content work we're doing now doesn't depend on it.
+      <strong>Practical first milestone:</strong> keep the current demo cart, add checkout messaging about account discounts, map demo products to real Lightspeed product IDs, and test whether a cart can be created or prefilled in Lightspeed checkout.
     </div>
 
-
-    <!-- Next Step -->
     <div class="next-step">
-      <h3>Ready to see it in action?</h3>
-      <p>Browse the demo storefront and try adding items to the cart. Every product links back to the real Hidden Reef store.</p>
+      <h3>Current demo behavior</h3>
+      <p>Browse the demo storefront and try adding items to the cart. The next improvement would be handing that cart to Lightspeed checkout while keeping final discounts and payment inside Lightspeed.</p>
       <a class="btn" href="../">Browse the Demo Store →</a>
     </div>
 
