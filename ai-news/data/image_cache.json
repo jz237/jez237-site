@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T18:00:01.939262+00:00",
+  "updatedAt": "2026-05-20T18:30:02.754968+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7600,6 +7600,14 @@
     "https://www.techrepublic.com/article/news-apple-intelligence-accessibility": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/Apple-accessibility-features-Magnifier_big.jpg.large_2x-1.jpg?f=jpeg",
       "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/20/how-to-build-knowledge-graph-generation-pipelines-from-text-with-kg-gen-networkx-analytics-and-interactive-visualizations": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-33-1024x731.png",
+      "checkedAt": "2026-05-20T18:30:02.754968+00:00"
+    },
+    "https://simonwillison.net/2026/May/20/tokens-per-second": {
+      "image": "",
+      "checkedAt": "2026-05-20T18:30:02.754968+00:00"
     }
   }
 }
