@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T21:08:48.693732+00:00",
+  "updatedAt": "2026-05-20T22:00:01.218256+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7632,6 +7632,18 @@
     "https://www.theverge.com/column/935021/google-io-gemini-for-science-alphafold-alphagenome-ai-health": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/demishassabis.webp?quality=90&amp;strip=all&amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;w=1200",
       "checkedAt": "2026-05-20T21:08:48.693732+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/musks-xai-is-being-sued-over-its-data-center-generators-now-its-buying-2-8b-more": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800",
+      "checkedAt": "2026-05-20T22:00:01.218256+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/20/meet-turbovec-a-rust-vector-index-with-python-bindings-and-built-on-googles-turboquant-algorithm": {
+      "image": "",
+      "checkedAt": "2026-05-20T22:00:01.218256+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2223576505.jpg?resize=1200,800",
+      "checkedAt": "2026-05-20T22:00:01.218256+00:00"
     }
   }
 }
