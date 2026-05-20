@@ -372,7 +372,8 @@ THR.departmentMap = {
   pond: ["pond"],
   equipment: ["filtration", "lighting", "heating-temperature", "air-equipment", "maintenance", "controllers", "pumps", "plumbing-parts", "reactors", "r-o", "uv-clarifiers", "wave-makers"],
   food: ["food"],
-  decor: ["decorations", "reptile", "dog-supplies"]
+  decor: ["decorations", "reptile", "dog-supplies"],
+  maintenance: ["maintenance", "filtration", "testing", "additives"]
 };
 
 window.THR = THR;
