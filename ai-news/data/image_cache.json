@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T21:00:01.150370+00:00",
+  "updatedAt": "2026-05-20T21:08:48.693732+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7628,6 +7628,10 @@
     "https://openai.com/index/ramp": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/1jnbN51vZD5HdojAWKmvvG/332a50f3bf43de6bb168e92303067c4a/oai_Ramp_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-20T21:00:01.150370+00:00"
+    },
+    "https://www.theverge.com/column/935021/google-io-gemini-for-science-alphafold-alphagenome-ai-health": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/demishassabis.webp?quality=90&amp;strip=all&amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;w=1200",
+      "checkedAt": "2026-05-20T21:08:48.693732+00:00"
     }
   }
 }
