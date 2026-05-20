@@ -74,7 +74,7 @@
       drawer = document.createElement('aside');
       drawer.className = 'drawer';
       drawer.setAttribute('aria-label', 'Demo cart drawer');
-      drawer.innerHTML = '<div class="drawer-head"><h2>Demo cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the Lightspeed handoff.</p><div class="cart-summary"></div><p class="drawer-note">Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue in Lightspeed →</a>';
+      drawer.innerHTML = '<div class="drawer-head"><h2>Demo cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the Lightspeed handoff.</p><div class="cart-summary"></div><p class="drawer-note">Free shipping on qualifying orders over $49. Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue in Lightspeed →</a>';
       document.body.appendChild(drawer);
     }
     const title = drawer.querySelector('.drawer-head h2');
@@ -89,7 +89,7 @@
     if (!drawer.querySelector('.drawer-note')) {
       const note = document.createElement('p');
       note.className = 'drawer-note';
-      note.textContent = 'Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.';
+      note.textContent = 'Free shipping on qualifying orders over $49. Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.';
       drawer.querySelector('.cart-summary')?.after(note);
     }
     const handoff = drawer.querySelector('.cart-handoff') || drawer.querySelector('.drawer .btn, .btn');
