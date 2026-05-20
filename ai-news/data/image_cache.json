@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T17:00:01.947918+00:00",
+  "updatedAt": "2026-05-20T18:00:01.939262+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7564,6 +7564,42 @@
     "https://www.theverge.com/tech/934585/google-ai-shopping-ads-search": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/search-ads-ai.png?quality=90&amp;strip=all&amp;crop=0,16.342557965595,100,67.314884068811",
       "checkedAt": "2026-05-20T17:00:01.947918+00:00"
+    },
+    "https://www.theverge.com/tech/934628/google-io-2026-android-ai-studio-widgets-shortcuts": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/258002_Google_Pixel_10_Pro_Fold_AJohnson_0010.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/openai-barrels-towards-ipo-that-may-happen-in-september": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2213399157.jpg?resize=1200,800",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.techrepublic.com/article/news-new-zealand-public-sector-job-cuts-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05202026-new-zealand-public-sector-job-cuts.jpg?f=jpeg",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/startup-battlefield-200-applications-close-in-1-week-window-to-nominate-and-apply-for-the-most-promising-startups-closes-may-27": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200,800",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.techrepublic.com/article/news-microsoft-surface-for-business-ai-pc-refresh": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/surface-pro-12.jpg?f=jpeg",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.techrepublic.com/article/news-anthropic-acquires-stainless-developer-tools": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/dev-tools.jpg?f=jpeg",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.techrepublic.com/article/news-dell-ai-factory-nvidia-networking-gap": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/woman-using-laptop-with-artificial-intelligence-gr-2026-03-26-05-09-22-utc-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-siri-ai-writing-tools-wwdc": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/ios-7.jpg?f=jpeg",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apple-intelligence-accessibility": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Apple-accessibility-features-Magnifier_big.jpg.large_2x-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-20T18:00:01.939262+00:00"
     }
   }
 }
