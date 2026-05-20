@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T22:00:01.218256+00:00",
+  "updatedAt": "2026-05-20T22:42:22.460732+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7644,6 +7644,22 @@
     "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2223576505.jpg?resize=1200,800",
       "checkedAt": "2026-05-20T22:00:01.218256+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/clouted-wants-to-take-the-guesswork-out-of-making-short-videos-go-viral": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/CLOUTED-TEAM-PHOTOS-2.jpg?resize=1200,765",
+      "checkedAt": "2026-05-20T22:42:22.460732+00:00"
+    },
+    "https://simonwillison.net/2026/May/20/spacex-s1": {
+      "image": "",
+      "checkedAt": "2026-05-20T22:42:22.460732+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/xai-burned-6-4b-last-year-spacexs-ipo-filing-shows-why-the-spending-is-far-from-over": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
+      "checkedAt": "2026-05-20T22:42:22.460732+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/nvidia-posts-another-record-quarter-reveals-43-billion-of-holdings-in-startups": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-getty.jpg?resize=1200,781",
+      "checkedAt": "2026-05-20T22:42:22.460732+00:00"
     }
   }
 }
