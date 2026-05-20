@@ -1583,7 +1583,7 @@
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
         <p>Everything aquarium: freshwater, saltwater, ponds, plants, coral, equipment, food, and expert help from a real local store.</p>
         <div class="button-row">
-          <a class="btn" href="category/?cat=freshwater">Shop Freshwater</a>
+          <a class="btn" href="category/?filter=new-arrivals">Shop New Arrivals</a>
           <a class="btn secondary" href="#visit">Visit the Store</a>
         </div>
       </div>
@@ -1633,19 +1633,9 @@
     <section class="section-band alt" id="products" aria-labelledby="products-title">
       <div class="section-head">
         <h2 id="products-title">New Arrivals</h2>
-        <a href="category/">View All Products →</a>
+        <a href="category/?filter=new-arrivals">Open Shopping Layout →</a>
       </div>
-      <div class="filters" aria-label="Product filters">
-        <button type="button" class="active" data-filter="all">All</button>
-        <button type="button" data-filter="saltwater">Saltwater</button>
-        <button type="button" data-filter="freshwater">Freshwater</button>
-        <button type="button" data-filter="pond">Pond</button>
-        <button type="button" data-filter="equipment">Equipment</button>
-        <button type="button" data-filter="food">Food</button>
-        <button type="button" data-filter="decor">Decor</button>
-        <button type="button" data-filter="maintenance">Maintenance</button>
-      </div>
-      <p class="arrival-note">Live product examples from the scraped catalog, rendered with the same compact card system used by the department pages.</p>
+      <p class="arrival-note">A preview of recent catalog items. Open the shopping layout to filter by New Arrivals, category, brand, and sort order.</p>
       <div class="thr-product-grid" id="new-arrivals-grid"></div>
     </section>
 
@@ -1715,13 +1705,11 @@
   <script src="assets/thr-cards.js"></script>
   <script src="assets/link-modal.js"></script>
   <script>
-    const filters = [...document.querySelectorAll('[data-filter]')];
     const search = document.getElementById('search');
     const cartCount = document.getElementById('cart-count');
     const cartItems = document.getElementById('cart-items');
     const emptyCart = document.getElementById('empty-cart');
     const cart = [];
-    let active = 'all';
     const homeProductSlugs = {
       all: ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'],
       saltwater: ['skimmers', 'marine-test-kits', 'coral-supplements', 'controllers', 'wave-makers', 'reactors'],
@@ -1750,29 +1738,23 @@
       return products;
     }
 
-    function applyFilter(next) {
-      if (next) active = next;
-      THR.renderProductList('new-arrivals-grid', getHomeProducts(active));
+    function renderNewArrivalsPreview() {
+      THR.renderProductList('new-arrivals-grid', getHomeProducts('all'));
       const q = (search.value || '').trim().toLowerCase();
       document.querySelectorAll('#new-arrivals-grid .thr-product').forEach(card => {
         const text = card.textContent.toLowerCase();
         card.style.display = !q || text.includes(q) ? '' : 'none';
       });
-      document.querySelectorAll('.filters [data-filter]').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === active));
     }
-    filters.forEach(el => el.addEventListener('click', () => {
-      applyFilter(el.dataset.filter);
-      if (!el.closest('.filters')) document.getElementById('products').scrollIntoView({behavior:'smooth'});
-    }));
-    search.addEventListener('input', () => applyFilter());
-    document.querySelector('.search-box').addEventListener('submit', e => { e.preventDefault(); applyFilter(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
+    search.addEventListener('input', () => renderNewArrivalsPreview());
+    document.querySelector('.search-box').addEventListener('submit', e => { e.preventDefault(); renderNewArrivalsPreview(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
     document.querySelector('.close-cart').addEventListener('click', () => document.body.classList.remove('cart-open'));
     function renderCart() {
       cartCount.textContent = cart.length;
       emptyCart.style.display = cart.length ? 'none' : '';
       cartItems.innerHTML = cart.map(name => '<div class="cart-item"><strong>' + name + '</strong><span>Qty 1</span></div>').join('');
     }
-    applyFilter('all');
+    renderNewArrivalsPreview();
   </script>
 </body>
 </html>

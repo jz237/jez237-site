@@ -5,16 +5,20 @@
   'use strict';
 
   const PRODUCTS_PER_PAGE = 24;
+  const NEW_ARRIVALS_FILTER = 'new-arrivals';
+  const NEW_ARRIVAL_SLUGS = ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'];
   let currentPage = 1;
   let currentProducts = [];
   let baseProducts = [];
   let currentSubcategory = null;
+  let showNewArrivalsFilter = false;
 
   function getParams() {
     const p = new URLSearchParams(window.location.search);
     return {
       cat: p.get('cat') || '',
       sub: p.get('sub') || '',
+      filter: p.get('filter') || '',
       brand: p.get('brand') || '',
       page: parseInt(p.get('page')) || 1
     };
@@ -114,6 +118,21 @@
     return window.THR?.extractBrand ? THR.extractBrand(name) : '';
   }
 
+  function getProductKey(product) {
+    return product.productUrl || product.name || '';
+  }
+
+  function getNewArrivalKeys(products) {
+    const keys = new Set();
+    NEW_ARRIVAL_SLUGS.forEach(slug => {
+      products
+        .filter(product => product.categorySlug === slug)
+        .slice(0, 3)
+        .forEach(product => keys.add(getProductKey(product)));
+    });
+    return keys;
+  }
+
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
   }
@@ -142,11 +161,13 @@
   function applyProductControls(products) {
     const controls = getActiveControls();
     const query = controls.query.toLowerCase();
+    const newArrivalKeys = controls.category === NEW_ARRIVALS_FILTER ? getNewArrivalKeys(products) : null;
     let filtered = products.filter(product => {
       const name = product.name || '';
       const brand = extractBrand(name);
       const matchesQuery = !query || name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
-      const matchesCategory = !controls.category || product.groupSlug === controls.category;
+      const matchesCategory = !controls.category ||
+        (controls.category === NEW_ARRIVALS_FILTER ? newArrivalKeys.has(getProductKey(product)) : product.groupSlug === controls.category);
       const matchesBrand = !controls.brand || brand === controls.brand;
       return matchesQuery && matchesCategory && matchesBrand;
     });
@@ -166,7 +187,8 @@
       .map(product => [product.groupSlug, product.groupName]))
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
-    const categoryOptions = categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
+    const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">New Arrivals</option>' : '';
+    const categoryOptions = newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
     el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="../">Home</a>';
 
     el.querySelectorAll('select').forEach(control => {
@@ -650,6 +672,7 @@
     const cat = findCategory(params.cat);
     const sub = params.sub ? findSubcategory(cat, params.sub) : null;
     currentSubcategory = sub;
+    showNewArrivalsFilter = !cat && !sub;
 
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
@@ -681,6 +704,10 @@
     if (params.brand) {
       const brandFilter = document.getElementById('brand-filter');
       if (brandFilter) brandFilter.value = params.brand;
+    }
+    if (showNewArrivalsFilter && params.filter === NEW_ARRIVALS_FILTER) {
+      const categoryFilter = document.getElementById('category-filter');
+      if (categoryFilter) categoryFilter.value = NEW_ARRIVALS_FILTER;
     }
 
     const searchInput = document.getElementById('search');
