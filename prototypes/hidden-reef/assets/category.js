@@ -19,6 +19,7 @@
   let currentSubcategory = null;
   let currentResultLabel = '';
   let showNewArrivalsFilter = false;
+  let categoryHeroRotator = 0;
 
   function getParams() {
     const p = new URLSearchParams(window.location.search);
@@ -248,6 +249,11 @@
   function renderHeader(cat, sub) {
     const el = document.getElementById('cat-header');
     if (!el) return;
+    if (categoryHeroRotator) {
+      window.clearInterval(categoryHeroRotator);
+      categoryHeroRotator = 0;
+    }
+    el.classList.remove('is-rotating');
     const title = sub ? sub.name : (cat ? cat.name + ' Dept.' : 'All Products');
     const desc = sub ? sub.description : (cat ? cat.description : 'Browse our full catalog');
     const sourceUrl = sub ? sub.sourceUrl : '';
@@ -269,9 +275,24 @@
       'heating-temperature': assetBase + '/department/lighting.jpg',
       'protein-skimmers': assetBase + '/department/saltwater-reef.jpg'
     };
+    const heroRotators = {
+      freshwater: [
+        assetBase + '/department/freshwater.jpg',
+        assetBase + '/department/freshwater-hero-2.jpg',
+        assetBase + '/department/freshwater-hero-3.jpg',
+        assetBase + '/department/freshwater-hero-4.jpg',
+        assetBase + '/department/freshwater-hero-5.jpg'
+      ]
+    };
     const heroImage = cat ? heroImages[cat.slug] : assetBase + '/site/hero-aquatic-world.jpg';
+    const rotatorImages = cat ? heroRotators[cat.slug] : null;
     el.style.setProperty('--cat-hero-image', 'url("' + heroImage + '")');
-    let html = `<div class="cat-header__copy"><h1>${title}</h1><p>${desc}</p></div>`;
+    let html = '';
+    if (rotatorImages && rotatorImages.length > 1 && !sub) {
+      el.classList.add('is-rotating');
+      html += '<div class="cat-hero-slides" aria-hidden="true"><img class="cat-hero-slide is-active" src="' + rotatorImages[0] + '" alt="" fetchpriority="high"><img class="cat-hero-slide" src="' + rotatorImages[1] + '" alt="" loading="eager"></div>';
+    }
+    html += `<div class="cat-header__copy"><h1>${title}</h1><p>${desc}</p></div>`;
     const actions = [];
     if (sourceUrl) {
       actions.push(`<a class="source-link" href="${sourceUrl}" target="_blank" rel="noopener">View on Hidden Reef site ↗</a>`);
@@ -280,7 +301,40 @@
       html += `<div class="cat-header__actions">${actions.join('')}</div>`;
     }
     el.innerHTML = html;
+    if (rotatorImages && rotatorImages.length > 1 && !sub) {
+      startCategoryHeroRotator(el, rotatorImages);
+    }
     document.getElementById('page-title').textContent = title + ' — The Hidden Reef';
+  }
+
+  function startCategoryHeroRotator(header, images) {
+    const slides = Array.from(header.querySelectorAll('.cat-hero-slide'));
+    if (slides.length < 2) return;
+    images.slice(1).forEach(src => {
+      const image = new Image();
+      image.src = src;
+    });
+    let activeImage = 0;
+    let activeLayer = 0;
+    categoryHeroRotator = window.setInterval(async () => {
+      activeImage = (activeImage + 1) % images.length;
+      const nextLayer = activeLayer === 0 ? 1 : 0;
+      const incomingSlide = slides[nextLayer];
+      const outgoingSlide = slides[activeLayer];
+      incomingSlide.src = images[activeImage];
+      if (incomingSlide.decode) {
+        try {
+          await incomingSlide.decode();
+        } catch (error) {
+          // Continue with the browser's normal image loading behavior.
+        }
+      }
+      requestAnimationFrame(() => {
+        incomingSlide.classList.add('is-active');
+        outgoingSlide.classList.remove('is-active');
+        activeLayer = nextLayer;
+      });
+    }, 4000);
   }
 
   function renderDepartmentSwitcher(activeCatSlug) {
