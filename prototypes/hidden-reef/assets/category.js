@@ -258,6 +258,289 @@
     el.innerHTML = '<div class="department-tabs" aria-label="Shop by department">' + tabs + '</div><a class="department-all-products" href="./"><span>Reset department</span><strong>Shop all products</strong></a>';
   }
 
+  const sidebarConfig = {
+    saltwater: [
+      {
+        title: 'Saltwater & Reef',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Saltwater & Reef', href: '?cat=saltwater', active: true },
+          { type: 'check', label: 'Fish & Livestock (in-store)' },
+          { type: 'check', label: 'Corals & Frags (in-store)' },
+          { type: 'check', label: 'Invertebrates (in-store)' },
+          { type: 'check', label: 'Cleanup Crew (in-store)' },
+          { type: 'link', label: 'Reef Systems & Tanks', href: '?cat=aquariums' }
+        ]
+      },
+      {
+        title: 'Equipment',
+        items: [
+          { type: 'link', label: 'Skimmers & Filtration', href: '?cat=saltwater&sub=skimmers' },
+          { type: 'link', label: 'Lighting & Spectrum', href: '?cat=equipment&sub=led-fixtures' },
+          { type: 'link', label: 'Flow & Powerheads', href: '?cat=saltwater&sub=wave-makers' },
+          { type: 'link', label: 'Controllers & Monitors', href: '?cat=saltwater&sub=controllers' }
+        ]
+      },
+      {
+        title: 'Food & Care',
+        items: [
+          { type: 'link', label: 'Salt Mix & Additives', href: '?cat=additives' },
+          { type: 'link', label: 'Test Kits & Refractometers', href: '?cat=maintenance' },
+          { type: 'link', label: 'Calcium, Alk & Magnesium', href: '?cat=additives' },
+          { type: 'link', label: 'Water Conditioner', href: '?cat=additives&sub=water-conditioners' }
+        ]
+      },
+      {
+        title: 'Quick Tips',
+        items: [
+          { type: 'check', label: 'Tank size and sump plan' },
+          { type: 'check', label: 'Lighting for coral goals' },
+          { type: 'check', label: 'Flow and dead spots' },
+          { type: 'check', label: 'Salt, testing, stability' },
+          { type: 'check', label: 'Livestock compatibility' }
+        ]
+      }
+    ],
+    freshwater: [
+      {
+        title: 'Freshwater Categories',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Freshwater', href: '?cat=freshwater', active: true },
+          { type: 'check', label: 'Tetras & Community (in-store)' },
+          { type: 'check', label: 'Cichlids (in-store)' },
+          { type: 'check', label: 'Betta & Gourami (in-store)' },
+          { type: 'check', label: 'Livebearers (in-store)' },
+          { type: 'link', label: 'Planted Tanks', href: '?cat=additives&sub=planted' },
+          { type: 'check', label: 'Goldfish & Koi (in-store)' },
+          { type: 'check', label: 'Invertebrates (in-store)' }
+        ]
+      },
+      {
+        title: 'Equipment',
+        items: [
+          { type: 'link', label: 'Filters & Filtration', href: '?cat=equipment' },
+          { type: 'link', label: 'Heaters & Thermometers', href: '?cat=equipment&sub=heaters' },
+          { type: 'link', label: 'Lighting', href: '?cat=equipment&sub=led-fixtures' },
+          { type: 'link', label: 'Air Pumps & Accessories', href: '?cat=equipment&sub=air-pumps' }
+        ]
+      },
+      {
+        title: 'Food & Care',
+        items: [
+          { type: 'link', label: 'Flake Food', href: '?cat=food&sub=flake-tropical' },
+          { type: 'link', label: 'Pellets & Granules', href: '?cat=food&sub=flake-tropical' },
+          { type: 'link', label: 'Freeze-Dried', href: '?cat=food&sub=freeze-dry' },
+          { type: 'link', label: 'Water Conditioner', href: '?cat=additives&sub=water-conditioners' }
+        ]
+      },
+      {
+        title: 'Beginner Tips',
+        items: [
+          { type: 'check', label: 'Choose tank size first' },
+          { type: 'check', label: 'Cycle before stocking' },
+          { type: 'check', label: 'Match fish temperament' },
+          { type: 'check', label: 'Do not overfeed' },
+          { type: 'check', label: 'Test water before guessing' }
+        ]
+      }
+    ],
+    aquariums: [
+      {
+        title: 'Aquariums',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Aquariums', href: '?cat=aquariums', active: true },
+          { type: 'link', label: 'Starter Aquarium Kits', href: '?cat=aquariums&sub=starter-kits' },
+          { type: 'link', label: 'Aquarium & Stand Combos', href: '?cat=aquariums&sub=aquarium-and-stand' },
+          { type: 'check', label: 'Glass and acrylic options (ask staff)' },
+          { type: 'check', label: 'Cabinet and stand planning' }
+        ]
+      },
+      {
+        title: 'Related Departments',
+        items: [
+          { type: 'link', label: 'Freshwater', href: '?cat=freshwater' },
+          { type: 'link', label: 'Saltwater', href: '?cat=saltwater' },
+          { type: 'link', label: 'Equipment', href: '?cat=equipment' },
+          { type: 'link', label: 'Decorations', href: '?cat=decor' }
+        ]
+      }
+    ],
+    additives: [
+      {
+        title: 'Additives',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Additives', href: '?cat=additives', active: true },
+          { type: 'link', label: 'Water Conditioners', href: '?cat=additives&sub=water-conditioners' },
+          { type: 'link', label: 'Planted Tank Additives', href: '?cat=additives&sub=planted' },
+          { type: 'link', label: 'Coral & Saltwater Supplements', href: '?cat=additives&sub=coral-supplements' },
+          { type: 'check', label: 'Bring a water sample for advice' }
+        ]
+      },
+      {
+        title: 'Related Departments',
+        items: [
+          { type: 'link', label: 'Freshwater', href: '?cat=freshwater' },
+          { type: 'link', label: 'Saltwater', href: '?cat=saltwater' },
+          { type: 'link', label: 'Maintenance', href: '?cat=maintenance' },
+          { type: 'link', label: 'Food & Care', href: '?cat=food' }
+        ]
+      }
+    ],
+    pond: [
+      {
+        title: 'Pond & Water Garden',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Pond', href: '?cat=pond', active: true },
+          { type: 'check', label: 'Koi & Pond Fish (in-store)' },
+          { type: 'check', label: 'Pond Plants (in-store)' },
+          { type: 'link', label: 'Pumps & Filtration', href: '?cat=pond&sub=pond-pumps' },
+          { type: 'link', label: 'Waterfalls & Aeration', href: '?cat=pond&sub=pond-pumps' }
+        ]
+      },
+      {
+        title: 'Equipment',
+        items: [
+          { type: 'link', label: 'Pumps & Waterfall Kits', href: '?cat=pond&sub=pond-pumps' },
+          { type: 'link', label: 'Pond Lighting', href: '?cat=equipment&sub=led-fixtures' },
+          { type: 'check', label: 'Liners & Underlayment (ask staff)' },
+          { type: 'check', label: 'Netting & Predators (ask staff)' }
+        ]
+      },
+      {
+        title: 'Food & Care',
+        items: [
+          { type: 'link', label: 'Pond Food & Feeding', href: '?cat=pond&sub=pond-food' },
+          { type: 'link', label: 'Water Treatments', href: '?cat=maintenance' },
+          { type: 'link', label: 'Bacteria & Startup', href: '?cat=maintenance' },
+          { type: 'link', label: 'Seasonal Care', href: '?cat=maintenance' }
+        ]
+      }
+    ],
+    equipment: [
+      {
+        title: 'Equipment',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Equipment', href: '?cat=equipment', active: true },
+          { type: 'link', label: 'Filters & Canisters', href: '?cat=equipment&sub=canister-filters' },
+          { type: 'link', label: 'Heaters & Chillers', href: '?cat=equipment&sub=heaters' },
+          { type: 'link', label: 'Lighting Fixtures', href: '?cat=equipment&sub=led-fixtures' },
+          { type: 'link', label: 'Air Pumps & Accessories', href: '?cat=equipment&sub=air-pumps' }
+        ]
+      },
+      {
+        title: 'Related Departments',
+        items: [
+          { type: 'link', label: 'Filter Media & Replacement', href: '?cat=maintenance' },
+          { type: 'link', label: 'Food & Water Care', href: '?cat=food' },
+          { type: 'link', label: 'Freshwater', href: '?cat=freshwater' },
+          { type: 'link', label: 'Saltwater', href: '?cat=saltwater' }
+        ]
+      }
+    ],
+    food: [
+      {
+        title: 'Food & Water Care',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Food & Care', href: '?cat=food', active: true },
+          { type: 'link', label: 'Flake Food', href: '?cat=food&sub=flake-tropical' },
+          { type: 'link', label: 'Pellets & Granules', href: '?cat=food&sub=flake-tropical' },
+          { type: 'link', label: 'Freeze-Dried Treats', href: '?cat=food&sub=freeze-dry' },
+          { type: 'check', label: 'Frozen Food (in-store)' }
+        ]
+      },
+      {
+        title: 'Equipment',
+        items: [
+          { type: 'link', label: 'Automatic Feeders', href: '?cat=food&sub=feeders' },
+          { type: 'link', label: 'Feeding Lids & Clips', href: '?cat=food&sub=feeders' },
+          { type: 'link', label: 'Water Conditioner', href: '?cat=additives&sub=water-conditioners' },
+          { type: 'link', label: 'Bacteria & Additives', href: '?cat=additives' }
+        ]
+      }
+    ],
+    decor: [
+      {
+        title: 'Decorations',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Decorations', href: '?cat=decor', active: true },
+          { type: 'link', label: 'Ornaments & Hides', href: '?cat=decor&sub=ornaments' },
+          { type: 'link', label: 'Driftwood & Rock', href: '?cat=decor&sub=all-decorations' },
+          { type: 'link', label: 'Artificial Plants', href: '?cat=decor&sub=all-decorations' },
+          { type: 'link', label: 'Backgrounds', href: '?cat=decor&sub=all-decorations' }
+        ]
+      },
+      {
+        title: 'Related Departments',
+        items: [
+          { type: 'link', label: 'Aquascaping Tools', href: '?cat=decor' },
+          { type: 'link', label: 'Substrate & Gravel', href: '?cat=decor&sub=all-decorations' },
+          { type: 'link', label: 'Live Plants', href: '?cat=freshwater' },
+          { type: 'link', label: 'LED Plant Lighting', href: '?cat=equipment&sub=led-fixtures' }
+        ]
+      }
+    ],
+    maintenance: [
+      {
+        title: 'Maintenance',
+        open: true,
+        items: [
+          { type: 'link', label: 'All Maintenance', href: '?cat=maintenance', active: true },
+          { type: 'link', label: 'Test Kits', href: '?cat=maintenance' },
+          { type: 'link', label: 'Filter Media', href: '?cat=maintenance' },
+          { type: 'link', label: 'Algae Control', href: '?cat=maintenance&sub=gravel-cleaners' },
+          { type: 'link', label: 'Cleaning Tools', href: '?cat=maintenance&sub=gravel-cleaners' }
+        ]
+      },
+      {
+        title: 'Equipment',
+        items: [
+          { type: 'link', label: 'Gravel Vac & Siphons', href: '?cat=maintenance&sub=gravel-cleaners' },
+          { type: 'link', label: 'Magnetic Cleaners', href: '?cat=maintenance&sub=gravel-cleaners' },
+          { type: 'link', label: 'Filter Replacements', href: '?cat=maintenance' },
+          { type: 'link', label: 'Water Change Systems', href: '?cat=maintenance&sub=gravel-cleaners' }
+        ]
+      }
+    ]
+  };
+
+  function renderDepartmentSidebar(cat) {
+    const el = document.getElementById('department-sidebar');
+    if (!el) return;
+    const layout = el.closest('.shopping-layout');
+    if (!cat || !sidebarConfig[cat.slug]) {
+      el.innerHTML = '';
+      layout?.classList.add('sidebar-empty');
+      return;
+    }
+    layout?.classList.remove('sidebar-empty');
+    const html = sidebarConfig[cat.slug].map((section, index) => {
+      const open = section.open || index === 0;
+      const items = section.items.map(item => {
+        if (item.type === 'check') {
+          return '<div class="check-item">' + escapeHtml(item.label) + '</div>';
+        }
+        const active = item.active ? ' class="active-filter"' : '';
+        return '<a href="' + item.href + '"' + active + '>' + escapeHtml(item.label) + '</a>';
+      }).join('');
+      return '<div class="sidebar-section"><button class="sidebar-toggle" type="button" aria-expanded="' + (open ? 'true' : 'false') + '">' + escapeHtml(section.title) + ' <span class="arrow">▶</span></button><div class="sidebar-body' + (open ? ' open' : '') + '"><div class="sidebar-body-inner">' + items + '</div></div></div>';
+    }).join('');
+    el.innerHTML = html;
+    el.querySelectorAll('.sidebar-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const body = button.nextElementSibling;
+        const isOpen = body.classList.toggle('open');
+        button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+  }
+
   function renderSubcatTabs(cat, activeSubSlug) {
     const el = document.getElementById('subcat-tabs');
     if (!el || !cat || !cat.children) return;
@@ -395,6 +678,7 @@
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
     renderDepartmentSwitcher(cat ? cat.slug : '');
+    renderDepartmentSidebar(cat);
     renderSubcatTabs(cat, params.sub);
 
     // Get products
