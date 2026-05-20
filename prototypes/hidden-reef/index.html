@@ -1867,11 +1867,8 @@
 
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-slides" aria-hidden="true">
-        <img class="is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
-        <img src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="eager" />
-        <img src="assets/site/hero-aquatic-world-3.jpg" alt="" loading="eager" />
-        <img src="assets/site/hero-aquatic-world-4.jpg" alt="" loading="eager" />
-        <img src="assets/site/hero-aquatic-world-5.jpg" alt="" loading="eager" />
+        <img class="hero-slide-current is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
+        <img class="hero-slide-next" src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="eager" />
       </div>
       <div class="hero-content">
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
@@ -2013,14 +2010,31 @@
 	    const cartItems = document.getElementById('cart-items');
 	    const emptyCart = document.getElementById('empty-cart');
 	    const cart = [];
-	    const heroSlides = Array.from(document.querySelectorAll('.hero-slides img'));
-	    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-	    if (heroSlides.length > 1 && !reduceMotion.matches) {
+	    const heroImages = [
+	      'assets/site/hero-aquatic-world.jpg',
+	      'assets/site/hero-aquatic-world-2.jpg',
+	      'assets/site/hero-aquatic-world-3.jpg',
+	      'assets/site/hero-aquatic-world-4.jpg',
+	      'assets/site/hero-aquatic-world-5.jpg'
+	    ];
+	    const currentHeroSlide = document.querySelector('.hero-slide-current');
+	    const nextHeroSlide = document.querySelector('.hero-slide-next');
+	    heroImages.slice(1).forEach(src => {
+	      const image = new Image();
+	      image.src = src;
+	    });
+	    if (currentHeroSlide && nextHeroSlide && heroImages.length > 1) {
 	      let activeHeroSlide = 0;
+	      const reducedHeroMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	      const transitionDelay = reducedHeroMotion ? 50 : 1300;
 	      window.setInterval(() => {
-	        heroSlides[activeHeroSlide].classList.remove('is-active');
-	        activeHeroSlide = (activeHeroSlide + 1) % heroSlides.length;
-	        heroSlides[activeHeroSlide].classList.add('is-active');
+	        activeHeroSlide = (activeHeroSlide + 1) % heroImages.length;
+	        nextHeroSlide.src = heroImages[activeHeroSlide];
+	        nextHeroSlide.classList.add('is-active');
+	        window.setTimeout(() => {
+	          currentHeroSlide.src = heroImages[activeHeroSlide];
+	          nextHeroSlide.classList.remove('is-active');
+	        }, transitionDelay);
 	      }, 4000);
 	    }
 	    document.querySelector('.search-box')?.addEventListener('submit', e => {
