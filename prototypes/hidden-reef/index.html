@@ -1867,8 +1867,8 @@
 
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-slides" aria-hidden="true">
-        <img class="hero-slide-current is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
-        <img class="hero-slide-next" src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="eager" />
+        <img class="hero-slide is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
+        <img class="hero-slide" src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="eager" />
       </div>
       <div class="hero-content">
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
@@ -2017,24 +2017,33 @@
 	      'assets/site/hero-aquatic-world-4.jpg',
 	      'assets/site/hero-aquatic-world-5.jpg'
 	    ];
-	    const currentHeroSlide = document.querySelector('.hero-slide-current');
-	    const nextHeroSlide = document.querySelector('.hero-slide-next');
+	    const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
 	    heroImages.slice(1).forEach(src => {
 	      const image = new Image();
 	      image.src = src;
 	    });
-	    if (currentHeroSlide && nextHeroSlide && heroImages.length > 1) {
-	      let activeHeroSlide = 0;
+	    if (heroSlides.length >= 2 && heroImages.length > 1) {
+	      let activeHeroImage = 0;
+	      let activeHeroLayer = 0;
 	      const reducedHeroMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	      const transitionDelay = reducedHeroMotion ? 50 : 1300;
-	      window.setInterval(() => {
-	        activeHeroSlide = (activeHeroSlide + 1) % heroImages.length;
-	        nextHeroSlide.src = heroImages[activeHeroSlide];
-	        nextHeroSlide.classList.add('is-active');
-	        window.setTimeout(() => {
-	          currentHeroSlide.src = heroImages[activeHeroSlide];
-	          nextHeroSlide.classList.remove('is-active');
-	        }, transitionDelay);
+	      window.setInterval(async () => {
+	        activeHeroImage = (activeHeroImage + 1) % heroImages.length;
+	        const nextHeroLayer = activeHeroLayer === 0 ? 1 : 0;
+	        const incomingSlide = heroSlides[nextHeroLayer];
+	        const outgoingSlide = heroSlides[activeHeroLayer];
+	        incomingSlide.src = heroImages[activeHeroImage];
+	        if (!reducedHeroMotion && incomingSlide.decode) {
+	          try {
+	            await incomingSlide.decode();
+	          } catch (error) {
+	            // Continue with the browser's normal image loading behavior.
+	          }
+	        }
+	        requestAnimationFrame(() => {
+	          incomingSlide.classList.add('is-active');
+	          outgoingSlide.classList.remove('is-active');
+	          activeHeroLayer = nextHeroLayer;
+	        });
 	      }, 4000);
 	    }
 	    document.querySelector('.search-box')?.addEventListener('submit', e => {
