@@ -164,7 +164,7 @@
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
     const categoryOptions = categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
-    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button>';
+    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="../">Home</a>';
 
     el.querySelectorAll('select').forEach(control => {
       control.addEventListener('change', () => updateProductView(1));
@@ -220,9 +220,16 @@
     };
     const heroImage = cat ? heroImages[cat.slug] : '../assets/site/hero-aquatic-world.jpg';
     el.style.setProperty('--cat-hero-image', 'url("' + heroImage + '")');
-    let html = `<h1>${title}</h1><p>${desc}</p>`;
+    let html = `<div class="cat-header__copy"><h1>${title}</h1><p>${desc}</p></div>`;
+    const actions = [];
+    if (cat || sub) {
+      actions.push('<a class="source-link" href="./">View all products</a>');
+    }
     if (sourceUrl) {
-      html += `<a class="source-link" href="${sourceUrl}" target="_blank" rel="noopener">View on Hidden Reef site ↗</a>`;
+      actions.push(`<a class="source-link" href="${sourceUrl}" target="_blank" rel="noopener">View on Hidden Reef site ↗</a>`);
+    }
+    if (actions.length) {
+      html += `<div class="cat-header__actions">${actions.join('')}</div>`;
     }
     el.innerHTML = html;
     document.getElementById('page-title').textContent = title + ' — The Hidden Reef';

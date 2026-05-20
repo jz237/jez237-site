@@ -82,7 +82,10 @@
       position:relative;
       min-height:220px;
       display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:20px;
       align-content:end;
+      align-items:end;
       margin:12px 0 28px;
       overflow:hidden;
       padding:clamp(22px,4vw,38px);
@@ -102,7 +105,8 @@
       background:linear-gradient(180deg,transparent,rgba(0,9,18,.46));
       pointer-events:none;
     }
-    .cat-header > * { position:relative; z-index:1; max-width:620px; }
+    .cat-header > * { position:relative; z-index:1; }
+    .cat-header__copy { max-width:620px; }
     .cat-header h1 {
       margin:0 0 6px; color:#fff;
       font-family:Georgia,"Times New Roman",serif;
@@ -110,6 +114,14 @@
       text-shadow:0 8px 30px rgba(0,0,0,.58);
     }
     .cat-header p { margin:0; color:#d6f4fb; font-size:15px; line-height:1.5; }
+    .cat-header__actions {
+      display:flex;
+      justify-content:flex-end;
+      align-items:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+      max-width:360px;
+    }
     .cat-header .source-link {
       display:inline-flex; align-items:center; gap:6px;
       margin-top:10px; padding:8px 14px;
@@ -159,7 +171,7 @@
     /* Product controls */
     .product-controls {
       display:grid;
-      grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) minmax(180px,1fr) auto;
+      grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) minmax(180px,1fr) auto auto;
       gap:10px;
       align-items:end;
       margin:0 0 14px;
@@ -190,7 +202,8 @@
       background:#102b3b;
       font-weight:800;
     }
-    .product-controls button {
+    .product-controls button,
+    .product-controls .home-control {
       min-height:40px;
       padding:8px 14px;
       border:1px solid rgba(116,205,235,.22);
@@ -200,7 +213,13 @@
       font-weight:900;
       cursor:pointer;
     }
-    .product-controls button:hover {
+    .product-controls .home-control {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .product-controls button:hover,
+    .product-controls .home-control:hover {
       border-color:var(--reef-cyan);
       color:#fff;
     }
@@ -276,6 +295,8 @@
     }
     @media (max-width:760px) {
       .subcat-tabs { padding:8px 0; }
+      .cat-header { grid-template-columns:1fr; }
+      .cat-header__actions { justify-content:flex-start; }
       .product-controls { grid-template-columns:1fr; }
     }
   </style>
@@ -292,7 +313,6 @@
         <button type="submit" aria-label="Search">⌕</button>
       </form>
       <div class="header-actions">
-        <a href="../">Home</a>
         <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span>↗</span></a>
       </div>
     </header>
