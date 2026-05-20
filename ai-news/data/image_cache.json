@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T20:00:01.447083+00:00",
+  "updatedAt": "2026-05-20T21:00:01.150370+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7620,6 +7620,14 @@
     "https://openai.com/index/model-disproves-discrete-geometry-conjecture": {
       "image": "",
       "checkedAt": "2026-05-20T20:00:01.447083+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/openai-claims-it-solved-an-80-year-old-math-problem-for-real-this-time": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Erdos-problems.png?resize=1200,863",
+      "checkedAt": "2026-05-20T21:00:01.150370+00:00"
+    },
+    "https://openai.com/index/ramp": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/1jnbN51vZD5HdojAWKmvvG/332a50f3bf43de6bb168e92303067c4a/oai_Ramp_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-20T21:00:01.150370+00:00"
     }
   }
 }
