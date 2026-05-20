@@ -1100,9 +1100,13 @@
       }
       .link-modal__facts { grid-template-columns: 1fr; }
       .link-modal__actions { grid-template-columns: 1fr; }
-      .promo-grid, .guides { grid-template-columns: 1fr; }
-      .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .live-links { grid-template-columns: 1fr; }
+	      .promo-grid, .guides { grid-template-columns: 1fr; }
+	      .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+	      .product-controls,
+	      .department-switcher,
+	      .shopping-layout { grid-template-columns: 1fr; }
+	      .department-sidebar { position: static; }
+	      .live-links { grid-template-columns: 1fr; }
       .product { min-height: 286px; }
       .product img { height: 122px; }
       .visit-band { grid-template-columns: 1fr; }
@@ -1193,10 +1197,204 @@
         linear-gradient(180deg, #071f32 0%, #041827 100%);
       box-shadow: 0 22px 54px rgba(0,0,0,0.28);
     }
-    #products .section-head { margin-top: 0; }
-    #products .section-head h2 { color: #f7fcff; }
-    #products .section-head a,
-    #products .arrival-note { color: #8fdcf0; }
+	    #products .section-head { margin-top: 0; }
+	    #products .section-head h2 { color: #f7fcff; }
+	    #products .section-head a,
+	    #products .arrival-note { color: #8fdcf0; }
+	    .product-controls {
+	      display: grid;
+	      grid-template-columns: minmax(180px,1fr) minmax(180px,1fr) minmax(180px,1fr) auto auto;
+	      gap: 10px;
+	      align-items: end;
+	      margin: 0 0 14px;
+	      padding: 12px;
+	      border: 1px solid rgba(116,205,235,0.2);
+	      border-radius: 8px;
+	      background: rgba(7,26,39,0.72);
+	    }
+	    .product-controls label { display: grid; gap: 5px; min-width: 0; }
+	    .product-controls span {
+	      color: #40d9ff;
+	      font-size: 11px;
+	      font-weight: 900;
+	      letter-spacing: 0.08em;
+	      text-transform: uppercase;
+	    }
+	    .product-controls select {
+	      width: 100%;
+	      min-height: 40px;
+	      padding: 8px 10px;
+	      border: 1px solid rgba(116,205,235,0.22);
+	      border-radius: 6px;
+	      color: #eaf8fc;
+	      background: #102b3b;
+	      font-weight: 800;
+	    }
+	    .product-controls button,
+	    .product-controls .home-control {
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      min-height: 40px;
+	      padding: 8px 14px;
+	      border: 1px solid rgba(116,205,235,0.22);
+	      border-radius: 6px;
+	      color: #dff8ff;
+	      background: rgba(8,35,52,0.72);
+	      font-weight: 900;
+	      cursor: pointer;
+	    }
+	    .product-controls button:hover,
+	    .product-controls .home-control:hover { border-color: #40d9ff; color: #fff; }
+	    .department-switcher {
+	      display: grid;
+	      grid-template-columns: minmax(0,1fr) minmax(210px,260px);
+	      gap: 12px;
+	      align-items: stretch;
+	      margin: 0 0 18px;
+	    }
+	    .department-tabs {
+	      display: flex;
+	      flex-wrap: wrap;
+	      gap: 8px;
+	      padding: 12px;
+	      border: 1px solid rgba(116,205,235,0.2);
+	      border-radius: 8px;
+	      background: rgba(7,26,39,0.72);
+	    }
+	    .department-tab {
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      min-height: 36px;
+	      padding: 8px 14px;
+	      border: 1px solid rgba(116,205,235,0.22);
+	      border-radius: 999px;
+	      color: #284f65;
+	      background: #fff;
+	      font-size: 13px;
+	      font-weight: 900;
+	    }
+	    .department-tab:hover,
+	    .department-tab.active { border-color: #40d9ff; color: #fff; background: var(--teal); }
+	    .department-all-products {
+	      display: grid;
+	      align-content: center;
+	      min-height: 100%;
+	      padding: 15px 16px;
+	      border: 1px solid rgba(116,205,235,0.45);
+	      border-radius: 8px;
+	      color: #032033;
+	      background: #40d9ff;
+	      box-shadow: 0 12px 26px rgba(64,217,255,0.16);
+	      font-weight: 950;
+	    }
+	    .department-all-products span {
+	      display: block;
+	      color: #064153;
+	      font-size: 11px;
+	      letter-spacing: 0.12em;
+	      text-transform: uppercase;
+	    }
+	    .department-all-products strong {
+	      display: block;
+	      margin-top: 4px;
+	      color: #021421;
+	      font-size: 20px;
+	      line-height: 1;
+	    }
+	    .shopping-layout {
+	      display: grid;
+	      grid-template-columns: 260px minmax(0,1fr);
+	      gap: 18px;
+	      align-items: start;
+	    }
+	    .shopping-layout.sidebar-empty { grid-template-columns: 1fr; }
+	    .department-sidebar {
+	      position: sticky;
+	      top: 14px;
+	      display: grid;
+	      gap: 0;
+	      padding: 0;
+	      border: 1px solid rgba(116,205,235,0.2);
+	      border-radius: 8px;
+	      background: #071a27;
+	      overflow: hidden;
+	      box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.035);
+	    }
+	    .department-sidebar:empty { display: none; }
+	    .sidebar-section { border-bottom: 1px solid rgba(116,205,235,0.12); }
+	    .sidebar-section:last-child { border-bottom: none; }
+	    .sidebar-toggle {
+	      display: flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      width: 100%;
+	      padding: 12px 16px;
+	      border: 0;
+	      background: transparent;
+	      color: #fff;
+	      font-size: 13px;
+	      font-weight: 800;
+	      text-transform: uppercase;
+	      letter-spacing: 0.06em;
+	      cursor: pointer;
+	    }
+	    .sidebar-body { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+	    .sidebar-body.open { max-height: 700px; }
+	    .sidebar-body-inner { padding: 0 16px 14px; }
+	    .sidebar-body-inner a,
+	    .sidebar-body-inner span {
+	      display: block;
+	      padding: 5px 0;
+	      border-top: 1px solid rgba(116,205,235,0.08);
+	      color: #9fb8c7;
+	      font-size: 13px;
+	      font-weight: 750;
+	    }
+	    .sidebar-body-inner a:hover,
+	    .sidebar-body-inner .active-filter { color: #40d9ff; font-weight: 850; }
+	    .count-bar {
+	      display: flex;
+	      justify-content: space-between;
+	      align-items: center;
+	      margin-bottom: 14px;
+	      padding-bottom: 10px;
+	      border-bottom: 1px solid rgba(116,205,235,0.2);
+	    }
+	    .count-bar span { color: #a9cbd9; font-size: 13px; font-weight: 800; }
+	    .count-bar .total { color: #40d9ff; }
+	    .pagination {
+	      display: flex;
+	      justify-content: center;
+	      gap: 8px;
+	      flex-wrap: wrap;
+	      margin: 28px 0 12px;
+	    }
+	    .pagination button {
+	      min-height: 38px;
+	      padding: 8px 16px;
+	      border: 1px solid rgba(116,205,235,0.2);
+	      border-radius: 6px;
+	      color: #a9cbd9;
+	      background: transparent;
+	      font-size: 14px;
+	      font-weight: 800;
+	      cursor: pointer;
+	    }
+	    .pagination button:hover,
+	    .pagination button.active {
+	      border-color: #40d9ff;
+	      color: #fff;
+	      background: linear-gradient(180deg,#0db6c6,#0089a8);
+	    }
+	    .pagination .info {
+	      display: flex;
+	      align-items: center;
+	      color: #a9cbd9;
+	      font-size: 13px;
+	      font-weight: 700;
+	    }
     #products .filters button {
       color: #18455b;
       border-color: #c7dfe8;
@@ -1552,7 +1750,7 @@
   </style>
 </head>
 <body>
-  <main class="page">
+  <main class="page" id="top">
     <header class="header">
       <a class="brand" href="../../">
         <img src="assets/site/logo-full.png" alt="The Hidden Reef" />
@@ -1632,11 +1830,18 @@
 
     <section class="section-band alt" id="products" aria-labelledby="products-title">
       <div class="section-head">
-        <h2 id="products-title">New Arrivals</h2>
-        <a href="category/?filter=new-arrivals">Open Shopping Layout →</a>
+        <h2 id="products-title">Shop New Arrivals</h2>
       </div>
-      <p class="arrival-note">A preview of recent catalog items. Open the shopping layout to filter by New Arrivals, category, brand, and sort order.</p>
-      <div class="thr-product-grid" id="new-arrivals-grid"></div>
+      <div class="product-controls" id="product-controls"></div>
+      <div class="department-switcher" id="department-switcher"></div>
+      <div class="shopping-layout">
+        <aside class="department-sidebar" id="department-sidebar" aria-label="Department filters"></aside>
+        <section class="product-results" aria-label="Products">
+          <div class="count-bar" id="count-bar"></div>
+          <div class="thr-product-grid" id="product-grid"></div>
+          <div class="pagination" id="pagination"></div>
+        </section>
+      </div>
     </section>
 
     <section class="section-band" id="visit" aria-label="Visit the store">
@@ -1699,62 +1904,34 @@
     <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef →</a>
   </aside>
 
-  <script src="assets/products.js"></script>
-  <script src="assets/product-data.js"></script>
-  <script src="assets/catalog-utils.js"></script>
-  <script src="assets/thr-cards.js"></script>
-  <script src="assets/link-modal.js"></script>
-  <script>
-    const search = document.getElementById('search');
-    const cartCount = document.getElementById('cart-count');
-    const cartItems = document.getElementById('cart-items');
-    const emptyCart = document.getElementById('empty-cart');
-    const cart = [];
-    const homeProductSlugs = {
-      all: ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'],
-      saltwater: ['skimmers', 'marine-test-kits', 'coral-supplements', 'controllers', 'wave-makers', 'reactors'],
-      freshwater: ['starter-kits', 'planted', 'water-conditioners', 'test-kits', 'co2'],
-      pond: ['pond-supplies', 'pond-pumps', 'pond-additives', 'pond-food', 'pond-bacteria'],
-      equipment: ['led-fixtures', 'canister-filters', 'heaters', 'air-pumps', 'filter-media', 'controllers', 'pumps', 'plumbing-parts', 'r-o'],
-      food: ['flake-tropical', 'feeders', 'freeze-dry', 'pond-food'],
-      decor: ['ornaments', 'all-decorations', 'reptile', 'dog-supplies'],
-      maintenance: ['gravel-cleaners', 'filter-media', 'water-conditioners', 'test-kits']
-    };
-
-    function getHomeProducts(filter) {
-      const slugs = homeProductSlugs[filter] || homeProductSlugs.all;
-      if (!window.THR_PRODUCTS) return [];
-      const perSlug = filter === 'all' ? 3 : 6;
-      const products = [];
-      for (const slug of slugs) {
-        const grouped = window.THR?.groupProductVariants
-          ? THR.groupProductVariants(THR_PRODUCTS[slug] || [])
-          : (THR_PRODUCTS[slug] || []);
-        for (const product of grouped.slice(0, perSlug)) {
-          products.push(product);
-          if (products.length >= 24) return products;
-        }
-      }
-      return products;
-    }
-
-    function renderNewArrivalsPreview() {
-      THR.renderProductList('new-arrivals-grid', getHomeProducts('all'));
-      const q = (search.value || '').trim().toLowerCase();
-      document.querySelectorAll('#new-arrivals-grid .thr-product').forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = !q || text.includes(q) ? '' : 'none';
-      });
-    }
-    search.addEventListener('input', () => renderNewArrivalsPreview());
-    document.querySelector('.search-box').addEventListener('submit', e => { e.preventDefault(); renderNewArrivalsPreview(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
-    document.querySelector('.close-cart').addEventListener('click', () => document.body.classList.remove('cart-open'));
-    function renderCart() {
-      cartCount.textContent = cart.length;
-      emptyCart.style.display = cart.length ? 'none' : '';
-      cartItems.innerHTML = cart.map(name => '<div class="cart-item"><strong>' + name + '</strong><span>Qty 1</span></div>').join('');
-    }
-    renderNewArrivalsPreview();
-  </script>
-</body>
-</html>
+	  <script src="assets/products.js"></script>
+	  <script src="assets/product-data.js"></script>
+	  <script src="assets/catalog-utils.js"></script>
+	  <script src="assets/thr-cards.js"></script>
+	  <script src="assets/link-modal.js"></script>
+	  <script>
+	    window.THR_CATEGORY_CONFIG = {
+	      assetBase: 'assets',
+	      categoryBase: 'category/',
+	      homeHref: '#top',
+	      defaultFilter: 'new-arrivals'
+	    };
+	    const cartCount = document.getElementById('cart-count');
+	    const cartItems = document.getElementById('cart-items');
+	    const emptyCart = document.getElementById('empty-cart');
+	    const cart = [];
+	    document.querySelector('.search-box')?.addEventListener('submit', e => {
+	      e.preventDefault();
+	      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
+	    });
+	    document.querySelector('.close-cart').addEventListener('click', () => document.body.classList.remove('cart-open'));
+	    function renderCart() {
+	      cartCount.textContent = cart.length;
+	      emptyCart.style.display = cart.length ? 'none' : '';
+	      cartItems.innerHTML = cart.map(name => '<div class="cart-item"><strong>' + name + '</strong><span>Qty 1</span></div>').join('');
+	    }
+	    renderCart();
+	  </script>
+	  <script src="assets/category.js"></script>
+	</body>
+	</html>

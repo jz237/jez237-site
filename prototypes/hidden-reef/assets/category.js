@@ -7,6 +7,11 @@
   const PRODUCTS_PER_PAGE = 24;
   const NEW_ARRIVALS_FILTER = 'new-arrivals';
   const NEW_ARRIVAL_SLUGS = ['starter-kits', 'planted', 'flake-tropical', 'skimmers', 'pond-supplies', 'led-fixtures', 'ornaments', 'gravel-cleaners', 'controllers', 'pumps'];
+  const pageConfig = window.THR_CATEGORY_CONFIG || {};
+  const categoryBase = pageConfig.categoryBase || './';
+  const assetBase = pageConfig.assetBase || '../assets';
+  const homeHref = pageConfig.homeHref || '../';
+  const defaultFilter = pageConfig.defaultFilter || '';
   let currentPage = 1;
   let currentProducts = [];
   let baseProducts = [];
@@ -189,7 +194,7 @@
       .sort((a, b) => a[1].localeCompare(b[1]));
     const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">New Arrivals</option>' : '';
     const categoryOptions = newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
-    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="../">Home</a>';
+    el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
 
     el.querySelectorAll('select').forEach(control => {
       control.addEventListener('change', () => updateProductView(1));
@@ -227,24 +232,24 @@
     const desc = sub ? sub.description : (cat ? cat.description : 'Browse our full catalog');
     const sourceUrl = sub ? sub.sourceUrl : '';
     const heroImages = {
-      freshwater: '../assets/department/freshwater.jpg',
-      saltwater: '../assets/department/saltwater-reef.jpg',
-      aquariums: '../assets/department/aquarium.jpg',
-      additives: '../assets/department/additives.png',
-      pond: '../assets/department/pond.jpg',
-      equipment: '../assets/department/lighting.jpg',
-      lighting: '../assets/department/lighting.jpg',
-      food: '../assets/department/food-care.jpg',
-      decor: '../assets/department/aquascaping.jpg',
-      decorations: '../assets/department/aquascaping.jpg',
-      maintenance: '../assets/department/maintenance-care.jpg',
-      filtration: '../assets/department/maintenance-care.jpg',
-      testing: '../assets/department/maintenance-care.jpg',
-      'air-equipment': '../assets/department/maintenance-care.jpg',
-      'heating-temperature': '../assets/department/lighting.jpg',
-      'protein-skimmers': '../assets/department/saltwater-reef.jpg'
+      freshwater: assetBase + '/department/freshwater.jpg',
+      saltwater: assetBase + '/department/saltwater-reef.jpg',
+      aquariums: assetBase + '/department/aquarium.jpg',
+      additives: assetBase + '/department/additives.png',
+      pond: assetBase + '/department/pond.jpg',
+      equipment: assetBase + '/department/lighting.jpg',
+      lighting: assetBase + '/department/lighting.jpg',
+      food: assetBase + '/department/food-care.jpg',
+      decor: assetBase + '/department/aquascaping.jpg',
+      decorations: assetBase + '/department/aquascaping.jpg',
+      maintenance: assetBase + '/department/maintenance-care.jpg',
+      filtration: assetBase + '/department/maintenance-care.jpg',
+      testing: assetBase + '/department/maintenance-care.jpg',
+      'air-equipment': assetBase + '/department/maintenance-care.jpg',
+      'heating-temperature': assetBase + '/department/lighting.jpg',
+      'protein-skimmers': assetBase + '/department/saltwater-reef.jpg'
     };
-    const heroImage = cat ? heroImages[cat.slug] : '../assets/site/hero-aquatic-world.jpg';
+    const heroImage = cat ? heroImages[cat.slug] : assetBase + '/site/hero-aquatic-world.jpg';
     el.style.setProperty('--cat-hero-image', 'url("' + heroImage + '")');
     let html = `<div class="cat-header__copy"><h1>${title}</h1><p>${desc}</p></div>`;
     const actions = [];
@@ -273,9 +278,9 @@
     ];
     const tabs = departments.map(([slug, label]) => {
       const active = slug === activeCatSlug ? ' active' : '';
-      return '<a class="department-tab' + active + '" href="?cat=' + slug + '">' + label + '</a>';
+      return '<a class="department-tab' + active + '" href="' + categoryBase + '?cat=' + slug + '">' + label + '</a>';
     }).join('');
-    el.innerHTML = '<div class="department-tabs" aria-label="Shop by department">' + tabs + '</div><a class="department-all-products" href="./"><span>Reset department</span><strong>Shop all products</strong></a>';
+    el.innerHTML = '<div class="department-tabs" aria-label="Shop by department">' + tabs + '</div><a class="department-all-products" href="' + categoryBase + '"><span>Reset department</span><strong>Shop all products</strong></a>';
   }
 
   const sidebarConfig = {
@@ -578,7 +583,7 @@
     let html = '';
     pageProducts.forEach((p, i) => {
       const brand = extractBrand(p.name);
-      const imgSrc = p.imageUrl || '../assets/site/product-placeholder.jpg';
+      const imgSrc = p.imageUrl || assetBase + '/site/product-placeholder.jpg';
       const imgAlt = (p.name || 'Product').replace(/"/g, '&quot;');
       const name = (p.name || 'Unknown Product').replace(/</g, '&lt;');
       const price = formatPrice(p.price);
@@ -705,7 +710,8 @@
       const brandFilter = document.getElementById('brand-filter');
       if (brandFilter) brandFilter.value = params.brand;
     }
-    if (showNewArrivalsFilter && params.filter === NEW_ARRIVALS_FILTER) {
+    const initialFilter = params.filter || defaultFilter;
+    if (showNewArrivalsFilter && initialFilter === NEW_ARRIVALS_FILTER) {
       const categoryFilter = document.getElementById('category-filter');
       if (categoryFilter) categoryFilter.value = NEW_ARRIVALS_FILTER;
     }
