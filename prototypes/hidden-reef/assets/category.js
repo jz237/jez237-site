@@ -205,6 +205,7 @@
     const desc = sub ? sub.description : (cat ? cat.description : 'Browse our full catalog');
     const sourceUrl = sub ? sub.sourceUrl : '';
     const heroImages = {
+      freshwater: '../assets/department/freshwater.jpg',
       saltwater: '../assets/department/saltwater-reef.jpg',
       aquariums: '../assets/department/aquarium.jpg',
       additives: '../assets/department/additives.png',

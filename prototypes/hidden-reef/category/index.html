@@ -80,7 +80,7 @@
     /* Category header */
     .cat-header {
       position:relative;
-      min-height:220px;
+      min-height:clamp(330px,34vw,390px);
       display:grid;
       grid-template-columns:minmax(0,1fr) auto;
       gap:20px;
@@ -426,7 +426,7 @@
       .main-nav a:nth-child(3n+1) { border-left:0; }
     }
     @media (max-width:760px) {
-      .cat-header { grid-template-columns:1fr; }
+      .cat-header { grid-template-columns:1fr; min-height:300px; }
       .cat-header__actions { justify-content:flex-start; }
       .department-switcher { grid-template-columns:1fr; }
       .product-controls { grid-template-columns:1fr; }
