@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T08:00:01.250657+00:00",
+  "updatedAt": "2026-05-20T09:00:01.816808+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7512,6 +7512,10 @@
     "https://openai.com/index/introducing-openai-for-singapore": {
       "image": "",
       "checkedAt": "2026-05-20T04:00:01.783498+00:00"
+    },
+    "https://openai.com/index/the-next-phase-of-education-for-countries": {
+      "image": "",
+      "checkedAt": "2026-05-20T09:00:01.816808+00:00"
     }
   }
 }
