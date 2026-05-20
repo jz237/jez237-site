@@ -282,6 +282,13 @@
         assetBase + '/department/freshwater-hero-3.jpg',
         assetBase + '/department/freshwater-hero-4.jpg',
         assetBase + '/department/freshwater-hero-5.jpg'
+      ],
+      pond: [
+        assetBase + '/department/pond.jpg',
+        assetBase + '/department/pond-hero-2.jpg',
+        assetBase + '/department/pond-hero-3.jpg',
+        assetBase + '/department/pond-hero-4.jpg',
+        assetBase + '/department/pond-hero-5.jpg'
       ]
     };
     const heroImage = cat ? heroImages[cat.slug] : assetBase + '/site/hero-aquatic-world.jpg';
