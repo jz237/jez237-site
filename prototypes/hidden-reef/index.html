@@ -165,6 +165,7 @@
     .main-nav::-webkit-scrollbar { display: none; }
     .hero {
       position: relative;
+      isolation: isolate;
       min-height: 246px;
       overflow: hidden;
       border-radius: 0 0 8px 8px;
@@ -1867,10 +1868,10 @@
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-slides" aria-hidden="true">
         <img class="is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
-        <img src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="lazy" />
-        <img src="assets/site/hero-aquatic-world-3.jpg" alt="" loading="lazy" />
-        <img src="assets/site/hero-aquatic-world-4.jpg" alt="" loading="lazy" />
-        <img src="assets/site/hero-aquatic-world-5.jpg" alt="" loading="lazy" />
+        <img src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="eager" />
+        <img src="assets/site/hero-aquatic-world-3.jpg" alt="" loading="eager" />
+        <img src="assets/site/hero-aquatic-world-4.jpg" alt="" loading="eager" />
+        <img src="assets/site/hero-aquatic-world-5.jpg" alt="" loading="eager" />
       </div>
       <div class="hero-content">
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
