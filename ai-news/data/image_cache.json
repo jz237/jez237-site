@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T15:52:26.707947+00:00",
+  "updatedAt": "2026-05-20T17:00:01.947918+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7556,6 +7556,14 @@
     "https://techcrunch.com/2026/05/20/stability-ai-release-a-new-audio-model-that-can-create-six-minute-songs": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-1480808838.jpg?resize=1200,800",
       "checkedAt": "2026-05-20T15:52:26.707947+00:00"
+    },
+    "https://www.theverge.com/tech/934704/google-gemini-omni-youtub-shorts-remix-ai": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/youtube-shorts-remix.jpg?quality=90&amp;strip=all&amp;crop=2.25%2C0%2C95.5%2C100&amp;w=1200",
+      "checkedAt": "2026-05-20T17:00:01.947918+00:00"
+    },
+    "https://www.theverge.com/tech/934585/google-ai-shopping-ads-search": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/search-ads-ai.png?quality=90&amp;strip=all&amp;crop=0,16.342557965595,100,67.314884068811",
+      "checkedAt": "2026-05-20T17:00:01.947918+00:00"
     }
   }
 }
