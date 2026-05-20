@@ -586,5 +586,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-20-morning-ionosphere-kelp-aerostat",
+    "title": "Ionosphere Kelp Aerostat",
+    "tests": "Tests atmospheric sci-fi infrastructure, airborne biomaterials, translucent biofilm antennas, and subtle luminous radio-wave patterns without relying on space-station or planetary-surface tropes.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed hard-science-fiction scene titled conceptually \"Ionosphere Kelp Aerostat\", with no visible text, no logos, and no dancing, dancers, performance, ballet, or dance-like poses of any kind.\n\nScene/backdrop: the upper atmosphere of a blue exoplanet at sunrise, far above a curved cloud deck tinted peach and turquoise. The horizon shows thin aurora bands and faint stars fading into daylight.\n\nSubject: a vast floating research aerostat shaped like a transparent seed pod, tethered to drifting engineered kelp-like antenna forests. The kelp fronds are not underwater: they hang and curl slowly in thin air from carbon-fiber booms, made of translucent green-gold biofilm with embedded copper signal veins and tiny ceramic sensor beads. Several small maintenance drones hover nearby for scale, inspecting the fronds with soft white lights.\n\nDetails/materials: clear pressure blisters with warm habitat windows inside the pod, braided superconducting tethers, matte graphite trusses, frost crystals on shaded struts, condensation halos around vents, and delicate radio-wave interference patterns visible as subtle luminous ripples through the mist. Below, distant storm towers rise from the cloud sea like dark islands.\n\nComposition/style: cinematic three-quarter view from slightly above, the aerostat centered but asymmetrical, kelp antenna arrays sweeping diagonally across the frame, strong depth from foreground fronds to distant clouds. Realistic industrial design, plausible science-fiction engineering, intricate material contrast between glass, biofilm, copper, graphite, and vapor. Rich but restrained color palette, crisp detail, atmospheric volumetric light, no readable labels or typography.",
+    "image": "images/2026-05-20-morning-ionosphere-kelp-aerostat.png",
+    "date": "2026-05-20",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
