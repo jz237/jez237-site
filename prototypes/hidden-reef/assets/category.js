@@ -278,10 +278,7 @@
     const heroRotators = {
       freshwater: [
         assetBase + '/department/freshwater.jpg',
-        assetBase + '/department/freshwater-hero-2.jpg',
-        assetBase + '/department/freshwater-hero-3.jpg',
-        assetBase + '/department/freshwater-hero-4.jpg',
-        assetBase + '/department/freshwater-hero-5.jpg'
+        assetBase + '/department/freshwater-hero-2.jpg'
       ],
       pond: [
         assetBase + '/department/pond.jpg',
