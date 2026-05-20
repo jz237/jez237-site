@@ -15,7 +15,9 @@
   let currentPage = 1;
   let currentProducts = [];
   let baseProducts = [];
+  let currentCategory = null;
   let currentSubcategory = null;
+  let currentResultLabel = '';
   let showNewArrivalsFilter = false;
 
   function getParams() {
@@ -81,6 +83,15 @@
     return null;
   }
 
+  function findSubcategoryGlobal(subSlug) {
+    if (!THR || !THR.categories) return null;
+    for (const key of Object.keys(THR.categories)) {
+      const sub = findSubcategory(THR.categories[key], subSlug);
+      if (sub) return sub;
+    }
+    return null;
+  }
+
   function getProducts(subSlug) {
     if (!window.THR_PRODUCTS || !THR_PRODUCTS[subSlug]) return [];
     const meta = getCategoryMeta(subSlug);
@@ -90,6 +101,15 @@
       groupSlug: meta.groupSlug || '',
       groupName: meta.groupName || ''
     }));
+  }
+
+  function getCategoryProducts(cat) {
+    let products = [];
+    if (!cat || !cat.children) return products;
+    for (const child of Object.values(cat.children)) {
+      products = products.concat(getProducts(child.slug));
+    }
+    return products;
   }
 
   function getCategoryMeta(subSlug) {
@@ -546,13 +566,24 @@
     }
     layout?.classList.remove('sidebar-empty');
     const html = sidebarConfig[cat.slug].map((section, index) => {
-      const open = section.open || index === 0;
+      const sectionHasActive = section.items.some(item => {
+        if (item.type !== 'link') return false;
+        const itemParams = new URLSearchParams(item.href.replace(/^\?/, ''));
+        const itemSub = itemParams.get('sub') || '';
+        const itemCat = itemParams.get('cat') || '';
+        return currentSubcategory ? itemSub === currentSubcategory.slug : itemCat === cat.slug && !itemSub;
+      });
+      const open = section.open || index === 0 || sectionHasActive;
       const items = section.items.map(item => {
         if (item.type === 'check') {
           return '<div class="check-item">' + escapeHtml(item.label) + '</div>';
         }
-        const active = item.active ? ' class="active-filter"' : '';
-        return '<a href="' + item.href + '"' + active + '>' + escapeHtml(item.label) + '</a>';
+        const itemParams = new URLSearchParams(item.href.replace(/^\?/, ''));
+        const itemSub = itemParams.get('sub') || '';
+        const itemCat = itemParams.get('cat') || '';
+        const isActive = currentSubcategory ? itemSub === currentSubcategory.slug : itemCat === cat.slug && !itemSub;
+        const active = isActive ? ' class="active-filter"' : '';
+        return '<a href="' + item.href + '" data-sidebar-filter="true"' + active + '>' + escapeHtml(item.label) + '</a>';
       }).join('');
       return '<div class="sidebar-section"><button class="sidebar-toggle" type="button" aria-expanded="' + (open ? 'true' : 'false') + '">' + escapeHtml(section.title) + ' <span class="arrow">▶</span></button><div class="sidebar-body' + (open ? ' open' : '') + '"><div class="sidebar-body-inner">' + items + '</div></div></div>';
     }).join('');
@@ -564,6 +595,50 @@
         button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
     });
+    el.querySelectorAll('[data-sidebar-filter]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        applySidebarFilter(link);
+      });
+    });
+  }
+
+  function applySidebarFilter(link) {
+    if (!currentCategory) return;
+    const params = new URLSearchParams(link.getAttribute('href').replace(/^\?/, ''));
+    const targetCat = findCategory(params.get('cat') || '');
+    const subSlug = params.get('sub') || '';
+    const targetSub = subSlug ? findSubcategory(targetCat, subSlug) || findSubcategoryGlobal(subSlug) : null;
+    const activeSection = link.closest('.sidebar-section');
+
+    document.querySelectorAll('#department-sidebar .active-filter').forEach(active => active.classList.remove('active-filter'));
+    link.classList.add('active-filter');
+    if (activeSection) {
+      activeSection.querySelector('.sidebar-body')?.classList.add('open');
+      activeSection.querySelector('.sidebar-toggle')?.setAttribute('aria-expanded', 'true');
+    }
+
+    if (targetSub) {
+      currentSubcategory = targetSub;
+      currentResultLabel = targetSub.name;
+      baseProducts = getProducts(targetSub.slug);
+    } else if (targetCat && targetCat.slug !== currentCategory.slug) {
+      currentSubcategory = null;
+      currentResultLabel = targetCat.name;
+      baseProducts = getCategoryProducts(targetCat);
+    } else {
+      currentSubcategory = null;
+      currentResultLabel = currentCategory.name;
+      baseProducts = getCategoryProducts(currentCategory);
+    }
+
+    const categoryFilter = document.getElementById('category-filter');
+    const brandFilter = document.getElementById('brand-filter');
+    const sortControl = document.getElementById('sort-products');
+    if (categoryFilter) categoryFilter.value = '';
+    if (brandFilter) brandFilter.value = '';
+    if (sortControl) sortControl.value = 'featured';
+    updateProductView(1);
   }
 
   function renderProducts(products, page) {
@@ -648,7 +723,7 @@
     const selectedCategory = controls.category
       ? document.querySelector('#category-filter option:checked')?.textContent || ''
       : '';
-    const label = sub ? sub.name : (selectedCategory || 'All products');
+    const label = selectedCategory || currentResultLabel || (sub ? sub.name : 'All products');
     el.innerHTML = `<span>${label}</span><span class="total">${shown} of ${total} products shown</span>`;
   }
 
@@ -676,7 +751,9 @@
 
     const cat = findCategory(params.cat);
     const sub = params.sub ? findSubcategory(cat, params.sub) : null;
+    currentCategory = cat;
     currentSubcategory = sub;
+    currentResultLabel = sub ? sub.name : (cat ? cat.name : '');
     showNewArrivalsFilter = !cat && !sub;
 
     renderBreadcrumb(cat, sub);
@@ -689,12 +766,7 @@
     if (sub) {
       products = getProducts(sub.slug);
     } else if (cat) {
-      products = [];
-      if (cat.children) {
-        for (const child of Object.values(cat.children)) {
-          products = products.concat(getProducts(child.slug));
-        }
-      }
+      products = getCategoryProducts(cat);
     } else {
       products = [];
       if (window.THR_PRODUCTS) {
