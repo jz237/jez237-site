@@ -176,18 +176,55 @@
       border: 1px solid rgba(116,205,235,0.22);
       box-shadow: 0 18px 44px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.08);
     }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(56,215,255,0.24), transparent 27%),
+        linear-gradient(90deg, rgba(1,13,27,0.96) 0%, rgba(1,35,62,0.84) 35%, rgba(0,48,75,0.16) 72%);
+      pointer-events: none;
+    }
     .hero::after {
       content: "";
       position: absolute;
       inset: auto 0 0 0;
+      z-index: 3;
       height: 34%;
       background: linear-gradient(180deg, transparent, rgba(0,11,22,0.54));
       pointer-events: none;
     }
+    .hero-slides {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(90deg, #021421, #05344f);
+    }
+    .hero-slides img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      opacity: 0;
+      animation: reefHeroFade 20s infinite;
+    }
+    .hero-slides img:nth-child(1) { animation-delay: 0s; }
+    .hero-slides img:nth-child(2) { animation-delay: 4s; }
+    .hero-slides img:nth-child(3) { animation-delay: 8s; }
+    .hero-slides img:nth-child(4) { animation-delay: 12s; }
+    .hero-slides img:nth-child(5) { animation-delay: 16s; }
+    @keyframes reefHeroFade {
+      0%, 17% { opacity: 1; }
+      25%, 92% { opacity: 0; }
+      100% { opacity: 1; }
+    }
     .hero-content {
       max-width: 540px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
       padding: 34px clamp(22px, 5vw, 58px);
       color: #fff;
     }
@@ -1715,6 +1752,9 @@
         margin-top: 12px;
         background-position: 62% center;
       }
+      .hero-slides img {
+        object-position: 62% center;
+      }
       .hero-content {
         padding: 30px 18px;
       }
@@ -1792,9 +1832,17 @@
 	        align-items: flex-start;
 	        flex-direction: column;
 	        gap: 6px;
-	      }
-	    }
-	  </style>
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-slides img {
+        animation: none;
+      }
+      .hero-slides img:first-child {
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 <body>
   <main class="page" id="top">
@@ -1824,6 +1872,13 @@
     </nav>
 
     <section class="hero" aria-labelledby="page-title">
+      <div class="hero-slides" aria-hidden="true">
+        <img src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
+        <img src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="lazy" />
+        <img src="assets/site/hero-aquatic-world-3.jpg" alt="" loading="lazy" />
+        <img src="assets/site/hero-aquatic-world-4.jpg" alt="" loading="lazy" />
+        <img src="assets/site/hero-aquatic-world-5.jpg" alt="" loading="lazy" />
+      </div>
       <div class="hero-content">
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
         <p>Everything aquarium: freshwater, saltwater, ponds, plants, coral, equipment, food, and expert help from a real local store.</p>
