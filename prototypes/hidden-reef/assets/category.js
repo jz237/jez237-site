@@ -162,6 +162,7 @@
     const brandOptions = brands.map(brand => '<option value="' + escapeHtml(brand) + '">' + escapeHtml(brand) + '</option>').join('');
     const categories = Array.from(new Map(products
       .filter(product => product.groupSlug && product.groupName)
+      .filter(product => product.groupSlug !== 'aquariums')
       .map(product => [product.groupSlug, product.groupName]))
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
@@ -224,9 +225,6 @@
     el.style.setProperty('--cat-hero-image', 'url("' + heroImage + '")');
     let html = `<div class="cat-header__copy"><h1>${title}</h1><p>${desc}</p></div>`;
     const actions = [];
-    if (cat || sub) {
-      actions.push('<a class="source-link all-products-link" href="./">View all products</a>');
-    }
     if (sourceUrl) {
       actions.push(`<a class="source-link" href="${sourceUrl}" target="_blank" rel="noopener">View on Hidden Reef site ↗</a>`);
     }
@@ -244,7 +242,6 @@
       ['saltwater', 'Saltwater'],
       ['freshwater', 'Freshwater'],
       ['pond', 'Pond'],
-      ['aquariums', 'Aquariums'],
       ['additives', 'Additives'],
       ['equipment', 'Equipment'],
       ['food', 'Food'],
@@ -269,7 +266,7 @@
           { type: 'check', label: 'Corals & Frags (in-store)' },
           { type: 'check', label: 'Invertebrates (in-store)' },
           { type: 'check', label: 'Cleanup Crew (in-store)' },
-          { type: 'link', label: 'Reef Systems & Tanks', href: '?cat=aquariums' }
+          { type: 'link', label: 'Reef Systems & Tanks', href: '?cat=saltwater&sub=starter-kits' }
         ]
       },
       {
@@ -541,28 +538,6 @@
     });
   }
 
-  function renderSubcatTabs(cat, activeSubSlug) {
-    const el = document.getElementById('subcat-tabs');
-    if (!el || !cat || !cat.children) return;
-    const subs = Object.values(cat.children);
-    if (subs.length <= 1) { el.innerHTML = ''; return; }
-
-    let html = `<button class="subcat-tab ${!activeSubSlug ? 'active' : ''}" data-sub="">All ${cat.name}</button>`;
-    for (const sub of subs) {
-      const isActive = sub.slug === activeSubSlug ? 'active' : '';
-      html += `<button class="subcat-tab ${isActive}" data-sub="${sub.slug}">${sub.name}</button>`;
-    }
-    el.innerHTML = html;
-
-    el.querySelectorAll('.subcat-tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const subSlug = btn.dataset.sub;
-        const url = subSlug ? `?cat=${cat.slug}&sub=${subSlug}` : `?cat=${cat.slug}`;
-        window.location.href = url;
-      });
-    });
-  }
-
   function renderProducts(products, page) {
     const el = document.getElementById('product-grid');
     if (!el) return;
@@ -679,7 +654,6 @@
     renderHeader(cat, sub);
     renderDepartmentSwitcher(cat ? cat.slug : '');
     renderDepartmentSidebar(cat);
-    renderSubcatTabs(cat, params.sub);
 
     // Get products
     let products;
