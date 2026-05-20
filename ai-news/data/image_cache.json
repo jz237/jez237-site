@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T14:00:01.598006+00:00",
+  "updatedAt": "2026-05-20T15:00:01.971526+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7528,6 +7528,22 @@
     "https://www.theverge.com/ai-artificial-intelligence/933687/utah-stratos-project-data-center-kevin-oleary": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKP224_KEVIN_O_LEARY_CVIRGINIA_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-20T14:00:01.598006+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/934521/google-synthid-c2pa-content-credentials-ai-labelling-efforts": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/ai-label-swag-pope.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-20T15:00:01.971526+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/nanoclaw-creator-turns-down-20m-buyout-offer-raises-12m-seed-instead": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/NanoClaw-fouders-2.jpg?resize=1200,708",
+      "checkedAt": "2026-05-20T15:00:01.971526+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/startup-battlefield-200-applications-close-in-one-week-window-to-nominate-and-apply-for-the-most-promising-startups-ends-may-27": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200,800",
+      "checkedAt": "2026-05-20T15:00:01.971526+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/19/1137454/roundtables-inside-the-musk-v-altman-trial": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MITTR-Roundtables-Zoom-Opening-Overlay_a83ddf.png?resize=1200,600",
+      "checkedAt": "2026-05-20T15:00:01.971526+00:00"
     }
   }
 }
