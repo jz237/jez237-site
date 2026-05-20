@@ -248,7 +248,7 @@
   function renderHeader(cat, sub) {
     const el = document.getElementById('cat-header');
     if (!el) return;
-    const title = sub ? sub.name : (cat ? cat.name : 'All Products');
+    const title = sub ? sub.name : (cat ? cat.name + ' Dept.' : 'All Products');
     const desc = sub ? sub.description : (cat ? cat.description : 'Browse our full catalog');
     const sourceUrl = sub ? sub.sourceUrl : '';
     const heroImages = {
