@@ -598,5 +598,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-20-afternoon-verdigris-spell-quarry",
+    "title": "Verdigris Spell Quarry",
+    "tests": "Explores wet mineral fantasy craft, luminous spell-vein extraction, and oxidized copper quarry machinery without performance imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed fantasy craft landscape titled conceptually \"Verdigris Spell Quarry\", with no visible text, no logos, and no dancing, dancers, performance, ballet, or dance-like poses of any kind.\n\nScene/backdrop: a rain-darkened open quarry carved into green-black serpentine stone at twilight, with stepped terraces, wet rock faces, narrow mine rails, copper gutters, and shallow pools reflecting a storm-cleared violet sky. Ancient cedar scaffolds and brass hoists cling to the quarry walls; small lanterns glow under overhangs.\n\nSubject: quiet stone-mages and quarry artisans in practical still working poses carefully extract raw spells as luminous mineral veins from the rock. The spell seams look like glowing turquoise and warm amber crystal strata, not written words: translucent sheets, geode pockets, vapor wisps, and floating dust motes that crystallize into tiny hexagonal sparks. A central levitation crane lifts one intact slab of enchanted stone, wrapped in copper bands and dripping rainwater.\n\nVisual style: cinematic fantasy realism, tactile wet stone, oxidized copper, moss, mineral translucency, soft lantern warmth against cool twilight, high detail without clutter, believable scale, no readable text anywhere.",
+    "image": "images/2026-05-20-afternoon-verdigris-spell-quarry.png",
+    "date": "2026-05-20",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
