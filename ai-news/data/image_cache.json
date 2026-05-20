@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T23:00:01.860070+00:00",
+  "updatedAt": "2026-05-20T00:00:01.186896+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7488,6 +7488,26 @@
     "https://techcrunch.com/2026/05/19/google-takes-a-page-out-of-metas-book-announces-new-audio-powered-smart-glasses-at-io-2026": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/IMG_1421.jpg?resize=1200,900",
       "checkedAt": "2026-05-19T23:00:01.860070+00:00"
+    },
+    "https://simonwillison.net/2026/May/19/llm-gemini-2": {
+      "image": "",
+      "checkedAt": "2026-05-20T00:00:01.186896+00:00"
+    },
+    "https://simonwillison.net/2026/May/19/datasette-llm-accountant": {
+      "image": "",
+      "checkedAt": "2026-05-20T00:00:01.186896+00:00"
+    },
+    "https://simonwillison.net/2026/May/19/llm-gemini": {
+      "image": "",
+      "checkedAt": "2026-05-20T00:00:01.186896+00:00"
+    },
+    "https://simonwillison.net/2026/May/19/datasette-llm": {
+      "image": "",
+      "checkedAt": "2026-05-20T00:00:01.186896+00:00"
+    },
+    "https://www.anthropic.com/news/widening-conversation-ai": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Chat&amp;backgroundColor=sky",
+      "checkedAt": "2026-05-20T00:00:01.186896+00:00"
     }
   }
 }
