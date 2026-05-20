@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T12:00:01.626381+00:00",
+  "updatedAt": "2026-05-20T12:02:14.712570+00:00",
   "items": [
     {
       "title": "Jia Wei, Zhonghao Zhang, Ping Chen, Qianyang li, Yancheng Pan, Shaoxun Wang, Ziyi Qiu, Longxiang Wang",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-20T12:00:08.525163+00:00",
+      "published": "2026-05-20T12:02:19.445097+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "How one startup turned backers into believers: MAGFAST broke the crowdfunding mold",
+      "url": "https://thenextweb.com/news/magfast-broke-crowdfunding-mold-backers-into-believers",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Picture Kevin. It’s 2014, and on Kickstarter he has just backed the Coolest Cooler, a portable cooler with a built-in blender, a Bluetooth speaker, and a USB charger. Finally, an innovative product that lets him host the perfect beach party. To Kevin, it feels like he’s caught onto something unique, fresh, exciting, before everyone else. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/magfast-broke-crowdfunding-mold-backers-into-believers.avif",
+      "published": "2026-05-20T11:58:12+00:00",
+      "firstSeen": "2026-05-20T12:02:14.712570+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1479
     },
     {
       "title": "NVIDIA AI Releases Nemotron-Labs-Diffusion: A Tri-Mode Language Model with 6× Tokens Per Forward Over Qwen3-8B",
@@ -31,7 +47,7 @@
       "lastSeen": "2026-05-20T12:00:01.626381+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.1805
+      "score": 8.1794
     },
     {
       "title": "Google announces Pics, a Workspace-native AI image generator that goes after Canva on precision editing",
@@ -44,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/05/Google-Pics.avif",
       "published": "2026-05-20T09:56:32+00:00",
       "firstSeen": "2026-05-20T11:00:01.356853+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3889
+      "score": 9.3878
     },
     {
       "title": "Google launches Gemini Omni Flash, a conversational video-generation model with avatar mode held back",
@@ -60,11 +76,11 @@
       "image": "https://media.thenextweb.com/2026/05/Gemini-Omni.avif",
       "published": "2026-05-20T09:01:15+00:00",
       "firstSeen": "2026-05-20T10:00:01.248119+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.5626
+      "score": 23.5616
     },
     {
       "title": "Meta starts the 10% cut, with the Singapore office getting the 4 am note first",
@@ -77,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-05-20T08:43:23+00:00",
       "firstSeen": "2026-05-20T10:00:01.248119+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0543
+      "score": 2.0532
     },
     {
       "title": "Berlin’s Dunia Innovations commits €280M to an autonomous AI-materials GigaLab",
@@ -93,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/Dunia-Innovations.avif",
       "published": "2026-05-20T08:36:46+00:00",
       "firstSeen": "2026-05-20T10:00:01.248119+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0512
+      "score": 2.0502
     },
     {
       "title": "Alibaba unveils the Zhenwu M890 as China’s NVIDIA alternative push hardens",
@@ -109,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Alibaba.avif",
       "published": "2026-05-20T08:23:17+00:00",
       "firstSeen": "2026-05-20T10:00:01.248119+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.345
+      "score": 2.344
     },
     {
       "title": "Alibaba Qwen Team Introduces Qwen3.5-LiveTranslate-Flash: Real-Time Multimodal Interpretation Across 60 Languages at 2.8-Second Latency",
@@ -128,7 +144,7 @@
       "lastSeen": "2026-05-20T12:00:01.626381+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.3588
+      "score": 8.3578
     },
     {
       "title": "Meta offers rival AI chatbots a limited free pass into WhatsApp, on Brussels’ terms",
@@ -141,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/WhatsApp.avif",
       "published": "2026-05-20T07:51:07+00:00",
       "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.1303
+      "score": 13.1293
     },
     {
       "title": "OpenAI plants its first overseas applied-AI lab in Singapore, with a $235M commitment",
@@ -157,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
       "published": "2026-05-20T07:40:16+00:00",
       "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1254
+      "score": 6.1244
     },
     {
       "title": "Gen Z is not booing AI. It is booing its own job market",
@@ -173,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/AI-displacement.avif",
       "published": "2026-05-20T07:29:38+00:00",
       "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0206
+      "score": 2.0196
     },
     {
       "title": "Google Introduces Gemini 3.5 Flash at I/O 2026: A Faster and Cheaper Model for AI Agents and Coding",
@@ -193,7 +209,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.633
+      "score": 23.6321
     },
     {
       "title": "Viktor takes $75m from Accel to put an AI coworker inside Slack and Teams",
@@ -206,10 +222,10 @@
       "image": "https://media.thenextweb.com/2026/05/Viktor-founders.avif",
       "published": "2026-05-20T07:11:31+00:00",
       "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7125
+      "score": 3.7115
     },
     {
       "title": "CircuitHub takes $28m from Plural to make PCBs the way clouds make compute",
@@ -225,7 +241,7 @@
       "lastSeen": "2026-05-20T12:00:01.626381+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0089
+      "score": 2.0079
     },
     {
       "title": "RemotePass raises $17.4m Series B from EBRD as global employment meets fintech",
@@ -241,7 +257,7 @@
       "lastSeen": "2026-05-20T10:00:01.248119+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7043
+      "score": 2.7033
     },
     {
       "title": "The next phase of OpenAI’s Education for Countries",
@@ -254,10 +270,10 @@
       "image": "",
       "published": "2026-05-20T00:00:00+00:00",
       "firstSeen": "2026-05-20T10:00:01.248119+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4882
+      "score": 5.4874
     },
     {
       "title": "llm-gemini 0.32",
@@ -270,11 +286,11 @@
       "image": "",
       "published": "2026-05-19T23:46:27+00:00",
       "firstSeen": "2026-05-20T00:00:01.186896+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.6732
+      "score": 17.6724
     },
     {
       "title": "OpenAI co-founder Andrej Karpathy joins Anthropic to supercharge Claude’s pre-training with AI",
@@ -290,7 +306,7 @@
       "lastSeen": "2026-05-20T08:34:15.092323+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 15.5239
+      "score": 15.5231
     },
     {
       "title": "Analog Devices snaps up Empower Semiconductor for $1.5bn to tackle AI’s power problem",
@@ -306,7 +322,7 @@
       "lastSeen": "2026-05-20T08:34:15.092323+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8208
+      "score": 1.82
     },
     {
       "title": "SpaceX plans to buy Cursor for $60 billion once its record IPO wraps",
@@ -322,7 +338,7 @@
       "lastSeen": "2026-05-20T08:34:15.092323+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2182
+      "score": 3.2174
     },
     {
       "title": "Literary Prizewinners Are Facing AI Allegations. It Feels Like the New Normal",
@@ -335,10 +351,10 @@
       "image": "https://media.wired.com/photos/6a0ce86f98983a3fe2d17459/master/pass/Commonwealth-Prize-AI-Scandal-Culture.jpg",
       "published": "2026-05-19T22:53:04+00:00",
       "firstSeen": "2026-05-19T23:00:01.860070+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9541
+      "score": 1.9533
     },
     {
       "title": "OpenAI adopts C2PA standard and Google’s SynthID to make AI-generated images easier to identify",
@@ -354,7 +370,7 @@
       "lastSeen": "2026-05-20T08:34:15.092323+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8137
+      "score": 4.8129
     },
     {
       "title": "Gemini 3.5 Flash: more expensive, but Google plan to use it for everything",
@@ -367,11 +383,11 @@
       "image": "https://static.simonwillison.net/static/2026/gemini-3.5-flash.png",
       "published": "2026-05-19T22:40:25+00:00",
       "firstSeen": "2026-05-19T23:00:01.860070+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 24.0497
+      "score": 24.0489
     },
     {
       "title": "Discord now encrypts every voice and video call by default, and not even it can listen in",
@@ -387,7 +403,7 @@
       "lastSeen": "2026-05-20T08:00:01.250657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8088
+      "score": 1.808
     },
     {
       "title": "H2O.ai launches tabH2O, a foundation model that makes predictions from tabular data without any training",
@@ -404,7 +420,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.9041
+      "score": 12.9033
     },
     {
       "title": "GitLab cuts 7% of workforce and flattens management in sweeping ‘agentic era’ restructuring",
@@ -420,7 +436,7 @@
       "lastSeen": "2026-05-20T08:00:01.250657+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6023
+      "score": 5.6016
     },
     {
       "title": "Demis Hassabis said this might be the ‘foothills of the singularity.’ What?",
@@ -433,10 +449,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Demis_GDM.OMNI_.AI-in-Real-World_3.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C19.091304550468%2C100%2C61.817390899063&amp%3Bw=1200",
       "published": "2026-05-19T22:16:02+00:00",
       "firstSeen": "2026-05-19T23:00:01.860070+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 7.4111
+      "score": 7.4104
     },
     {
       "title": "Upstash for Redis vs Supabase vs Neon: Which One Fits Vibe Coding Workflows in 2026?",
@@ -452,7 +468,7 @@
       "lastSeen": "2026-05-20T12:00:01.626381+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3693
+      "score": 5.3685
     },
     {
       "title": "US regulators pause bank cyber exams so Wall Street can patch Mythos vulnerabilities",
@@ -468,7 +484,7 @@
       "lastSeen": "2026-05-20T08:00:01.250657+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7937
+      "score": 3.7929
     },
     {
       "title": "Google just declared itself a contender in AI design at IO 2026",
@@ -481,10 +497,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-pics.png?resize=1200%2C736",
       "published": "2026-05-19T21:33:30+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0265
+      "score": 3.0257
     },
     {
       "title": "You can now talk to your Gmail inbox, as seen at Google IO 2026",
@@ -497,10 +513,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/10/gmail-icon-2020-ios.jpg?resize=1200%2C675",
       "published": "2026-05-19T21:25:31+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7238
+      "score": 9.723
     },
     {
       "title": "Gemini gets a morning routine, a new look, and an AI agent that never sleeps",
@@ -516,7 +532,7 @@
       "lastSeen": "2026-05-20T08:00:01.250657+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5836
+      "score": 11.5828
     },
     {
       "title": "The future of Google is a search box that does everything",
@@ -529,10 +545,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/lcimg-036c9a25-7169-4853-846e-94fd035c259f.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-05-19T21:24:14+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3933
+      "score": 4.3926
     },
     {
       "title": "Android CLI 1.0 arrives to give AI coding agents full access to Android Studio",
@@ -548,7 +564,7 @@
       "lastSeen": "2026-05-20T07:00:01.926980+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.5815
+      "score": 7.5807
     },
     {
       "title": "How to use Google’s new AI agents to go beyond your standard searches",
@@ -561,10 +577,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/G-information-agents.png?resize=1200%2C750",
       "published": "2026-05-19T21:16:25+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.7207
+      "score": 7.7199
     },
     {
       "title": "Google wants to own your entire shopping journey with Universal Cart and agent-led payments",
@@ -580,7 +596,7 @@
       "lastSeen": "2026-05-19T23:19:28.635050+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.979
+      "score": 10.9782
     },
     {
       "title": "From teen hacker to Iron Dome researcher, this founder raised $28M to fight AI phishing",
@@ -593,10 +609,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Copy-of-IMG_8655.jpg?resize=1200%2C800",
       "published": "2026-05-19T21:08:51+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0181
+      "score": 6.0174
     },
     {
       "title": "Gemini Spark, a 24/7 agentic assistant you can email like a colleague",
@@ -613,7 +629,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.8763
+      "score": 19.8755
     },
     {
       "title": "Google’s AI future demands trust — and your personal data",
@@ -626,26 +642,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gemini-spark-tasks.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0.50140845070423%2C0%2C98.997183098592%2C100&amp%3Bw=1200",
       "published": "2026-05-19T21:00:00+00:00",
       "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.6852
-    },
-    {
-      "title": "Google wants you to talk to Docs, Keep, and Gmail instead of typing",
-      "url": "https://thenextweb.com/news/google-wants-you-to-talk-to-docs-keep-and-gmail-instead-of-typing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google is betting that the future of productivity software starts with your voice, not your keyboard. At its I/O 2026 developer conference on Monday, the company unveiled voice-based prompting features for Docs, Keep, and Gmail, all powered by its Gemini AI models. The headline feature is Docs Live, which lets users create and edit documents entirely [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/google-voice-prompting-docs-keep-gmail-io-2026.avif",
-      "published": "2026-05-19T20:56:36+00:00",
-      "firstSeen": "2026-05-19T21:42:47.081270+00:00",
-      "lastSeen": "2026-05-19T23:19:28.635050+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.774
+      "score": 7.6844
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -658,10 +658,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6324
+      "score": 1.6319
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -674,10 +674,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.5479
+      "score": -1.5483
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -690,7 +690,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1247
@@ -706,7 +706,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-20T12:00:01.626381+00:00",
+      "lastSeen": "2026-05-20T12:02:14.712570+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5934
@@ -776,5 +776,11 @@
       "score": 1.19
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
