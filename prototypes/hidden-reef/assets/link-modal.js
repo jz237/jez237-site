@@ -69,12 +69,13 @@
   }
 
   function ensureCartDrawer() {
+    const drawerNoteHtml = '<strong>Free shipping on qualifying orders over $49.</strong> Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment. <span class="drawer-note__checkout">Discounts, shipping, and tax are calculated at checkout.</span>';
     let drawer = document.querySelector('.drawer');
     if (!drawer) {
       drawer = document.createElement('aside');
       drawer.className = 'drawer';
       drawer.setAttribute('aria-label', 'Demo cart drawer');
-      drawer.innerHTML = '<div class="drawer-head"><h2>Demo cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the Lightspeed handoff.</p><div class="cart-summary"></div><p class="drawer-note"><strong>Free shipping on qualifying orders over $49.</strong> Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue in Lightspeed →</a>';
+      drawer.innerHTML = '<div class="drawer-head"><h2>Demo cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the Lightspeed handoff.</p><div class="cart-summary"></div><p class="drawer-note">' + drawerNoteHtml + '</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue in Lightspeed →</a>';
       document.body.appendChild(drawer);
     }
     const title = drawer.querySelector('.drawer-head h2');
@@ -89,11 +90,11 @@
     if (!drawer.querySelector('.drawer-note')) {
       const note = document.createElement('p');
       note.className = 'drawer-note';
-      note.innerHTML = '<strong>Free shipping on qualifying orders over $49.</strong> Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.';
+      note.innerHTML = drawerNoteHtml;
       drawer.querySelector('.cart-summary')?.after(note);
     }
     const note = drawer.querySelector('.drawer-note');
-    if (note) note.innerHTML = '<strong>Free shipping on qualifying orders over $49.</strong> Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment.';
+    if (note) note.innerHTML = drawerNoteHtml;
     const handoff = drawer.querySelector('.cart-handoff') || drawer.querySelector('.drawer .btn, .btn');
     if (handoff) {
       handoff.classList.add('cart-handoff');

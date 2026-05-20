@@ -471,6 +471,12 @@ body.department-page .section-band + .section-band {
   color: #40d9ff;
   font-size: 13px;
 }
+.drawer-note__checkout {
+  display: block;
+  margin-top: 8px;
+  color: #dff8ff;
+  font-weight: 800;
+}
 @media (max-width: 560px) {
   .catalog-footer__inner {
     padding: 16px 18px;
