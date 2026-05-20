@@ -368,7 +368,7 @@ THR.categories = {
 // Map of department page slugs to category groups
 THR.departmentMap = {
   freshwater: ["aquariums", "additives", "testing", "co2"],
-  saltwater: ["protein-skimmers", "additives", "controllers", "pumps", "reactors", "r-o", "uv-clarifiers", "wave-makers"],
+  saltwater: ["aquariums", "protein-skimmers", "additives", "controllers", "pumps", "reactors", "r-o", "uv-clarifiers", "wave-makers"],
   pond: ["pond"],
   equipment: ["filtration", "lighting", "heating-temperature", "air-equipment", "maintenance", "controllers", "pumps", "plumbing-parts", "reactors", "r-o", "uv-clarifiers", "wave-makers"],
   food: ["food"],
