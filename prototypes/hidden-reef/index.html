@@ -209,17 +209,10 @@
       object-fit: cover;
       object-position: center center;
       opacity: 0;
-      animation: reefHeroFade 20s infinite;
+      transition: opacity 1.2s ease-in-out;
     }
-    .hero-slides img:nth-child(1) { animation-delay: 0s; }
-    .hero-slides img:nth-child(2) { animation-delay: 4s; }
-    .hero-slides img:nth-child(3) { animation-delay: 8s; }
-    .hero-slides img:nth-child(4) { animation-delay: 12s; }
-    .hero-slides img:nth-child(5) { animation-delay: 16s; }
-    @keyframes reefHeroFade {
-      0%, 100% { opacity: 0; }
-      5%, 18% { opacity: 1; }
-      25% { opacity: 0; }
+    .hero-slides img.is-active {
+      opacity: 1;
     }
     .hero-content {
       max-width: 540px;
@@ -1836,7 +1829,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .hero-slides img {
-        animation: none;
+        transition: none;
       }
       .hero-slides img:first-child {
         opacity: 1;
@@ -1873,7 +1866,7 @@
 
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-slides" aria-hidden="true">
-        <img src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
+        <img class="is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
         <img src="assets/site/hero-aquatic-world-2.jpg" alt="" loading="lazy" />
         <img src="assets/site/hero-aquatic-world-3.jpg" alt="" loading="lazy" />
         <img src="assets/site/hero-aquatic-world-4.jpg" alt="" loading="lazy" />
@@ -2019,6 +2012,16 @@
 	    const cartItems = document.getElementById('cart-items');
 	    const emptyCart = document.getElementById('empty-cart');
 	    const cart = [];
+	    const heroSlides = Array.from(document.querySelectorAll('.hero-slides img'));
+	    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+	    if (heroSlides.length > 1 && !reduceMotion.matches) {
+	      let activeHeroSlide = 0;
+	      window.setInterval(() => {
+	        heroSlides[activeHeroSlide].classList.remove('is-active');
+	        activeHeroSlide = (activeHeroSlide + 1) % heroSlides.length;
+	        heroSlides[activeHeroSlide].classList.add('is-active');
+	      }, 4000);
+	    }
 	    document.querySelector('.search-box')?.addEventListener('submit', e => {
 	      e.preventDefault();
 	      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
