@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T15:00:01.971526+00:00",
+  "updatedAt": "2026-05-20T16:00:02.053317+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7544,6 +7544,18 @@
     "https://www.technologyreview.com/2026/05/19/1137454/roundtables-inside-the-musk-v-altman-trial": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MITTR-Roundtables-Zoom-Opening-Overlay_a83ddf.png?resize=1200,600",
       "checkedAt": "2026-05-20T15:00:01.971526+00:00"
+    },
+    "https://simonwillison.net/2026/May/20/google-io": {
+      "image": "",
+      "checkedAt": "2026-05-20T16:00:02.053317+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/ai-search-startups-are-blowing-up": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-ai-sign-Getty.jpg?resize=1200,800",
+      "checkedAt": "2026-05-20T16:00:02.053317+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/stability-ai-release-a-new-audio-model-that-can-create-six-minute-songs": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-1480808838.jpg?resize=1200,800",
+      "checkedAt": "2026-05-20T16:00:02.053317+00:00"
     }
   }
 }
