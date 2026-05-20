@@ -223,7 +223,7 @@
     let html = `<div class="cat-header__copy"><h1>${title}</h1><p>${desc}</p></div>`;
     const actions = [];
     if (cat || sub) {
-      actions.push('<a class="source-link" href="./">View all products</a>');
+      actions.push('<a class="source-link all-products-link" href="./">View all products</a>');
     }
     if (sourceUrl) {
       actions.push(`<a class="source-link" href="${sourceUrl}" target="_blank" rel="noopener">View on Hidden Reef site ↗</a>`);
