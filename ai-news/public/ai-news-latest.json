@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20T19:00:01.168682+00:00",
+  "updatedAt": "2026-05-20T20:00:01.447083+00:00",
   "items": [
     {
       "title": "Jia Wei, Zhonghao Zhang, Ping Chen, Qianyang li, Yancheng Pan, Shaoxun Wang, Ziyi Qiu, Longxiang Wang",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-20T19:00:11.290744+00:00",
+      "published": "2026-05-20T20:00:08.923937+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "IrisGo, a startup backed by Andrew Ng, looks to become the AI desktop buddy you never knew you needed",
+      "url": "https://techcrunch.com/2026/05/20/irisgo-a-startup-backed-by-andrew-ng-looks-to-become-the-ai-desktop-buddy-you-never-knew-you-needed",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Initially billed as an \"AI butler,\" Iris watches what happens on a user's desktop and automatically learns how to do tasks for them, its co-founder says.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Arnold-Jeffrey-Andrew-Ng36.jpg?resize=1200%2C900",
+      "published": "2026-05-20T19:47:20+00:00",
+      "firstSeen": "2026-05-20T20:00:01.447083+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3836
+    },
+    {
+      "title": "100 things we announced at I/O 2026",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "Image with the words \"Ready, Set, I/O\" and a colorful Gemini logo",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/100_things_Social.max-600x600.format-webp.webp",
+      "published": "2026-05-20T19:30:00+00:00",
+      "firstSeen": "2026-05-20T20:00:01.447083+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.4148
     },
     {
       "title": "How to Build Knowledge Graph Generation Pipelines From Text With kg-gen, NetworkX Analytics, and Interactive Visualizations",
@@ -28,10 +60,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-33-1024x731.png",
       "published": "2026-05-20T18:24:08+00:00",
       "firstSeen": "2026-05-20T18:30:02.754968+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3019
+      "score": 3.2722
     },
     {
       "title": "I Gave My OpenClaw Agent a Physical Body",
@@ -44,10 +76,10 @@
       "image": "https://media.wired.com/photos/6a0ca4ce280901f1fa2a6d37/master/pass/AI-Lab-Rock-Em-Sock-Em-Vibe-Coded-Robots-Business.jpg",
       "published": "2026-05-20T18:00:00+00:00",
       "firstSeen": "2026-05-20T18:30:02.754968+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3599
+      "score": 6.3305
     },
     {
       "title": "How fast is 10 tokens per second really?",
@@ -60,10 +92,10 @@
       "image": "",
       "published": "2026-05-20T17:57:45+00:00",
       "firstSeen": "2026-05-20T18:30:02.754968+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3587
+      "score": 3.3295
     },
     {
       "title": "Vibe coding is coming to your phone",
@@ -76,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/258002_Google_Pixel_10_Pro_Fold_AJohnson_0010.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-05-20T17:40:00+00:00",
       "firstSeen": "2026-05-20T18:00:01.939262+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.82
+      "score": 5.791
     },
     {
       "title": "OpenAI barrels towards IPO that may happen in September",
@@ -95,7 +127,23 @@
       "lastSeen": "2026-05-20T19:00:01.168682+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3424
+      "score": 6.3135
+    },
+    {
+      "title": "OpenAI barrels toward IPO that may happen in September",
+      "url": "https://techcrunch.com/2026/05/20/openai-barrels-toward-ipo-that-may-happen-in-september",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A day after Elon Musk lost his lawsuit that threatened OpenAI's structure, leadership, and finances, OpenAI is reportedly back to prepping for its IPO.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2213399157.jpg?resize=1200%2C800",
+      "published": "2026-05-20T17:24:24+00:00",
+      "firstSeen": "2026-05-20T20:00:01.447083+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3135
     },
     {
       "title": "A new experiment brings better group meetings to Google Beam",
@@ -108,10 +156,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Screenshot_2026-05-15_at_4.21.2.max-600x600.format-webp.webp",
       "published": "2026-05-20T16:45:00+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3633
+      "score": 2.335
     },
     {
       "title": "You can now remix other people’s YouTube Shorts with AI",
@@ -124,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/youtube-shorts-remix.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=2.25%2C0%2C95.5%2C100&amp%3Bw=1200",
       "published": "2026-05-20T16:41:40+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6918
+      "score": 8.6635
     },
     {
       "title": "Google Search’s AI evolution includes more ads",
@@ -140,10 +188,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/search-ads-ai.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-20T16:00:00+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.772
+      "score": 9.7443
     },
     {
       "title": "Primer secures $100M Series C to fuel US expansion and autonomous AI payments",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/Primer.avif",
       "published": "2026-05-20T15:38:18+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7519
+      "score": 2.7245
     },
     {
       "title": "Google I/O, Gemini Spark, Antigravity",
@@ -172,11 +220,11 @@
       "image": "",
       "published": "2026-05-20T15:32:17+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.8891
+      "score": 18.8618
     },
     {
       "title": "AI search startups are blowing up",
@@ -189,10 +237,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-ai-sign-Getty.jpg?resize=1200%2C800",
       "published": "2026-05-20T15:04:45+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5765
+      "score": 4.5495
     },
     {
       "title": "Stability AI releases a new audio model that can create 6-minute songs",
@@ -205,10 +253,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-1480808838.jpg?resize=1200%2C800",
       "published": "2026-05-20T15:00:00+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8743
+      "score": 2.8473
     },
     {
       "title": "New Zealand Plans to Cut 9,000 Public Sector Jobs as AI Push Accelerates",
@@ -221,10 +269,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05202026-new-zealand-public-sector-job-cuts.jpg?f=jpeg",
       "published": "2026-05-20T14:41:42+00:00",
       "firstSeen": "2026-05-20T18:00:01.939262+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.126
+      "score": 3.0993
     },
     {
       "title": "Figma builds its own AI assistant that can design alongside you on the canvas",
@@ -237,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/05/figma-ai-agent-design-canvas-assistant.avif",
       "published": "2026-05-20T14:34:25+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.5227
+      "score": 9.4961
     },
     {
       "title": "It&#8217;s make or break time for AI labeling systems",
@@ -253,10 +301,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/ai-label-swag-pope.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-20T14:12:54+00:00",
       "firstSeen": "2026-05-20T15:00:01.971526+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2231
+      "score": 2.1967
     },
     {
       "title": "GitHub confirms hackers stole thousands of internal code repositories after employee installed a poisoned VS Code extension",
@@ -269,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/05/github-breach-teampcp-vscode-extension-internal-repos.avif",
       "published": "2026-05-20T14:06:49+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1104
+      "score": 3.0841
     },
     {
       "title": "NanoClaw creator turns down $20M buyout offer, raises $12M seed instead",
@@ -285,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/NanoClaw-fouders-2.jpg?resize=1200%2C708",
       "published": "2026-05-20T14:00:00+00:00",
       "firstSeen": "2026-05-20T15:00:01.971526+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8473
+      "score": 3.8211
     },
     {
       "title": "Startup Battlefield 200 applications close in one week: Window to nominate and apply for the most promising startups ends May 27",
@@ -304,7 +352,7 @@
       "lastSeen": "2026-05-20T17:00:01.947918+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2473
+      "score": 3.2211
     },
     {
       "title": "Startup Battlefield 200 applications close in 1 week: Window to nominate and apply for the most promising startups closes May 27",
@@ -317,10 +365,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200%2C800",
       "published": "2026-05-20T14:00:00+00:00",
       "firstSeen": "2026-05-20T18:00:01.939262+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2473
+      "score": 3.2211
     },
     {
       "title": "French companies bid $10bn for one of the EU’s five planned AI gigafactory sites",
@@ -333,10 +381,10 @@
       "image": "https://media.thenextweb.com/2026/05/A-Scaleway-led-AION-consortium.avif",
       "published": "2026-05-20T13:59:58+00:00",
       "firstSeen": "2026-05-20T15:00:01.971526+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0073
+      "score": 3.9811
     },
     {
       "title": "ChatGPT, Claude, Gemini and Grok are not ready to brief American voters",
@@ -349,10 +397,10 @@
       "image": "https://media.thenextweb.com/2026/05/Chatbots.avif",
       "published": "2026-05-20T13:27:03+00:00",
       "firstSeen": "2026-05-20T15:00:01.971526+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.3929
+      "score": 17.367
     },
     {
       "title": "If Google can’t make AI agents useful, maybe no one can",
@@ -365,10 +413,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRGSTKIO2026_v3.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-20T13:24:22+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0017
+      "score": 5.9759
     },
     {
       "title": "This new app scans your clothes for PFAS, microplastics, and hidden toxins",
@@ -381,10 +429,10 @@
       "image": "https://media.thenextweb.com/2026/05/wove-app-clothing-pfas-microplastics-toxin-scanner.avif",
       "published": "2026-05-20T13:01:01+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7816
+      "score": 3.756
     },
     {
       "title": "This $25 Subscription Will Bring AI Into Your Business",
@@ -397,10 +445,10 @@
       "image": "https://assets.techrepublic.com/uploads/2024/07/tr_20240703-1minai-pro-plan-lifetime-subscription.jpg",
       "published": "2026-05-20T13:00:36+00:00",
       "firstSeen": "2026-04-14T13:00:01.571968+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0814
+      "score": 5.0559
     },
     {
       "title": "Figma adds an AI assistant to its collaborative canvas",
@@ -409,14 +457,14 @@
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Figma's new AI assistant will be first available on Figma Design",
+      "summary": "Figma says users can employ natural language text prompts to direct its new AI agent to generate new designs, edit existing ones, or automate tasks such as generating iterations of existing designs.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agent-On-Canvas-Entrypoint.png?resize=1200%2C675",
       "published": "2026-05-20T13:00:00+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2211
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8956
     },
     {
       "title": "The biggest data center ever is becoming a huge problem in Utah",
@@ -429,10 +477,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKP224_KEVIN_O_LEARY_CVIRGINIA_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-20T13:00:00+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1911
+      "score": 2.1656
     },
     {
       "title": "QIZ Security teams up with Google Cloud to help enterprises brace for the quantum cryptography threat",
@@ -445,10 +493,10 @@
       "image": "https://media.thenextweb.com/2026/05/qiz-security-google-cloud-quantum-resistant-cryptography.avif",
       "published": "2026-05-20T12:53:10+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9782
+      "score": 1.9528
     },
     {
       "title": "Lambda wins a cloud deal with Hudson River Trading to supply access to NVIDIA chips",
@@ -461,10 +509,10 @@
       "image": "https://media.thenextweb.com/2026/05/Lambda.avif",
       "published": "2026-05-20T12:35:58+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2708
+      "score": 2.2456
     },
     {
       "title": "Fairplay and NCSE ask the FTC to investigate Roblox over child safety and ‘unfair and deceptive’ marketing",
@@ -477,10 +525,10 @@
       "image": "https://media.thenextweb.com/2026/04/roblox-age-gated-account-tiers-kids-select-child-safety.avif",
       "published": "2026-05-20T12:12:24+00:00",
       "firstSeen": "2026-05-20T14:00:01.598006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9608
+      "score": 1.9359
     },
     {
       "title": "How one startup turned backers into believers: MAGFAST broke the crowdfunding mold",
@@ -493,10 +541,10 @@
       "image": "https://media.thenextweb.com/2026/05/magfast-broke-crowdfunding-mold-backers-into-believers.avif",
       "published": "2026-05-20T11:58:12+00:00",
       "firstSeen": "2026-05-20T12:02:14.712570+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9549
+      "score": 1.9301
     },
     {
       "title": "NVIDIA AI Releases Nemotron-Labs-Diffusion: A Tri-Mode Language Model with 6× Tokens Per Forward Over Qwen3-8B",
@@ -509,10 +557,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-20-at-3.28.04-AM-1-150x150.png",
       "published": "2026-05-20T10:41:02+00:00",
       "firstSeen": "2026-05-20T11:00:01.356853+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9931
+      "score": 7.9692
     },
     {
       "title": "Google announces Pics, a Workspace-native AI image generator that goes after Canva on precision editing",
@@ -528,7 +576,7 @@
       "lastSeen": "2026-05-20T15:52:26.707947+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2053
+      "score": 9.1819
     },
     {
       "title": "Google launches Gemini Omni Flash, a conversational video-generation model with avatar mode held back",
@@ -545,7 +593,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.3837
+      "score": 23.3608
     },
     {
       "title": "Meta starts the 10% cut, with the Singapore office getting the 4 am note first",
@@ -561,7 +609,7 @@
       "lastSeen": "2026-05-20T15:00:01.971526+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8768
+      "score": 1.8542
     },
     {
       "title": "Berlin’s Dunia Innovations commits €280M to an autonomous AI-materials GigaLab",
@@ -577,7 +625,7 @@
       "lastSeen": "2026-05-20T14:00:01.598006+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8743
+      "score": 1.8517
     },
     {
       "title": "Alibaba unveils the Zhenwu M890 as China’s NVIDIA alternative push hardens",
@@ -593,55 +641,7 @@
       "lastSeen": "2026-05-20T14:00:01.598006+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1692
-    },
-    {
-      "title": "Alibaba Qwen Team Introduces Qwen3.5-LiveTranslate-Flash: Real-Time Multimodal Interpretation Across 60 Languages at 2.8-Second Latency",
-      "url": "https://www.marktechpost.com/2026/05/20/alibaba-qwen-team-introduces-qwen3-5-livetranslate-flash-real-time-multimodal-interpretation-across-60-languages-at-2-8-second-latency",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Alibaba's Qwen team has released Qwen3.5-LiveTranslate-Flash, a real-time multimodal translation model that processes audio and video simultaneously. The model covers 60 input languages and produces speech output in 29 languages at 2.8 seconds of latency. Key additions over the previous Qwen3 version include real-time speaker voice cloning, vision-enhanced comprehension via lip movements and on-screen text, and dynamic keyword configuration for domain-specific terminology. On FLEURS and CoVoST2 benchmarks, the model outperforms major commercial alternatives. It is available as an API-only mode",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-20-at-1.09.04-AM-1-150x150.png",
-      "published": "2026-05-20T08:09:51+00:00",
-      "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.1841
-    },
-    {
-      "title": "Meta offers rival AI chatbots a limited free pass into WhatsApp, on Brussels’ terms",
-      "url": "https://thenextweb.com/news/meta-whatsapp-ai-rivals-free-access-eu-dma-proposal",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "After January’s blanket ban and March’s $0.0625-per-message fee, Meta has filed a fresh European Commission proposal: free WhatsApp access for OpenAI, Perplexity, and others, up to a usage cap, then a fee. Meta has filed a fresh European Commission proposal that would give rival AI chatbots, including OpenAI’s ChatGPT, Perplexity, Anthropic’s Claude and others, free [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/WhatsApp.avif",
-      "published": "2026-05-20T07:51:07+00:00",
-      "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T13:00:01.438083+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.9571
-    },
-    {
-      "title": "OpenAI plants its first overseas applied-AI lab in Singapore, with a $235M commitment",
-      "url": "https://thenextweb.com/news/openai-singapore-applied-ai-lab-235-million",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The company will scale to about 200 staff in the city-state and align the lab’s work to Singapore’s public-sector, finance, healthcare, and digital-infrastructure priorities. OpenAI said on Wednesday it will open its first applied-AI lab outside the United States in Singapore, with a S$300m (about $235m) commitment alongside a staffing ramp to roughly 200 people [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/OpenAI.avif",
-      "published": "2026-05-20T07:40:16+00:00",
-      "firstSeen": "2026-05-20T08:34:15.092323+00:00",
-      "lastSeen": "2026-05-20T13:00:01.438083+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.953
+      "score": 2.1467
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5419
+      "score": 1.5303
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.6119
+      "score": -1.62
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -686,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1239
+      "score": 1.1238
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -702,10 +702,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-20T19:00:01.168682+00:00",
+      "lastSeen": "2026-05-20T20:00:01.447083+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5928
+      "score": 2.5927
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
