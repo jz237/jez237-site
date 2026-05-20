@@ -1,7 +1,40 @@
 {
   "date": "2026-05-20",
-  "updatedAt": "2026-05-20T07:00:01.926980+00:00",
+  "updatedAt": "2026-05-20T08:00:01.250657+00:00",
   "items": [
+    {
+      "title": "Google Introduces Gemini 3.5 Flash at I/O 2026: A Faster and Cheaper Model for AI Agents and Coding",
+      "url": "https://www.marktechpost.com/2026/05/20/google-introduces-gemini-3-5-flash-at-i-o-2026-a-faster-and-cheaper-model-for-ai-agents-and-coding",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Google's Gemini 3.5 Flash beats its own flagship on coding and agentic benchmarks while running four times faster and at half the cost.\nThe post Google Introduces Gemini 3.5 Flash at I/O 2026: A Faster and Cheaper Model for AI Agents and Coding appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-20-at-12.03.04-AM-1-150x150.png",
+      "published": "2026-05-20T07:12:49+00:00",
+      "firstSeen": "2026-05-20T08:00:01.250657+00:00",
+      "lastSeen": "2026-05-20T08:00:01.250657+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 23.7462
+    },
+    {
+      "title": "RemotePass raises $17.4m Series B from EBRD as global employment meets fintech",
+      "url": "https://thenextweb.com/news/remotepass-17-4-million-series-b-ebrd-500-global",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Dubai-founded global employment and payroll platform reached profitability in early 2025 before taking the round. EBRD Venture Capital led; 500 Global is the new strategic name alongside.\\ RemotePass, the global employment, payroll, and spend platform co-founded by Kamal Reggad and Karim Nadi, has raised $17.4m in Series B funding led by EBRD Venture Capital, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/RemotePass.avif",
+      "published": "2026-05-20T06:53:04+00:00",
+      "firstSeen": "2026-05-20T08:00:01.250657+00:00",
+      "lastSeen": "2026-05-20T08:00:01.250657+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8164
+    },
     {
       "title": "Jia Wei, Zhonghao Zhang, Ping Chen, Qianyang li, Yancheng Pan, Shaoxun Wang, Ziyi Qiu, Longxiang Wang",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +44,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-20T07:00:07.595174+00:00",
+      "published": "2026-05-20T08:00:09.908175+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-20T07:00:01.926980+00:00",
+      "lastSeen": "2026-05-20T08:00:01.250657+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
