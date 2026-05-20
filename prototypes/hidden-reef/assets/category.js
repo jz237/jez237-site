@@ -33,7 +33,8 @@
         pond: 'Pond',
         equipment: 'Equipment',
         food: 'Food',
-        decor: 'Decorations'
+        decor: 'Decorations',
+        maintenance: 'Maintenance'
       };
       const departmentDescriptions = {
         freshwater: 'Aquariums, planted tank care, water conditioners, and testing',
@@ -41,7 +42,8 @@
         pond: 'Koi, pumps, treatments, season prep, and pond food',
         equipment: 'Filtration, lighting, heating, air equipment, and maintenance',
         food: 'Flakes, freeze-dried food, feeders, and pond nutrition',
-        decor: 'Ornaments, accents, rockwork, and aquascaping pieces'
+        decor: 'Ornaments, accents, rockwork, and aquascaping pieces',
+        maintenance: 'Cleaning tools, filter media, water care, and test kits'
       };
       const children = {};
       THR.departmentMap[catSlug].forEach(groupSlug => {
@@ -235,6 +237,27 @@
     document.getElementById('page-title').textContent = title + ' — The Hidden Reef';
   }
 
+  function renderDepartmentSwitcher(activeCatSlug) {
+    const el = document.getElementById('department-switcher');
+    if (!el) return;
+    const departments = [
+      ['saltwater', 'Saltwater'],
+      ['freshwater', 'Freshwater'],
+      ['pond', 'Pond'],
+      ['aquariums', 'Aquariums'],
+      ['additives', 'Additives'],
+      ['equipment', 'Equipment'],
+      ['food', 'Food'],
+      ['decor', 'Decorations'],
+      ['maintenance', 'Maintenance']
+    ];
+    const tabs = departments.map(([slug, label]) => {
+      const active = slug === activeCatSlug ? ' active' : '';
+      return '<a class="department-tab' + active + '" href="?cat=' + slug + '">' + label + '</a>';
+    }).join('');
+    el.innerHTML = '<div class="department-tabs" aria-label="Shop by department">' + tabs + '</div><a class="department-all-products" href="./"><span>Reset department</span><strong>Shop all products</strong></a>';
+  }
+
   function renderSubcatTabs(cat, activeSubSlug) {
     const el = document.getElementById('subcat-tabs');
     if (!el || !cat || !cat.children) return;
@@ -371,6 +394,7 @@
 
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
+    renderDepartmentSwitcher(cat ? cat.slug : '');
     renderSubcatTabs(cat, params.sub);
 
     // Get products
