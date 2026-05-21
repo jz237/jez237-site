@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learning Center - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --line: rgba(116,205,235,0.2);
+      --orange: #ff7b32;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(14,159,204,0.22), transparent 26%),
+        radial-gradient(circle at 88% 8%, rgba(39,194,232,0.12), transparent 30%),
+        linear-gradient(180deg, #03111d 0, #051827 260px, #020912 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: auto minmax(260px, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .search-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      height: 44px;
+      border: 2px solid rgba(116,205,235,0.24);
+      border-radius: 999px;
+      overflow: hidden;
+      background: #102b3b;
+    }
+    .search-box input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      padding: 0 18px;
+      color: #eaf8fc;
+      background: transparent;
+    }
+    .search-box input::placeholder { color: #89aab8; }
+    .search-box button {
+      width: 54px;
+      border: 0;
+      color: #fff;
+      background: var(--teal);
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .cart-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 45px;
+      height: 40px;
+      border: 0;
+      background: transparent;
+      color: #7ddfff;
+      font-size: 24px;
+    }
+    .cart-button span {
+      position: absolute;
+      top: -2px;
+      right: 0;
+      display: grid;
+      place-items: center;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--teal);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+      gap: 24px;
+      align-items: end;
+      margin-top: 18px;
+      padding: clamp(24px, 4vw, 44px);
+      border: 1px solid rgba(105,237,255,0.5);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(1,13,27,0.96) 0%, rgba(1,35,62,0.84) 48%, rgba(0,48,75,0.58)),
+        url("../assets/site/hero-aquatic-world.jpg") center/cover no-repeat;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24), 0 0 28px rgba(64,217,255,0.22);
+    }
+    .hero span,
+    .guide-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 0.98;
+    }
+    .hero p {
+      max-width: 620px;
+      margin: 0;
+      color: #dff8ff;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .hero-card {
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background: rgba(7,26,39,0.78);
+    }
+    .hero-card strong {
+      display: block;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+    }
+    .hero-card p {
+      margin-top: 8px;
+      color: #b9d9e7;
+      font-size: 13px;
+    }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+    }
+    .section-head p {
+      margin: 0;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .guide-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.12), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .guide-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1.18;
+      object-fit: cover;
+      object-position: 50% 10%;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: #fff;
+    }
+    .guide-card div { padding: 16px; }
+    .guide-card h3 {
+      margin: 8px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .guide-card p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      margin: 0 16px 16px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .diagram-list {
+      display: grid;
+      gap: 22px;
+      margin-top: 14px;
+    }
+    .diagram {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+      gap: 18px;
+      align-items: start;
+      padding: 18px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background: #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .diagram img {
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(195,222,232,0.74);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .diagram h2 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .diagram p {
+      margin: 0 0 14px;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .diagram ul {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .diagram li {
+      position: relative;
+      padding-left: 17px;
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .diagram li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--aqua);
+      box-shadow: 0 0 12px rgba(64,217,255,0.6);
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .header,
+      .hero,
+      .diagram { grid-template-columns: 1fr; }
+      .guide-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { margin-top: 12px; padding: 24px 18px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .diagram { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <a class="brand" href="../">
+        <img src="../assets/site/logo-full.png" alt="The Hidden Reef" />
+      </a>
+      <form class="search-box" action="../#products">
+        <input type="search" placeholder="Search filters, media, pumps, tanks..." />
+        <button type="submit" aria-label="Search">⌕</button>
+      </form>
+      <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span>↗</span></a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../category/?cat=freshwater">Freshwater</a>
+      <a href="../category/?cat=saltwater">Saltwater</a>
+      <a href="../category/?cat=pond">Pond</a>
+      <a href="../category/?cat=equipment">Equipment</a>
+      <a href="../category/?cat=food">Food</a>
+      <a href="../category/?cat=decor">Decorations</a>
+      <a href="../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="./">Learn</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <span>Learning Center</span>
+        <h1>Understand the system before buying the box.</h1>
+        <p>Educational filtration diagrams give customers a quick way to see water path, media order, bacteria zones, and maintenance points before they choose equipment.</p>
+      </div>
+      <aside class="hero-card">
+        <strong>First set: filtration</strong>
+        <p>Internal power filter, sponge filter, and sump filtration. These are the right first three because they cover beginner tanks, gentle breeding/quarantine setups, and larger reef-style systems.</p>
+      </aside>
+    </section>
+
+    <section aria-labelledby="guides-title">
+      <div class="section-head">
+        <h2 id="guides-title">Filtration Guides</h2>
+        <p>Dissected views for staff explanations and customer education.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card">
+          <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
+          <div><span>Compact filter</span><h3>Internal Power Filter</h3><p>Shows intake slots, sponge/floss, ceramic biological media, optional carbon, motor head, return nozzle, and the basic nitrogen cycle.</p></div>
+          <a class="btn" href="#internal-power-filter">Inspect diagram</a>
+        </article>
+        <article class="guide-card">
+          <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
+          <div><span>Gentle biological filter</span><h3>Sponge Filter</h3><p>Explains air pump lift, bubbles, check valve, sponge pores, beneficial bacteria, and why sponge filters are useful for fry and shrimp tanks.</p></div>
+          <a class="btn" href="#sponge-filter">Inspect diagram</a>
+        </article>
+        <article class="guide-card">
+          <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram" />
+          <div><span>High-capacity system</span><h3>Sump Filtration</h3><p>Maps overflow, drain line, mechanical stage, biological media chamber, chemical media, return pump, and return line back to the display tank.</p></div>
+          <a class="btn" href="#sump-filter">Inspect diagram</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="diagram-list" aria-label="Full diagrams">
+      <article class="diagram" id="internal-power-filter">
+        <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
+        <div>
+          <h2>Internal Power Filter</h2>
+          <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
+          <ul>
+            <li>Good beginner visual for mechanical, biological, and optional chemical filtration.</li>
+            <li>Pairs naturally with filter media, replacement sponges, cartridges, and water conditioners.</li>
+            <li>Maintenance message is strong: rinse sponge in tank water and do not replace all biological media at once.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="diagram" id="sponge-filter">
+        <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
+        <div>
+          <h2>Sponge Filter</h2>
+          <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
+          <ul>
+            <li>Shows why the air pump, check valve, airline, uplift tube, and sponge all matter.</li>
+            <li>Clear upsell path for air pumps, valves, tubing, replacement sponge, and brushes.</li>
+            <li>Useful beginner note: old sponges are beneficial bacteria colonies, not trash.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="diagram" id="sump-filter">
+        <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram" />
+        <div>
+          <h2>Sump Filtration</h2>
+          <p>Best for larger systems, reef tanks, high bioload displays, and customers who need room for pumps, media, and hidden equipment.</p>
+          <ul>
+            <li>Explains the full water path from overflow to drain line, sump chambers, return pump, and display tank.</li>
+            <li>Supports serious setup planning for plumbing, filter socks, ceramic media, carbon, pumps, and top-off habits.</li>
+            <li>Good place to later add skimmer, refugium, roller mat, and auto top-off diagrams.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="#internal-power-filter">Internal filters</a><a href="#sponge-filter">Sponge filters</a><a href="#sump-filter">Sumps</a><a href="../category/?cat=equipment">Shop equipment</a></div></div>
+        <div><h4>Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
