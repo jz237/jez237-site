@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-21T20:00:02.057355+00:00",
+  "updatedAt": "2026-05-21T21:00:01.646270+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7796,6 +7796,26 @@
     "https://simonwillison.net/2026/May/21/datasette-agent-2": {
       "image": "",
       "checkedAt": "2026-05-21T20:00:02.057355+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MITTR-Roundtables-Zoom-Opening-Overlay.png?resize=1200,600",
+      "checkedAt": "2026-05-21T21:00:01.646270+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/935602/graduates-boo-ai-ceos": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-21-at-3.44.22PM.png?quality=90&amp;strip=all&amp;crop=0%2C2.6098311610285%2C100%2C94.780337677943&amp;w=1200",
+      "checkedAt": "2026-05-21T21:00:01.646270+00:00"
+    },
+    "https://deepmind.google/blog/were-launching-the-google-deepmind-accelerator-program-in-asia-pacific-to-tackle-environmental-risks": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Image_for_APAC_GDM_Accelerator.max-1440x810.png",
+      "checkedAt": "2026-05-21T21:00:01.646270+00:00"
+    },
+    "https://simonwillison.net/2026/May/21/datasette-agent-charts": {
+      "image": "",
+      "checkedAt": "2026-05-21T21:00:01.646270+00:00"
+    },
+    "https://simonwillison.net/2026/May/20/datasette-agent-charts": {
+      "image": "",
+      "checkedAt": "2026-05-21T21:00:01.646270+00:00"
     }
   }
 }
