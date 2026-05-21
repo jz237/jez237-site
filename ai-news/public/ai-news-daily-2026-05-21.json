@@ -1,6 +1,6 @@
 {
   "date": "2026-05-21",
-  "updatedAt": "2026-05-21T08:00:01.616179+00:00",
+  "updatedAt": "2026-05-21T09:00:01.220498+00:00",
   "items": [
     {
       "title": "What is a Forward Deployed Engineer: The AI Role OpenAI, Anthropic, and Google Are Hiring in 2026",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-hand-drawn-venn-diagram-sketched-in-bl_pNcqroZdXgCTMXysn491tQ_sLPvQZd-TkWl24gZiyC3Tw_hd-1-150x150.png",
       "published": "2026-05-21T04:58:31+00:00",
       "firstSeen": "2026-05-21T05:00:01.554056+00:00",
-      "lastSeen": "2026-05-21T08:00:01.616179+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.9313
+      "score": 9.9036
     },
     {
       "title": "SpaceX Listed Grok’s ‘Spicy’ Mode as a Risk in Its IPO Filing",
@@ -29,10 +29,26 @@
       "image": "https://media.wired.com/photos/6a0e32d330c7f349f26634db/master/pass/Grok-Has-Over-100-Million-Monthly-Users-Business-2255064635.jpg",
       "published": "2026-05-21T00:43:13+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T08:00:01.616179+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0886
+      "score": 8.064
+    },
+    {
+      "title": "Pivot raises $40m Series B to pitch an agentic-AI procurement OS at the enterprises legacy software has not fixed",
+      "url": "https://thenextweb.com/news/pivot-40m-series-b-agentic-ai-procurement-operating-system",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Paris and New York-based start-up, founded in 2023, will use the new capital to deepen ERP integrations and push its agentic procurement platform into more enterprise environments. DoorDash, Lemonade and Flix are already on the customer list; $3bn in invoices already run through the system annually. Pivot, the Paris and New York-based procurement-software start-up, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Pivot.avif",
+      "published": "2026-05-21T07:22:17+00:00",
+      "firstSeen": "2026-05-21T09:00:01.220498+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5013
     },
     {
       "title": "Anthropic says it’s about to have its first profitable quarter",
@@ -45,10 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-05-21T00:21:21+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T08:00:01.616179+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0795
+      "score": 5.0552
     },
     {
       "title": "Jensen Huang says he’s found a ‘brand new’ $200B market for Nvidia",
@@ -61,10 +77,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219673294.jpg?resize=1200%2C750",
       "published": "2026-05-21T00:28:31+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T08:00:01.616179+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7825
+      "score": 3.7581
     },
     {
       "title": "One Model, Three Modalities: ByteDance Releases Lance for Image and Video Understanding, Generation, and Editing",
@@ -77,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-21-at-12.07.02-AM-1-150x150.png",
       "published": "2026-05-21T07:14:59+00:00",
       "firstSeen": "2026-05-21T08:00:01.616179+00:00",
-      "lastSeen": "2026-05-21T08:00:01.616179+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.2973
+      "score": 2.2678
     },
     {
       "title": "In SpaceX’s IPO, Elon Musk is a risk factor",
@@ -93,10 +109,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2270729873.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.750005106244%2C100%2C78.499989787512&amp%3Bw=1200",
       "published": "2026-05-21T03:42:45+00:00",
       "firstSeen": "2026-05-21T04:00:01.489618+00:00",
-      "lastSeen": "2026-05-21T08:00:01.616179+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2365
+      "score": 2.2097
+    },
+    {
+      "title": "Trump to sign an AI oversight order this week as MAGA security pressure mounts on frontier-model labs",
+      "url": "https://thenextweb.com/news/trump-ai-oversight-executive-order-voluntary-90-day-disclosure",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The draft executive order, expected as early as Thursday, sets up a voluntary 90-day pre-release model-disclosure framework with the federal government, with critical-infrastructure providers including banks brought in early. Steve Bannon and Amy Kremer have been pressing for a harder, mandatory line. President Donald Trump is expected to sign an executive order on AI oversight [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2020/10/Untitled-design-2020-10-01T165604.930.avif",
+      "published": "2026-05-21T08:01:01+00:00",
+      "firstSeen": "2026-05-21T09:00:01.220498+00:00",
+      "lastSeen": "2026-05-21T09:00:01.220498+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.2796
     },
     {
       "title": "Leveraging Large Language Models for Sentiment Analysis: Multi-Modal Analysis of Decentraland's MANA Token",
@@ -112,7 +144,7 @@
       "lastSeen": "2026-05-21T08:00:01.616179+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "score": -0.7701
     }
   ],
   "errors": []
