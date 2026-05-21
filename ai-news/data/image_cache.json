@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-21T13:30:42.413724+00:00",
+  "updatedAt": "2026-05-21T15:00:01.322859+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7680,6 +7680,46 @@
     "https://www.theverge.com/ai-artificial-intelligence/935056/google-vibe-coding-first-android-app-gemini-ai-studio": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/verge-mood-gemini-google-ai-studio.jpg?quality=90&amp;strip=all&amp;crop=0%2C15.095986038394%2C100%2C69.808027923211&amp;w=1200",
       "checkedAt": "2026-05-21T13:30:42.413724+00:00"
+    },
+    "https://techcrunch.com/2026/05/21/hark-raises-700m-series-a-for-its-secretive-universal-ai-interface": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-6.20.59-AM.png?w=939",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://techcrunch.com/2026/05/21/the-path-founded-by-tony-robbins-and-calm-alums-wants-to-offer-safer-ai-therapy": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2245199304.jpg?resize=1200,800",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://www.theverge.com/podcast/934869/elon-musk-sam-altman-openai-suit-loss-pointless": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_DCD_MuskvAltman.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://techcrunch.com/2026/05/21/google-is-pitching-an-ai-agent-ecosystem-to-consumers-who-may-not-buy-it": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?resize=1200,675",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://www.microsoft.com/en-us/research/blog/vega-zero-knowledge-proofs-for-digital-identity-in-the-age-of-ai": {
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/VEGA-TWLIFB-1200x627-1.jpg",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://techcrunch.com/2026/05/21/with-aluminum-prices-up-20-recycling-startups-bet-on-ai-to-cash-in": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/09/GettyImages-180404126-e1694911368750.jpg?resize=1200,676",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://www.theverge.com/science/935229/spacex-anthropic-ipo-ai-capacity-deal-colossus": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://www.techrepublic.com/article/chaton-ai-assistant-premium-3-year-subscription": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/chaton-plan-1.jpg?f=jpeg",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://www.techrepublic.com/article/news-andrej-karpathy-joins-anthropic": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Michael-Macor.jpg?f=jpeg",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-search-ai-agent-overhaul": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/search-update.jpg?f=jpeg",
+      "checkedAt": "2026-05-21T15:00:01.322859+00:00"
     }
   }
 }
