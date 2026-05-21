@@ -610,5 +610,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-20-evening-stratospheric-spore-weather-loom",
+    "title": "Stratospheric Spore Weather Loom",
+    "tests": "Explores whether GPT Image 2 can produce a readable vertical scientific infographic with sparse labels, cutaway hierarchy, atmospheric translucency, and fine machinery without slipping into dense illegible text.",
+    "prompt": "Use case: infographic-diagram\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a vertical museum-quality educational infographic poster titled \"STRATOSPHERIC SPORE WEATHER LOOM\".\n\nComposition: a clean annotated cutaway diagram of a fictional high-altitude atmospheric research platform that weaves harmless engineered spores into temporary cloud-seeding lattices. Top third: a pale sunrise stratosphere above a curved cloud deck, with a slender solar-wing airship and tethered sensor balloons drifting calmly. Middle section: a transparent cylindrical \"weather loom\" suspended below the airship, showing rotating ceramic reels, braided vapor threads, spore capsules, ionized mist nozzles, and fine mesh guide rings. Bottom third: a magnified cloud cross-section where the woven lattice dissolves into dew droplets, rain nuclei, and visible humidity gradients.\n\nInfographic details: include a sparse set of clear labels only: \"solar airship\", \"spore capsule reel\", \"vapor thread\", \"humidity lattice\", \"droplet formation\", and \"return sensor kite\". Use numbered callout circles 1-5, thin leader lines, simple colored arrows for airflow and humidity movement, and two small inset diagrams: one magnified biodegradable spore capsule and one simplified before/after cloud droplet panel. Keep all text large, minimal, and readable; avoid tiny paragraphs.\n\nVisual style: precise scientific illustration mixed with cinematic atmospheric realism, crisp diagram hierarchy, soft cream margin, subtle grid marks, translucent vapor, pearly white clouds, pale cyan sky, warm peach sunrise highlights, matte white ceramic machinery, faint gold solar-film reflections, high detail, clean educational layout, believable scale cues from tiny maintenance drones.\n\nConstraints: no copyrighted characters, no logos, no watermark, no dense unreadable text, no people as central subjects, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography or performance imagery.",
+    "image": "images/2026-05-20-evening-stratospheric-spore-weather-loom.png",
+    "date": "2026-05-20",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
