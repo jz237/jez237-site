@@ -1,6 +1,6 @@
 {
   "date": "2026-05-21",
-  "updatedAt": "2026-05-21T10:01:20.266953+00:00",
+  "updatedAt": "2026-05-21T11:00:01.642366+00:00",
   "items": [
     {
       "title": "What is a Forward Deployed Engineer: The AI Role OpenAI, Anthropic, and Google Are Hiring in 2026",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-hand-drawn-venn-diagram-sketched-in-bl_pNcqroZdXgCTMXysn491tQ_sLPvQZd-TkWl24gZiyC3Tw_hd-1-150x150.png",
       "published": "2026-05-21T04:58:31+00:00",
       "firstSeen": "2026-05-21T05:00:01.554056+00:00",
-      "lastSeen": "2026-05-21T10:00:01.984989+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.8761
+      "score": 9.8505
     },
     {
       "title": "SpaceX Listed Grok’s ‘Spicy’ Mode as a Risk in Its IPO Filing",
@@ -29,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a0e32d330c7f349f26634db/master/pass/Grok-Has-Over-100-Million-Monthly-Users-Business-2255064635.jpg",
       "published": "2026-05-21T00:43:13+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0395
+      "score": 8.0168
     },
     {
       "title": "Pivot raises $40m Series B to pitch an agentic-AI procurement OS at the enterprises legacy software has not fixed",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-21T10:01:20.266953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4719
+      "score": 5.4445
     },
     {
       "title": "Anthropic says it’s about to have its first profitable quarter",
@@ -61,10 +61,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-05-21T00:21:21+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.031
+      "score": 5.0084
+    },
+    {
+      "title": "Starling’s FY26 profit dips again as the neobank provisions for more credit losses",
+      "url": "https://thenextweb.com/news/starling-bank-fy26-profit-dip-credit-loss-provisions",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Goldman-backed UK challenger has booked a second consecutive annual decline as it takes additional expected-credit-loss provisions, on top of the FY25 fallout from the BBLS Covid-loan compliance issue and the FCA’s £29m anti-money-laundering fine. Starling Bank’s annual profit fell again in the year to 31 March 2026, Bloomberg reported on Thursday, as the Goldman-backed UK [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Starling-Bank.avif",
+      "published": "2026-05-21T09:15:31+00:00",
+      "firstSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.498
     },
     {
       "title": "Manus eyes $1bn raise to buy itself out of Meta acquisition after Chinese block",
@@ -77,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
       "published": "2026-05-21T08:58:43+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5186
+      "score": 4.4899
     },
     {
       "title": "Jensen Huang says he’s found a ‘brand new’ $200B market for Nvidia",
@@ -93,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219673294.jpg?resize=1200%2C750",
       "published": "2026-05-21T00:28:31+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7338
+      "score": 3.7111
     },
     {
       "title": "Meta lays off thousands of employees to offset AI investments",
@@ -109,10 +125,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS507_FTCxMETA_ANTITRUST_CVIRGINIA_2_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T09:20:46+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3395
+      "score": 2.3106
     },
     {
       "title": "One Model, Three Modalities: ByteDance Releases Lance for Image and Video Understanding, Generation, and Editing",
@@ -125,10 +141,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-21-at-12.07.02-AM-1-150x150.png",
       "published": "2026-05-21T07:14:59+00:00",
       "firstSeen": "2026-05-21T08:00:01.616179+00:00",
-      "lastSeen": "2026-05-21T10:00:01.984989+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.2385
+      "score": 2.2112
     },
     {
       "title": "In SpaceX’s IPO, Elon Musk is a risk factor",
@@ -141,65 +157,43 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2270729873.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.750005106244%2C100%2C78.499989787512&amp%3Bw=1200",
       "published": "2026-05-21T03:42:45+00:00",
       "firstSeen": "2026-05-21T04:00:01.489618+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1832
+      "score": 2.1584
     },
     {
-      "title": "AMD commits more than $10bn to Taiwan’s AI ecosystem with ASE, SPIL and Helios as the visible deliverables",
-      "url": "https://thenextweb.com/news/amd-10bn-taiwan-ai-ecosystem-helios-ase-spil",
+      "title": "Trump administration moves to underwrite US AI exports with billions in EXIM financing",
+      "url": "https://thenextweb.com/news/trump-administration-ai-exports-exim-financing-programme",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Lisa Su’s Taiwan announcement covers advanced silicon, packaging and manufacturing partnerships for the company’s rack-scale Helios platform, set for deployment in the second half of 2026. AMD announced on Wednesday more than $10bn of investments across Taiwan’s semiconductor ecosystem to expand strategic partnerships and scale advanced packaging manufacturing for next-generation AI infrastructure. The commitment covers a multi-year [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/AMD.avif",
-      "published": "2026-05-21T08:53:18+00:00",
-      "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "summary": "EXIM has more than $100bn of unused statutory lending capacity that the White House wants channelled into US-built, full-stack AI export packages, with the Commerce Department running a public solicitation for industry-led consortia. The Trump administration is moving to underwrite US-made AI exports with billions of dollars of federal export financing, the latest in a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/trump-ai-national-standard-preempt-state-regulation.avif",
+      "published": "2026-05-21T10:03:43+00:00",
+      "firstSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1159
+      "score": 2.1217
     },
     {
-      "title": "Malaysia issues a statutory demand to TikTok over content moderation failures",
-      "url": "https://thenextweb.com/news/malaysia-mcmc-statutory-demand-tiktok-onsa-section-39",
+      "title": "ICEYE secures a €300M revolving credit facility from a seven-bank syndicate",
+      "url": "https://thenextweb.com/news/iceye-300-million-revolving-credit-facility",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The MCMC’s first formal Section 39 enforcement under the Online Safety Act 2025 lands on TikTok, with a maximum financial penalty of RM10 million in play if the platform fails to deliver an enforceable moderation plan. Malaysia’s Communications and Multimedia Commission has issued a formal statutory demand to TikTok over what regulators describe as a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
-      "published": "2026-05-21T08:46:56+00:00",
-      "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
+      "summary": "The Helsinki-headquartered SAR-satellite operator has originated a 3-year committed RCF led by Citi and Danske Bank, calibrated to back customer-contract guarantees and underwrite continued global expansion after the company doubled in size in 2025. ICEYE, the Helsinki-headquartered synthetic-aperture-radar satellite operator, has originated a €300m three-year committed revolving credit facility, the company said on Thursday. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ICEYE.avif",
+      "published": "2026-05-21T09:52:13+00:00",
+      "firstSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1128
-    },
-    {
-      "title": "China blocks NVIDIA’s RTX 5090D V2 imports while Jensen Huang was in Beijing",
-      "url": "https://thenextweb.com/news/china-rtx-5090d-v2-ban-jensen-huang-beijing-visit",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The ban on the China-only Blackwell card landed during the Trump delegation’s state visit, on which the Nvidia CEO was a late addition. Chinese AI buyers had been using the 5090D V2 as a workaround for the H200 procurement vacuum. China stopped granting import permits for Nvidia’s RTX 5090D V2 gaming card on 15 May, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
-      "published": "2026-05-21T08:32:09+00:00",
-      "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T10:01:20.266953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1055
+      "score": 2.116
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
