@@ -1,6 +1,6 @@
 {
   "date": "2026-05-21",
-  "updatedAt": "2026-05-21T15:00:01.322859+00:00",
+  "updatedAt": "2026-05-21T16:00:02.042875+00:00",
   "items": [
     {
       "title": "Grok’s federal stall is undercutting SpaceX’s IPO growth story",
@@ -13,10 +13,26 @@
       "image": "https://media.thenextweb.com/2026/05/Grok-2.avif",
       "published": "2026-05-21T10:28:29+00:00",
       "firstSeen": "2026-05-21T12:00:02.095742+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 14.0201
+      "score": 13.9935
+    },
+    {
+      "title": "Anthropic’s Code with Claude showed off coding’s future—whether you like it or not",
+      "url": "https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The vibes were strong at Code with Claude, Anthropic’s two-day event for software developers in London that kicked off on May 19, the same day as Google’s I/O in Palo Alto. (A coincidence, not a flex, Anthropic staffers assured me.) “Who here has shipped a pull request in the last week that was completely written&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Katelyn-Lesse-Anthropic-Head-of-Engineering-Claude-Platform-1.jpg?resize=1200%2C600",
+      "published": "2026-05-21T14:30:45+00:00",
+      "firstSeen": "2026-05-21T16:00:02.042875+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.6455
     },
     {
       "title": "What is a Forward Deployed Engineer: The AI Role OpenAI, Anthropic, and Google Are Hiring in 2026",
@@ -29,10 +45,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-hand-drawn-venn-diagram-sketched-in-bl_pNcqroZdXgCTMXysn491tQ_sLPvQZd-TkWl24gZiyC3Tw_hd-1-150x150.png",
       "published": "2026-05-21T04:58:31+00:00",
       "firstSeen": "2026-05-21T05:00:01.554056+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.7526
+      "score": 9.7298
+    },
+    {
+      "title": "I Cloned Myself With Gemini’s AI Avatar Tool. The Result Was Unnervingly Me",
+      "url": "https://www.wired.com/story/i-cloned-myself-with-geminis-ai-avatar-tool-the-result-was-unnervingly-me",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I used the Gemini app to generate lifelike videos featuring a digital clone of myself. Google sees this as the future of creation. I’m still creeped out.",
+      "image": "https://media.wired.com/photos/6a0e4530773c1aab709e10aa/master/pass/Hands-On-With-Gemini-Gear-2276204472.jpg",
+      "published": "2026-05-21T15:48:24+00:00",
+      "firstSeen": "2026-05-21T16:00:02.042875+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3841
     },
     {
       "title": "SpaceX Listed Grok’s ‘Spicy’ Mode as a Risk in Its IPO Filing",
@@ -45,10 +77,26 @@
       "image": "https://media.wired.com/photos/6a0e32d330c7f349f26634db/master/pass/Grok-Has-Over-100-Million-Monthly-Users-Business-2255064635.jpg",
       "published": "2026-05-21T00:43:13+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9298
+      "score": 7.9095
+    },
+    {
+      "title": "Spotify Studio&#8217;s AI agent creates a daily podcast just for you",
+      "url": "https://www.theverge.com/entertainment/935390/spotify-studio-ai-app-personal-podcasts",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Studio by Spotify Labs is a new standalone AI app that generates a daily briefing, podcasts, and playlists on your PC using chatbot prompts. The AI-generated content draws from your Spotify listening history, as well as info from apps you connect to it, like your email inbox, calendar, and notes. Spotify says its AI can [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/spotify-studio-ai.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
+      "published": "2026-05-21T15:47:29+00:00",
+      "firstSeen": "2026-05-21T16:00:02.042875+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.1536
     },
     {
       "title": "Anthropic is paying $15 billion a year for access to Elon Musk’s data centers",
@@ -61,10 +109,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T13:35:52+00:00",
       "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.018
+      "score": 5.989
     },
     {
       "title": "Pivot raises $40m Series B to pitch an agentic-AI procurement OS at the enterprises legacy software has not fixed",
@@ -80,7 +128,7 @@
       "lastSeen": "2026-05-21T10:01:20.266953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3399
+      "score": 5.3156
     },
     {
       "title": "Google is pitching an AI agent ecosystem to consumers who may not buy it",
@@ -93,10 +141,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?resize=1200%2C675",
       "published": "2026-05-21T13:52:23+00:00",
       "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9561
+      "score": 4.9269
     },
     {
       "title": "Anthropic says it’s about to have its first profitable quarter",
@@ -109,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-05-21T00:21:21+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9224
+      "score": 4.9023
     },
     {
       "title": "Vega: Zero-knowledge proofs for digital identity in the age of AI",
@@ -125,74 +173,26 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/VEGA-TWLIFB-1200x627-1.jpg",
       "published": "2026-05-21T13:48:40+00:00",
       "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8243
+      "score": 4.7951
     },
     {
-      "title": "I can’t believe how fast Google vibe coded my first Android app",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/935056/google-vibe-coding-first-android-app-gemini-ai-studio",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
+      "title": "Spotify takes on Google’s NotebookLM with its new app",
+      "url": "https://techcrunch.com/2026/05/21/spotify-debuts-a-new-desktop-app-for-creating-personal-podcasts",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Yesterday, I built my first Android app. Then, I made two more - three in one afternoon. For one, I literally typed 148 words into my web browser and walked away. Ten minutes later, I had an entire new app on my actual Android phone. I did have to prep that phone by enabling a [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/verge-mood-gemini-google-ai-studio.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
-      "published": "2026-05-21T13:00:00+00:00",
-      "firstSeen": "2026-05-21T13:30:42.413724+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
+      "summary": "Spotify is releasing the new desktop app as a research preview in more than 20 markets",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Header.jpeg?resize=1200%2C675",
+      "published": "2026-05-21T15:27:00+00:00",
+      "firstSeen": "2026-05-21T16:00:02.042875+00:00",
+      "lastSeen": "2026-05-21T16:00:02.042875+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8005
-    },
-    {
-      "title": "Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now",
-      "url": "https://www.techrepublic.com/article/microsoft-visual-studio-professional-2026",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Microsoft's latest 64-bit IDE adds AI-assisted coding, faster performance, and advanced collaboration tools.\nThe post Visual Studio 2026 Brings AI Deeper Into Development and It’s 93% Off Right Now appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/01/Copy-of-Untitled-Design-7.png",
-      "published": "2026-05-21T12:30:40+00:00",
-      "firstSeen": "2026-04-28T14:00:01.148748+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5765
-    },
-    {
-      "title": "Starling’s FY26 profit dips again as the neobank provisions for more credit losses",
-      "url": "https://thenextweb.com/news/starling-bank-fy26-profit-dip-credit-loss-provisions",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Goldman-backed UK challenger has booked a second consecutive annual decline as it takes additional expected-credit-loss provisions, on top of the FY25 fallout from the BBLS Covid-loan compliance issue and the FCA’s £29m anti-money-laundering fine. Starling Bank’s annual profit fell again in the year to 31 March 2026, Bloomberg reported on Thursday, as the Goldman-backed UK [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Starling-Bank.avif",
-      "published": "2026-05-21T09:15:31+00:00",
-      "firstSeen": "2026-05-21T11:00:01.642366+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3878
-    },
-    {
-      "title": "Manus eyes $1bn raise to buy itself out of Meta acquisition after Chinese block",
-      "url": "https://thenextweb.com/news/manus-1bn-raise-unwind-meta-acquisition-china-ndrc",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Beijing has ordered the Singapore-via-China agentic AI startup to reverse Meta’s $2bn-plus December acquisition. Manus’s response, on Bloomberg’s reporting, is to raise the capital required to buy itself back out. Manus AI, the Singapore-headquartered agentic-AI start-up at the centre of the Chinese regulatory block on Meta’s $2bn-plus December acquisition, is weighing a fresh capital raise [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
-      "published": "2026-05-21T08:58:43+00:00",
-      "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T15:00:01.322859+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3806
+      "score": 4.7733
     }
   ],
   "errors": []
