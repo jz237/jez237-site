@@ -225,7 +225,7 @@
       object-position: center center;
       opacity: 0;
       transform: scale(1.04) translate3d(0,0,0);
-      transition: opacity 1.25s ease-in-out;
+      transition: opacity 2s ease-in-out;
     }
     .hero-slides img.is-active {
       opacity: 1;
@@ -2157,6 +2157,7 @@
 	        const nextHeroLayer = activeHeroLayer === 0 ? 1 : 0;
 	        const incomingSlide = heroSlides[nextHeroLayer];
 	        const outgoingSlide = heroSlides[activeHeroLayer];
+	        incomingSlide.classList.remove('is-active');
 	        incomingSlide.src = heroImages[activeHeroImage];
 	        if (incomingSlide.decode) {
 	          try {
@@ -2166,12 +2167,14 @@
 	          }
 	        }
 	        requestAnimationFrame(() => {
-	          incomingSlide.classList.add('is-active');
-	          outgoingSlide.classList.remove('is-active');
-	          activeHeroLayer = nextHeroLayer;
+	          requestAnimationFrame(() => {
+	            incomingSlide.classList.add('is-active');
+	            outgoingSlide.classList.remove('is-active');
+	            activeHeroLayer = nextHeroLayer;
+	          });
 	        });
 	      };
-	      window.setInterval(rotateHero, reducedHeroMotion ? 9000 : 4800);
+	      window.setInterval(rotateHero, reducedHeroMotion ? 10000 : 6200);
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
