@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" role="img" aria-labelledby="title desc">
+  <title id="title">Refugium saltwater filtration diagram</title>
+  <desc id="desc">Educational diagram showing refugium chamber with macroalgae, live rock, sand bed, light, pods, and nutrient export.</desc>
+  <rect width="900" height="720" fill="#f7fbff"/>
+  <rect x="34" y="34" width="832" height="652" rx="28" fill="#e8f7ff" stroke="#0f7da3" stroke-width="6"/>
+  <text x="450" y="88" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#07364c">REFUGIUM</text>
+  <text x="450" y="126" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#236276">Macroalgae chamber for nitrate/phosphate export</text>
+  <rect x="132" y="212" width="636" height="324" rx="18" fill="#bceeff" stroke="#0a6d91" stroke-width="7"/>
+  <path d="M132 474 H768 V536 H132 Z" fill="#d6b26b"/>
+  <path d="M210 474 C230 420 214 350 252 292 C270 370 250 420 268 474" fill="none" stroke="#158349" stroke-width="15" stroke-linecap="round"/>
+  <path d="M324 474 C302 410 338 358 330 304 C390 364 362 422 386 474" fill="none" stroke="#1a9b5e" stroke-width="16" stroke-linecap="round"/>
+  <path d="M520 474 C554 414 514 352 570 296 C586 368 598 418 610 474" fill="none" stroke="#168f57" stroke-width="16" stroke-linecap="round"/>
+  <ellipse cx="456" cy="442" rx="70" ry="32" fill="#6b5542"/>
+  <ellipse cx="648" cy="448" rx="56" ry="26" fill="#6b5542"/>
+  <rect x="312" y="156" width="276" height="34" rx="12" fill="#ffd766" stroke="#be8a00" stroke-width="5"/>
+  <text x="450" y="183" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#5e4200">REFUGIUM LIGHT</text>
+  <path d="M92 364 H132" stroke="#07364c" stroke-width="8" marker-end="url(#arrow)"/>
+  <path d="M768 364 H814" stroke="#07364c" stroke-width="8" marker-end="url(#arrow)"/>
+  <text x="84" y="334" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#07364c">from sump</text>
+  <text x="642" y="334" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#07364c">to return chamber</text>
+  <g fill="#07364c">
+    <circle cx="276" cy="406" r="5"/><circle cx="286" cy="386" r="4"/><circle cx="612" cy="394" r="5"/><circle cx="626" cy="414" r="4"/>
+  </g>
+  <text x="450" y="608" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#07364c">Algae growth, live rock, sand, and pods help stabilize reef water.</text>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#07364c"/>
+    </marker>
+  </defs>
+</svg>
