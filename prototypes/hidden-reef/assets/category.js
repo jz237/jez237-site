@@ -213,7 +213,7 @@
       .map(product => [product.groupSlug, product.groupName]))
       .entries())
       .sort((a, b) => a[1].localeCompare(b[1]));
-    const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">Current Picks</option>' : '';
+    const newArrivalsOption = showNewArrivalsFilter ? '<option value="' + NEW_ARRIVALS_FILTER + '">New Arrivals</option>' : '';
     const categoryOptions = newArrivalsOption + categories.map(([slug, name]) => '<option value="' + escapeHtml(slug) + '">' + escapeHtml(name) + '</option>').join('');
     el.innerHTML = '<label><span>Category</span><select id="category-filter"><option value="">All categories</option>' + categoryOptions + '</select></label><label><span>Brand</span><select id="brand-filter"><option value="">All brands</option>' + brandOptions + '</select></label><label><span>Sort</span><select id="sort-products"><option value="featured">Featured order</option><option value="name-asc">Name A-Z</option><option value="price-asc">Price low to high</option><option value="price-desc">Price high to low</option></select></label><button type="button" id="reset-products">Reset</button><a class="home-control" href="' + homeHref + '">Home</a>';
 
