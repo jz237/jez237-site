@@ -646,5 +646,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-21-afternoon-saffron-ink-oracle-vats",
+    "title": "Saffron Ink Oracle Vats",
+    "tests": "Explores fantasy craft imagery with glowing liquid visions, sandstone architecture, and still artisan scale figures while avoiding performance or readable text.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed fantasy craft scene titled conceptually \"Saffron Ink Oracle Vats\", with no visible text.\n\nScene/backdrop: a secluded monastery scriptorium built into terraced red sandstone cliffs at dusk. Arched windows open onto a dry canyon with wind-smoothed stone, thorny silver shrubs, and a pale crescent moon. Inside, shallow channels of glowing saffron-gold ink flow through carved stone gutters between worktables, cooling pools, and sealed ceramic cisterns.\n\nSubject: quiet oracle-scribes and pigment keepers in practical still working poses tend enormous glazed earthenware vats where enchanted ink blooms into miniature visions beneath the surface: tiny storm clouds, mountain silhouettes, constellations, ships on moonlit water, and floating pollen-like sparks. The visions are image-like reflections inside liquid, not writing or symbols. Reed pens, brass siphons, glass alembics, mineral pestles, blank parchment sheets, woven strainers, and clay tablets without markings surround the vats.\n\nComposition: square 1024x1024 cinematic three-quarter view from slightly above table height, with one large open ink vat in the foreground as the focal point and stepped rows of smaller vats receding toward moonlit arches. Include rich details: glossy ink meniscus, saffron stains on stone, steam wisps, ceramic crackle glaze, brass valves, dry dust, reflected moonlight, tiny stationary figures for scale, and layered depth through the cliffside rooms.\n\nMaterials and lighting: warm saffron-gold liquid, matte red sandstone, teal-blue moonlight, dark umber shadows, cream parchment, tarnished brass, smoke-gray glass, subtle magical glow, tactile handmade surfaces, high detail without clutter, fantasy realism grounded in craft.\n\nConstraints: no readable text, no letters, no runes, no logos, no copyrighted characters, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no theatrical performance, no implied choreography, no watermark, no signature.",
+    "image": "images/2026-05-21-afternoon-saffron-ink-oracle-vats.png",
+    "date": "2026-05-21",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
