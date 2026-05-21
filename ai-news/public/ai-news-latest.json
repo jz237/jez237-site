@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-21T20:00:02.057355+00:00",
+  "updatedAt": "2026-05-21T21:00:01.646270+00:00",
   "items": [
     {
-      "title": "Shiny Stories, Hidden Struggles: Investigating the Representation of Disability Through the Lens of LLMs",
+      "title": "Marco Bombieri, Simone Paolo Ponzetto, Marco Rospocher",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-21T20:00:09.736797+00:00",
+      "published": "2026-05-21T21:00:13.972328+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Meta Is in Crisis, Google Search’s Makeover, and AI Gets Booed by Graduates",
+      "url": "https://www.wired.com/story/uncanny-valley-podcast-meta-in-crisis-google-search-makeover-ai-booed-by-graduates",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "In this episode of Uncanny Valley, we unpack the mass layoffs at Meta, big announcements at Google I/O, and the latest backlash against AI.",
+      "image": "https://media.wired.com/photos/6a0e43f5fefe8abd82234107/master/pass/Uncanny-Valley-Meta-Layoffs-2235448475.jpg",
+      "published": "2026-05-21T20:44:53+00:00",
+      "firstSeen": "2026-05-21T21:00:01.646270+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6823
+    },
+    {
+      "title": "Roundtables: Can AI Learn to Understand the World?",
+      "url": "https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Listen to the session or watch below AI companies want to build systems that understand the external world and overcome the limitations of LLMs. Recent developments have brought world models to the forefront of the AI discussion. Watch a conversation with editor in chief Mat Honan, senior AI editor Will Douglas Heaven, and AI reporter&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MITTR-Roundtables-Zoom-Opening-Overlay.png?resize=1200%2C600",
+      "published": "2026-05-21T20:41:05+00:00",
+      "firstSeen": "2026-05-21T21:00:01.646270+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2804
+    },
+    {
+      "title": "All of the updates from Elon Musk and Sam Altman’s battle over OpenAI",
+      "url": "https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Sam Altman and Elon Musk are facing off in a high-stakes trial that could alter the future of OpenAI and its most well-known product, ChatGPT. In 2024, Musk filed a lawsuit accusing OpenAI of abandoning its founding mission of developing AI to benefit humanity and shifting focus to boosting profits instead. After nearly a month, [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-21T20:15:18+00:00",
+      "firstSeen": "2026-04-27T16:52:30.776403+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.3375
+    },
+    {
+      "title": "In desperate times, graduates find hope in humiliating tech CEOs",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/935602/graduates-boo-ai-ceos",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "University graduates are booing and heckling corporate executives who praise AI during their commencement ceremonies, and the only people who seem to be genuinely surprised by this are the executives themselves. In a procession of viral videos, 2026 commencement speakers like former Google CEO Eric Schmidt face loud and sustained jeers from students after praising [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-21-at-3.44.22PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.6098311610285%2C100%2C94.780337677943&amp%3Bw=1200",
+      "published": "2026-05-21T20:00:06+00:00",
+      "firstSeen": "2026-05-21T21:00:01.646270+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3299
     },
     {
       "title": "Datasette Agent",
@@ -28,10 +92,26 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-agent.jpg",
       "published": "2026-05-21T19:52:19+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.6861
+      "score": 3.6561
+    },
+    {
+      "title": "We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks",
+      "url": "https://deepmind.google/blog/were-launching-the-google-deepmind-accelerator-program-in-asia-pacific-to-tackle-environmental-risks",
+      "source": "Google DeepMind Blog",
+      "sourceUrl": "https://deepmind.google/blog/rss.xml",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Image_for_APAC_GDM_Accelerator.max-1440x810.png",
+      "published": "2026-05-21T19:46:42+00:00",
+      "firstSeen": "2026-05-21T21:00:01.646270+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 9.0933
     },
     {
       "title": "Spotify and Universal Music strike deal allowing fan-made AI covers and remixes",
@@ -44,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/10/spotify-app-GettyImages-1689920063-e1702479483636.jpeg?resize=1200%2C676",
       "published": "2026-05-21T19:45:00+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2824
+      "score": 2.2524
     },
     {
       "title": "Six search engines worth trying now that Google isn’t really Google anymore",
@@ -60,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2151663494.jpg?resize=1200%2C801",
       "published": "2026-05-21T19:19:05+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6693
+      "score": 4.6398
     },
     {
       "title": "Scaling creativity in the age of AI",
@@ -76,10 +156,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Digital-paper-marble.jpeg?resize=1200%2C600",
       "published": "2026-05-21T19:16:43+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2682
+      "score": 2.2386
     },
     {
       "title": "datasette-agent-sprites 0.1a0",
@@ -92,10 +172,10 @@
       "image": "",
       "published": "2026-05-21T18:21:07+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6408
+      "score": 5.612
     },
     {
       "title": "Goodbye home screen: How NEED is turning Telegram into a digital marketplace",
@@ -108,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/need-telegram-digital-marketplace-mini-apps.avif",
       "published": "2026-05-21T17:35:00+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1786
+      "score": 3.1504
     },
     {
       "title": "Trump delays AI security executive order: ‘I don’t want to get in the way of that leading’",
@@ -124,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2225249178.jpg?w=1024",
       "published": "2026-05-21T17:30:45+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9165
+      "score": 2.8884
     },
     {
       "title": "HHS launches AI initiative to detect fraud and waste in federal health programmes",
@@ -140,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/HHS.avif",
       "published": "2026-05-21T17:29:47+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8761
+      "score": 3.848
     },
     {
       "title": "Oura files confidentially for US IPO as ring sales accelerate",
@@ -156,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/Oura-rings.avif",
       "published": "2026-05-21T17:22:56+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0728
+      "score": 2.0448
     },
     {
       "title": "Russell Nicolet: Finding his purpose as a client-centered attorney",
@@ -172,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/russell-nicolet-personal-injury-law-firm-without-roadmap.avif",
       "published": "2026-05-21T17:20:02+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0715
+      "score": 2.0435
     },
     {
       "title": "Inside the quiet reinvention of the clinical judgment call",
@@ -188,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/cara-systems-clinical-judgment-reinvention-neurovascular-ai.avif",
       "published": "2026-05-21T17:10:21+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0669
+      "score": 2.039
     },
     {
       "title": "UN draft protocol would expand nations’ right to tax tech giants",
@@ -204,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/05/United-Nations.avif",
       "published": "2026-05-21T17:10:07+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0668
+      "score": 2.0389
     },
     {
       "title": "MagenticLite, MagenticBrain, Fara1.5: An agentic experience optimized for small models",
@@ -220,13 +300,13 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/MagenticLite-TWLIFB-1200x627-1-scaled.jpg",
       "published": "2026-05-21T17:00:00+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.872
+      "score": 8.8443
     },
     {
-      "title": "The Endless AI guitar pedal has potential",
+      "title": "This AI guitar pedal let me roll my own effects",
       "url": "https://www.theverge.com/ai-artificial-intelligence/935219/polyend-endless-ai-guitar-effects-pedal",
       "source": "The Verge AI",
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
@@ -236,10 +316,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268540_Polyend_Endles_TOBrien_0036.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T17:00:00+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.272
+      "score": 2.2443
     },
     {
       "title": "Brett Adcock’s AI hardware startup Hark raises $700m at $6bn valuation",
@@ -252,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/05/Brett-Adcock.avif",
       "published": "2026-05-21T16:56:59+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0606
+      "score": 2.0329
     },
     {
       "title": "Spotify and Universal sign licensing deal for AI covers and remixes",
@@ -268,10 +348,10 @@
       "image": "https://media.thenextweb.com/2024/01/Untitled-design-5-1.avif",
       "published": "2026-05-21T16:49:11+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.057
+      "score": 2.0294
     },
     {
       "title": "IBM lands $1bn as US backs nine quantum companies for $2bn",
@@ -284,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/05/IBM.avif",
       "published": "2026-05-21T16:41:55+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0536
+      "score": 2.0261
     },
     {
       "title": "Europe’s go-to-market accelerator for AI Startups launches",
@@ -300,10 +380,10 @@
       "image": "https://media.thenextweb.com/2026/05/AcceleratorX.avif",
       "published": "2026-05-21T16:31:17+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9487
+      "score": 4.9213
     },
     {
       "title": "NVIDIA GTC Taipei at COMPUTEX: Live Updates on What’s Next in AI",
@@ -316,10 +396,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-rolling-blog-kickoff.jpg",
       "published": "2026-05-21T16:00:17+00:00",
       "firstSeen": "2026-05-21T16:47:15.927597+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9744
+      "score": 5.9475
     },
     {
       "title": "Spotify is launching AI-generated remixes",
@@ -332,10 +412,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/KtzRDIOEJYs3A6mb9MaNfOeEAekXQwD5Omr7BQZWkzg.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T15:54:03+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9416
+      "score": 2.9147
     },
     {
       "title": "I Cloned Myself With Gemini’s AI Avatar Tool. The Result Was Unnervingly Me",
@@ -348,10 +428,10 @@
       "image": "https://media.wired.com/photos/6a0e4530773c1aab709e10aa/master/pass/Hands-On-With-Gemini-Gear-2276204472.jpg",
       "published": "2026-05-21T15:48:24+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.269
+      "score": 9.2422
     },
     {
       "title": "Spotify Studio&#8217;s AI agent creates a daily podcast just for you",
@@ -364,10 +444,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/spotify-studio-ai.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C3.4613147178592%2C100%2C93.077370564282&amp%3Bw=1200",
       "published": "2026-05-21T15:47:29+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0386
+      "score": 6.0118
     },
     {
       "title": "AI video is moving beyond clip slop",
@@ -380,10 +460,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-21-at-10.55.11AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=10.308438155136%2C0%2C79.383123689727%2C100&amp%3Bw=1200",
       "published": "2026-05-21T15:30:00+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2307
+      "score": 2.2041
     },
     {
       "title": "Historic SpaceX IPO Filing Reveals Starlink, AI, and Mars Ambitions",
@@ -396,10 +476,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/spacex-ipo.jpg?f=jpeg",
       "published": "2026-05-21T15:29:38+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1206
+      "score": 3.094
     },
     {
       "title": "Spotify takes on Google’s NotebookLM with its new app",
@@ -412,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Header.jpeg?resize=1200%2C675",
       "published": "2026-05-21T15:27:00+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6594
+      "score": 4.6328
     },
     {
       "title": "Spotify launches an ElevenLabs-powered audiobook creation tool",
@@ -428,10 +508,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Spotify-Audiobooks-Ux.jpg?resize=1200%2C675",
       "published": "2026-05-21T15:27:00+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9594
+      "score": 3.9328
     },
     {
       "title": "Spotify adds AI-powered Q&A and briefing generation features to podcasts",
@@ -444,10 +524,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-21-at-5.45.05-PM.jpg?resize=1200%2C675",
       "published": "2026-05-21T15:27:00+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1594
+      "score": 2.1328
+    },
+    {
+      "title": "datasette-agent-charts 0.1a2",
+      "url": "https://simonwillison.net/2026/May/21/datasette-agent-charts",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Release: datasette-agent-charts 0.1a2\n        \n\n\"View SQL query\" buttons below rendered charts.\n\n\n    \n    \n        Tags: datasette, datasette-agent",
+      "image": "",
+      "published": "2026-05-21T15:15:58+00:00",
+      "firstSeen": "2026-05-21T21:00:01.646270+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.528
     },
     {
       "title": "Glucose Tracking Is Turning Into the Next Big Health Data Platform",
@@ -460,10 +556,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/BGM_twopart-1.jpg?f=jpeg",
       "published": "2026-05-21T15:07:39+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1107
+      "score": 3.0844
     },
     {
       "title": "datasette-agent 0.1a3",
@@ -472,14 +568,14 @@
       "sourceUrl": "https://simonwillison.net/atom/everything/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Release: datasette-agent 0.1a3\n        See Datasette Agent, an extensible AI assistant for Datasette.\n    \n    \n        Tags: datasette, datasette-agent",
+      "summary": "Release: datasette-agent 0.1a3\n        \n\n\"View SQL query\" buttons for both visible tables and collapsed SQL result tool calls.\nDon't display empty reasoning chunks\nImproved handling of truncated responses - table still displays to the user even if the SQL results were truncated when showing the agent.\n\n\nSee Datasette Agent, an extensible AI assistant for Datasette.\n    \n    \n        Tags: datasette, datasette-agent",
       "image": "",
       "published": "2026-05-21T15:04:09+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.6492
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.3229
     },
     {
       "title": "Anthropic’s Code with Claude showed off coding’s future—whether you like it or not",
@@ -492,10 +588,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Katelyn-Lesse-Anthropic-Head-of-Engineering-Claude-Platform-1.jpg?resize=1200%2C600",
       "published": "2026-05-21T14:30:45+00:00",
       "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5345
+      "score": 13.5086
     },
     {
       "title": "Hark raises $700M Series A for its secretive ‘universal’ AI interface",
@@ -508,10 +604,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/Screenshot-2026-03-24-at-6.20.59-AM.png?w=939",
       "published": "2026-05-21T14:00:00+00:00",
       "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2211
+      "score": 4.1956
     },
     {
       "title": "Musk v. Altman: Much ado about nothing",
@@ -524,10 +620,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_DCD_MuskvAltman.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T14:00:00+00:00",
       "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2911
+      "score": 3.2656
     },
     {
       "title": "The Path, founded by Tony Robbins and Calm alums, hopes to offer safer AI therapy",
@@ -540,106 +636,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2245199304.jpg?resize=1200%2C800",
       "published": "2026-05-21T14:00:00+00:00",
       "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4711
-    },
-    {
-      "title": "Google is pitching an AI agent ecosystem to consumers who may not buy it",
-      "url": "https://techcrunch.com/2026/05/21/google-is-pitching-an-ai-agent-ecosystem-to-consumers-who-may-not-buy-it",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "One of the most promising introductions at Google’s I/O developer conference on Tuesday was a new way for consumers to use the web: AI agents. Unfortunately, it was also the most confusing.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?resize=1200%2C675",
-      "published": "2026-05-21T13:52:23+00:00",
-      "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8178
-    },
-    {
-      "title": "Vega: Zero-knowledge proofs for digital identity in the age of AI",
-      "url": "https://www.microsoft.com/en-us/research/blog/vega-zero-knowledge-proofs-for-digital-identity-in-the-age-of-ai",
-      "source": "Microsoft Research Blog",
-      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Vega turns a full credential into a single proof, sharing only what is needed and nothing more, with performance that works in real apps. \nThe post Vega: Zero-knowledge proofs for digital identity in the age of AI appeared first on Microsoft Research.",
-      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/VEGA-TWLIFB-1200x627-1.jpg",
-      "published": "2026-05-21T13:48:40+00:00",
-      "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6862
-    },
-    {
-      "title": "US government takes $2 billion equity stake in nine quantum computing firms",
-      "url": "https://arstechnica.com/gadgets/2026/05/us-government-takes-2-billion-equity-stake-in-nine-quantum-computing-firms",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Beneficiaries include startup backed by firm with links to the Trump family.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2017/03/Screen-Shot-2017-03-31-at-1.37.22-PM.png",
-      "published": "2026-05-21T13:48:38+00:00",
-      "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9762
-    },
-    {
-      "title": "With aluminum prices up 20%, recycling startups bet on AI to cash in",
-      "url": "https://techcrunch.com/2026/05/21/with-aluminum-prices-up-20-recycling-startups-bet-on-ai-to-cash-in",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Recycling startups are using AI to improve the recovery of critical minerals like aluminum, aiming to build a massive source of the metal.",
-      "image": "https://techcrunch.com/wp-content/uploads/2023/09/GettyImages-180404126-e1694911368750.jpg?resize=1200%2C676",
-      "published": "2026-05-21T13:38:42+00:00",
-      "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.112
-    },
-    {
-      "title": "Anthropic is paying $15 billion a year for access to Elon Musk’s data centers",
-      "url": "https://www.theverge.com/science/935229/spacex-anthropic-ipo-ai-capacity-deal-colossus",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Earlier this month, SpaceX and Anthropic announced a new compute partnership that provides access to the rocket company's Colossus data centers in Memphis, TN. Now, with the release of SpaceX's IPO filing, we have more details about that deal, including how much Anthropic is paying to Elon Musk's company. In its S-1 filing, SpaceX said [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK269_ANTHROPIC_2_D.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-21T13:35:52+00:00",
-      "firstSeen": "2026-05-21T15:00:01.322859+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8808
-    },
-    {
-      "title": "License to Stream: ‘007 First Light’ Coming to GeForce NOW With an Ultimate Bundle",
-      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-007-first-light-ultimate-bundle",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The mission begins now. GeForce NOW is dialing up the action with a blockbuster mix of spy thrills, high-speed racing and member rewards — plus eight new games joining the cloud this week, all ready to stream instantly. Leading the drop: the 007 First Light Ultimate Membership Bundle, which brings a brand-new way to jump [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/gfn-thursday-5-14-nv-blog-1280x680-logo-1.jpg",
-      "published": "2026-05-21T13:00:22+00:00",
-      "firstSeen": "2026-05-21T13:30:42.413724+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0958
+      "score": 2.4456
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3307
+      "score": 1.3249
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.7611
+      "score": -1.7652
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1219
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-21T20:00:02.057355+00:00",
+      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5914
