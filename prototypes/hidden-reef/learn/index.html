@@ -208,20 +208,15 @@
         #071a27;
       box-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
-	    .guide-card img {
-	      width: 100%;
-	      aspect-ratio: 1 / 1.18;
-	      object-fit: cover;
+    .guide-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1.18;
+      object-fit: cover;
       object-position: 50% 10%;
       border-bottom: 1px solid rgba(116,205,235,0.16);
-	      background: #fff;
-	    }
-	    .guide-card img[src$=".svg"] {
-	      object-fit: contain;
-	      object-position: center;
-	      padding: 10px;
-	    }
-	    .guide-card div { padding: 16px; }
+      background: #fff;
+    }
+    .guide-card div { padding: 16px; }
     .guide-card h3 {
       margin: 8px 0 8px;
       color: #fff;
@@ -235,7 +230,7 @@
       font-size: 13px;
       line-height: 1.45;
     }
-	    .btn {
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -245,64 +240,9 @@
       border-radius: 6px;
       color: #fff;
       background: var(--orange);
-	      font-weight: 900;
-	    }
-	    .guide-category-stack {
-	      display: grid;
-	      gap: 14px;
-	    }
-	    .guide-category {
-	      overflow: hidden;
-	      border: 1px solid rgba(116,205,235,0.22);
-	      border-radius: 8px;
-	      background: rgba(7,26,39,0.7);
-	    }
-	    .guide-category summary {
-	      display: flex;
-	      align-items: center;
-	      justify-content: space-between;
-	      gap: 16px;
-	      min-height: 58px;
-	      padding: 15px 18px;
-	      color: #fff;
-	      cursor: pointer;
-	      list-style: none;
-	      background: rgba(0,167,183,0.14);
-	    }
-	    .guide-category summary::-webkit-details-marker { display: none; }
-	    .guide-category summary h3 {
-	      margin: 0;
-	      font-family: Georgia, "Times New Roman", serif;
-	      font-size: 24px;
-	      line-height: 1.1;
-	    }
-	    .guide-category summary span {
-	      color: #9fc6d6;
-	      font-size: 12px;
-	      font-weight: 900;
-	      text-align: right;
-	      text-transform: uppercase;
-	      letter-spacing: 0.08em;
-	    }
-	    .guide-category summary::after {
-	      content: "+";
-	      display: grid;
-	      place-items: center;
-	      flex: 0 0 auto;
-	      width: 28px;
-	      height: 28px;
-	      border-radius: 999px;
-	      color: #061722;
-	      background: var(--aqua);
-	      font-size: 22px;
-	      font-weight: 950;
-	      line-height: 1;
-	    }
-	    .guide-category[open] summary::after { content: "-"; }
-	    .guide-category .guide-grid {
-	      padding: 16px;
-	    }
-	    .diagram-list {
+      font-weight: 900;
+    }
+    .diagram-list {
       display: grid;
       gap: 22px;
       margin-top: 14px;
@@ -318,14 +258,13 @@
       background: #071a27;
       box-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
-	    .diagram img {
-	      width: 100%;
-	      height: auto;
-	      border: 1px solid rgba(195,222,232,0.74);
+    .diagram img {
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(195,222,232,0.74);
       border-radius: 8px;
-	      background: #fff;
-	    }
-	    .diagram img[src$=".svg"] { padding: 8px; }
+      background: #fff;
+    }
     .diagram h2 {
       margin: 0 0 10px;
       color: #fff;
@@ -398,14 +337,9 @@
       .header { padding: 14px 12px; }
       .brand img { width: min(100%, 246px); }
       .hero { margin-top: 12px; padding: 24px 18px; }
-	      .section-head { display: block; }
-	      .section-head p { margin-top: 6px; }
-	      .guide-category summary {
-	        align-items: flex-start;
-	        flex-direction: column;
-	      }
-	      .guide-category summary span { text-align: left; }
-	      .diagram { padding: 12px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .diagram { padding: 12px; }
       .footer-top { grid-template-columns: 1fr; }
     }
   </style>
@@ -476,79 +410,39 @@
       </div>
     </section>
 
-	    <section aria-labelledby="saltwater-guides-title">
-	      <div class="section-head">
-	        <h2 id="saltwater-guides-title">Saltwater & Reef Filtration</h2>
-	        <p>Reef-specific systems grouped by purpose, with expandable categories and visual diagram cards.</p>
-	      </div>
-	      <div class="guide-category-stack">
-	        <details class="guide-category" open>
-	          <summary><h3>Core Reef Systems</h3><span>display, sump, HOB, all-in-one</span></summary>
-	          <div class="guide-grid">
-	            <article class="guide-card">
-	              <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
-	              <div><span>Natural biofilter</span><h3>Live Rock Biofiltration</h3><p>Explains porous live rock, surface bacteria, nitrifying zones, microfauna habitat, flow, detritus management, and reef stability.</p></div>
-	              <a class="btn" href="#live-rock-saltwater">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
-	              <div><span>Reef-ready sump</span><h3>Saltwater Sump</h3><p>Shows overflow, drain line, filter sock, protein skimmer, biological media, refugium, return pump, and return line.</p></div>
-	              <a class="btn" href="#sump-saltwater">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back saltwater aquarium filtration system diagram" />
-	              <div><span>Small marine tanks</span><h3>Saltwater HOB Filter</h3><p>Walks through intake, media stages, impeller, live rock rubble, waterfall return, salinity care, and added flow needs.</p></div>
-	              <a class="btn" href="#hang-on-back-saltwater">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
-	              <div><span>Nano reef setup</span><h3>All-In-One Saltwater</h3><p>Shows rear filtration chambers, overflow slots, filter floss, media basket, live rock rubble, skimmer chamber, heater, pump, and return nozzle.</p></div>
-	              <a class="btn" href="#all-in-one-saltwater">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram" />
-	              <div><span>High-capacity system</span><h3>Sump Filtration</h3><p>Maps overflow, drain line, mechanical stage, biological media chamber, chemical media, return pump, and return line back to the display tank.</p></div>
-	              <a class="btn" href="#sump-filter">Inspect diagram</a>
-	            </article>
-	          </div>
-	        </details>
-	        <details class="guide-category" open>
-	          <summary><h3>Mechanical & Polishing</h3><span>sock, roller, UV</span></summary>
-	          <div class="guide-grid">
-	            <article class="guide-card">
-	              <img src="../assets/learn/filter-sock-roller.svg" alt="Filter sock and roller saltwater filtration diagram" />
-	              <div><span>Mechanical prefilter</span><h3>Filter Sock / Roller</h3><p>Shows overflow water passing through sock or fleece media before detritus reaches the rest of the sump.</p></div>
-	              <a class="btn" href="#filter-sock-roller">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/uv-sterilizer.svg" alt="UV sterilizer saltwater filtration diagram" />
-	              <div><span>Water polishing</span><h3>UV Sterilizer</h3><p>Explains controlled flow through a UV body around the quartz sleeve and lamp for water clarity support.</p></div>
-	              <a class="btn" href="#uv-sterilizer">Inspect diagram</a>
-	            </article>
-	          </div>
-	        </details>
-	        <details class="guide-category" open>
-	          <summary><h3>Nutrient Export & Specialty</h3><span>skimmer, refugium, reactor</span></summary>
-	          <div class="guide-grid">
-	            <article class="guide-card">
-	              <img src="../assets/learn/protein-skimmer.svg" alt="Protein skimmer saltwater filtration diagram" />
-	              <div><span>Organic waste removal</span><h3>Protein Skimmer</h3><p>Shows pump intake, bubble chamber, foam neck, collection cup, and clean-water outlet.</p></div>
-	              <a class="btn" href="#protein-skimmer">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/refugium.svg" alt="Refugium saltwater filtration diagram" />
-	              <div><span>Biological export</span><h3>Refugium</h3><p>Explains macroalgae, sand, live rock, pod habitat, refugium lighting, and nitrate/phosphate export.</p></div>
-	              <a class="btn" href="#refugium">Inspect diagram</a>
-	            </article>
-	            <article class="guide-card">
-	              <img src="../assets/learn/media-reactor.svg" alt="Media reactor saltwater filtration diagram" />
-	              <div><span>Chemical media flow</span><h3>Media Reactor</h3><p>Shows feed pump, reactor chamber, carbon or GFO bed, flow direction, and return line.</p></div>
-	              <a class="btn" href="#media-reactor">Inspect diagram</a>
-	            </article>
-	          </div>
-	        </details>
-	      </div>
-	    </section>
+    <section aria-labelledby="saltwater-guides-title">
+      <div class="section-head">
+        <h2 id="saltwater-guides-title">Saltwater & Reef Filtration</h2>
+        <p>Reef-specific systems: live rock biofiltration, saltwater sumps, HOB marine filters, and all-in-one nano reef filtration.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card">
+          <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
+          <div><span>Natural biofilter</span><h3>Live Rock Biofiltration</h3><p>Explains porous live rock, surface bacteria, nitrifying zones, microfauna habitat, flow, detritus management, and reef stability.</p></div>
+          <a class="btn" href="#live-rock-saltwater">Inspect diagram</a>
+        </article>
+        <article class="guide-card">
+          <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
+          <div><span>Reef-ready sump</span><h3>Saltwater Sump</h3><p>Shows overflow, drain line, filter sock, protein skimmer, biological media, refugium, return pump, and return line.</p></div>
+          <a class="btn" href="#sump-saltwater">Inspect diagram</a>
+        </article>
+        <article class="guide-card">
+          <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back saltwater aquarium filtration system diagram" />
+          <div><span>Small marine tanks</span><h3>Saltwater HOB Filter</h3><p>Walks through intake, media stages, impeller, live rock rubble, waterfall return, salinity care, and added flow needs.</p></div>
+          <a class="btn" href="#hang-on-back-saltwater">Inspect diagram</a>
+        </article>
+        <article class="guide-card">
+          <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
+          <div><span>Nano reef setup</span><h3>All-In-One Saltwater</h3><p>Shows rear filtration chambers, overflow slots, filter floss, media basket, live rock rubble, skimmer chamber, heater, pump, and return nozzle.</p></div>
+          <a class="btn" href="#all-in-one-saltwater">Inspect diagram</a>
+        </article>
+        <article class="guide-card">
+          <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram" />
+          <div><span>High-capacity system</span><h3>Sump Filtration</h3><p>Maps overflow, drain line, mechanical stage, biological media chamber, chemical media, return pump, and return line back to the display tank.</p></div>
+          <a class="btn" href="#sump-filter">Inspect diagram</a>
+        </article>
+      </div>
+    </section>
 
     <section class="diagram-list" aria-label="Freshwater and general full diagrams">
       <article class="diagram" id="internal-power-filter">
@@ -618,9 +512,9 @@
         </div>
       </article>
 
-	      <article class="diagram" id="sump-saltwater">
-	        <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
-	        <div>
+      <article class="diagram" id="sump-saltwater">
+        <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
+        <div>
           <h2>Saltwater Sump</h2>
           <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
           <ul>
@@ -628,77 +522,12 @@
             <li>Supports sales conversations around skimmers, socks, return pumps, macroalgae, live rock, and RO/DI top-off habits.</li>
             <li>Good planning visual for customers moving from basic filtration into a serious reef system.</li>
           </ul>
-	        </div>
-	      </article>
+        </div>
+      </article>
 
-	      <article class="diagram" id="filter-sock-roller">
-	        <img src="../assets/learn/filter-sock-roller.svg" alt="Filter sock and roller saltwater filtration diagram" />
-	        <div>
-	          <h2>Filter Sock / Roller</h2>
-	          <p>Best as the first mechanical stage in a sump, where overflow water drops through sock felt or automatic fleece before waste can break down.</p>
-	          <ul>
-	            <li>Explains the difference between reusable socks and automatic roller fleece.</li>
-	            <li>Natural product path for socks, roller mats, fleece rolls, sump holders, and replacement plumbing parts.</li>
-	            <li>Strong maintenance note: trapped detritus is only removed from the system when the sock is cleaned or fleece advances.</li>
-	          </ul>
-	        </div>
-	      </article>
-
-	      <article class="diagram" id="protein-skimmer">
-	        <img src="../assets/learn/protein-skimmer.svg" alt="Protein skimmer saltwater filtration diagram" />
-	        <div>
-	          <h2>Protein Skimmer</h2>
-	          <p>Best for saltwater and reef systems where dissolved organics need to be exported before they become nitrate and phosphate.</p>
-	          <ul>
-	            <li>Shows the pump intake, air mixing, bubble column, foam neck, collection cup, and clean-water outlet.</li>
-	            <li>Supports sales conversations around skimmer sizing, sump water depth, air intake cleaning, and cup maintenance.</li>
-	            <li>Good beginner reef note: skimmers remove waste, but they do not replace water changes or biological filtration.</li>
-	          </ul>
-	        </div>
-	      </article>
-
-	      <article class="diagram" id="refugium">
-	        <img src="../assets/learn/refugium.svg" alt="Refugium saltwater filtration diagram" />
-	        <div>
-	          <h2>Refugium</h2>
-	          <p>Best for reef customers who want a dedicated low-risk chamber for macroalgae, microfauna, live rock rubble, and nutrient export.</p>
-	          <ul>
-	            <li>Explains refugium lighting, macroalgae growth, sand/live rock habitat, pods, and nitrate/phosphate uptake.</li>
-	            <li>Natural product path for refugium lights, macroalgae, live rock rubble, pods, test kits, and pruning tools.</li>
-	            <li>Useful planning note: refugiums need flow and regular harvesting, not just a static algae chamber.</li>
-	          </ul>
-	        </div>
-	      </article>
-
-	      <article class="diagram" id="media-reactor">
-	        <img src="../assets/learn/media-reactor.svg" alt="Media reactor saltwater filtration diagram" />
-	        <div>
-	          <h2>Media Reactor</h2>
-	          <p>Best for running carbon, GFO, phosphate remover, or other specialty media with controlled flow instead of loose media bags.</p>
-	          <ul>
-	            <li>Shows feed pump, reactor body, media bed, upward water path, and polished return flow.</li>
-	            <li>Supports product paths for reactors, pumps, tubing, valves, carbon, GFO, and replacement sponges/screens.</li>
-	            <li>Strong setup note: too much flow can grind media; too little flow leaves media underused.</li>
-	          </ul>
-	        </div>
-	      </article>
-
-	      <article class="diagram" id="uv-sterilizer">
-	        <img src="../assets/learn/uv-sterilizer.svg" alt="UV sterilizer saltwater filtration diagram" />
-	        <div>
-	          <h2>UV Sterilizer</h2>
-	          <p>Best for water clarity support and managing free-floating algae, bacteria, and parasite pressure when sized and flowed correctly.</p>
-	          <ul>
-	            <li>Shows inlet, UV body, quartz sleeve, UV lamp, exposure chamber, and outlet.</li>
-	            <li>Natural product path for UV units, replacement bulbs, quartz sleeves, pumps, tubing, and flow control valves.</li>
-	            <li>Important customer note: UV is not a cure-all and still depends on quarantine, husbandry, bulb age, and proper flow rate.</li>
-	          </ul>
-	        </div>
-	      </article>
-
-	      <article class="diagram" id="hang-on-back-saltwater">
-	        <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back saltwater aquarium filtration system diagram" />
-	        <div>
+      <article class="diagram" id="hang-on-back-saltwater">
+        <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back saltwater aquarium filtration system diagram" />
+        <div>
           <h2>Saltwater HOB Filter</h2>
           <p>Best for small marine tanks, quarantine systems, nano reef setups, hospital tanks, and fish-only saltwater aquariums where simple access matters.</p>
           <ul>
@@ -740,7 +569,7 @@
       <div class="footer-top">
         <div><h3>The Hidden Reef</h3><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
         <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
-	        <div><h4>Learn</h4><div class="footer-link-grid"><a href="#internal-power-filter">Internal filters</a><a href="#freshwater-filter">Freshwater filters</a><a href="#protein-skimmer">Protein skimmers</a><a href="#refugium">Refugiums</a><a href="#media-reactor">Media reactors</a><a href="../category/?cat=equipment">Shop equipment</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="#internal-power-filter">Internal filters</a><a href="#freshwater-filter">Freshwater filters</a><a href="#live-rock-saltwater">Live rock</a><a href="#sump-saltwater">Saltwater sump</a><a href="#all-in-one-saltwater">All-in-one reefs</a><a href="../category/?cat=equipment">Shop equipment</a></div></div>
         <div><h4>Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
       </div>
     </footer>
