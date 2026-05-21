@@ -339,7 +339,15 @@
       box-shadow: 0 12px 28px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
       cursor: pointer;
       transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      animation: departmentGlow 9s ease-in-out infinite;
     }
+    .cat:nth-child(2) { animation-delay: -3.8s; }
+    .cat:nth-child(3) { animation-delay: -1.4s; }
+    .cat:nth-child(4) { animation-delay: -6.2s; }
+    .cat:nth-child(5) { animation-delay: -2.6s; }
+    .cat:nth-child(6) { animation-delay: -7.7s; }
+    .cat:nth-child(7) { animation-delay: -4.9s; }
+    .cat:nth-child(8) { animation-delay: -0.8s; }
     .cat::before {
       content: "";
       position: absolute;
@@ -1933,6 +1941,31 @@
         object-position: 56% 48%;
       }
     }
+    @keyframes departmentGlow {
+      0%, 18%, 100% {
+        border-color: rgba(116,205,235,0.2);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+      }
+      28%, 36% {
+        border-color: rgba(64,217,255,0.62);
+        box-shadow:
+          0 12px 28px rgba(0,0,0,0.22),
+          0 0 0 1px rgba(64,217,255,0.2),
+          0 0 18px rgba(64,217,255,0.18),
+          inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+      48%, 72% {
+        border-color: rgba(116,205,235,0.24);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+      }
+      82%, 88% {
+        border-color: rgba(0,167,183,0.54);
+        box-shadow:
+          0 12px 28px rgba(0,0,0,0.22),
+          0 0 14px rgba(0,167,183,0.16),
+          inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+    }
     .reveal-on-scroll {
       opacity: 0;
       transform: translateY(18px);
@@ -1969,6 +2002,9 @@
         transition: opacity 2.4s ease-in-out !important;
       }
       .hero-slides::after {
+        animation: none !important;
+      }
+      .cat {
         animation: none !important;
       }
       .reveal-on-scroll {
