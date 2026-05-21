@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-21T19:13:58.221112+00:00",
+  "updatedAt": "2026-05-21T20:00:02.057355+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7772,6 +7772,30 @@
     "https://openai.com/index/adventhealth": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2SyV42dJu9Qxe9mQyiIkXo/d8eb4d513aea9968e097e85ae7e9dee1/oai_AdventHealth_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-21T18:00:01.726013+00:00"
+    },
+    "https://simonwillison.net/2026/May/21/datasette-agent": {
+      "image": "https://static.simonwillison.net/static/2026/datasette-agent.jpg",
+      "checkedAt": "2026-05-21T20:00:02.057355+00:00"
+    },
+    "https://techcrunch.com/2026/05/21/spotify-and-universal-music-strike-deal-allowing-fan-made-ai-covers-and-remixes": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/10/spotify-app-GettyImages-1689920063-e1702479483636.jpeg?resize=1200,676",
+      "checkedAt": "2026-05-21T20:00:02.057355+00:00"
+    },
+    "https://techcrunch.com/2026/05/21/six-search-engines-worth-trying-now-that-google-isnt-really-google-anymore": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2151663494.jpg?resize=1200,801",
+      "checkedAt": "2026-05-21T20:00:02.057355+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Digital-paper-marble.jpeg?resize=1200,600",
+      "checkedAt": "2026-05-21T20:00:02.057355+00:00"
+    },
+    "https://simonwillison.net/2026/May/21/datasette-agent-sprites": {
+      "image": "",
+      "checkedAt": "2026-05-21T20:00:02.057355+00:00"
+    },
+    "https://simonwillison.net/2026/May/21/datasette-agent-2": {
+      "image": "",
+      "checkedAt": "2026-05-21T20:00:02.057355+00:00"
     }
   }
 }
