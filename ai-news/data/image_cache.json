@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-21T00:16:38.426414+00:00",
+  "updatedAt": "2026-05-21T01:00:01.831577+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7660,6 +7660,14 @@
     "https://techcrunch.com/2026/05/20/nvidia-posts-another-record-quarter-reveals-43-billion-of-holdings-in-startups": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-getty.jpg?resize=1200,781",
       "checkedAt": "2026-05-20T22:42:22.460732+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/jensen-huang-says-hes-found-a-brand-new-200b-market-for-nvidia": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219673294.jpg?resize=1200,750",
+      "checkedAt": "2026-05-21T01:00:01.831577+00:00"
+    },
+    "https://techcrunch.com/2026/05/20/anthropic-says-its-about-to-have-its-first-profitable-quarter": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200,800",
+      "checkedAt": "2026-05-21T01:00:01.831577+00:00"
     }
   }
 }
