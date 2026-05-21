@@ -634,5 +634,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-21-midday-graviton-coral-data-reef",
+    "title": "Graviton Coral Data Reef",
+    "tests": "Explores a hard-sci-fi zero-gravity data reef: engineered coral-like quantum memory latticework inside an asteroid vault, with opal glass, graphene, superconducting traces, neutron-star rim light, and no performance or dancing imagery.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a richly detailed hard-science-fiction image titled conceptually \"Graviton Coral Data Reef\", with no visible text.\n\nScene/backdrop: a deep-space research vault carved into the shadowed interior of a nickel-iron asteroid, open on one side to a dense starfield and a distant blue-white neutron star. The asteroid walls are dark metallic rock with cut facets, embedded sensor ports, frost, and thin veins of iridescent mineral.\n\nSubject: a zero-gravity data reef where branching coral-like quantum memory structures grow from matte ceramic anchor plates. The reef is not biological coral copied literally: it is engineered latticework made from opalescent glass, black graphene ribs, copper-gold superconducting traces, and tiny sapphire cooling nodes. Thousands of pinprick data lights pulse inside translucent branches like captured constellations. Small maintenance drones and still robotic manipulator arms inspect the lattice for scale; no humanoid figures are needed.\n\nComposition: square 1024x1024 cinematic three-quarter view looking across layered foreground lattice branches into a larger central reef chamber, with a strong diagonal from the asteroid opening to the glowing data reef. Include floating calibration beads, braided fiber bundles, heat-sink fins, fine ice crystals, dust motes, magnetic containment rings, and subtle lensing distortions around the densest memory cluster.\n\nMaterials and lighting: cold neutron-star rim light, warm amber service lamps, deep black asteroid shadow, pearly opal glass, glossy graphene, brushed titanium, copper-gold traces, sapphire blue cooling glints, volumetric dust, crisp reflections, physically plausible zero-gravity engineering, high detail without clutter.\n\nConstraints: no readable text, no labels, no logos, no copyrighted characters, no people posing, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performance imagery, no watermark, no signature.",
+    "image": "images/2026-05-21-midday-graviton-coral-data-reef.png",
+    "date": "2026-05-21",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
