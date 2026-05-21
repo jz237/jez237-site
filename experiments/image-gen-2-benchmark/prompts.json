@@ -658,5 +658,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-21-afternoon-abyssal-recovery-manifest",
+    "title": "Abyssal Recovery Manifest",
+    "tests": "Explores the artifact-document lane through a tactile deep-ocean recovery packet, combining readable archival evidence design with benign and hostile abyssal life forms.",
+    "prompt": "Use case: scientific-educational\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a vertical believable physical artifact-document titled \"Abyssal Recovery Manifest\" from a fictional deep-ocean research program.\nVisual format: a salt-stained expedition evidence packet laid flat for archival photography: clipped waterproof field forms, one torn bathymetry chart, a transparent specimen envelope, small pressure-depth labels, a stamped chain-of-custody tag, sonar strip fragments, and two taped instant photos from a submersible dive. Make the document itself the interesting image format.\nSubject/ecology: an oceanic weird-science ecosystem around trench vents and coral signal reefs, with both benign and hostile life forms. Include benign glass eel couriers carrying tiny glowing spore packets, kelp-backed manta-like rays with sensor gardens, and choir medusas pulsing soft warning patterns. Include hostile razor siphonophore strands, blackwater mimic rays, and spore leech swarms threatening a damaged return sensor pod.\nComposition: vertical 1024x1536 poster-like archive sheet, top-down document photography, layered paper edges, wet corners, mineral stains, ruler ticks, specimen scale markers, partial readable headings only. Keep text sparse and large enough where present; avoid dense tiny paragraphs.\nMood and materials: deep-sea pressure, scientific credibility, salt, mylar, waterproof paper, ceramic sensor fragments, blue-green bioluminescent traces, black water visible in the taped photos. Serious, tactile, not cinematic concept art.\nConstraints: no copyrighted logos, no dancing, no dancers, no stage performance, no fantasy spell effects, no generic sci-fi city, no glossy AI-art poster look, no unreadable walls of text.",
+    "image": "images/2026-05-21-afternoon-abyssal-recovery-manifest.png",
+    "date": "2026-05-21",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
