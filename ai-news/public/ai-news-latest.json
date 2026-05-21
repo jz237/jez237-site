@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-21T11:00:01.642366+00:00",
+  "updatedAt": "2026-05-21T12:00:02.095742+00:00",
   "items": [
     {
-      "title": "Leveraging Large Language Models for Sentiment Analysis: Multi-Modal Analysis of Decentraland's MANA Token",
+      "title": "Xintong Wu, Peiting Tsai, Jing Yuan, Michael Yu, Greg Sun, Luyao Zhang",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-21T11:00:09.035868+00:00",
+      "published": "2026-05-21T12:00:17.123191+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "Grok’s federal stall is undercutting SpaceX’s IPO growth story",
+      "url": "https://thenextweb.com/news/grok-flat-washington-spacex-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Downloads have fallen from 20m in January to 8.3m in April, paid conversion is a fifth of ChatGPT’s, the $0.42-per-agency GSA deal is now stalled, and SpaceX has rented out the Memphis Colossus 1 cluster to Anthropic for $1.25bn a month. SpaceX’s S-1 filed on Tuesday rests on an AI-revenue line Grok is no longer [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Grok-2.avif",
+      "published": "2026-05-21T10:28:29+00:00",
+      "firstSeen": "2026-05-21T12:00:02.095742+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 14.1044
+    },
+    {
+      "title": "Taiwan moves to detain three over alleged illegal high-end AI server exports to China",
+      "url": "https://thenextweb.com/news/taiwan-detains-three-ai-server-smuggling-supermicro-china",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The investigation is the island’s first formal semiconductor-smuggling crackdown and ties back to the wider Supermicro-linked diversion network that has been routing Nvidia Hopper systems into Chinese customers through Hong Kong and third-country relays. Taiwanese prosecutors are seeking the detention of three individuals over the alleged use of forged documents to export high-end Nvidia AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Supermicro.avif",
+      "published": "2026-05-21T10:16:46+00:00",
+      "firstSeen": "2026-05-21T12:00:02.095742+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0986
     },
     {
       "title": "Trump administration moves to underwrite US AI exports with billions in EXIM financing",
@@ -28,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/04/trump-ai-national-standard-preempt-state-regulation.avif",
       "published": "2026-05-21T10:03:43+00:00",
       "firstSeen": "2026-05-21T11:00:01.642366+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1217
+      "score": 2.0923
     },
     {
       "title": "ICEYE secures a €300M revolving credit facility from a seven-bank syndicate",
@@ -44,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/05/ICEYE.avif",
       "published": "2026-05-21T09:52:13+00:00",
       "firstSeen": "2026-05-21T11:00:01.642366+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.116
+      "score": 2.0868
     },
     {
       "title": "Samsung chip workers offered a $340,000 average bonus as union pushes toward $1m and an 18-day strike",
@@ -60,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/Samsung-strike-union.avif",
       "published": "2026-05-21T09:36:11+00:00",
       "firstSeen": "2026-05-21T11:00:01.642366+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.4081
+      "score": 0.3791
     },
     {
       "title": "Meta lays off thousands of employees to offset AI investments",
@@ -76,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STKS507_FTCxMETA_ANTITRUST_CVIRGINIA_2_E.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T09:20:46+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3106
+      "score": 2.2818
     },
     {
       "title": "Starling’s FY26 profit dips again as the neobank provisions for more credit losses",
@@ -92,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/Starling-Bank.avif",
       "published": "2026-05-21T09:15:31+00:00",
       "firstSeen": "2026-05-21T11:00:01.642366+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.498
+      "score": 4.4693
     },
     {
       "title": "Manus eyes $1bn raise to buy itself out of Meta acquisition after Chinese block",
@@ -108,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta-Manus.avif",
       "published": "2026-05-21T08:58:43+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4899
+      "score": 4.4614
     },
     {
       "title": "AMD commits more than $10bn to Taiwan’s AI ecosystem with ASE, SPIL and Helios as the visible deliverables",
@@ -124,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/AMD.avif",
       "published": "2026-05-21T08:53:18+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0873
+      "score": 2.0589
     },
     {
       "title": "Malaysia issues a statutory demand to TikTok over content moderation failures",
@@ -140,10 +172,10 @@
       "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
       "published": "2026-05-21T08:46:56+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0843
+      "score": 2.0559
     },
     {
       "title": "China blocks NVIDIA’s RTX 5090D V2 imports while Jensen Huang was in Beijing",
@@ -156,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
       "published": "2026-05-21T08:32:09+00:00",
       "firstSeen": "2026-05-21T10:00:01.984989+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0772
+      "score": 2.0491
     },
     {
       "title": "SpaceX files S-1, opening the path to what would be the largest IPO in history",
@@ -175,7 +207,7 @@
       "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0715
+      "score": 2.0435
     },
     {
       "title": "NVIDIA beats again, guides to $91bn for Q2 and authorises another $80bn of buybacks",
@@ -191,7 +223,7 @@
       "lastSeen": "2026-05-21T11:00:01.642366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0673
+      "score": 2.0394
     },
     {
       "title": "Trump to sign an AI oversight order this week as MAGA security pressure mounts on frontier-model labs",
@@ -207,7 +239,7 @@
       "lastSeen": "2026-05-21T10:01:20.266953+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.3375
+      "score": -0.3652
     },
     {
       "title": "Pivot raises $40m Series B to pitch an agentic-AI procurement OS at the enterprises legacy software has not fixed",
@@ -223,7 +255,7 @@
       "lastSeen": "2026-05-21T10:01:20.266953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4445
+      "score": 5.4173
     },
     {
       "title": "One Model, Three Modalities: ByteDance Releases Lance for Image and Video Understanding, Generation, and Editing",
@@ -236,10 +268,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-21-at-12.07.02-AM-1-150x150.png",
       "published": "2026-05-21T07:14:59+00:00",
       "firstSeen": "2026-05-21T08:00:01.616179+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.2112
+      "score": 2.184
     },
     {
       "title": "What is a Forward Deployed Engineer: The AI Role OpenAI, Anthropic, and Google Are Hiring in 2026",
@@ -252,10 +284,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-hand-drawn-venn-diagram-sketched-in-bl_pNcqroZdXgCTMXysn491tQ_sLPvQZd-TkWl24gZiyC3Tw_hd-1-150x150.png",
       "published": "2026-05-21T04:58:31+00:00",
       "firstSeen": "2026-05-21T05:00:01.554056+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.8505
+      "score": 9.825
     },
     {
       "title": "In SpaceX’s IPO, Elon Musk is a risk factor",
@@ -268,10 +300,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2270729873.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.750005106244%2C100%2C78.499989787512&amp%3Bw=1200",
       "published": "2026-05-21T03:42:45+00:00",
       "firstSeen": "2026-05-21T04:00:01.489618+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1584
+      "score": 2.1338
     },
     {
       "title": "SpaceX Listed Grok’s ‘Spicy’ Mode as a Risk in Its IPO Filing",
@@ -284,10 +316,10 @@
       "image": "https://media.wired.com/photos/6a0e32d330c7f349f26634db/master/pass/Grok-Has-Over-100-Million-Monthly-Users-Business-2255064635.jpg",
       "published": "2026-05-21T00:43:13+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0168
+      "score": 7.9941
     },
     {
       "title": "Jensen Huang says he’s found a ‘brand new’ $200B market for Nvidia",
@@ -300,10 +332,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219673294.jpg?resize=1200%2C750",
       "published": "2026-05-21T00:28:31+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7111
+      "score": 3.6886
     },
     {
       "title": "Anthropic says it’s about to have its first profitable quarter",
@@ -316,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-05-21T00:21:21+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0084
+      "score": 4.986
     },
     {
       "title": "SpaceX Is Spending $2.8 Billion to Buy Gas Turbines for Its AI Data Centers",
@@ -332,10 +364,10 @@
       "image": "https://media.wired.com/photos/6a0e35cf773c1aab709e1077/master/pass/Elon-Musk-SpaceX-Spending-2.8-Billion-on-Gas-Turbines-Business-2275592313.jpg",
       "published": "2026-05-20T23:30:06+00:00",
       "firstSeen": "2026-05-21T00:00:01.676544+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9892
+      "score": 1.9673
     },
     {
       "title": "Clouted wants to take the guesswork out of making short videos go viral",
@@ -348,10 +380,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/CLOUTED-TEAM-PHOTOS-2.jpg?resize=1200%2C765",
       "published": "2026-05-20T22:30:45+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9676
+      "score": 1.9463
     },
     {
       "title": "Quoting SpaceX S-1",
@@ -364,10 +396,10 @@
       "image": "",
       "published": "2026-05-20T22:26:36+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4661
+      "score": 10.4448
     },
     {
       "title": "xAI burned $6.4B last year — SpaceX’s IPO filing shows why the spending is far from over",
@@ -380,10 +412,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
       "published": "2026-05-20T22:26:08+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9659
+      "score": 8.9447
     },
     {
       "title": "Nvidia posts another record quarter, reveals $43B of holdings in startups",
@@ -396,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-getty.jpg?resize=1200%2C781",
       "published": "2026-05-20T22:03:51+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9579
+      "score": 1.9369
     },
     {
       "title": "Musk’s xAI is being sued over its data center generators — now it’s buying $2.8B more",
@@ -412,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200%2C800",
       "published": "2026-05-20T21:55:49+00:00",
       "firstSeen": "2026-05-20T22:00:01.218256+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9551
+      "score": 4.9341
     },
     {
       "title": "Meet Turbovec: A Rust Vector Index with Python Bindings, and Built on Google’s TurboQuant Algorithm",
@@ -428,10 +460,10 @@
       "image": "",
       "published": "2026-05-20T21:42:31+00:00",
       "firstSeen": "2026-05-20T22:00:01.218256+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.5196
+      "score": -1.5404
     },
     {
       "title": "Anthropic will pay xAI $1.25B per month for compute",
@@ -444,10 +476,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2223576505.jpg?resize=1200%2C800",
       "published": "2026-05-20T21:29:22+00:00",
       "firstSeen": "2026-05-20T22:00:01.218256+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9458
+      "score": 7.9251
     },
     {
       "title": "‘Solve all diseases,’ you say?",
@@ -460,10 +492,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/demishassabis.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-05-20T21:06:35+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0921
+      "score": -1.1126
     },
     {
       "title": "Canva launches inside Google Gemini, completing its push to be the design layer for every major AI assistant",
@@ -479,7 +511,7 @@
       "lastSeen": "2026-05-21T10:01:20.266953+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 19.1934
+      "score": 19.1731
     },
     {
       "title": "Airbnb is adding hotels, car rentals, and luggage storage as it evolves from a home-sharing app into a full travel platform",
@@ -495,7 +527,7 @@
       "lastSeen": "2026-05-21T10:01:20.266953+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.4889
+      "score": 0.4687
     },
     {
       "title": "We’re announcing new community investments in Missouri.",
@@ -508,10 +540,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/MissouriSocial.max-600x600.format-webp.webp",
       "published": "2026-05-20T20:40:00+00:00",
       "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0687
+      "score": 2.0485
     },
     {
       "title": "Tesla’s Full Self-Driving software just landed in its second European country, with more in the queue",
@@ -527,7 +559,7 @@
       "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8865
+      "score": 2.8663
     },
     {
       "title": "OpenAI claims it solved an 80-year-old math problem — for real this time",
@@ -540,10 +572,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Erdos-problems.png?resize=1200%2C863",
       "published": "2026-05-20T20:28:27+00:00",
       "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6248
+      "score": 6.6046
     },
     {
       "title": "OpenAI is about to file for an IPO, and prediction markets think Anthropic just lost the race to go public first",
@@ -559,7 +591,7 @@
       "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.8816
+      "score": 8.8615
     },
     {
       "title": "LinkedIn is finally cracking down on AI slop, and the feed might actually become readable again",
@@ -575,7 +607,7 @@
       "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7765
+      "score": 1.7566
     },
     {
       "title": "Europe’s EV sales are surging as the Iran war sends petrol prices through the roof",
@@ -591,7 +623,7 @@
       "lastSeen": "2026-05-21T09:00:01.220498+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7739
+      "score": 1.754
     },
     {
       "title": "IrisGo, a startup backed by Andrew Ng, looks to become the AI desktop buddy you never knew you needed",
@@ -604,42 +636,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Arnold-Jeffrey-Andrew-Ng36.jpg?resize=1200%2C900",
       "published": "2026-05-20T19:47:20+00:00",
       "firstSeen": "2026-05-20T20:00:01.447083+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0109
-    },
-    {
-      "title": "100 things we announced at I/O 2026",
-      "url": "https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements",
-      "source": "Google AI Blog",
-      "sourceUrl": "https://blog.google/technology/ai/rss/",
-      "sourceWeight": 0.95,
-      "category": "AI",
-      "summary": "Image with the words \"Ready, Set, I/O\" and a colorful Gemini logo",
-      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/100_things_Social.max-600x600.format-webp.webp",
-      "published": "2026-05-20T19:30:00+00:00",
-      "firstSeen": "2026-05-20T20:00:01.447083+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.0452
-    },
-    {
-      "title": "Google publishes exploit code threatening millions of Chromium users",
-      "url": "https://arstechnica.com/security/2026/05/google-publishes-exploit-code-threatening-millions-of-chromium-users",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Google publishes exploit code before patch, reported 29 months earlier, is fixed.",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/01/chromium_logo.jpeg",
-      "published": "2026-05-20T19:10:36+00:00",
-      "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7588
+      "score": 2.9912
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.3905
+      "score": 1.3831
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.7189
+      "score": -1.7241
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -684,10 +684,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1225
+      "score": 1.1224
     },
     {
       "title": "The Life Scientific: Lucy Carpenter",
@@ -700,10 +700,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-21T11:00:01.642366+00:00",
+      "lastSeen": "2026-05-21T12:00:02.095742+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.5918
+      "score": 2.5917
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
