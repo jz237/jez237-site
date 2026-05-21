@@ -622,5 +622,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-21-morning-holographic-salt-organ",
+    "title": "Holographic Salt Organ",
+    "tests": "Explores refractive halite architecture, volumetric holographic light, and surreal scientific-instrument design in a grounded underground environment.",
+    "prompt": "Use case: stylized-concept\nAsset type: daily GPT Image 2 benchmark archive image\nPrimary request: Create a visually rich surreal architectural still scene titled conceptually \"Holographic Salt Organ\", with no visible text.\n\nScene/backdrop: a vast abandoned underground salt mine chamber converted into a quiet optical instrument. Sheer translucent salt walls rise like pale rose and white cliffs, with crystalline seams, shallow brine pools, rusted rail tracks, old timber braces, and fine salt dust suspended in the air.\n\nSubject: at the center stands an enormous pipe-organ-like machine built from carved halite crystals, brushed nickel valves, glass bellows, prism lenses, and clear brine tubes. Instead of music or performance, it silently refracts beams of sunlight piped down from the surface into floating holographic geological landscapes: miniature deserts, glaciers, coral reefs, and star fields hovering as delicate light volumes above the keys and pipes. No players, no audience, no stage.\n\nComposition: square 1024x1024 cinematic three-quarter view from slightly above floor level, strong central silhouette of the crystal organ, foreground brine reflections and salt crystals, layered depth into the mine tunnels behind it. The image should feel like an impossible scientific artifact documented in a real place, not a concert or theatrical scene.\n\nMaterials and lighting: translucent pink halite, milky white salt, cool cyan holographic light, warm amber sunbeams, tarnished metal, dark wet rails, tiny condensation droplets, crisp caustics, volumetric haze, ultra-detailed textures, physically plausible reflections and refraction.\n\nConstraints: no readable text, no logos, no copyrighted characters, no people posing, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performance imagery, no watermark, no signature.",
+    "image": "images/2026-05-21-morning-holographic-salt-organ.png",
+    "date": "2026-05-21",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
