@@ -248,7 +248,7 @@
       margin-top: 14px;
     }
     .diagram {
-      display: grid;
+      display: none;
       grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
       gap: 18px;
       align-items: start;
@@ -257,6 +257,22 @@
       border-radius: 8px;
       background: #071a27;
       box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+      scroll-margin-top: 22px;
+    }
+    .diagram:target,
+    .diagram.is-selected {
+      display: grid;
+    }
+    .diagram-empty {
+      padding: 18px;
+      border: 1px dashed rgba(116,205,235,0.24);
+      border-radius: 8px;
+      color: #b9d9e7;
+      background: rgba(7,31,50,0.58);
+    }
+    body:has(.diagram:target) .diagram-empty,
+    body:has(.diagram.is-selected) .diagram-empty {
+      display: none;
     }
     .diagram img {
       width: 100%;
@@ -445,6 +461,7 @@
     </section>
 
     <section class="diagram-list" aria-label="Freshwater and general full diagrams">
+      <p class="diagram-empty">Select a guide above to open its full diagram.</p>
       <article class="diagram" id="internal-power-filter">
         <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
         <div>
@@ -574,5 +591,29 @@
       </div>
     </footer>
   </main>
+  <script>
+    (() => {
+      const diagrams = Array.from(document.querySelectorAll('.diagram'));
+
+      function showSelectedDiagram(shouldScroll = false) {
+        const id = decodeURIComponent(window.location.hash.replace('#', ''));
+        let selected = null;
+        diagrams.forEach((diagram) => {
+          const isSelected = diagram.id === id;
+          diagram.classList.toggle('is-selected', isSelected);
+          if (isSelected) selected = diagram;
+        });
+        if (selected && shouldScroll) {
+          setTimeout(() => {
+            window.scrollTo({ top: selected.offsetTop - 20, left: 0, behavior: 'auto' });
+          }, 80);
+        }
+      }
+
+      window.addEventListener('hashchange', () => showSelectedDiagram(true));
+      showSelectedDiagram(false);
+      window.addEventListener('load', () => showSelectedDiagram(Boolean(window.location.hash)));
+    })();
+  </script>
 </body>
 </html>
