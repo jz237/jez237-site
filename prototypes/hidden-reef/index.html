@@ -207,13 +207,13 @@
       position: absolute;
       inset: -18%;
       z-index: 3;
-      opacity: 0.2;
+      opacity: 0.34;
       background:
-        repeating-linear-gradient(108deg, transparent 0 34px, rgba(169,244,255,0.13) 36px, transparent 42px),
-        radial-gradient(ellipse at 72% 18%, rgba(64,217,255,0.24), transparent 34%);
+        repeating-linear-gradient(108deg, transparent 0 30px, rgba(169,244,255,0.18) 32px, transparent 39px),
+        radial-gradient(ellipse at 72% 18%, rgba(64,217,255,0.28), transparent 36%);
       mix-blend-mode: screen;
       transform: translate3d(-4%, -2%, 0);
-      animation: waterShimmer 9s ease-in-out infinite alternate;
+      animation: waterShimmer 7s ease-in-out infinite alternate;
       pointer-events: none;
     }
     .hero-slides img {
@@ -224,12 +224,12 @@
       object-fit: cover;
       object-position: center center;
       opacity: 0;
-      transform: scale(1.035);
-      transition: opacity 1.2s ease-in-out, transform 6.8s ease;
+      transform: scale(1.04) translate3d(0,0,0);
+      transition: opacity 1.25s ease-in-out;
     }
     .hero-slides img.is-active {
       opacity: 1;
-      transform: scale(1.09) translate3d(-1.5%, -1%, 0);
+      animation: heroDrift 12s ease-in-out infinite alternate;
     }
     .hero-content {
       max-width: 540px;
@@ -1911,10 +1911,20 @@
     }
     @keyframes waterShimmer {
       from {
-        transform: translate3d(-6%, -2%, 0) rotate(.001deg);
+        transform: translate3d(-7%, -2%, 0) rotate(.001deg);
       }
       to {
-        transform: translate3d(6%, 2%, 0) rotate(.001deg);
+        transform: translate3d(7%, 2%, 0) rotate(.001deg);
+      }
+    }
+    @keyframes heroDrift {
+      from {
+        transform: scale(1.045) translate3d(0, 0, 0);
+        object-position: 50% 50%;
+      }
+      to {
+        transform: scale(1.095) translate3d(-1.6%, -1%, 0);
+        object-position: 56% 48%;
       }
     }
     .reveal-on-scroll {
@@ -2142,27 +2152,26 @@
 	      let activeHeroImage = 0;
 	      let activeHeroLayer = 0;
 	      const reducedHeroMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	      if (!reducedHeroMotion) {
-	        window.setInterval(async () => {
-	          activeHeroImage = (activeHeroImage + 1) % heroImages.length;
-	          const nextHeroLayer = activeHeroLayer === 0 ? 1 : 0;
-	          const incomingSlide = heroSlides[nextHeroLayer];
-	          const outgoingSlide = heroSlides[activeHeroLayer];
-	          incomingSlide.src = heroImages[activeHeroImage];
-	          if (incomingSlide.decode) {
-	            try {
-	              await incomingSlide.decode();
-	            } catch (error) {
-	              // Continue with the browser's normal image loading behavior.
-	            }
+	      const rotateHero = async () => {
+	        activeHeroImage = (activeHeroImage + 1) % heroImages.length;
+	        const nextHeroLayer = activeHeroLayer === 0 ? 1 : 0;
+	        const incomingSlide = heroSlides[nextHeroLayer];
+	        const outgoingSlide = heroSlides[activeHeroLayer];
+	        incomingSlide.src = heroImages[activeHeroImage];
+	        if (incomingSlide.decode) {
+	          try {
+	            await incomingSlide.decode();
+	          } catch (error) {
+	            // Continue with the browser's normal image loading behavior.
 	          }
-	          requestAnimationFrame(() => {
-	            incomingSlide.classList.add('is-active');
-	            outgoingSlide.classList.remove('is-active');
-	            activeHeroLayer = nextHeroLayer;
-	          });
-	        }, 4300);
-	      }
+	        }
+	        requestAnimationFrame(() => {
+	          incomingSlide.classList.add('is-active');
+	          outgoingSlide.classList.remove('is-active');
+	          activeHeroLayer = nextHeroLayer;
+	        });
+	      };
+	      window.setInterval(rotateHero, reducedHeroMotion ? 9000 : 4800);
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
