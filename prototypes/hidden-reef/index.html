@@ -796,9 +796,31 @@
       gap: 10px;
       margin-top: 4px;
     }
+    .learn-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .learn-column {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+    }
+    .learn-column h4 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.1;
+    }
     .learn-preview-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 10px;
     }
     .learn-preview {
@@ -1283,6 +1305,7 @@
       .promo-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .learn-panel { grid-template-columns: 1fr; }
+      .learn-split { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
     @media (max-width: 760px) {
@@ -2214,16 +2237,27 @@
         <div class="learn-copy">
           <span>Educational dissected views</span>
           <h3>See how filtration actually works.</h3>
-          <p>Simple visual guides for internal power filters, sponge filters, and sump systems. Good for beginners, staff explanations, and matching products to the right aquarium setup.</p>
+          <p>Simple visual guides grouped by aquarium type, so freshwater beginners and saltwater reef customers can jump straight to the systems that match their setup.</p>
           <div class="learn-actions">
             <a class="btn" href="learn/">Open Learning Center</a>
             <a class="btn secondary" href="category/?cat=equipment">Shop filtration</a>
           </div>
         </div>
-        <div class="learn-preview-grid" aria-label="Filtration guide previews">
-          <a class="learn-preview" href="learn/#internal-power-filter"><img src="assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration diagram" loading="lazy" /><strong>Internal Power Filter</strong></a>
-          <a class="learn-preview" href="learn/#sponge-filter"><img src="assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration diagram" loading="lazy" /><strong>Sponge Filter</strong></a>
-          <a class="learn-preview" href="learn/#sump-filter"><img src="assets/learn/sump-filter.png" alt="Sump aquarium filtration diagram" loading="lazy" /><strong>Sump Filtration</strong></a>
+        <div class="learn-split" aria-label="Filtration guide previews by aquarium type">
+          <div class="learn-column">
+            <h4>Freshwater Filtration</h4>
+            <div class="learn-preview-grid">
+              <a class="learn-preview" href="learn/#freshwater-filter"><img src="assets/learn/freshwater-filter.png" alt="Freshwater aquarium filtration diagram" loading="lazy" /><strong>Freshwater Filtration</strong></a>
+              <a class="learn-preview" href="learn/#sponge-filter"><img src="assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration diagram" loading="lazy" /><strong>Sponge Filter</strong></a>
+            </div>
+          </div>
+          <div class="learn-column">
+            <h4>Saltwater &amp; Reef Filtration</h4>
+            <div class="learn-preview-grid">
+              <a class="learn-preview" href="learn/#sump-saltwater"><img src="assets/learn/sump-saltwater.png" alt="Saltwater sump aquarium filtration diagram" loading="lazy" /><strong>Saltwater Sump</strong></a>
+              <a class="learn-preview" href="learn/#live-rock-saltwater"><img src="assets/learn/live-rock-saltwater.png" alt="Live rock saltwater filtration diagram" loading="lazy" /><strong>Live Rock Biofiltration</strong></a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
