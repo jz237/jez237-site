@@ -1,6 +1,6 @@
 {
   "date": "2026-05-21",
-  "updatedAt": "2026-05-21T06:00:01.415251+00:00",
+  "updatedAt": "2026-05-21T05:18:46.239560+00:00",
   "items": [
     {
       "title": "What is a Forward Deployed Engineer: The AI Role OpenAI, Anthropic, and Google Are Hiring in 2026",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-hand-drawn-venn-diagram-sketched-in-bl_pNcqroZdXgCTMXysn491tQ_sLPvQZd-TkWl24gZiyC3Tw_hd-1-150x150.png",
       "published": "2026-05-21T04:58:31+00:00",
       "firstSeen": "2026-05-21T05:00:01.554056+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.9891
+      "score": 10.0097
     },
     {
       "title": "SpaceX Listed Grok’s ‘Spicy’ Mode as a Risk in Its IPO Filing",
@@ -29,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a0e32d330c7f349f26634db/master/pass/Grok-Has-Over-100-Million-Monthly-Users-Business-2255064635.jpg",
       "published": "2026-05-21T00:43:13+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1399
+      "score": 8.1583
     },
     {
       "title": "Anthropic says it’s about to have its first profitable quarter",
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-05-21T00:21:21+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1304
+      "score": 5.1485
     },
     {
       "title": "Jensen Huang says he’s found a ‘brand new’ $200B market for Nvidia",
@@ -61,26 +61,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219673294.jpg?resize=1200%2C750",
       "published": "2026-05-21T00:28:31+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8335
-    },
-    {
-      "title": "Marco Bombieri, Simone Paolo Ponzetto, Marco Rospocher",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-21T06:00:09.970306+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 3.8517
     },
     {
       "title": "In SpaceX’s IPO, Elon Musk is a risk factor",
@@ -93,10 +77,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2270729873.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.750005106244%2C100%2C78.499989787512&amp%3Bw=1200",
       "published": "2026-05-21T03:42:45+00:00",
       "firstSeen": "2026-05-21T04:00:01.489618+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2923
+      "score": 2.3122
+    },
+    {
+      "title": "Leveraging Large Language Models for Sentiment Analysis: Multi-Modal Analysis of Decentraland's MANA Token",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-21T05:18:51.341504+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.74
     }
   ],
   "errors": []

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-21T06:00:01.415251+00:00",
+  "updatedAt": "2026-05-21T05:18:46.239560+00:00",
   "items": [
     {
       "title": "Marco Bombieri, Simone Paolo Ponzetto, Marco Rospocher",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-21T06:00:09.970306+00:00",
+      "published": "2026-05-21T05:18:51.341504+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -28,10 +28,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-hand-drawn-venn-diagram-sketched-in-bl_pNcqroZdXgCTMXysn491tQ_sLPvQZd-TkWl24gZiyC3Tw_hd-1-150x150.png",
       "published": "2026-05-21T04:58:31+00:00",
       "firstSeen": "2026-05-21T05:00:01.554056+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 9.9891
+      "score": 10.0097
     },
     {
       "title": "In SpaceX’s IPO, Elon Musk is a risk factor",
@@ -44,10 +44,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/gettyimages-2270729873.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.750005106244%2C100%2C78.499989787512&amp%3Bw=1200",
       "published": "2026-05-21T03:42:45+00:00",
       "firstSeen": "2026-05-21T04:00:01.489618+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2923
+      "score": 2.3122
     },
     {
       "title": "SpaceX Listed Grok’s ‘Spicy’ Mode as a Risk in Its IPO Filing",
@@ -60,10 +60,10 @@
       "image": "https://media.wired.com/photos/6a0e32d330c7f349f26634db/master/pass/Grok-Has-Over-100-Million-Monthly-Users-Business-2255064635.jpg",
       "published": "2026-05-21T00:43:13+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1399
+      "score": 8.1583
     },
     {
       "title": "Jensen Huang says he’s found a ‘brand new’ $200B market for Nvidia",
@@ -76,10 +76,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2219673294.jpg?resize=1200%2C750",
       "published": "2026-05-21T00:28:31+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8335
+      "score": 3.8517
     },
     {
       "title": "Anthropic says it’s about to have its first profitable quarter",
@@ -92,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-05-21T00:21:21+00:00",
       "firstSeen": "2026-05-21T01:00:01.831577+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1304
+      "score": 5.1485
     },
     {
       "title": "SpaceX Is Spending $2.8 Billion to Buy Gas Turbines for Its AI Data Centers",
@@ -108,10 +108,10 @@
       "image": "https://media.wired.com/photos/6a0e35cf773c1aab709e1077/master/pass/Elon-Musk-SpaceX-Spending-2.8-Billion-on-Gas-Turbines-Business-2275592313.jpg",
       "published": "2026-05-20T23:30:06+00:00",
       "firstSeen": "2026-05-21T00:00:01.676544+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1083
+      "score": 2.126
     },
     {
       "title": "Clouted wants to take the guesswork out of making short videos go viral",
@@ -124,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/CLOUTED-TEAM-PHOTOS-2.jpg?resize=1200%2C765",
       "published": "2026-05-20T22:30:45+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0834
+      "score": 2.1007
     },
     {
       "title": "Quoting SpaceX S-1",
@@ -140,10 +140,10 @@
       "image": "",
       "published": "2026-05-20T22:26:36+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5817
+      "score": 10.5989
     },
     {
       "title": "xAI burned $6.4B last year — SpaceX’s IPO filing shows why the spending is far from over",
@@ -156,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2259661359.jpg?w=1024",
       "published": "2026-05-20T22:26:08+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0815
+      "score": 9.0987
     },
     {
       "title": "Nvidia posts another record quarter, reveals $43B of holdings in startups",
@@ -172,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/jensen-huang-gtc-getty.jpg?resize=1200%2C781",
       "published": "2026-05-20T22:03:51+00:00",
       "firstSeen": "2026-05-20T22:42:22.460732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0724
+      "score": 2.0894
     },
     {
       "title": "Musk’s xAI is being sued over its data center generators — now it’s buying $2.8B more",
@@ -188,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200%2C800",
       "published": "2026-05-20T21:55:49+00:00",
       "firstSeen": "2026-05-20T22:00:01.218256+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0691
+      "score": 5.086
     },
     {
       "title": "Meet Turbovec: A Rust Vector Index with Python Bindings, and Built on Google’s TurboQuant Algorithm",
@@ -204,10 +204,10 @@
       "image": "",
       "published": "2026-05-20T21:42:31+00:00",
       "firstSeen": "2026-05-20T22:00:01.218256+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.4063
+      "score": -1.3895
     },
     {
       "title": "Anthropic will pay xAI $1.25B per month for compute",
@@ -220,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2223576505.jpg?resize=1200%2C800",
       "published": "2026-05-20T21:29:22+00:00",
       "firstSeen": "2026-05-20T22:00:01.218256+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0584
+      "score": 8.0751
     },
     {
       "title": "‘Solve all diseases,’ you say?",
@@ -236,10 +236,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/demishassabis.webp?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.597538331207%2C100%2C78.804923337586&amp%3Bw=1200",
       "published": "2026-05-20T21:06:35+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9807
+      "score": -0.9641
     },
     {
       "title": "Canva launches inside Google Gemini, completing its push to be the design layer for every major AI assistant",
@@ -252,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/canva-google-gemini-connected-app-design.avif",
       "published": "2026-05-20T20:53:44+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 19.3042
+      "score": 19.3207
     },
     {
       "title": "Airbnb is adding hotels, car rentals, and luggage storage as it evolves from a home-sharing app into a full travel platform",
@@ -268,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/airbnb-hotels-ai-services-summer-2026.avif",
       "published": "2026-05-20T20:40:34+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.599
+      "score": 0.6154
     },
     {
       "title": "We’re announcing new community investments in Missouri.",
@@ -284,10 +284,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/MissouriSocial.max-600x600.format-webp.webp",
       "published": "2026-05-20T20:40:00+00:00",
       "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1788
+      "score": 2.1951
     },
     {
       "title": "Tesla’s Full Self-Driving software just landed in its second European country, with more in the queue",
@@ -300,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-fsd-europe-lithuania-netherlands-expansion.avif",
       "published": "2026-05-20T20:33:24+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9962
+      "score": 3.0125
     },
     {
       "title": "OpenAI claims it solved an 80-year-old math problem — for real this time",
@@ -316,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Erdos-problems.png?resize=1200%2C863",
       "published": "2026-05-20T20:28:27+00:00",
       "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7342
+      "score": 6.7505
     },
     {
       "title": "OpenAI is about to file for an IPO, and prediction markets think Anthropic just lost the race to go public first",
@@ -332,10 +332,10 @@
       "image": "https://media.thenextweb.com/2026/05/openai-ipo-confidential-filing-anthropic-race.avif",
       "published": "2026-05-20T20:19:05+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.9906
+      "score": 9.0068
     },
     {
       "title": "LinkedIn is finally cracking down on AI slop, and the feed might actually become readable again",
@@ -348,10 +348,10 @@
       "image": "https://media.thenextweb.com/2026/05/linkedin-ai-slop-crackdown-generic-content.avif",
       "published": "2026-05-20T20:03:56+00:00",
       "firstSeen": "2026-05-20T21:08:48.693732+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8847
+      "score": 1.9008
     },
     {
       "title": "Europe’s EV sales are surging as the Iran war sends petrol prices through the roof",
@@ -364,10 +364,10 @@
       "image": "https://media.thenextweb.com/2026/05/europe-ev-sales-surge-iran-war-oil-prices.avif",
       "published": "2026-05-20T19:56:07+00:00",
       "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8817
+      "score": 1.8977
     },
     {
       "title": "IrisGo, a startup backed by Andrew Ng, looks to become the AI desktop buddy you never knew you needed",
@@ -380,10 +380,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Arnold-Jeffrey-Andrew-Ng36.jpg?resize=1200%2C900",
       "published": "2026-05-20T19:47:20+00:00",
       "firstSeen": "2026-05-20T20:00:01.447083+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1183
+      "score": 3.1343
     },
     {
       "title": "100 things we announced at I/O 2026",
@@ -396,10 +396,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/100_things_Social.max-600x600.format-webp.webp",
       "published": "2026-05-20T19:30:00+00:00",
       "firstSeen": "2026-05-20T20:00:01.447083+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1517
+      "score": 6.1676
     },
     {
       "title": "Google publishes exploit code threatening millions of Chromium users",
@@ -412,10 +412,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/01/chromium_logo.jpeg",
       "published": "2026-05-20T19:10:36+00:00",
       "firstSeen": "2026-05-20T21:00:01.150370+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8644
+      "score": 1.8801
     },
     {
       "title": "How to Build Knowledge Graph Generation Pipelines From Text With kg-gen, NetworkX Analytics, and Interactive Visualizations",
@@ -428,10 +428,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-33-1024x731.png",
       "published": "2026-05-20T18:24:08+00:00",
       "firstSeen": "2026-05-20T18:30:02.754968+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.017
+      "score": 3.0324
     },
     {
       "title": "I Gave My OpenClaw Agent a Physical Body",
@@ -444,10 +444,10 @@
       "image": "https://media.wired.com/photos/6a0ca4ce280901f1fa2a6d37/master/pass/AI-Lab-Rock-Em-Sock-Em-Vibe-Coded-Robots-Business.jpg",
       "published": "2026-05-20T18:00:00+00:00",
       "firstSeen": "2026-05-20T18:30:02.754968+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0782
+      "score": 6.0934
     },
     {
       "title": "How fast is 10 tokens per second really?",
@@ -460,10 +460,10 @@
       "image": "",
       "published": "2026-05-20T17:57:45+00:00",
       "firstSeen": "2026-05-20T18:30:02.754968+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0774
+      "score": 3.0925
     },
     {
       "title": "Vibe coding is coming to your phone",
@@ -476,10 +476,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/258002_Google_Pixel_10_Pro_Fold_AJohnson_0010.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-05-20T17:40:00+00:00",
       "firstSeen": "2026-05-20T18:00:01.939262+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5409
+      "score": 5.556
     },
     {
       "title": "OpenAI barrels towards IPO that may happen in September",
@@ -495,7 +495,7 @@
       "lastSeen": "2026-05-20T19:00:01.168682+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0653
+      "score": 6.0802
     },
     {
       "title": "OpenAI barrels toward IPO that may happen in September",
@@ -508,10 +508,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2213399157.jpg?resize=1200%2C800",
       "published": "2026-05-20T17:24:24+00:00",
       "firstSeen": "2026-05-20T20:00:01.447083+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0653
+      "score": 6.0802
     },
     {
       "title": "A new experiment brings better group meetings to Google Beam",
@@ -524,10 +524,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Screenshot_2026-05-15_at_4.21.2.max-600x600.format-webp.webp",
       "published": "2026-05-20T16:45:00+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0913
+      "score": 2.106
     },
     {
       "title": "You can now remix other people’s YouTube Shorts with AI",
@@ -540,10 +540,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/youtube-shorts-remix.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=2.25%2C0%2C95.5%2C100&amp%3Bw=1200",
       "published": "2026-05-20T16:41:40+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.4201
+      "score": 8.4348
     },
     {
       "title": "Google Search’s AI evolution includes more ads",
@@ -556,10 +556,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/search-ads-ai.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C16.342557965595%2C100%2C67.314884068811",
       "published": "2026-05-20T16:00:00+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.5056
+      "score": 9.52
     },
     {
       "title": "Primer secures $100M Series C to fuel US expansion and autonomous AI payments",
@@ -572,10 +572,10 @@
       "image": "https://media.thenextweb.com/2026/05/Primer.avif",
       "published": "2026-05-20T15:38:18+00:00",
       "firstSeen": "2026-05-20T17:00:01.947918+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4881
+      "score": 2.5024
     },
     {
       "title": "Google I/O, Gemini Spark, Antigravity",
@@ -588,11 +588,11 @@
       "image": "",
       "published": "2026-05-20T15:32:17+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.6261
+      "score": 18.6403
     },
     {
       "title": "AI search startups are blowing up",
@@ -605,10 +605,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-ai-sign-Getty.jpg?resize=1200%2C800",
       "published": "2026-05-20T15:04:45+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3168
+      "score": 4.3308
     },
     {
       "title": "Stability AI releases a new audio model that can create 6-minute songs",
@@ -621,10 +621,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-1480808838.jpg?resize=1200%2C800",
       "published": "2026-05-20T15:00:00+00:00",
       "firstSeen": "2026-05-20T15:52:26.707947+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6152
+      "score": 2.6291
     },
     {
       "title": "New Zealand Plans to Cut 9,000 Public Sector Jobs as AI Push Accelerates",
@@ -637,10 +637,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05202026-new-zealand-public-sector-job-cuts.jpg?f=jpeg",
       "published": "2026-05-20T14:41:42+00:00",
       "firstSeen": "2026-05-20T18:00:01.939262+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.869
+      "score": 2.8829
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4308
+      "score": 1.4368
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.6904
+      "score": -1.6861
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1228
@@ -701,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-21T06:00:01.415251+00:00",
+      "lastSeen": "2026-05-21T05:18:46.239560+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5921
