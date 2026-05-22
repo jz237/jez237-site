@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T15:00:01.937321+00:00",
+  "updatedAt": "2026-05-22T15:18:33.079913+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7836,6 +7836,18 @@
     "https://www.theverge.com/tech/936002/samsung-memory-chip-employees-deal-strike-bonus": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2272013055.jpg?quality=90&amp;strip=all&amp;crop=0%2C12.56851276178%2C100%2C74.86297447644&amp;w=1200",
       "checkedAt": "2026-05-22T11:53:11.311034+00:00"
+    },
+    "https://huggingface.co/blog/Dharma-AI/text-degeneration-a-production-failure-mode-that-m": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Dharma-AI/text-degeneration-a-production-failure-mode-that-m.png",
+      "checkedAt": "2026-05-22T15:18:33.079913+00:00"
+    },
+    "https://www.theverge.com/tech/936073/ai-writing-granta-commonwealth-prize": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/257664_7_writing_apps_CVirginia.gif?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-22T15:18:33.079913+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/936072/spotify-umg-ai-music-remix-cover-superfan": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK467_AI_MUSIC_CVirginia_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-22T15:18:33.079913+00:00"
     }
   }
 }
