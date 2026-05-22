@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T20:04:49.685887+00:00",
+  "updatedAt": "2026-05-22T21:21:44.683077+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7888,6 +7888,10 @@
     "https://techcrunch.com/2026/05/22/how-vcs-and-founders-use-inflated-arr-to-kingmake-ai-startups": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Pinocchio-ARR-nose2.png?resize=1200,800",
       "checkedAt": "2026-05-22T21:00:01.239558+00:00"
+    },
+    "https://techcrunch.com/2026/05/22/google-goes-for-the-glitter-with-disco-ball-icons-are-yall-sure-you-still-want-this": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-2.46.43-PM.jpg?resize=1200,965",
+      "checkedAt": "2026-05-22T21:21:44.683077+00:00"
     }
   }
 }
