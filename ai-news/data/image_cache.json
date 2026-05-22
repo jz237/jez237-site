@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T11:00:01.153756+00:00",
+  "updatedAt": "2026-05-22T12:00:01.292498+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7832,6 +7832,10 @@
     "https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200,600",
       "checkedAt": "2026-05-22T11:00:01.153756+00:00"
+    },
+    "https://www.theverge.com/tech/936002/samsung-memory-chip-employees-deal-strike-bonus": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2272013055.jpg?quality=90&amp;strip=all&amp;crop=0%2C12.56851276178%2C100%2C74.86297447644&amp;w=1200",
+      "checkedAt": "2026-05-22T12:00:01.292498+00:00"
     }
   }
 }
