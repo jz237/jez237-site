@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T07:00:01.533160+00:00",
+  "updatedAt": "2026-05-22T08:00:01.338777+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7824,6 +7824,10 @@
     "https://simonwillison.net/2026/May/22/ftc-active-listening": {
       "image": "",
       "checkedAt": "2026-05-22T05:00:02.015853+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/22/build-recurrent-depth-transformers-with-openmythos-for-mla-gqa-sparse-moe-and-loop-scaled-reasoning": {
+      "image": "",
+      "checkedAt": "2026-05-22T08:00:01.338777+00:00"
     }
   }
 }
