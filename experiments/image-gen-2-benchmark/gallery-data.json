@@ -694,5 +694,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-22-midday-moire-orchard-transparency-stack",
+    "title": "Moire Orchard Transparency Stack",
+    "tests": "Wild-experiment lane: tests whether GPT Image 2 can render a scanner-bed optical artifact with moire interference, transparent material layering, and an image format that reads as an experimental photogram rather than a normal scene.",
+    "prompt": "Title concept: Moire Orchard Transparency Stack.\n\nCreate a square 1024x1024 experimental image that looks like an archival flatbed scan of a hand-built optical object, not a landscape and not cinematic concept art. The object is a stack of misregistered transparent acetate sheets, frosted vellum, colored gel filters, pressed translucent plant slices, pinholes, graphite registration marks, and tiny brass paper clips arranged on the scanner glass. Where the layers overlap, they form an impossible orchard only through moire interference: tree trunks appear as wavy black line fields, fruit appears as glowing cyan and vermilion interference discs, irrigation channels appear as thin silver scratches, and shadows from the clips look like small sundials.\n\nComposition: direct top-down scanner-bed view with the square glass edges barely visible, strong negative space, a few sheets shifted off-axis, crisp dust specks, air bubbles, tape seams, fingerprints, Newton rings, faint scanner light bands, and subtle prismatic halos. The image format itself should feel like an experimental studio artifact, halfway between photogram, printmaking proof, and optical science demo.\n\nPalette and mood: clean white scanner light, smoked gray acetate, transparent lemon yellow, cyan, vermilion, graphite black, tarnished brass, pale green plant tissue. Quiet, strange, tactile, precise, visually striking, high detail without clutter.\n\nConstraints: no readable text, no logos, no copyrighted characters, no people, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no watermark, no signature.",
+    "image": "images/2026-05-22-midday-moire-orchard-transparency-stack.png",
+    "date": "2026-05-22",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
