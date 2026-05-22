@@ -22,7 +22,7 @@
     .page { max-width:1180px; background:linear-gradient(180deg,rgba(7,26,39,.48),rgba(3,13,22,0)); }
     /* Header */
     .header {
-      grid-template-columns:auto minmax(260px,1fr) auto;
+      grid-template-columns:1fr;
       gap:18px; padding:16px 20px;
       margin:0 calc(clamp(12px,2.5vw,28px) * -1);
       border-bottom:1px solid var(--reef-line);
@@ -30,7 +30,7 @@
     }
     .brand {
       grid-column:auto; min-width:235px; min-height:0;
-      justify-content:flex-start; padding:0; margin:0;
+      justify-content:center; padding:0; margin:0;
       background:none; border:0; box-shadow:none;
     }
     .brand img {
@@ -333,6 +333,57 @@
     .count-bar span { color:var(--reef-muted); font-size:13px; font-weight:800; }
     .count-bar .total { color:var(--reef-cyan); }
 
+    .shopping-tools {
+      display:grid;
+      grid-template-columns:minmax(260px,1fr) auto;
+      gap:12px;
+      align-items:center;
+      margin:0 0 12px;
+      padding:12px;
+      border:1px solid var(--reef-line);
+      border-radius:8px;
+      background:rgba(7,26,39,.72);
+    }
+    .shopping-search {
+      width:min(100%,520px);
+      height:44px;
+      border-color:rgba(116,205,235,.28);
+      background:#102b3b;
+    }
+    .shopping-search button {
+      width:auto;
+      min-width:78px;
+      padding:0 16px;
+      background:linear-gradient(180deg,#0db6c6,#0089a8);
+    }
+    .shopping-cart {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      min-width:128px;
+      height:44px;
+      padding:0 14px;
+      border:1px solid rgba(116,205,235,.28);
+      border-radius:999px;
+      color:#dff8ff;
+      background:rgba(8,35,52,.72);
+      font-size:20px;
+      text-decoration:none;
+    }
+    .shopping-cart strong {
+      color:#eaf8fc;
+      font-size:13px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .shopping-cart span {
+      top:-6px;
+      right:-4px;
+      background:var(--reef-orange);
+    }
+
     /* Product controls */
     .product-controls {
       display:grid;
@@ -461,6 +512,9 @@
     @media (max-width:760px) {
       .cat-header { grid-template-columns:1fr; min-height:300px; }
       .cat-header__actions { justify-content:flex-start; }
+      .shopping-tools { grid-template-columns:1fr; gap:10px; padding:10px; }
+      .shopping-search { width:100%; }
+      .shopping-cart { width:100%; justify-content:center; }
       .department-switcher { grid-template-columns:1fr; }
       .product-controls { grid-template-columns:1fr; }
       .shopping-layout { grid-template-columns:1fr; }
@@ -475,13 +529,6 @@
         <img src="../assets/site/logo-full.png" alt="The Hidden Reef" />
         <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
       </a>
-      <form class="search-box" action="#products" onsubmit="return false;">
-        <input id="search" type="search" placeholder="Search products..." />
-        <button type="submit" aria-label="Search">⌕</button>
-      </form>
-      <div class="header-actions">
-        <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span>↗</span></a>
-      </div>
     </header>
 
     <nav class="main-nav" aria-label="Store categories">
@@ -497,6 +544,17 @@
 
     <div class="breadcrumb" id="breadcrumb"></div>
     <section class="cat-header" id="cat-header"></section>
+    <div class="shopping-tools" aria-label="Shopping tools">
+      <form class="search-box shopping-search" role="search" aria-label="Search products" onsubmit="return false;">
+        <input id="search" type="search" placeholder="Search aquariums, food, pumps..." autocomplete="off" />
+        <button type="submit" aria-label="Search">⌕</button>
+      </form>
+      <a class="cart-button shopping-cart" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">
+        🛒
+        <strong>Cart</strong>
+        <span>↗</span>
+      </a>
+    </div>
     <div class="product-controls" id="product-controls"></div>
     <div class="department-switcher" id="department-switcher"></div>
     <div class="shopping-layout">
