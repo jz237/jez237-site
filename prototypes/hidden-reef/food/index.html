@@ -14,21 +14,15 @@
     body.department-page { --department-hero: url("../assets/department/food-care.jpg"); --department-hero-size: cover; --department-hero-base: linear-gradient(90deg,#021421,#dbeaf0); }
     @media(max-width:760px){body.department-page .category-hero{background:linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.82)),url("../assets/department/food-care.jpg") right bottom/cover no-repeat}}
   </style>
+  <link rel="stylesheet" href="../assets/site-masthead.css" />
 </head>
 <body class="department-page">
   <main class="page">
-    <header class="header">
+    <header class="header masthead">
       <a class="brand" href="../">
-        <img src="../assets/site/logo-full.png" alt="The Hidden Reef" />
-        <span><strong>The Hidden Reef</strong><span>Aquariums - Fish - Coral - Ponds</span></span>
+        <img src="../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
       </a>
-      <form class="search-box" action="../#products">
-        <input placeholder="Search food, conditioner, bacteria, test kits..." />
-        <button>⌕</button>
-      </form>
-      <div class="header-actions">
-        <button class="cart-button">🛒<span id="cart-count">0</span></button>
-      </div>
     </header>
 
     <nav class="main-nav" aria-label="Store categories">
@@ -36,9 +30,10 @@
       <a href="../category/?cat=saltwater">Saltwater</a>
       <a href="../category/?cat=pond">Pond</a>
       <a href="../category/?cat=equipment">Equipment</a>
-      <a class="active" href="./">Food</a>
+      <a class="active" href="../category/?cat=food">Food</a>
       <a href="../category/?cat=decor">Decorations</a>
       <a href="../category/?cat=maintenance">Maintenance</a>
+      <a href="../learn/">Learn</a>
       <a href="../#visit">Visit Us</a>
     </nav>
 
