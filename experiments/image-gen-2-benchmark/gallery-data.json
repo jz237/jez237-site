@@ -706,5 +706,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-22-evening-municipal-fog-permit-ledger",
+    "title": "Municipal Fog Permit Ledger",
+    "tests": "Artifact-document lane: tests a bureaucratic 1930s-style municipal ledger as the visual format, with sparse readable form text, pasted inspection photos, fog-capture apparatus, and tactile archival paper materials.",
+    "prompt": "Title: Municipal Fog Permit Ledger\nLane/category: artifact-document\n\nCreate a vertical 1024x1536 believable physical artifact-document titled \"MUNICIPAL FOG PERMIT LEDGER\". It should look like a 1930s coastal city clerk oversized permit page photographed flat on a worn oak counter, not like glossy concept art.\n\nVisual format: one large cream ledger sheet with a cloth binding strip on the left, punched holes, oxidized brass corner protectors, carbon-copy smudges, rubber-stamp marks, red pencil corrections, pasted street-map slips, numbered permit tabs, a small folded vellum weather chart, and three tiny sepia inspection photographs clipped to the page. Make the paper object and bureaucratic layout the main image.\n\nSubject: the fictional city licenses household fog capture devices installed on rooftops, awnings, trolley stops, lighthouse balconies, and bakery chimneys. The pasted inspection photos show strange but practical fog apparatus: copper condensation combs, glass bell jars, rain-gutter funnels, ceramic mist meters, weighted canvas hoses, and neighborhood storage canisters. Include a small schematic cross-section of a rooftop fog comb and a street-block map with fog drift arrows.\n\nText discipline: include only sparse, large, partly readable document text such as \"FOG PERMIT\", \"WARD 7\", \"INSPECTED\", \"APPROVED\", \"METER NO.\", and \"CONDENSER TYPE\". Avoid dense tiny paragraphs; most form rows may be blank lines, boxes, or illegible carbon texture. No real city names, no real logos.\n\nMood and materials: civic, odd, tactile, archival; cream paper, faded teal ink, dark red pencil, black rubber stamp, sepia photo paper, tarnished brass clips, blue-gray fog stains, soot fingerprints, soft window light, shallow real shadows, visible paper fibers and worn edges.\n\nConstraints: no copyrighted characters, no logos, no watermark, no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied performance imagery.",
+    "image": "images/2026-05-22-evening-municipal-fog-permit-ledger.png",
+    "date": "2026-05-22",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
