@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T03:00:01.761172+00:00",
+  "updatedAt": "2026-05-22T04:00:01.835687+00:00",
   "items": [
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -13,10 +13,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T03:00:01.761172+00:00",
+      "lastSeen": "2026-05-22T04:00:01.835687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2041
+      "score": 5.1763
     },
     {
       "title": "Marco Bombieri, Simone Paolo Ponzetto, Marco Rospocher",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T03:00:06.537198+00:00",
+      "published": "2026-05-22T04:00:13.182150+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T03:00:01.761172+00:00",
+      "lastSeen": "2026-05-22T04:00:01.835687+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
