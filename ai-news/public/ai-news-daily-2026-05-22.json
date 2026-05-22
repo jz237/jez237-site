@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T06:00:01.690490+00:00",
+  "updatedAt": "2026-05-22T07:00:01.533160+00:00",
   "items": [
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -13,13 +13,13 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T06:00:01.690490+00:00",
+      "lastSeen": "2026-05-22T07:00:01.533160+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.123
+      "score": 5.0975
     },
     {
-      "title": "Don't Collapse Your Features: Why CenterLoss Hurts OOD Detection and Multi-Scale Mahalanobis Wins",
+      "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T06:00:11.424427+00:00",
+      "published": "2026-05-22T07:00:12.203814+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T06:00:01.690490+00:00",
+      "lastSeen": "2026-05-22T07:00:01.533160+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -45,10 +45,10 @@
       "image": "",
       "published": "2026-05-22T04:48:32+00:00",
       "firstSeen": "2026-05-22T05:00:02.015853+00:00",
-      "lastSeen": "2026-05-22T06:00:01.690490+00:00",
+      "lastSeen": "2026-05-22T07:00:01.533160+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2542
+      "score": 2.225
     }
   ],
   "errors": []
