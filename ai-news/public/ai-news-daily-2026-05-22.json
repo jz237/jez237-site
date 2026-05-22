@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T14:00:01.230562+00:00",
+  "updatedAt": "2026-05-22T15:00:01.937321+00:00",
   "items": [
     {
       "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-1.31.26-AM-1-150x150.png",
       "published": "2026-05-22T08:32:55+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.5654
+      "score": 23.5395
     },
     {
       "title": "Kawasaki Heavy ties up with Nvidia on physical AI, and the rideable robot horse gets a foundation model",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/05/CORLEO.avif",
       "published": "2026-05-22T12:15:20+00:00",
       "firstSeen": "2026-05-22T14:00:01.230562+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.398
+      "score": 10.3692
     },
     {
       "title": "Google I/O showed how the path for AI-driven science is shifting",
@@ -47,10 +47,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200%2C600",
       "published": "2026-05-22T10:00:00+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8743
+      "score": 6.8473
     },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3794
+      "score": 6.3539
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -79,10 +79,10 @@
       "image": "",
       "published": "2026-05-22T07:39:30+00:00",
       "firstSeen": "2026-05-22T08:00:01.338777+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8423
+      "score": 5.8171
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -95,10 +95,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9371
+      "score": 4.9166
     },
     {
       "title": "Sora shutdown leaves Critterz at the Cannes market without its model",
@@ -111,10 +111,10 @@
       "image": "https://media.thenextweb.com/2026/05/Critterz.avif",
       "published": "2026-05-22T09:26:39+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0192
+      "score": 3.9927
     },
     {
       "title": "Most data breaches start with a stolen password. Here’s how to fix that",
@@ -127,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/05/most-data-breaches-start-with-a-stolen-password.avif",
       "published": "2026-05-22T12:15:51+00:00",
       "firstSeen": "2026-05-22T14:00:01.230562+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4982
+      "score": 3.4695
     },
     {
       "title": "Italian police seize a piracy app that streamed Sky, DAZN, and Netflix through hijacked real accounts",
@@ -143,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/02/UK-brings-streaming-giants-under-broadcaster-style-regulation.avif",
       "published": "2026-05-22T10:09:34+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1387
+      "score": 3.1116
     },
     {
       "title": "Samsung&#8217;s memory chip employees negotiated $340,000 bonuses this year",
@@ -159,10 +159,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2272013055.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.56851276178%2C100%2C74.86297447644&amp%3Bw=1200",
       "published": "2026-05-22T11:05:25+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.9746
+      "score": 2.9468
     },
     {
       "title": "A hacker group is poisoning open source code at an unprecedented scale",
@@ -175,10 +175,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2270725355-1152x648.jpg",
       "published": "2026-05-22T10:30:14+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7482
+      "score": 2.7208
     },
     {
       "title": "Drake Caraker, Bryan Arnold, David Rhoads",
@@ -189,9 +189,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T14:00:07.919109+00:00",
+      "published": "2026-05-22T15:00:09.242478+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T15:00:01.937321+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
