@@ -1,24 +1,7 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T09:00:01.164464+00:00",
+  "updatedAt": "2026-05-22T08:30:42.702418+00:00",
   "items": [
-    {
-      "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
-      "url": "https://www.marktechpost.com/2026/05/22/microsoft-releases-fara1-5-a-family-of-browser-computer-use-agents-4b-9b-27b-that-outperform-openai-operator-and-gemini-2-5-computer-use-on-online-mind2web",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Microsoft Research released Fara1.5, a family of browser computer-use agents in 4B, 9B, and 27B sizes. Fara1.5-27B scores 72% on Online-Mind2Web, outperforming OpenAI Operator, Gemini 2.5 Computer Use, and Yutori Navigator n1. The release also includes FaraGen1.5, a synthetic data pipeline that trains agents on gated\nThe post Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-1.31.26-AM-1-150x150.png",
-      "published": "2026-05-22T08:32:55+00:00",
-      "firstSeen": "2026-05-22T09:00:01.164464+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 23.7063
-    },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
       "url": "https://thenextweb.com/news/deepseek-agi-goal-10bn-funding-round",
@@ -29,11 +12,11 @@
       "summary": "Liang Wenfeng tells prospective investors the Hangzhou lab will prioritise frontier research over revenue, in its first-ever external raise. DeepSeek founder Liang Wenfeng has told prospective investors in the company’s first outside funding round that the lab intends to pursue artificial general intelligence as a primary goal, and will keep releasing open-source models rather than [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
-      "firstSeen": "2026-05-22T09:00:01.164464+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
+      "firstSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5179
+      "score": 6.5325
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -46,10 +29,10 @@
       "image": "",
       "published": "2026-05-22T07:39:30+00:00",
       "firstSeen": "2026-05-22T08:00:01.338777+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
+      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9797
+      "score": 5.9942
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -62,10 +45,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
+      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0484
+      "score": 5.0602
     },
     {
       "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
@@ -76,9 +59,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T09:00:08.484890+00:00",
+      "published": "2026-05-22T08:30:47.355757+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
+      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -94,10 +77,10 @@
       "image": "",
       "published": "2026-05-22T04:48:32+00:00",
       "firstSeen": "2026-05-22T05:00:02.015853+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
+      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1691
+      "score": 2.1825
     },
     {
       "title": "Meta settles bellwether Kentucky case, ending first school-district trial over youth mental health",
@@ -109,11 +92,11 @@
       "summary": "The Breathitt County settlement closes the trial that had been set for June 12 in Oakland. Roughly 1,200 similar school-district suits sit behind it. Meta has settled the first US school-district lawsuit set for trial seeking to make social media companies pay for the cost of addressing a youth mental health crisis its critics say [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-05-22T07:44:20+00:00",
-      "firstSeen": "2026-05-22T09:00:01.164464+00:00",
-      "lastSeen": "2026-05-22T09:00:01.164464+00:00",
+      "firstSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1121
+      "score": 2.1266
     }
   ],
   "errors": []
