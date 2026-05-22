@@ -2046,6 +2046,81 @@
         gap: 6px;
       }
     }
+    .header.masthead {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-bottom: 0;
+      border-radius: 0;
+      background: #020914;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.22);
+    }
+    .header.masthead .brand {
+      display: block;
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
+    }
+    .header.masthead .brand img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 220px;
+      object-fit: contain;
+      object-position: center center;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .header.masthead .brand > span,
+    .header.masthead .search-box,
+    .header.masthead .header-actions {
+      display: none;
+    }
+    .header.masthead + .main-nav {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      border-top: 1px solid rgba(116,205,235,0.12);
+      border-bottom: 1px solid rgba(116,205,235,0.24);
+      background: #021523;
+    }
+    .header.masthead + .main-nav a {
+      min-height: 40px;
+      color: #b9e9f5;
+      border-left-color: rgba(116,205,235,0.18);
+    }
+    @media (max-width: 760px) {
+      .header.masthead {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+      .header.masthead .brand {
+        display: block;
+        text-align: left;
+      }
+      .header.masthead .brand img {
+        width: 100%;
+        max-height: 150px;
+        object-position: center center;
+      }
+      .header.masthead + .main-nav {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+    }
     @keyframes heroCopyIn {
       from {
         opacity: 0;
@@ -2146,15 +2221,11 @@
 </head>
 <body>
   <main class="page" id="top">
-    <header class="header">
+    <header class="header masthead">
       <a class="brand" href="../../">
-        <img src="assets/site/logo-full.png" alt="The Hidden Reef" />
+        <img src="assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
         <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
       </a>
-      <form class="search-box" action="#products">
-        <input id="search" type="search" placeholder="Search products, categories, brands..." />
-        <button type="submit" aria-label="Search">⌕</button>
-      </form>
       <div class="header-actions">
         <a class="cart-button" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">🛒<span id="cart-count">↗</span></a>
       </div>
