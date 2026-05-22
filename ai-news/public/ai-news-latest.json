@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T08:30:42.702418+00:00",
+  "updatedAt": "2026-05-22T10:00:01.752645+00:00",
   "items": [
     {
       "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
@@ -10,12 +10,77 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T08:30:47.355757+00:00",
+      "published": "2026-05-22T10:00:11.077450+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "The Gulf’s AI Boom Has an Undersea Cable Problem",
+      "url": "https://www.wired.com/story/the-gulfs-ai-boom-has-an-undersea-cable-problem",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Hyperscalers are pushing the Gulf to rethink internet infrastructure as AI raises the stakes of cable disruptions.",
+      "image": "https://media.wired.com/photos/6a0f1eac22b304758d42f327/master/pass/6a0ecc1805928bccd6b0e6c5_UnderwaterCables_Lead_autoxauto.0000001.jpg",
+      "published": "2026-05-22T09:00:00+00:00",
+      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
+    },
+    {
+      "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
+      "url": "https://www.marktechpost.com/2026/05/22/microsoft-releases-fara1-5-a-family-of-browser-computer-use-agents-4b-9b-27b-that-outperform-openai-operator-and-gemini-2-5-computer-use-on-online-mind2web",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Microsoft Research released Fara1.5, a family of browser computer-use agents in 4B, 9B, and 27B sizes. Fara1.5-27B scores 72% on Online-Mind2Web, outperforming OpenAI Operator, Gemini 2.5 Computer Use, and Yutori Navigator n1. The release also includes FaraGen1.5, a synthetic data pipeline that trains agents on gated\nThe post Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-1.31.26-AM-1-150x150.png",
+      "published": "2026-05-22T08:32:55+00:00",
+      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 23.6765
+    },
+    {
+      "title": "NVIDIA’s NVentures adds Alice & Bob to its quantum portfolio",
+      "url": "https://thenextweb.com/news/alice-bob-nventures-series-b-extension",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Paris-based cat-qubit company adds NVentures to a cap table already backed by FFC, AVP and Bpifrance, and deepens its CUDA-Q tie-up with Nvidia. Alice &amp; Bob, the Paris- and Boston-based quantum hardware company building fault-tolerant machines on its proprietary cat-qubit architecture, has added NVentures, Nvidia’s venture arm, to its cap table in an extension [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Alice-and-Bob.avif",
+      "published": "2026-05-22T08:29:46+00:00",
+      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.105
+    },
+    {
+      "title": "Lenovo Q4 revenue tops estimates on strong PC sales, shares jump 15%",
+      "url": "https://thenextweb.com/news/lenovo-q4-revenue-beats-pc-ai-growth",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "$21.6bn quarter, AI revenue nearly doubles, full year crowned the best in the company’s history. Lenovo posted Q4 revenue of $21.6bn, up 27% year-on-year and roughly $2.2bn ahead of consensus, sending shares up about 15% on Friday in Hong Kong. Net profit attributable to shareholders jumped 479% to $521m, almost double the $271m analysts had [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Lenovo.avif",
+      "published": "2026-05-22T08:10:11+00:00",
+      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0955
     },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
@@ -28,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5325
+      "score": 6.4886
     },
     {
       "title": "Meta settles bellwether Kentucky case, ending first school-district trial over youth mental health",
@@ -44,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-05-22T07:44:20+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1266
+      "score": 2.083
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -60,10 +125,10 @@
       "image": "",
       "published": "2026-05-22T07:39:30+00:00",
       "firstSeen": "2026-05-22T08:00:01.338777+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9942
+      "score": 5.9507
     },
     {
       "title": "FTC to Require Cox Media Group, Two Other Firms to Pay Nearly $1 Million to Settle Charges They Deceived Customers About “Active Listening” AI-Powered Marketing Service",
@@ -76,10 +141,10 @@
       "image": "",
       "published": "2026-05-22T04:48:32+00:00",
       "firstSeen": "2026-05-22T05:00:02.015853+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1825
+      "score": 2.1423
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -92,10 +157,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0602
+      "score": 5.0249
     },
     {
       "title": "How CopilotKit Is Redefining the Agentic AI Stack in 2026",
@@ -108,10 +173,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/image-46-150x150.png",
       "published": "2026-05-21T23:23:07+00:00",
       "firstSeen": "2026-05-22T00:00:01.577137+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.7737
+      "score": 8.7391
     },
     {
       "title": "Qwen Introduces Qwen3.7-Max: A Reasoning Agent Model With a 1M-Token Context Window",
@@ -124,10 +189,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-21-at-3.32.30-PM-150x150.png",
       "published": "2026-05-21T22:33:10+00:00",
       "firstSeen": "2026-05-21T23:00:01.725900+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.5542
+      "score": 10.5204
     },
     {
       "title": "Cohere Releases Command A+: A 218B Sparse MoE Model for Agentic Workflows That Runs on as Few as Two H100 GPUs",
@@ -140,11 +205,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-21-at-2.39.46-PM-1-150x150.png",
       "published": "2026-05-21T21:47:00+00:00",
       "firstSeen": "2026-05-21T22:00:01.146472+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1365
+      "score": 18.1034
     },
     {
       "title": "ClickUp cuts 22 per cent of staff and introduces $1 million salary bands for those who remain",
@@ -157,10 +222,10 @@
       "image": "https://media.thenextweb.com/2026/05/clickup-layoffs-22-percent-ai-100x-org-million-salary.avif",
       "published": "2026-05-21T21:38:49+00:00",
       "firstSeen": "2026-05-21T23:00:01.725900+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5634
+      "score": 2.5305
     },
     {
       "title": "GitLab 19.0 bets that the real bottleneck in software delivery is everything after writing the code",
@@ -173,10 +238,10 @@
       "image": "https://media.thenextweb.com/2026/05/gitlab-19-intelligent-orchestration-agentic-devops.avif",
       "published": "2026-05-21T21:26:32+00:00",
       "firstSeen": "2026-05-21T23:00:01.725900+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0588
+      "score": 5.0261
     },
     {
       "title": "Google’s AI search overhaul is great for Google and bad for everyone who makes the web worth searching",
@@ -189,10 +254,10 @@
       "image": "https://media.thenextweb.com/2026/05/google-search-ai-overhaul-publishers-traffic-open-web.avif",
       "published": "2026-05-21T21:18:55+00:00",
       "firstSeen": "2026-05-21T23:00:01.725900+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.056
+      "score": 7.0233
     },
     {
       "title": "Firefox is getting its biggest redesign in six years, and compact mode is coming back",
@@ -205,10 +270,10 @@
       "image": "https://media.thenextweb.com/2026/05/firefox-project-nova-redesign-compact-mode.avif",
       "published": "2026-05-21T20:59:22+00:00",
       "firstSeen": "2026-05-21T21:45:48.876042+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2487
+      "score": 3.2164
     },
     {
       "title": "SpaceX used a $20 billion bridge loan to slash Musk’s debt costs in half, IPO filing reveals",
@@ -221,10 +286,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-bridge-loan-musk-debt-refinancing-ipo.avif",
       "published": "2026-05-21T20:48:03+00:00",
       "firstSeen": "2026-05-21T21:45:48.876042+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8445
+      "score": 3.8124
     },
     {
       "title": "Meta Is in Crisis, Google Search’s Makeover, and AI Gets Booed by Graduates",
@@ -237,10 +302,10 @@
       "image": "https://media.wired.com/photos/6a0e43f5fefe8abd82234107/master/pass/Uncanny-Valley-Meta-Layoffs-2235448475.jpg",
       "published": "2026-05-21T20:44:53+00:00",
       "firstSeen": "2026-05-21T21:00:01.646270+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3834
+      "score": 4.3512
     },
     {
       "title": "Roundtables: Can AI Learn to Understand the World?",
@@ -253,10 +318,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MITTR-Roundtables-Zoom-Opening-Overlay.png?resize=1200%2C600",
       "published": "2026-05-21T20:41:05+00:00",
       "firstSeen": "2026-05-21T21:00:01.646270+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.982
+      "score": 1.9499
     },
     {
       "title": "All of the updates from Elon Musk and Sam Altman’s battle over OpenAI",
@@ -269,10 +334,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/268474_musk_vs_altman_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T20:15:18+00:00",
       "firstSeen": "2026-04-27T16:52:30.776403+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0426
+      "score": 9.0109
     },
     {
       "title": "In desperate times, graduates find hope in humiliating tech CEOs",
@@ -285,10 +350,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-21-at-3.44.22PM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.6098311610285%2C100%2C94.780337677943&amp%3Bw=1200",
       "published": "2026-05-21T20:00:06+00:00",
       "firstSeen": "2026-05-21T21:00:01.646270+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0371
+      "score": 2.0056
     },
     {
       "title": "Datasette Agent",
@@ -301,10 +366,10 @@
       "image": "https://static.simonwillison.net/static/2026/datasette-agent.jpg",
       "published": "2026-05-21T19:52:19+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.3643
+      "score": 3.3329
     },
     {
       "title": "We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks",
@@ -317,10 +382,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Image_for_APAC_GDM_Accelerator.max-1440x810.png",
       "published": "2026-05-21T19:46:42+00:00",
       "firstSeen": "2026-05-21T21:00:01.646270+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8023
+      "score": 8.771
     },
     {
       "title": "New Verizon Report Reveals the Security Gap Attackers Are Exploiting Most",
@@ -333,10 +398,10 @@
       "image": "",
       "published": "2026-05-21T19:45:32+00:00",
       "firstSeen": "2026-05-21T21:45:48.876042+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6219
+      "score": 3.5906
     },
     {
       "title": "Spotify and Universal Music strike deal allowing fan-made AI covers and remixes",
@@ -349,10 +414,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/10/spotify-app-GettyImages-1689920063-e1702479483636.jpeg?resize=1200%2C676",
       "published": "2026-05-21T19:45:00+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9617
+      "score": 1.9304
     },
     {
       "title": "Six search engines worth trying now that Google isn’t really Google anymore",
@@ -365,10 +430,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2151663494.jpg?resize=1200%2C801",
       "published": "2026-05-21T19:19:05+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3525
+      "score": 4.3216
     },
     {
       "title": "Scaling creativity in the age of AI",
@@ -381,10 +446,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/Digital-paper-marble.jpeg?resize=1200%2C600",
       "published": "2026-05-21T19:16:43+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9516
+      "score": 1.9208
     },
     {
       "title": "datasette-agent-sprites 0.1a0",
@@ -397,10 +462,10 @@
       "image": "",
       "published": "2026-05-21T18:21:07+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3323
+      "score": 5.3022
     },
     {
       "title": "Goodbye home screen: How NEED is turning Telegram into a digital marketplace",
@@ -413,10 +478,10 @@
       "image": "https://media.thenextweb.com/2026/05/need-telegram-digital-marketplace-mini-apps.avif",
       "published": "2026-05-21T17:35:00+00:00",
       "firstSeen": "2026-05-21T19:00:01.461302+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8766
+      "score": 2.8472
     },
     {
       "title": "Trump delays AI security executive order, saying language ‘could have been a blocker’",
@@ -429,10 +494,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2225249178.jpg?w=1024",
       "published": "2026-05-21T17:30:45+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6152
+      "score": 2.5858
     },
     {
       "title": "HHS launches AI initiative to detect fraud and waste in federal health programmes",
@@ -448,7 +513,7 @@
       "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5749
+      "score": 3.5455
     },
     {
       "title": "Oura files confidentially for US IPO as ring sales accelerate",
@@ -464,7 +529,7 @@
       "lastSeen": "2026-05-22T08:30:42.702418+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7726
+      "score": 1.7433
     },
     {
       "title": "Russell Nicolet: Finding his purpose as a client-centered attorney",
@@ -480,7 +545,7 @@
       "lastSeen": "2026-05-22T08:00:01.338777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7716
+      "score": 1.7424
     },
     {
       "title": "Inside the quiet reinvention of the clinical judgment call",
@@ -496,7 +561,7 @@
       "lastSeen": "2026-05-22T08:00:01.338777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7684
+      "score": 1.7393
     },
     {
       "title": "UN draft protocol would expand nations’ right to tax tech giants",
@@ -512,7 +577,7 @@
       "lastSeen": "2026-05-21T22:00:01.146472+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7683
+      "score": 1.7392
     },
     {
       "title": "MagenticLite, MagenticBrain, Fara1.5: An agentic experience optimized for small models",
@@ -525,10 +590,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/MagenticLite-TWLIFB-1200x627-1-scaled.jpg",
       "published": "2026-05-21T17:00:00+00:00",
       "firstSeen": "2026-05-21T20:00:02.057355+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5749
+      "score": 8.546
     },
     {
       "title": "This AI guitar pedal let me roll my own effects",
@@ -541,10 +606,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268540_Polyend_Endles_TOBrien_0036.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-21T17:00:00+00:00",
       "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9749
+      "score": 1.946
     },
     {
       "title": "Brett Adcock’s AI hardware startup Hark raises $700m at $6bn valuation",
@@ -560,7 +625,7 @@
       "lastSeen": "2026-05-21T22:00:01.146472+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7639
+      "score": 1.735
     },
     {
       "title": "Spotify and Universal sign licensing deal for AI covers and remixes",
@@ -576,71 +641,7 @@
       "lastSeen": "2026-05-21T22:00:01.146472+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7614
-    },
-    {
-      "title": "IBM lands $1bn as US backs nine quantum companies for $2bn",
-      "url": "https://thenextweb.com/news/us-2bn-quantum-equity-stakes-chips-act",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Nine CHIPS Act letters of intent, $1bn for IBM, and a government cap table that now includes most of the publicly traded quantum names. The US Department of Commerce has signed nine letters of intent to provide $2.013bn in CHIPS Act funding to quantum computing companies, in exchange for federal equity stakes in each recipient. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/IBM.avif",
-      "published": "2026-05-21T16:41:55+00:00",
-      "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.759
-    },
-    {
-      "title": "Europe’s go-to-market accelerator for AI Startups launches",
-      "url": "https://thenextweb.com/news/acceleratorx-launch-european-ai-startup",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "AcceleratorX, a new breed of startup accelerator purpose-built for AI founders opens Cohort 1 applications – offering startups unprecedented access to a pan-European network of 2,000+ marketing and communications professionals across 30 countries as real pilot clients from day one. Most AI startups don’t fail because they can’t build. In 2026, building has become cheap [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/AcceleratorX.avif",
-      "published": "2026-05-21T16:31:17+00:00",
-      "firstSeen": "2026-05-21T18:00:01.726013+00:00",
-      "lastSeen": "2026-05-21T21:00:01.646270+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.6555
-    },
-    {
-      "title": "NVIDIA GTC Taipei at COMPUTEX: Live Updates on What’s Next in AI",
-      "url": "https://blogs.nvidia.com/blog/nvidia-gtc-taipei-computex-2026-news",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "At NVIDIA GTC Taipei at COMPUTEX, the world’s developers, researchers and industry leaders are converging to dive into the latest breakthroughs shaping every industry, covering topics spanning AI factories and scaling infrastructure to agentic and physical AI and more.",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-rolling-blog-kickoff.jpg",
-      "published": "2026-05-21T16:00:17+00:00",
-      "firstSeen": "2026-05-21T16:47:15.927597+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.6854
-    },
-    {
-      "title": "Spotify is launching AI-generated remixes",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/935379/spotify-umg-ai-covers-remix",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Spotify and Universal Music Group (UMG) just announced a licensing deal that will allow users to prompt the creation of AI-generated remixes and covers for streaming songs. The tool will be a paid add-on for Premium subscribers. Artists will be able to opt out of the program, but those who do participate will collect royalties [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/KtzRDIOEJYs3A6mb9MaNfOeEAekXQwD5Omr7BQZWkzg.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-21T15:54:03+00:00",
-      "firstSeen": "2026-05-21T16:00:02.042875+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6534
+      "score": 1.7325
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -653,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2688
+      "score": 1.2628
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -669,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.8048
+      "score": -1.8091
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -685,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1213
@@ -701,10 +702,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-22T08:30:42.702418+00:00",
+      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.591
+      "score": 2.5909
     },
     {
       "title": "Hiranya Peiris on unravelling the story of the universe",
