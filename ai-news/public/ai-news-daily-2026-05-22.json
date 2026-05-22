@@ -1,7 +1,23 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T00:00:01.577137+00:00",
+  "updatedAt": "2026-05-22T01:00:01.617281+00:00",
   "items": [
+    {
+      "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
+      "url": "https://www.wired.com/story/openai-chris-lehane-global-affairs-pr",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Global affairs chief Chris Lehane wants to tone down the debate over AI’s societal impacts—and get states to pass laws that won’t derail OpenAI’s meteoric rise.",
+      "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
+      "published": "2026-05-22T00:04:25+00:00",
+      "firstSeen": "2026-05-22T01:00:01.617281+00:00",
+      "lastSeen": "2026-05-22T01:00:01.617281+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.262
+    },
     {
       "title": "Marco Bombieri, Simone Paolo Ponzetto, Marco Rospocher",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T00:00:08.845053+00:00",
+      "published": "2026-05-22T01:00:13.157421+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T00:00:01.577137+00:00",
+      "lastSeen": "2026-05-22T01:00:01.617281+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
