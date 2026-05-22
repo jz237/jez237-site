@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T15:18:33.079913+00:00",
+  "updatedAt": "2026-05-22T17:00:01.910482+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7848,6 +7848,26 @@
     "https://www.theverge.com/ai-artificial-intelligence/936072/spotify-umg-ai-music-remix-cover-superfan": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/04/STK467_AI_MUSIC_CVirginia_A.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-22T15:18:33.079913+00:00"
+    },
+    "https://techcrunch.com/2026/05/22/you-can-no-longer-google-the-word-disregard": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/Google-IO-everything.webp?resize=1200,674",
+      "checkedAt": "2026-05-22T17:00:01.910482+00:00"
+    },
+    "https://www.theverge.com/tech/936176/google-ai-overviews-search-disregard": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-22-at-8.44.28AM.png?quality=90&amp;strip=all&amp;crop=0%2C13.100144814526%2C100%2C73.799710370948&amp;w=1200",
+      "checkedAt": "2026-05-22T17:00:01.910482+00:00"
+    },
+    "https://techcrunch.com/2026/05/22/we-tried-googles-ai-glasses-and-theyre-almost-there": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/1_IO_Glasses_Product_GentleMonst.width-1000.format-webp_NnExl2N.webp?w=1000",
+      "checkedAt": "2026-05-22T17:00:01.910482+00:00"
+    },
+    "https://huggingface.co/blog/Dharma-AI/specialization-beats-scale": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Dharma-AI/specialization-beats-scale.png",
+      "checkedAt": "2026-05-22T17:00:01.910482+00:00"
+    },
+    "https://openai.com/index/gartner-2026-agentic-coding-leader": {
+      "image": "",
+      "checkedAt": "2026-05-22T17:00:01.910482+00:00"
     }
   }
 }
