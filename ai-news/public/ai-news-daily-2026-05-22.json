@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T10:00:01.752645+00:00",
+  "updatedAt": "2026-05-22T11:00:01.153756+00:00",
   "items": [
     {
       "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
@@ -13,11 +13,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-1.31.26-AM-1-150x150.png",
       "published": "2026-05-22T08:32:55+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.6765
+      "score": 23.6476
+    },
+    {
+      "title": "Google I/O showed how the path for AI-driven science is shifting",
+      "url": "https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "During Tuesday’s Google I/O keynote, Demis Hassabis, the CEO of Google DeepMind, proclaimed that we are currently “standing in the foothills of the singularity.” It was a striking statement—the singularity is the theoretical future moment when AI rapidly exceeds human intelligence and dramatically transforms the world. But what struck me as I listened in the&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200%2C600",
+      "published": "2026-05-22T10:00:00+00:00",
+      "firstSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.9599
     },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
@@ -30,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4886
+      "score": 6.4602
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -46,10 +62,10 @@
       "image": "",
       "published": "2026-05-22T07:39:30+00:00",
       "firstSeen": "2026-05-22T08:00:01.338777+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9507
+      "score": 5.9225
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -62,10 +78,26 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0249
+      "score": 5.002
+    },
+    {
+      "title": "Sora shutdown leaves Critterz at the Cannes market without its model",
+      "url": "https://thenextweb.com/news/critterz-misses-cannes-openai-sora-shutdown",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The OpenAI-backed family animation that was meant to prove generative AI could ship a real movie has missed its festival window, in part because the video model it was built on no longer exists. Critterz, the OpenAI-backed animated feature that was being positioned as the first mainstream commercial film made through a generative AI pipeline, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Critterz.avif",
+      "published": "2026-05-22T09:26:39+00:00",
+      "firstSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1035
     },
     {
       "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
@@ -76,9 +108,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T10:00:11.077450+00:00",
+      "published": "2026-05-22T11:00:09.912143+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -94,10 +126,26 @@
       "image": "https://media.wired.com/photos/6a0f1eac22b304758d42f327/master/pass/6a0ecc1805928bccd6b0e6c5_UnderwaterCables_Lead_autoxauto.0000001.jpg",
       "published": "2026-05-22T09:00:00+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
+    },
+    {
+      "title": "Austrian startup REPS raises $23.6m to turn road traffic into electricity",
+      "url": "https://thenextweb.com/news/austrian-startup-reps-raises-23-6m-to-turn-road-traffic-into-electricity",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Tyrol-based REPS has plugged its first “road power plant” into the Port of Hamburg. The next test is whether the economics survive contact with anywhere else. Tyrol-based REPS has raised $23.6m to scale a technology with an unusually literal premise: install a slab into a road, let trucks drive over it, harvest the energy they would otherwise [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/REPS.avif",
+      "published": "2026-05-22T09:57:16+00:00",
+      "firstSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1185
     },
     {
       "title": "FTC to Require Cox Media Group, Two Other Firms to Pay Nearly $1 Million to Settle Charges They Deceived Customers About “Active Listening” AI-Powered Marketing Service",
@@ -110,10 +158,10 @@
       "image": "",
       "published": "2026-05-22T04:48:32+00:00",
       "firstSeen": "2026-05-22T05:00:02.015853+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1423
+      "score": 2.1162
     },
     {
       "title": "NVIDIA’s NVentures adds Alice & Bob to its quantum portfolio",
@@ -126,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/05/Alice-and-Bob.avif",
       "published": "2026-05-22T08:29:46+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.105
+      "score": 2.0761
     },
     {
       "title": "Lenovo Q4 revenue tops estimates on strong PC sales, shares jump 15%",
@@ -142,26 +190,10 @@
       "image": "https://media.thenextweb.com/2026/05/Lenovo.avif",
       "published": "2026-05-22T08:10:11+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
+      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0955
-    },
-    {
-      "title": "Meta settles bellwether Kentucky case, ending first school-district trial over youth mental health",
-      "url": "https://thenextweb.com/news/meta-settles-kentucky-school-mental-health-bellwether",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Breathitt County settlement closes the trial that had been set for June 12 in Oakland. Roughly 1,200 similar school-district suits sit behind it. Meta has settled the first US school-district lawsuit set for trial seeking to make social media companies pay for the cost of addressing a youth mental health crisis its critics say [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
-      "published": "2026-05-22T07:44:20+00:00",
-      "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T10:00:01.752645+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.083
+      "score": 2.0668
     }
   ],
   "errors": []

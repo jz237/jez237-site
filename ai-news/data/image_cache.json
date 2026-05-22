@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T10:00:01.752645+00:00",
+  "updatedAt": "2026-05-22T11:00:01.153756+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7828,6 +7828,10 @@
     "https://www.marktechpost.com/2026/05/22/build-recurrent-depth-transformers-with-openmythos-for-mla-gqa-sparse-moe-and-loop-scaled-reasoning": {
       "image": "",
       "checkedAt": "2026-05-22T08:00:01.338777+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200,600",
+      "checkedAt": "2026-05-22T11:00:01.153756+00:00"
     }
   }
 }
