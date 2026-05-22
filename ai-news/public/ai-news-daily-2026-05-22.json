@@ -1,7 +1,23 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T07:00:01.533160+00:00",
+  "updatedAt": "2026-05-22T08:00:01.338777+00:00",
   "items": [
+    {
+      "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
+      "url": "https://www.marktechpost.com/2026/05/22/build-recurrent-depth-transformers-with-openmythos-for-mla-gqa-sparse-moe-and-loop-scaled-reasoning",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we explore OpenMythos by building an advanced recurrent-depth transformer workflow that runs end-to-end in Google Colab. We create both MLA and GQA model variants, compare their parameter counts, and check the stability of the recurrent injection matrix through its spectral radius.\nThe post Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning appeared first on MarkTechPost.",
+      "image": "",
+      "published": "2026-05-22T07:39:30+00:00",
+      "firstSeen": "2026-05-22T08:00:01.338777+00:00",
+      "lastSeen": "2026-05-22T08:00:01.338777+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.0096
+    },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
       "url": "https://www.wired.com/story/openai-chris-lehane-global-affairs-pr",
@@ -13,10 +29,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T07:00:01.533160+00:00",
+      "lastSeen": "2026-05-22T08:00:01.338777+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0975
+      "score": 5.0726
     },
     {
       "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
@@ -27,9 +43,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T07:00:12.203814+00:00",
+      "published": "2026-05-22T08:00:12.184678+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T07:00:01.533160+00:00",
+      "lastSeen": "2026-05-22T08:00:01.338777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -45,10 +61,10 @@
       "image": "",
       "published": "2026-05-22T04:48:32+00:00",
       "firstSeen": "2026-05-22T05:00:02.015853+00:00",
-      "lastSeen": "2026-05-22T07:00:01.533160+00:00",
+      "lastSeen": "2026-05-22T08:00:01.338777+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.225
+      "score": 2.1967
     }
   ],
   "errors": []
