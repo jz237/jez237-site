@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T04:00:01.835687+00:00",
+  "updatedAt": "2026-05-22T05:00:02.015853+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7820,6 +7820,10 @@
     "https://www.techrepublic.com/article/news-verizon-dbir-vulnerability-exploitation-2026": {
       "image": "",
       "checkedAt": "2026-05-21T21:45:48.876042+00:00"
+    },
+    "https://simonwillison.net/2026/May/22/ftc-active-listening": {
+      "image": "",
+      "checkedAt": "2026-05-22T05:00:02.015853+00:00"
     }
   }
 }
