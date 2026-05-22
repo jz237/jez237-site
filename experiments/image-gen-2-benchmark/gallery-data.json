@@ -670,5 +670,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-21-evening-mending-map-of-the-moonless-orchard",
+    "title": "Mending Map of the Moonless Orchard",
+    "tests": "Tests a handmade quilt-map format with tactile textile materials, top-down craft photography, and a nocturnal invented orchard rendered as embroidered map symbols rather than a cinematic scene.",
+    "prompt": "Primary request: Create a handmade mixed-media illustration titled conceptually \"Mending Map of the Moonless Orchard\", with no visible readable text.\n\nVisual format: a square overhead photograph of a hand-sewn quilt-map laid on a plain worktable, built from irregular fabric scraps, visible running stitches, embroidered knots, cut felt pieces, pressed leaves under translucent gauze, tiny beads, thread tails, pins, and paper pattern fragments. The object should feel physically handmade, tactile, imperfect, and carefully arranged, not like glossy digital concept art.\n\nSubject: the quilt-map depicts an imaginary moonless orchard where each tree bears a different impossible night fruit: stitched velvet pear-lanterns, translucent blue thread apples, small seed pods made from pearly buttons, black felt branches with silver floss veins, and tiny cloth irrigation channels carrying starlight-colored thread. Include a few miniature stitched labels as blank fabric tabs only, with no readable letters. No people, no performers, no animals needed.\n\nComposition: square 1024x1024, direct top-down archival craft-table view. The orchard fills most of the frame as an abstract map rather than a landscape: paths curve like seam lines, trees appear as embroidered symbols, and the border is made from mismatched quilt squares. One corner shows a needle, a spool of dark teal thread, and loose silver floss for scale. Keep the design legible as a handmade artifact, with clear material separation and a strong graphic silhouette.\n\nMood and palette: quiet, nocturnal, domestic, slightly uncanny; deep indigo cotton, faded plum wool, moss green felt, cream muslin, tarnished silver thread, one restrained glow of pale cyan beads. Soft side light, real fabric shadows, shallow texture detail, lint, wrinkles, stitch holes, frayed edges.\n\nConstraints: no readable text, no logos, no copyrighted characters, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no theatrical performance, no watermark, no signature.",
+    "image": "images/2026-05-21-evening-mending-map-of-the-moonless-orchard.png",
+    "date": "2026-05-21",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
