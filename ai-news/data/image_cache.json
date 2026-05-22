@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T23:00:01.804700+00:00",
+  "updatedAt": "2026-05-22T23:17:35.435774+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7916,6 +7916,10 @@
     "https://openai.com/index/virgin-atlantic": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2gCDMlpfyFZVDZ9FjvBEVV/f54b0a2f700b297b86ba435388215932/virgin-atlantic-seo.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-22T23:00:01.804700+00:00"
+    },
+    "https://techcrunch.com/2026/05/22/ai-is-being-used-to-resurrect-the-voices-of-dead-pilots": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/UPS-crash-flight-kentucky-Getty.jpg?resize=1200,800",
+      "checkedAt": "2026-05-22T23:17:35.435774+00:00"
     }
   }
 }
