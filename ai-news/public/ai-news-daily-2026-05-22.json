@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T13:00:01.966548+00:00",
+  "updatedAt": "2026-05-22T14:00:01.230562+00:00",
   "items": [
     {
       "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
@@ -13,11 +13,28 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-1.31.26-AM-1-150x150.png",
       "published": "2026-05-22T08:32:55+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.592
+      "score": 23.5654
+    },
+    {
+      "title": "Kawasaki Heavy ties up with Nvidia on physical AI, and the rideable robot horse gets a foundation model",
+      "url": "https://thenextweb.com/news/kawasaki-nvidia-physical-ai-corleo-san-jose",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Shares jumped 12% as the Japanese industrial group opened a San Jose development base with Nvidia, Analog Devices, Microsoft, and Fujitsu, with its four-legged CORLEO mobility concept as the first showcase. Kawasaki Heavy Industries said on Friday it will partner with Nvidia and a handful of other US and Japanese firms on physical AI for robots, opening [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/CORLEO.avif",
+      "published": "2026-05-22T12:15:20+00:00",
+      "firstSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 10.398
     },
     {
       "title": "Google I/O showed how the path for AI-driven science is shifting",
@@ -30,10 +47,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200%2C600",
       "published": "2026-05-22T10:00:00+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.902
+      "score": 6.8743
     },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
@@ -46,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4056
+      "score": 6.3794
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -62,10 +79,10 @@
       "image": "",
       "published": "2026-05-22T07:39:30+00:00",
       "firstSeen": "2026-05-22T08:00:01.338777+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8683
+      "score": 5.8423
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -78,10 +95,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9581
+      "score": 4.9371
     },
     {
       "title": "Sora shutdown leaves Critterz at the Cannes market without its model",
@@ -94,10 +111,26 @@
       "image": "https://media.thenextweb.com/2026/05/Critterz.avif",
       "published": "2026-05-22T09:26:39+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0465
+      "score": 4.0192
+    },
+    {
+      "title": "Most data breaches start with a stolen password. Here’s how to fix that",
+      "url": "https://thenextweb.com/news/most-data-breaches-start-with-a-stolen-password",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Somewhere in your organisation right now, an employee is reusing a password they created in 2019. Another is sharing login credentials for a team account through a Slack DM. A third is storing client portal access in a browser’s built-in autofill, synced to a personal Google account your IT team does not control. None of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/most-data-breaches-start-with-a-stolen-password.avif",
+      "published": "2026-05-22T12:15:51+00:00",
+      "firstSeen": "2026-05-22T14:00:01.230562+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.4982
     },
     {
       "title": "Italian police seize a piracy app that streamed Sky, DAZN, and Netflix through hijacked real accounts",
@@ -110,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/02/UK-brings-streaming-giants-under-broadcaster-style-regulation.avif",
       "published": "2026-05-22T10:09:34+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1665
+      "score": 3.1387
     },
     {
       "title": "Samsung&#8217;s memory chip employees negotiated $340,000 bonuses this year",
@@ -126,10 +159,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2272013055.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.56851276178%2C100%2C74.86297447644&amp%3Bw=1200",
       "published": "2026-05-22T11:05:25+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.0032
+      "score": 2.9746
     },
     {
       "title": "A hacker group is poisoning open source code at an unprecedented scale",
@@ -142,10 +175,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2270725355-1152x648.jpg",
       "published": "2026-05-22T10:30:14+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7763
+      "score": 2.7482
     },
     {
       "title": "Drake Caraker, Bryan Arnold, David Rhoads",
@@ -156,44 +189,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T13:00:14.085560+00:00",
+      "published": "2026-05-22T14:00:07.919109+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
+      "lastSeen": "2026-05-22T14:00:01.230562+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
-    },
-    {
-      "title": "The Gulf’s AI Boom Has an Undersea Cable Problem",
-      "url": "https://www.wired.com/story/the-gulfs-ai-boom-has-an-undersea-cable-problem",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Hyperscalers are pushing the Gulf to rethink internet infrastructure as AI raises the stakes of cable disruptions.",
-      "image": "https://media.wired.com/photos/6a0f1eac22b304758d42f327/master/pass/6a0ecc1805928bccd6b0e6c5_UnderwaterCables_Lead_autoxauto.0000001.jpg",
-      "published": "2026-05-22T09:00:00+00:00",
-      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1743
-    },
-    {
-      "title": "China’s EV brands cross 15% in Europe, with Britain leading the charge",
-      "url": "https://thenextweb.com/news/chinese-brands-15-percent-europe-ev-sales-april-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "BYD and Chery led a doubling of Chinese EV deliveries in April, even as Brussels keeps its tariff wall up and Stellantis quietly hands the keys to underused European plants. Chinese brands accounted for more than 15 per cent of Europe’s electric-vehicle sales in April, the first time the threshold has been crossed in a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/BYD.avif",
-      "published": "2026-05-22T10:32:23+00:00",
-      "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0773
     }
   ],
   "errors": []
