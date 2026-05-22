@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T18:00:01.620046+00:00",
+  "updatedAt": "2026-05-22T19:00:01.272548+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7872,6 +7872,18 @@
     "https://www.theverge.com/ai-artificial-intelligence/936219/elon-stop-trying-to-make-grok-happen": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_Illo_STK022_K_Radtke_Musk_Smiles.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-22T18:00:01.620046+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/22/a-step-by-step-coding-tutorial-to-implement-gbrain-the-self-wiring-memory-layer-built-by-y-combinators-garry-tan-for-ai-agents": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-39.png",
+      "checkedAt": "2026-05-22T19:00:01.272548+00:00"
+    },
+    "https://techcrunch.com/podcast/elon-musk-cant-hear-you-over-the-sound-of-his-1-75-trillion-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275592313.jpg?resize=1200,800",
+      "checkedAt": "2026-05-22T19:00:01.272548+00:00"
+    },
+    "https://techcrunch.com/video/spacex-files-to-go-public-and-the-math-requires-a-little-faith": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/04/GettyImages-2074390033.jpg?resize=1200,675",
+      "checkedAt": "2026-05-22T19:00:01.272548+00:00"
     }
   }
 }
