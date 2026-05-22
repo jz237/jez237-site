@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-22T20:04:49.685887+00:00",
+  "updatedAt": "2026-05-22T22:00:01.648704+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7888,6 +7888,26 @@
     "https://techcrunch.com/2026/05/22/how-vcs-and-founders-use-inflated-arr-to-kingmake-ai-startups": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Pinocchio-ARR-nose2.png?resize=1200,800",
       "checkedAt": "2026-05-22T21:00:01.239558+00:00"
+    },
+    "https://techcrunch.com/2026/05/22/google-goes-for-the-glitter-with-disco-ball-icons-are-yall-sure-you-still-want-this": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-2.46.43-PM.jpg?resize=1200,965",
+      "checkedAt": "2026-05-22T22:00:01.648704+00:00"
+    },
+    "https://www.techrepublic.com/article/news-southwest-bans-humanoid-robots-flights": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/bebop.jpg?f=jpeg",
+      "checkedAt": "2026-05-22T22:00:01.648704+00:00"
+    },
+    "https://www.techrepublic.com/article/news-anthropic-first-profitable-quarter-enterprise-ai": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/prakash-singh.jpg?f=jpeg",
+      "checkedAt": "2026-05-22T22:00:01.648704+00:00"
+    },
+    "https://www.techrepublic.com/article/news-how-to-use-gemini-google-docs": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/gemini-tricks.jpg?f=jpeg",
+      "checkedAt": "2026-05-22T22:00:01.648704+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-overhauls-ipos-and-cyberthreats-define-this-week-in-tech": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/ChatGPT-Image-May-22-2026-11_27_02-AM-1-1024x576.png?f=jpeg",
+      "checkedAt": "2026-05-22T22:00:01.648704+00:00"
     }
   }
 }
