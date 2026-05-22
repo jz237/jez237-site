@@ -682,5 +682,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-22-morning-hinged-seeds-of-the-clockwork-mangrove",
+    "title": "Hinged Seeds of the Clockwork Mangrove",
+    "tests": "Explores a fictional botanical specimen as a macro museum drawer: believable invented seed anatomy, hybrid organic-mechanical materials, sparse top-down composition, and tactile natural-history documentation rather than cinematic scenery.",
+    "prompt": "Title concept: Hinged Seeds of the Clockwork Mangrove.\n\nCreate a square 1024x1024 fictional natural-history macro photograph, not cinematic concept art: a shallow museum specimen drawer photographed from directly above on matte charcoal paper. Inside are seven invented mangrove seed pods arranged in a precise but organic spiral, each pod half biological and half tiny mechanical ecology: lacquered green-brown husks, brass hinge ribs, translucent amber rootlets, pearl-like flotation bladders, dew beads, miniature gear-shaped leaf scars, and fine copper capillaries visible under cracked seed coats. Include a few simple blank ivory specimen tabs and brass pins, but no readable text.\n\nVisual language: tactile cabinet-of-curiosities specimen record, macro lens sharpness, shallow shadows, aged brass, wet botanical surfaces, amber resin, dark graphite background, sparse composition with strong negative space, scientifically plausible strangeness, subtle humid sheen, no people, no logos, no watermark.\n\nHard exclusions: no dancing, no dancers, no ballet, no dance poses, no stage performance, no implied choreography.",
+    "image": "images/2026-05-22-morning-hinged-seeds-of-the-clockwork-mangrove.png",
+    "date": "2026-05-22",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
