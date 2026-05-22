@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T11:00:01.153756+00:00",
+  "updatedAt": "2026-05-22T11:53:11.311034+00:00",
   "items": [
     {
       "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.6476
+      "score": 23.6226
     },
     {
       "title": "Google I/O showed how the path for AI-driven science is shifting",
@@ -30,10 +30,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200%2C600",
       "published": "2026-05-22T10:00:00+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9599
+      "score": 6.9338
     },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4602
+      "score": 6.4356
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-05-22T11:00:01.153756+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9225
+      "score": 5.8981
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -78,10 +78,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.002
+      "score": 4.9823
     },
     {
       "title": "Sora shutdown leaves Critterz at the Cannes market without its model",
@@ -94,10 +94,58 @@
       "image": "https://media.thenextweb.com/2026/05/Critterz.avif",
       "published": "2026-05-22T09:26:39+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1035
+      "score": 4.0778
+    },
+    {
+      "title": "Italian police seize a piracy app that streamed Sky, DAZN, and Netflix through hijacked real accounts",
+      "url": "https://thenextweb.com/news/italy-cinemagoal-piracy-bust-gdf-ravenna",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Operazione Tutto Chiaro hit more than 100 sites across Italy, France, and Germany, targeting a system that rebroadcast legitimate subscription codes every three minutes. Italy’s Guardia di Finanza said on Friday it had dismantled an audiovisual piracy operation that streamed paid content from Sky, DAZN, Netflix, Disney+, and Spotify to thousands of subscribers using an app called [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/02/UK-brings-streaming-giants-under-broadcaster-style-regulation.avif",
+      "published": "2026-05-22T10:09:34+00:00",
+      "firstSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1985
+    },
+    {
+      "title": "Samsung&#8217;s memory chip employees negotiated $340,000 bonuses this year",
+      "url": "https://www.theverge.com/tech/936002/samsung-memory-chip-employees-deal-strike-bonus",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Details have emerged about a tentative deal struck between Samsung and semiconductor employees who had threatened to strike. The deal reportedly makes some workers eligible for average annual bonuses of $340,000. The proposed 18-day strike had hinged on Samsung's bonus cap for employees in the semiconductor division and followed a substantial rise in the possible [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2272013055.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.56851276178%2C100%2C74.86297447644&amp%3Bw=1200",
+      "published": "2026-05-22T11:05:25+00:00",
+      "firstSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 3.0359
+    },
+    {
+      "title": "A hacker group is poisoning open source code at an unprecedented scale",
+      "url": "https://arstechnica.com/information-technology/2026/05/a-hacker-group-is-poisoning-open-source-code-at-an-unprecedented-scale",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "GitHub is just the latest victim of TeamPCP, a gang that has carried out a spree of software supply chain attacks.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2270725355-1152x648.jpg",
+      "published": "2026-05-22T10:30:14+00:00",
+      "firstSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8086
     },
     {
       "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
@@ -108,9 +156,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T11:00:09.912143+00:00",
+      "published": "2026-05-22T11:53:17.732774+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -126,75 +174,33 @@
       "image": "https://media.wired.com/photos/6a0f1eac22b304758d42f327/master/pass/6a0ecc1805928bccd6b0e6c5_UnderwaterCables_Lead_autoxauto.0000001.jpg",
       "published": "2026-05-22T09:00:00+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.2052
     },
     {
-      "title": "Austrian startup REPS raises $23.6m to turn road traffic into electricity",
-      "url": "https://thenextweb.com/news/austrian-startup-reps-raises-23-6m-to-turn-road-traffic-into-electricity",
+      "title": "China’s EV brands cross 15% in Europe, with Britain leading the charge",
+      "url": "https://thenextweb.com/news/chinese-brands-15-percent-europe-ev-sales-april-2026",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "Tyrol-based REPS has plugged its first “road power plant” into the Port of Hamburg. The next test is whether the economics survive contact with anywhere else. Tyrol-based REPS has raised $23.6m to scale a technology with an unusually literal premise: install a slab into a road, let trucks drive over it, harvest the energy they would otherwise [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/REPS.avif",
-      "published": "2026-05-22T09:57:16+00:00",
-      "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
+      "summary": "BYD and Chery led a doubling of Chinese EV deliveries in April, even as Brussels keeps its tariff wall up and Stellantis quietly hands the keys to underused European plants. Chinese brands accounted for more than 15 per cent of Europe’s electric-vehicle sales in April, the first time the threshold has been crossed in a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/BYD.avif",
+      "published": "2026-05-22T10:32:23+00:00",
+      "firstSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1185
-    },
-    {
-      "title": "FTC to Require Cox Media Group, Two Other Firms to Pay Nearly $1 Million to Settle Charges They Deceived Customers About “Active Listening” AI-Powered Marketing Service",
-      "url": "https://simonwillison.net/2026/May/22/ftc-active-listening",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "FTC to Require Cox Media Group, Two Other Firms to Pay Nearly $1 Million to Settle Charges They Deceived Customers About “Active Listening” AI-Powered Marketing Service\nBack in 2024 Cox Media Group were caught trying to sell advertisers packages based on \"active listening\", with this deck which claimed:\n\n\nSmart devices capture real-time intent data by listening to our conversations\nAdvertisers can pair this voice-data with behavioral data to target in-market consumers\n\n\nI wrote about this in September 2024. My theory:\n\nI think active listening is the term that the team came up with for “someth",
-      "image": "",
-      "published": "2026-05-22T04:48:32+00:00",
-      "firstSeen": "2026-05-22T05:00:02.015853+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1162
-    },
-    {
-      "title": "NVIDIA’s NVentures adds Alice & Bob to its quantum portfolio",
-      "url": "https://thenextweb.com/news/alice-bob-nventures-series-b-extension",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Paris-based cat-qubit company adds NVentures to a cap table already backed by FFC, AVP and Bpifrance, and deepens its CUDA-Q tie-up with Nvidia. Alice &amp; Bob, the Paris- and Boston-based quantum hardware company building fault-tolerant machines on its proprietary cat-qubit architecture, has added NVentures, Nvidia’s venture arm, to its cap table in an extension [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Alice-and-Bob.avif",
-      "published": "2026-05-22T08:29:46+00:00",
-      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0761
-    },
-    {
-      "title": "Lenovo Q4 revenue tops estimates on strong PC sales, shares jump 15%",
-      "url": "https://thenextweb.com/news/lenovo-q4-revenue-beats-pc-ai-growth",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "$21.6bn quarter, AI revenue nearly doubles, full year crowned the best in the company’s history. Lenovo posted Q4 revenue of $21.6bn, up 27% year-on-year and roughly $2.2bn ahead of consensus, sending shares up about 15% on Friday in Hong Kong. Net profit attributable to shareholders jumped 479% to $521m, almost double the $271m analysts had [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Lenovo.avif",
-      "published": "2026-05-22T08:10:11+00:00",
-      "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T11:00:01.153756+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0668
+      "score": 2.1096
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
