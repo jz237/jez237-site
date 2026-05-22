@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "updatedAt": "2026-05-22T11:53:11.311034+00:00",
+  "updatedAt": "2026-05-22T13:00:01.966548+00:00",
   "items": [
     {
       "title": "Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator and Gemini 2.5 Computer Use on Online-Mind2Web",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-1.31.26-AM-1-150x150.png",
       "published": "2026-05-22T08:32:55+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T12:00:01.292498+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 23.6226
+      "score": 23.592
     },
     {
       "title": "Google I/O showed how the path for AI-driven science is shifting",
@@ -30,10 +30,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/io-scientist.jpg?resize=1200%2C600",
       "published": "2026-05-22T10:00:00+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9338
+      "score": 6.902
     },
     {
       "title": "DeepSeek founder declares AGI as the goal as $10bn funding round advances",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/DeepSeek.avif",
       "published": "2026-05-22T07:56:00+00:00",
       "firstSeen": "2026-05-22T08:30:42.702418+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4356
+      "score": 6.4056
     },
     {
       "title": "Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning",
@@ -62,10 +62,10 @@
       "image": "",
       "published": "2026-05-22T07:39:30+00:00",
       "firstSeen": "2026-05-22T08:00:01.338777+00:00",
-      "lastSeen": "2026-05-22T12:00:01.292498+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8981
+      "score": 5.8683
     },
     {
       "title": "Can OpenAI’s ‘Master of Disaster’ Fix AI’s Reputation Crisis?",
@@ -78,10 +78,10 @@
       "image": "https://media.wired.com/photos/6a0f679a40b54a02fd444453/master/pass/Model-Behavior-Can-OpenAI-Global-Affairs-Chief-Fix-AI-Reputation-Problem-Business.jpg",
       "published": "2026-05-22T00:04:25+00:00",
       "firstSeen": "2026-05-22T01:00:01.617281+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9823
+      "score": 4.9581
     },
     {
       "title": "Sora shutdown leaves Critterz at the Cannes market without its model",
@@ -94,10 +94,10 @@
       "image": "https://media.thenextweb.com/2026/05/Critterz.avif",
       "published": "2026-05-22T09:26:39+00:00",
       "firstSeen": "2026-05-22T11:00:01.153756+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0778
+      "score": 4.0465
     },
     {
       "title": "Italian police seize a piracy app that streamed Sky, DAZN, and Netflix through hijacked real accounts",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/02/UK-brings-streaming-giants-under-broadcaster-style-regulation.avif",
       "published": "2026-05-22T10:09:34+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1985
+      "score": 3.1665
     },
     {
       "title": "Samsung&#8217;s memory chip employees negotiated $340,000 bonuses this year",
@@ -126,10 +126,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2272013055.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C12.56851276178%2C100%2C74.86297447644&amp%3Bw=1200",
       "published": "2026-05-22T11:05:25+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.0359
+      "score": 3.0032
     },
     {
       "title": "A hacker group is poisoning open source code at an unprecedented scale",
@@ -142,13 +142,13 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2270725355-1152x648.jpg",
       "published": "2026-05-22T10:30:14+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8086
+      "score": 2.7763
     },
     {
-      "title": "Double descent for least-squares interpolation on contaminated data: A simulation study",
+      "title": "Drake Caraker, Bryan Arnold, David Rhoads",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -156,9 +156,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-22T11:53:17.732774+00:00",
+      "published": "2026-05-22T13:00:14.085560+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -174,10 +174,10 @@
       "image": "https://media.wired.com/photos/6a0f1eac22b304758d42f327/master/pass/6a0ecc1805928bccd6b0e6c5_UnderwaterCables_Lead_autoxauto.0000001.jpg",
       "published": "2026-05-22T09:00:00+00:00",
       "firstSeen": "2026-05-22T10:00:01.752645+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2052
+      "score": 2.1743
     },
     {
       "title": "China’s EV brands cross 15% in Europe, with Britain leading the charge",
@@ -190,17 +190,11 @@
       "image": "https://media.thenextweb.com/2026/05/BYD.avif",
       "published": "2026-05-22T10:32:23+00:00",
       "firstSeen": "2026-05-22T11:53:11.311034+00:00",
-      "lastSeen": "2026-05-22T11:53:11.311034+00:00",
+      "lastSeen": "2026-05-22T13:00:01.966548+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1096
+      "score": 2.0773
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
