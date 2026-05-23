@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Interesting Insects & Wildlife — 2026 Garden Progress</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/design.css" />
+  <link rel="stylesheet" href="../../assets/plant-page.css" />
+  <link rel="stylesheet" href="../../assets/plant-enhance.css" />
+  <style>
+    :root {
+      --earth-bg: #1c1611;
+      --earth-border: #624a35;
+      --earth-text: #f1e7d9;
+      --earth-muted: #ccb9a4;
+    }
+    body { background: radial-gradient(circle at top, #433126 0%, #1c1611 56%, #130e0b 100%); color: var(--earth-text); }
+    header { background: rgba(28,22,17,.84); border-bottom: 1px solid var(--earth-border); }
+    a { color: #dfc790; }
+    .hero, .gallery-card {
+      border: 1px solid var(--earth-border);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(57,42,31,0.96), rgba(39,29,22,0.96));
+      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+    }
+    .hero { padding: 24px; margin-bottom: 18px; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .gallery-card {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .gallery-card.featured { grid-column: span 2; }
+    .gallery-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-copy { padding: 16px; }
+    .muted, .mini-date { color: var(--earth-muted); }
+    .meta-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .pill { font-size:12px; padding:5px 9px; border-radius:999px; border:1px solid rgba(255,255,255,0.09); background:rgba(255,255,255,0.04); color: var(--earth-muted); }
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    .gallery-card img { cursor: zoom-in; }
+    @media (max-width: 900px) {
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .gallery-card.featured { grid-column: span 2; }
+    }
+    @media (max-width: 640px) {
+      .gallery { grid-template-columns: 1fr; }
+      .gallery-card.featured { grid-column: span 1; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
+</head>
+<body>
+  <header id="site-nav"></header>
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">2026 Garden Progress Nature Notes</div>
+      <h1 class="title">Interesting Insects & Wildlife</h1>
+      <p class="muted">Pollinators, beneficials, and little moments of life that make the garden feel active and real, including the occasional wild visitor passing through.</p>
+    </section>
+
+    <section class="gallery">
+      <article class="gallery-card featured">
+        <img src="../../photos/garden/images/2026/05/hoverfly-on-purple-salvia-2026-05-23.png" alt="Hoverfly visiting purple salvia flowers" loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">May 23, 2026 pollinator moment</div>
+          <h2>Hoverfly on purple salvia</h2>
+          <p>A sharp close-up of a hoverfly working the purple salvia, with glassy wings, bold yellow markings, and the flower spike glowing in the sun.</p>
+          <div class="meta-pills"><span class="pill">hoverfly</span><span class="pill">purple salvia</span><span class="pill">beneficial pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/bumblebee-on-catmint.jpg" alt="Bumblebee on catmint" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Bumblebee on catmint</h2>
+          <p>A fuzzy bumblebee working purple catmint blooms, exactly the kind of small pollinator moment that makes the garden feel alive instead of merely planted.</p>
+          <div class="meta-pills"><span class="pill">pollinator</span><span class="pill">catmint / nepeta</span><span class="pill">nature detail</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/bumblebee-on-white-salvia.jpg" alt="Bumblebee on white salvia" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Bumblebee on white salvia</h2>
+          <p>A heavy-laden bumblebee buried in the white salvia bloom, hind legs packed with orange pollen. Exactly the kind of close-up that shows how hard these garden workers are really going.</p>
+          <div class="meta-pills"><span class="pill">bumblebee</span><span class="pill">white salvia</span><span class="pill">pollen load</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2025/eastern-black-swallowtail-butterfly-bush-close.jpg" alt="Male eastern black swallowtail on butterfly bush" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">past-years pollinator</div>
+          <h2>Male eastern black swallowtail on butterfly bush</h2>
+          <p>A sharper close-up of the same kind of summer pollinator moment, the black swallowtail showing off those cream spots, blue wash, and orange hindwing markings while feeding on the butterfly bush.</p>
+          <div class="meta-pills"><span class="pill">black swallowtail</span><span class="pill">butterfly bush</span><span class="pill">2025 reference</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/bumblebee-on-salvia.jpg" alt="Bumblebee on salvia" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Bumblebee on salvia</h2>
+          <p>A fuzzy bumblebee buried in the salvia bloom, dusted with pollen and doing what it does best. One of those tiny garden scenes that makes the whole planting feel alive.</p>
+          <div class="meta-pills"><span class="pill">bumblebee</span><span class="pill">salvia</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/bumblebee-on-salvia-close.jpg" alt="Bumblebee close-up on salvia" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Bumblebee on salvia, close-up</h2>
+          <p>An intimate close-up of a bumblebee buried deep in a salvia bloom, showing the soft pollen coat, translucent wings, and the heavy-duty work these insects do in the garden.</p>
+          <div class="meta-pills"><span class="pill">bumblebee</span><span class="pill">salvia</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/bumblebee-on-sedum-close.jpg" alt="Bumblebee on sedum close-up" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Bumblebee on sedum, close-up</h2>
+          <p>A richly detailed bumblebee hanging from a sedum bloom, pollen bright on its head and thorax while the wings catch light in a warm, glassy sheen.</p>
+          <div class="meta-pills"><span class="pill">bumblebee</span><span class="pill">sedum</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card featured">
+        <img src="../../photos/garden/images/2026/04/hummingbird-moth-buddleia-close.jpg" alt="Hummingbird moth on buddleia close-up" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Hummingbird moth on buddleia</h2>
+          <p>A hummingbird moth caught mid-hover at the purple buddleia bloom, wings blurred by motion while the long proboscis reaches deep into the flowers.</p>
+          <div class="meta-pills"><span class="pill">hummingbird moth</span><span class="pill">buddleia</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card featured">
+        <img src="../../photos/garden/images/2026/04/monarch-on-buddleia.jpg" alt="Monarch butterfly on buddleia" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Monarch on buddleia</h2>
+          <p>A monarch butterfly paused on the purple buddleia, wings edged in black and white, with that iconic orange-and-gold pattern glowing in the sun. A classic late-season pollinator moment.</p>
+          <div class="meta-pills"><span class="pill">monarch</span><span class="pill">buddleia</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/skipper-on-leaves.jpg" alt="Skipper butterfly on green leaves" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Skipper on green leaves</h2>
+          <p>A warm-toned skipper resting on glossy green foliage, wings half-open and showing those bright orange patches that make skippers easy to miss until they settle in.</p>
+          <div class="meta-pills"><span class="pill">skipper</span><span class="pill">butterfly</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card featured">
+        <img src="../../photos/garden/images/2026/04/monarch-caterpillar-milkweed-1.jpg" alt="Monarch caterpillars on milkweed" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">wildlife moment</div>
+          <h2>Monarch caterpillars on milkweed</h2>
+          <p>A pair of monarch caterpillars feeding on milkweed, striped and unmistakable, with the classic black-yellow-white banding that makes the whole plant feel like habitat instead of ornament.</p>
+          <div class="meta-pills"><span class="pill">monarch</span><span class="pill">milkweed</span><span class="pill">wildlife</span></div>
+          <div style="margin-top:12px;">
+            <img src="../../photos/garden/images/2026/04/monarch-caterpillar-milkweed-2.jpg" alt="Monarch caterpillar, second angle" style="width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;" / loading="lazy" decoding="async">
+          </div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/hummingbird-moth-on-buddleia.jpg" alt="Hummingbird moth on buddleia" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Hummingbird moth on buddleia</h2>
+          <p>A fast-moving hummingbird moth hovering at the purple buddleia bloom, wings blurred in motion and body locked into the flower like a tiny airborne machine.</p>
+          <div class="meta-pills"><span class="pill">hummingbird moth</span><span class="pill">buddleia</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/swallowtail-on-buddleia-close.jpg" alt="Swallowtail butterfly on buddleia close-up" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Swallowtail on buddleia, close-up</h2>
+          <p>A close, detailed look at the swallowtail working the purple buddleia blooms, with the orange markings and cream spots on the wings showing clearly against the flower cluster.</p>
+          <div class="meta-pills"><span class="pill">swallowtail</span><span class="pill">buddleia</span><span class="pill">pollinator</span></div>
+        </div>
+      </article>
+
+      <article class="gallery-card featured">
+        <img src="../../photos/garden/images/2025/tomato-tower-bed-2025-reference-1.jpg" alt="Eastern tiger swallowtail at the tomato tower bed (2025 reference)" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">past-years pollinator</div>
+          <h2>Eastern tiger swallowtail on butterfly bush</h2>
+          <p>A bright eastern tiger swallowtail working purple butterfly bush blooms, with the second frame catching the same butterfly from a slightly different angle. Exactly the kind of older pollinator moment worth keeping in the wildlife archive.</p>
+          <div class="meta-pills"><span class="pill">eastern tiger swallowtail</span><span class="pill">butterfly bush</span><span class="pill">2025 reference</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+            <img src="../../photos/garden/images/2025/tomato-tower-bed-2025-reference-2.jpg" alt="Eastern tiger swallowtail, alternate frame" style="width:100%;border-radius:12px;aspect-ratio:4/5;object-fit:cover;grid-column:1/-1;" / loading="lazy" decoding="async">
+          </div>
+        </div>
+      </article>
+
+      <article class="gallery-card featured">
+        <img src="../../photos/garden/images/2026/04/fritillary-on-buddleia-1.jpg" alt="Fritillary butterfly on buddleia" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">pollinator moment</div>
+          <h2>Orange fritillary on buddleia</h2>
+          <p>An orange fritillary butterfly drinking from purple buddleia blooms, wings spread bright against the flower spikes. The second frame catches the same butterfly from a slightly different angle, still locked onto the nectar source.</p>
+          <div class="meta-pills"><span class="pill">fritillary</span><span class="pill">buddleia</span><span class="pill">pollinator</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+            <img src="../../photos/garden/images/2026/04/fritillary-on-buddleia-2.jpg" alt="Fritillary on buddleia, second angle" style="width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;grid-column:1/-1;" / loading="lazy" decoding="async">
+          </div>
+        </div>
+      </article>
+
+      <article class="gallery-card">
+        <img src="../../photos/garden/images/2026/04/garter-snake-yard-2.jpg" alt="Eastern gartersnake in mulch" / loading="lazy" decoding="async">
+        <div class="gallery-copy">
+          <div class="mini-date">yard wildlife</div>
+          <h2>Eastern gartersnake in the mulch</h2>
+          <p>Likely an eastern gartersnake, slim, striped, and completely at home slipping through the mulch. A good reminder that the garden is not just planted space, it’s habitat.</p>
+          <div class="meta-pills"><span class="pill">harmless</span><span class="pill">beneficial native wildlife</span><span class="pill">Philadelphia yard</span></div>
+        </div>
+      </article>
+    </section>
+  </main>
+  <div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async"></div>
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('.gallery-card img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
+  <script src="../../assets/plant-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
+</body>
+</html>
