@@ -742,5 +742,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-23-midday-phonograph-frost-bloom",
+    "title": "Phonograph Frost Bloom",
+    "tests": "Wild-experiment lane: tests a macro forensic photography format that turns audio grooves into frost and mineral interference patterns, emphasizing tactile analog media and uncanny material transformation rather than a normal scene.",
+    "prompt": "Title: Phonograph Frost Bloom\nLane/category: wild-experiment\n\nCreate a square 1024x1024 experimental image that looks like a macro photograph of sound made visible on a frozen lacquer disc, not a poster, not a landscape, and not glossy AI concept art. The subject is an invented physical recording medium: a black 78-rpm phonograph record partly covered by white frost crystals, pale teal copper salts, amber shellac cracks, and tiny graphite calibration pins. The grooves appear to sprout delicate radial ice flowers and interference rings, as if a winter storm has been etched into audio.\n\nVisual format and composition: extreme close-up, the record fills the frame edge to edge, photographed at a shallow oblique angle under a laboratory stereoscope. One torn strip of matte masking tape crosses the lower-left edge with only a few illegible pencil ticks, no readable words. Include a small milky acrylic ruler fragment and two brass insect pins for scale. The center label is mostly cropped away and intentionally blank, with no logos or text.\n\nMaterial language: tactile analog media, frost, shellac, oxidized copper dust, graphite smudges, pinholes, condensation beads, scratched acetate, imperfect lab lighting. Palette should be cold black, chalk white, pale teal, tarnished brass, and a small amount of amber. Mood is quiet, forensic, uncanny, and intimate.\n\nQuality constraints: sharply resolved macro texture, believable optical depth, subtle film grain, no people, no performers, no dancing or dance-like poses, no copyrighted characters, no brand marks, no legible typography except meaningless small ticks.",
+    "image": "images/2026-05-23-midday-phonograph-frost-bloom.png",
+    "date": "2026-05-23",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
