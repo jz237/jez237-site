@@ -125,6 +125,6 @@ Good next implementation passes:
 - Added `learn/cloudy-water/` as the first full Troubleshooting article.
 - Added GPT Image 2 visual asset `assets/learn/cloudy-water-gpt-image-2.png`.
 - Refined the visual section so the four diagnosis cards use realistic crops from the main aquarium image instead of abstract CSS placeholders.
-- Added GPT Image 2 infographic asset `assets/learn/cloudy-water-decision-infographic-gpt-image-2.png` below the decision tree.
+- Replaced the generated decision infographic with a readable HTML/CSS shop-floor chart: quick diagnosis table, common causes, helpful tools, and safety note.
 - Article structure now includes: hero visual, visual water-clarity display, what to do today, decision-tree diagnosis flow, common causes, helpful departments, and urgent-help callout.
 - Learn Center Cloudy Water card now links to the dedicated guide instead of only the short first-step card.

@@ -313,16 +313,181 @@
       box-shadow: 0 18px 44px rgba(0,0,0,0.24);
     }
     .infographic-panel {
-      overflow: hidden;
       margin-top: 16px;
-      border: 1px solid rgba(116,205,235,0.2);
+      padding: clamp(16px, 2.5vw, 26px);
+      border: 1px solid rgba(116,205,235,0.34);
       border-radius: 8px;
-      background: #061a27;
-      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(64,217,255,0.18), transparent 30%),
+        radial-gradient(circle at 100% 4%, rgba(141,108,255,0.14), transparent 34%),
+        linear-gradient(180deg, #062640 0%, #031626 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.03);
     }
-    .infographic-panel img {
-      width: 100%;
+    .info-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(116,205,235,0.2);
+    }
+    .info-header h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(26px, 4vw, 44px);
+      line-height: 1;
+    }
+    .info-header p {
+      max-width: 430px;
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: right;
+    }
+    .info-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0 10px;
+      color: var(--aqua);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      line-height: 1;
+    }
+    .info-section-title b {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #00131d;
+      background: var(--aqua);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 18px;
+      font-weight: 950;
+    }
+    .diagnosis-chart {
+      border: 1px solid rgba(180,238,255,0.62);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(3,18,29,0.68);
+    }
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1.12fr 1fr 1.34fr;
+      border-top: 1px solid rgba(180,238,255,0.38);
+    }
+    .chart-row:first-child { border-top: 0; }
+    .chart-row > div {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      min-width: 0;
+      padding: 11px;
+      border-left: 1px solid rgba(180,238,255,0.38);
+      color: #ecfbff;
+      font-size: 13px;
+      line-height: 1.34;
+    }
+    .chart-row > div:first-child { border-left: 0; }
+    .chart-row.chart-head > div {
       display: block;
+      padding: 12px 14px;
+      color: #fff;
+      background: linear-gradient(180deg, rgba(0,167,183,0.52), rgba(4,87,120,0.56));
+      font-size: 15px;
+      font-weight: 950;
+    }
+    .chart-icon,
+    .info-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(180,238,255,0.6);
+      border-radius: 50%;
+      color: #dffbff;
+      background: rgba(8,35,52,0.92);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 16px rgba(64,217,255,0.12);
+    }
+    .chart-row strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .info-card {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 12px;
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid rgba(64,217,255,0.34);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(9,55,82,0.86), rgba(5,31,49,0.92));
+    }
+    .info-card h4 {
+      margin: 0 0 3px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+      line-height: 1.05;
+    }
+    .info-card span {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--aqua);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .info-card p {
+      margin: 0;
+      color: #c5e8f3;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .safety-strip {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,185,72,0.78);
+      border-radius: 8px;
+      background: rgba(57,34,6,0.36);
+    }
+    .safety-strip .info-icon {
+      border-color: rgba(255,185,72,0.82);
+      color: #ffcf73;
+      background: rgba(70,42,8,0.82);
+    }
+    .safety-strip h4 {
+      margin: 0 0 3px;
+      color: #ffcf73;
+      font-size: 17px;
+      line-height: 1.1;
+    }
+    .safety-strip p {
+      margin: 0;
+      color: #fff3db;
+      font-size: 13px;
+      line-height: 1.35;
     }
     .flow-row {
       display: grid;
@@ -383,6 +548,29 @@
       .clarity-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .flow-row { grid-template-columns: 1fr; }
       .flow-row:first-child { display: none; }
+      .info-header { display: block; }
+      .info-header p { margin-top: 7px; text-align: left; }
+      .chart-row { grid-template-columns: 1fr; border-top: 1px solid rgba(180,238,255,0.38); }
+      .chart-row.chart-head { display: none; }
+      .chart-row > div {
+        border-left: 0;
+        border-top: 1px solid rgba(180,238,255,0.2);
+      }
+      .chart-row > div:first-child { border-top: 0; }
+      .chart-row > div:nth-child(1)::before,
+      .chart-row > div:nth-child(2)::before,
+      .chart-row > div:nth-child(3)::before {
+        grid-column: 1 / -1;
+        color: var(--aqua);
+        font-size: 11px;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .chart-row > div:nth-child(1)::before { content: "What do you see?"; }
+      .chart-row > div:nth-child(2)::before { content: "Most likely cause"; }
+      .chart-row > div:nth-child(3)::before { content: "Best next step"; }
+      .info-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 760px) {
       .page { padding-inline: 8px; }
@@ -403,6 +591,15 @@
       .product-card { min-height: 0; padding: 14px; }
       .visual-display,
       .flow { padding: 12px; }
+      .infographic-panel { padding: 13px; }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-card { grid-template-columns: 46px minmax(0, 1fr); }
+      .chart-row > div {
+        grid-template-columns: 38px minmax(0, 1fr);
+        padding: 10px;
+      }
+      .chart-icon,
+      .info-icon { width: 38px; height: 38px; }
       .footer-top { grid-template-columns: 1fr; }
     }
   </style>
@@ -553,9 +750,76 @@
           <div>Increase surface agitation, test immediately, reduce feeding, and ask the store before adding livestock.</div>
         </div>
       </div>
-      <figure class="infographic-panel">
-        <img src="../../assets/learn/cloudy-water-decision-infographic-gpt-image-2.png" alt="Cloudy water diagnosis flow showing testing, cloud type, filtration response, and clear water follow-up" loading="lazy" />
-      </figure>
+      <aside class="infographic-panel" aria-labelledby="infographic-title">
+        <div class="info-header">
+          <h3 id="infographic-title">Aquarium Cloudy Water Troubleshooter</h3>
+          <p>Identify the type of cloudiness, match the likely cause, then choose one controlled next step.</p>
+        </div>
+
+        <div class="info-section-title"><b>1</b>Quick diagnosis table</div>
+        <div class="diagnosis-chart" aria-label="Cloudy water quick diagnosis table">
+          <div class="chart-row chart-head">
+            <div>What do you see?</div>
+            <div>Most likely cause</div>
+            <div>Best next step</div>
+          </div>
+          <div class="chart-row">
+            <div><span class="chart-icon">Haze</span><span><strong>Milky white haze, especially in a new tank?</strong> White, smoky water with no green tint.</span></div>
+            <div><span class="chart-icon">Bio</span><span><strong>Bacterial bloom or cycling instability</strong> Often tied to new setups, over-cleaning, or disrupted filter media.</span></div>
+            <div><span class="chart-icon">Test</span><span><strong>Test ammonia and nitrite first.</strong> Feed lightly, preserve biological media, and avoid replacing all filter media at once.</span></div>
+          </div>
+          <div class="chart-row">
+            <div><span class="chart-icon">Green</span><span><strong>Water looks green?</strong> Tank gets direct sun, long light hours, or has nutrient buildup.</span></div>
+            <div><span class="chart-icon">Algae</span><span><strong>Free-floating algae in the water column</strong> Light and nutrients are usually driving the bloom.</span></div>
+            <div><span class="chart-icon">Light</span><span><strong>Reduce light and test nitrate/phosphate.</strong> Consider UV sterilization for persistent green water.</span></div>
+          </div>
+          <div class="chart-row">
+            <div><span class="chart-icon">Dust</span><span><strong>Cloudiness appeared after cleaning, gravel work, or new sand?</strong> Fine particles are probably suspended.</span></div>
+            <div><span class="chart-icon">Fine</span><span><strong>Stirred substrate or suspended debris</strong> The filter needs help catching smaller particles.</span></div>
+            <div><span class="chart-icon">Floss</span><span><strong>Use mechanical filtration.</strong> Add floss or polishing pads and give the tank time to clear.</span></div>
+          </div>
+          <div class="chart-row">
+            <div><span class="chart-icon">Flow</span><span><strong>Particles stay suspended and never clear?</strong> Water may be moving around the media instead of through it.</span></div>
+            <div><span class="chart-icon">Filter</span><span><strong>Weak mechanical filtration or bypassing media</strong> Clogged intakes, tired floss, or low flow can all cause this.</span></div>
+            <div><span class="chart-icon">Check</span><span><strong>Inspect the filter path.</strong> Check intake flow, impeller, sponge condition, floss, and media order.</span></div>
+          </div>
+          <div class="chart-row">
+            <div><span class="chart-icon">Fish</span><span><strong>Fish are gasping, clamped, stressed, or the tank is heavily stocked?</strong> Treat this as more than cloudy water.</span></div>
+            <div><span class="chart-icon">O2</span><span><strong>Bioload overload or low oxygen stress</strong> Cloudiness may be paired with dangerous water quality.</span></div>
+            <div><span class="chart-icon">Air</span><span><strong>Increase surface agitation and test immediately.</strong> Reduce feeding and do not add livestock until stable.</span></div>
+          </div>
+          <div class="chart-row">
+            <div><span class="chart-icon">Dose</span><span><strong>Cloudiness started after conditioners, buffers, treatments, or mineral products?</strong> Additives may be reacting.</span></div>
+            <div><span class="chart-icon">Chem</span><span><strong>Additive reaction or overdosing</strong> Mixed products can cloud the water or irritate livestock.</span></div>
+            <div><span class="chart-icon">Pause</span><span><strong>Stop stacking products.</strong> Review dosing and confirm parameters before adding anything else.</span></div>
+          </div>
+        </div>
+
+        <div class="info-section-title"><b>2</b>Common causes</div>
+        <div class="info-grid">
+          <article class="info-card"><span class="info-icon">Bio</span><div><span>New tank</span><h4>Bacterial bloom</h4><p>A white haze is common while the bacteria population is establishing. Replacing filter media can make it worse.</p></div></article>
+          <article class="info-card"><span class="info-icon">Food</span><div><span>Maintenance</span><h4>Overfeeding and debris</h4><p>Excess food and trapped waste break down quickly and fuel cloudy water.</p></div></article>
+          <article class="info-card"><span class="info-icon">Sun</span><div><span>Light + nutrients</span><h4>Green-water algae</h4><p>Green water points to algae in the water column. Light duration, sunlight, nitrate, and phosphate are the main clues.</p></div></article>
+          <article class="info-card"><span class="info-icon">Flow</span><div><span>Filter issue</span><h4>Weak mechanical filtration</h4><p>If fine particles stay suspended, inspect flow, floss, sponges, intakes, and bypass routes.</p></div></article>
+          <article class="info-card"><span class="info-icon">Sand</span><div><span>Cleaning shock</span><h4>Stirred substrate</h4><p>Sand, soil, new gravel, or aggressive gravel-vac work can cloud the water temporarily.</p></div></article>
+          <article class="info-card"><span class="info-icon">Dose</span><div><span>Chemistry</span><h4>Additive reaction</h4><p>Some treatments, conditioners, pH products, and mineral additives cloud when mixed or overdosed.</p></div></article>
+        </div>
+
+        <div class="info-section-title"><b>3</b>Helpful tools and solutions</div>
+        <div class="info-grid">
+          <article class="info-card"><span class="info-icon">Test</span><div><span>Testing</span><h4>Liquid test kits</h4><p>Use ammonia, nitrite, nitrate, and pH tests to separate cosmetic cloudiness from livestock danger.</p></div></article>
+          <article class="info-card"><span class="info-icon">Pad</span><div><span>Filtration</span><h4>Filter floss and polishing pads</h4><p>Best for suspended particles after maintenance, new substrate, or weak mechanical capture.</p></div></article>
+          <article class="info-card"><span class="info-icon">Media</span><div><span>Biological support</span><h4>Bacteria starter and seeded media</h4><p>Useful after a new setup, filter disruption, or cycle wobble. Preserve established bio-media when possible.</p></div></article>
+          <article class="info-card"><span class="info-icon">UV</span><div><span>Green water</span><h4>UV sterilizer</h4><p>Helpful for persistent free-floating algae when the unit is correctly sized and flow rate is appropriate.</p></div></article>
+          <article class="info-card"><span class="info-icon">H2O</span><div><span>Water changes</span><h4>Conditioner, buckets, and patience</h4><p>Useful for dilution and routine recovery, but avoid huge disruptive changes unless livestock safety demands it.</p></div></article>
+          <article class="info-card"><span class="info-icon">Vac</span><div><span>Routine</span><h4>Gravel vac and intake sponge care</h4><p>Good maintenance prevents detritus buildup while protecting flow and mechanical filtration.</p></div></article>
+        </div>
+
+        <div class="safety-strip">
+          <span class="info-icon">!</span>
+          <div><h4>Important safety note</h4><p>If fish are gasping, clamped, or dying, treat it as a water-quality emergency: test immediately, increase aeration, and perform an appropriate conditioned water change.</p></div>
+        </div>
+      </aside>
     </section>
 
     <section aria-labelledby="causes-title">
