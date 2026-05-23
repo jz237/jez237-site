@@ -1,6 +1,6 @@
 {
   "date": "2026-05-23",
-  "updatedAt": "2026-05-23T10:43:05.558054+00:00",
+  "updatedAt": "2026-05-23T11:00:01.386318+00:00",
   "items": [
     {
       "title": "Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints",
@@ -13,11 +13,27 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-1.20.14-AM-1-150x150.png",
       "published": "2026-05-23T08:17:27+00:00",
       "firstSeen": "2026-05-23T09:00:01.319082+00:00",
-      "lastSeen": "2026-05-23T09:10:22.756312+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.3483
+      "score": 14.3402
+    },
+    {
+      "title": "Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification",
+      "url": "https://www.marktechpost.com/2026/05/23/nous-research-releases-contrastive-neuron-attribution-cna-sparse-mlp-circuit-steering-without-sae-training-or-weight-modification",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Nous Research releases Contrastive Neuron Attribution (CNA), a method that identifies and ablates sparse MLP neuron circuits to steer LLM behavior — no sparse autoencoder training, no weight modification, and no degradation of general capability benchmarks.\nThe post Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-2.48.09-AM-150x150.png",
+      "published": "2026-05-23T10:32:09+00:00",
+      "firstSeen": "2026-05-23T11:00:01.386318+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.0559
     },
     {
       "title": "Corsair is now using Chinese DRAM in its DDR5 kits. Memory prices could finally drop.",
@@ -30,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/05/chinese-dram-cxmt-corsair-ddr5-memory-prices.avif",
       "published": "2026-05-23T09:37:16+00:00",
       "firstSeen": "2026-05-23T10:43:05.558054+00:00",
-      "lastSeen": "2026-05-23T10:43:05.558054+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.517
+      "score": 4.5087
     },
     {
       "title": "SpaceX launched Starship V3 three weeks before its IPO. The booster exploded.",
@@ -46,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-starship-v3-flight-12-ipo-superheavy-failure.avif",
       "published": "2026-05-23T09:56:03+00:00",
       "firstSeen": "2026-05-23T10:43:05.558054+00:00",
-      "lastSeen": "2026-05-23T10:43:05.558054+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5263
+      "score": 3.5179
     },
     {
       "title": "Xiaomi’s CEO admitted his SUV wasn’t cheap enough to beat Tesla. Then he launched one that is.",
@@ -62,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/05/xiaomi-yu7-standard-tesla-model-y-price-range.avif",
       "published": "2026-05-23T08:26:39+00:00",
       "firstSeen": "2026-05-23T10:00:01.572174+00:00",
-      "lastSeen": "2026-05-23T10:43:05.558054+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7827
+      "score": 2.7746
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -76,9 +92,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-23T10:43:09.408739+00:00",
+      "published": "2026-05-23T11:00:07.850271+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-23T10:43:05.558054+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -94,10 +110,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-labs-diffusion.png",
       "published": "2026-05-23T00:02:03+00:00",
       "firstSeen": "2026-05-23T01:00:01.633230+00:00",
-      "lastSeen": "2026-05-23T10:43:05.558054+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1475
+      "score": 2.1411
     },
     {
       "title": "Waymo’s robotaxis keep driving into floods. The software patch didn’t work. Five cities are now shut down.",
@@ -110,17 +126,11 @@
       "image": "https://media.thenextweb.com/2026/05/waymo-pauses-five-cities-flooded-roads-recall.avif",
       "published": "2026-05-23T09:09:34+00:00",
       "firstSeen": "2026-05-23T10:00:01.572174+00:00",
-      "lastSeen": "2026-05-23T10:43:05.558054+00:00",
+      "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1034
+      "score": 2.0952
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
