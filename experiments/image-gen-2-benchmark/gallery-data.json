@@ -718,5 +718,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-22-evening-paper-theater-of-the-rain-harvest",
+    "title": "Paper Theater of the Rain Harvest",
+    "tests": "Handmade-illustration lane: tests a cut-paper shoebox diorama format with visible craft construction, pop-up depth, rainy village machinery, and tactile non-gloss materials.",
+    "prompt": "Title: Paper Theater of the Rain Harvest\nLane/category: handmade-illustration\n\nCreate a square 1024x1024 handmade illustration that looks like a small tabletop paper theater photographed in a real craft studio, not glossy digital concept art and not a stage performance. The entire image is a tangible cut-paper diorama assembled inside a shallow shoebox frame: layered hand-cut watercolor paper, visible scissor edges, curled tabs, glue seams, matte gouache brush texture, thread suspensions, pinholes, and tiny binder clips holding pieces in place.\n\nSubject: the diorama depicts an imaginary village that harvests rain after a storm using still mechanical contraptions: paper rooftops shaped like funnels, blue vellum water ribbons, bead droplets caught in thimble-sized cisterns, tiny cardboard gutters, folded paper wind vanes, and miniature patchwork fields reflecting puddles. Include no people as performers; if any human figures appear, they must be tiny static paper silhouettes doing ordinary work, not posing. The emphasis is on the handmade miniature object and its construction.\n\nComposition: direct three-quarter tabletop view into the shoebox frame, with the front edge of the box visible, several scenery layers receding like a pop-up book, a few loose cutouts and paint-stained brushes resting outside the frame for scale. Use strong graphic silhouettes and crisp separation between paper layers; shallow real shadows should reveal the physical depth.\n\nMood and palette: quiet after-rain optimism, classroom craft meets folk-art precision; muted sky blue, wet slate gray, tomato red roof paper, leaf green gouache, cream cardboard, silver thread, transparent cyan vellum, and warm desk-lamp light. Tactile, imperfect, charming, detailed, clearly handmade.\n\nConstraints: no readable text, no logos, no copyrighted characters, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no theatrical performance with audience, no watermark, no signature.",
+    "image": "images/2026-05-22-evening-paper-theater-of-the-rain-harvest.png",
+    "date": "2026-05-22",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
