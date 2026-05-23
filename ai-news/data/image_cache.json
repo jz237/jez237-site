@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-23T00:00:01.597135+00:00",
+  "updatedAt": "2026-05-23T01:00:01.633230+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7920,6 +7920,10 @@
     "https://techcrunch.com/2026/05/22/ai-is-being-used-to-resurrect-the-voices-of-dead-pilots": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/UPS-crash-flight-kentucky-Getty.jpg?resize=1200,800",
       "checkedAt": "2026-05-22T23:17:35.435774+00:00"
+    },
+    "https://huggingface.co/blog/nvidia/nemotron-labs-diffusion": {
+      "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-labs-diffusion.png",
+      "checkedAt": "2026-05-23T01:00:01.633230+00:00"
     }
   }
 }
