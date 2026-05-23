@@ -9,3 +9,9 @@ assets, not photos from The Hidden Reef:
 - hero-aquatic-world-3.jpg - reef hero rotation image with anemones and clownfish.
 - hero-aquatic-world-4.jpg - reef hero rotation image with reef rockwork and tangs.
 - hero-aquatic-world-5.jpg - reef hero rotation image with soft coral and blue light shafts.
+
+## Sale product images
+
+Product images in `specials/` were copied from The Hidden Reef / Lightspeed
+product CDN on 2026-05-23 for this Hidden Reef prototype so the specials
+carousel can accurately reflect the live sale pages.

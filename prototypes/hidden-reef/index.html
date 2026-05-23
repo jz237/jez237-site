@@ -519,22 +519,74 @@
     }
     .special-media {
       position: relative;
+      display: grid;
+      align-items: center;
       min-height: 245px;
+      padding: 16px;
       overflow: hidden;
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(222,240,246,0.92)),
-        #fff;
+        radial-gradient(circle at 20% 18%, rgba(64,217,255,0.2), transparent 30%),
+        linear-gradient(145deg, rgba(255,255,255,0.96), rgba(221,241,247,0.92) 58%, rgba(180,218,229,0.9)),
+        #edf8fb;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 16px 36px rgba(0,0,0,0.22);
     }
-    .special-media img {
+    .special-media::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 0 42%, rgba(64,217,255,0.12) 42% 44%, transparent 44%),
+        radial-gradient(circle at 80% 76%, rgba(255,123,50,0.16), transparent 26%);
+      pointer-events: none;
+    }
+    .special-product-stack {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: end;
+      gap: 10px;
+    }
+    .special-product-card {
+      display: grid;
+      place-items: center;
+      min-height: 212px;
+      padding: 12px;
+      border: 1px solid rgba(6,48,70,0.12);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 12px 26px rgba(8,30,45,0.14);
+    }
+    .special-product-card:nth-child(2) {
+      transform: translateY(-10px);
+    }
+    .special-product-card img {
       width: 100%;
-      height: 100%;
-      min-height: 245px;
-      object-fit: cover;
+      height: 190px;
+      object-fit: contain;
       display: block;
       filter: saturate(1.05) contrast(1.03);
+    }
+    .special-product-card--single {
+      grid-column: 1 / -1;
+      min-height: 232px;
+    }
+    .special-product-card--single img {
+      height: 212px;
+    }
+    .special-media-label {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      padding: 0 118px 0 8px;
+      color: #0a3850;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     .special-media--logo img {
       object-fit: contain;
@@ -1496,7 +1548,6 @@
       .promo-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .special-slide { grid-template-columns: 1fr; }
       .special-media { min-height: 220px; }
-      .special-media img { min-height: 220px; }
       .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .learn-panel { grid-template-columns: 1fr; }
       .learn-split { grid-template-columns: 1fr; }
@@ -1529,8 +1580,27 @@
         font-size: 13px;
       }
       .special-media,
-      .special-media img {
+      .special-product-card {
         min-height: 176px;
+      }
+      .special-media {
+        padding: 10px;
+      }
+      .special-product-stack {
+        gap: 7px;
+      }
+      .special-product-card {
+        padding: 8px;
+      }
+      .special-product-card img {
+        height: 136px;
+      }
+      .special-product-card--single img {
+        height: 164px;
+      }
+      .special-media-label {
+        padding-right: 92px;
+        font-size: 10px;
       }
       .special-price-burst {
         width: 82px;
@@ -2561,20 +2631,31 @@
           <article class="special-slide">
             <div class="special-copy">
               <em>May 22 - May 28</em>
-              <h2>Memorial Day Red Sea Sale</h2>
-              <p>Save across Red Sea reef care, testing, filtration, media, parts, and aquarium systems during the holiday sale window. Good for customers who already run Red Sea gear and anyone building a reef setup around matching components.</p>
+              <h2>Red Sea Memorial Sale</h2>
+              <p>Select Red Sea test kits, reef care supplements, meters, media, pumps, parts, and aquarium systems are marked down for the holiday window. The live sale page shows practical reef-maintenance items rather than one broad brand logo.</p>
               <ul class="special-meta">
                 <li>12% off select Red Sea products</li>
                 <li>233 sale items</li>
-                <li>Online pricing may differ from store MAP pricing</li>
+                <li>Examples: Reef Mature Pro Kit $35.19, Refractometer $66.00</li>
               </ul>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/sales-online/red-sea-memorial-sale-may-22-may-28/" target="_blank" rel="noopener">Shop Red Sea Sale</a>
                 <a class="btn secondary" href="category/?cat=saltwater">Browse reef gear</a>
               </div>
             </div>
-            <div class="special-media special-media--logo">
-              <img src="assets/site/brand-red-sea.svg" alt="Red Sea reef aquarium products" />
+            <div class="special-media">
+              <div class="special-product-stack">
+                <div class="special-product-card">
+                  <img src="assets/site/specials/red-sea-reef-mature-pro-kit.jpg" alt="Red Sea Reef Mature Pro Kit" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/red-sea-seawater-refractometer.png" alt="Red Sea seawater refractometer" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/red-sea-marine-phosphate-test-kit.png" alt="Red Sea marine phosphate test kit" />
+                </div>
+              </div>
+              <div class="special-media-label">Test kits, care, media, pumps, parts, systems</div>
               <div class="special-price-burst">12%<small>off</small></div>
             </div>
           </article>
@@ -2582,19 +2663,30 @@
             <div class="special-copy">
               <em>Made to order</em>
               <h2>Innovative Marine MTO Systems</h2>
-              <p>Large Innovative Marine made-to-order aquariums get the biggest sale treatment. This is the kind of promo that needs more explanation than a simple tile: customers should understand these are substantial systems with lead-time and configuration decisions.</p>
+              <p>Hidden Reef's made-to-order Innovative Marine sale focuses on large lagoon, EXT, and SR Pro systems with APS stands. These are serious planned-build aquariums, with sale examples running into the multi-thousand-dollar range.</p>
               <ul class="special-meta">
                 <li>50% off MTO reef systems</li>
                 <li>50 sale items</li>
-                <li>Best for planned upgrades</li>
+                <li>Examples: INT 112 Lagoon $2,796.50, SR Pro 120 $3,196.50</li>
               </ul>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">Shop MTO Systems</a>
                 <a class="btn secondary" href="category/?cat=equipment">Plan a setup</a>
               </div>
             </div>
-            <div class="special-media special-media--logo">
-              <img src="assets/site/brand-innovative-marine.jpg" alt="Innovative Marine aquarium system" />
+            <div class="special-media">
+              <div class="special-product-stack">
+                <div class="special-product-card">
+                  <img src="assets/site/specials/innovative-marine-int-112-lagoon.jpg" alt="Innovative Marine INT 112 Lagoon aquarium with APS stand" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/innovative-marine-ext-112-lagoon.jpg" alt="Innovative Marine EXT 112 Lagoon aquarium with APS stand" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/innovative-marine-sr-pro-120.jpg" alt="Innovative Marine SR Pro 2 120 AIO aquarium with APS stand" />
+                </div>
+              </div>
+              <div class="special-media-label">Large MTO reef systems with APS stands</div>
               <div class="special-price-burst">50%<small>off</small></div>
             </div>
           </article>
@@ -2602,11 +2694,11 @@
             <div class="special-copy">
               <em>Complete systems</em>
               <h2>Innovative Marine 25-100 Gallon Sale</h2>
-              <p>A cleaner entry point for customers who want a complete aquarium system without stepping into the huge made-to-order range. This belongs in the same carousel because it is a different customer intent, not just another logo tile.</p>
+              <p>The smaller Innovative Marine special covers complete reef systems in the 25-100 gallon range, including Nuvo Fusion, EXT, and INT complete setups. It is a more approachable system sale than the MTO promo.</p>
               <ul class="special-meta">
                 <li>10% off complete systems</li>
                 <li>22 sale items</li>
-                <li>Good for serious starters and upgrades</li>
+                <li>Examples: Fusion 40L $1,395.00, EXT 75 $2,952.00</li>
               </ul>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/sales-online/innovative-marine-10-off-25-100-g-complete/" target="_blank" rel="noopener">Shop Complete Systems</a>
@@ -2614,19 +2706,55 @@
               </div>
             </div>
             <div class="special-media">
-              <img src="assets/site/product-reef-system.jpg" alt="Complete reef aquarium system" />
+              <div class="special-product-stack">
+                <div class="special-product-card">
+                  <img src="assets/site/specials/innovative-marine-nuvo-fusion-40.jpg" alt="Innovative Marine Nuvo Fusion 40L Pro 2 aquarium" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/innovative-marine-ext-75-complete.jpg" alt="Innovative Marine EXT 75 gallon complete reef system" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/innovative-marine-int-100-complete.jpg" alt="Innovative Marine INT 100 gallon complete reef system" />
+                </div>
+              </div>
+              <div class="special-media-label">25-100 gallon complete reef systems</div>
               <div class="special-price-burst">10%<small>off</small></div>
+            </div>
+          </article>
+          <article class="special-slide">
+            <div class="special-copy">
+              <em>Filtration upgrade</em>
+              <h2>Innovative Marine Nuvo Roller</h2>
+              <p>The original specials also include the Aqua Gadget Nuvo Roller manual fleece roller. This is a focused add-on promo for customers who want cleaner mechanical filtration without replacing the whole aquarium.</p>
+              <ul class="special-meta">
+                <li>30% off fleece roller</li>
+                <li>Sale price $104.99</li>
+                <li>Regular price $149.99</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/sales-online/innovative-marine-fleece-roller-30-off/" target="_blank" rel="noopener">Shop Nuvo Roller</a>
+                <a class="btn secondary" href="category/?cat=maintenance">Filter media</a>
+              </div>
+            </div>
+            <div class="special-media">
+              <div class="special-product-stack">
+                <div class="special-product-card special-product-card--single">
+                  <img src="assets/site/specials/innovative-marine-nuvo-roller.jpg" alt="Innovative Marine Aqua Gadget Nuvo Roller manual fleece roller" />
+                </div>
+              </div>
+              <div class="special-media-label">Aqua Gadget Nuvo Roller manual fleece roller</div>
+              <div class="special-price-burst">30%<small>off</small></div>
             </div>
           </article>
           <article class="special-slide">
             <div class="special-copy">
               <em>Reef automation</em>
               <h2>Reef Factory Equipment Sale</h2>
-              <p>Controllers, testers, pumps, and automation gear are easier to sell when the special is framed around the job they do. This slide keeps the price point visible while giving enough room to explain why monitoring and stability matter.</p>
+              <p>Reef Factory's sale page is built around automation and monitoring hardware: Smart Rollers, ATO gear, meters, pumps, and controllers. The carousel frames it as stability gear instead of a generic equipment discount.</p>
               <ul class="special-meta">
                 <li>40% off Reef Factory</li>
                 <li>39 sale items</li>
-                <li>Controllers, testers, pumps</li>
+                <li>Examples: Level Keeper $93.59, Smart Roller L $239.99</li>
               </ul>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/sales-online/reef-factory-sale-40/" target="_blank" rel="noopener">Shop Reef Factory</a>
@@ -2634,7 +2762,18 @@
               </div>
             </div>
             <div class="special-media">
-              <img src="assets/department/lighting.jpg" alt="Reef lighting and control equipment" />
+              <div class="special-product-stack">
+                <div class="special-product-card">
+                  <img src="assets/site/specials/reef-factory-level-keeper.webp" alt="Reef Factory Level Keeper auto top off system" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/reef-factory-ph-meter.png" alt="Reef Factory pH meter" />
+                </div>
+                <div class="special-product-card">
+                  <img src="assets/site/specials/reef-factory-smart-roller-l.png" alt="Reef Factory Smart Roller L" />
+                </div>
+              </div>
+              <div class="special-media-label">ATO, meters, smart rollers, controllers</div>
               <div class="special-price-burst">40%<small>off</small></div>
             </div>
           </article>
