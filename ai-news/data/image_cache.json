@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-23T19:35:12.677947+00:00",
+  "updatedAt": "2026-05-23T21:00:01.734077+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7944,6 +7944,10 @@
     "https://www.marktechpost.com/2026/05/23/build-a-superclaude-framework-workflow-with-commands-agents-modes-and-session-memory": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-42-1024x731.png",
       "checkedAt": "2026-05-23T19:35:12.677947+00:00"
+    },
+    "https://simonwillison.net/2026/May/23/on-the-dl": {
+      "image": "",
+      "checkedAt": "2026-05-23T21:00:01.734077+00:00"
     }
   }
 }
