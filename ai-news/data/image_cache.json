@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-23T19:00:01.612393+00:00",
+  "updatedAt": "2026-05-23T20:00:01.585022+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7936,6 +7936,14 @@
     "https://techcrunch.com/2026/05/23/ferrari-is-using-ai-to-create-f1-superfans": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/01-bxd-ferrari-xg-photography-v2.jpg?resize=1200,959",
       "checkedAt": "2026-05-23T15:16:14.046173+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/23/tencent-open-sources-tencentdb-agent-memory-a-4-tier-local-memory-pipeline-for-ai-agents": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-43.png",
+      "checkedAt": "2026-05-23T20:00:01.585022+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/23/build-a-superclaude-framework-workflow-with-commands-agents-modes-and-session-memory": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-42-1024x731.png",
+      "checkedAt": "2026-05-23T20:00:01.585022+00:00"
     }
   }
 }
