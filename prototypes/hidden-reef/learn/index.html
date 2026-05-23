@@ -173,6 +173,132 @@
       color: #b9d9e7;
       font-size: 13px;
     }
+    .path-grid,
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .problem-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .path-card,
+    .problem-card,
+    .checklist-card {
+      display: grid;
+      gap: 9px;
+      min-height: 172px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .path-card span,
+    .problem-card span,
+    .checklist-card span {
+      color: var(--aqua);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .path-card h3,
+    .problem-card h3,
+    .checklist-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .path-card p,
+    .problem-card p,
+    .checklist-card p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .path-card a,
+    .problem-card a {
+      align-self: end;
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.42);
+      text-underline-offset: 4px;
+    }
+    .triage-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 16px;
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid rgba(147,112,255,0.28);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.14), transparent 34%),
+        linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .triage-panel h3 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+    .triage-panel p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .triage-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .triage-list li {
+      padding: 10px 11px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      color: #d9f5fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .triage-list strong {
+      color: #fff;
+    }
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .checklist-card ul {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .checklist-card li {
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .checklist-card li::before {
+      content: "• ";
+      color: var(--aqua);
+      font-weight: 900;
+    }
     .section-head {
       display: flex;
       align-items: baseline;
@@ -337,8 +463,12 @@
     @media (max-width: 1040px) {
       .header,
       .hero,
-      .diagram { grid-template-columns: 1fr; }
-      .guide-grid { grid-template-columns: 1fr; }
+      .diagram,
+      .triage-panel { grid-template-columns: 1fr; }
+      .guide-grid,
+      .problem-grid,
+      .checklist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 980px) {
@@ -353,6 +483,14 @@
       .hero { margin-top: 12px; padding: 24px 18px; }
       .section-head { display: block; }
       .section-head p { margin-top: 6px; }
+      .path-grid,
+      .problem-grid,
+      .guide-grid,
+      .checklist-grid { grid-template-columns: 1fr; gap: 10px; }
+      .path-card,
+      .problem-card,
+      .checklist-card { min-height: 0; padding: 14px; }
+      .triage-panel { padding: 14px; }
       .diagram { padding: 12px; }
       .footer-top { grid-template-columns: 1fr; }
     }
@@ -383,19 +521,210 @@
     <section class="hero">
       <div>
         <span>Learning Center</span>
-        <h1>Understand the system before buying the box.</h1>
-        <p>Educational filtration diagrams give customers a quick way to see water path, media order, bacteria zones, and maintenance points before they choose equipment.</p>
+        <h1>Start smarter, fix problems faster.</h1>
+        <p>Practical care guides for choosing equipment, understanding water quality, and troubleshooting the problems customers actually run into at home.</p>
       </div>
       <aside class="hero-card">
-        <strong>First set: filtration</strong>
-        <p>Freshwater, general, and reef-ready filtration diagrams are grouped by system type, so customers can match the visual explanation to the aquarium they are actually planning.</p>
+        <strong>Ask the right question first</strong>
+        <p>Are you starting a tank, fixing a problem, choosing gear, or building a better routine? The Learn Center now starts from that customer decision.</p>
       </aside>
     </section>
 
-    <section aria-labelledby="guides-title">
+    <section aria-labelledby="paths-title">
       <div class="section-head">
-        <h2 id="guides-title">Freshwater & General Filtration</h2>
-        <p>Dissected views for beginner freshwater tanks, planted displays, sponge filters, HOB filters, canisters, sumps, and common aquarium hardware.</p>
+        <h2 id="paths-title">Choose a Learning Path</h2>
+        <p>Start with the job the customer is trying to do.</p>
+      </div>
+      <div class="path-grid">
+        <article class="path-card">
+          <span>New setup</span>
+          <h3>Start a Tank</h3>
+          <p>Freshwater, saltwater, pond, cycling, water testing, and first-shopping-list basics.</p>
+          <a href="#starter-checklists">See starter checklists</a>
+        </article>
+        <article class="path-card">
+          <span>Diagnosis</span>
+          <h3>Fix a Problem</h3>
+          <p>Cloudy water, algae, ammonia spikes, sick fish, parasites, coral stress, and emergency symptoms.</p>
+          <a href="#troubleshooting">Open troubleshooting</a>
+        </article>
+        <article class="path-card">
+          <span>Gear help</span>
+          <h3>Choose Equipment</h3>
+          <p>Filters, UV sterilizers, skimmers, media reactors, flow, lighting, heaters, and maintenance tools.</p>
+          <a href="#filtration-equipment">Compare filtration</a>
+        </article>
+        <article class="path-card">
+          <span>Routine care</span>
+          <h3>Care Guides</h3>
+          <p>Weekly routines, water changes, filter cleaning, feeding, testing, dosing, and quarantine habits.</p>
+          <a href="#care-routines">Build a routine</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="troubleshooting" aria-labelledby="troubleshooting-title">
+      <div class="section-head">
+        <h2 id="troubleshooting-title">Troubleshooting Center</h2>
+        <p>Diagnosis-style guides for the most common aquarium problems.</p>
+      </div>
+      <div class="problem-grid">
+        <article class="problem-card">
+          <span>Water clarity</span>
+          <h3>Cloudy Water</h3>
+          <p>Separate new-tank bacterial bloom, overfeeding, dirty substrate, filter problems, and green-water algae.</p>
+          <a href="#cloudy-water-guide">View first steps</a>
+        </article>
+        <article class="problem-card">
+          <span>Algae control</span>
+          <h3>Algae Taking Over</h3>
+          <p>Check light duration, nutrients, phosphate, maintenance habits, plant competition, and cleanup crew fit.</p>
+          <a href="#algae-guide">View first steps</a>
+        </article>
+        <article class="problem-card">
+          <span>Fish health</span>
+          <h3>Sick Fish & Parasites</h3>
+          <p>Spot symptoms like white dots, flashing, clamped fins, rapid breathing, fin damage, and appetite loss.</p>
+          <a href="#parasite-guide">View first steps</a>
+        </article>
+        <article class="problem-card">
+          <span>Emergency</span>
+          <h3>Ammonia or Nitrite Spike</h3>
+          <p>Test immediately, protect livestock, reduce feeding, check filtration, and avoid replacing all media at once.</p>
+          <a href="#ammonia-guide">View first steps</a>
+        </article>
+        <article class="problem-card">
+          <span>Behavior clue</span>
+          <h3>Fish Gasping at Surface</h3>
+          <p>Prioritize oxygen, temperature, ammonia, nitrite, flow, surface agitation, and recent chemical additions.</p>
+          <a href="#gasping-guide">View first steps</a>
+        </article>
+        <article class="problem-card">
+          <span>Reef stress</span>
+          <h3>Coral Not Opening</h3>
+          <p>Review salinity, alkalinity, nitrate, phosphate, lighting changes, flow, pests, and recent dips or moves.</p>
+          <a href="#coral-guide">View first steps</a>
+        </article>
+      </div>
+      <div class="triage-panel">
+        <div>
+          <h3>Standard Problem Guide Format</h3>
+          <p>Each troubleshooting article should follow the same predictable pattern so customers know what to test, what to do today, and when to ask the store for help.</p>
+        </div>
+        <ul class="triage-list">
+          <li><strong>Symptoms:</strong> what the customer sees in the tank.</li>
+          <li><strong>Test first:</strong> water parameters or quick observations to confirm.</li>
+          <li><strong>Likely causes:</strong> ranked from common to less common.</li>
+          <li><strong>Do today:</strong> immediate actions that are hard to regret.</li>
+          <li><strong>Helpful departments:</strong> testing, filtration, medication, water care, or livestock support.</li>
+        </ul>
+      </div>
+      <div class="section-head">
+        <h2>First Steps</h2>
+        <p>Short triage notes for the problem cards above.</p>
+      </div>
+      <div class="checklist-grid">
+        <article class="checklist-card" id="cloudy-water-guide">
+          <span>Cloudy water</span>
+          <h3>What to Check First</h3>
+          <ul>
+            <li>Test ammonia, nitrite, nitrate, and pH</li>
+            <li>Check whether the tank is newly cycling or recently disturbed</li>
+            <li>Inspect filter flow and mechanical media before adding clarifiers</li>
+          </ul>
+        </article>
+        <article class="checklist-card" id="algae-guide">
+          <span>Algae</span>
+          <h3>What to Check First</h3>
+          <ul>
+            <li>Reduce light duration and avoid direct sun exposure</li>
+            <li>Test nitrate and phosphate, especially in reef tanks</li>
+            <li>Remove what you can by hand before relying on treatments</li>
+          </ul>
+        </article>
+        <article class="checklist-card" id="parasite-guide">
+          <span>Sick fish</span>
+          <h3>What to Check First</h3>
+          <ul>
+            <li>Look for white spots, flashing, clamped fins, sores, or rapid breathing</li>
+            <li>Test water before medicating; poor water can mimic disease</li>
+            <li>Use quarantine when possible and confirm whether invertebrates are present</li>
+          </ul>
+        </article>
+        <article class="checklist-card" id="ammonia-guide">
+          <span>Ammonia spike</span>
+          <h3>What to Check First</h3>
+          <ul>
+            <li>Test ammonia and nitrite immediately</li>
+            <li>Stop overfeeding and remove decaying food or dead livestock</li>
+            <li>Protect biological media; do not replace every filter pad at once</li>
+          </ul>
+        </article>
+        <article class="checklist-card" id="gasping-guide">
+          <span>Gasping fish</span>
+          <h3>What to Check First</h3>
+          <ul>
+            <li>Increase surface agitation and confirm the filter is moving water</li>
+            <li>Check temperature, ammonia, nitrite, and recent additive use</li>
+            <li>Look for overcrowding, low oxygen, or medication side effects</li>
+          </ul>
+        </article>
+        <article class="checklist-card" id="coral-guide">
+          <span>Coral stress</span>
+          <h3>What to Check First</h3>
+          <ul>
+            <li>Verify salinity, alkalinity, nitrate, phosphate, and temperature stability</li>
+            <li>Review recent lighting, flow, dip, or placement changes</li>
+            <li>Inspect for pests or irritation before moving the coral repeatedly</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="starter-checklists" aria-labelledby="checklists-title">
+      <div class="section-head">
+        <h2 id="checklists-title">Starter & Care Checklists</h2>
+        <p>Short planning guides that can grow into full articles.</p>
+      </div>
+      <div class="checklist-grid">
+        <article class="checklist-card">
+          <span>Freshwater start</span>
+          <h3>First Tank Checklist</h3>
+          <ul>
+            <li>Tank, stand, lid, light, heater, filter, thermometer</li>
+            <li>Water conditioner, bacteria starter, test kit</li>
+            <li>Substrate, decor, food, net, algae pad, bucket</li>
+          </ul>
+        </article>
+        <article class="checklist-card">
+          <span>Reef start</span>
+          <h3>Saltwater Setup Basics</h3>
+          <ul>
+            <li>RO/DI or prepared saltwater plan</li>
+            <li>Refractometer, salt mix, heater, flow, rock, sand</li>
+            <li>Test alkalinity, nitrate, phosphate, salinity</li>
+          </ul>
+        </article>
+        <article class="checklist-card">
+          <span id="care-routines">Routine care</span>
+          <h3>Weekly Maintenance</h3>
+          <ul>
+            <li>Test water and compare trends</li>
+            <li>Clean glass, remove debris, inspect equipment</li>
+            <li>Rinse mechanical media in removed tank water</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="filtration-equipment" aria-labelledby="guides-title">
+      <div class="section-head">
+        <h2 id="guides-title">Filtration & Equipment</h2>
+        <p>One consolidated filtration area for freshwater, planted displays, saltwater, reef systems, UV, reactors, skimmers, and sumps.</p>
+      </div>
+      <div class="section-head">
+        <h2>Freshwater & General</h2>
+        <p>Dissected views for beginner tanks, planted displays, sponge filters, HOB filters, canisters, sumps, and common aquarium hardware.</p>
       </div>
       <div class="guide-grid">
         <article class="guide-card">
@@ -427,8 +756,8 @@
 
     <section aria-labelledby="saltwater-guides-title">
       <div class="section-head">
-        <h2 id="saltwater-guides-title">Saltwater & Reef Filtration</h2>
-        <p>Reef-specific systems and saltwater use cases: live rock biofiltration, reef-ready sumps, HOB filters used on marine tanks, media reactors, skimmers, and all-in-one nano reef filtration.</p>
+        <h2 id="saltwater-guides-title">Saltwater & Reef</h2>
+        <p>Reef-specific filtration and saltwater use cases: live rock, reef-ready sumps, HOB filters, media reactors, skimmers, and all-in-one nano reef chambers.</p>
       </div>
       <div class="guide-grid">
         <article class="guide-card">
@@ -623,7 +952,7 @@
       <div class="footer-top">
         <div><h3>The Hidden Reef</h3><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
         <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
-        <div><h4>Learn</h4><div class="footer-link-grid"><a href="#internal-power-filter">Internal filters</a><a href="#freshwater-filter">Canister filters</a><a href="#uv-sterilizer">UV sterilizers</a><a href="#sump-saltwater">Saltwater sump</a><a href="#media-reactor-saltwater">Media reactors</a><a href="#protein-skimmer-saltwater">Protein skimmers</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="#troubleshooting">Troubleshooting</a><a href="#starter-checklists">Starter checklists</a><a href="#filtration-equipment">Filtration</a><a href="#care-routines">Care routines</a><a href="#uv-sterilizer">UV sterilizers</a><a href="#protein-skimmer-saltwater">Protein skimmers</a></div></div>
         <div><h4>Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
       </div>
     </footer>
