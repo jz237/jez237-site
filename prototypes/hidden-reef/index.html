@@ -519,10 +519,7 @@
     }
     .special-media {
       position: relative;
-      display: grid;
-      align-items: center;
       min-height: 245px;
-      padding: 16px;
       overflow: hidden;
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
@@ -531,6 +528,17 @@
         linear-gradient(145deg, rgba(255,255,255,0.96), rgba(221,241,247,0.92) 58%, rgba(180,218,229,0.9)),
         #edf8fb;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 16px 36px rgba(0,0,0,0.22);
+    }
+    .special-art-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 245px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: saturate(1.08) contrast(1.04);
     }
     .special-media::before {
       content: "";
@@ -577,15 +585,18 @@
       height: 212px;
     }
     .special-media-label {
-      position: relative;
-      z-index: 1;
-      margin-top: 10px;
-      padding: 0 118px 0 8px;
-      color: #0a3850;
+      position: absolute;
+      left: 16px;
+      right: 122px;
+      bottom: 18px;
+      z-index: 2;
+      color: #dff8ff;
       text-align: left;
       font-size: 12px;
       font-weight: 950;
       letter-spacing: 0.08em;
+      line-height: 1.25;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
       text-transform: uppercase;
     }
     .special-media--logo img {
@@ -597,14 +608,17 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 44%, rgba(2,17,29,0.88));
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(2,17,29,0.34), transparent 42%),
+        linear-gradient(180deg, transparent 46%, rgba(2,17,29,0.86));
       pointer-events: none;
     }
     .special-price-burst {
       position: absolute;
       right: 14px;
       bottom: 14px;
-      z-index: 1;
+      z-index: 2;
       display: grid;
       place-items: center;
       width: 104px;
@@ -1586,6 +1600,9 @@
       .special-media {
         padding: 10px;
       }
+      .special-art-image {
+        min-height: 176px;
+      }
       .special-product-stack {
         gap: 7px;
       }
@@ -1599,7 +1616,9 @@
         height: 164px;
       }
       .special-media-label {
-        padding-right: 92px;
+        left: 12px;
+        right: 96px;
+        bottom: 15px;
         font-size: 10px;
       }
       .special-price-burst {
@@ -2644,17 +2663,7 @@
               </div>
             </div>
             <div class="special-media">
-              <div class="special-product-stack">
-                <div class="special-product-card">
-                  <img src="assets/site/specials/red-sea-reef-mature-pro-kit.jpg" alt="Red Sea Reef Mature Pro Kit" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/red-sea-seawater-refractometer.png" alt="Red Sea seawater refractometer" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/red-sea-marine-phosphate-test-kit.png" alt="Red Sea marine phosphate test kit" />
-                </div>
-              </div>
+              <img class="special-art-image" src="assets/site/specials/red-sea-special-gpt2.jpg" alt="Premium reef care products arranged beside a reef aquarium" />
               <div class="special-media-label">Test kits, care, media, pumps, parts, systems</div>
               <div class="special-price-burst">12%<small>off</small></div>
             </div>
@@ -2675,17 +2684,7 @@
               </div>
             </div>
             <div class="special-media">
-              <div class="special-product-stack">
-                <div class="special-product-card">
-                  <img src="assets/site/specials/innovative-marine-int-112-lagoon.jpg" alt="Innovative Marine INT 112 Lagoon aquarium with APS stand" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/innovative-marine-ext-112-lagoon.jpg" alt="Innovative Marine EXT 112 Lagoon aquarium with APS stand" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/innovative-marine-sr-pro-120.jpg" alt="Innovative Marine SR Pro 2 120 AIO aquarium with APS stand" />
-                </div>
-              </div>
+              <img class="special-art-image" src="assets/site/specials/innovative-marine-mto-special-gpt2.jpg" alt="Large premium reef aquarium system in a blue-lit showroom" />
               <div class="special-media-label">Large MTO reef systems with APS stands</div>
               <div class="special-price-burst">50%<small>off</small></div>
             </div>
@@ -2706,17 +2705,7 @@
               </div>
             </div>
             <div class="special-media">
-              <div class="special-product-stack">
-                <div class="special-product-card">
-                  <img src="assets/site/specials/innovative-marine-nuvo-fusion-40.jpg" alt="Innovative Marine Nuvo Fusion 40L Pro 2 aquarium" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/innovative-marine-ext-75-complete.jpg" alt="Innovative Marine EXT 75 gallon complete reef system" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/innovative-marine-int-100-complete.jpg" alt="Innovative Marine INT 100 gallon complete reef system" />
-                </div>
-              </div>
+              <img class="special-art-image" src="assets/site/specials/innovative-marine-complete-special-gpt2.jpg" alt="Complete mid-size reef aquarium system with filtration equipment" />
               <div class="special-media-label">25-100 gallon complete reef systems</div>
               <div class="special-price-burst">10%<small>off</small></div>
             </div>
@@ -2737,11 +2726,7 @@
               </div>
             </div>
             <div class="special-media">
-              <div class="special-product-stack">
-                <div class="special-product-card special-product-card--single">
-                  <img src="assets/site/specials/innovative-marine-nuvo-roller.jpg" alt="Innovative Marine Aqua Gadget Nuvo Roller manual fleece roller" />
-                </div>
-              </div>
+              <img class="special-art-image" src="assets/site/specials/nuvo-roller-special-gpt2.jpg" alt="Manual fleece roller aquarium filter beside a reef tank" />
               <div class="special-media-label">Aqua Gadget Nuvo Roller manual fleece roller</div>
               <div class="special-price-burst">30%<small>off</small></div>
             </div>
@@ -2762,17 +2747,7 @@
               </div>
             </div>
             <div class="special-media">
-              <div class="special-product-stack">
-                <div class="special-product-card">
-                  <img src="assets/site/specials/reef-factory-level-keeper.webp" alt="Reef Factory Level Keeper auto top off system" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/reef-factory-ph-meter.png" alt="Reef Factory pH meter" />
-                </div>
-                <div class="special-product-card">
-                  <img src="assets/site/specials/reef-factory-smart-roller-l.png" alt="Reef Factory Smart Roller L" />
-                </div>
-              </div>
+              <img class="special-art-image" src="assets/site/specials/reef-factory-special-gpt2.jpg" alt="Reef aquarium automation and monitoring equipment beside a reef tank" />
               <div class="special-media-label">ATO, meters, smart rollers, controllers</div>
               <div class="special-price-burst">40%<small>off</small></div>
             </div>
@@ -2983,7 +2958,7 @@
 	    const specialDots = document.getElementById('special-dots');
 	    if (specialsTrack && specialSlides.length && specialDots) {
 	      let activeSpecial = 0;
-	      const reducedSpecialMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	      let specialsTimer = null;
 	      specialDots.innerHTML = specialSlides.map((slide, index) =>
 	        '<button class="special-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-special-index="' + index + '" aria-label="Show special ' + (index + 1) + '"></button>'
 	      ).join('');
@@ -2995,15 +2970,27 @@
 	          dot.classList.toggle('is-active', dotIndex === activeSpecial);
 	        });
 	      }
+	      function startSpecialsTimer() {
+	        window.clearInterval(specialsTimer);
+	        if (specialSlides.length <= 1) return;
+	        specialsTimer = window.setInterval(() => {
+	          if (document.hidden) return;
+	          setSpecial(activeSpecial + 1);
+	        }, 6500);
+	      }
 	      document.querySelectorAll('[data-special-dir]').forEach(button => {
-	        button.addEventListener('click', () => setSpecial(activeSpecial + Number(button.dataset.specialDir || 1)));
+	        button.addEventListener('click', () => {
+	          setSpecial(activeSpecial + Number(button.dataset.specialDir || 1));
+	          startSpecialsTimer();
+	        });
 	      });
 	      dots.forEach(dot => {
-	        dot.addEventListener('click', () => setSpecial(Number(dot.dataset.specialIndex || 0)));
+	        dot.addEventListener('click', () => {
+	          setSpecial(Number(dot.dataset.specialIndex || 0));
+	          startSpecialsTimer();
+	        });
 	      });
-	      if (!reducedSpecialMotion && specialSlides.length > 1) {
-	        window.setInterval(() => setSpecial(activeSpecial + 1), 8500);
-	      }
+	      startSpecialsTimer();
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
