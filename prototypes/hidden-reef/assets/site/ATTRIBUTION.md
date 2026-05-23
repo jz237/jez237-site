@@ -10,8 +10,8 @@ assets, not photos from The Hidden Reef:
 - hero-aquatic-world-4.jpg - reef hero rotation image with reef rockwork and tangs.
 - hero-aquatic-world-5.jpg - reef hero rotation image with soft coral and blue light shafts.
 
-## Sale product images
+## Sale carousel images
 
-Product images in `specials/` were copied from The Hidden Reef / Lightspeed
-product CDN on 2026-05-23 for this Hidden Reef prototype so the specials
-carousel can accurately reflect the live sale pages.
+The `*-gpt2.jpg` sale artwork files in `specials/` were generated with GPT
+Image 2 on 2026-05-23 as demo advertising images for the specials carousel.
+They are not official brand artwork or photos from The Hidden Reef.
