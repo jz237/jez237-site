@@ -1,6 +1,6 @@
 {
   "date": "2026-05-23",
-  "updatedAt": "2026-05-23T10:00:01.572174+00:00",
+  "updatedAt": "2026-05-23T09:10:22.756312+00:00",
   "items": [
     {
       "title": "Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints",
@@ -13,27 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-1.20.14-AM-1-150x150.png",
       "published": "2026-05-23T08:17:27+00:00",
       "firstSeen": "2026-05-23T09:00:01.319082+00:00",
-      "lastSeen": "2026-05-23T10:00:01.572174+00:00",
+      "lastSeen": "2026-05-23T09:10:22.756312+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.369
-    },
-    {
-      "title": "Xiaomi’s CEO admitted his SUV wasn’t cheap enough to beat Tesla. Then he launched one that is.",
-      "url": "https://thenextweb.com/news/xiaomi-yu7-standard-tesla-model-y-price-range",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Most CEOs would not go on stage and admit their product was not competitively priced against a rival. Lei Jun did exactly that on Wednesday evening, and then launched a model that fixes it. At Xiaomi’s “Human x Car x Home” launch event on 21 May, the founder and CEO unveiled the YU7 True Standard [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/xiaomi-yu7-standard-tesla-model-y-price-range.avif",
-      "published": "2026-05-23T08:26:39+00:00",
-      "firstSeen": "2026-05-23T10:00:01.572174+00:00",
-      "lastSeen": "2026-05-23T10:00:01.572174+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8035
+      "score": 14.3934
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -44,9 +28,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-23T10:00:09.837075+00:00",
+      "published": "2026-05-23T09:10:28.623376+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-23T10:00:01.572174+00:00",
+      "lastSeen": "2026-05-23T09:10:22.756312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -62,26 +46,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-labs-diffusion.png",
       "published": "2026-05-23T00:02:03+00:00",
       "firstSeen": "2026-05-23T01:00:01.633230+00:00",
-      "lastSeen": "2026-05-23T10:00:01.572174+00:00",
+      "lastSeen": "2026-05-23T09:10:22.756312+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.164
-    },
-    {
-      "title": "Waymo’s robotaxis keep driving into floods. The software patch didn’t work. Five cities are now shut down.",
-      "url": "https://thenextweb.com/news/waymo-pauses-five-cities-flooded-roads-recall",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Waymo suspended robotaxi service across five US cities on 21 May after a software patch it pushed to its entire 3,791-vehicle fleet less than two weeks earlier failed to prevent another autonomous vehicle from driving into standing water. An unoccupied Waymo robotaxi got stuck on a flooded street in Midtown Atlanta on Wednesday evening during [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/waymo-pauses-five-cities-flooded-roads-recall.avif",
-      "published": "2026-05-23T09:09:34+00:00",
-      "firstSeen": "2026-05-23T10:00:01.572174+00:00",
-      "lastSeen": "2026-05-23T10:00:01.572174+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1246
+      "score": 2.1834
     }
   ],
   "errors": []
