@@ -81,3 +81,48 @@ Troubleshooting pages should use a diagnosis-style layout:
 ## First Build Priority
 
 Start with Troubleshooting plus Filtration & Equipment. These are the highest-value areas because they match real customer questions and lead naturally to useful product/category links without feeling like generic sales copy.
+
+## Current State - 2026-05-23
+
+Initial Learn Center hub is built and deployed.
+
+- Live page: `https://jz237.github.io/jez237-site/prototypes/hidden-reef/learn/?v=df172a86`
+- Commit: `df172a86 Add Learn Center accordions and specials glow`
+- Structure now includes:
+  - Choose a Learning Path
+  - Troubleshooting Center
+  - First-step triage cards
+  - Starter and care checklists
+  - Filtration & Equipment as one consolidated category
+- Accordion behavior:
+  - Choose a Learning Path stays visible.
+  - Troubleshooting Center opens by default.
+  - Starter/Care and Filtration start collapsed.
+  - Links into collapsed sections auto-open the relevant section.
+
+## Current Design Direction
+
+- Keep the Learn Center practical and diagnostic, not blog-like.
+- Use collapsible sections as content grows so the page does not become too tall.
+- Keep Troubleshooting as the main customer-facing hook.
+- Keep Filtration consolidated instead of splitting freshwater, reef, and pond filtration into separate top-level categories.
+- Product/category links should feel helpful and local-store practical, not forced sales copy.
+
+## Next Work In `#hidden-reef`
+
+Continue Hidden Reef demo work in the private Discord channel `#hidden-reef` (`1507858595310604358`).
+
+Good next implementation passes:
+
+- Expand individual troubleshooting articles for cloudy water, algae, parasites/ich, ammonia or nitrite spikes, and fish gasping at the surface.
+- Add compact diagnosis cards with: symptoms, tests, likely causes, what to do today, what to avoid, and helpful departments.
+- Build the Filtration & Equipment section into real guide pages: filter choice, media types, maintenance, UV, skimmers, reactors, and fleece rollers.
+- Add internal links from troubleshooting cards to relevant shopping categories.
+- Keep mobile tight: short intro text, compact card spacing, collapsed deep content, and no giant stacked walls.
+
+## Cloudy Water Guide Pass - 2026-05-23
+
+- Added `learn/cloudy-water/` as the first full Troubleshooting article.
+- Added GPT Image 2 visual asset `assets/learn/cloudy-water-gpt-image-2.png`.
+- Article structure now includes: hero visual, visual water-clarity display, what to do today, decision-tree diagnosis flow, common causes, helpful departments, and urgent-help callout.
+- Learn Center Cloudy Water card now links to the dedicated guide instead of only the short first-step card.

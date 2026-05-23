@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloudy Water Troubleshooter - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --line: rgba(116,205,235,0.2);
+      --orange: #ff7b32;
+      --purple: #9275ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 0%, rgba(14,159,204,0.22), transparent 28%),
+        radial-gradient(circle at 90% 12%, rgba(141,108,255,0.15), transparent 30%),
+        linear-gradient(180deg, #03111d 0, #051827 300px, #020912 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+      gap: 22px;
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(141,108,255,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .eyebrow,
+    .section-head span,
+    .step-card span,
+    .cause-card span,
+    .product-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 0.98;
+    }
+    .hero p,
+    .section-head p,
+    .visual-copy p,
+    .step-card p,
+    .cause-card p,
+    .product-card p,
+    .callout p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      overflow: hidden;
+      min-height: 310px;
+      margin: 0;
+      border: 1px solid rgba(147,112,255,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 28px rgba(147,112,255,0.18);
+    }
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: cover;
+      display: block;
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .visual-display {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.12), transparent 36%),
+        #071a27;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .clarity-scale {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .water-tile {
+      min-height: 230px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: #0b2536;
+    }
+    .water-tile .tank {
+      position: relative;
+      height: 158px;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), transparent 18%),
+        linear-gradient(160deg, rgba(64,217,255,0.28), rgba(5,44,67,0.9));
+    }
+    .tank::before,
+    .tank::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.9;
+    }
+    .tank::before {
+      width: 58px;
+      height: 22px;
+      left: 16%;
+      top: 38%;
+      background: rgba(244,189,92,0.76);
+      clip-path: polygon(0 50%, 20% 15%, 76% 18%, 100% 50%, 76% 82%, 20% 85%);
+    }
+    .tank::after {
+      width: 42px;
+      height: 80px;
+      right: 12%;
+      bottom: 0;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, rgba(37,188,121,0.74), rgba(20,108,80,0.9));
+      box-shadow: -22px 15px 0 rgba(39,161,108,0.64);
+    }
+    .milk .tank { filter: saturate(0.72); }
+    .milk .tank { background: linear-gradient(160deg, rgba(235,248,252,0.78), rgba(98,139,153,0.88)); }
+    .green .tank { background: linear-gradient(160deg, rgba(163,215,93,0.66), rgba(27,85,59,0.9)); }
+    .particles .tank { background: linear-gradient(160deg, rgba(117,191,209,0.52), rgba(30,62,72,0.94)); }
+    .particles .tank span {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(224,198,151,0.95) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,255,255,0.75) 0 1px, transparent 2px);
+      background-size: 18px 16px, 29px 24px;
+      opacity: 0.58;
+    }
+    .clear .tank { background: linear-gradient(160deg, rgba(64,217,255,0.36), rgba(4,50,79,0.94)); }
+    .water-tile div:last-child {
+      padding: 12px;
+    }
+    .water-tile h3,
+    .callout h3,
+    .cause-card h3,
+    .product-card h3 {
+      margin: 0 0 7px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.05;
+    }
+    .water-tile p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 12px;
+      line-height: 1.38;
+    }
+    .visual-copy {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .mini-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .mini-list li {
+      padding: 10px 11px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      color: #d9f5fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .mini-list strong { color: #fff; }
+    .step-grid,
+    .cause-grid,
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .step-card,
+    .cause-card,
+    .product-card,
+    .callout {
+      display: grid;
+      gap: 9px;
+      min-height: 168px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .step-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(0,167,183,0.42);
+      box-shadow: 0 0 18px rgba(64,217,255,0.22);
+      font-weight: 950;
+    }
+    .flow {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid rgba(147,112,255,0.28);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .flow-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .flow-row > div {
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .flow-row strong { display: block; margin-bottom: 4px; color: #fff; }
+    .flow-row:first-child > div {
+      color: #fff;
+      background: rgba(0,167,183,0.28);
+      font-weight: 900;
+    }
+    .callout {
+      min-height: 0;
+      margin-top: 16px;
+      border-color: rgba(255,123,50,0.35);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.13), transparent 34%),
+        #071a27;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero,
+      .visual-display { grid-template-columns: 1fr; }
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+      .clarity-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow-row { grid-template-columns: 1fr; }
+      .flow-row:first-child { display: none; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { padding: 24px 18px; }
+      .hero-visual,
+      .hero-visual img { min-height: 230px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .clarity-scale,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: 1fr; gap: 10px; }
+      .step-card,
+      .cause-card,
+      .product-card { min-height: 0; padding: 14px; }
+      .visual-display,
+      .flow { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Learn</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs">
+      <a href="../">Learning Center</a>
+      <span>/</span>
+      <span>Cloudy Water Troubleshooter</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Water clarity guide</span>
+        <h1>Cloudy Water Troubleshooter</h1>
+        <p>Cloudy water is a symptom, not a single problem. Start with testing, identify the type of cloudiness, then choose a fix that protects the tank's biological filter.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#diagnosis">Start diagnosis</a>
+          <a class="btn secondary" href="#do-today">What to do today</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="../../assets/learn/cloudy-water-gpt-image-2.png" alt="Four aquarium water clarity states showing bacterial bloom, green water, suspended particles, and clear water" />
+      </figure>
+    </section>
+
+    <section aria-labelledby="visual-title">
+      <div class="section-head">
+        <div>
+          <span>Visual display</span>
+          <h2 id="visual-title">Name the cloud before treating it.</h2>
+        </div>
+        <p>Customers usually say cloudy. The tank is giving a more specific clue.</p>
+      </div>
+      <div class="visual-display">
+        <div class="clarity-scale" aria-label="Common cloudy water appearances">
+          <article class="water-tile milk">
+            <div class="tank"></div>
+            <div><h3>White haze</h3><p>Often a new-tank bacterial bloom, over-cleaned filter, or sudden biological imbalance.</p></div>
+          </article>
+          <article class="water-tile green">
+            <div class="tank"></div>
+            <div><h3>Green tint</h3><p>Usually free-floating algae fed by light, nutrients, direct sun, or old maintenance habits.</p></div>
+          </article>
+          <article class="water-tile particles">
+            <div class="tank"><span></span></div>
+            <div><h3>Dusty particles</h3><p>Often stirred substrate, fine debris, weak mechanical filtration, or dirty media.</p></div>
+          </article>
+          <article class="water-tile clear">
+            <div class="tank"></div>
+            <div><h3>Clear water</h3><p>Stable biology, proper flow, clean mechanical media, and consistent maintenance.</p></div>
+          </article>
+        </div>
+        <div class="visual-copy">
+          <p>Don't add three products at once and hope one worked. Test first, make one controlled change, and give the filter time to catch up unless livestock are in danger.</p>
+          <ul class="mini-list">
+            <li><strong>If ammonia or nitrite is present:</strong> treat it like an urgent water-quality problem, not a cosmetic issue.</li>
+            <li><strong>If livestock look normal:</strong> avoid panic cleaning; over-cleaning can reset the bacteria you need.</li>
+            <li><strong>If the water is green:</strong> light and nutrient control matter more than polishing pads alone.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="do-today" aria-labelledby="today-title">
+      <div class="section-head">
+        <div>
+          <span>First response</span>
+          <h2 id="today-title">Do these before buying a quick fix.</h2>
+        </div>
+        <p>These steps are useful across most cloudy-water cases.</p>
+      </div>
+      <div class="step-grid">
+        <article class="step-card">
+          <div class="step-number">1</div>
+          <span>Test water</span>
+          <h3>Check ammonia, nitrite, nitrate, and pH.</h3>
+          <p>Cloudiness plus ammonia or nitrite changes the priority. Protect fish first, then polish water later.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">2</div>
+          <span>Inspect flow</span>
+          <h3>Make sure the filter is actually moving water.</h3>
+          <p>Look for clogged intakes, packed filter floss, weak impellers, low water level, or media installed in the wrong order.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">3</div>
+          <span>Reduce load</span>
+          <h3>Feed lightly and remove waste.</h3>
+          <p>Extra food, dead plant matter, and stirred debris feed the exact bloom customers are trying to clear.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="diagnosis" aria-labelledby="diagnosis-title">
+      <div class="section-head">
+        <div>
+          <span>Decision tree</span>
+          <h2 id="diagnosis-title">Match the symptom to the likely cause.</h2>
+        </div>
+        <p>Use this as the store-floor conversation flow.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-row">
+          <div>Question</div>
+          <div>Likely direction</div>
+          <div>Next action</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is the tank under 6 weeks old?</strong> Or did you recently replace/clean filter media?</div>
+          <div>White haze is probably a bacterial bloom or cycling instability.</div>
+          <div>Test ammonia/nitrite, feed lightly, keep biological media, and avoid full filter replacement.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is the water green?</strong> Does the tank get direct sun or long light hours?</div>
+          <div>Free-floating algae is likely. It will keep returning if light and nutrients stay high.</div>
+          <div>Shorten lighting, block direct sun, test nitrate/phosphate, clean gradually, and consider UV for persistent green water.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Did it turn cloudy after cleaning?</strong> Did substrate, sand, or decor get disturbed?</div>
+          <div>Suspended particles or fine dust are likely.</div>
+          <div>Use mechanical filtration, floss, polishing pads, and patient water changes instead of over-medicating.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is the tank stocked heavily?</strong> Are fish gasping, hiding, or acting stressed?</div>
+          <div>Bioload or oxygen stress may be part of the problem.</div>
+          <div>Increase surface agitation, test immediately, reduce feeding, and ask the store before adding livestock.</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="causes-title">
+      <div class="section-head">
+        <div>
+          <span>Common causes</span>
+          <h2 id="causes-title">What usually causes cloudy water?</h2>
+        </div>
+        <p>Ranked by how often customers run into them.</p>
+      </div>
+      <div class="cause-grid">
+        <article class="cause-card">
+          <span>New tank</span>
+          <h3>Bacterial bloom</h3>
+          <p>A white haze often appears while a new tank's bacteria population is adjusting. The mistake is replacing every filter pad and removing the bacteria the tank needs.</p>
+        </article>
+        <article class="cause-card">
+          <span>Maintenance</span>
+          <h3>Overfeeding and debris</h3>
+          <p>Extra food breaks down fast. Reduce feeding, remove trapped waste, and make sure mechanical media is catching particles.</p>
+        </article>
+        <article class="cause-card">
+          <span>Light and nutrients</span>
+          <h3>Green-water algae</h3>
+          <p>Green water points to algae in the water column. Light duration, sunlight, nitrate, phosphate, and UV sizing are the useful conversation points.</p>
+        </article>
+        <article class="cause-card">
+          <span>Filter issue</span>
+          <h3>Weak mechanical filtration</h3>
+          <p>If particles stay suspended, check flow, intakes, impellers, filter floss, sponge condition, and whether water is bypassing the media.</p>
+        </article>
+        <article class="cause-card">
+          <span>Cleaning shock</span>
+          <h3>Stirred substrate</h3>
+          <p>Sand, soil, new gravel, or aggressive gravel-vac work can cloud water temporarily. Filter floss and time usually beat chemical guessing.</p>
+        </article>
+        <article class="cause-card">
+          <span>Chemistry</span>
+          <h3>Additive reaction</h3>
+          <p>Some treatments, conditioners, pH products, and mineral additives can cloud when mixed or overdosed. Stop adding products until the basics are tested.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="products-title">
+      <div class="section-head">
+        <div>
+          <span>Helpful departments</span>
+          <h2 id="products-title">What the customer may need.</h2>
+        </div>
+        <p>Connect diagnosis to store departments without pushing a random bottle.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card">
+          <span>Testing</span>
+          <h3>Liquid test kits</h3>
+          <p>Ammonia, nitrite, nitrate, and pH tell whether this is a livestock-safety issue or a clarity issue.</p>
+        </article>
+        <article class="product-card">
+          <span>Filtration</span>
+          <h3>Filter floss and polishing pads</h3>
+          <p>Useful for fine particles after substrate disturbance, maintenance, or weak mechanical capture.</p>
+        </article>
+        <article class="product-card">
+          <span>Biological support</span>
+          <h3>Bacteria starter and media</h3>
+          <p>Helpful after new setups, filter disruption, or a cycle wobble. Preserve old biological media whenever possible.</p>
+        </article>
+        <article class="product-card">
+          <span>Green water</span>
+          <h3>UV sterilizer</h3>
+          <p>A good tool for persistent green water when sized to flow rate. It supports maintenance; it does not replace it.</p>
+        </article>
+        <article class="product-card">
+          <span>Water changes</span>
+          <h3>Conditioner and buckets</h3>
+          <p>Small controlled water changes can reduce waste while keeping the tank stable.</p>
+        </article>
+        <article class="product-card">
+          <span>Routine</span>
+          <h3>Gravel vac and intake sponge</h3>
+          <p>Better waste removal and pre-filtering help prevent repeat cloudy-water cycles.</p>
+        </article>
+      </div>
+      <div class="callout">
+        <h3>When to ask for help immediately</h3>
+        <p>If fish are gasping, lying on the bottom, showing red gills, refusing food suddenly, or ammonia/nitrite tests positive, bring water test results and a clear phone photo/video to the store before adding treatments.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="../#troubleshooting">Troubleshooting</a><a href="../#starter-checklists">Starter checklists</a><a href="../#filtration-equipment">Filtration</a><a href="#diagnosis">Cloudy water</a><a href="../#uv-sterilizer">UV sterilizers</a><a href="../#protein-skimmer-saltwater">Protein skimmers</a></div></div>
+        <div><h4>Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
