@@ -6,3 +6,4 @@ Generated with GPT Image 2 for this Hidden Reef prototype. These are demo
 assets, not photos from The Hidden Reef:
 
 - cloudy-water-gpt-image-2.png - cloudy water troubleshooting visual showing white haze, green water, suspended particles, and clear filtered water.
+- cloudy-water-decision-infographic-gpt-image-2.png - cloudy water diagnosis infographic visual showing water tests, cloud identification, filtration/media response, UV support, and clear water.

@@ -80,8 +80,8 @@
     .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
-      gap: 22px;
+      grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
+      gap: clamp(24px, 3vw, 36px);
       align-items: stretch;
       padding: clamp(22px, 4vw, 40px);
       border: 1px solid rgba(105,237,255,0.46);
@@ -91,6 +91,7 @@
         linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
       box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
     }
+    .hero > div { min-width: 0; }
     .eyebrow,
     .section-head span,
     .step-card span,
@@ -107,7 +108,7 @@
       margin: 8px 0 12px;
       color: #fff;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(38px, 5vw, 64px);
+      font-size: clamp(38px, 4.7vw, 58px);
       line-height: 0.98;
     }
     .hero p,
@@ -205,46 +206,22 @@
       border-bottom: 1px solid rgba(116,205,235,0.16);
       background:
         linear-gradient(180deg, rgba(255,255,255,0.08), transparent 18%),
-        linear-gradient(160deg, rgba(64,217,255,0.28), rgba(5,44,67,0.9));
+        url("../../assets/learn/cloudy-water-gpt-image-2.png");
+      background-size: 400% 100%;
+      background-repeat: no-repeat;
+      filter: saturate(1.05) contrast(1.04);
     }
-    .tank::before,
     .tank::after {
       content: "";
       position: absolute;
-      border-radius: 999px;
-      opacity: 0.9;
-    }
-    .tank::before {
-      width: 58px;
-      height: 22px;
-      left: 16%;
-      top: 38%;
-      background: rgba(244,189,92,0.76);
-      clip-path: polygon(0 50%, 20% 15%, 76% 18%, 100% 50%, 76% 82%, 20% 85%);
-    }
-    .tank::after {
-      width: 42px;
-      height: 80px;
-      right: 12%;
-      bottom: 0;
-      border-radius: 50% 50% 0 0;
-      background: linear-gradient(180deg, rgba(37,188,121,0.74), rgba(20,108,80,0.9));
-      box-shadow: -22px 15px 0 rgba(39,161,108,0.64);
-    }
-    .milk .tank { filter: saturate(0.72); }
-    .milk .tank { background: linear-gradient(160deg, rgba(235,248,252,0.78), rgba(98,139,153,0.88)); }
-    .green .tank { background: linear-gradient(160deg, rgba(163,215,93,0.66), rgba(27,85,59,0.9)); }
-    .particles .tank { background: linear-gradient(160deg, rgba(117,191,209,0.52), rgba(30,62,72,0.94)); }
-    .particles .tank span {
-      position: absolute;
       inset: 0;
-      background-image:
-        radial-gradient(circle, rgba(224,198,151,0.95) 0 1px, transparent 2px),
-        radial-gradient(circle, rgba(255,255,255,0.75) 0 1px, transparent 2px);
-      background-size: 18px 16px, 29px 24px;
-      opacity: 0.58;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 23%, rgba(0,0,0,0.18));
+      pointer-events: none;
     }
-    .clear .tank { background: linear-gradient(160deg, rgba(64,217,255,0.36), rgba(4,50,79,0.94)); }
+    .milk .tank { background-position: 0% 50%; }
+    .green .tank { background-position: 33.333% 50%; }
+    .particles .tank { background-position: 66.666% 50%; }
+    .clear .tank { background-position: 100% 50%; }
     .water-tile div:last-child {
       padding: 12px;
     }
@@ -334,6 +311,18 @@
       border-radius: 8px;
       background: linear-gradient(180deg, #071f32 0%, #041827 100%);
       box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-panel {
+      overflow: hidden;
+      margin-top: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: #061a27;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-panel img {
+      width: 100%;
+      display: block;
     }
     .flow-row {
       display: grid;
@@ -472,19 +461,19 @@
       <div class="visual-display">
         <div class="clarity-scale" aria-label="Common cloudy water appearances">
           <article class="water-tile milk">
-            <div class="tank"></div>
+            <div class="tank" aria-hidden="true"></div>
             <div><h3>White haze</h3><p>Often a new-tank bacterial bloom, over-cleaned filter, or sudden biological imbalance.</p></div>
           </article>
           <article class="water-tile green">
-            <div class="tank"></div>
+            <div class="tank" aria-hidden="true"></div>
             <div><h3>Green tint</h3><p>Usually free-floating algae fed by light, nutrients, direct sun, or old maintenance habits.</p></div>
           </article>
           <article class="water-tile particles">
-            <div class="tank"><span></span></div>
+            <div class="tank" aria-hidden="true"></div>
             <div><h3>Dusty particles</h3><p>Often stirred substrate, fine debris, weak mechanical filtration, or dirty media.</p></div>
           </article>
           <article class="water-tile clear">
-            <div class="tank"></div>
+            <div class="tank" aria-hidden="true"></div>
             <div><h3>Clear water</h3><p>Stable biology, proper flow, clean mechanical media, and consistent maintenance.</p></div>
           </article>
         </div>
@@ -564,6 +553,9 @@
           <div>Increase surface agitation, test immediately, reduce feeding, and ask the store before adding livestock.</div>
         </div>
       </div>
+      <figure class="infographic-panel">
+        <img src="../../assets/learn/cloudy-water-decision-infographic-gpt-image-2.png" alt="Cloudy water diagnosis flow showing testing, cloud type, filtration response, and clear water follow-up" loading="lazy" />
+      </figure>
     </section>
 
     <section aria-labelledby="causes-title">
