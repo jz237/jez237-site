@@ -7,3 +7,4 @@ assets, not photos from The Hidden Reef:
 
 - cloudy-water-gpt-image-2.png - cloudy water troubleshooting visual showing white haze, green water, suspended particles, and clear filtered water.
 - cloudy-water-decision-infographic-gpt-image-2.png - cloudy water diagnosis infographic visual showing water tests, cloud identification, filtration/media response, UV support, and clear water.
+- cloudy-water-troubleshooter-chart.png - user-provided chart-style cloudy water troubleshooter reference image used as a visual addendum.
