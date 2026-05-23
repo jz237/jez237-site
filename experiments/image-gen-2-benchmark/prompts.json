@@ -754,5 +754,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-23-afternoon-lost-elevator-certificate",
+    "title": "Lost Elevator Certificate",
+    "tests": "Believable paper artifact design, period office printing, legible document hierarchy, fictional bureaucracy, stains, stamps, attached slip, and archival scan texture.",
+    "prompt": "Create a believable photographed physical artifact: a vertical 1970s municipal inspection form titled LOST ELEVATOR CERTIFICATE, printed on faded green carbon-copy paper with red rubber stamps, punched filing holes, coffee ring, staple rust, hand-written pencil annotations, and a small attached floor-plan slip. The document records an impossible elevator that opens onto unregistered floors: boiler moon, linen forest, blue static mezzanine, and basement 0. Composition is a flatbed archival scan with slight paper curl and shadow, restrained office palette of institutional green, black type, red stamp ink, and yellowed tape. Include diagram boxes, check marks, numbered fields, and official-looking seals that are fictional and not real logos. Text should be mostly legible in headings and labels, with small body text reduced to plausible marks. No copyrighted logos, no real government names, no people, no dancing.",
+    "image": "images/2026-05-23-afternoon-lost-elevator-certificate.png",
+    "date": "2026-05-23",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
