@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-23T15:16:14.046173+00:00",
+  "updatedAt": "2026-05-23T17:00:01.906429+00:00",
   "items": [
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -10,9 +10,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-23T15:16:17.619898+00:00",
+      "published": "2026-05-23T17:00:10.721333+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -28,10 +28,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/01-bxd-ferrari-xg-photography-v2.jpg?resize=1200%2C959",
       "published": "2026-05-23T15:08:00+00:00",
       "firstSeen": "2026-05-23T15:16:14.046173+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2858
+      "score": 2.2344
     },
     {
       "title": "SpaceX’s IPO filing reveals Musk’s clean energy contradiction. xAI burns gas while Tesla sells solar.",
@@ -44,10 +44,10 @@
       "image": "https://media.thenextweb.com/2026/05/musk-spacex-ipo-solar-xai-data-centres-fossil-fuel.avif",
       "published": "2026-05-23T14:54:22+00:00",
       "firstSeen": "2026-05-23T15:16:14.046173+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5389
+      "score": 6.4878
     },
     {
       "title": "Anthropic’s Claude Mythos found 10,000 critical vulnerabilities in one month. The patches can’t keep up.",
@@ -60,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/05/anthropic-glasswing-claude-mythos-10000-vulnerabilities.avif",
       "published": "2026-05-23T14:28:30+00:00",
       "firstSeen": "2026-05-23T15:16:14.046173+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.126
+      "score": 11.0755
     },
     {
       "title": "Berlin’s Peec AI more than doubled revenue to $10M ARR in six months. Its product helps brands show up in ChatGPT.",
@@ -76,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/05/peec-ai-berlin-10-million-arr-geo-ai-search.avif",
       "published": "2026-05-23T13:13:43+00:00",
       "firstSeen": "2026-05-23T15:00:01.572076+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5893
+      "score": 10.5406
     },
     {
       "title": "Elon Musk has given up on solar power (on Earth)",
@@ -92,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200%2C800",
       "published": "2026-05-23T13:00:00+00:00",
       "firstSeen": "2026-05-23T14:00:01.219606+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3228
+      "score": 5.2743
     },
     {
       "title": "Google’s new anything-to-anything AI model is wild",
@@ -108,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/ai-label-19.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-23T11:00:00+00:00",
       "firstSeen": "2026-05-23T12:00:02.113776+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.237
+      "score": 6.1911
     },
     {
       "title": "South Korea’s deputy PM says AI wealth must benefit the public. The Samsung strike showed why.",
@@ -124,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/south-korea-ai-wealth-public-samsung-strike.avif",
       "published": "2026-05-23T10:53:12+00:00",
       "firstSeen": "2026-05-23T12:00:02.113776+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0239
+      "score": 1.9782
     },
     {
       "title": "Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification",
@@ -140,10 +140,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-2.48.09-AM-150x150.png",
       "published": "2026-05-23T10:32:09+00:00",
       "firstSeen": "2026-05-23T11:00:01.386318+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9344
+      "score": 6.8892
     },
     {
       "title": "SEO teams are tracking keywords. But are they tracking what ChatGPT says about their brand?",
@@ -156,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/moz-pro-ai-visibility-chatgpt-gemini-tracking.avif",
       "published": "2026-05-23T10:31:00+00:00",
       "firstSeen": "2026-05-23T12:00:02.113776+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4139
+      "score": 9.3687
     },
     {
       "title": "Tesla finally launched FSD in China. Its rivals have been selling self-driving cars there for years.",
@@ -172,11 +172,11 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-fsd-china-launch-years-delayed.avif",
       "published": "2026-05-23T10:15:23+00:00",
       "firstSeen": "2026-05-23T12:00:02.113776+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.007
+      "score": 10.9621
     },
     {
       "title": "SpaceX launched Starship V3 three weeks before its IPO. The booster exploded.",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-starship-v3-flight-12-ipo-superheavy-failure.avif",
       "published": "2026-05-23T09:56:03+00:00",
       "firstSeen": "2026-05-23T10:43:05.558054+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3985
+      "score": 3.354
     },
     {
       "title": "Corsair is now using Chinese DRAM in its DDR5 kits. Memory prices could finally drop.",
@@ -205,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/05/chinese-dram-cxmt-corsair-ddr5-memory-prices.avif",
       "published": "2026-05-23T09:37:16+00:00",
       "firstSeen": "2026-05-23T10:43:05.558054+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3902
+      "score": 4.3461
     },
     {
       "title": "Waymo’s robotaxis keep driving into floods. The software patch didn’t work. Five cities are now shut down.",
@@ -221,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/05/waymo-pauses-five-cities-flooded-roads-recall.avif",
       "published": "2026-05-23T09:09:34+00:00",
       "firstSeen": "2026-05-23T10:00:01.572174+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9783
+      "score": 1.9347
     },
     {
       "title": "Xiaomi’s CEO admitted his SUV wasn’t cheap enough to beat Tesla. Then he launched one that is.",
@@ -237,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/05/xiaomi-yu7-standard-tesla-model-y-price-range.avif",
       "published": "2026-05-23T08:26:39+00:00",
       "firstSeen": "2026-05-23T10:00:01.572174+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.66
+      "score": 2.6173
     },
     {
       "title": "Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints",
@@ -253,11 +253,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-1.20.14-AM-1-150x150.png",
       "published": "2026-05-23T08:17:27+00:00",
       "firstSeen": "2026-05-23T09:00:01.319082+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2261
+      "score": 14.1836
     },
     {
       "title": "Towards Speed-of-Light Text Generation with Nemotron-Labs Diffusion Language Models",
@@ -270,10 +270,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-labs-diffusion.png",
       "published": "2026-05-23T00:02:03+00:00",
       "firstSeen": "2026-05-23T01:00:01.633230+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0504
+      "score": 2.0166
     },
     {
       "title": "AI is being used to resurrect the voices of dead pilots",
@@ -286,10 +286,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/UPS-crash-flight-kentucky-Getty.jpg?resize=1200%2C800",
       "published": "2026-05-22T23:03:33+00:00",
       "firstSeen": "2026-05-22T23:17:35.435774+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8912
+      "score": 1.8583
     },
     {
       "title": "The memory shortage is causing a repricing of consumer electronics",
@@ -302,10 +302,10 @@
       "image": "",
       "published": "2026-05-22T22:01:31+00:00",
       "firstSeen": "2026-05-22T23:00:01.804700+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5713
+      "score": 4.5394
     },
     {
       "title": "Google goes for the glitter with disco-ball icons: ‘Are y’all sure you still want this?’",
@@ -318,10 +318,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-2.46.43-PM.jpg?resize=1200%2C965",
       "published": "2026-05-22T21:02:36+00:00",
       "firstSeen": "2026-05-22T21:21:44.683077+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.253
+      "score": 3.2219
     },
     {
       "title": "How VCs and founders use inflated ‘ARR’ to crown AI startups",
@@ -334,10 +334,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Pinocchio-ARR-nose2.png?resize=1200%2C800",
       "published": "2026-05-22T20:40:48+00:00",
       "firstSeen": "2026-05-22T21:00:01.239558+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8463
+      "score": 1.8155
     },
     {
       "title": "Google&#8217;s AI search is so broken it can &#8216;disregard&#8217; what you&#8217;re looking for",
@@ -350,10 +350,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-22-at-8.44.28AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C13.100144814526%2C100%2C73.799710370948&amp%3Bw=1200",
       "published": "2026-05-22T20:39:54+00:00",
       "firstSeen": "2026-05-22T17:00:01.910482+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3161
+      "score": 4.2853
     },
     {
       "title": "A Step-by-Step Coding Tutorial to Implement GBrain: The Self-Wiring Memory Layer Built by Y Combinator’s Garry Tan for AI Agents",
@@ -366,10 +366,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-39.png",
       "published": "2026-05-22T18:23:40+00:00",
       "firstSeen": "2026-05-22T20:00:01.988295+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.536
+      "score": 13.5071
     },
     {
       "title": "Elon Musk can’t hear you over the sound of his $1.75 trillion IPO",
@@ -382,10 +382,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2275592313.jpg?resize=1200%2C800",
       "published": "2026-05-22T18:17:07+00:00",
       "firstSeen": "2026-05-22T20:00:01.988295+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8041
+      "score": 1.7753
     },
     {
       "title": "Texas AG sues Meta over claims that WhatsApp doesn't provide end-to-end encryption",
@@ -398,10 +398,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/10/whatsapp-1024x648.jpg",
       "published": "2026-05-22T18:13:05+00:00",
       "firstSeen": "2026-05-22T20:00:01.988295+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7629
+      "score": 2.7342
     },
     {
       "title": "Catch up on the Dialogues stage at Google I/O 2026.",
@@ -414,10 +414,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IO26_Dialogues_3z680sK.max-600x600.format-webp.webp",
       "published": "2026-05-22T18:00:00+00:00",
       "firstSeen": "2026-05-22T18:01:54.029003+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9392
+      "score": 1.9107
     },
     {
       "title": "Southwest Bans Humanoid Robots After Viral Passenger Flights",
@@ -430,10 +430,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/bebop.jpg?f=jpeg",
       "published": "2026-05-22T17:53:45+00:00",
       "firstSeen": "2026-05-22T23:00:01.804700+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7575
+      "score": 2.729
     },
     {
       "title": "Anthropic Reportedly Reaches Profitability as Claude Wins Over Businesses",
@@ -446,10 +446,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/prakash-singh.jpg?f=jpeg",
       "published": "2026-05-22T17:17:33+00:00",
       "firstSeen": "2026-05-22T23:00:01.804700+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.7474
+      "score": 11.7194
     },
     {
       "title": "Elon, stop trying to make Grok happen",
@@ -462,10 +462,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_Illo_STK022_K_Radtke_Musk_Smiles.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-22T17:17:06+00:00",
       "firstSeen": "2026-05-22T18:00:01.620046+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9573
+      "score": 10.9292
     },
     {
       "title": "The Rise of LLMs Is Not an Accident",
@@ -481,7 +481,7 @@
       "lastSeen": "2026-05-23T15:00:01.572076+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 5.5405
+      "score": 5.5128
     },
     {
       "title": "You can no longer Google the word ‘disregard’",
@@ -494,10 +494,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/Google-IO-everything.webp?resize=1200%2C674",
       "published": "2026-05-22T16:16:48+00:00",
       "firstSeen": "2026-05-22T17:00:01.910482+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1708
+      "score": 3.1436
     },
     {
       "title": "We tried Google’s AI glasses and they’re almost there",
@@ -510,10 +510,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/1_IO_Glasses_Product_GentleMonst.width-1000.format-webp_NnExl2N.webp?w=1000",
       "published": "2026-05-22T15:37:15+00:00",
       "firstSeen": "2026-05-22T17:00:01.910482+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7603
+      "score": 5.7335
     },
     {
       "title": "Salesforce is selling the AI future harder than it is delivering it",
@@ -529,7 +529,7 @@
       "lastSeen": "2026-05-23T15:00:01.572076+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6691
+      "score": 3.6424
     },
     {
       "title": "Specialization Beats Scale: A Strategic Variable Most AI Procurement Decisions Overlook",
@@ -542,10 +542,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/Dharma-AI/specialization-beats-scale.png",
       "published": "2026-05-22T15:25:59+00:00",
       "firstSeen": "2026-05-22T17:00:01.910482+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8973
+      "score": 1.8707
     },
     {
       "title": "Forum is Meta’s new Facebook Groups app, and it looks a lot like Reddit",
@@ -561,7 +561,7 @@
       "lastSeen": "2026-05-23T13:59:40.628923+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2169
+      "score": 5.1903
     },
     {
       "title": "Wingtech sues Nexperia in Chinese court over Dutch government’s semiconductor seizure",
@@ -577,7 +577,7 @@
       "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6161
+      "score": 1.5896
     },
     {
       "title": "10 Gemini Tricks to Try in Google Docs",
@@ -590,10 +590,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/gemini-tricks.jpg?f=jpeg",
       "published": "2026-05-22T15:16:59+00:00",
       "firstSeen": "2026-05-22T23:00:01.804700+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.115
+      "score": 10.0884
     },
     {
       "title": "Text Degeneration: A Production Failure Mode That Most Benchmarks Do Not Track",
@@ -609,7 +609,7 @@
       "lastSeen": "2026-05-22T15:18:33.079913+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2431
+      "score": 2.2167
     },
     {
       "title": "Even If You Hate AI, You Will Use Google AI Search",
@@ -622,10 +622,10 @@
       "image": "https://media.wired.com/photos/6a0f3c884bfa87f10e0f1aa1/master/pass/Backchannel-Google-Search-Business-2276578156.jpg",
       "published": "2026-05-22T15:00:00+00:00",
       "firstSeen": "2026-05-22T15:18:33.079913+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1505
+      "score": 4.1242
     },
     {
       "title": "Starbucks pulls its AI inventory tool nine months in, after it kept confusing the milks",
@@ -641,7 +641,7 @@
       "lastSeen": "2026-05-23T11:00:01.386318+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.609
+      "score": 1.5828
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1833
+      "score": 1.1804
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.8652
+      "score": -1.8673
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -686,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1206
@@ -702,7 +702,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-23T15:16:14.046173+00:00",
+      "lastSeen": "2026-05-23T17:00:01.906429+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5904
