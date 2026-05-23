@@ -306,6 +306,60 @@
       gap: 16px;
       margin: 30px 0 14px;
     }
+    .learn-disclosure {
+      margin-top: 22px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.1), transparent 34%),
+        rgba(5,24,38,0.72);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.2);
+    }
+    .learn-disclosure summary {
+      display: block;
+      padding: 0 16px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .learn-disclosure summary::-webkit-details-marker {
+      display: none;
+    }
+    .learn-disclosure summary .section-head {
+      margin: 0;
+      padding: 18px 0;
+      align-items: center;
+    }
+    .learn-disclosure summary h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .learn-disclosure summary h2::before {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(147,112,255,0.36);
+      border-radius: 7px;
+      color: #fff;
+      background: rgba(141,108,255,0.18);
+      box-shadow: 0 0 18px rgba(147,112,255,0.18);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .learn-disclosure[open] summary h2::before {
+      content: "-";
+    }
+    .learn-disclosure__body {
+      display: grid;
+      gap: 14px;
+      padding: 0 16px 18px;
+    }
+    .learn-disclosure__body > .section-head:first-child {
+      margin-top: 4px;
+    }
     .section-head h2 {
       margin: 0;
       color: #f7fcff;
@@ -491,6 +545,14 @@
       .problem-card,
       .checklist-card { min-height: 0; padding: 14px; }
       .triage-panel { padding: 14px; }
+      .learn-disclosure summary,
+      .learn-disclosure__body { padding-left: 12px; padding-right: 12px; }
+      .learn-disclosure summary .section-head { padding: 14px 0; }
+      .learn-disclosure summary h2::before {
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+      }
       .diagram { padding: 12px; }
       .footer-top { grid-template-columns: 1fr; }
     }
@@ -563,11 +625,14 @@
       </div>
     </section>
 
-    <section id="troubleshooting" aria-labelledby="troubleshooting-title">
-      <div class="section-head">
-        <h2 id="troubleshooting-title">Troubleshooting Center</h2>
-        <p>Diagnosis-style guides for the most common aquarium problems.</p>
-      </div>
+    <details class="learn-disclosure" id="troubleshooting" open>
+      <summary aria-labelledby="troubleshooting-title">
+        <div class="section-head">
+          <h2 id="troubleshooting-title">Troubleshooting Center</h2>
+          <p>Diagnosis-style guides for the most common aquarium problems.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
       <div class="problem-grid">
         <article class="problem-card">
           <span>Water clarity</span>
@@ -679,13 +744,17 @@
           </ul>
         </article>
       </div>
-    </section>
-
-    <section id="starter-checklists" aria-labelledby="checklists-title">
-      <div class="section-head">
-        <h2 id="checklists-title">Starter & Care Checklists</h2>
-        <p>Short planning guides that can grow into full articles.</p>
       </div>
+    </details>
+
+    <details class="learn-disclosure" id="starter-checklists">
+      <summary aria-labelledby="checklists-title">
+        <div class="section-head">
+          <h2 id="checklists-title">Starter & Care Checklists</h2>
+          <p>Short planning guides that can grow into full articles.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
       <div class="checklist-grid">
         <article class="checklist-card">
           <span>Freshwater start</span>
@@ -715,13 +784,17 @@
           </ul>
         </article>
       </div>
-    </section>
-
-    <section id="filtration-equipment" aria-labelledby="guides-title">
-      <div class="section-head">
-        <h2 id="guides-title">Filtration & Equipment</h2>
-        <p>One consolidated filtration area for freshwater, planted displays, saltwater, reef systems, UV, reactors, skimmers, and sumps.</p>
       </div>
+    </details>
+
+    <details class="learn-disclosure" id="filtration-equipment">
+      <summary aria-labelledby="guides-title">
+        <div class="section-head">
+          <h2 id="guides-title">Filtration & Equipment</h2>
+          <p>One consolidated filtration area for freshwater, planted displays, saltwater, reef systems, UV, reactors, skimmers, and sumps.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
       <div class="section-head">
         <h2>Freshwater & General</h2>
         <p>Dissected views for beginner tanks, planted displays, sponge filters, HOB filters, canisters, sumps, and common aquarium hardware.</p>
@@ -752,9 +825,7 @@
           <button class="btn guide-select" type="button" data-diagram="uv-sterilizer">Inspect diagram</button>
         </article>
       </div>
-    </section>
 
-    <section aria-labelledby="saltwater-guides-title">
       <div class="section-head">
         <h2 id="saltwater-guides-title">Saltwater & Reef</h2>
         <p>Reef-specific filtration and saltwater use cases: live rock, reef-ready sumps, HOB filters, media reactors, skimmers, and all-in-one nano reef chambers.</p>
@@ -785,7 +856,8 @@
           <button class="btn guide-select" type="button" data-diagram="protein-skimmer-saltwater">Inspect diagram</button>
         </article>
       </div>
-    </section>
+      </div>
+    </details>
 
     <section class="diagram-list" aria-label="Freshwater and general full diagrams">
       <p class="diagram-empty">Select a guide above to open its full diagram.</p>
@@ -961,16 +1033,27 @@
     (() => {
       const diagrams = Array.from(document.querySelectorAll('.diagram'));
 
+      function openDisclosureFor(id) {
+        if (!id) return null;
+        const target = document.getElementById(id);
+        const disclosure = target?.matches('details.learn-disclosure')
+          ? target
+          : target?.closest('details.learn-disclosure');
+        if (disclosure) disclosure.open = true;
+        return target;
+      }
+
       function showSelectedDiagram(id, shouldScroll = false) {
+        const target = openDisclosureFor(id);
         let selected = null;
         diagrams.forEach((diagram) => {
           const isSelected = diagram.id === id;
           diagram.classList.toggle('is-selected', isSelected);
           if (isSelected) selected = diagram;
         });
-        if (selected && shouldScroll) {
+        if ((selected || target) && shouldScroll) {
           setTimeout(() => {
-            window.scrollTo({ top: selected.offsetTop - 20, left: 0, behavior: 'auto' });
+            window.scrollTo({ top: (selected || target).offsetTop - 20, left: 0, behavior: 'auto' });
           }, 80);
         }
       }
