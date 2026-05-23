@@ -730,5 +730,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-23-morning-luminous-littoral-geode-snail",
+    "title": "Luminous Littoral Geode Snail",
+    "tests": "Fictional-specimen lane: tests an invented mollusk through a medical x-ray light-table format, emphasizing translucent radiograph plates, mineral anatomy, sparse lab documentation, and tactile clinical materials instead of cinematic creature art.",
+    "prompt": "Title: Luminous Littoral Geode Snail\nLane/category: fictional-specimen\n\nCreate a square 1024x1024 fictional natural-history specimen image that looks like a backlit veterinary radiograph and lab light-table documentation sheet for an invented shoreline mollusk, not cinematic concept art and not a normal animal portrait.\n\nVisual format: a black glass medical light table photographed from above, holding three translucent x-ray plates, one small wet specimen slide, two blank frosted ID tabs, graphite grease-pencil crop marks, metal film clips, dust, fingerprints, and a thin clear ruler with mostly unreadable ticks. The physical radiograph plates and their glowing translucent material should be the main visual language.\n\nSubject: the specimen is the Luminous Littoral Geode Snail, an imaginary tidepool organism whose shell is partly living nacre and partly mineral crystal. Show it through x-ray-style transparency: spiral shell chambers lined with amethyst-like geode facets, opal cartilage ribs, a soft coiled body with branching salt-filter organs, tiny pearl flotation sacs, and hair-thin copper-colored nerve filaments that faintly glow inside the plates. Include one magnified inset plate showing a cross-section of the shell crystal lattice and one small slide with a single translucent larval shell.\n\nComposition: direct top-down archive-lab view, three overlapping x-ray films arranged asymmetrically on the light table, strong negative space, crisp film edges, subtle parallax shadows from clips and ruler, no landscape background. The organism should read as scientifically plausible but impossible, with readable anatomy from the glowing radiograph layers.\n\nMood and palette: clinical, quiet, uncanny coastal biology; deep black glass, cool cyan x-ray glow, smoky violet mineral chambers, pearl white nacre, faint amber internal filaments, brushed steel clips, pale sea-salt residue. High detail, tactile physical documentation, sparse and precise.\n\nText discipline: no readable paragraphs, no real logos, no brand marks; blank tabs and illegible film marks only.\n\nHard exclusions: no dancing, no dancers, no ballet, no dance poses, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no watermark, no signature.",
+    "image": "images/2026-05-23-morning-luminous-littoral-geode-snail.png",
+    "date": "2026-05-23",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
