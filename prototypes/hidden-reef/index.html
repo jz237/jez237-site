@@ -412,6 +412,211 @@
       gap: 14px;
       margin-bottom: 22px;
     }
+    .specials-spotlight {
+      margin: 18px 0 12px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 76% 4%, rgba(64,217,255,0.2), transparent 30%),
+        radial-gradient(circle at 8% 100%, rgba(255,123,50,0.12), transparent 32%),
+        linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+    }
+    .specials-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 18px;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: rgba(3,18,29,0.54);
+    }
+    .specials-head span {
+      color: #40d9ff;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .specials-head a {
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .specials-window {
+      overflow: hidden;
+    }
+    .specials-track {
+      display: flex;
+      transition: transform 0.58s cubic-bezier(.22,.8,.25,1);
+      will-change: transform;
+    }
+    .special-slide {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(280px, .72fr);
+      gap: 18px;
+      min-width: 100%;
+      padding: clamp(18px, 3vw, 28px);
+    }
+    .special-copy {
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .special-copy em {
+      width: fit-content;
+      padding: 5px 9px;
+      border: 1px solid rgba(255,123,50,0.45);
+      border-radius: 999px;
+      color: #ffd5bf;
+      background: rgba(255,123,50,0.12);
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .special-copy h2 {
+      max-width: 680px;
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 4.4vw, 58px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+    .special-copy p {
+      max-width: 690px;
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .special-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 2px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .special-meta li {
+      padding: 7px 9px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 6px;
+      color: #eaf8fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .special-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .special-media {
+      position: relative;
+      min-height: 245px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(222,240,246,0.92)),
+        #fff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 16px 36px rgba(0,0,0,0.22);
+    }
+    .special-media img {
+      width: 100%;
+      height: 100%;
+      min-height: 245px;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.03);
+    }
+    .special-media--logo img {
+      object-fit: contain;
+      padding: 30px;
+      background: #fff;
+    }
+    .special-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 44%, rgba(2,17,29,0.88));
+      pointer-events: none;
+    }
+    .special-price-burst {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 104px;
+      aspect-ratio: 1;
+      border: 2px solid rgba(255,255,255,0.58);
+      border-radius: 50%;
+      color: #fff;
+      background: radial-gradient(circle at 32% 24%, #ffb071, #ff7b32 54%, #c84f13);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.32);
+      text-align: center;
+      font-size: 25px;
+      font-weight: 1000;
+      line-height: 0.9;
+    }
+    .special-price-burst small {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .special-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 18px 16px;
+    }
+    .special-arrows {
+      display: flex;
+      gap: 8px;
+    }
+    .special-control {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(116,205,235,0.24);
+      border-radius: 6px;
+      color: #dff8ff;
+      background: rgba(8,35,52,0.72);
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .special-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      justify-content: center;
+    }
+    .special-dot {
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba(126,232,255,0.48);
+      border-radius: 999px;
+      background: rgba(126,232,255,0.18);
+      cursor: pointer;
+    }
+    .special-dot.is-active {
+      width: 28px;
+      background: #40d9ff;
+      border-color: #40d9ff;
+    }
     .path-strip {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1289,6 +1494,9 @@
       .categories { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
       .promo-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .special-slide { grid-template-columns: 1fr; }
+      .special-media { min-height: 220px; }
+      .special-media img { min-height: 220px; }
       .live-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .learn-panel { grid-template-columns: 1fr; }
       .learn-split { grid-template-columns: 1fr; }
@@ -1305,6 +1513,32 @@
         background-position: 62% center;
       }
       .hero-content { padding: 26px 18px; }
+      .specials-head {
+        display: grid;
+        gap: 5px;
+        padding: 13px 14px;
+      }
+      .special-slide {
+        gap: 14px;
+        padding: 16px 14px 18px;
+      }
+      .special-copy h2 {
+        font-size: clamp(29px, 9vw, 40px);
+      }
+      .special-copy p {
+        font-size: 13px;
+      }
+      .special-media,
+      .special-media img {
+        min-height: 176px;
+      }
+      .special-price-burst {
+        width: 82px;
+        font-size: 20px;
+      }
+      .special-controls {
+        padding: 0 14px 14px;
+      }
       .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .category-intro { display: block; }
       .category-intro p { margin-top: 6px; }
@@ -2317,6 +2551,104 @@
       </div>
     </section>
 
+    <section class="specials-spotlight" aria-labelledby="specials-title">
+      <div class="specials-head">
+        <span id="specials-title">Current specials</span>
+        <a href="https://www.thehiddenreef.com/sales-online/" target="_blank" rel="noopener">View all sale departments</a>
+      </div>
+      <div class="specials-window">
+        <div class="specials-track" id="specials-track">
+          <article class="special-slide">
+            <div class="special-copy">
+              <em>May 22 - May 28</em>
+              <h2>Memorial Day Red Sea Sale</h2>
+              <p>Save across Red Sea reef care, testing, filtration, media, parts, and aquarium systems during the holiday sale window. Good for customers who already run Red Sea gear and anyone building a reef setup around matching components.</p>
+              <ul class="special-meta">
+                <li>12% off select Red Sea products</li>
+                <li>233 sale items</li>
+                <li>Online pricing may differ from store MAP pricing</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/sales-online/red-sea-memorial-sale-may-22-may-28/" target="_blank" rel="noopener">Shop Red Sea Sale</a>
+                <a class="btn secondary" href="category/?cat=saltwater">Browse reef gear</a>
+              </div>
+            </div>
+            <div class="special-media special-media--logo">
+              <img src="assets/site/brand-red-sea.svg" alt="Red Sea reef aquarium products" />
+              <div class="special-price-burst">12%<small>off</small></div>
+            </div>
+          </article>
+          <article class="special-slide">
+            <div class="special-copy">
+              <em>Made to order</em>
+              <h2>Innovative Marine MTO Systems</h2>
+              <p>Large Innovative Marine made-to-order aquariums get the biggest sale treatment. This is the kind of promo that needs more explanation than a simple tile: customers should understand these are substantial systems with lead-time and configuration decisions.</p>
+              <ul class="special-meta">
+                <li>50% off MTO reef systems</li>
+                <li>50 sale items</li>
+                <li>Best for planned upgrades</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">Shop MTO Systems</a>
+                <a class="btn secondary" href="category/?cat=equipment">Plan a setup</a>
+              </div>
+            </div>
+            <div class="special-media special-media--logo">
+              <img src="assets/site/brand-innovative-marine.jpg" alt="Innovative Marine aquarium system" />
+              <div class="special-price-burst">50%<small>off</small></div>
+            </div>
+          </article>
+          <article class="special-slide">
+            <div class="special-copy">
+              <em>Complete systems</em>
+              <h2>Innovative Marine 25-100 Gallon Sale</h2>
+              <p>A cleaner entry point for customers who want a complete aquarium system without stepping into the huge made-to-order range. This belongs in the same carousel because it is a different customer intent, not just another logo tile.</p>
+              <ul class="special-meta">
+                <li>10% off complete systems</li>
+                <li>22 sale items</li>
+                <li>Good for serious starters and upgrades</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/sales-online/innovative-marine-10-off-25-100-g-complete/" target="_blank" rel="noopener">Shop Complete Systems</a>
+                <a class="btn secondary" href="category/?cat=saltwater">See saltwater</a>
+              </div>
+            </div>
+            <div class="special-media">
+              <img src="assets/site/product-reef-system.jpg" alt="Complete reef aquarium system" />
+              <div class="special-price-burst">10%<small>off</small></div>
+            </div>
+          </article>
+          <article class="special-slide">
+            <div class="special-copy">
+              <em>Reef automation</em>
+              <h2>Reef Factory Equipment Sale</h2>
+              <p>Controllers, testers, pumps, and automation gear are easier to sell when the special is framed around the job they do. This slide keeps the price point visible while giving enough room to explain why monitoring and stability matter.</p>
+              <ul class="special-meta">
+                <li>40% off Reef Factory</li>
+                <li>39 sale items</li>
+                <li>Controllers, testers, pumps</li>
+              </ul>
+              <div class="special-actions">
+                <a class="btn" href="https://www.thehiddenreef.com/sales-online/reef-factory-sale-40/" target="_blank" rel="noopener">Shop Reef Factory</a>
+                <a class="btn secondary" href="category/?cat=maintenance">Water care</a>
+              </div>
+            </div>
+            <div class="special-media">
+              <img src="assets/department/lighting.jpg" alt="Reef lighting and control equipment" />
+              <div class="special-price-burst">40%<small>off</small></div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="special-controls" aria-label="Specials carousel controls">
+        <div class="special-arrows">
+          <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
+          <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
+        </div>
+        <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
+      </div>
+    </section>
+
     <section class="section-band" aria-label="Departments">
       <div class="category-intro">
         <h2>Shop by Department</h2>
@@ -2348,19 +2680,6 @@
             <a class="btn secondary" href="category/?cat=equipment">Shop filtration</a>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section-band alt" aria-label="Promotions">
-      <div class="section-head">
-        <h2>Current Promotions</h2>
-        <a href="https://www.thehiddenreef.com/sales-online/" target="_blank" rel="noopener">View all current sales</a>
-      </div>
-      <div class="promo-grid">
-      <a class="promo-card" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener" aria-label="Open Hidden Reef sale: Innovative Marine made-to-order 50 percent off"><img src="assets/department/aquarium.jpg" alt="" /><div class="promo-copy"><span>Sale Innovative Marine MTO</span><strong>50% OFF</strong><small>Made-to-order systems</small><em class="promo-count">50 sale items</em></div></a>
-      <a class="promo-card" href="https://www.thehiddenreef.com/sales-online/innovative-marine-fleece-roller-30-off/" target="_blank" rel="noopener" aria-label="Open Hidden Reef sale: Innovative Marine fleece roller 30 percent off"><img src="assets/department/maintenance-care.jpg" alt="" /><div class="promo-copy"><span>Innovative Marine</span><strong>30% OFF</strong><small>Fleece roller</small><em class="promo-count">1 sale item</em></div></a>
-      <a class="promo-card" href="https://www.thehiddenreef.com/sales-online/innovative-marine-10-off-25-100-g-complete/" target="_blank" rel="noopener" aria-label="Open Hidden Reef sale: Innovative Marine 10 percent off 25 to 100 gallon complete systems"><img src="assets/department/saltwater-reef.jpg" alt="" /><div class="promo-copy"><span>Innovative Marine</span><strong>10% OFF</strong><small>25-100 gallon complete systems</small><em class="promo-count">22 sale items</em></div></a>
-      <a class="promo-card" href="https://www.thehiddenreef.com/sales-online/reef-factory-sale-40/" target="_blank" rel="noopener" aria-label="Open Hidden Reef sale: Reef Factory 40 percent off"><img src="assets/department/lighting.jpg" alt="" /><div class="promo-copy"><span>Reef Factory Sale</span><strong>40% OFF</strong><small>Controllers, testers, pumps</small><em class="promo-count">39 sale items</em></div></a>
       </div>
     </section>
 
@@ -2519,6 +2838,33 @@
 	        });
 	      };
 	      window.setInterval(rotateHero, reducedHeroMotion ? 11000 : 7200);
+	    }
+	    const specialsTrack = document.getElementById('specials-track');
+	    const specialSlides = Array.from(document.querySelectorAll('.special-slide'));
+	    const specialDots = document.getElementById('special-dots');
+	    if (specialsTrack && specialSlides.length && specialDots) {
+	      let activeSpecial = 0;
+	      const reducedSpecialMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	      specialDots.innerHTML = specialSlides.map((slide, index) =>
+	        '<button class="special-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-special-index="' + index + '" aria-label="Show special ' + (index + 1) + '"></button>'
+	      ).join('');
+	      const dots = Array.from(specialDots.querySelectorAll('.special-dot'));
+	      function setSpecial(index) {
+	        activeSpecial = (index + specialSlides.length) % specialSlides.length;
+	        specialsTrack.style.transform = 'translateX(' + (-100 * activeSpecial) + '%)';
+	        dots.forEach((dot, dotIndex) => {
+	          dot.classList.toggle('is-active', dotIndex === activeSpecial);
+	        });
+	      }
+	      document.querySelectorAll('[data-special-dir]').forEach(button => {
+	        button.addEventListener('click', () => setSpecial(activeSpecial + Number(button.dataset.specialDir || 1)));
+	      });
+	      dots.forEach(dot => {
+	        dot.addEventListener('click', () => setSpecial(Number(dot.dataset.specialIndex || 0)));
+	      });
+	      if (!reducedSpecialMotion && specialSlides.length > 1) {
+	        window.setInterval(() => setSpecial(activeSpecial + 1), 8500);
+	      }
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
