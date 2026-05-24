@@ -1,6 +1,6 @@
 {
   "date": "2026-05-24",
-  "updatedAt": "2026-05-24T10:00:01.689950+00:00",
+  "updatedAt": "2026-05-24T10:06:00.697978+00:00",
   "items": [
     {
       "title": "Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-1.42.33-AM-1-150x150.png",
       "published": "2026-05-24T08:56:19+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.738
+      "score": 19.7351
     },
     {
       "title": "DeepSeek made its 75% discount permanent. The AI price war just escalated.",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/05/deepseek-v4-pro-75-percent-price-cut-permanent.avif",
       "published": "2026-05-24T07:48:42+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.3851
+      "score": 17.3822
     },
     {
       "title": "NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule",
@@ -47,10 +47,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-12.26.27-AM-1-150x150.png",
       "published": "2026-05-24T07:42:09+00:00",
       "firstSeen": "2026-05-24T07:57:16.602234+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.952
+      "score": 5.9491
     },
     {
       "title": "AI is killing the cheap smartphone. The memory that powers your phone now goes to data centres instead.",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif",
       "published": "2026-05-24T08:34:58+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5075
+      "score": 4.5046
     },
     {
       "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
@@ -79,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
       "published": "2026-05-24T09:02:04+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5209
+      "score": 3.5179
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -93,9 +93,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-24T10:00:06.286434+00:00",
+      "published": "2026-05-24T10:06:06.475684+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
@@ -111,10 +111,10 @@
       "image": "https://media.thenextweb.com/2026/05/stellantis-leapmotor-chinese-evs-mexico-canada-brampton.avif",
       "published": "2026-05-24T08:20:28+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:06:00.697978+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1004
+      "score": 2.0975
     }
   ],
   "errors": []
