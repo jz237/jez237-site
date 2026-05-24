@@ -1,0 +1,193 @@
+main.page {
+  counter-reset: guide-section;
+}
+
+main.page > section:not(.hero) {
+  counter-increment: guide-section;
+  position: relative;
+  margin-top: 30px;
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid rgba(116, 205, 235, 0.14);
+  border-left: 6px solid rgba(64, 217, 255, 0.72);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(64, 217, 255, 0.075), transparent 34%),
+    rgba(2, 14, 24, 0.58);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+}
+
+main.page > section:not(.hero)::before {
+  content: counter(guide-section);
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  color: #04121d;
+  background: #40d9ff;
+  font-weight: 950;
+  box-shadow: 0 0 22px rgba(64, 217, 255, 0.22);
+}
+
+main.page > section:not(.hero):nth-of-type(3n) {
+  border-left-color: rgba(114, 211, 137, 0.82);
+  background:
+    linear-gradient(90deg, rgba(114, 211, 137, 0.08), transparent 34%),
+    rgba(5, 17, 21, 0.64);
+}
+
+main.page > section:not(.hero):nth-of-type(3n)::before {
+  background: #72d389;
+}
+
+main.page > section:not(.hero):nth-of-type(4n) {
+  border-left-color: rgba(255, 180, 92, 0.86);
+  background:
+    linear-gradient(90deg, rgba(255, 180, 92, 0.09), transparent 34%),
+    rgba(20, 15, 8, 0.48);
+}
+
+main.page > section:not(.hero):nth-of-type(4n)::before {
+  background: #ffb45c;
+}
+
+main.page > section:not(.hero):nth-of-type(5n) {
+  border-left-color: rgba(164, 137, 255, 0.84);
+  background:
+    linear-gradient(90deg, rgba(164, 137, 255, 0.085), transparent 34%),
+    rgba(12, 10, 28, 0.52);
+}
+
+main.page > section:not(.hero):nth-of-type(5n)::before {
+  background: #a489ff;
+}
+
+.section-head {
+  align-items: start;
+  padding-right: 48px;
+  margin-top: 0;
+}
+
+.section-head span,
+.eyebrow,
+.step-card span,
+.type-card span,
+.cause-card span,
+.product-card span {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 8px;
+  border: 1px solid rgba(116, 205, 235, 0.18);
+  border-radius: 6px;
+  color: #9eeeff;
+  background: rgba(1, 12, 20, 0.72);
+  line-height: 1;
+}
+
+.section-head h2 {
+  max-width: 760px;
+}
+
+.section-head p {
+  max-width: 360px;
+  color: #c7d8d2;
+}
+
+.step-card,
+.type-card,
+.cause-card,
+.product-card {
+  border-color: rgba(180, 213, 219, 0.16);
+  background: rgba(7, 21, 30, 0.74);
+}
+
+.step-card {
+  border-top: 4px solid #40d9ff;
+  background:
+    linear-gradient(180deg, rgba(64, 217, 255, 0.09), rgba(7, 21, 30, 0.74) 42%),
+    #06141d;
+}
+
+.type-card {
+  border-top: 4px solid #72d389;
+  background:
+    linear-gradient(180deg, rgba(114, 211, 137, 0.1), rgba(7, 21, 30, 0.72) 42%),
+    #061712;
+}
+
+.cause-card {
+  border-top: 4px solid #a489ff;
+  background:
+    linear-gradient(180deg, rgba(164, 137, 255, 0.1), rgba(12, 16, 29, 0.76) 42%),
+    #090f1e;
+}
+
+.product-card {
+  border-top: 4px solid #ffb45c;
+  background:
+    linear-gradient(180deg, rgba(255, 180, 92, 0.1), rgba(22, 18, 12, 0.72) 42%),
+    #11110c;
+}
+
+.step-card p,
+.type-card p,
+.cause-card p,
+.product-card p,
+.flow-row > div,
+.visual-list li,
+.mini-list li {
+  color: #c9d9d7;
+}
+
+.flow {
+  border-color: rgba(164, 137, 255, 0.34);
+  background:
+    linear-gradient(180deg, rgba(164, 137, 255, 0.12), transparent 36%),
+    #07131f;
+}
+
+.flow-row > div {
+  background: rgba(3, 12, 20, 0.78);
+}
+
+.flow-row:first-child > div {
+  color: #03111d;
+  background: #40d9ff;
+}
+
+.callout {
+  border-left: 6px solid #ff7b32;
+  background:
+    linear-gradient(90deg, rgba(255, 123, 50, 0.14), transparent 42%),
+    #150f0b;
+}
+
+.infographic-toggle {
+  border-color: rgba(255, 180, 92, 0.28);
+  background: #071018;
+}
+
+.infographic-toggle summary {
+  color: #fff4e8;
+}
+
+@media (max-width: 760px) {
+  main.page > section:not(.hero) {
+    padding: 14px;
+    border-left-width: 4px;
+  }
+
+  main.page > section:not(.hero)::before {
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .section-head {
+    padding-right: 42px;
+  }
+}
