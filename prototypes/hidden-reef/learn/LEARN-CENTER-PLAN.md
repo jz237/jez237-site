@@ -149,5 +149,6 @@ Good next implementation passes:
 
 - Added `learn/coral-not-opening/` as a full reef Troubleshooting article.
 - Uses existing reef imagery from `assets/department/saltwater-reef.jpg` for the hero visual.
-- Article structure follows the established guide pattern without a separate infographic asset: hero visual, first response, visual clues, decision flow, common causes, helpful departments, and what-to-avoid callout.
+- Added infographic asset `assets/learn/coral-not-opening-troubleshooter-chart.png`.
+- Article structure follows the established guide pattern: hero visual, first response, visual clues, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
 - Learn Center Coral Not Opening card and first-step checklist now link to the dedicated guide instead of only the short first-step anchor.
