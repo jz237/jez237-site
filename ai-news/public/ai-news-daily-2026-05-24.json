@@ -1,6 +1,6 @@
 {
   "date": "2026-05-24",
-  "updatedAt": "2026-05-24T19:38:15.121634+00:00",
+  "updatedAt": "2026-05-24T20:00:01.683834+00:00",
   "items": [
     {
       "title": "Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-1.42.33-AM-1-150x150.png",
       "published": "2026-05-24T08:56:19+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.4872
+      "score": 19.479
     },
     {
       "title": "DeepSeek made its 75% discount permanent. The AI price war just escalated.",
@@ -34,7 +34,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.142
+      "score": 17.1341
     },
     {
       "title": "The US blacklisted Anthropic as a security threat. Its spy agencies are using Claude anyway.",
@@ -47,10 +47,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif",
       "published": "2026-05-24T15:53:40+00:00",
       "firstSeen": "2026-05-24T17:00:01.475407+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0414
+      "score": 11.0314
     },
     {
       "title": "NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule",
@@ -63,10 +63,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-12.26.27-AM-1-150x150.png",
       "published": "2026-05-24T07:42:09+00:00",
       "firstSeen": "2026-05-24T07:57:16.602234+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7096
+      "score": 5.7017
     },
     {
       "title": "AI is killing the cheap smartphone. The memory that powers your phone now goes to data centres instead.",
@@ -79,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif",
       "published": "2026-05-24T08:34:58+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2592
+      "score": 4.251
     },
     {
       "title": "The Apple Watch is 11 years old and losing momentum. Screenless rivals are winning the next phase.",
@@ -95,10 +95,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-watch-losing-ground-whoop-oura-screenless-wearables.avif",
       "published": "2026-05-24T15:03:17+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8185
+      "score": 3.8088
     },
     {
       "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
@@ -111,10 +111,10 @@
       "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
       "published": "2026-05-24T09:02:04+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2694
+      "score": 3.2612
     },
     {
       "title": "HP pushed a critical BIOS update through Windows Update. It bricked its most expensive laptops.",
@@ -127,10 +127,26 @@
       "image": "https://media.thenextweb.com/2026/05/hp-bios-update-bricking-premium-laptops-zbook-elitebook.avif",
       "published": "2026-05-24T16:48:16+00:00",
       "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1668
+      "score": 3.1566
+    },
+    {
+      "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
+      "url": "https://llm-stats.com/ai-news",
+      "source": "LLM Stats AI News",
+      "sourceUrl": "https://llm-stats.com/ai-news",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "",
+      "image": "https://llm-stats.com/og/main.png",
+      "published": "2026-05-24T20:00:13.041163+00:00",
+      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.71
     },
     {
       "title": "India’s SolarSquare is raising $60M at a $500M valuation. It has powered 50,000 homes.",
@@ -143,26 +159,10 @@
       "image": "https://media.thenextweb.com/2026/05/solarsquare-series-c-60-million-india-rooftop-solar.avif",
       "published": "2026-05-24T14:48:57+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7121
-    },
-    {
-      "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-24T19:38:20.400422+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.7025
     },
     {
       "title": "Quoting Armin Ronacher",
@@ -175,10 +175,10 @@
       "image": "",
       "published": "2026-05-24T18:46:53+00:00",
       "firstSeen": "2026-05-24T19:00:02.076741+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2641
+      "score": 2.2534
     },
     {
       "title": "I tried Amazon’s Bee wearable and am both intrigued and slightly creeped out",
@@ -191,10 +191,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/17.png?resize=1200%2C750",
       "published": "2026-05-24T15:00:00+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T19:38:15.121634+00:00",
+      "lastSeen": "2026-05-24T20:00:01.683834+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.157
+      "score": 2.1473
     }
   ],
   "errors": []
