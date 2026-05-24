@@ -376,10 +376,11 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
+      align-items: stretch;
     }
     .guide-card {
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: 1fr auto;
       overflow: hidden;
       border: 1px solid rgba(116,205,235,0.22);
       border-radius: 8px;
@@ -414,6 +415,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      align-self: end;
       min-height: 40px;
       margin: 0 16px 16px;
       padding: 10px 18px;
