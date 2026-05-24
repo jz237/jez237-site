@@ -766,5 +766,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-23-evening-button-sun-almanac",
+    "title": "Button Sun Almanac",
+    "tests": "Handmade-illustration lane: tests a schoolroom craft almanac format with potato-stamp tempera, buttons, yarn, cardboard, radial folk-art composition, and tactile photographed materials rather than a polished digital scene.",
+    "prompt": "Title: Button Sun Almanac\nLane/category: handmade-illustration\n\nCreate a square 1024x1024 handmade illustration that looks like a photographed schoolroom craft almanac assembled on a paint-splattered table, not glossy digital concept art. The entire image is a tangible folk-art panel made from corrugated cardboard, potato-stamp tempera marks, stitched paper scraps, mismatched shirt buttons, yarn, wax crayon, torn construction paper, masking tape tabs, dry glue ridges, and visible brush hairs caught in paint.\n\nSubject: an imaginary seasonal sun calendar for a small invented coastal town, shown as twelve handmade circular button-suns arranged around a central cardboard tide wheel. Each sun has a different tactile face made from buttons and stamped paint: salt-white winter sun, green seed sun, foggy blue spring sun, brass harvest sun, red storm sun, pale shell sun, and other nonhuman symbolic suns. Around them are tiny static cut-paper houses, tide pools, laundry lines, seed packets, rooftop water barrels, and cloud shapes, all flat and handmade. No people, no performers, no animals required.\n\nComposition: direct overhead craft-table photograph with the square panel filling most of the frame. Keep the almanac as a graphic object rather than a landscape: circular rhythm, radial yarn spokes, uneven hand-drawn crayon month boxes with no readable text, and a few loose buttons, blunt scissors, and a capped glue stick near the edge for scale. Strong material separation, imperfect alignment, thumbprints, paper fibers, curled corners, and real shadows.\n\nMood and palette: warm, tactile, homespun, slightly strange; tomato red, faded teal, marigold yellow, sea-glass green, chalk white, cardboard brown, black crayon, dull brass button highlights. Soft afternoon window light, matte surfaces, shallow texture detail, no slick rendering.\n\nConstraints: no readable text, no logos, no copyrighted characters, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no theatrical performance, no watermark, no signature.",
+    "image": "images/2026-05-23-evening-button-sun-almanac.png",
+    "date": "2026-05-23",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
