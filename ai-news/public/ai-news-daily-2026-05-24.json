@@ -1,6 +1,6 @@
 {
   "date": "2026-05-24",
-  "updatedAt": "2026-05-24T21:09:45.804777+00:00",
+  "updatedAt": "2026-05-24T22:00:01.583723+00:00",
   "items": [
     {
       "title": "Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-1.42.33-AM-1-150x150.png",
       "published": "2026-05-24T08:56:19+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.4533
+      "score": 19.4353
     },
     {
       "title": "DeepSeek made its 75% discount permanent. The AI price war just escalated.",
@@ -34,7 +34,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.1092
+      "score": 17.0917
     },
     {
       "title": "The US blacklisted Anthropic as a security threat. Its spy agencies are using Claude anyway.",
@@ -47,10 +47,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif",
       "published": "2026-05-24T15:53:40+00:00",
       "firstSeen": "2026-05-24T17:00:01.475407+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0002
+      "score": 10.9784
     },
     {
       "title": "The AI security gap nobody wants to admit is already here",
@@ -63,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-security-gap-claude-code-leak-.avif",
       "published": "2026-05-24T19:20:19+00:00",
       "firstSeen": "2026-05-24T21:00:01.935579+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0957
+      "score": 7.0716
     },
     {
       "title": "Mad House — Usborne Creepy Computer Games",
@@ -79,10 +79,10 @@
       "image": "https://static.simonwillison.net/static/2026/mad-house.jpg",
       "published": "2026-05-24T17:14:11+00:00",
       "firstSeen": "2026-05-24T21:00:01.935579+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1763
+      "score": 6.1537
     },
     {
       "title": "NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule",
@@ -95,10 +95,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-12.26.27-AM-1-150x150.png",
       "published": "2026-05-24T07:42:09+00:00",
       "firstSeen": "2026-05-24T07:57:16.602234+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6769
+      "score": 5.6594
     },
     {
       "title": "AI is killing the cheap smartphone. The memory that powers your phone now goes to data centres instead.",
@@ -114,7 +114,23 @@
       "lastSeen": "2026-05-24T21:09:45.804777+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2256
+      "score": 4.2077
+    },
+    {
+      "title": "McKinsey built a free AI tool so candidates stop paying $500/hour interview coaches",
+      "url": "https://thenextweb.com/news/mckinsey-ai-interview-practice-tool-lilli-consulting",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "McKinsey launched a free AI practice tool in April that gives candidates unlimited attempts at the quantitative case study they will face in their interview. The tool is available globally to applicants for entry-level business analyst and associate roles. The firm says it is designed to level the playing field for candidates who cannot afford [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/mckinsey-ai-interview-practice-tool-lilli-consulting.avif",
+      "published": "2026-05-24T20:18:22+00:00",
+      "firstSeen": "2026-05-24T22:00:01.583723+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.8994
     },
     {
       "title": "The Apple Watch is 11 years old and losing momentum. Screenless rivals are winning the next phase.",
@@ -127,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-watch-losing-ground-whoop-oura-screenless-wearables.avif",
       "published": "2026-05-24T15:03:17+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7783
+      "score": 3.757
     },
     {
       "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
@@ -143,10 +159,10 @@
       "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
       "published": "2026-05-24T09:02:04+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2354
+      "score": 3.2173
     },
     {
       "title": "HP pushed a critical BIOS update through Windows Update. It bricked its most expensive laptops.",
@@ -159,13 +175,13 @@
       "image": "https://media.thenextweb.com/2026/05/hp-bios-update-bricking-premium-laptops-zbook-elitebook.avif",
       "published": "2026-05-24T16:48:16+00:00",
       "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1246
+      "score": 3.1022
     },
     {
-      "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
+      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -173,28 +189,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-24T21:09:51.061269+00:00",
+      "published": "2026-05-24T22:00:06.949865+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
+      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
-    },
-    {
-      "title": "India’s SolarSquare is raising $60M at a $500M valuation. It has powered 50,000 homes.",
-      "url": "https://thenextweb.com/news/solarsquare-series-c-60-million-india-rooftop-solar",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SolarSquare, an Indian rooftop solar startup, is in advanced talks to raise $55 million to $60 million at a valuation between $450 million and $500 million, TechCrunch reports. B Capital and Lightspeed Venture Partners are set to co-lead the Series C round. The deal would more than double SolarSquare’s valuation from 18 months ago. Lightspeed [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/solarsquare-series-c-60-million-india-rooftop-solar.avif",
-      "published": "2026-05-24T14:48:57+00:00",
-      "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T21:09:45.804777+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6722
     }
   ],
   "errors": []
