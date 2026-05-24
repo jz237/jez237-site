@@ -491,6 +491,202 @@
       background: var(--aqua);
       box-shadow: 0 0 12px rgba(64,217,255,0.6);
     }
+    main.page > section:not(.hero):not(.diagram-list):not(.store-help) {
+      margin-top: 28px;
+      padding: clamp(16px, 2vw, 22px);
+      border: 1px solid rgba(116,205,235,0.14);
+      border-left: 6px solid rgba(64,217,255,0.72);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(64,217,255,0.075), transparent 34%),
+        rgba(2,14,24,0.58);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.18);
+    }
+    main.page > section:not(.hero):not(.diagram-list):not(.store-help) .section-head {
+      margin-top: 0;
+    }
+    .section-head h2 {
+      line-height: 1.05;
+    }
+    .section-head p {
+      max-width: 380px;
+      color: #c7d8d2;
+    }
+    .hero span,
+    .guide-card span,
+    .path-card span,
+    .problem-card span,
+    .checklist-card span {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 8px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 6px;
+      color: #9eeeff;
+      background: rgba(1,12,20,0.72);
+      line-height: 1;
+    }
+    .path-card,
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      border-color: rgba(180,213,219,0.16);
+      background: rgba(7,21,30,0.74);
+    }
+    .path-card {
+      border-top: 4px solid #40d9ff;
+      background:
+        linear-gradient(180deg, rgba(64,217,255,0.09), rgba(7,21,30,0.74) 42%),
+        #06141d;
+    }
+    .path-card:nth-child(2) {
+      border-top-color: #ff7b32;
+      background:
+        linear-gradient(180deg, rgba(255,123,50,0.11), rgba(22,15,10,0.74) 42%),
+        #120f0b;
+    }
+    .path-card:nth-child(3) {
+      border-top-color: #a489ff;
+      background:
+        linear-gradient(180deg, rgba(164,137,255,0.1), rgba(12,16,29,0.76) 42%),
+        #090f1e;
+    }
+    .path-card:nth-child(4) {
+      border-top-color: #72d389;
+      background:
+        linear-gradient(180deg, rgba(114,211,137,0.1), rgba(7,21,30,0.72) 42%),
+        #061712;
+    }
+    .problem-card {
+      border-top: 4px solid #ff7b32;
+      background:
+        linear-gradient(180deg, rgba(255,123,50,0.1), rgba(22,15,10,0.72) 42%),
+        #130f0b;
+    }
+    .problem-card:nth-child(2n) {
+      border-top-color: #72d389;
+      background:
+        linear-gradient(180deg, rgba(114,211,137,0.1), rgba(7,21,30,0.72) 42%),
+        #061712;
+    }
+    .problem-card:nth-child(3n) {
+      border-top-color: #a489ff;
+      background:
+        linear-gradient(180deg, rgba(164,137,255,0.1), rgba(12,16,29,0.76) 42%),
+        #090f1e;
+    }
+    .checklist-card {
+      border-top: 4px solid #40d9ff;
+      background:
+        linear-gradient(180deg, rgba(64,217,255,0.08), rgba(7,21,30,0.74) 42%),
+        #06141d;
+    }
+    .checklist-card:nth-child(2n) {
+      border-top-color: #72d389;
+      background:
+        linear-gradient(180deg, rgba(114,211,137,0.09), rgba(7,21,30,0.72) 42%),
+        #061712;
+    }
+    .checklist-card:nth-child(3n) {
+      border-top-color: #ffb45c;
+      background:
+        linear-gradient(180deg, rgba(255,180,92,0.1), rgba(22,18,12,0.72) 42%),
+        #11110c;
+    }
+    .guide-card {
+      border-top: 4px solid #a489ff;
+      background:
+        linear-gradient(180deg, rgba(164,137,255,0.1), rgba(12,16,29,0.76) 42%),
+        #090f1e;
+    }
+    .guide-card:nth-child(2n) {
+      border-top-color: #40d9ff;
+      background:
+        linear-gradient(180deg, rgba(64,217,255,0.08), rgba(7,21,30,0.74) 42%),
+        #06141d;
+    }
+    .path-card p,
+    .problem-card p,
+    .checklist-card li,
+    .guide-card p,
+    .diagram p,
+    .diagram li {
+      color: #c9d9d7;
+    }
+    .learn-disclosure {
+      position: relative;
+      overflow: hidden;
+      border-left: 6px solid #ff7b32;
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.1), transparent 36%),
+        rgba(20,12,8,0.58);
+    }
+    .learn-disclosure::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      pointer-events: none;
+      box-shadow: 0 0 42px rgba(255,123,50,0.2);
+    }
+    .learn-disclosure summary {
+      background: rgba(1,12,20,0.24);
+    }
+    .learn-disclosure[open] summary {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(1,12,20,0.54);
+    }
+    .learn-disclosure summary h2::before {
+      color: #04121d;
+      border-color: transparent;
+      background: #ff7b32;
+    }
+    .learn-disclosure__body {
+      padding-top: 16px;
+    }
+    #starter-checklists {
+      border-left-color: #72d389;
+      background:
+        linear-gradient(90deg, rgba(114,211,137,0.09), transparent 36%),
+        rgba(5,17,13,0.62);
+    }
+    #starter-checklists::before {
+      box-shadow: 0 0 42px rgba(114,211,137,0.18);
+    }
+    #starter-checklists summary h2::before {
+      background: #72d389;
+    }
+    #filtration-equipment {
+      border-left-color: #a489ff;
+      background:
+        linear-gradient(90deg, rgba(164,137,255,0.1), transparent 36%),
+        rgba(10,9,25,0.62);
+    }
+    #filtration-equipment::before {
+      box-shadow: 0 0 42px rgba(164,137,255,0.18);
+    }
+    #filtration-equipment summary h2::before {
+      background: #a489ff;
+    }
+    .diagram-list {
+      padding: 4px 0;
+    }
+    .diagram {
+      border-left: 6px solid #a489ff;
+      background:
+        linear-gradient(90deg, rgba(164,137,255,0.08), transparent 34%),
+        #07131f;
+    }
+    .diagram-empty {
+      border-color: rgba(164,137,255,0.3);
+      background: rgba(9,15,30,0.62);
+    }
+    .store-help {
+      border-left: 6px solid #ffb45c;
+      background:
+        linear-gradient(90deg, rgba(255,180,92,0.12), transparent 38%),
+        #150f0b;
+    }
     .footer {
       margin-top: 28px;
       overflow: hidden;
