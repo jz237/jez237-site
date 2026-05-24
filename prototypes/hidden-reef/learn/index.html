@@ -232,19 +232,6 @@
       text-decoration-color: rgba(64,217,255,0.42);
       text-underline-offset: 4px;
     }
-    .triage-panel {
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      gap: 16px;
-      margin-top: 14px;
-      padding: 18px;
-      border: 1px solid rgba(147,112,255,0.28);
-      border-radius: 8px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.14), transparent 34%),
-        linear-gradient(180deg, #071f32 0%, #041827 100%);
-      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
-    }
     .store-help {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -281,38 +268,6 @@
     .store-help__actions .btn {
       margin: 0;
       white-space: nowrap;
-    }
-    .triage-panel h3 {
-      margin: 0 0 8px;
-      color: #fff;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 28px;
-      line-height: 1.05;
-    }
-    .triage-panel p {
-      margin: 0;
-      color: #b9d9e7;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .triage-list {
-      display: grid;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .triage-list li {
-      padding: 10px 11px;
-      border: 1px solid rgba(116,205,235,0.16);
-      border-radius: 7px;
-      color: #d9f5fc;
-      background: rgba(8,35,52,0.72);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-    .triage-list strong {
-      color: #fff;
     }
     .checklist-grid {
       display: grid;
@@ -556,8 +511,7 @@
     @media (max-width: 1040px) {
       .header,
       .hero,
-      .diagram,
-      .triage-panel { grid-template-columns: 1fr; }
+      .diagram { grid-template-columns: 1fr; }
       .guide-grid,
       .problem-grid,
       .checklist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -583,7 +537,6 @@
       .path-card,
       .problem-card,
       .checklist-card { min-height: 0; padding: 14px; }
-      .triage-panel { padding: 14px; }
       .store-help { grid-template-columns: 1fr; padding: 16px; }
       .store-help__actions { justify-content: stretch; }
       .store-help__actions .btn { width: 100%; margin: 0; }
@@ -712,19 +665,6 @@
           <p>Review salinity, alkalinity, nitrate, phosphate, lighting changes, flow, pests, and recent dips or moves.</p>
           <a href="#coral-guide">View first steps</a>
         </article>
-      </div>
-      <div class="triage-panel">
-        <div>
-          <h3>Standard Problem Guide Format</h3>
-          <p>Each troubleshooting guide follows the same simple pattern: what you may see, what to test, what to do today, and when to ask the store for help.</p>
-        </div>
-        <ul class="triage-list">
-          <li><strong>Symptoms:</strong> what you see in your tank.</li>
-          <li><strong>Test first:</strong> water parameters or quick observations to confirm.</li>
-          <li><strong>Likely causes:</strong> ranked from common to less common.</li>
-          <li><strong>Do today:</strong> immediate actions that are hard to regret.</li>
-          <li><strong>Helpful supplies:</strong> testing, filtration, medication, water care, or livestock support.</li>
-        </ul>
       </div>
       <div class="section-head">
         <h2>First Steps</h2>
