@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Algae Troubleshooter - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --line: rgba(116,205,235,0.2);
+      --orange: #ff7b32;
+      --purple: #9275ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(14,159,204,0.22), transparent 28%),
+        radial-gradient(circle at 86% 10%, rgba(141,108,255,0.14), transparent 30%),
+        linear-gradient(180deg, #03111d 0, #051827 300px, #020912 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(340px, 1.12fr);
+      gap: clamp(24px, 3vw, 36px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(141,108,255,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .hero > div { min-width: 0; }
+    .eyebrow,
+    .section-head span,
+    .step-card span,
+    .cause-card span,
+    .product-card span,
+    .type-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    .hero p,
+    .section-head p,
+    .step-card p,
+    .cause-card p,
+    .product-card p,
+    .type-card p,
+    .callout p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      display: grid;
+      gap: 10px;
+      align-content: stretch;
+      min-height: 310px;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid rgba(147,112,255,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 28px rgba(147,112,255,0.18);
+    }
+    .algae-window {
+      position: relative;
+      min-height: 184px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 18% 82%, rgba(54,185,86,0.86) 0 7%, transparent 8%),
+        radial-gradient(circle at 58% 78%, rgba(79,213,112,0.72) 0 5%, transparent 6%),
+        radial-gradient(circle at 82% 68%, rgba(31,151,78,0.78) 0 8%, transparent 9%),
+        linear-gradient(180deg, rgba(48,218,183,0.28), rgba(3,23,34,0.7)),
+        url("../../assets/site/hero-aquatic-world-3.jpg") center/cover no-repeat;
+    }
+    .algae-window::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(95deg, transparent 0 18%, rgba(45,203,94,0.34) 19% 23%, transparent 24% 42%, rgba(92,230,122,0.26) 43% 48%, transparent 49%),
+        linear-gradient(180deg, rgba(255,255,255,0.14), transparent 24%, rgba(0,0,0,0.28));
+    }
+    .visual-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .visual-list li {
+      padding: 10px 11px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      color: #d9f5fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .visual-list strong { display: block; color: #fff; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .type-grid,
+    .step-grid,
+    .cause-grid,
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .type-card,
+    .step-card,
+    .cause-card,
+    .product-card,
+    .callout {
+      display: grid;
+      gap: 9px;
+      min-height: 168px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .type-card h3,
+    .step-card h3,
+    .callout h3,
+    .cause-card h3,
+    .product-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(0,167,183,0.42);
+      box-shadow: 0 0 18px rgba(64,217,255,0.22);
+      font-weight: 950;
+    }
+    .flow {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid rgba(147,112,255,0.28);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .flow-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .flow-row > div {
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      background: rgba(8,35,52,0.72);
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .flow-row strong { display: block; margin-bottom: 4px; color: #fff; }
+    .flow-row:first-child > div {
+      color: #fff;
+      background: rgba(0,167,183,0.28);
+      font-weight: 900;
+    }
+    .product-card a,
+    .callout a {
+      align-self: end;
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.42);
+      text-underline-offset: 4px;
+    }
+    .callout {
+      min-height: 0;
+      margin-top: 16px;
+      border-color: rgba(255,123,50,0.35);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.13), transparent 34%),
+        #071a27;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; }
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+      .flow-row { grid-template-columns: 1fr; }
+      .flow-row:first-child { display: none; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { padding: 24px 18px; }
+      .hero-visual { min-height: 0; padding: 12px; }
+      .visual-list,
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: 1fr; gap: 10px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .type-card,
+      .step-card,
+      .cause-card,
+      .product-card { min-height: 0; padding: 14px; }
+      .flow { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Learn</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs">
+      <a href="../">Learning Center</a>
+      <span>/</span>
+      <span>Algae Troubleshooter</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Algae control guide</span>
+        <h1>Algae Taking Over</h1>
+        <p>Algae usually means light, nutrients, maintenance rhythm, or flow are out of balance. Identify the type first, then correct the cause instead of just scrubbing the symptom.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#diagnosis">Start diagnosis</a>
+          <a class="btn secondary" href="#do-today">What to do today</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Aquarium algae visual summary">
+        <div class="algae-window" aria-hidden="true"></div>
+        <ul class="visual-list">
+          <li><strong>Green film</strong> Often light duration, sunlight, or normal glass growth.</li>
+          <li><strong>Hair algae</strong> Usually excess nutrients plus strong light and weak export.</li>
+          <li><strong>Brown dust</strong> Common in new tanks, silicates, low competition, or immature biology.</li>
+          <li><strong>Cyano mats</strong> Often low flow, trapped organics, and unstable nutrients.</li>
+        </ul>
+      </figure>
+    </section>
+
+    <section id="do-today" aria-labelledby="today-title">
+      <div class="section-head">
+        <div>
+          <span>First response</span>
+          <h2 id="today-title">Do this before adding algae chemicals.</h2>
+        </div>
+        <p>The safest fixes reduce fuel and improve export.</p>
+      </div>
+      <div class="step-grid">
+        <article class="step-card">
+          <div class="step-number">1</div>
+          <span>Control light</span>
+          <h3>Shorten the photoperiod and block direct sun.</h3>
+          <p>Most tanks do better with a consistent timer. Big swings and window light make algae harder to diagnose.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">2</div>
+          <span>Test nutrients</span>
+          <h3>Check nitrate and phosphate.</h3>
+          <p>Low readings can still hide algae-bound nutrients, but testing gives the conversation a starting point.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">3</div>
+          <span>Remove fuel</span>
+          <h3>Clean gently and feed less for a few days.</h3>
+          <p>Pull out loose algae, siphon debris, rinse mechanical media, and avoid dumping in extra food.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="types-title">
+      <div class="section-head">
+        <div>
+          <span>Visual clues</span>
+          <h2 id="types-title">Name the algae before treating it.</h2>
+        </div>
+        <p>The type points to different causes and different store departments.</p>
+      </div>
+      <div class="type-grid">
+        <article class="type-card">
+          <span>Glass film</span>
+          <h3>Green spot or film algae</h3>
+          <p>Usually normal in lit tanks, but fast regrowth suggests too much light, direct sun, excess nutrients, or inconsistent glass cleaning.</p>
+        </article>
+        <article class="type-card">
+          <span>Stringy growth</span>
+          <h3>Hair algae</h3>
+          <p>Often tied to long light hours, excess nutrients, poor plant competition, weak cleanup crew, or reef nutrient imbalance.</p>
+        </article>
+        <article class="type-card">
+          <span>New tank dust</span>
+          <h3>Brown diatoms</h3>
+          <p>Common in newer freshwater and saltwater tanks. Often fades as the tank matures, especially with good cleanup and stable maintenance.</p>
+        </article>
+        <article class="type-card">
+          <span>Blue-green sheets</span>
+          <h3>Cyanobacteria</h3>
+          <p>Slimy mats point toward dead spots, trapped organics, imbalance, and low flow. It needs cause correction, not just surface removal.</p>
+        </article>
+        <article class="type-card">
+          <span>Green water</span>
+          <h3>Free-floating algae</h3>
+          <p>If the water itself is green, think light, nitrate, phosphate, direct sun, and properly sized UV sterilization.</p>
+        </article>
+        <article class="type-card">
+          <span>Pond season</span>
+          <h3>Pond algae</h3>
+          <p>Sunlight, fish load, runoff, plant coverage, filtration, and UV sizing all matter more outside than one bottle of treatment.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="diagnosis" aria-labelledby="diagnosis-title">
+      <div class="section-head">
+        <div>
+          <span>Decision flow</span>
+          <h2 id="diagnosis-title">Match the symptom to the likely cause.</h2>
+        </div>
+        <p>Use this as a quick shop-floor conversation path.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-row">
+          <div>Question</div>
+          <div>Likely direction</div>
+          <div>Next action</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>How many hours are the lights on?</strong> Is the tank near a window?</div>
+          <div>Too much light is the easiest algae fuel to fix.</div>
+          <div>Use a timer, shorten the schedule, block direct sun, and avoid changing intensity too aggressively on reef lights.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is algae stringy, mat-like, or just glass film?</strong></div>
+          <div>Different algae types point to different causes.</div>
+          <div>Remove what you can, improve flow, clean mechanical media, and match the fix to the visual clue.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Are nitrate or phosphate high?</strong> Is food left uneaten?</div>
+          <div>Excess nutrients are feeding growth.</div>
+          <div>Reduce feeding, improve export, service filtration, and consider phosphate-removing media where appropriate.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is this a planted tank or reef?</strong></div>
+          <div>Plants and corals change the safe solution.</div>
+          <div>Do not blindly dose algaecide. Protect plants, coral, shrimp, snails, and biological filtration.</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="causes-title">
+      <div class="section-head">
+        <div>
+          <span>Common causes</span>
+          <h2 id="causes-title">What usually lets algae win?</h2>
+        </div>
+        <p>Most cases are a mix of these, not one magic cause.</p>
+      </div>
+      <div class="cause-grid">
+        <article class="cause-card">
+          <span>Light</span>
+          <h3>Long or inconsistent lighting</h3>
+          <p>Timers beat memory. Stable light schedules make algae control much easier, especially in planted and reef tanks.</p>
+        </article>
+        <article class="cause-card">
+          <span>Nutrients</span>
+          <h3>Too much food and waste</h3>
+          <p>Overfeeding, dirty substrate, dead plant matter, and clogged media all add fuel for algae and cyano.</p>
+        </article>
+        <article class="cause-card">
+          <span>Flow</span>
+          <h3>Dead spots</h3>
+          <p>Low-flow corners collect organics. Cyano and nuisance algae often start where debris settles and circulation is weak.</p>
+        </article>
+        <article class="cause-card">
+          <span>Immature tank</span>
+          <h3>New-system instability</h3>
+          <p>Brown diatoms and early algae phases are common while the tank matures. The goal is steady correction, not a full reset.</p>
+        </article>
+        <article class="cause-card">
+          <span>Export</span>
+          <h3>Weak filtration maintenance</h3>
+          <p>Mechanical media, skimmers, reactors, water changes, and plant growth all export nutrients when used correctly.</p>
+        </article>
+        <article class="cause-card">
+          <span>Livestock balance</span>
+          <h3>Cleanup crew mismatch</h3>
+          <p>Snails, shrimp, algae eaters, and pond plants can help, but only when compatible with the tank and the actual algae type.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="products-title">
+      <div class="section-head">
+        <div>
+          <span>Helpful departments</span>
+          <h2 id="products-title">What the customer may need.</h2>
+        </div>
+        <p>Point toward causes, not random algae cures.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card">
+          <span>Testing</span>
+          <h3>Nitrate and phosphate tests</h3>
+          <p>These give algae conversations a baseline, especially for reef, planted, and pond customers.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+        <article class="product-card">
+          <span>Lighting</span>
+          <h3>Timers and lighting help</h3>
+          <p>A timer, correct intensity, and fewer direct-sun hours solve more algae cases than customers expect.</p>
+          <a href="../../category/?cat=lighting">View lighting</a>
+        </article>
+        <article class="product-card">
+          <span>Filtration</span>
+          <h3>Filter media and polishing pads</h3>
+          <p>Better mechanical capture and regular media service reduce organics before algae gets them.</p>
+          <a href="../../category/?cat=filtration">View filtration</a>
+        </article>
+        <article class="product-card">
+          <span>Reef nutrients</span>
+          <h3>Reactors and phosphate media</h3>
+          <p>Useful when phosphate control needs steady flow through media instead of occasional guesswork.</p>
+          <a href="../../category/?cat=reactors">View reactors</a>
+        </article>
+        <article class="product-card">
+          <span>Green water</span>
+          <h3>UV sterilizers</h3>
+          <p>Best for free-floating green water when sized and plumbed for the right contact time.</p>
+          <a href="../../category/?cat=uv-clarifiers">View UV clarifiers</a>
+        </article>
+        <article class="product-card">
+          <span>Ponds</span>
+          <h3>Pond filtration and plant balance</h3>
+          <p>Outdoor algae control is about sun, fish load, plant coverage, filtration, and UV working together.</p>
+          <a href="../../category/?cat=pond">Shop pond</a>
+        </article>
+      </div>
+      <div class="callout">
+        <h3>What to avoid</h3>
+        <p>Do not dose algae treatments into tanks with shrimp, snails, coral, delicate plants, or stressed fish without checking compatibility. If livestock are gasping or ammonia/nitrite is present, treat it as a water-quality emergency first.</p>
+        <a href="../cloudy-water/">Compare with the cloudy water guide</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="../#troubleshooting">Troubleshooting</a><a href="../cloudy-water/">Cloudy water</a><a href="#diagnosis">Algae diagnosis</a><a href="../#filtration-equipment">Filtration</a><a href="../#uv-sterilizer">UV sterilizers</a><a href="../#protein-skimmer-saltwater">Protein skimmers</a></div></div>
+        <div><h4>Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
