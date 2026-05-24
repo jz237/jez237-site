@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coral Not Opening - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --orange: #ff7b32;
+      --purple: #9275ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(14,159,204,0.22), transparent 28%),
+        radial-gradient(circle at 86% 10%, rgba(141,108,255,0.14), transparent 30%),
+        linear-gradient(180deg, #03111d 0, #051827 300px, #020912 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 0 clamp(12px, 2.5vw, 28px) 42px; }
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(340px, 1.12fr);
+      gap: clamp(24px, 3vw, 36px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(141,108,255,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .eyebrow,
+    .section-head span,
+    .step-card span,
+    .cause-card span,
+    .product-card span,
+    .type-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    .hero p,
+    .section-head p,
+    .step-card p,
+    .cause-card p,
+    .product-card p,
+    .type-card p,
+    .callout p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary { border: 1px solid rgba(116,205,235,0.32); background: rgba(8,35,52,0.72); }
+    .hero-visual {
+      display: grid;
+      gap: 10px;
+      align-content: stretch;
+      min-height: 310px;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid rgba(147,112,255,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 28px rgba(147,112,255,0.18);
+    }
+    .coral-window {
+      position: relative;
+      min-height: 184px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(3,23,34,0.1) 48%, rgba(0,0,0,0.32)),
+        url("../../assets/department/saltwater-reef.jpg") center/cover no-repeat;
+    }
+    .coral-window::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(105deg, rgba(255,255,255,0.16), transparent 18% 72%, rgba(255,255,255,0.08)),
+        radial-gradient(circle at 72% 24%, rgba(64,217,255,0.16), transparent 24%);
+      pointer-events: none;
+    }
+    .visual-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .visual-list li {
+      padding: 10px 11px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      color: #d9f5fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .visual-list strong { display: block; color: #fff; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .type-grid,
+    .step-grid,
+    .cause-grid,
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .type-card,
+    .step-card,
+    .cause-card,
+    .product-card,
+    .callout {
+      display: grid;
+      gap: 9px;
+      min-height: 168px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .type-card h3,
+    .step-card h3,
+    .callout h3,
+    .cause-card h3,
+    .product-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(0,167,183,0.42);
+      box-shadow: 0 0 18px rgba(64,217,255,0.22);
+      font-weight: 950;
+    }
+    .flow {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid rgba(147,112,255,0.28);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .flow-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .flow-row > div {
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      background: rgba(8,35,52,0.72);
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .flow-row strong { display: block; margin-bottom: 4px; color: #fff; }
+    .flow-row:first-child > div {
+      color: #fff;
+      background: rgba(0,167,183,0.28);
+      font-weight: 900;
+    }
+    .product-card a,
+    .callout a {
+      align-self: end;
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.42);
+      text-underline-offset: 4px;
+    }
+    .callout {
+      min-height: 0;
+      margin-top: 16px;
+      border-color: rgba(255,123,50,0.35);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.13), transparent 34%),
+        #071a27;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; }
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+      .flow-row { grid-template-columns: 1fr; }
+      .flow-row:first-child { display: none; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { padding: 24px 18px; }
+      .hero-visual { min-height: 0; padding: 12px; }
+      .visual-list,
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: 1fr; gap: 10px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .type-card,
+      .step-card,
+      .cause-card,
+      .product-card { min-height: 0; padding: 14px; }
+      .flow { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Learn</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs">
+      <a href="../">Learning Center</a>
+      <span>/</span>
+      <span>Coral Not Opening</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Reef troubleshooting</span>
+        <h1>Coral Not Opening</h1>
+        <p>Closed polyps, shrinking tissue, pale color, or sudden irritation usually means something changed. Check stability first, then look at light, flow, pests, neighbors, and recent dosing or dips.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#diagnosis">Start diagnosis</a>
+          <a class="btn secondary" href="#do-today">What to do today</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Reef coral stress visual summary">
+        <div class="coral-window" aria-hidden="true"></div>
+        <ul class="visual-list">
+          <li><strong>One coral closed</strong> Local flow, pests, neighbor stings, or placement may be the issue.</li>
+          <li><strong>Many corals closed</strong> Treat water quality, salinity, temperature, or dosing swings as likely.</li>
+          <li><strong>Pale or shrinking</strong> Review light intensity, nutrients, alkalinity, and recent changes.</li>
+          <li><strong>Tissue damage</strong> Inspect for pests, fish nipping, coral warfare, or infection.</li>
+        </ul>
+      </figure>
+    </section>
+
+    <section id="do-today" aria-labelledby="today-title">
+      <div class="section-head">
+        <div>
+          <span>First response</span>
+          <h2 id="today-title">Check stability before moving the coral.</h2>
+        </div>
+        <p>Repeatedly moving or dipping a stressed coral can make the problem worse.</p>
+      </div>
+      <div class="step-grid">
+        <article class="step-card">
+          <div class="step-number">1</div>
+          <span>Core tests</span>
+          <h3>Confirm salinity, temperature, alkalinity, nitrate, and phosphate.</h3>
+          <p>Corals react strongly to swings. Test before changing placement, lighting, or dosing.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">2</div>
+          <span>Observe</span>
+          <h3>Look for local irritation.</h3>
+          <p>Check for pests, sand on tissue, fish nipping, neighboring coral sweepers, and direct blast from a pump.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">3</div>
+          <span>Stabilize</span>
+          <h3>Make one correction at a time.</h3>
+          <p>Adjust slowly unless livestock are in immediate danger. Stability is often the treatment.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="types-title">
+      <div class="section-head">
+        <div>
+          <span>Visual clues</span>
+          <h2 id="types-title">Read the pattern before reacting.</h2>
+        </div>
+        <p>The number of affected corals tells you whether to look locally or system-wide.</p>
+      </div>
+      <div class="type-grid">
+        <article class="type-card">
+          <span>Single coral</span>
+          <h3>Closed but neighbors look fine</h3>
+          <p>Think placement, flow, light, pests, fish nipping, or coral aggression before changing the whole tank.</p>
+        </article>
+        <article class="type-card">
+          <span>Multiple corals</span>
+          <h3>Tank-wide irritation</h3>
+          <p>Check salinity, alkalinity, temperature, pH trend, nutrients, and recent dosing or water changes.</p>
+        </article>
+        <article class="type-card">
+          <span>Soft corals</span>
+          <h3>Closed, shedding, or waxy</h3>
+          <p>Some soft corals shed naturally, but poor flow, low nutrients, or chemical irritation can extend the closure.</p>
+        </article>
+        <article class="type-card">
+          <span>LPS corals</span>
+          <h3>Retracted flesh</h3>
+          <p>Watch alkalinity swings, low magnesium, too much flow, stinging neighbors, and damage to inflated tissue.</p>
+        </article>
+        <article class="type-card">
+          <span>SPS corals</span>
+          <h3>Pale, browned, or no polyp extension</h3>
+          <p>Review light intensity, nutrients, alkalinity stability, pests, and rapid parameter changes.</p>
+        </article>
+        <article class="type-card">
+          <span>Emergency</span>
+          <h3>Tissue peeling or rapid loss</h3>
+          <p>Bring photos and water results quickly. Fast tissue loss needs a more careful plan than generic coral food.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="diagnosis" aria-labelledby="diagnosis-title">
+      <div class="section-head">
+        <div>
+          <span>Decision flow</span>
+          <h2 id="diagnosis-title">Separate a local problem from a tank problem.</h2>
+        </div>
+        <p>Use this before changing lights, moving coral, or adding supplements.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-row">
+          <div>Question</div>
+          <div>Likely direction</div>
+          <div>Next action</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Did salinity, alkalinity, or temperature swing?</strong></div>
+          <div>System stress is likely.</div>
+          <div>Stabilize slowly, verify test accuracy, and avoid chasing numbers with large doses.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is only one coral affected?</strong></div>
+          <div>Local irritation is more likely.</div>
+          <div>Inspect for pests, sand, flow blast, coral warfare, fish nipping, or recent placement changes.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Did lighting or flow recently change?</strong></div>
+          <div>Acclimation stress is possible.</div>
+          <div>Reduce sudden intensity changes and reposition gradually rather than making repeated moves.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Were additives, carbon, GFO, medication, or dips used?</strong></div>
+          <div>Chemical irritation or nutrient swing may be involved.</div>
+          <div>Stop stacking corrections, run appropriate filtration, and confirm compatibility before more dosing.</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="causes-title">
+      <div class="section-head">
+        <div>
+          <span>Common causes</span>
+          <h2 id="causes-title">What usually keeps coral closed?</h2>
+        </div>
+        <p>Coral stress is usually about instability, irritation, or a mismatch between species and placement.</p>
+      </div>
+      <div class="cause-grid">
+        <article class="cause-card">
+          <span>Instability</span>
+          <h3>Alkalinity or salinity swings</h3>
+          <p>Fast changes can close coral even when the final number looks acceptable.</p>
+        </article>
+        <article class="cause-card">
+          <span>Flow</span>
+          <h3>Too much or too little movement</h3>
+          <p>Direct blasting can damage tissue, while dead spots allow detritus and film to build up.</p>
+        </article>
+        <article class="cause-card">
+          <span>Lighting</span>
+          <h3>Sudden intensity changes</h3>
+          <p>New lights, cleaned lenses, moved rockwork, or schedule changes can shock coral.</p>
+        </article>
+        <article class="cause-card">
+          <span>Nutrients</span>
+          <h3>Nitrate or phosphate mismatch</h3>
+          <p>Very low or very high nutrients can both irritate coral, especially after rapid media changes.</p>
+        </article>
+        <article class="cause-card">
+          <span>Pests</span>
+          <h3>Hidden irritators</h3>
+          <p>Flatworms, nudibranchs, vermetid snails, aiptasia, and fish nipping can keep one coral closed.</p>
+        </article>
+        <article class="cause-card">
+          <span>Chemistry</span>
+          <h3>Dosing or media changes</h3>
+          <p>Fresh carbon, GFO, medication, dips, and supplements can cause stress when changed aggressively.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="products-title">
+      <div class="section-head">
+        <div>
+          <span>Helpful supplies</span>
+          <h2 id="products-title">What you may need.</h2>
+        </div>
+        <p>Bring test results and photos before buying a fix for a coral problem.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card">
+          <span>Testing</span>
+          <h3>Reef test kits</h3>
+          <p>Alkalinity, calcium, magnesium, nitrate, phosphate, salinity, and temperature are the starting point.</p>
+          <a href="../../category/?cat=maintenance">Shop test kits</a>
+        </article>
+        <article class="product-card">
+          <span>Stability</span>
+          <h3>Salt mix and salinity tools</h3>
+          <p>Stable salinity and reliable measurement matter before supplements or coral foods.</p>
+          <a href="../../category/?cat=saltwater">Shop saltwater</a>
+        </article>
+        <article class="product-card">
+          <span>Flow</span>
+          <h3>Pumps and wave makers</h3>
+          <p>Better random flow can help coral stay clean without blasting tissue.</p>
+          <a href="../../category/?cat=equipment">View equipment</a>
+        </article>
+        <article class="product-card">
+          <span>Lighting</span>
+          <h3>Reef lighting and acclimation</h3>
+          <p>Lighting changes should be gradual, especially for newly moved coral.</p>
+          <a href="../../category/?cat=lighting">View lighting</a>
+        </article>
+        <article class="product-card">
+          <span>Filtration</span>
+          <h3>Carbon, media, and reactors</h3>
+          <p>Useful when chemicals, coral warfare, or dissolved organics are suspected, but avoid drastic swings.</p>
+          <a href="../../category/?cat=reactors">View reactors</a>
+        </article>
+        <article class="product-card">
+          <span>Inspection</span>
+          <h3>Dip containers and coral tools</h3>
+          <p>Photos, inspection containers, coral dip, and careful observation help identify pests safely.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+      </div>
+      <div class="callout">
+        <h3>What to avoid</h3>
+        <p>Do not move the coral repeatedly, dose several supplements at once, or dip every coral before checking water stability. If tissue is peeling, pests are visible, or multiple corals close at once, bring photos and test results for help.</p>
+        <a href="../algae/">Compare with the algae guide</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="../#troubleshooting">Troubleshooting</a><a href="../cloudy-water/">Cloudy water</a><a href="../algae/">Algae diagnosis</a><a href="../ich/">Ich diagnosis</a><a href="#diagnosis">Coral diagnosis</a><a href="../#filtration-equipment">Filtration</a></div></div>
+        <div><h4>Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
