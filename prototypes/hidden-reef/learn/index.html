@@ -174,6 +174,7 @@
       font-size: 13px;
     }
     .path-grid,
+    .quick-link-grid,
     .problem-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -183,6 +184,7 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .path-card,
+    .quick-link,
     .problem-card,
     .checklist-card {
       display: grid;
@@ -197,6 +199,7 @@
       box-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
     .path-card span,
+    .quick-link span,
     .problem-card span,
     .checklist-card span {
       color: var(--aqua);
@@ -206,6 +209,7 @@
       text-transform: uppercase;
     }
     .path-card h3,
+    .quick-link h3,
     .problem-card h3,
     .checklist-card h3 {
       margin: 0;
@@ -215,6 +219,7 @@
       line-height: 1.05;
     }
     .path-card p,
+    .quick-link p,
     .problem-card p,
     .checklist-card p {
       margin: 0;
@@ -223,6 +228,7 @@
       line-height: 1.45;
     }
     .path-card a,
+    .quick-link a,
     .problem-card a {
       align-self: end;
       color: #dff8ff;
@@ -244,6 +250,61 @@
         radial-gradient(circle at 100% 0%, rgba(141,108,255,0.14), transparent 34%),
         linear-gradient(180deg, #071f32 0%, #041827 100%);
       box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .quick-link {
+      min-height: 142px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.13), transparent 38%),
+        #071f32;
+    }
+    .quick-link h3 {
+      font-size: 22px;
+    }
+    .quick-link.is-urgent {
+      border-color: rgba(255,123,50,0.48);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.16), transparent 38%),
+        #071f32;
+    }
+    .quick-link.is-urgent span {
+      color: #ffb38a;
+    }
+    .store-help {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-top: 28px;
+      padding: 20px;
+      border: 1px solid rgba(116,205,235,0.24);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.13), transparent 38%),
+        linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .store-help h2 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+    .store-help p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .store-help__actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .store-help__actions .btn {
+      margin: 0;
+      white-space: nowrap;
     }
     .triage-panel h3 {
       margin: 0 0 8px;
@@ -522,6 +583,7 @@
       .diagram,
       .triage-panel { grid-template-columns: 1fr; }
       .guide-grid,
+      .quick-link-grid,
       .problem-grid,
       .checklist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -540,13 +602,18 @@
       .section-head { display: block; }
       .section-head p { margin-top: 6px; }
       .path-grid,
+      .quick-link-grid,
       .problem-grid,
       .guide-grid,
       .checklist-grid { grid-template-columns: 1fr; gap: 10px; }
       .path-card,
+      .quick-link,
       .problem-card,
       .checklist-card { min-height: 0; padding: 14px; }
       .triage-panel { padding: 14px; }
+      .store-help { grid-template-columns: 1fr; padding: 16px; }
+      .store-help__actions { justify-content: stretch; }
+      .store-help__actions .btn { width: 100%; margin: 0; }
       .learn-disclosure summary,
       .learn-disclosure__body { padding-left: 12px; padding-right: 12px; }
       .learn-disclosure summary .section-head { padding: 14px 0; }
@@ -594,6 +661,39 @@
       </aside>
     </section>
 
+    <section aria-labelledby="quick-title">
+      <div class="section-head">
+        <h2 id="quick-title">Most-Used Help</h2>
+        <p>Jump straight to the guide that matches what is happening now.</p>
+      </div>
+      <div class="quick-link-grid">
+        <article class="quick-link is-urgent">
+          <span>Emergency</span>
+          <h3>Fish gasping?</h3>
+          <p>Add oxygen and check water quality before adding medication.</p>
+          <a href="fish-gasping/">Open emergency guide</a>
+        </article>
+        <article class="quick-link is-urgent">
+          <span>Bad test result</span>
+          <h3>Ammonia or nitrite?</h3>
+          <p>Protect livestock and preserve the biological filter.</p>
+          <a href="ammonia-nitrite/">Open spike guide</a>
+        </article>
+        <article class="quick-link">
+          <span>Cloudiness</span>
+          <h3>Milky or green water?</h3>
+          <p>Match the type of cloud before buying a quick fix.</p>
+          <a href="cloudy-water/">Open cloudy water guide</a>
+        </article>
+        <article class="quick-link">
+          <span>Growth</span>
+          <h3>Algae taking over?</h3>
+          <p>Check light, nutrients, flow, cleanup crew, and maintenance habits.</p>
+          <a href="algae/">Open algae guide</a>
+        </article>
+      </div>
+    </section>
+
     <section aria-labelledby="paths-title">
       <div class="section-head">
         <h2 id="paths-title">Choose a Learning Path</h2>
@@ -627,7 +727,7 @@
       </div>
     </section>
 
-    <details class="learn-disclosure" id="troubleshooting">
+    <details class="learn-disclosure" id="troubleshooting" open>
       <summary aria-labelledby="troubleshooting-title">
         <div class="section-head">
           <h2 id="troubleshooting-title">Troubleshooting Center</h2>
@@ -771,6 +871,7 @@
             <li>Water conditioner, bacteria starter, test kit</li>
             <li>Substrate, decor, food, net, algae pad, bucket</li>
           </ul>
+          <p><a href="../category/?cat=freshwater">Shop freshwater basics</a></p>
         </article>
         <article class="checklist-card">
           <span>Reef start</span>
@@ -780,6 +881,7 @@
             <li>Refractometer, salt mix, heater, flow, rock, sand</li>
             <li>Test alkalinity, nitrate, phosphate, salinity</li>
           </ul>
+          <p><a href="../category/?cat=saltwater">Shop saltwater basics</a></p>
         </article>
         <article class="checklist-card">
           <span id="care-routines">Routine care</span>
@@ -789,6 +891,7 @@
             <li>Clean glass, remove debris, inspect equipment</li>
             <li>Rinse mechanical media in removed tank water</li>
           </ul>
+          <p><a href="../category/?cat=maintenance">Shop maintenance supplies</a></p>
         </article>
       </div>
       </div>
@@ -1025,6 +1128,17 @@
           </ul>
         </div>
       </article>
+    </section>
+
+    <section class="store-help" aria-labelledby="store-help-title">
+      <div>
+        <h2 id="store-help-title">Still not sure what is happening?</h2>
+        <p>Bring a fresh water sample, tank size, livestock list, recent test results, and clear photos of the tank or affected fish. That gives the store a much better starting point than guessing from one symptom.</p>
+      </div>
+      <div class="store-help__actions">
+        <a class="btn" href="../contact/">Plan a visit</a>
+        <a class="btn" href="../category/?cat=maintenance">Shop test kits</a>
+      </div>
     </section>
 
     <footer class="footer">
