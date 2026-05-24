@@ -1,6 +1,6 @@
 {
   "date": "2026-05-24",
-  "updatedAt": "2026-05-24T09:00:01.159257+00:00",
+  "updatedAt": "2026-05-24T10:00:01.689950+00:00",
   "items": [
     {
       "title": "Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-1.42.33-AM-1-150x150.png",
       "published": "2026-05-24T08:56:19+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T09:00:01.159257+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.7681
+      "score": 19.738
     },
     {
       "title": "DeepSeek made its 75% discount permanent. The AI price war just escalated.",
@@ -30,11 +30,11 @@
       "image": "https://media.thenextweb.com/2026/05/deepseek-v4-pro-75-percent-price-cut-permanent.avif",
       "published": "2026-05-24T07:48:42+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T09:00:01.159257+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.4143
+      "score": 17.3851
     },
     {
       "title": "NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule",
@@ -47,10 +47,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-12.26.27-AM-1-150x150.png",
       "published": "2026-05-24T07:42:09+00:00",
       "firstSeen": "2026-05-24T07:57:16.602234+00:00",
-      "lastSeen": "2026-05-24T09:00:01.159257+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9811
+      "score": 5.952
+    },
+    {
+      "title": "AI is killing the cheap smartphone. The memory that powers your phone now goes to data centres instead.",
+      "url": "https://thenextweb.com/news/ai-killing-cheap-smartphone-dram-memory-crisis",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "In 1985, the best computer a reasonably affluent American could buy was the IBM PC AT, which cost $19,400 in today’s money. Today, a Tecno Spark Go costs $30 in a Nairobi market stall and runs a processor billions of times faster. No other good in history has experienced a cost decline on that scale. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif",
+      "published": "2026-05-24T08:34:58+00:00",
+      "firstSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5075
+    },
+    {
+      "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
+      "url": "https://thenextweb.com/news/moment-78-million-citadel-quants-ai-trading-wealth-management",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Moment, the fintech company founded by a cohort of former Citadel Securities quantitative traders and researchers, has raised $78 million. The round was led by Index Ventures with participation from existing investors Andreessen Horowitz and Avra. The company last raised $36 million in July 2025. Moment builds infrastructure that allows wealth management firms to deploy [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
+      "published": "2026-05-24T09:02:04+00:00",
+      "firstSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5209
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -61,12 +93,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-24T09:00:10.740215+00:00",
+      "published": "2026-05-24T10:00:06.286434+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-24T09:00:01.159257+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "Stellantis wants to build Chinese EVs in Canada and Mexico. Just not in the US.",
+      "url": "https://thenextweb.com/news/stellantis-leapmotor-chinese-evs-mexico-canada-brampton",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Stellantis CEO Antonio Filosa said on Thursday that the company sees opportunity to produce and sell Chinese-branded vehicles in Mexico and potentially Canada. In the United States, the answer is different. “Now there is no space in the United States. We don’t see that,” Filosa said at a news conference following the company’s investor day [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/stellantis-leapmotor-chinese-evs-mexico-canada-brampton.avif",
+      "published": "2026-05-24T08:20:28+00:00",
+      "firstSeen": "2026-05-24T10:00:01.689950+00:00",
+      "lastSeen": "2026-05-24T10:00:01.689950+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1004
     }
   ],
   "errors": []
