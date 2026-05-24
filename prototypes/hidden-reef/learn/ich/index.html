@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Parasites and Ich Troubleshooter - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --line: rgba(116,205,235,0.2);
+      --orange: #ff7b32;
+      --purple: #9275ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(14,159,204,0.22), transparent 28%),
+        radial-gradient(circle at 86% 10%, rgba(141,108,255,0.14), transparent 30%),
+        linear-gradient(180deg, #03111d 0, #051827 300px, #020912 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(340px, 1.12fr);
+      gap: clamp(24px, 3vw, 36px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(141,108,255,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .hero > div { min-width: 0; }
+    .eyebrow,
+    .section-head span,
+    .step-card span,
+    .cause-card span,
+    .product-card span,
+    .type-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    .hero p,
+    .section-head p,
+    .step-card p,
+    .cause-card p,
+    .product-card p,
+    .type-card p,
+    .callout p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      display: grid;
+      gap: 10px;
+      align-content: stretch;
+      min-height: 310px;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid rgba(147,112,255,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 28px rgba(147,112,255,0.18);
+    }
+    .sick-fish-window {
+      position: relative;
+      min-height: 184px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(3,23,34,0.12) 48%, rgba(0,0,0,0.3)),
+        url("../../assets/learn/ich-parasites-gpt-image-2.jpg") center/cover no-repeat;
+    }
+    .sick-fish-window::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(105deg, rgba(255,255,255,0.18), transparent 18% 72%, rgba(255,255,255,0.08)),
+        linear-gradient(180deg, rgba(255,255,255,0.12), transparent 24%, rgba(0,0,0,0.2));
+      pointer-events: none;
+    }
+    .visual-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .visual-list li {
+      padding: 10px 11px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      color: #d9f5fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .visual-list strong { display: block; color: #fff; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .type-grid,
+    .step-grid,
+    .cause-grid,
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .type-card,
+    .step-card,
+    .cause-card,
+    .product-card,
+    .callout {
+      display: grid;
+      gap: 9px;
+      min-height: 168px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .type-card h3,
+    .step-card h3,
+    .callout h3,
+    .cause-card h3,
+    .product-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(0,167,183,0.42);
+      box-shadow: 0 0 18px rgba(64,217,255,0.22);
+      font-weight: 950;
+    }
+    .flow {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid rgba(147,112,255,0.28);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .flow-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .flow-row > div {
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      background: rgba(8,35,52,0.72);
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .flow-row strong { display: block; margin-bottom: 4px; color: #fff; }
+    .flow-row:first-child > div {
+      color: #fff;
+      background: rgba(0,167,183,0.28);
+      font-weight: 900;
+    }
+    .product-card a,
+    .callout a {
+      align-self: end;
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.42);
+      text-underline-offset: 4px;
+    }
+    .callout {
+      min-height: 0;
+      margin-top: 16px;
+      border-color: rgba(255,123,50,0.35);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.13), transparent 34%),
+        #071a27;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; }
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+      .flow-row { grid-template-columns: 1fr; }
+      .flow-row:first-child { display: none; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { padding: 24px 18px; }
+      .hero-visual { min-height: 0; padding: 12px; }
+      .visual-list,
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: 1fr; gap: 10px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .type-card,
+      .step-card,
+      .cause-card,
+      .product-card { min-height: 0; padding: 14px; }
+      .flow { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Learn</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs">
+      <a href="../">Learning Center</a>
+      <span>/</span>
+      <span>Parasites and Ich Troubleshooter</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Sick fish guide</span>
+        <h1>Parasites or Ich?</h1>
+        <p>White spots, flashing, clamped fins, heavy breathing, and scratching can come from parasites, stress, or water quality. Check the basics first, then choose treatment based on symptoms and livestock safety.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#diagnosis">Start diagnosis</a>
+          <a class="btn secondary" href="#do-today">What to do today</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Aquarium fish illness visual summary">
+        <div class="sick-fish-window" aria-hidden="true"></div>
+        <ul class="visual-list">
+          <li><strong>Salt-like spots</strong> Ich often looks like tiny white grains on fins or body.</li>
+          <li><strong>Flashing</strong> Scratching against decor can mean irritation, parasites, or poor water.</li>
+          <li><strong>Clamped fins</strong> A stress sign, not a diagnosis by itself.</li>
+          <li><strong>Heavy breathing</strong> Treat oxygen and water quality as urgent.</li>
+        </ul>
+      </figure>
+    </section>
+
+    <section id="do-today" aria-labelledby="today-title">
+      <div class="section-head">
+        <div>
+          <span>First response</span>
+          <h2 id="today-title">Do this before medicating the tank.</h2>
+        </div>
+        <p>The safest first move is to separate symptoms from water-quality emergencies.</p>
+      </div>
+      <div class="step-grid">
+        <article class="step-card">
+          <div class="step-number">1</div>
+          <span>Water test</span>
+          <h3>Check ammonia and nitrite first.</h3>
+          <p>Burned gills and poisoning can look like disease. Positive ammonia or nitrite changes the plan immediately.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">2</div>
+          <span>Oxygen</span>
+          <h3>Increase surface movement.</h3>
+          <p>Add aeration or aim flow at the surface if fish are breathing hard, crowding filters, or hanging near the top.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">3</div>
+          <span>Containment</span>
+          <h3>Consider a hospital tank.</h3>
+          <p>Medication is easier and safer in a bare treatment tank, especially with shrimp, snails, plants, coral, or live rock.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="types-title">
+      <div class="section-head">
+        <div>
+          <span>Visual clues</span>
+          <h2 id="types-title">Separate ich from look-alikes.</h2>
+        </div>
+        <p>The symptom pattern matters more than a single white mark.</p>
+      </div>
+      <div class="type-grid">
+        <article class="type-card">
+          <span>White spots</span>
+          <h3>Ich-like grains</h3>
+          <p>Multiple tiny white spots that look like salt grains, especially with scratching, are a classic ich warning.</p>
+        </article>
+        <article class="type-card">
+          <span>Velvet concern</span>
+          <h3>Fine dust or gold sheen</h3>
+          <p>A powdery coating with rapid breathing can be more urgent than ordinary ich. Ask for help quickly.</p>
+        </article>
+        <article class="type-card">
+          <span>External irritation</span>
+          <h3>Flashing and scratching</h3>
+          <p>Scratching can come from parasites, chlorine exposure, ammonia, pH swings, or debris irritating the gills.</p>
+        </article>
+        <article class="type-card">
+          <span>Stress signs</span>
+          <h3>Clamped fins or hiding</h3>
+          <p>These are warning signs, but they do not identify the disease. Combine them with tests and visible symptoms.</p>
+        </article>
+        <article class="type-card">
+          <span>Secondary infection</span>
+          <h3>Cloudy eyes or ragged fins</h3>
+          <p>Damage after parasites or poor water may need a different treatment path than ich alone.</p>
+        </article>
+        <article class="type-card">
+          <span>Emergency</span>
+          <h3>Gasping or sudden losses</h3>
+          <p>Treat this as urgent water quality, oxygen, temperature, toxin, or fast-moving parasite risk.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="diagnosis" aria-labelledby="diagnosis-title">
+      <div class="section-head">
+        <div>
+          <span>Decision flow</span>
+          <h2 id="diagnosis-title">Match symptoms before choosing treatment.</h2>
+        </div>
+        <p>Use this as a quick shop-floor flow before choosing medication.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-row">
+          <div>Question</div>
+          <div>Likely direction</div>
+          <div>Next action</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Are fish gasping or dying suddenly?</strong></div>
+          <div>That is urgent, even if spots are present.</div>
+          <div>Increase aeration and test ammonia, nitrite, pH, and temperature first.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Are there many tiny salt-like spots?</strong></div>
+          <div>Ich is possible when spots repeat across fins/body and fish scratch.</div>
+          <div>Move affected fish to treatment when possible and choose fish-safe medication.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is it dust, slime, cotton, wounds, or fin damage?</strong></div>
+          <div>Those can point away from basic ich.</div>
+          <div>Bring photos or video before mixing treatments.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Are invertebrates, plants, coral, or live rock present?</strong></div>
+          <div>Many medications are unsafe for them.</div>
+          <div>Use a hospital tank or ask the store before dosing the display.</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="causes-title">
+      <div class="section-head">
+        <div>
+          <span>Common causes</span>
+          <h2 id="causes-title">What usually starts the outbreak?</h2>
+        </div>
+        <p>Most sick-fish cases combine exposure, stress, and water conditions.</p>
+      </div>
+      <div class="cause-grid">
+        <article class="cause-card">
+          <span>New arrivals</span>
+          <h3>No quarantine period</h3>
+          <p>New fish can bring parasites before symptoms are obvious. Quarantine catches problems before the display is exposed.</p>
+        </article>
+        <article class="cause-card">
+          <span>Stress</span>
+          <h3>Weak immune response</h3>
+          <p>Shipping, bullying, temperature swings, and poor acclimation can make fish more vulnerable to parasites.</p>
+        </article>
+        <article class="cause-card">
+          <span>Water quality</span>
+          <h3>Ammonia, nitrite, or pH trouble</h3>
+          <p>Bad water can mimic disease and makes any real infection harder for fish to survive.</p>
+        </article>
+        <article class="cause-card">
+          <span>Temperature</span>
+          <h3>Unstable heat or chill</h3>
+          <p>Temperature swings stress fish and can change how quickly parasite life cycles move.</p>
+        </article>
+        <article class="cause-card">
+          <span>Compatibility</span>
+          <h3>Crowding and aggression</h3>
+          <p>Fish that are chased, nipped, or overcrowded often show illness first because they cannot recover between stress events.</p>
+        </article>
+        <article class="cause-card">
+          <span>Treatment mismatch</span>
+          <h3>Wrong medication or mixed dosing</h3>
+          <p>Guessing can delay the right fix and harm sensitive livestock. Identify the symptom pattern before dosing.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="products-title">
+      <div class="section-head">
+        <div>
+          <span>Helpful departments</span>
+          <h2 id="products-title">What the customer may need.</h2>
+        </div>
+        <p>Point toward diagnosis and safe treatment, not random medication stacking.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card">
+          <span>Testing</span>
+          <h3>Ammonia, nitrite, pH, and temperature</h3>
+          <p>These separate water emergencies from true disease and guide whether water changes come before medication.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+        <article class="product-card">
+          <span>Treatment tank</span>
+          <h3>Hospital tank basics</h3>
+          <p>A simple bare tank, heater, air-driven sponge filter, and cover make treatment cleaner and safer.</p>
+          <a href="../../category/?cat=aquariums">View aquariums</a>
+        </article>
+        <article class="product-card">
+          <span>Aeration</span>
+          <h3>Air pumps and surface movement</h3>
+          <p>Sick fish and medicated tanks often need extra oxygen support.</p>
+          <a href="../../category/?cat=filtration">View filtration</a>
+        </article>
+        <article class="product-card">
+          <span>Medication</span>
+          <h3>Ich and parasite treatments</h3>
+          <p>Choose medication based on freshwater, saltwater, reef safety, and livestock sensitivity.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+        <article class="product-card">
+          <span>UV support</span>
+          <h3>UV sterilizers</h3>
+          <p>UV can help reduce free-floating organisms when sized correctly, but it does not replace treatment.</p>
+          <a href="../../category/?cat=uv-clarifiers">View UV clarifiers</a>
+        </article>
+        <article class="product-card">
+          <span>Observation</span>
+          <h3>Nets, containers, and specimen cups</h3>
+          <p>Clear photos, short video, and careful isolation help the store identify the problem faster.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+      </div>
+      <div class="callout">
+        <h3>What to avoid</h3>
+        <p>Do not mix multiple medications, dose reef displays blindly, or treat before checking ammonia and nitrite. Remove carbon only when the medication instructions call for it, and keep oxygen high during treatment.</p>
+        <a href="../cloudy-water/">Compare with the cloudy water guide</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="../#troubleshooting">Troubleshooting</a><a href="../cloudy-water/">Cloudy water</a><a href="../algae/">Algae diagnosis</a><a href="#diagnosis">Ich diagnosis</a><a href="../#filtration-equipment">Filtration</a><a href="../#uv-sterilizer">UV sterilizers</a></div></div>
+        <div><h4>Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
