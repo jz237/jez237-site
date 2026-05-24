@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-24T15:00:02.072949+00:00",
+  "updatedAt": "2026-05-24T15:19:07.974284+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7952,6 +7952,10 @@
     "https://www.theverge.com/column/935545/hackers-ai-chatbots": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK414_AI_CVIRGINIA_I__0005_3.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
       "checkedAt": "2026-05-24T13:00:01.277430+00:00"
+    },
+    "https://techcrunch.com/2026/05/24/i-tried-amazons-bee-wearable-and-am-both-intrigued-and-slightly-creeped-out": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/17.png?resize=1200,750",
+      "checkedAt": "2026-05-24T15:19:07.974284+00:00"
     }
   }
 }
