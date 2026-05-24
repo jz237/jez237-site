@@ -286,6 +286,77 @@
       background: rgba(0,167,183,0.28);
       font-weight: 900;
     }
+    .infographic-panel {
+      overflow: hidden;
+      margin-top: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: #061a27;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-panel a {
+      display: block;
+    }
+    .infographic-panel img {
+      width: 100%;
+      display: block;
+    }
+    .infographic-panel figcaption {
+      padding: 10px 14px;
+      border-top: 1px solid rgba(116,205,235,0.16);
+      color: #b9d9e7;
+      font-size: 12px;
+      line-height: 1.45;
+      background: rgba(3,18,29,0.76);
+    }
+    .infographic-toggle {
+      margin-top: 16px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background: #061a27;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-toggle summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 54px;
+      padding: 14px 16px;
+      color: #fff;
+      cursor: pointer;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.1;
+      list-style: none;
+    }
+    .infographic-toggle summary::-webkit-details-marker { display: none; }
+    .infographic-toggle summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(116,205,235,0.34);
+      border-radius: 8px;
+      color: var(--aqua);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 24px;
+      line-height: 1;
+      background: rgba(0,167,183,0.12);
+    }
+    .infographic-toggle[open] summary::after {
+      content: "-";
+    }
+    .infographic-toggle .infographic-panel {
+      margin-top: 0;
+      border: 0;
+      border-top: 1px solid rgba(116,205,235,0.16);
+      border-radius: 0;
+      box-shadow: none;
+    }
     .product-card a,
     .callout a {
       align-self: end;
@@ -609,6 +680,15 @@
         <p>Do not dose algae treatments into tanks with shrimp, snails, coral, delicate plants, or stressed fish without checking compatibility. If livestock are gasping or ammonia/nitrite is present, treat it as a water-quality emergency first.</p>
         <a href="../cloudy-water/">Compare with the cloudy water guide</a>
       </div>
+      <details class="infographic-toggle">
+        <summary>Open the quick-reference algae chart</summary>
+        <figure class="infographic-panel">
+          <a href="../../assets/learn/algae-troubleshooter-chart.png">
+            <img src="../../assets/learn/algae-troubleshooter-chart.png" alt="Aquarium algae troubleshooter chart with quick diagnosis rows, common causes, helpful tools, and an important safety note" loading="lazy" />
+          </a>
+          <figcaption>Visual addendum: the algae troubleshooting guide condensed into a quick-reference chart. Select the image to open the full-size version.</figcaption>
+        </figure>
+      </details>
     </section>
 
     <footer class="footer">
