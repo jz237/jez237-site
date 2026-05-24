@@ -1,6 +1,6 @@
 {
   "date": "2026-05-24",
-  "updatedAt": "2026-05-24T22:08:47.147779+00:00",
+  "updatedAt": "2026-05-24T23:00:01.944544+00:00",
   "items": [
     {
       "title": "Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%",
@@ -13,11 +13,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-1.42.33-AM-1-150x150.png",
       "published": "2026-05-24T08:56:19+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.4322
+      "score": 19.4143
     },
     {
       "title": "DeepSeek made its 75% discount permanent. The AI price war just escalated.",
@@ -34,7 +34,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.0887
+      "score": 17.0714
     },
     {
       "title": "The US blacklisted Anthropic as a security threat. Its spy agencies are using Claude anyway.",
@@ -47,10 +47,26 @@
       "image": "https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif",
       "published": "2026-05-24T15:53:40+00:00",
       "firstSeen": "2026-05-24T17:00:01.475407+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9746
+      "score": 10.953
+    },
+    {
+      "title": "StepFun Releases StepAudio 2.5 Realtime: An End-to-End Voice Model with Roleplay-Specific RLHF and Paralinguistic Comprehension",
+      "url": "https://www.marktechpost.com/2026/05/24/stepfun-releases-stepaudio-2-5-realtime-an-end-to-end-voice-model-with-roleplay-specific-rlhf-and-paralinguistic-comprehension",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "StepFun, the Shanghai-based AI lab, released StepAudio 2.5 Realtime in May 2026 — an end-to-end real-time speech large language model with fully customizable persona capabilities. The model connects via a WebSocket API, supports Chinese and English, and ranked first across all five benchmark dimensions tested in April 2026, including an 80.41 human evaluation score and 82.18 on paralinguistic comprehension.\nThe post StepFun Releases StepAudio 2.5 Realtime: An End-to-End Voice Model with Roleplay-Specific RLHF and Paralinguistic Comprehension appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-3.50.40-PM-1-150x150.png",
+      "published": "2026-05-24T22:51:05+00:00",
+      "firstSeen": "2026-05-24T23:00:01.944544+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.8155
     },
     {
       "title": "The AI security gap nobody wants to admit is already here",
@@ -63,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-security-gap-claude-code-leak-.avif",
       "published": "2026-05-24T19:20:19+00:00",
       "firstSeen": "2026-05-24T21:00:01.935579+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0675
+      "score": 7.0436
     },
     {
       "title": "Mad House — Usborne Creepy Computer Games",
@@ -79,10 +95,10 @@
       "image": "https://static.simonwillison.net/static/2026/mad-house.jpg",
       "published": "2026-05-24T17:14:11+00:00",
       "firstSeen": "2026-05-24T21:00:01.935579+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1498
+      "score": 6.1273
     },
     {
       "title": "NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule",
@@ -95,10 +111,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-12.26.27-AM-1-150x150.png",
       "published": "2026-05-24T07:42:09+00:00",
       "firstSeen": "2026-05-24T07:57:16.602234+00:00",
-      "lastSeen": "2026-05-24T22:00:01.583723+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6565
+      "score": 5.6392
     },
     {
       "title": "AI is killing the cheap smartphone. The memory that powers your phone now goes to data centres instead.",
@@ -114,7 +130,7 @@
       "lastSeen": "2026-05-24T21:09:45.804777+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2047
+      "score": 4.187
     },
     {
       "title": "McKinsey built a free AI tool so candidates stop paying $500/hour interview coaches",
@@ -127,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/05/mckinsey-ai-interview-practice-tool-lilli-consulting.avif",
       "published": "2026-05-24T20:18:22+00:00",
       "firstSeen": "2026-05-24T22:00:01.583723+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8952
+      "score": 3.8707
     },
     {
       "title": "The Apple Watch is 11 years old and losing momentum. Screenless rivals are winning the next phase.",
@@ -143,10 +159,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-watch-losing-ground-whoop-oura-screenless-wearables.avif",
       "published": "2026-05-24T15:03:17+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.7533
+      "score": 3.7321
     },
     {
       "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
@@ -159,10 +175,10 @@
       "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
       "published": "2026-05-24T09:02:04+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2142
+      "score": 3.1963
     },
     {
       "title": "HP pushed a critical BIOS update through Windows Update. It bricked its most expensive laptops.",
@@ -175,33 +191,11 @@
       "image": "https://media.thenextweb.com/2026/05/hp-bios-update-bricking-premium-laptops-zbook-elitebook.avif",
       "published": "2026-05-24T16:48:16+00:00",
       "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
+      "lastSeen": "2026-05-24T23:00:01.944544+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0983
-    },
-    {
-      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-24T22:08:56.866310+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-24T22:08:47.147779+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 3.0761
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
