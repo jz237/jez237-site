@@ -15,7 +15,7 @@
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: #f7fbfd;
   border: 1px solid rgba(195,222,232,.72);
   box-shadow: 0 4px 14px rgba(0,0,0,.25);
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
@@ -41,7 +41,7 @@
   margin: 0;
   border: 0;
   border-radius: 0;
-  background: #fff;
+  background: #f7fbfd;
   box-shadow: none;
   display: flex;
   align-items: center;
@@ -150,7 +150,7 @@
   flex-direction: column;
   gap: 2px;
   margin-top: 0;
-  background: #fff;
+  background: #f7fbfd;
 }
 .thr-product .thr-price {
   display: inline-block;
