@@ -128,3 +128,11 @@ Good next implementation passes:
 - Replaced the generated decision infographic with a readable HTML/CSS shop-floor chart: quick diagnosis table, common causes, helpful tools, and safety note.
 - Article structure now includes: hero visual, visual water-clarity display, what to do today, decision-tree diagnosis flow, common causes, helpful departments, and urgent-help callout.
 - Learn Center Cloudy Water card now links to the dedicated guide instead of only the short first-step card.
+
+## Ammonia / Nitrite Guide Pass - 2026-05-24
+
+- Added `learn/ammonia-nitrite/` as a full emergency Troubleshooting article.
+- Added GPT Image 2 hero asset `assets/learn/ammonia-nitrite-spike-gpt-image-2.jpg`.
+- Added infographic asset `assets/learn/ammonia-nitrite-troubleshooter-chart.png`.
+- Article structure follows the established guide pattern: hero visual, first response, warning signs, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
+- Learn Center Ammonia or Nitrite Spike card now links to the dedicated guide instead of only the short first-step card.
