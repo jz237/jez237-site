@@ -174,7 +174,6 @@
       font-size: 13px;
     }
     .path-grid,
-    .quick-link-grid,
     .problem-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -184,7 +183,6 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .path-card,
-    .quick-link,
     .problem-card,
     .checklist-card {
       display: grid;
@@ -199,7 +197,6 @@
       box-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
     .path-card span,
-    .quick-link span,
     .problem-card span,
     .checklist-card span {
       color: var(--aqua);
@@ -209,7 +206,6 @@
       text-transform: uppercase;
     }
     .path-card h3,
-    .quick-link h3,
     .problem-card h3,
     .checklist-card h3 {
       margin: 0;
@@ -219,7 +215,6 @@
       line-height: 1.05;
     }
     .path-card p,
-    .quick-link p,
     .problem-card p,
     .checklist-card p {
       margin: 0;
@@ -228,7 +223,6 @@
       line-height: 1.45;
     }
     .path-card a,
-    .quick-link a,
     .problem-card a {
       align-self: end;
       color: #dff8ff;
@@ -250,24 +244,6 @@
         radial-gradient(circle at 100% 0%, rgba(141,108,255,0.14), transparent 34%),
         linear-gradient(180deg, #071f32 0%, #041827 100%);
       box-shadow: 0 18px 44px rgba(0,0,0,0.24);
-    }
-    .quick-link {
-      min-height: 142px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.13), transparent 38%),
-        #071f32;
-    }
-    .quick-link h3 {
-      font-size: 22px;
-    }
-    .quick-link.is-urgent {
-      border-color: rgba(255,123,50,0.48);
-      background:
-        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.16), transparent 38%),
-        #071f32;
-    }
-    .quick-link.is-urgent span {
-      color: #ffb38a;
     }
     .store-help {
       display: grid;
@@ -583,7 +559,6 @@
       .diagram,
       .triage-panel { grid-template-columns: 1fr; }
       .guide-grid,
-      .quick-link-grid,
       .problem-grid,
       .checklist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -602,12 +577,10 @@
       .section-head { display: block; }
       .section-head p { margin-top: 6px; }
       .path-grid,
-      .quick-link-grid,
       .problem-grid,
       .guide-grid,
       .checklist-grid { grid-template-columns: 1fr; gap: 10px; }
       .path-card,
-      .quick-link,
       .problem-card,
       .checklist-card { min-height: 0; padding: 14px; }
       .triage-panel { padding: 14px; }
@@ -659,39 +632,6 @@
         <strong>Ask the right question first</strong>
         <p>Are you starting a tank, fixing a problem, choosing gear, or building a better routine? Start with what you are trying to do today.</p>
       </aside>
-    </section>
-
-    <section aria-labelledby="quick-title">
-      <div class="section-head">
-        <h2 id="quick-title">Most-Used Help</h2>
-        <p>Jump straight to the guide that matches what is happening now.</p>
-      </div>
-      <div class="quick-link-grid">
-        <article class="quick-link is-urgent">
-          <span>Emergency</span>
-          <h3>Fish gasping?</h3>
-          <p>Add oxygen and check water quality before adding medication.</p>
-          <a href="fish-gasping/">Open emergency guide</a>
-        </article>
-        <article class="quick-link is-urgent">
-          <span>Bad test result</span>
-          <h3>Ammonia or nitrite?</h3>
-          <p>Protect livestock and preserve the biological filter.</p>
-          <a href="ammonia-nitrite/">Open spike guide</a>
-        </article>
-        <article class="quick-link">
-          <span>Cloudiness</span>
-          <h3>Milky or green water?</h3>
-          <p>Match the type of cloud before buying a quick fix.</p>
-          <a href="cloudy-water/">Open cloudy water guide</a>
-        </article>
-        <article class="quick-link">
-          <span>Growth</span>
-          <h3>Algae taking over?</h3>
-          <p>Check light, nutrients, flow, cleanup crew, and maintenance habits.</p>
-          <a href="algae/">Open algae guide</a>
-        </article>
-      </div>
     </section>
 
     <section aria-labelledby="paths-title">
