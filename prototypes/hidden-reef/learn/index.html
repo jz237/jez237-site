@@ -531,7 +531,9 @@
     .checklist-card,
     .guide-card {
       border-color: rgba(180,213,219,0.16);
-      background: rgba(7,21,30,0.74);
+      background:
+        linear-gradient(180deg, rgba(15,44,61,0.72), rgba(4,16,26,0.88)),
+        #06141d;
     }
     .path-card {
       border-top: 4px solid #40d9ff;
@@ -557,53 +559,22 @@
         linear-gradient(180deg, rgba(114,211,137,0.1), rgba(7,21,30,0.72) 42%),
         #061712;
     }
-    .problem-card {
-      border-top: 4px solid #ff7b32;
-      background:
-        linear-gradient(180deg, rgba(255,123,50,0.1), rgba(22,15,10,0.72) 42%),
-        #130f0b;
-    }
-    .problem-card:nth-child(2n) {
-      border-top-color: #72d389;
-      background:
-        linear-gradient(180deg, rgba(114,211,137,0.1), rgba(7,21,30,0.72) 42%),
-        #061712;
-    }
-    .problem-card:nth-child(3n) {
-      border-top-color: #a489ff;
-      background:
-        linear-gradient(180deg, rgba(164,137,255,0.1), rgba(12,16,29,0.76) 42%),
-        #090f1e;
-    }
-    .checklist-card {
-      border-top: 4px solid #40d9ff;
-      background:
-        linear-gradient(180deg, rgba(64,217,255,0.08), rgba(7,21,30,0.74) 42%),
-        #06141d;
-    }
-    .checklist-card:nth-child(2n) {
-      border-top-color: #72d389;
-      background:
-        linear-gradient(180deg, rgba(114,211,137,0.09), rgba(7,21,30,0.72) 42%),
-        #061712;
-    }
-    .checklist-card:nth-child(3n) {
-      border-top-color: #ffb45c;
-      background:
-        linear-gradient(180deg, rgba(255,180,92,0.1), rgba(22,18,12,0.72) 42%),
-        #11110c;
-    }
+    .problem-card,
+    .checklist-card,
     .guide-card {
-      border-top: 4px solid #a489ff;
+      position: relative;
+      border-top: 0;
+      border-left: 4px solid var(--section-accent, var(--aqua));
       background:
-        linear-gradient(180deg, rgba(164,137,255,0.1), rgba(12,16,29,0.76) 42%),
-        #090f1e;
+        linear-gradient(90deg, var(--section-card-wash, rgba(64,217,255,0.09)), transparent 42%),
+        linear-gradient(180deg, rgba(9,30,44,0.9), rgba(4,15,24,0.92));
     }
-    .guide-card:nth-child(2n) {
-      border-top-color: #40d9ff;
-      background:
-        linear-gradient(180deg, rgba(64,217,255,0.08), rgba(7,21,30,0.74) 42%),
-        #06141d;
+    .problem-card span,
+    .checklist-card span,
+    .guide-card span {
+      color: #dff8ff;
+      border-color: var(--section-chip-border, rgba(116,205,235,0.28));
+      background: var(--section-chip-bg, rgba(1,12,20,0.82));
     }
     .path-card p,
     .problem-card p,
@@ -614,9 +585,13 @@
       color: #c9d9d7;
     }
     .learn-disclosure {
+      --section-accent: #ff7b32;
+      --section-card-wash: rgba(255,123,50,0.09);
+      --section-chip-border: rgba(255,123,50,0.34);
+      --section-chip-bg: rgba(83,34,17,0.48);
       position: relative;
       overflow: hidden;
-      border-left: 6px solid #ff7b32;
+      border-left: 6px solid var(--section-accent);
       background:
         linear-gradient(90deg, rgba(255,123,50,0.1), transparent 36%),
         rgba(20,12,8,0.58);
@@ -645,7 +620,11 @@
       padding-top: 16px;
     }
     #starter-checklists {
-      border-left-color: #72d389;
+      --section-accent: #72d389;
+      --section-card-wash: rgba(114,211,137,0.08);
+      --section-chip-border: rgba(114,211,137,0.34);
+      --section-chip-bg: rgba(19,72,43,0.44);
+      border-left-color: var(--section-accent);
       background:
         linear-gradient(90deg, rgba(114,211,137,0.09), transparent 36%),
         rgba(5,17,13,0.62);
@@ -657,7 +636,11 @@
       background: #72d389;
     }
     #filtration-equipment {
-      border-left-color: #a489ff;
+      --section-accent: #a489ff;
+      --section-card-wash: rgba(164,137,255,0.09);
+      --section-chip-border: rgba(164,137,255,0.36);
+      --section-chip-bg: rgba(51,42,99,0.44);
+      border-left-color: var(--section-accent);
       background:
         linear-gradient(90deg, rgba(164,137,255,0.1), transparent 36%),
         rgba(10,9,25,0.62);
