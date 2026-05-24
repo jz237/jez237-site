@@ -125,8 +125,8 @@ Good next implementation passes:
 - Added `learn/cloudy-water/` as the first full Troubleshooting article.
 - Added GPT Image 2 visual asset `assets/learn/cloudy-water-gpt-image-2.png`.
 - Refined the visual section so the four diagnosis cards use realistic crops from the main aquarium image instead of abstract CSS placeholders.
-- Replaced the generated decision infographic with a readable HTML/CSS shop-floor chart: quick diagnosis table, common causes, helpful tools, and safety note.
-- Article structure now includes: hero visual, visual water-clarity display, what to do today, decision-tree diagnosis flow, common causes, helpful departments, and urgent-help callout.
+- Replaced the generated decision infographic with a readable HTML/CSS customer chart: quick diagnosis table, common causes, helpful tools, and safety note.
+- Article structure now includes: hero visual, visual water-clarity display, what to do today, what-to-check-next guidance, common causes, helpful departments, and urgent-help callout.
 - Learn Center Cloudy Water card now links to the dedicated guide instead of only the short first-step card.
 
 ## Ammonia / Nitrite Guide Pass - 2026-05-24
@@ -134,7 +134,7 @@ Good next implementation passes:
 - Added `learn/ammonia-nitrite/` as a full emergency Troubleshooting article.
 - Added GPT Image 2 hero asset `assets/learn/ammonia-nitrite-spike-gpt-image-2.jpg`.
 - Added infographic asset `assets/learn/ammonia-nitrite-troubleshooter-chart.png`.
-- Article structure follows the established guide pattern: hero visual, first response, warning signs, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
+- Article structure follows the established guide pattern: hero visual, first response, warning signs, what-to-check-next guidance, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
 - Learn Center Ammonia or Nitrite Spike card now links to the dedicated guide instead of only the short first-step card.
 
 ## Fish Gasping Guide Pass - 2026-05-24
@@ -142,7 +142,7 @@ Good next implementation passes:
 - Added `learn/fish-gasping/` as a full emergency Troubleshooting article.
 - Added GPT Image 2 hero asset `assets/learn/fish-gasping-surface-gpt-image-2.jpg`.
 - Added infographic asset `assets/learn/fish-gasping-troubleshooter-chart.png`.
-- Article structure follows the established guide pattern: hero visual, first response, warning signs, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
+- Article structure follows the established guide pattern: hero visual, first response, warning signs, what-to-check-next guidance, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
 - Learn Center Fish Gasping at Surface card now links to the dedicated guide instead of only the short first-step card.
 
 ## Coral Not Opening Guide Pass - 2026-05-24
@@ -150,5 +150,5 @@ Good next implementation passes:
 - Added `learn/coral-not-opening/` as a full reef Troubleshooting article.
 - Uses existing reef imagery from `assets/department/saltwater-reef.jpg` for the hero visual.
 - Added infographic asset `assets/learn/coral-not-opening-troubleshooter-chart.png`.
-- Article structure follows the established guide pattern: hero visual, first response, visual clues, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
+- Article structure follows the established guide pattern: hero visual, first response, visual clues, what-to-check-next guidance, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
 - Learn Center Coral Not Opening card and first-step checklist now link to the dedicated guide instead of only the short first-step anchor.
