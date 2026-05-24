@@ -45,6 +45,7 @@
     select.control, input.control { outline: none; }
     button.control { cursor: pointer; color: var(--text); }
     main { padding: 12px 22px 70px; }
+    .load-more-row { display: flex; justify-content: center; margin: 30px 0 0; }
     .day-group { margin-top: 28px; }
     .day-heading {
       display: flex;
@@ -136,12 +137,14 @@
     <div class="controls" aria-label="Gallery controls">
       <input class="control" id="search" type="search" placeholder="Search prompts…">
       <select class="control" id="date-filter"><option value="all">All dates</option></select>
-      <button class="control" id="load-more" type="button">Load more</button>
     </div>
   </header>
 
   <main>
     <div id="gallery" class="archive" aria-live="polite"></div>
+    <div class="load-more-row" id="load-more-row">
+      <button class="control" id="load-more" type="button">Load more</button>
+    </div>
   </main>
 
   <footer>
@@ -164,6 +167,7 @@
       const search = document.getElementById('search');
       const dateFilter = document.getElementById('date-filter');
       const loadMore = document.getElementById('load-more');
+      const loadMoreRow = document.getElementById('load-more-row');
       const pageSize = 12;
       let allItems = [];
       let visibleCount = pageSize;
@@ -190,7 +194,7 @@
         const items = filteredItems();
         const shown = items.slice(0, visibleCount);
         countPill.textContent = `Images: ${allItems.length}`;
-        loadMore.hidden = visibleCount >= items.length;
+        loadMoreRow.hidden = visibleCount >= items.length;
         if (!shown.length) {
           gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
           return;
