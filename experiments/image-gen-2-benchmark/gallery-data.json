@@ -778,5 +778,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-24-morning-glasshouse-thunder-lichen",
+    "title": "Glasshouse Thunder Lichen",
+    "tests": "Fictional-specimen lane: tests a wet botanical press plate format with translucent invented storm lichen, glass shards, condensation, lab bench materials, and restrained natural-history documentation instead of creature concept art.",
+    "prompt": "Title: Glasshouse Thunder Lichen\nLane/category: fictional-specimen\n\nCreate a square 1024x1024 fictional natural-history specimen image that looks like a real wet botanical press plate photographed on a lab bench, not glossy AI concept art and not a cinematic scene. The subject is an invented organism called Glasshouse Thunder Lichen: several translucent, branching lichen fronds that seem to have grown on cracked greenhouse glass after lightning storms. Visual format: top-down specimen documentation, with two clear glass shards, damp blotter paper, tiny brass clips, condensation beads, faint graphite scale marks, and three small sample vials with cloudy blue-green residue. The lichen should have believable biology: pale sea-glass membranes, dark rootlike filaments, peppery copper spore dots, and faint internal branching veins that look electric without becoming neon fantasy magic. Composition: spare, archival, tactile, asymmetrical, with lots of off-white wet paper texture and a few cool gray shadows. Palette: milky glass, storm green, tarnished copper, slate pencil, very pale yellowed lab paper. Include only minimal plausible labels or numbers if any; no logos, no copyrighted characters, no dancing, no performers, no dramatic fantasy lighting, no polished 3D render.",
+    "image": "images/2026-05-24-morning-glasshouse-thunder-lichen.png",
+    "date": "2026-05-24",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
