@@ -790,5 +790,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-24-midday-magnetic-soup-weather-window",
+    "title": "Magnetic Soup Weather Window",
+    "tests": "Wild-experiment lane: tests a kitchen-lab macro format where magnetic particles and soup-like materials become a weather map, emphasizing tactile domestic apparatus and physical optical texture rather than normal scene depiction.",
+    "prompt": "Title: Magnetic Soup Weather Window\nLane/category: wild-experiment\n\nCreate a square 1024x1024 experimental image that looks like a laboratory photograph of an impossible cooking-and-weather apparatus, not a poster, not a landscape, and not glossy AI concept art. The image is a close top-down/three-quarter view of a shallow enamel soup pan filled with opaque milk-white broth, black iron filings, saffron oil droplets, floating glass thermometers, tiny ceramic weather vanes, and translucent gel cubes. A hidden magnet beneath the pan pulls the iron filings into miniature storm fronts, contour lines, whirlpools, and cloud-like filaments across the liquid surface, so the soup appears to be quietly forecasting weather.\n\nVisual format: tactile kitchen-lab experiment documentation. The pan sits on a scratched zinc countertop with one clipped blank index card, a cracked porcelain spoon, condensation rings, stray salt crystals, and two brass calibration weights. Include no readable text; any card marks should be blank or illegible ticks. The pan should dominate the composition, with the liquid surface as the main visual event.\n\nComposition and material language: square frame, shallow oblique angle, crisp macro detail, strong negative space around the pan rim, believable liquid meniscus, oil iridescence, iron particles, enamel chips, zinc scratches, steam beads, glass refraction, ceramic glaze, and soft lab-window light. Palette: milk white, iron black, faded cobalt enamel, saffron orange oil, pale mint gel, tarnished brass, cool gray zinc. Mood: quiet, peculiar, forensic, domestic, slightly uncanny.\n\nConstraints: no readable text, no logos, no copyrighted characters, no people, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no stage performance, no watermark, no signature.",
+    "image": "images/2026-05-24-midday-magnetic-soup-weather-window.png",
+    "date": "2026-05-24",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
