@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-24T18:00:01.241008+00:00",
+  "updatedAt": "2026-05-24T19:00:02.076741+00:00",
   "items": [
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -10,12 +10,28 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-24T18:00:16.398338+00:00",
+      "published": "2026-05-24T19:00:22.841782+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "Quoting Armin Ronacher",
+      "url": "https://simonwillison.net/2026/May/24/armin-ronacher",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The most frustrating failure mode right now is that people submit issues that are not in their own voice. They contain an observed problem somewhere, but it has been thrown into a clanker and the clanker reworded it and made a huge mess of it. Typically, it was prompted so badly that the conclusions produced are more often than not inaccurate but always full of confidence. The result is complete guesswork on root causes, fake-minimal repros, suggested implementation strategies, analogies to adjacent but often the wrong code, and long lists of error classes that might or might not matter. [...]",
+      "image": "",
+      "published": "2026-05-24T18:46:53+00:00",
+      "firstSeen": "2026-05-24T19:00:02.076741+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2833
     },
     {
       "title": "The SEO conference circuit in 2026 is one long argument about what comes next",
@@ -28,10 +44,10 @@
       "image": "https://media.thenextweb.com/2026/05/seo-conferences-2026-mozcon-ahrefs-evolve-brightonseo-spotlight-smx.avif",
       "published": "2026-05-24T16:58:43+00:00",
       "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1192
+      "score": 2.0899
     },
     {
       "title": "HP pushed a critical BIOS update through Windows Update. It bricked its most expensive laptops.",
@@ -44,10 +60,10 @@
       "image": "https://media.thenextweb.com/2026/05/hp-bios-update-bricking-premium-laptops-zbook-elitebook.avif",
       "published": "2026-05-24T16:48:16+00:00",
       "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2141
+      "score": 3.1849
     },
     {
       "title": "Two Amazon data centres in the UAE were hit by drones. The Gulf’s AI ambitions are being tested.",
@@ -60,10 +76,10 @@
       "image": "https://media.thenextweb.com/2026/05/middle-east-war-gulf-ai-data-centres-energy-risk.avif",
       "published": "2026-05-24T16:19:01+00:00",
       "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0997
+      "score": 2.071
     },
     {
       "title": "The US blacklisted Anthropic as a security threat. Its spy agencies are using Claude anyway.",
@@ -76,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/us-government-chip-shortage-anthropic-nsa-9-billion.avif",
       "published": "2026-05-24T15:53:40+00:00",
       "firstSeen": "2026-05-24T17:00:01.475407+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0875
+      "score": 11.0591
     },
     {
       "title": "This Zurich startup built a four-armed robot for space stations. Each astronaut hour it saves is worth $140,000.",
@@ -92,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/orbit-robotics-helios-four-armed-space-robot.avif",
       "published": "2026-05-24T15:22:16+00:00",
       "firstSeen": "2026-05-24T17:00:01.475407+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0725
+      "score": 2.0445
     },
     {
       "title": "The Apple Watch is 11 years old and losing momentum. Screenless rivals are winning the next phase.",
@@ -108,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-watch-losing-ground-whoop-oura-screenless-wearables.avif",
       "published": "2026-05-24T15:03:17+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8636
+      "score": 3.8358
     },
     {
       "title": "I tried Amazon’s Bee wearable and am both intrigued and slightly creeped out",
@@ -124,10 +140,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/17.png?resize=1200%2C750",
       "published": "2026-05-24T15:00:00+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.1743
     },
     {
       "title": "India’s SolarSquare is raising $60M at a $500M valuation. It has powered 50,000 homes.",
@@ -140,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/solarsquare-series-c-60-million-india-rooftop-solar.avif",
       "published": "2026-05-24T14:48:57+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7569
+      "score": 2.7293
     },
     {
       "title": "Hackers are learning to exploit chatbot &#8216;personalities&#8217;",
@@ -156,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK414_AI_CVIRGINIA_I__0005_3.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-24T12:00:00+00:00",
       "firstSeen": "2026-05-24T13:00:01.277430+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1911
+      "score": 2.1656
     },
     {
       "title": "These Robots Are Making Meals for a Nonprofit in San Francisco’s Tenderloin",
@@ -172,10 +188,10 @@
       "image": "https://media.wired.com/photos/6a10ce314007cbd416b6e106/master/pass/Robot-Meals-Gear-Chef+-robot-(1).jpg",
       "published": "2026-05-24T10:30:00+00:00",
       "firstSeen": "2026-05-24T11:00:01.114620+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0831
+      "score": 2.0586
     },
     {
       "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
@@ -188,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
       "published": "2026-05-24T09:02:04+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3075
+      "score": 3.284
     },
     {
       "title": "Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%",
@@ -204,11 +220,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-1.42.33-AM-1-150x150.png",
       "published": "2026-05-24T08:56:19+00:00",
       "firstSeen": "2026-05-24T09:00:01.159257+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.5252
+      "score": 19.5018
     },
     {
       "title": "AI is killing the cheap smartphone. The memory that powers your phone now goes to data centres instead.",
@@ -221,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif",
       "published": "2026-05-24T08:34:58+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2968
+      "score": 4.2736
     },
     {
       "title": "Stellantis wants to build Chinese EVs in Canada and Mexico. Just not in the US.",
@@ -237,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/05/stellantis-leapmotor-chinese-evs-mexico-canada-brampton.avif",
       "published": "2026-05-24T08:20:28+00:00",
       "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8911
+      "score": 1.8681
     },
     {
       "title": "DeepSeek made its 75% discount permanent. The AI price war just escalated.",
@@ -257,7 +273,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.1789
+      "score": 17.1561
     },
     {
       "title": "NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule",
@@ -270,10 +286,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-12.26.27-AM-1-150x150.png",
       "published": "2026-05-24T07:42:09+00:00",
       "firstSeen": "2026-05-24T07:57:16.602234+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7463
+      "score": 5.7237
     },
     {
       "title": "On the <dl>",
@@ -286,10 +302,10 @@
       "image": "",
       "published": "2026-05-23T20:24:48+00:00",
       "firstSeen": "2026-05-23T21:00:01.734077+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7939
+      "score": 1.7774
     },
     {
       "title": "Tencent Open-Sources TencentDB Agent Memory: A 4-Tier Local Memory Pipeline for AI Agents",
@@ -302,11 +318,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-43.png",
       "published": "2026-05-23T19:31:12+00:00",
       "firstSeen": "2026-05-23T19:35:12.677947+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4591
+      "score": 14.443
     },
     {
       "title": "Build a SuperClaude Framework Workflow with Commands, Agents, Modes, and Session Memory",
@@ -319,10 +335,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-42-1024x731.png",
       "published": "2026-05-23T19:05:33+00:00",
       "firstSeen": "2026-05-23T19:35:12.677947+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.5022
+      "score": 13.4862
     },
     {
       "title": "Ferrari is using IBM’s AI to create F1 superfans",
@@ -335,10 +351,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/01-bxd-ferrari-xg-photography-v2.jpg?resize=1200%2C959",
       "published": "2026-05-23T15:08:00+00:00",
       "firstSeen": "2026-05-23T15:16:14.046173+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7115
+      "score": 1.6972
     },
     {
       "title": "SpaceX’s IPO filing reveals Musk’s clean energy contradiction. xAI burns gas while Tesla sells solar.",
@@ -354,7 +370,7 @@
       "lastSeen": "2026-05-24T17:13:50.179105+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9682
+      "score": 5.954
     },
     {
       "title": "Anthropic’s Claude Mythos found 10,000 critical vulnerabilities in one month. The patches can’t keep up.",
@@ -370,7 +386,7 @@
       "lastSeen": "2026-05-24T17:13:50.179105+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5621
+      "score": 10.548
     },
     {
       "title": "Berlin’s Peec AI more than doubled revenue to $10M ARR in six months. Its product helps brands show up in ChatGPT.",
@@ -386,7 +402,7 @@
       "lastSeen": "2026-05-24T15:19:07.974284+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0447
+      "score": 10.0311
     },
     {
       "title": "Elon Musk has given up on solar power (on Earth)",
@@ -399,10 +415,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/elon-musk-world-economic-forum1.jpg?resize=1200%2C800",
       "published": "2026-05-23T13:00:00+00:00",
       "firstSeen": "2026-05-23T14:00:01.219606+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7815
+      "score": 4.7681
     },
     {
       "title": "Google’s new anything-to-anything AI model is wild",
@@ -415,10 +431,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/ai-label-19.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-23T11:00:00+00:00",
       "firstSeen": "2026-05-23T12:00:02.113776+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.725
+      "score": 5.7122
     },
     {
       "title": "South Korea’s deputy PM says AI wealth must benefit the public. The Samsung strike showed why.",
@@ -434,7 +450,7 @@
       "lastSeen": "2026-05-24T15:19:07.974284+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5135
+      "score": 1.5008
     },
     {
       "title": "Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification",
@@ -447,10 +463,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-2.48.09-AM-150x150.png",
       "published": "2026-05-23T10:32:09+00:00",
       "firstSeen": "2026-05-23T11:00:01.386318+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.429
+      "score": 6.4164
     },
     {
       "title": "SEO teams are tracking keywords. But are they tracking what ChatGPT says about their brand?",
@@ -466,7 +482,7 @@
       "lastSeen": "2026-05-24T15:00:02.072949+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9088
+      "score": 8.8962
     },
     {
       "title": "Tesla finally launched FSD in China. Its rivals have been selling self-driving cars there for years.",
@@ -483,7 +499,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 10.5055
+      "score": 10.493
     },
     {
       "title": "SpaceX launched Starship V3 three weeks before its IPO. The booster exploded.",
@@ -499,7 +515,7 @@
       "lastSeen": "2026-05-24T09:00:01.159257+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9014
+      "score": 2.889
     },
     {
       "title": "Corsair is now using Chinese DRAM in its DDR5 kits. Memory prices could finally drop.",
@@ -515,7 +531,7 @@
       "lastSeen": "2026-05-24T09:00:01.159257+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8975
+      "score": 3.8852
     },
     {
       "title": "Waymo’s robotaxis keep driving into floods. The software patch didn’t work. Five cities are now shut down.",
@@ -531,7 +547,7 @@
       "lastSeen": "2026-05-24T09:00:01.159257+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4918
+      "score": 1.4797
     },
     {
       "title": "Xiaomi’s CEO admitted his SUV wasn’t cheap enough to beat Tesla. Then he launched one that is.",
@@ -547,7 +563,7 @@
       "lastSeen": "2026-05-24T07:57:16.602234+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1831
+      "score": 2.1712
     },
     {
       "title": "Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints",
@@ -560,11 +576,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-23-at-1.20.14-AM-1-150x150.png",
       "published": "2026-05-23T08:17:27+00:00",
       "firstSeen": "2026-05-23T09:00:01.319082+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.7513
+      "score": 13.7394
     },
     {
       "title": "Towards Speed-of-Light Text Generation with Nemotron-Labs Diffusion Language Models",
@@ -577,10 +593,10 @@
       "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/nemotron-labs-diffusion.png",
       "published": "2026-05-23T00:02:03+00:00",
       "firstSeen": "2026-05-23T01:00:01.633230+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6729
+      "score": 1.6635
     },
     {
       "title": "AI is being used to resurrect the voices of dead pilots",
@@ -593,10 +609,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/UPS-crash-flight-kentucky-Getty.jpg?resize=1200%2C800",
       "published": "2026-05-22T23:03:33+00:00",
       "firstSeen": "2026-05-22T23:17:35.435774+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5237
+      "score": 1.5146
     },
     {
       "title": "The memory shortage is causing a repricing of consumer electronics",
@@ -609,10 +625,10 @@
       "image": "",
       "published": "2026-05-22T22:01:31+00:00",
       "firstSeen": "2026-05-22T23:00:01.804700+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2143
+      "score": 4.2054
     },
     {
       "title": "Google goes for the glitter with disco-ball icons: ‘Are y’all sure you still want this?’",
@@ -625,26 +641,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-2.46.43-PM.jpg?resize=1200%2C965",
       "published": "2026-05-22T21:02:36+00:00",
       "firstSeen": "2026-05-22T21:21:44.683077+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.9055
-    },
-    {
-      "title": "How VCs and founders use inflated ‘ARR’ to crown AI startups",
-      "url": "https://techcrunch.com/2026/05/22/how-vcs-and-founders-use-inflated-arr-to-kingmake-ai-startups",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Some AI startups are stretching traditional revenue metrics when talking about progress publicly. And their investors are fully aware.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Pinocchio-ARR-nose2.png?resize=1200%2C800",
-      "published": "2026-05-22T20:40:48+00:00",
-      "firstSeen": "2026-05-22T21:00:01.239558+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5024
+      "score": 2.8969
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -657,10 +657,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1501
+      "score": 1.1493
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -673,10 +673,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.8887
+      "score": -1.8893
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -689,7 +689,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1203
@@ -705,7 +705,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-24T18:00:01.241008+00:00",
+      "lastSeen": "2026-05-24T19:00:02.076741+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5902
