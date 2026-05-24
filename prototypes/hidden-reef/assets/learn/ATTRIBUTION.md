@@ -10,3 +10,5 @@ assets, not photos from The Hidden Reef:
 - cloudy-water-troubleshooter-chart.png - user-provided chart-style cloudy water troubleshooter reference image used as a visual addendum.
 - ich-parasites-gpt-image-2.jpg - sick fish and parasite troubleshooting hero image showing visible ich-like spots, ragged fins, clamped fins, and filter-hugging behavior.
 - ich-parasite-troubleshooter-chart.png - sick fish and parasite troubleshooting infographic used as a visual addendum.
+- ammonia-nitrite-spike-gpt-image-2.jpg - ammonia and nitrite spike emergency hero image showing fish near surface flow, subtle haze, and water testing vials.
+- ammonia-nitrite-troubleshooter-chart.png - ammonia and nitrite spike emergency infographic used as a visual addendum.

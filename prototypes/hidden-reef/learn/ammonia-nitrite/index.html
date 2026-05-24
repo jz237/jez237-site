@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ammonia or Nitrite Spike - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --line: rgba(116,205,235,0.2);
+      --orange: #ff7b32;
+      --purple: #9275ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(14,159,204,0.22), transparent 28%),
+        radial-gradient(circle at 86% 10%, rgba(141,108,255,0.14), transparent 30%),
+        linear-gradient(180deg, #03111d 0, #051827 300px, #020912 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(340px, 1.12fr);
+      gap: clamp(24px, 3vw, 36px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(141,108,255,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .hero > div { min-width: 0; }
+    .eyebrow,
+    .section-head span,
+    .step-card span,
+    .cause-card span,
+    .product-card span,
+    .type-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    .hero p,
+    .section-head p,
+    .step-card p,
+    .cause-card p,
+    .product-card p,
+    .type-card p,
+    .callout p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      display: grid;
+      gap: 10px;
+      align-content: stretch;
+      min-height: 310px;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid rgba(147,112,255,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 28px rgba(147,112,255,0.18);
+    }
+    .sick-fish-window {
+      position: relative;
+      min-height: 184px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(3,23,34,0.12) 48%, rgba(0,0,0,0.3)),
+        url("../../assets/learn/ammonia-nitrite-spike-gpt-image-2.jpg") center/cover no-repeat;
+    }
+    .sick-fish-window::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(105deg, rgba(255,255,255,0.18), transparent 18% 72%, rgba(255,255,255,0.08)),
+        linear-gradient(180deg, rgba(255,255,255,0.12), transparent 24%, rgba(0,0,0,0.2));
+      pointer-events: none;
+    }
+    .visual-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .visual-list li {
+      padding: 10px 11px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      color: #d9f5fc;
+      background: rgba(8,35,52,0.72);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .visual-list strong { display: block; color: #fff; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .type-grid,
+    .step-grid,
+    .cause-grid,
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .type-card,
+    .step-card,
+    .cause-card,
+    .product-card,
+    .callout {
+      display: grid;
+      gap: 9px;
+      min-height: 168px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    }
+    .type-card h3,
+    .step-card h3,
+    .callout h3,
+    .cause-card h3,
+    .product-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(0,167,183,0.42);
+      box-shadow: 0 0 18px rgba(64,217,255,0.22);
+      font-weight: 950;
+    }
+    .flow {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid rgba(147,112,255,0.28);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-panel {
+      overflow: hidden;
+      margin-top: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: #061a27;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-panel a {
+      display: block;
+    }
+    .infographic-panel img {
+      width: 100%;
+      display: block;
+    }
+    .infographic-panel figcaption {
+      padding: 10px 14px;
+      border-top: 1px solid rgba(116,205,235,0.16);
+      color: #b9d9e7;
+      font-size: 12px;
+      line-height: 1.45;
+      background: rgba(3,18,29,0.76);
+    }
+    .infographic-toggle {
+      margin-top: 16px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background: #061a27;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .infographic-toggle summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 54px;
+      padding: 14px 16px;
+      color: #fff;
+      cursor: pointer;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.1;
+      list-style: none;
+    }
+    .infographic-toggle summary::-webkit-details-marker { display: none; }
+    .infographic-toggle summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(116,205,235,0.34);
+      border-radius: 8px;
+      color: var(--aqua);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 24px;
+      line-height: 1;
+      background: rgba(0,167,183,0.12);
+    }
+    .infographic-toggle[open] summary::after {
+      content: "-";
+    }
+    .infographic-toggle .infographic-panel {
+      margin-top: 0;
+      border: 0;
+      border-top: 1px solid rgba(116,205,235,0.16);
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .flow-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .flow-row > div {
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 7px;
+      background: rgba(8,35,52,0.72);
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .flow-row strong { display: block; margin-bottom: 4px; color: #fff; }
+    .flow-row:first-child > div {
+      color: #fff;
+      background: rgba(0,167,183,0.28);
+      font-weight: 900;
+    }
+    .product-card a,
+    .callout a {
+      align-self: end;
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.42);
+      text-underline-offset: 4px;
+    }
+    .callout {
+      min-height: 0;
+      margin-top: 16px;
+      border-color: rgba(255,123,50,0.35);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,123,50,0.13), transparent 34%),
+        #071a27;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; }
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+      .flow-row { grid-template-columns: 1fr; }
+      .flow-row:first-child { display: none; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { padding: 24px 18px; }
+      .hero-visual { min-height: 0; padding: 12px; }
+      .visual-list,
+      .type-grid,
+      .step-grid,
+      .cause-grid,
+      .product-grid { grid-template-columns: 1fr; gap: 10px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .type-card,
+      .step-card,
+      .cause-card,
+      .product-card { min-height: 0; padding: 14px; }
+      .flow { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Learn</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs">
+      <a href="../">Learning Center</a>
+      <span>/</span>
+      <span>Ammonia or Nitrite Spike</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Emergency water guide</span>
+        <h1>Ammonia or Nitrite Spike</h1>
+        <p>Ammonia and nitrite are urgent because they damage gills, stress livestock, and can kill fish before the tank looks obviously dirty. Test first, protect oxygen, and correct the cause without destroying the biological filter.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#diagnosis">Start diagnosis</a>
+          <a class="btn secondary" href="#do-today">What to do today</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Aquarium ammonia and nitrite emergency visual summary">
+        <div class="sick-fish-window" aria-hidden="true"></div>
+        <ul class="visual-list">
+          <li><strong>Gasping</strong> Fish near the surface or filter flow need oxygen support immediately.</li>
+          <li><strong>Positive test</strong> Any ammonia or nitrite reading means the biofilter is overloaded.</li>
+          <li><strong>Recent change</strong> New tanks, big cleanouts, dead livestock, and overfeeding are common triggers.</li>
+          <li><strong>Protect bacteria</strong> Keep filter media alive; do not replace everything at once.</li>
+        </ul>
+      </figure>
+    </section>
+
+    <section id="do-today" aria-labelledby="today-title">
+      <div class="section-head">
+        <div>
+          <span>First response</span>
+          <h2 id="today-title">Do this before adding more chemicals.</h2>
+        </div>
+        <p>The safest first move is oxygen plus a measured water-quality response.</p>
+      </div>
+      <div class="step-grid">
+        <article class="step-card">
+          <div class="step-number">1</div>
+          <span>Confirm</span>
+          <h3>Retest ammonia and nitrite.</h3>
+          <p>Use a reliable test kit and check pH and temperature too. Toxicity and fish stress change with water conditions.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">2</div>
+          <span>Oxygen</span>
+          <h3>Add aeration now.</h3>
+          <p>Aim flow at the surface or add an air stone. Fish exposed to ammonia or nitrite need extra oxygen support.</p>
+        </article>
+        <article class="step-card">
+          <div class="step-number">3</div>
+          <span>Dilution</span>
+          <h3>Do a safe water change.</h3>
+          <p>Use conditioner, match temperature, and avoid a full teardown. The goal is to reduce toxins while preserving bacteria.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="types-title">
+      <div class="section-head">
+        <div>
+          <span>Warning signs</span>
+          <h2 id="types-title">Spot a water-quality emergency.</h2>
+        </div>
+        <p>Fish symptoms often show up before the water looks bad.</p>
+      </div>
+      <div class="type-grid">
+        <article class="type-card">
+          <span>Breathing</span>
+          <h3>Gasping or hanging high</h3>
+          <p>Fish gathering near the surface, overflow, or filter return may be struggling with oxygen or gill irritation.</p>
+        </article>
+        <article class="type-card">
+          <span>Behavior</span>
+          <h3>Lethargy and clamped fins</h3>
+          <p>Fish may hover, hide, refuse food, clamp fins, or sit near strong flow when toxins are present.</p>
+        </article>
+        <article class="type-card">
+          <span>Test result</span>
+          <h3>Any ammonia is a warning</h3>
+          <p>In an established tank, ammonia should read zero. A positive reading means waste is outpacing the biofilter.</p>
+        </article>
+        <article class="type-card">
+          <span>Cycle trouble</span>
+          <h3>Nitrite after ammonia</h3>
+          <p>Nitrite often rises after ammonia as a cycling tank or damaged filter tries to catch up.</p>
+        </article>
+        <article class="type-card">
+          <span>Tank clue</span>
+          <h3>Cloudy water or odor</h3>
+          <p>A haze, smell, or film can point to excess organics, overfeeding, dead matter, or filter disruption.</p>
+        </article>
+        <article class="type-card">
+          <span>Livestock loss</span>
+          <h3>Sudden deaths</h3>
+          <p>Fast losses after a new setup, cleaning, move, or power outage should be treated as water-quality urgent.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="diagnosis" aria-labelledby="diagnosis-title">
+      <div class="section-head">
+        <div>
+          <span>Decision flow</span>
+          <h2 id="diagnosis-title">Respond without crashing the filter.</h2>
+        </div>
+        <p>Use this as a quick shop-floor flow for positive ammonia or nitrite tests.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-row">
+          <div>Question</div>
+          <div>Likely direction</div>
+          <div>Next action</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Are fish gasping, weak, or dying?</strong></div>
+          <div>Treat as urgent oxygen and toxin exposure.</div>
+          <div>Add aeration, test immediately, and begin a conditioned water change.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is ammonia or nitrite above zero?</strong></div>
+          <div>The biological filter is not keeping up.</div>
+          <div>Reduce feeding, remove waste, detoxify if appropriate, and recheck daily.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Was the tank recently cleaned or filter media replaced?</strong></div>
+          <div>Beneficial bacteria may have been removed or damaged.</div>
+          <div>Preserve remaining media and add bottled bacteria or seeded media if available.</div>
+        </div>
+        <div class="flow-row">
+          <div><strong>Is there dead matter, overfeeding, or too much new livestock?</strong></div>
+          <div>The waste load may have jumped faster than the tank can process it.</div>
+          <div>Remove decay, pause feeding briefly, and avoid adding fish until readings stay at zero.</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="causes-title">
+      <div class="section-head">
+        <div>
+          <span>Common causes</span>
+          <h2 id="causes-title">What usually causes the spike?</h2>
+        </div>
+        <p>Most spikes trace back to excess waste, disrupted bacteria, or a tank that is still cycling.</p>
+      </div>
+      <div class="cause-grid">
+        <article class="cause-card">
+          <span>New setup</span>
+          <h3>Tank still cycling</h3>
+          <p>New aquariums need time for bacteria to process ammonia into nitrite and then nitrate.</p>
+        </article>
+        <article class="cause-card">
+          <span>Filter cleaning</span>
+          <h3>Biofilter was disturbed</h3>
+          <p>Replacing all media, rinsing in untreated tap water, or letting media dry can remove beneficial bacteria.</p>
+        </article>
+        <article class="cause-card">
+          <span>Food load</span>
+          <h3>Overfeeding</h3>
+          <p>Uneaten food breaks down into ammonia and can overwhelm the filter quickly.</p>
+        </article>
+        <article class="cause-card">
+          <span>Decay</span>
+          <h3>Dead plant or animal matter</h3>
+          <p>Hidden losses, rotting plants, or trapped debris can create a sudden waste pulse.</p>
+        </article>
+        <article class="cause-card">
+          <span>Stocking</span>
+          <h3>Too much livestock too fast</h3>
+          <p>Adding many fish at once can create more waste than the existing bacteria can process.</p>
+        </article>
+        <article class="cause-card">
+          <span>Power or flow</span>
+          <h3>Oxygen loss in the filter</h3>
+          <p>Power outages, clogged filters, or stalled flow can starve bacteria and reduce waste processing.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="products-title">
+      <div class="section-head">
+        <div>
+          <span>Helpful departments</span>
+          <h2 id="products-title">What the customer may need.</h2>
+        </div>
+        <p>Point toward testing, dilution, bacteria support, and filter protection.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card">
+          <span>Testing</span>
+          <h3>Ammonia, nitrite, nitrate, and pH</h3>
+          <p>Test kits confirm the problem and show whether the tank is cycling or recovering.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+        <article class="product-card">
+          <span>Water care</span>
+          <h3>Conditioner and detoxifier</h3>
+          <p>Use conditioner for water changes and choose ammonia/nitrite support products carefully.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+        <article class="product-card">
+          <span>Aeration</span>
+          <h3>Air pumps and air stones</h3>
+          <p>Extra surface movement helps stressed fish breathe and supports bacteria during recovery.</p>
+          <a href="../../category/?cat=filtration">View filtration</a>
+        </article>
+        <article class="product-card">
+          <span>Bacteria</span>
+          <h3>Bottled bacteria or seeded media</h3>
+          <p>Biological support can help the filter recover after cleaning, cycling, or livestock additions.</p>
+          <a href="../../category/?cat=filtration">View filtration</a>
+        </article>
+        <article class="product-card">
+          <span>Water change</span>
+          <h3>Siphon, bucket, and thermometer</h3>
+          <p>Controlled water changes dilute toxins without shocking livestock.</p>
+          <a href="../../category/?cat=maintenance">Shop maintenance</a>
+        </article>
+        <article class="product-card">
+          <span>Filter media</span>
+          <h3>Sponge, ceramic, and biomedia</h3>
+          <p>Stable biological media gives bacteria a place to live and helps prevent repeat spikes.</p>
+          <a href="../../category/?cat=filtration">View filtration</a>
+        </article>
+      </div>
+      <div class="callout">
+        <h3>What to avoid</h3>
+        <p>Do not replace all filter media, scrub everything sterile, add more fish, overfeed, or chase the number with repeated huge water changes. Keep oxygen high, protect the biofilter, and test daily until ammonia and nitrite stay at zero.</p>
+        <a href="../cloudy-water/">Compare with the cloudy water guide</a>
+      </div>
+      <details class="infographic-toggle">
+        <summary>Open the quick-reference ammonia chart</summary>
+        <figure class="infographic-panel">
+          <a href="../../assets/learn/ammonia-nitrite-troubleshooter-chart.png">
+            <img src="../../assets/learn/ammonia-nitrite-troubleshooter-chart.png" alt="Ammonia and nitrite spike troubleshooter chart with emergency symptoms, first response steps, helpful tools, and an important safety note" loading="lazy" />
+          </a>
+          <figcaption>Visual addendum: the ammonia and nitrite emergency guide condensed into a quick-reference chart. Select the image to open the full-size version.</figcaption>
+        </figure>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="../#troubleshooting">Troubleshooting</a><a href="../cloudy-water/">Cloudy water</a><a href="../algae/">Algae diagnosis</a><a href="../ich/">Ich diagnosis</a><a href="#diagnosis">Ammonia spike</a><a href="../#filtration-equipment">Filtration</a></div></div>
+        <div><h4>Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
