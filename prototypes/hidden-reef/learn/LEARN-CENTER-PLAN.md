@@ -136,3 +136,11 @@ Good next implementation passes:
 - Added infographic asset `assets/learn/ammonia-nitrite-troubleshooter-chart.png`.
 - Article structure follows the established guide pattern: hero visual, first response, warning signs, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
 - Learn Center Ammonia or Nitrite Spike card now links to the dedicated guide instead of only the short first-step card.
+
+## Fish Gasping Guide Pass - 2026-05-24
+
+- Added `learn/fish-gasping/` as a full emergency Troubleshooting article.
+- Added GPT Image 2 hero asset `assets/learn/fish-gasping-surface-gpt-image-2.jpg`.
+- Added infographic asset `assets/learn/fish-gasping-troubleshooter-chart.png`.
+- Article structure follows the established guide pattern: hero visual, first response, warning signs, decision flow, common causes, helpful departments, what-to-avoid callout, and collapsible quick-reference chart.
+- Learn Center Fish Gasping at Surface card now links to the dedicated guide instead of only the short first-step card.
