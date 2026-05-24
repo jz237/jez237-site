@@ -802,5 +802,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-24-afternoon-unclaimed-shadow-postage-register",
+    "title": "Unclaimed Shadow Postage Register",
+    "tests": "Artifact-document lane: tests a postal evidence-board format with tactile stamp packets, cancellation marks, route diagrams, and bureaucratic tracking of impossible shadow mail rather than a normal scene.",
+    "prompt": "Title: Unclaimed Shadow Postage Register\nLane/category: artifact-document\n\nCreate a vertical 1024x1536 believable physical artifact-document titled \"UNCLAIMED SHADOW POSTAGE REGISTER\". It should look like a photographed 1910s postal back-office evidence board assembled from real paper, string, stamps, envelopes, and inspection slips, not glossy concept art and not a poster.\n\nVisual format: a narrow cork-and-linen archive board lying flat under soft window light. Pin to it a tall buff postal register sheet, three small torn envelope fronts, waxed paper stamp packets, violet cancellation marks, black string ties, brass map pins, a thin transparent ruler, a folded gray route diagram, and one small glassine sleeve containing odd black postage stamps. The physical evidence-board layout is the main image.\n\nSubject: a fictional postal bureau tracks pieces of mail whose shadows arrived without their letters. The documents record impossible but bureaucratic details: misdelivered silhouettes, shadow weight, lamp angle, noon-window routing, umbra class, and missing-object claims. Show tiny stamps printed with abstract shadow shapes, an envelope with a dark rectangular stain where an address shadow should be, and a route diagram of street lamps connected by dotted lines. Keep everything mundane and clerical rather than supernatural horror.\n\nText discipline: include only sparse large readable document text such as \"UNCLAIMED SHADOWS\", \"POSTAGE DUE\", \"UMBRA CLASS\", \"ROUTE 4\", \"INSPECTED\", \"CLAIM NO.\", and \"RETURN TO SENDER\". Avoid dense tiny paragraphs; most rows should be blank ruled lines, boxes, smudges, or illegible type texture. Use fictional seals only; no real agency names, no real logos.\n\nMood and materials: dry, archival, strange, quiet; buff paper, faded violet ink, black stamp gum, charcoal-gray shadow stains, tarnished brass pins, tan string, translucent glassine, red pencil ticks, cork texture, linen tape, subtle curled edges, dust, fingerprints, and real shallow shadows.\n\nConstraints: no copyrighted characters, no logos, no watermark, no signature, no people, no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied performance imagery.",
+    "image": "images/2026-05-24-afternoon-unclaimed-shadow-postage-register.png",
+    "date": "2026-05-24",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
