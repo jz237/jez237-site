@@ -235,6 +235,18 @@
       background:#8ff0ff;
     }
 
+    .catalog-frame {
+      margin:22px 0 0;
+      padding:24px;
+      border:1px solid rgba(116,205,235,.22);
+      border-radius:10px;
+      background:
+        radial-gradient(circle at 85% 0%, rgba(116,205,235,.16), transparent 30%),
+        radial-gradient(circle at 8% 100%, rgba(141,108,255,.11), transparent 36%),
+        linear-gradient(180deg,#071f32 0%,#041827 100%);
+      box-shadow:-10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+
     .shopping-layout {
       display:grid;
       grid-template-columns:260px minmax(0,1fr);
@@ -519,6 +531,11 @@
       .shopping-cart { width:100%; justify-content:center; }
       .department-switcher { grid-template-columns:1fr; }
       .product-controls { grid-template-columns:1fr; }
+      .catalog-frame {
+        margin-top:18px;
+        padding:12px;
+        overflow:hidden;
+      }
       .shopping-layout { grid-template-columns:1fr; }
       .department-sidebar { position:static; }
     }
@@ -549,27 +566,29 @@
 
     <div class="breadcrumb" id="breadcrumb"></div>
     <section class="cat-header" id="cat-header"></section>
-    <div class="shopping-tools" aria-label="Shopping tools">
-      <form class="search-box shopping-search" role="search" aria-label="Search products" onsubmit="return false;">
-        <input id="search" type="search" placeholder="Search aquariums, food, pumps..." autocomplete="off" />
-        <button type="submit" aria-label="Search">⌕</button>
-      </form>
-      <a class="cart-button shopping-cart" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">
-        🛒
-        <strong>Cart</strong>
-        <span>↗</span>
-      </a>
-    </div>
-    <div class="product-controls" id="product-controls"></div>
-    <div class="department-switcher" id="department-switcher"></div>
-    <div class="shopping-layout">
-      <aside class="department-sidebar" id="department-sidebar" aria-label="Department filters"></aside>
-      <section class="product-results" id="products" aria-label="Products">
-        <div class="count-bar" id="count-bar"></div>
-        <div class="thr-product-grid" id="product-grid"></div>
-        <div class="pagination" id="pagination"></div>
-      </section>
-    </div>
+    <section class="catalog-frame" aria-label="Product shopping">
+      <div class="shopping-tools" aria-label="Shopping tools">
+        <form class="search-box shopping-search" role="search" aria-label="Search products" onsubmit="return false;">
+          <input id="search" type="search" placeholder="Search aquariums, food, pumps..." autocomplete="off" />
+          <button type="submit" aria-label="Search">⌕</button>
+        </form>
+        <a class="cart-button shopping-cart" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">
+          🛒
+          <strong>Cart</strong>
+          <span>↗</span>
+        </a>
+      </div>
+      <div class="product-controls" id="product-controls"></div>
+      <div class="department-switcher" id="department-switcher"></div>
+      <div class="shopping-layout">
+        <aside class="department-sidebar" id="department-sidebar" aria-label="Department filters"></aside>
+        <section class="product-results" id="products" aria-label="Products">
+          <div class="count-bar" id="count-bar"></div>
+          <div class="thr-product-grid" id="product-grid"></div>
+          <div class="pagination" id="pagination"></div>
+        </section>
+      </div>
+    </section>
     <div class="back-top"><a href="#top">↑ Back to top</a></div>
 
     <footer class="footer">
