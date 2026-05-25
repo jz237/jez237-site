@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T15:00:01.280911+00:00",
+  "updatedAt": "2026-05-25T16:00:01.966124+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7988,6 +7988,18 @@
     "https://techcrunch.com/2026/05/25/startup-battlefield-200-applications-close-in-days-apply-before-may-27": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200,800",
       "checkedAt": "2026-05-25T15:00:01.280911+00:00"
+    },
+    "https://techcrunch.com/2026/05/25/the-popes-ai-encyclical-isnt-really-about-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2213411719.jpg?w=1024",
+      "checkedAt": "2026-05-25T16:00:01.966124+00:00"
+    },
+    "https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278126608.jpg?quality=90&amp;strip=all&amp;crop=0%2C0%2C100%2C78.487862082976&amp;w=1200",
+      "checkedAt": "2026-05-25T16:00:01.966124+00:00"
+    },
+    "https://huggingface.co/blog/agent-glossary": {
+      "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
+      "checkedAt": "2026-05-25T16:00:01.966124+00:00"
     }
   }
 }
