@@ -1270,6 +1270,49 @@
       justify-self: start;
       white-space: normal;
     }
+    .learn-disclosure__body .checklist-grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      align-items: stretch;
+    }
+    .learn-disclosure__body .checklist-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 100%;
+      padding: 16px;
+    }
+    .learn-disclosure__body .checklist-card h3 {
+      max-width: 12.5em;
+      font-size: 25px;
+      line-height: 1.08;
+    }
+    .learn-disclosure__body .checklist-card ul {
+      gap: 9px;
+      margin-top: 2px;
+    }
+    .learn-disclosure__body .checklist-card li {
+      position: relative;
+      padding-left: 14px;
+      font-size: 14px;
+      line-height: 1.42;
+    }
+    .learn-disclosure__body .checklist-card li::before {
+      position: absolute;
+      left: 0;
+      content: "•";
+      color: #ffb45c;
+    }
+    .learn-disclosure__body .checklist-card p {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+    .learn-disclosure__body .checklist-card p a {
+      display: inline-flex;
+      width: fit-content;
+      justify-self: start;
+      align-self: start;
+      white-space: normal;
+    }
     .store-help {
       position: relative;
       grid-template-columns: 190px minmax(0, 1fr) 230px;
