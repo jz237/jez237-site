@@ -42,7 +42,7 @@
 
 .header.masthead + .main-nav {
   display: grid !important;
-  grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
   gap: 0 !important;
   width: min(100%, 1180px) !important;
   max-width: 1180px !important;
