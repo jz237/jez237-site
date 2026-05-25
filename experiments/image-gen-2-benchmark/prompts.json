@@ -838,5 +838,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-25-midday-thermal-kite-shadowgram",
+    "title": "Thermal Kite Shadowgram",
+    "tests": "Wild-experiment lane: tests a darkroom contact-print format where invisible heat and fragile kite materials become visible through cyanotype-like chemistry, emphasizing wet paper, thread shadows, scorch halos, and forensic physical process rather than a normal scene.",
+    "prompt": "Title: Thermal Kite Shadowgram\nLane/category: wild-experiment\n\nCreate a square 1024x1024 experimental image that looks like a real photographic darkroom contact print made from heat, thread, and fragile paper objects, not a poster, not a landscape, and not glossy AI concept art.\n\nVisual format: an overhead view of a single cyanotype-like shadowgram sheet lying in a shallow enamel developing tray. Instead of blue botanical silhouettes, the print reveals an impossible weather instrument assembled from tissue-paper kites, hair-thin copper wire, pinprick vents, mica flakes, charred matchstick spars, and stitched paper thermals. The kites are not flying and no people are present; they are pressed flat against the paper as physical objects, leaving pale ghost silhouettes, scorched amber heat blooms, and smoky gray convection rings.\n\nComposition: the square print nearly fills the frame, slightly crooked inside the tray. Include a puddle of developer liquid along one edge, two dull steel binder clips, a glass stirring rod, salt crystals, curled wet paper corners, scattered soot specks, tiny thread knots, and a few illegible registration ticks. The main image should read as a strange lab-made print where invisible warm air has become visible through contact-print chemistry.\n\nMaterial language: wet photographic paper, enamel tray chips, translucent kite tissue, copper oxidation, singed fiber edges, mica sparkle, thread shadows, chemical tide marks, fingerprints, and real shallow reflections. Palette: Prussian blue, bone white, smoky charcoal, oxidized copper green, small amber scorch halos, silver-gray tray, clear liquid highlights. Mood is quiet, forensic, tactile, and uncanny.\n\nConstraints: no readable text, no logos, no copyrighted characters, no people, no performers, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no watermark, no signature.",
+    "image": "images/2026-05-25-midday-thermal-kite-shadowgram.png",
+    "date": "2026-05-25",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
