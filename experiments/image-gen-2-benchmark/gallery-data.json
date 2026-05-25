@@ -814,5 +814,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-24-evening-sock-puppet-weather-report",
+    "title": "Sock Puppet Weather Report",
+    "tests": "Handmade sock-puppet construction, felt-map iconography, tabletop stop-motion lighting, visible craft imperfections, and soft textile/cardboard material separation.",
+    "prompt": "A square handmade stop-motion style scene built entirely from mismatched socks, felt scraps, cardboard, yarn, pipe cleaners, and hand-cut paper. The image is a tiny local TV weather desk made by a child: three sock-puppet cloud presenters with button eyes sit behind a shoebox news desk, pointing at a felt weather map where stitched suns, raindrops, wind arrows, and a lumpy thundercloud are pinned on with safety pins. Visible glue dots, frayed threads, crooked marker outlines, uneven scissor edges, thumbtacks, and cardboard corrugation. Warm desk-lamp lighting, shallow tabletop depth, playful but slightly deadpan mood, tactile craft texture, no readable text, no logos, no dancing, no stage performance.",
+    "image": "images/2026-05-24-evening-sock-puppet-weather-report.png",
+    "date": "2026-05-24",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
