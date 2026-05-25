@@ -40,7 +40,7 @@ body.department-page .search-box{grid-column:auto;max-width:none;justify-self:st
 body.department-page .search-box input{color:#eaf8fc;background:transparent}
 body.department-page .search-box input::placeholder{color:#8bb1bf}
 body.department-page .header-actions{grid-column:auto;color:#b8dbea;align-self:center}
-body.department-page .main-nav{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:0;margin:0 calc(clamp(12px,2.5vw,28px)*-1);padding:0;border-top:0;border-bottom:1px solid rgba(116,205,235,.2);background:rgba(3,18,29,.98);color:#a9d6e6}
+body.department-page .main-nav{display:grid;grid-template-columns:repeat(10, minmax(0, 1fr));gap:0;margin:0 calc(clamp(12px,2.5vw,28px)*-1);padding:0;border-top:0;border-bottom:1px solid rgba(116,205,235,.2);background:rgba(3,18,29,.98);color:#a9d6e6}
 body.department-page .main-nav a{display:flex;justify-content:center;align-items:center;min-width:0;min-height:44px;padding:10px 10px;border-left:1px solid rgba(116,205,235,.12);white-space:nowrap;text-align:center}
 body.department-page .main-nav a:first-child{border-left:0}
 body.department-page .main-nav a.active{color:#40d9ff}

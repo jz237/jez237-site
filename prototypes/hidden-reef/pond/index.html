@@ -54,7 +54,7 @@
     .search-box input::placeholder { color:#8bb1bf; }
     .header-actions { grid-column:auto; color:#b8dbea; align-self:center; }
     .main-nav {
-      display:grid; grid-template-columns:repeat(9,minmax(0,1fr)); gap:0;
+      display:grid; grid-template-columns:repeat(10, minmax(0, 1fr)); gap:0;
       margin:0 calc(clamp(12px,2.5vw,28px) * -1); padding:0;
       border-top:0; border-bottom:1px solid var(--reef-line);
       background:rgba(3,18,29,.98); color:#a9d6e6;
@@ -213,6 +213,7 @@
     </header>
 
     <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
       <a href="../category/?cat=freshwater">Freshwater</a>
       <a href="../category/?cat=saltwater">Saltwater</a>
       <a class="active" href="../category/?cat=pond">Pond</a>
