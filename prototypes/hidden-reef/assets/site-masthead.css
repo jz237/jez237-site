@@ -1,8 +1,8 @@
 .header.masthead {
   display: block !important;
-  width: min(100%, 1180px) !important;
+  width: calc(100% + 48px) !important;
   max-width: 1180px !important;
-  margin: 18px auto 0 !important;
+  margin: 18px -24px 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
   border: 1px solid rgba(116,205,235,0.24) !important;
@@ -47,9 +47,9 @@
   display: grid !important;
   grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
   gap: 0 !important;
-  width: min(100%, 1180px) !important;
+  width: calc(100% + 48px) !important;
   max-width: 1180px !important;
-  margin: 0 auto 18px !important;
+  margin: 0 -24px 18px !important;
   padding: 0 !important;
   overflow: hidden !important;
   border-right: 1px solid rgba(116,205,235,0.24) !important;
@@ -93,6 +93,13 @@
 .learn-disclosure,
 main.page > section:not(.hero) {
   box-shadow: -10px 14px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.035) !important;
+}
+
+main.page > section,
+main.page > .footer {
+  width: calc(100% + 48px) !important;
+  margin-left: -24px !important;
+  margin-right: -24px !important;
 }
 
 .path-card:hover,
@@ -161,11 +168,23 @@ main.page > section:not(.hero) {
 @media (max-width: 760px) {
   .header.masthead {
     width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     margin-top: 8px !important;
     padding: 0 !important;
   }
 
   .header.masthead + .main-nav {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     margin-bottom: 12px !important;
+  }
+
+  main.page > section,
+  main.page > .footer {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
