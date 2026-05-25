@@ -29,7 +29,7 @@ main.page > section:not(.hero)::before {
   color: #04121d;
   background: #40d9ff;
   font-weight: 950;
-  box-shadow: 0 0 22px rgba(64, 217, 255, 0.22);
+  box-shadow: 0 0 17px rgba(64, 217, 255, 0.22);
 }
 
 main.page > section:not(.hero):nth-of-type(3n) {
