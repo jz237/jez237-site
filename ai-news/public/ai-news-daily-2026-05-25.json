@@ -1,7 +1,23 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T08:00:01.269025+00:00",
+  "updatedAt": "2026-05-25T09:00:02.023574+00:00",
   "items": [
+    {
+      "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
+      "url": "https://thenextweb.com/news/ecb-banks-cybersecurity-ai-mythos-elderson",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Central Bank is calling banks in for a meeting on Tuesday to address the cybersecurity risks created by a new generation of AI models that can find and exploit software vulnerabilities faster than any human team. The meeting follows months of growing anxiety across European finance about Anthropic’s Claude Mythos Preview, the frontier AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ecb-banks-cybersecurity-ai-mythos-elderson.avif",
+      "published": "2026-05-25T07:53:29+00:00",
+      "firstSeen": "2026-05-25T09:00:02.023574+00:00",
+      "lastSeen": "2026-05-25T09:00:02.023574+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.1166
+    },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
       "url": "https://www.marktechpost.com/2026/05/25/workos-releases-auth-md-an-open-agent-registration-protocol-built-on-oauth-standards",
@@ -13,10 +29,42 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T08:00:01.269025+00:00",
+      "lastSeen": "2026-05-25T09:00:02.023574+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.709
+      "score": 6.6791
+    },
+    {
+      "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
+      "url": "https://thenextweb.com/news/softbank-record-high-openai-ipo-nikkei",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Nikkei broke 65,000 for the first time on Monday, and SoftBank, the listed proxy for both OpenAI and Arm, did much of the lifting. SoftBank Group shares hit a record high in Tokyo on Monday, carrying the Nikkei 225 above 65,000 for the first time and capping a fortnight in which the Japanese investment [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/softbank-10b-margin-loan-openai-stake-collateral.avif",
+      "published": "2026-05-25T07:26:52+00:00",
+      "firstSeen": "2026-05-25T09:00:02.023574+00:00",
+      "lastSeen": "2026-05-25T09:00:02.023574+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2036
+    },
+    {
+      "title": "Uber goes after Delivery Hero in full, with an offer that sits below the close",
+      "url": "https://thenextweb.com/news/uber-delivery-hero-takeover-offer-confirmed",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The €33-per-share proposal lands at a slight discount to Friday’s price, but with Uber already sitting on a quarter of the company and DoorDash circling, the bid is the start of the negotiation, not the end of it. Delivery Hero confirmed on Saturday that Uber has tabled a formal takeover offer for the Berlin-based food-delivery [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Uber.avif",
+      "published": "2026-05-25T07:55:34+00:00",
+      "firstSeen": "2026-05-25T09:00:02.023574+00:00",
+      "lastSeen": "2026-05-25T09:00:02.023574+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1177
     },
     {
       "title": "Huawei unveils ‘Tau Scaling Law’ as China’s workaround for US chip sanctions",
@@ -29,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/Huawei-Tau-Scaling-Law.avif",
       "published": "2026-05-25T07:12:00+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T08:00:01.269025+00:00",
+      "lastSeen": "2026-05-25T09:00:02.023574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1258
+      "score": 2.0963
     },
     {
       "title": "Maximillian Rossi, Prajwal Raghunath, Eugene Wu",
@@ -48,7 +96,7 @@
       "lastSeen": "2026-05-25T08:00:01.269025+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "score": -0.7701
     }
   ],
   "errors": []
