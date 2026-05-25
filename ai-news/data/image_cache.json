@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T18:00:01.924966+00:00",
+  "updatedAt": "2026-05-25T19:00:02.027407+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8000,6 +8000,14 @@
     "https://huggingface.co/blog/agent-glossary": {
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "checkedAt": "2026-05-25T16:00:01.966124+00:00"
+    },
+    "https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work": {
+      "image": "https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1247853635.jpg?resize=1200,800",
+      "checkedAt": "2026-05-25T19:00:02.027407+00:00"
+    },
+    "https://openai.com/index/grupo-folha-grupo-uol-partnership": {
+      "image": "",
+      "checkedAt": "2026-05-25T19:00:02.027407+00:00"
     }
   }
 }
