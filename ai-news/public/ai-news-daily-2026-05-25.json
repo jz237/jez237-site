@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T14:00:01.195782+00:00",
+  "updatedAt": "2026-05-25T14:16:41.404897+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.1728
+      "score": 13.165
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9783
+      "score": 7.9712
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1582
+      "score": 7.1504
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -64,7 +64,7 @@
       "lastSeen": "2026-05-25T14:00:01.195782+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5418
+      "score": 6.5347
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0669
+      "score": 6.0599
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2881
+      "score": 4.2804
     },
     {
       "title": "Best Authentication Platforms for AI Agents and MCP Servers in 2026",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-05-25T14:00:01.195782+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8199
+      "score": 2.8123
     },
     {
       "title": "Why EU business AI adoption is rising and still not catching up",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-25T12:21:12+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8008
+      "score": 2.7927
     },
     {
       "title": "US's big bet on quantum computing may not be entirely legal",
@@ -141,10 +141,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/image-2-1152x648.jpeg",
       "published": "2026-05-25T12:00:15+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7907
+      "score": 2.7827
     },
     {
       "title": "UK venture funding doubled to $10.5bn in the first four months of 2026, on the back of three giant rounds",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/UK.avif",
       "published": "2026-05-25T10:06:48+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7374
+      "score": 2.7298
     },
     {
       "title": "Latent Cache Flow: Model-to-Model Communication Without Text",
@@ -171,29 +171,35 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-25T14:00:06.538482+00:00",
+      "published": "2026-05-25T14:17:02.933139+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
     },
     {
-      "title": "Ericsson is leaving Kista for central Stockholm, in the largest office lease in Swedish history",
-      "url": "https://thenextweb.com/news/ericsson-hagastaden-stockholm-headquarters-kista",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "5 days left: Save up to $410 on TechCrunch Disrupt 2026 passes before prices increase",
+      "url": "https://techcrunch.com/2026/05/25/5-days-left-save-up-to-410-on-techcrunch-disrupt-2026-passes-before-prices-increase",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "The 71,000-square-metre Hagastaden campus, signed with Atrium Ljungberg and Castellum, ends more than two decades in the suburb once branded Sweden’s Silicon Valley. Ericsson is moving its global headquarters out of Kista. The Swedish telecoms-equipment maker said on Monday that, starting in 2028, it will gradually relocate its Stockholm operations, including the HQ, R&amp;D functions, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2015/12/Ericsson.avif",
-      "published": "2026-05-25T10:17:04+00:00",
-      "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "summary": "Early Bird savings for TechCrunch Disrupt 2026 in San Francisco end May 29 at 11:59 p.m. PT. Register now to save up to $410 before prices increase.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200%2C675",
+      "published": "2026-05-25T14:00:00+00:00",
+      "firstSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0421
+      "score": 2.2815
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
