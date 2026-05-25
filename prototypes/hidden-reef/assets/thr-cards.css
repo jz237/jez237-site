@@ -17,7 +17,7 @@
   overflow: hidden;
   background: #f7fbfd;
   border: 1px solid rgba(195,222,232,.72);
-  box-shadow: -8px 12px 20px rgba(0,0,0,.3);
+  box-shadow: -8px 12px 20px rgba(0,0,0,.45);
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
   cursor: pointer;
   text-decoration: none;
@@ -27,7 +27,7 @@
 .thr-product:hover {
   transform: translateY(-4px);
   border-color: rgba(116,205,235,.45);
-  box-shadow: -12px 18px 28px rgba(0,0,0,.42);
+  box-shadow: -12px 18px 28px rgba(0,0,0,.58);
 }
 .thr-product:nth-child(2n) { animation-delay: .035s; }
 .thr-product:nth-child(3n) { animation-delay: .07s; }
