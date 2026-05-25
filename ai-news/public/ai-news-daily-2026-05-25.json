@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T21:21:48.841710+00:00",
+  "updatedAt": "2026-05-25T22:00:01.590724+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.9836
+      "score": 12.969
     },
     {
       "title": "OpenAI, Grupo Folha and Grupo UOL announce strategic content partnership",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0077
+      "score": 8.997
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8066
+      "score": 7.7933
     },
     {
       "title": "Only 3.3 per cent of users pay for Copilot, so Microsoft is finally making it optional",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif",
       "published": "2026-05-25T19:10:35+00:00",
       "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.5852
+      "score": 7.567
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9717
+      "score": 6.9573
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -93,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3713
+      "score": 6.3581
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -112,7 +112,23 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8973
+      "score": 5.8842
+    },
+    {
+      "title": "Together AI Open-Sources OSCAR: An Attention-Aware 2-Bit KV Cache Quantization System for Long-Context LLM Serving",
+      "url": "https://www.marktechpost.com/2026/05/25/together-ai-open-sources-oscar-an-attention-aware-2-bit-kv-cache-quantization-system-for-long-context-llm-serving",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Together AI has released OSCAR (Offline Spectral Covariance-Aware Rotation), an INT2 KV cache quantization method for long-context LLM serving. Unlike prior rotation-based approaches that apply data-oblivious Hadamard transforms, OSCAR derives separate rotations for keys and values from attention-aware covariance structures estimated offline. At 2.28 bits per KV element, OSCAR reduces the BF16 accuracy gap to 3.78 points on Qwen3-4B-Thinking-2507 and 1.42 points on Qwen3-8B, while delivering approximately 8× KV memory reduction and up to 3× decode speedup at 100K context length.\nThe post Toget",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-25-at-2.24.00-PM-1-150x150.png",
+      "published": "2026-05-25T21:24:31+00:00",
+      "firstSeen": "2026-05-25T22:00:01.590724+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4021
     },
     {
       "title": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
@@ -125,10 +141,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Quill&amp%3BbackgroundColor=heather",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0077
+      "score": 4.997
     },
     {
       "title": "Step by Step Guide to Build and Compare FedAvg and FedProx Federated Learning on Non-IID CIFAR-10 with NVIDIA FLARE",
@@ -141,10 +157,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-48.png",
       "published": "2026-05-25T20:26:40+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.6923
+      "score": 4.6735
     },
     {
       "title": "Harness, Scaffold, and the AI Agent Terms Worth Getting Right",
@@ -157,10 +173,10 @@
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6377
+      "score": 4.627
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -173,26 +189,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
+      "lastSeen": "2026-05-25T22:00:01.590724+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1035
-    },
-    {
-      "title": "What ClickUp’s mass layoff tells us about the future of work",
-      "url": "https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The nine-year-old startup is replacing hundreds of employees with thousands of AI agents.",
-      "image": "https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1247853635.jpg?resize=1200%2C800",
-      "published": "2026-05-25T16:00:00+00:00",
-      "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T21:21:48.841710+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8377
+      "score": 4.0892
     }
   ],
   "errors": []
