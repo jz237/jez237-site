@@ -1,5 +1,5 @@
 (() => {
-  const actionFrames = document.querySelectorAll(".hero-actions");
+  const actionFrames = document.querySelectorAll(".hero .hero-actions");
 
   actionFrames.forEach((frame) => {
     if (!frame.querySelector(".btn")) return;
@@ -17,6 +17,9 @@
 
     frame.addEventListener("click", (event) => {
       if (event.target.closest("a, button")) return;
+      const rect = frame.getBoundingClientRect();
+      const clickedLeftRail = event.clientX - rect.left <= 36;
+      if (!clickedLeftRail && !frame.classList.contains("is-collapsed")) return;
       toggleFrame();
     });
 
