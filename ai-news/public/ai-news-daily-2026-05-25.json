@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T19:56:25.226440+00:00",
+  "updatedAt": "2026-05-25T21:00:01.605108+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.0173
+      "score": 12.9921
     },
     {
       "title": "OpenAI, Grupo Folha and Grupo UOL announce strategic content partnership",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0322
+      "score": 9.0138
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8371
+      "score": 7.8143
     },
     {
       "title": "Only 3.3 per cent of users pay for Copilot, so Microsoft is finally making it optional",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif",
       "published": "2026-05-25T19:10:35+00:00",
       "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.6269
+      "score": 7.5957
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0048
+      "score": 6.98
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -93,10 +93,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T20:00:01.653404+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4016
+      "score": 6.3789
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9275
+      "score": 5.9049
     },
     {
       "title": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
@@ -125,10 +125,26 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Quill&amp%3BbackgroundColor=heather",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0322
+      "score": 5.0138
+    },
+    {
+      "title": "Step by Step Guide to Build and Compare FedAvg and FedProx Federated Learning on Non-IID CIFAR-10 with NVIDIA FLARE",
+      "url": "https://www.marktechpost.com/2026/05/25/step-by-step-guide-to-build-and-compare-fedavg-and-fedprox-federated-learning-on-non-iid-cifar-10-with-nvidia-flare",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build an advanced federated learning experiment with NVIDIA FLARE. We compare FedAvg and FedProx on a non-IID CIFAR-10 setup, where client data is split using a Dirichlet distribution to simulate realistic label imbalance across federated sites. We use the NVFlare Job API to define and launch federated jobs, while the Client [&#8230;]\nThe post Step by Step Guide to Build and Compare FedAvg and FedProx Federated Learning on Non-IID CIFAR-10 with NVIDIA FLARE appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-48.png",
+      "published": "2026-05-25T20:26:40+00:00",
+      "firstSeen": "2026-05-25T21:00:01.605108+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.7031
     },
     {
       "title": "Harness, Scaffold, and the AI Agent Terms Worth Getting Right",
@@ -141,10 +157,10 @@
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6622
+      "score": 4.6438
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -157,10 +173,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1363
+      "score": 4.1117
     },
     {
       "title": "What ClickUp’s mass layoff tells us about the future of work",
@@ -173,33 +189,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1247853635.jpg?resize=1200%2C800",
       "published": "2026-05-25T16:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T21:00:01.605108+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.876
-    },
-    {
-      "title": "China is giving every humanoid robot a 29-character ID code, and over 28,000 already have one",
-      "url": "https://thenextweb.com/news/china-humanoid-robot-id-system-lifecycle-tracking",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Summary: China has launched a national ID system for humanoid robots, assigning each a 29-character code that tracks it from production to recycling. Over 28,000 robots across 200 models already have IDs. The system logs real-time performance data including joint wear, battery status, and AI training history.   China has launched a national identification system [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/unitree.avif",
-      "published": "2026-05-25T19:04:01+00:00",
-      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1236
+      "score": 3.8473
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
