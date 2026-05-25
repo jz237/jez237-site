@@ -1,28 +1,59 @@
-.hero-actions {
+.hero .hero-actions,
+.hero > div > .hero-actions {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  width: min(100%, 430px);
-  padding: 14px 14px 14px 18px;
-  border: 1px solid rgba(105, 237, 255, 0.3);
-  border-left: 8px solid var(--orange, #ff7b32);
-  border-radius: 8px;
+  gap: 12px;
+  width: min(100%, 620px);
+  min-height: 76px;
+  margin-top: auto;
+  padding: 18px 18px 18px 28px;
+  overflow: visible;
+  border: 1px solid rgba(139, 225, 255, 0.42);
+  border-left: 0;
+  border-radius: 10px;
   background:
-    linear-gradient(90deg, rgba(255, 123, 50, 0.16), transparent 34%),
-    radial-gradient(circle at 100% 0%, rgba(64, 217, 255, 0.14), transparent 42%),
-    rgba(3, 16, 27, 0.76);
+    linear-gradient(90deg, rgba(255, 123, 50, 0.13), transparent 24%),
+    radial-gradient(circle at 100% 0%, rgba(95, 216, 255, 0.14), transparent 44%),
+    linear-gradient(180deg, rgba(11, 31, 45, 0.9), rgba(2, 10, 18, 0.82));
   box-shadow:
-    inset 0 0 0 7px rgba(255, 255, 255, 0.025),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 0 24px rgba(64, 217, 255, 0.14);
-  backdrop-filter: blur(8px);
-  transition: border-color 180ms ease, box-shadow 180ms ease, min-height 180ms ease;
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 0 1px rgba(8, 17, 27, 0.36),
+    0 18px 42px rgba(0, 0, 0, 0.38),
+    0 0 34px rgba(64, 217, 255, 0.18);
+  backdrop-filter: blur(12px) saturate(1.15);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    min-height 180ms ease,
+    padding 180ms ease;
 }
 
-.hero > div > .hero-actions {
-  align-self: flex-start;
-  margin-top: auto;
+.hero .hero-actions::before,
+.hero > div > .hero-actions::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 9px;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(180deg, #ff5d4c, #ff8b43);
+  box-shadow:
+    0 0 18px rgba(255, 99, 59, 0.72),
+    4px 0 18px rgba(255, 123, 50, 0.18);
+  pointer-events: none;
+}
+
+.hero .hero-actions::after,
+.hero > div > .hero-actions::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  border-radius: 7px;
+  pointer-events: none;
 }
 
 .hero-actions[data-collapsible="true"] {
@@ -31,40 +62,19 @@
 
 .hero-actions[data-collapsible="true"]:hover,
 .hero-actions[data-collapsible="true"]:focus-visible {
-  border-color: rgba(105, 237, 255, 0.5);
+  border-color: rgba(151, 232, 255, 0.64);
   box-shadow:
-    inset 0 0 0 7px rgba(255, 255, 255, 0.035),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 28px rgba(64, 217, 255, 0.22);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 0 1px rgba(8, 17, 27, 0.3),
+    0 20px 46px rgba(0, 0, 0, 0.42),
+    0 0 42px rgba(64, 217, 255, 0.27);
   outline: none;
 }
 
-.hero-actions[data-collapsible="true"]::after {
-  content: "-";
-  position: absolute;
-  left: -4px;
-  top: 50%;
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  translate: -50% -50%;
-  border: 1px solid rgba(255, 244, 232, 0.56);
-  border-radius: 999px;
-  color: rgba(3, 16, 27, 0.82);
-  background: var(--orange, #ff7b32);
-  font-size: 14px;
-  font-weight: 950;
-  line-height: 1;
-  pointer-events: none;
-}
-
 .hero-actions.is-collapsed {
-  min-height: 54px;
-}
-
-.hero-actions.is-collapsed::after {
-  content: "+";
+  min-height: 58px;
+  padding-block: 16px;
 }
 
 .hero-actions.is-collapsed .btn {
@@ -74,7 +84,10 @@
 .hero-actions .btn {
   flex: 1 1 0;
   min-width: 0;
+  min-height: 44px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-actions .btn:hover,
@@ -83,19 +96,15 @@
 }
 
 @media (max-width: 760px) {
-  .hero-actions,
+  .hero .hero-actions,
   .hero > div > .hero-actions {
     width: 100%;
     margin-top: 18px;
-    padding: 12px 12px 12px 16px;
+    min-height: 68px;
+    padding: 16px 14px 16px 24px;
   }
 
   .hero-actions .btn {
     flex-basis: 100%;
-  }
-
-  .hero-actions[data-collapsible="true"]::after {
-    left: -4px;
-    font-size: 13px;
   }
 }
