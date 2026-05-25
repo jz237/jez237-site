@@ -8,7 +8,7 @@
     frame.tabIndex = 0;
     frame.setAttribute("role", "button");
     frame.setAttribute("aria-expanded", "true");
-    frame.setAttribute("aria-label", "Toggle guide action buttons");
+    frame.setAttribute("aria-label", "Toggle guide buttons");
 
     const toggleFrame = () => {
       const isCollapsed = frame.classList.toggle("is-collapsed");
@@ -17,6 +17,9 @@
 
     frame.addEventListener("click", (event) => {
       if (event.target.closest("a, button")) return;
+      const rect = frame.getBoundingClientRect();
+      const clickedLeftRail = event.clientX - rect.left <= 36;
+      if (!clickedLeftRail && !frame.classList.contains("is-collapsed")) return;
       toggleFrame();
     });
 
