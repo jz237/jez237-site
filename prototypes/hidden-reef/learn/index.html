@@ -670,6 +670,197 @@
         linear-gradient(90deg, rgba(255,180,92,0.12), transparent 38%),
         #150f0b;
     }
+    /* Learning Center anti-card pass: use shelves, rows, and notes instead of repeated framed cards. */
+    .hero {
+      min-height: 330px;
+      align-items: center;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid rgba(116,205,235,0.32);
+    }
+    .hero-card {
+      align-self: end;
+      padding: 14px 0 0 18px;
+      border: 0;
+      border-left: 3px solid rgba(255,123,50,0.86);
+      border-radius: 0;
+      background: transparent;
+    }
+    main.page > section:not(.hero):not(.diagram-list):not(.store-help) {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .section-head {
+      margin: 36px 0 12px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid rgba(116,205,235,0.22);
+    }
+    .section-head h2 {
+      font-size: 30px;
+    }
+    .path-grid,
+    .problem-grid,
+    .checklist-grid,
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border-top: 1px solid rgba(116,205,235,0.14);
+    }
+    .path-card,
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      display: grid;
+      grid-template-columns: 150px minmax(180px, 250px) minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      min-height: 0;
+      padding: 16px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      border-left: 0;
+    }
+    .path-card:nth-child(n),
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      background: transparent;
+      border-top: 0;
+    }
+    .path-card span,
+    .problem-card span,
+    .checklist-card span,
+    .guide-card span,
+    .hero span {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #74d9ee;
+      letter-spacing: 0.09em;
+    }
+    .path-card h3,
+    .problem-card h3,
+    .checklist-card h3,
+    .guide-card h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .path-card p,
+    .problem-card p,
+    .guide-card p {
+      max-width: 560px;
+      font-size: 14px;
+    }
+    .path-card a,
+    .problem-card a,
+    .checklist-card p a {
+      justify-self: end;
+      align-self: center;
+      white-space: nowrap;
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(255,123,50,0.82);
+    }
+    .checklist-card {
+      grid-template-columns: 145px minmax(170px, 230px) minmax(0, 1fr);
+    }
+    .checklist-card p {
+      grid-column: 3;
+      margin-top: 0;
+    }
+    .checklist-card ul {
+      gap: 6px;
+    }
+    .checklist-card li::before {
+      color: #ffb45c;
+    }
+    .learn-disclosure {
+      margin-top: 28px;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    #troubleshooting,
+    #starter-checklists,
+    #filtration-equipment {
+      border-left: 0;
+      background: transparent;
+    }
+    .learn-disclosure::before {
+      display: none;
+    }
+    .learn-disclosure summary {
+      padding: 0;
+      background: transparent;
+      border-top: 2px solid var(--section-accent, rgba(116,205,235,0.3));
+    }
+    .learn-disclosure[open] summary {
+      border-bottom: 0;
+      background: transparent;
+    }
+    .learn-disclosure summary .section-head {
+      padding: 16px 0 12px;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+    }
+    .learn-disclosure summary h2::before {
+      width: auto;
+      height: auto;
+      border: 0;
+      background: transparent !important;
+      color: var(--section-accent, var(--aqua));
+      box-shadow: none;
+    }
+    .learn-disclosure__body {
+      padding: 2px 0 6px;
+    }
+    .guide-card {
+      grid-template-columns: 160px minmax(190px, 250px) minmax(0, 1fr) auto;
+    }
+    .guide-card div {
+      display: contents;
+    }
+    .guide-card .btn {
+      margin: 0;
+    }
+    .btn {
+      border: 1px solid rgba(255,123,50,0.5);
+      background: rgba(255,123,50,0.16);
+    }
+    .diagram {
+      border: 0;
+      border-top: 2px solid #a489ff;
+      border-radius: 0;
+      background: rgba(5,18,30,0.72);
+      box-shadow: none;
+    }
+    .diagram-empty {
+      border: 0;
+      border-top: 1px dashed rgba(164,137,255,0.42);
+      border-radius: 0;
+      background: transparent;
+    }
+    .store-help {
+      border: 0;
+      border-top: 2px solid #ffb45c;
+      border-radius: 0;
+      background: rgba(21,15,11,0.68);
+      box-shadow: none;
+    }
     .footer {
       margin-top: 28px;
       overflow: hidden;
@@ -716,6 +907,26 @@
       .path-card,
       .problem-card,
       .checklist-card { min-height: 0; padding: 14px; }
+      .path-card,
+      .problem-card,
+      .checklist-card,
+      .guide-card,
+      .guide-card div {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 14px 0;
+      }
+      .guide-card div {
+        display: grid;
+      }
+      .checklist-card p {
+        grid-column: auto;
+      }
+      .path-card a,
+      .problem-card a,
+      .checklist-card p a {
+        justify-self: start;
+      }
       .store-help { grid-template-columns: 1fr; padding: 16px; }
       .store-help__actions { justify-content: stretch; }
       .store-help__actions .btn { width: 100%; margin: 0; }
