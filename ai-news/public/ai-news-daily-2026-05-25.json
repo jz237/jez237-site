@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T23:00:01.822943+00:00",
+  "updatedAt": "2026-05-25T23:19:56.470221+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.9466
+      "score": 12.9393
     },
     {
       "title": "OpenAI, Grupo Folha and Grupo UOL announce strategic content partnership",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.9807
+      "score": 8.9753
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.773
+      "score": 7.7663
     },
     {
       "title": "Only 3.3 per cent of users pay for Copilot, so Microsoft is finally making it optional",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif",
       "published": "2026-05-25T19:10:35+00:00",
       "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.5391
+      "score": 7.5301
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9351
+      "score": 6.9279
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -96,7 +96,7 @@
       "lastSeen": "2026-05-25T23:00:01.822943+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3379
+      "score": 6.3313
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -112,7 +112,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8641
+      "score": 5.8576
     },
     {
       "title": "Together AI Open-Sources OSCAR: An Attention-Aware 2-Bit KV Cache Quantization System for Long-Context LLM Serving",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-05-25T23:00:01.822943+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3724
+      "score": 5.3628
     },
     {
       "title": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
@@ -141,10 +141,10 @@
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Quill&amp%3BbackgroundColor=heather",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:56:25.226440+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9807
+      "score": 4.9753
     },
     {
       "title": "Step by Step Guide to Build and Compare FedAvg and FedProx Federated Learning on Non-IID CIFAR-10 with NVIDIA FLARE",
@@ -160,7 +160,7 @@
       "lastSeen": "2026-05-25T23:00:01.822943+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.6446
+      "score": 4.6352
     },
     {
       "title": "Harness, Scaffold, and the AI Agent Terms Worth Getting Right",
@@ -173,10 +173,10 @@
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6107
+      "score": 4.6053
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -189,11 +189,17 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T23:00:01.822943+00:00",
+      "lastSeen": "2026-05-25T23:19:56.470221+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0673
+      "score": 4.0602
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
