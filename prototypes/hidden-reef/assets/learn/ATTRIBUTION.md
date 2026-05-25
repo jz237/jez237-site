@@ -16,3 +16,4 @@ assets, not photos from The Hidden Reef:
 - fish-gasping-troubleshooter-chart.png - fish gasping at surface emergency infographic used as a visual addendum.
 - first-tank-checklist-gpt-image-2.jpg - first freshwater tank checklist hero image showing setup, water preparation, cycling supplies, and first livestock.
 - saltwater-setup-basics-gpt-image-2.jpg - beginner saltwater setup basics hero image showing water mixing, marine tank setup, testing supplies, live rock, and livestock acclimation.
+- saltwater-tank-stabilizing-gpt-image-2.png - beginner saltwater tank stabilizing image showing live rock, clear water, testing supplies, refractometer, and maintenance notebook.
