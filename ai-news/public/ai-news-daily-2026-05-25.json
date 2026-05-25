@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T11:00:01.437059+00:00",
+  "updatedAt": "2026-05-25T10:45:25.804243+00:00",
   "items": [
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/05/ecb-banks-cybersecurity-ai-mythos-elderson.avif",
       "published": "2026-05-25T07:53:29+00:00",
       "firstSeen": "2026-05-25T09:00:02.023574+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.059
+      "score": 8.0658
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6219
+      "score": 6.6287
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/softbank-10b-margin-loan-openai-stake-collateral.avif",
       "published": "2026-05-25T07:26:52+00:00",
       "firstSeen": "2026-05-25T09:00:02.023574+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1466
+      "score": 6.1534
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -60,11 +60,11 @@
       "summary": "As attackers ramp up their AI exploit development, the search for software vulnerabilities is changing rapidly.",
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
-      "firstSeen": "2026-05-25T11:00:01.437059+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "firstSeen": "2026-05-25T10:45:25.804243+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3748
+      "score": 4.3822
     },
     {
       "title": "Best Authentication Platforms for AI Agents and MCP Servers in 2026",
@@ -76,11 +76,11 @@
       "summary": "As MCP crosses 97 million monthly SDK downloads and AI agents move into production workflows, authentication has become the most critical infrastructure decision teams face. This guide ranks the eight leading platforms — WorkOS, Stytch, Auth0 by Okta, Composio, Nango, Arcade, TrueFoundry, and Cloudflare — on spec compliance, enterprise identity depth, integration breadth, and real-world fit for 2026 deployments.\nThe post Best Authentication Platforms for AI Agents and MCP Servers in 2026 appeared first on MarkTechPost.",
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-47-1024x731.png",
       "published": "2026-05-25T10:34:02+00:00",
-      "firstSeen": "2026-05-25T11:00:01.437059+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "firstSeen": "2026-05-25T10:45:25.804243+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.9068
+      "score": 2.9142
     },
     {
       "title": "UK venture funding doubled to $10.5bn in the first four months of 2026, on the back of three giant rounds",
@@ -92,27 +92,11 @@
       "summary": "GlobalData’s count puts the country well clear of the rest of Europe and inside the global top five, but more than 40% of the total came from just three companies: Nscale, Wayve, and Ineffable Intelligence. UK-domiciled companies raised $10.5bn of venture capital between January and April 2026, roughly double the figure for the same period [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/05/UK.avif",
       "published": "2026-05-25T10:06:48+00:00",
-      "firstSeen": "2026-05-25T11:00:01.437059+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "firstSeen": "2026-05-25T10:45:25.804243+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8232
-    },
-    {
-      "title": "Latent Cache Flow: Model-to-Model Communication Without Text",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-25T11:00:10.414562+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.8305
     },
     {
       "title": "Ericsson is leaving Kista for central Stockholm, in the largest office lease in Swedish history",
@@ -124,11 +108,11 @@
       "summary": "The 71,000-square-metre Hagastaden campus, signed with Atrium Ljungberg and Castellum, ends more than two decades in the suburb once branded Sweden’s Silicon Valley. Ericsson is moving its global headquarters out of Kista. The Swedish telecoms-equipment maker said on Monday that, starting in 2028, it will gradually relocate its Stockholm operations, including the HQ, R&amp;D functions, [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2015/12/Ericsson.avif",
       "published": "2026-05-25T10:17:04+00:00",
-      "firstSeen": "2026-05-25T11:00:01.437059+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "firstSeen": "2026-05-25T10:45:25.804243+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1283
+      "score": 2.1357
     },
     {
       "title": "Blue Origin commits another $600m to its Florida campus",
@@ -140,11 +124,11 @@
       "summary": "Project Horizon adds an 830,000-square-foot upper-stage factory at Cape Canaveral, weeks before SpaceX’s record IPO and a month after the April New Glenn payload mishap. Blue Origin will spend $600m on a new upper-stage manufacturing facility at its Rocket Park campus in Cape Canaveral, Florida governor Ron DeSantis announced on Friday. The building, branded Project [&hellip;]\nThis story continues at The Next Web",
       "image": "https://media.thenextweb.com/2026/05/Blue-Origin.avif",
       "published": "2026-05-25T09:32:54+00:00",
-      "firstSeen": "2026-05-25T11:00:01.437059+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "firstSeen": "2026-05-25T10:45:25.804243+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1065
+      "score": 2.1137
     },
     {
       "title": "Schneider Electric expects its India data-centre business to outgrow the rest of the company",
@@ -157,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/Schneider-Electric.avif",
       "published": "2026-05-25T08:37:57+00:00",
       "firstSeen": "2026-05-25T10:00:01.479670+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.08
+      "score": 2.087
     },
     {
       "title": "Most organisations still store their passwords wrong. Here is what actually works.",
@@ -173,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/keeper-security-enterprise-password-credential-governance.avif",
       "published": "2026-05-25T08:37:36+00:00",
       "firstSeen": "2026-05-25T10:00:01.479670+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0798
+      "score": 2.0868
     },
     {
       "title": "Uber goes after Delivery Hero in full, with an offer that sits below the close",
@@ -189,10 +173,26 @@
       "image": "https://media.thenextweb.com/2026/05/Uber.avif",
       "published": "2026-05-25T07:55:34+00:00",
       "firstSeen": "2026-05-25T09:00:02.023574+00:00",
-      "lastSeen": "2026-05-25T11:00:01.437059+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.06
+      "score": 2.0668
+    },
+    {
+      "title": "Huawei unveils ‘Tau Scaling Law’ as China’s workaround for US chip sanctions",
+      "url": "https://thenextweb.com/news/huawei-tau-scaling-law-chip-sanctions",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "He Tingbo used a Shanghai keynote to argue that cutting signal-propagation time, not shrinking transistors, is the new frontier, and that Huawei has been quietly building chips around the idea for six years. Huawei used the opening day of the IEEE International Symposium on Circuits and Systems in Shanghai on Monday to argue that the global semiconductor [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Huawei-Tau-Scaling-Law.avif",
+      "published": "2026-05-25T07:12:00+00:00",
+      "firstSeen": "2026-05-25T08:00:01.269025+00:00",
+      "lastSeen": "2026-05-25T10:45:25.804243+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0465
     }
   ],
   "errors": []
