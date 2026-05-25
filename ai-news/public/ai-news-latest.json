@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T19:00:02.027407+00:00",
+  "updatedAt": "2026-05-25T19:56:25.226440+00:00",
   "items": [
     {
       "title": "Aliai Eusebi, Alexander Herzog, Xiaoyu Liang, Marie Vasek, Enrico Mariconti, Lorenzo Cavallaro",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-25T19:00:10.731795+00:00",
+      "published": "2026-05-25T19:56:30.847674+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Only 3.3 per cent of users pay for Copilot, so Microsoft is finally making it optional",
+      "url": "https://thenextweb.com/news/only-3-3-per-cent-of-users-pay-for-copilot-so-microsoft-is-finally-making-it-optional",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft has added the ability to fully remove the Copilot app from Windows 11. The change arrived in the April 2026 update and applies to both enterprise administrators using Group Policy and regular users who can now uninstall it through Settings like any other app. For IT administrators, the new policy is called “Remove Microsoft [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif",
+      "published": "2026-05-25T19:10:35+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.6269
+    },
+    {
+      "title": "China is giving every humanoid robot a 29-character ID code, and over 28,000 already have one",
+      "url": "https://thenextweb.com/news/china-humanoid-robot-id-system-lifecycle-tracking",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Summary: China has launched a national ID system for humanoid robots, assigning each a 29-character code that tracks it from production to recycling. Over 28,000 robots across 200 models already have IDs. The system logs real-time performance data including joint wear, battery status, and AI training history.   China has launched a national identification system [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/unitree.avif",
+      "published": "2026-05-25T19:04:01+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1236
+    },
+    {
+      "title": "Reallusion bets that 3D artists directing AI models will beat text prompts for professional filmmaking",
+      "url": "https://thenextweb.com/news/reallusion-ai-studio-bytedance-seedance-3d-video",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Reallusion, the 3D animation software company behind iClone and Character Creator, has launched AI Studio, a production platform that pairs traditional 3D scene-building with generative AI video models. The centrepiece is a direct integration with ByteDance’s Seedance 2.0, currently the top-ranked AI video model on the Artificial Analysis leaderboard. The pitch is straightforward. AI video [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/reallusion-ai-studio-bytedance-seedance-3d-video.avif",
+      "published": "2026-05-25T18:54:44+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.819
     },
     {
       "title": "What ClickUp’s mass layoff tells us about the future of work",
@@ -28,10 +76,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1247853635.jpg?resize=1200%2C800",
       "published": "2026-05-25T16:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.902
+      "score": 3.876
     },
     {
       "title": "The pope’s AI encyclical isn’t really about AI",
@@ -44,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2213411719.jpg?w=1024",
       "published": "2026-05-25T15:09:41+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1787
+      "score": 2.1533
     },
     {
       "title": "Pope Leo calls for being ‘profoundly human’ in the age of AI",
@@ -60,10 +108,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278126608.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0%2C100%2C78.487862082976&amp%3Bw=1200",
       "published": "2026-05-25T15:05:07+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9466
+      "score": 2.9212
     },
     {
       "title": "Startup Battlefield 200 applications close in days: Apply before May 27",
@@ -76,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200%2C800",
       "published": "2026-05-25T14:30:00+00:00",
       "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1607
+      "score": 0.1357
     },
     {
       "title": "PerPlant raises €1M to put AI cameras on tractors, and 200,000 hectares in the bank",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/PerPlant.avif",
       "published": "2026-05-25T14:15:18+00:00",
       "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1141
+      "score": 3.0893
     },
     {
       "title": "5 days left: Save up to $410 on TechCrunch Disrupt 2026 passes before prices increase",
@@ -108,10 +156,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-25T14:00:00+00:00",
       "firstSeen": "2026-05-25T14:16:41.404897+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1227
     },
     {
       "title": "India’s AI ambitions hinge on turning 200 million workers into 350 million",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/IBM.avif",
       "published": "2026-05-25T13:57:44+00:00",
       "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7063
+      "score": 2.6817
     },
     {
       "title": "Why EU business AI adoption is rising and still not catching up",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-25T12:21:12+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6645
+      "score": 2.641
     },
     {
       "title": "US's big bet on quantum computing may not be entirely legal",
@@ -156,10 +204,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/image-2-1152x648.jpeg",
       "published": "2026-05-25T12:00:15+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6557
+      "score": 2.6324
     },
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.0402
+      "score": 13.0173
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0274
+      "score": 7.0048
     },
     {
       "title": "Pope Leo XIV tells the Vatican to disarm AI, in the first encyclical of his pontificate",
@@ -204,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/pope-leo-ai-warfare-spiral-annihilation-sapienza.avif",
       "published": "2026-05-25T10:34:26+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.8204
+      "score": 0.798
     },
     {
       "title": "Best Authentication Platforms for AI Agents and MCP Servers in 2026",
@@ -223,7 +271,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.6903
+      "score": 2.6678
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -236,10 +284,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1586
+      "score": 4.1363
     },
     {
       "title": "Ericsson is leaving Kista for central Stockholm, in the largest office lease in Swedish history",
@@ -252,10 +300,10 @@
       "image": "https://media.thenextweb.com/2015/12/Ericsson.avif",
       "published": "2026-05-25T10:17:04+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9135
+      "score": 1.8912
     },
     {
       "title": "UK venture funding doubled to $10.5bn in the first four months of 2026, on the back of three giant rounds",
@@ -271,7 +319,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6094
+      "score": 2.5872
     },
     {
       "title": "Blue Origin commits another $600m to its Florida campus",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.896
+      "score": 1.8742
     },
     {
       "title": "Schneider Electric expects its India data-centre business to outgrow the rest of the company",
@@ -303,7 +351,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8747
+      "score": 1.8535
     },
     {
       "title": "Most organisations still store their passwords wrong. Here is what actually works.",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8746
+      "score": 1.8534
     },
     {
       "title": "Uber goes after Delivery Hero in full, with an offer that sits below the close",
@@ -335,7 +383,7 @@
       "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8587
+      "score": 1.8379
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -351,7 +399,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8579
+      "score": 7.8371
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -367,7 +415,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4223
+      "score": 6.4016
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -383,7 +431,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.948
+      "score": 5.9275
     },
     {
       "title": "Huawei unveils ‘Tau Scaling Law’ as China’s workaround for US chip sanctions",
@@ -399,7 +447,7 @@
       "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8426
+      "score": 1.8221
     },
     {
       "title": "OpenAI, Grupo Folha and Grupo UOL announce strategic content partnership",
@@ -412,10 +460,26 @@
       "image": "",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0489
+      "score": 9.0322
+    },
+    {
+      "title": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
+      "url": "https://www.anthropic.com/news/chris-olah-pope-leo-encyclical",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Quill&amp%3BbackgroundColor=heather",
+      "published": "2026-05-25T00:00:00+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0322
     },
     {
       "title": "Harness, Scaffold, and the AI Agent Terms Worth Getting Right",
@@ -428,10 +492,10 @@
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6789
+      "score": 4.6622
     },
     {
       "title": "datasette 1.0a30",
@@ -444,10 +508,10 @@
       "image": "https://static.simonwillison.net/static/2026/menu.gif",
       "published": "2026-05-24T23:52:37+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9367
+      "score": 3.92
     },
     {
       "title": "datasette-agent 0.1a4",
@@ -460,10 +524,10 @@
       "image": "https://static.simonwillison.net/static/2026/menu-agent.gif",
       "published": "2026-05-24T23:19:34+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2269
+      "score": 5.2105
     },
     {
       "title": "Build a Complete Langfuse Observability and Evaluation Pipeline for Tracing, Prompt Management, Scoring, and Experiments",
@@ -479,7 +543,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.202
+      "score": 5.1858
     },
     {
       "title": "StepFun Releases StepAudio 2.5 Realtime: An End-to-End Voice Model with Roleplay-Specific RLHF and Paralinguistic Comprehension",
@@ -495,7 +559,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3485
+      "score": 7.3323
     },
     {
       "title": "Everyone is navigating AI security in real time — even Google",
@@ -508,10 +572,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2266466589.jpg?w=1024",
       "published": "2026-05-24T21:39:21+00:00",
       "firstSeen": "2026-05-24T22:00:01.583723+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.798
+      "score": 1.7823
     },
     {
       "title": "datasette-fixtures 0.1a0",
@@ -524,10 +588,10 @@
       "image": "",
       "published": "2026-05-24T21:38:32+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1978
+      "score": 3.1821
     },
     {
       "title": "McKinsey built a free AI tool so candidates stop paying $500/hour interview coaches",
@@ -543,7 +607,7 @@
       "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4356
+      "score": 3.4205
     },
     {
       "title": "The AI security gap nobody wants to admit is already here",
@@ -559,7 +623,7 @@
       "lastSeen": "2026-05-25T10:00:01.479670+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.6201
+      "score": 6.6054
     },
     {
       "title": "Quoting Armin Ronacher",
@@ -572,74 +636,10 @@
       "image": "",
       "published": "2026-05-24T18:46:53+00:00",
       "firstSeen": "2026-05-24T19:00:02.076741+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7513
-    },
-    {
-      "title": "Mad House — Usborne Creepy Computer Games",
-      "url": "https://simonwillison.net/2026/May/24/usborne-mad-house",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Tool: Mad House — Usborne Creepy Computer Games\n        Via Hacker News I learned that UK publisher Usborne published free PDFs of their 1980s Computer Books, some of which I remember working through on my Commodore 64 as a child.\nThese were so great! Beautifully illustrated books with fun projects made up of code you could type into your own machine.\nI remember playing \"Mad House\" typed in from the 1983 book \"Creepy Computer Games\", so I fed that PDF into Claude and had it build an interactive version of that game in JavaScript and HTML:\n\nBuild a vanilla JS artifact that exactly recreates the",
-      "image": "https://static.simonwillison.net/static/2026/mad-house.jpg",
-      "published": "2026-05-24T17:14:11+00:00",
-      "firstSeen": "2026-05-24T21:00:01.935579+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.7278
-    },
-    {
-      "title": "The SEO conference circuit in 2026 is one long argument about what comes next",
-      "url": "https://thenextweb.com/news/seo-conferences-2026-mozcon-ahrefs-evolve-brightonseo-spotlight-smx",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "One of the confirmed sessions at MozCon’s New York date is titled “Preparing for the Death of the Open Web.” The speaker is Mike King, founder of digital marketing agency iPullRank. It is not the most alarming talk title on the 2026 conference calendar. It might be the most honest. The backdrop is not easy [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/seo-conferences-2026-mozcon-ahrefs-evolve-brightonseo-spotlight-smx.avif",
-      "published": "2026-05-24T16:58:43+00:00",
-      "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-25T10:00:01.479670+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5839
-    },
-    {
-      "title": "HP pushed a critical BIOS update through Windows Update. It bricked its most expensive laptops.",
-      "url": "https://thenextweb.com/news/hp-bios-update-bricking-premium-laptops-zbook-elitebook",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "HP customers are reporting that BIOS updates pushed through Windows Update are rendering premium laptops unbootable. The affected devices include the ZBook Ultra G1a, a mobile workstation that costs upwards of £4,000, and the EliteBook X G1a. The updates were flagged as critical, meaning they were applied automatically with no user intervention required. Complaints have [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/hp-bios-update-bricking-premium-laptops-zbook-elitebook.avif",
-      "published": "2026-05-24T16:48:16+00:00",
-      "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-25T10:00:01.479670+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6813
-    },
-    {
-      "title": "The Gulf was supposed to power the AI boom. Then the war started.",
-      "url": "https://thenextweb.com/news/middle-east-war-gulf-ai-data-centres-energy-risk",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Two Amazon Web Services data centres in the UAE were targeted early in the Middle East war. Nearly three months later, oil prices remain around $100 a barrel and the Strait of Hormuz remains closed. The Gulf’s ambition to become a global AI hub is facing its first real stress test. Before the conflict began [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/middle-east-war-gulf-ai-data-centres-energy-risk.avif",
-      "published": "2026-05-24T16:19:01+00:00",
-      "firstSeen": "2026-05-24T18:00:01.241008+00:00",
-      "lastSeen": "2026-05-25T09:00:02.023574+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.5742
+      "score": 1.7369
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1351
+      "score": 1.1347
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.8994
+      "score": -1.8996
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5901
@@ -738,5 +738,11 @@
       "score": 1.89
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }

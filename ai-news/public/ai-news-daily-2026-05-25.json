@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T19:00:02.027407+00:00",
+  "updatedAt": "2026-05-25T19:56:25.226440+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.0402
+      "score": 13.0173
     },
     {
       "title": "OpenAI, Grupo Folha and Grupo UOL announce strategic content partnership",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.0489
+      "score": 9.0322
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -48,7 +48,23 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8579
+      "score": 7.8371
+    },
+    {
+      "title": "Only 3.3 per cent of users pay for Copilot, so Microsoft is finally making it optional",
+      "url": "https://thenextweb.com/news/only-3-3-per-cent-of-users-pay-for-copilot-so-microsoft-is-finally-making-it-optional",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Microsoft has added the ability to fully remove the Copilot app from Windows 11. The change arrived in the April 2026 update and applies to both enterprise administrators using Group Policy and regular users who can now uninstall it through Settings like any other app. For IT administrators, the new policy is called “Remove Microsoft [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/microsoft-copilot-uninstall-windows-11-bloatware.avif",
+      "published": "2026-05-25T19:10:35+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.6269
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0274
+      "score": 7.0048
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -80,7 +96,7 @@
       "lastSeen": "2026-05-25T19:00:02.027407+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4223
+      "score": 6.4016
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -96,7 +112,23 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.948
+      "score": 5.9275
+    },
+    {
+      "title": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
+      "url": "https://www.anthropic.com/news/chris-olah-pope-leo-encyclical",
+      "source": "Anthropic News",
+      "sourceUrl": "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml",
+      "sourceWeight": 1.0,
+      "category": "AI",
+      "summary": "Anthropic co-founder Chris Olah's remarks on Pope Leo XIV's encyclical \"Magnifica humanitas\"",
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Quill&amp%3BbackgroundColor=heather",
+      "published": "2026-05-25T00:00:00+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.0322
     },
     {
       "title": "Harness, Scaffold, and the AI Agent Terms Worth Getting Right",
@@ -109,10 +141,10 @@
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6789
+      "score": 4.6622
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -125,10 +157,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1586
+      "score": 4.1363
     },
     {
       "title": "What ClickUp’s mass layoff tells us about the future of work",
@@ -141,59 +173,33 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1247853635.jpg?resize=1200%2C800",
       "published": "2026-05-25T16:00:00+00:00",
       "firstSeen": "2026-05-25T19:00:02.027407+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.902
+      "score": 3.876
     },
     {
-      "title": "PerPlant raises €1M to put AI cameras on tractors, and 200,000 hectares in the bank",
-      "url": "https://thenextweb.com/news/perplant-1m-seed-precision-spraying-copenhagen",
+      "title": "China is giving every humanoid robot a 29-character ID code, and over 28,000 already have one",
+      "url": "https://thenextweb.com/news/china-humanoid-robot-id-system-lifecycle-tracking",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "The Copenhagen agtech has already mapped nine times more European farmland than every Danish agricultural drone combined. Two well-known Nordic investors want the United States next. The pitch behind PerPlant is one a farmer can grasp in a sentence: a box on the roof of the tractor, a camera looking at the field, an AI deciding which [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/PerPlant.avif",
-      "published": "2026-05-25T14:15:18+00:00",
-      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
+      "summary": "Summary: China has launched a national ID system for humanoid robots, assigning each a 29-character code that tracks it from production to recycling. Over 28,000 robots across 200 models already have IDs. The system logs real-time performance data including joint wear, battery status, and AI training history.   China has launched a national identification system [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/unitree.avif",
+      "published": "2026-05-25T19:04:01+00:00",
+      "firstSeen": "2026-05-25T19:56:25.226440+00:00",
+      "lastSeen": "2026-05-25T19:56:25.226440+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1141
-    },
-    {
-      "title": "Pope Leo calls for being ‘profoundly human’ in the age of AI",
-      "url": "https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Pope Leo XIV warned of the risks of AI and unconstrained technological power in his first major papal document released on Monday. Magnifica Humanitas is the pope's manifesto on \"safeguarding the human person in the time of artificial intelligence,\" in which he discusses the dangers of AI-powered warfare, the effects of AI on labor, and [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278126608.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0%2C100%2C78.487862082976&amp%3Bw=1200",
-      "published": "2026-05-25T15:05:07+00:00",
-      "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9466
-    },
-    {
-      "title": "India’s AI ambitions hinge on turning 200 million workers into 350 million",
-      "url": "https://thenextweb.com/news/india-ai-workforce-reskilling-ibm-patel",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "IBM India’s Sandip Patel says the country can become the world’s AI skill capital by 2030. The arithmetic of getting there is harder than the headline number suggests. ndia has roughly six hundred million workers, and on a recent Bengaluru morning, the head of IBM’s India business put a number on how many of them [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/IBM.avif",
-      "published": "2026-05-25T13:57:44+00:00",
-      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T19:00:02.027407+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7063
+      "score": 3.1236
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
