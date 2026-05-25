@@ -1048,24 +1048,36 @@
       grid-template-columns: 1fr;
       justify-items: center;
       gap: 8px;
-      min-height: 254px;
-      padding: 118px 16px 14px;
+      align-content: start;
+      min-height: 272px;
+      padding: 14px 16px 16px;
       overflow: hidden;
       border: 1px solid rgba(32,179,244,0.72) !important;
       border-radius: 8px;
       text-align: center;
       background-color: #021737;
-      background-image: linear-gradient(180deg, rgba(4,46,94,0.92), rgba(2,23,55,0.96));
+      background-image:
+        radial-gradient(circle at 50% 14%, rgba(64,217,255,0.28), transparent 34%),
+        linear-gradient(180deg, rgba(4,46,94,0.92), rgba(2,23,55,0.96));
       box-shadow: inset 0 0 22px rgba(17,104,176,0.32), 0 10px 28px rgba(0,0,0,0.26);
     }
     .path-card__art {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      width: 100%;
-      height: 100%;
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: min(132px, 76%);
+      aspect-ratio: 1;
+      height: auto;
+      margin: 0 auto 4px;
+      border: 1px solid rgba(86,222,255,0.82);
+      border-radius: 999px;
       object-fit: cover;
-      object-position: center top;
+      object-position: center 24%;
+      background: #031224;
+      box-shadow:
+        0 0 0 7px rgba(5,34,74,0.72),
+        0 0 24px rgba(64,217,255,0.3),
+        inset 0 0 18px rgba(0,0,0,0.28);
     }
     .path-card::before {
       content: "";
@@ -1073,8 +1085,7 @@
       inset: 0;
       z-index: 1;
       background:
-        linear-gradient(180deg, rgba(1,9,21,0.02) 0%, rgba(1,10,24,0.16) 38%, rgba(1,11,24,0.84) 70%, rgba(1,9,20,0.97) 100%),
-        radial-gradient(circle at 50% 18%, rgba(84,223,255,0.22), transparent 28%),
+        linear-gradient(180deg, rgba(1,9,21,0.03) 0%, rgba(1,10,24,0.08) 38%, rgba(1,11,24,0.38) 72%, rgba(1,9,20,0.74) 100%),
         linear-gradient(180deg, rgba(255,255,255,0.04), transparent 22%);
       pointer-events: none;
     }
@@ -1338,8 +1349,7 @@
         grid-template-columns: 1fr;
       }
       .path-card {
-        min-height: 230px;
-        padding-top: 112px;
+        min-height: 258px;
       }
       .guide-library__head,
       .learn-disclosure summary .section-head {
