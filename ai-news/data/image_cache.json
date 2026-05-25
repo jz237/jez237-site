@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T19:56:25.226440+00:00",
+  "updatedAt": "2026-05-25T21:00:01.605108+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8012,6 +8012,14 @@
     "https://www.anthropic.com/news/chris-olah-pope-leo-encyclical": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Quill&amp;backgroundColor=heather",
       "checkedAt": "2026-05-25T19:56:25.226440+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/25/step-by-step-guide-to-build-and-compare-fedavg-and-fedprox-federated-learning-on-non-iid-cifar-10-with-nvidia-flare": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-48.png",
+      "checkedAt": "2026-05-25T21:00:01.605108+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8jsd": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-05-25T21:00:01.605108+00:00"
     }
   }
 }
