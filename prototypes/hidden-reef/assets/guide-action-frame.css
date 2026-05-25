@@ -90,6 +90,41 @@
   z-index: 1;
 }
 
+.hero .hero-actions .btn,
+.hero > div > .hero-actions .btn,
+.hero .hero-actions .btn.secondary,
+.hero > div > .hero-actions .btn.secondary {
+  border: 1px solid rgba(142, 225, 255, 0.44);
+  color: rgba(246, 253, 255, 0.96);
+  background:
+    linear-gradient(180deg, rgba(24, 61, 82, 0.5), rgba(4, 18, 30, 0.66));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 0 18px rgba(65, 202, 255, 0.08);
+  text-shadow: 0 0 8px rgba(220, 248, 255, 0.22);
+}
+
+.hero .hero-actions .btn:first-of-type,
+.hero > div > .hero-actions .btn:first-of-type {
+  border-color: rgba(255, 126, 63, 0.58);
+  background:
+    linear-gradient(90deg, rgba(255, 115, 55, 0.16), transparent 48%),
+    linear-gradient(180deg, rgba(26, 55, 72, 0.54), rgba(5, 18, 30, 0.68));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 20px rgba(255, 112, 50, 0.14);
+}
+
+.hero .hero-actions .btn:hover,
+.hero .hero-actions .btn:focus-visible,
+.hero > div > .hero-actions .btn:hover,
+.hero > div > .hero-actions .btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(176, 239, 255, 0.68);
+  background:
+    linear-gradient(180deg, rgba(33, 76, 101, 0.58), rgba(5, 22, 36, 0.74));
+}
+
 .hero-actions .btn:hover,
 .hero-actions .btn:focus-visible {
   cursor: pointer;
