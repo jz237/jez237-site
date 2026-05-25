@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T10:00:01.479670+00:00",
+  "updatedAt": "2026-05-25T10:45:25.804243+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7976,6 +7976,10 @@
     "https://www.marktechpost.com/2026/05/25/workos-releases-auth-md-an-open-agent-registration-protocol-built-on-oauth-standards": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "checkedAt": "2026-05-25T08:00:01.269025+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/25/best-authentication-platforms-for-ai-agents-and-mcp-servers-in-2026": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-47-1024x731.png",
+      "checkedAt": "2026-05-25T10:45:25.804243+00:00"
     }
   }
 }
