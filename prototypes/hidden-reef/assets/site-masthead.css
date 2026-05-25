@@ -102,6 +102,12 @@ main.page > .footer {
   margin-right: -24px !important;
 }
 
+main.page > section[aria-labelledby="paths-title"] {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 .path-card:hover,
 .style-card:hover,
 .care-card:hover,
