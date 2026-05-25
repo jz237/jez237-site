@@ -1075,8 +1075,11 @@
       gap: 10px;
       margin-top: 4px;
     }
-    .learn-actions .btn {
+    .learn-actions .btn:first-child {
       min-width: min(100%, 260px);
+    }
+    .learn-actions .btn.secondary {
+      padding-inline: 14px;
     }
     .learn-split {
       display: grid;
@@ -2834,6 +2837,10 @@
           <p>Clear help for starter tanks, equipment choices, care routines, water quality, and troubleshooting, written so you can understand the system before choosing the next step.</p>
           <div class="learn-actions">
             <a class="btn" href="learn/">Open Help Center</a>
+            <a class="btn secondary" href="learn/#starter-checklists">Start a Tank</a>
+            <a class="btn secondary" href="learn/#troubleshooting">Fix a Problem</a>
+            <a class="btn secondary" href="learn/#filtration-equipment">Equipment</a>
+            <a class="btn secondary" href="learn/#care-routines">Care Guides</a>
           </div>
         </div>
       </div>
