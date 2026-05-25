@@ -850,5 +850,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-25-afternoon-rain-garden-transfer-window",
+    "title": "Rain Garden Transfer Window",
+    "tests": "Tests whether GPT Image 2 can make an explicit stained-glass visual format read instantly while embedding a transit-diagram network, glowing glass material imperfections, and civic rain-garden symbolism without reverting to document, specimen, or glossy concept-art conventions.",
+    "prompt": "Title: Rain Garden Transfer Window\nFormat name: Stained-Glass Transit Diagram\nCategory/kind: stained-glass\n\nCreate a square 1024x1024 image that is unmistakably a backlit stained-glass panel, not glossy AI concept art, not a lab specimen, not an archive document, and not a normal transit map poster. The image should look like a real stained-glass window installed in a quiet underground transit concourse, photographed straight-on with slight perspective and architectural context at the edges.\n\nVisual format rules: lead came outlines form a transit-diagram-like network; jewel-tone glass pieces glow from behind; route lines are built from colored glass strips and circular station medallions; the surface includes uneven glass texture, solder seams, tiny bubbles, hairline cracks, and dust on the lower sill.\n\nSubject: an impossible city transit system where each route connects civic rain gardens, rooftop cisterns, greenhouse platforms, storm drains, canal locks, seed libraries, and cloud-observation towers. The stations are abstract symbols rather than readable names: leaf icons, droplet medallions, seed shapes, roof silhouettes, small bridge glyphs, and rainwater arrows. At the center, a large round transfer hub contains a stylized glass cistern with blue water bands and green aquatic plants. Around it, colored route lines branch through amber neighborhoods, deep teal tunnels, violet night platforms, ruby signal lamps, and pale opal sky panels.\n\nComposition: square stained-glass panel filling most of the frame, with a thin dark metal window frame and a bit of tiled station wall visible around it. Strong graphic clarity from the transit network, but tactile realism from the stained glass material. Include no readable words, no real logos, no brand marks, no copyrighted characters. If any human figures appear, they must be tiny static silhouettes in the station edge context, not central, not posing.\n\nMood and palette: luminous, civic, calm, rain-washed; emerald, cobalt, amber, ruby, violet, opal white, dark lead lines, faint reflections on polished floor tile below. Backlighting should make the glass glow while preserving material imperfections.\n\nHard exclusions: no dancing, no dancers, no ballet, no ballroom, no stage dance, no ceremonial dance, no dance poses, no implied choreography, no performers, no stage performance, no watermark, no signature.",
+    "image": "images/2026-05-25-afternoon-rain-garden-transfer-window.png",
+    "date": "2026-05-25",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
