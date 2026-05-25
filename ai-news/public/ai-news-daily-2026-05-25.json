@@ -1,9 +1,41 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T07:00:02.064298+00:00",
+  "updatedAt": "2026-05-25T08:00:01.269025+00:00",
   "items": [
     {
-      "title": "Aliai Eusebi, Alexander Herzog, Xiaoyu Liang, Marie Vasek, Enrico Mariconti, Lorenzo Cavallaro",
+      "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
+      "url": "https://www.marktechpost.com/2026/05/25/workos-releases-auth-md-an-open-agent-registration-protocol-built-on-oauth-standards",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Most web applications still have no structured way for an AI agent to register. auth.md proposes a fix: a Markdown file apps publish at their domain that tells agents which registration flows are supported, which scopes to request, and how to get credentials tied to a real user — without a human filling out a form.\nThe post WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
+      "published": "2026-05-25T07:38:15+00:00",
+      "firstSeen": "2026-05-25T08:00:01.269025+00:00",
+      "lastSeen": "2026-05-25T08:00:01.269025+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.709
+    },
+    {
+      "title": "Huawei unveils ‘Tau Scaling Law’ as China’s workaround for US chip sanctions",
+      "url": "https://thenextweb.com/news/huawei-tau-scaling-law-chip-sanctions",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "He Tingbo used a Shanghai keynote to argue that cutting signal-propagation time, not shrinking transistors, is the new frontier, and that Huawei has been quietly building chips around the idea for six years. Huawei used the opening day of the IEEE International Symposium on Circuits and Systems in Shanghai on Monday to argue that the global semiconductor [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Huawei-Tau-Scaling-Law.avif",
+      "published": "2026-05-25T07:12:00+00:00",
+      "firstSeen": "2026-05-25T08:00:01.269025+00:00",
+      "lastSeen": "2026-05-25T08:00:01.269025+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1258
+    },
+    {
+      "title": "Maximillian Rossi, Prajwal Raghunath, Eugene Wu",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -11,12 +43,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-25T07:00:10.302562+00:00",
+      "published": "2026-05-25T08:00:07.986104+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-25T07:00:02.064298+00:00",
+      "lastSeen": "2026-05-25T08:00:01.269025+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.74
     }
   ],
   "errors": []

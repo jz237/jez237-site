@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T07:00:02.064298+00:00",
+  "updatedAt": "2026-05-25T08:00:01.269025+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7972,6 +7972,10 @@
     "https://simonwillison.net/2026/May/24/datasette-fixtures": {
       "image": "",
       "checkedAt": "2026-05-25T00:00:01.971231+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/25/workos-releases-auth-md-an-open-agent-registration-protocol-built-on-oauth-standards": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
+      "checkedAt": "2026-05-25T08:00:01.269025+00:00"
     }
   }
 }
