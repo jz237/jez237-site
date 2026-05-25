@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T14:16:41.404897+00:00",
+  "updatedAt": "2026-05-25T15:00:01.280911+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.165
+      "score": 13.1448
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9712
+      "score": 7.9529
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1504
+      "score": 7.1305
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5347
+      "score": 6.5165
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0599
+      "score": 6.0418
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -93,10 +93,42 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2804
+      "score": 4.2607
+    },
+    {
+      "title": "PerPlant raises €1M to put AI cameras on tractors, and 200,000 hectares in the bank",
+      "url": "https://thenextweb.com/news/perplant-1m-seed-precision-spraying-copenhagen",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Copenhagen agtech has already mapped nine times more European farmland than every Danish agricultural drone combined. Two well-known Nordic investors want the United States next. The pitch behind PerPlant is one a farmer can grasp in a sentence: a box on the roof of the tractor, a camera looking at the field, an AI deciding which [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/PerPlant.avif",
+      "published": "2026-05-25T14:15:18+00:00",
+      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2275
+    },
+    {
+      "title": "India’s AI ambitions hinge on turning 200 million workers into 350 million",
+      "url": "https://thenextweb.com/news/india-ai-workforce-reskilling-ibm-patel",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "IBM India’s Sandip Patel says the country can become the world’s AI skill capital by 2030. The arithmetic of getting there is harder than the headline number suggests. ndia has roughly six hundred million workers, and on a recent Bengaluru morning, the head of IBM’s India business put a number on how many of them [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/IBM.avif",
+      "published": "2026-05-25T13:57:44+00:00",
+      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8187
     },
     {
       "title": "Best Authentication Platforms for AI Agents and MCP Servers in 2026",
@@ -109,10 +141,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-47-1024x731.png",
       "published": "2026-05-25T10:34:02+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8123
+      "score": 2.7926
     },
     {
       "title": "Why EU business AI adoption is rising and still not catching up",
@@ -125,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-25T12:21:12+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7927
+      "score": 2.772
     },
     {
       "title": "US's big bet on quantum computing may not be entirely legal",
@@ -141,10 +173,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/image-2-1152x648.jpeg",
       "published": "2026-05-25T12:00:15+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7827
+      "score": 2.7622
     },
     {
       "title": "UK venture funding doubled to $10.5bn in the first four months of 2026, on the back of three giant rounds",
@@ -157,49 +189,11 @@
       "image": "https://media.thenextweb.com/2026/05/UK.avif",
       "published": "2026-05-25T10:06:48+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7298
-    },
-    {
-      "title": "Latent Cache Flow: Model-to-Model Communication Without Text",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-25T14:17:02.933139+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "5 days left: Save up to $410 on TechCrunch Disrupt 2026 passes before prices increase",
-      "url": "https://techcrunch.com/2026/05/25/5-days-left-save-up-to-410-on-techcrunch-disrupt-2026-passes-before-prices-increase",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Early Bird savings for TechCrunch Disrupt 2026 in San Francisco end May 29 at 11:59 p.m. PT. Register now to save up to $410 before prices increase.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200%2C675",
-      "published": "2026-05-25T14:00:00+00:00",
-      "firstSeen": "2026-05-25T14:16:41.404897+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2815
+      "score": 2.7104
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }

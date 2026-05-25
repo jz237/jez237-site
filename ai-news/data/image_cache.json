@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T14:16:41.404897+00:00",
+  "updatedAt": "2026-05-25T15:00:01.280911+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7984,6 +7984,10 @@
     "https://techcrunch.com/2026/05/25/5-days-left-save-up-to-410-on-techcrunch-disrupt-2026-passes-before-prices-increase": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200,675",
       "checkedAt": "2026-05-25T14:16:41.404897+00:00"
+    },
+    "https://techcrunch.com/2026/05/25/startup-battlefield-200-applications-close-in-days-apply-before-may-27": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200,800",
+      "checkedAt": "2026-05-25T15:00:01.280911+00:00"
     }
   }
 }
