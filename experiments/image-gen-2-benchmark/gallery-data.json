@@ -826,5 +826,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-25-morning-velvet-static-seed-battery",
+    "title": "Velvet Static Seed Battery",
+    "tests": "Fictional-specimen lane: tests a museum conservation tray format with invented electro-botanical seed organs, matte archival materials, specimen variation, static dust effects, and top-down taxonomic comparison instead of creature or landscape concept art.",
+    "prompt": "Title: Velvet Static Seed Battery\nLane/category: fictional-specimen\n\nCreate a square 1024x1024 fictional natural-history specimen image that looks like a photographed museum conservation workbench record for an invented plant-machine organ, not cinematic concept art and not a normal botanical illustration.\n\nVisual format: a shallow acid-free archival tray lined with dark olive conservation foam, photographed from directly above. Inside are six small impossible seed batteries arranged like a taxonomic comparison set: each specimen is half dried seed pod and half soft electrical organ, with velvety black husks, pale rootlike ceramic ribs, translucent green gel reservoirs, tiny silver pollen contacts, and hair-thin static filaments that catch dust. Include two glass microscope coverslips, a torn strip of blank linen tape, a few brass entomology pins, a non-readable graphite scale grid, cotton gloves partly cropped at the edge, and one open kraft coin envelope with no logo.\n\nSubject: the seed batteries are fictional dormant organs from a wind-dispersed plant that stores static charge in velvet-coated seed chambers. Show believable variation between specimens: one cracked pod exposing layered gel cells, one sprouting porcelain-white conductive roots, one with dust standing upright around it from static, one sliced cross-section revealing radial capacitor-like chambers, and two intact dark seed pods with subtle iridescent green seams. It should feel scientifically plausible but impossible.\n\nComposition: direct top-down archive-table documentation, spare and tactile, with strong negative space in the tray, crisp specimen shadows, precise pin placement, and no landscape background. The physical conservation tray and comparison layout should be the main visual language.\n\nMood and palette: quiet, dry, uncanny natural history; velvet black, oxidized olive foam, pale ceramic white, translucent chartreuse gel, dull brass pins, graphite gray, kraft paper brown, tiny silver contact highlights. High detail, matte surfaces, dust, fibers, real macro texture, restrained lighting.\n\nText discipline: no readable paragraphs, no real logos, no brand marks; any labels or marks must be blank or illegible.\n\nHard exclusions: no dancing, no dancers, no ballet, no dance poses, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no watermark, no signature.",
+    "image": "images/2026-05-25-morning-velvet-static-seed-battery.png",
+    "date": "2026-05-25",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
