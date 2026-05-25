@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weekly Maintenance Checklist - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a {
+      color: #dff8ff;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.36);
+      text-underline-offset: 4px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(360px, 1.18fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(114,211,137,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .eyebrow,
+    .section-head span,
+    .step-card span,
+    .gear-card span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 620px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      overflow: hidden;
+      min-height: 310px;
+      margin: 0;
+      border: 1px solid rgba(114,211,137,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 28px rgba(114,211,137,0.18);
+    }
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: cover;
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .section-head p { max-width: 430px; }
+    .step-grid,
+    .gear-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .step-card,
+    .gear-card,
+    .callout {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(114,211,137,0.12), transparent 36%),
+        #071a27;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .step-card,
+    .gear-card { padding: 16px; }
+    .step-card h3,
+    .gear-card h3,
+    .callout h2 {
+      margin: 8px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .step-card ul,
+    .gear-card ul {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .step-card li,
+    .gear-card li {
+      position: relative;
+      padding-left: 17px;
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .step-card li::before,
+    .gear-card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(114,211,137,0.48);
+    }
+    .visual-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 0.62fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.14), transparent 36%),
+        #071a27;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .visual-band img {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      max-height: 360px;
+      object-fit: cover;
+      object-position: center 58%;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      background: #061a27;
+    }
+    .callout {
+      margin-top: 28px;
+      padding: 20px;
+      border-left: 6px solid var(--orange);
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%),
+        #150f0b;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3,
+    .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero,
+      .visual-band { grid-template-columns: 1fr; }
+      .step-grid,
+      .gear-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .hero { padding: 20px 16px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .step-grid,
+      .gear-grid { grid-template-columns: 1fr; }
+      .visual-band,
+      .callout { padding: 14px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../">Home</a>
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Learn</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs"><a href="../">Learning Center</a><span>/</span><span>Weekly Maintenance Checklist</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Routine care</span>
+        <h1>Weekly Maintenance Checklist</h1>
+        <p>Keep the tank stable with a simple weekly rhythm: inspect livestock, test water, change a sensible amount, clean the glass, and service filters without disturbing the biological media.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=maintenance">Shop maintenance supplies</a>
+          <a class="btn secondary" href="../#starter-checklists">Back to checklists</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="../../assets/learn/weekly-maintenance-checklist-gpt-image-2.jpg" alt="Illustrated aquarium weekly maintenance checklist with test kits, water change tools, algae scraper, filter media, and a healthy aquarium" />
+      </figure>
+    </section>
+
+    <section aria-labelledby="weekly-steps-title">
+      <div class="section-head">
+        <div>
+          <span>Weekly rhythm</span>
+          <h2 id="weekly-steps-title">Do these in order</h2>
+        </div>
+        <p>The goal is steady water quality and early problem detection, not a deep clean that shocks the tank.</p>
+      </div>
+      <div class="step-grid">
+        <article class="step-card">
+          <span>01</span>
+          <h3>Inspect before touching</h3>
+          <p>Look at the animals and equipment before feeding, scraping, or moving anything.</p>
+          <ul>
+            <li>Check fish breathing, appetite, hiding, and fin condition</li>
+            <li>Confirm heater, filter, flow, and surface movement</li>
+            <li>Look for new algae, cloudy water, leaks, or salt creep</li>
+          </ul>
+        </article>
+        <article class="step-card">
+          <span>02</span>
+          <h3>Test the trend</h3>
+          <p>Use tests to see where the tank is heading instead of reacting only when livestock looks stressed.</p>
+          <ul>
+            <li>Check ammonia, nitrite, nitrate, pH, and temperature</li>
+            <li>Check salinity and alkalinity for saltwater or reef tanks</li>
+            <li>Write down results so changes are easy to spot</li>
+          </ul>
+        </article>
+        <article class="step-card">
+          <span>03</span>
+          <h3>Change water carefully</h3>
+          <p>Small, consistent water changes are safer than occasional aggressive cleanouts.</p>
+          <ul>
+            <li>Match temperature and conditioner or salinity before refilling</li>
+            <li>Siphon visible debris without tearing up the whole bottom</li>
+            <li>Top off evaporation with freshwater, not saltwater</li>
+          </ul>
+        </article>
+        <article class="step-card">
+          <span>04</span>
+          <h3>Clean without resetting</h3>
+          <p>Clear glass and restore flow, but protect the bacteria living in the filter and substrate.</p>
+          <ul>
+            <li>Wipe algae from glass and rinse prefilters or sponges in tank water</li>
+            <li>Replace chemical media only when it is exhausted</li>
+            <li>Never replace all biological media at the same time</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="maintenance-supplies-title">
+      <div class="section-head">
+        <div>
+          <span>Keep it ready</span>
+          <h2 id="maintenance-supplies-title">Supplies to keep on hand</h2>
+        </div>
+        <p>A small maintenance kit makes weekly care faster and keeps aquarium tools separate from household tools.</p>
+      </div>
+      <div class="gear-grid">
+        <article class="gear-card">
+          <span>Water change</span>
+          <h3>Bucket, siphon, conditioner</h3>
+          <p>Use aquarium-only tools and prepare replacement water before anything is removed.</p>
+          <ul>
+            <li>Dedicated bucket or water-change container</li>
+            <li>Gravel vacuum or siphon</li>
+            <li>Water conditioner, salt mix, or prepared saltwater as needed</li>
+          </ul>
+        </article>
+        <article class="gear-card">
+          <span>Testing</span>
+          <h3>Core test kits</h3>
+          <p>Testing prevents guesswork and helps the store diagnose issues if you bring in a sample.</p>
+          <ul>
+            <li>Ammonia, nitrite, nitrate, and pH</li>
+            <li>Thermometer and log sheet or notebook</li>
+            <li>Salinity, alkalinity, phosphate, and calcium for reef tanks</li>
+          </ul>
+        </article>
+        <article class="gear-card">
+          <span>Cleaning</span>
+          <h3>Glass and detail tools</h3>
+          <p>Clean the visible buildup while avoiding soaps, sprays, and rough tools that can scratch acrylic or glass.</p>
+          <ul>
+            <li>Algae pad or magnetic cleaner rated for the tank material</li>
+            <li>Turkey baster or small brush for debris pockets</li>
+            <li>Towel for spills, salt creep, and cabinet edges</li>
+          </ul>
+        </article>
+        <article class="gear-card">
+          <span>Filter care</span>
+          <h3>Media and flow checks</h3>
+          <p>Keep water moving freely, but treat biological media like part of the livestock support system.</p>
+          <ul>
+            <li>Replacement filter floss or cartridges when appropriate</li>
+            <li>Extra sponge, carbon, or specialty media</li>
+            <li>Brushes for intakes, impellers, tubing, and return nozzles</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-band" aria-labelledby="maintenance-habit-title">
+      <img src="../../assets/site/learn-paths/care-guides-gpt2.jpg" alt="Aquarium care guide illustration" loading="lazy" />
+      <div>
+        <div class="section-head" style="display:block;margin:0 0 12px">
+          <span>Care habit</span>
+          <h2 id="maintenance-habit-title">Keep changes boring</h2>
+        </div>
+        <p>A healthy aquarium usually improves through steady, repeatable care. If something looks wrong, test first, make one clear correction, and give the system time to respond before changing several things at once.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=maintenance">Browse maintenance</a>
+          <a class="btn secondary" href="../#health-water-quality">Open water quality</a>
+        </div>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>Bring a water sample if the numbers do not make sense</h2>
+      <p>If the tank looks off or the tests are confusing, bring a fresh water sample to the store with your tank size, livestock list, recent maintenance, and any products added. That gives the staff enough context to help without guessing.</p>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Learn</h4><div class="footer-link-grid"><a href="../">Learning Center</a><a href="../first-tank/">First Tank</a><a href="../saltwater-basics/">Saltwater Basics</a><a href="../cloudy-water/">Cloudy Water</a><a href="../algae/">Algae</a><a href="../ammonia-nitrite/">Ammonia Spike</a></div></div>
+        <div><h4>About This Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
