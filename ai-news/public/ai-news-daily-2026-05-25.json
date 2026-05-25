@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "updatedAt": "2026-05-25T16:00:01.966124+00:00",
+  "updatedAt": "2026-05-25T17:00:01.545366+00:00",
   "items": [
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -13,10 +13,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.1176
+      "score": 13.0911
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9281
+      "score": 7.9041
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1037
+      "score": 7.0775
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -61,10 +61,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.492
+      "score": 6.4681
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0174
+      "score": 5.9936
     },
     {
       "title": "Harness, Scaffold, and the AI Agent Terms Worth Getting Right",
@@ -93,10 +93,10 @@
       "image": "https://huggingface.co/blog/assets/agent-glossary/thumbnail.png",
       "published": "2026-05-25T00:00:00+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7353
+      "score": 4.716
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -109,10 +109,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2341
+      "score": 4.2083
     },
     {
       "title": "PerPlant raises €1M to put AI cameras on tractors, and 200,000 hectares in the bank",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/PerPlant.avif",
       "published": "2026-05-25T14:15:18+00:00",
       "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1979
+      "score": 3.1692
     },
     {
       "title": "Pope Leo calls for being ‘profoundly human’ in the age of AI",
@@ -141,10 +141,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278126608.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C0%2C100%2C78.487862082976&amp%3Bw=1200",
       "published": "2026-05-25T15:05:07+00:00",
       "firstSeen": "2026-05-25T16:00:01.966124+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0324
+      "score": 3.003
     },
     {
       "title": "India’s AI ambitions hinge on turning 200 million workers into 350 million",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/IBM.avif",
       "published": "2026-05-25T13:57:44+00:00",
       "firstSeen": "2026-05-25T15:00:01.280911+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7894
+      "score": 2.761
     },
     {
       "title": "Best Authentication Platforms for AI Agents and MCP Servers in 2026",
@@ -173,10 +173,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-47-1024x731.png",
       "published": "2026-05-25T10:34:02+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.7659
+      "score": 2.74
     },
     {
       "title": "Why EU business AI adoption is rising and still not catching up",
@@ -189,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-25T12:21:12+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T16:00:01.966124+00:00",
+      "lastSeen": "2026-05-25T17:00:01.545366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.744
+      "score": 2.7168
     }
   ],
   "errors": []
