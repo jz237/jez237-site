@@ -1361,9 +1361,157 @@
       border-color: rgba(255,201,86,0.72);
       background: rgba(3,33,76,0.86);
     }
+    .starter-section {
+      display: grid;
+      gap: 14px;
+    }
+    .starter-section__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      padding: 2px 0 12px;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+    }
+    .starter-section__head h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      line-height: 1.05;
+    }
+    .starter-section__head p {
+      max-width: 560px;
+      margin: 6px 0 0;
+      color: #c9d9d7;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .starter-section__meta {
+      color: #72d389;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .starter-topic-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .starter-topic-card {
+      display: grid;
+      gap: 7px;
+      min-height: 132px;
+      padding: 13px;
+      border: 1px solid rgba(114,211,137,0.26);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(114,211,137,0.14), transparent 38%),
+        rgba(3,28,31,0.72);
+      box-shadow: inset 0 0 20px rgba(114,211,137,0.06);
+    }
+    .starter-topic-card span {
+      color: #91f0b0;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .starter-topic-card strong {
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.05;
+    }
+    .starter-topic-card p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .starter-guide-panel {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(114,211,137,0.1), transparent 42%),
+        rgba(2,20,23,0.76);
+      box-shadow: inset 0 0 28px rgba(114,211,137,0.07);
+    }
+    .starter-guide-panel h4 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      line-height: 1.05;
+    }
+    .starter-guide-panel p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .starter-quick-list {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .starter-quick-list li {
+      position: relative;
+      padding-left: 18px;
+      color: #dff8ff;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .starter-quick-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #72d389;
+      box-shadow: 0 0 12px rgba(114,211,137,0.46);
+    }
+    .starter-step-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .starter-step-card {
+      padding: 13px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 8px;
+      background: rgba(3,35,77,0.36);
+    }
+    .starter-step-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+      font-size: 14px;
+    }
+    .starter-step-card p {
+      color: #c9d9d7;
+      font-size: 13px;
+      line-height: 1.42;
+    }
     @media (max-width: 1040px) {
       .path-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .starter-topic-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .starter-guide-panel {
+        grid-template-columns: 1fr;
       }
       .store-help {
         grid-template-columns: minmax(0, 1fr) 250px;
@@ -1380,8 +1528,20 @@
       .path-grid,
       .problem-grid,
       .checklist-grid,
-      .guide-grid {
+      .guide-grid,
+      .starter-topic-grid,
+      .starter-step-grid {
         grid-template-columns: 1fr;
+      }
+      .starter-section__head {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .starter-section__meta {
+        white-space: normal;
+      }
+      .starter-guide-panel {
+        padding: 14px;
       }
       .path-card {
         min-height: 296px;
@@ -1614,17 +1774,72 @@
         </div>
       </summary>
       <div class="learn-disclosure__body">
+      <section class="starter-section" aria-labelledby="first-tank-checklist-title">
+        <div class="starter-section__head">
+          <div>
+            <h3 id="first-tank-checklist-title">First Tank Checklist</h3>
+            <p>A beginner-friendly freshwater setup path for the first shopping trip, the first fill, and the first livestock plan.</p>
+          </div>
+          <span class="starter-section__meta">Freshwater start</span>
+        </div>
+        <div class="starter-topic-grid">
+          <article class="starter-topic-card">
+            <span>01</span>
+            <strong>Tank setup</strong>
+            <p>Pick the tank, stand, lid, light, substrate, and a stable place away from windows.</p>
+          </article>
+          <article class="starter-topic-card">
+            <span>02</span>
+            <strong>Equipment</strong>
+            <p>Match the heater, filter, thermometer, net, bucket, and algae pad to the tank size.</p>
+          </article>
+          <article class="starter-topic-card">
+            <span>03</span>
+            <strong>Water prep</strong>
+            <p>Use conditioner, bacteria starter, and a test kit before any fish go in.</p>
+          </article>
+          <article class="starter-topic-card">
+            <span>04</span>
+            <strong>Cycling</strong>
+            <p>Build the biological filter and track ammonia, nitrite, nitrate, and pH.</p>
+          </article>
+          <article class="starter-topic-card">
+            <span>05</span>
+            <strong>First livestock</strong>
+            <p>Choose hardy, compatible fish slowly instead of filling the tank on day one.</p>
+          </article>
+        </div>
+        <div class="starter-guide-panel">
+          <div>
+            <h4>What to buy first</h4>
+            <p>Start with the hardware and water tools before livestock. That gives the tank time to stabilize and avoids the common beginner mistake of bringing fish home before the system can support them.</p>
+            <ul class="starter-quick-list">
+              <li>Tank, stand or level support, lid, light, heater, filter, and thermometer</li>
+              <li>Water conditioner, bacteria starter, liquid test kit, substrate, decor, food, net, algae pad, and dedicated bucket</li>
+              <li>A simple livestock plan based on adult fish size, temperament, and tank volume</li>
+            </ul>
+          </div>
+          <div class="starter-step-grid">
+            <article class="starter-step-card">
+              <strong>Before filling</strong>
+              <p>Rinse substrate, place hardscape securely, install the filter and heater, and confirm the tank is level before adding water.</p>
+            </article>
+            <article class="starter-step-card">
+              <strong>First fill</strong>
+              <p>Treat tap water with conditioner, start the filter, set the heater, and let temperature stabilize before testing.</p>
+            </article>
+            <article class="starter-step-card">
+              <strong>First week</strong>
+              <p>Test ammonia and nitrite, feed lightly if cycling with livestock, and avoid replacing filter media while bacteria are developing.</p>
+            </article>
+            <article class="starter-step-card">
+              <strong>First fish</strong>
+              <p>Add a small number of hardy fish, then wait and retest before adding more. Compatibility matters more than filling every inch.</p>
+            </article>
+          </div>
+        </div>
+      </section>
       <div class="checklist-grid">
-        <article class="checklist-card">
-          <span>Freshwater start</span>
-          <h3>First Tank Checklist</h3>
-          <ul>
-            <li>Tank, stand, lid, light, heater, filter, thermometer</li>
-            <li>Water conditioner, bacteria starter, test kit</li>
-            <li>Substrate, decor, food, net, algae pad, bucket</li>
-          </ul>
-          <p><a href="../category/?cat=freshwater">Shop freshwater basics</a></p>
-        </article>
         <article class="checklist-card">
           <span>Reef start</span>
           <h3>Saltwater Setup Basics</h3>
