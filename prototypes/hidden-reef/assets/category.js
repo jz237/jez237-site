@@ -93,6 +93,25 @@
     return null;
   }
 
+  function setMainNavActive(catSlug) {
+    const nav = document.querySelector('.main-nav');
+    if (!nav) return;
+    const activeDepartments = new Set(['freshwater', 'saltwater', 'pond', 'equipment', 'food', 'decor', 'maintenance']);
+    if (!catSlug) return;
+    nav.querySelectorAll('a.active').forEach(link => link.classList.remove('active'));
+    if (!activeDepartments.has(catSlug)) return;
+    nav.querySelectorAll('a[href]').forEach(link => {
+      try {
+        const url = new URL(link.getAttribute('href'), window.location.href);
+        if (url.searchParams.get('cat') === catSlug) {
+          link.classList.add('active');
+        }
+      } catch (error) {
+        // Ignore malformed relative links and leave the nav unmodified.
+      }
+    });
+  }
+
   function getProducts(subSlug) {
     if (!window.THR_PRODUCTS || !THR_PRODUCTS[subSlug]) return [];
     const meta = getCategoryMeta(subSlug);
@@ -681,6 +700,7 @@
       currentResultLabel = targetSub.name;
       baseProducts = getProducts(targetSub.slug);
     } else if (targetCat && targetCat.slug !== currentCategory.slug) {
+      currentCategory = targetCat;
       currentSubcategory = null;
       currentResultLabel = targetCat.name;
       baseProducts = getCategoryProducts(targetCat);
@@ -689,6 +709,7 @@
       currentResultLabel = currentCategory.name;
       baseProducts = getCategoryProducts(currentCategory);
     }
+    setMainNavActive(targetCat ? targetCat.slug : currentCategory.slug);
 
     const categoryFilter = document.getElementById('category-filter');
     const brandFilter = document.getElementById('brand-filter');
@@ -813,6 +834,7 @@
     currentSubcategory = sub;
     currentResultLabel = sub ? sub.name : (cat ? cat.name : '');
     showNewArrivalsFilter = !cat && !sub;
+    setMainNavActive(cat ? cat.slug : '');
 
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
