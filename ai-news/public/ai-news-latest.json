@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T14:16:41.404897+00:00",
+  "updatedAt": "2026-05-25T15:00:01.280911+00:00",
   "items": [
     {
       "title": "Latent Cache Flow: Model-to-Model Communication Without Text",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-25T14:17:02.933139+00:00",
+      "published": "2026-05-25T15:00:12.402966+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Startup Battlefield 200 applications close in days: Apply before May 27",
+      "url": "https://techcrunch.com/2026/05/25/startup-battlefield-200-applications-close-in-days-apply-before-may-27",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The deadline to apply or nominate for Startup Battlefield 200 is May 27. This is your shot at VC access, global visibility, TechCrunch coverage, and $100,000. Apply now.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/11/54889393608_2493644601_o-2.jpg?resize=1200%2C800",
+      "published": "2026-05-25T14:30:00+00:00",
+      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.2748
+    },
+    {
+      "title": "PerPlant raises €1M to put AI cameras on tractors, and 200,000 hectares in the bank",
+      "url": "https://thenextweb.com/news/perplant-1m-seed-precision-spraying-copenhagen",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Copenhagen agtech has already mapped nine times more European farmland than every Danish agricultural drone combined. Two well-known Nordic investors want the United States next. The pitch behind PerPlant is one a farmer can grasp in a sentence: a box on the roof of the tractor, a camera looking at the field, an AI deciding which [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/PerPlant.avif",
+      "published": "2026-05-25T14:15:18+00:00",
+      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2275
     },
     {
       "title": "5 days left: Save up to $410 on TechCrunch Disrupt 2026 passes before prices increase",
@@ -28,10 +60,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_5Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-25T14:00:00+00:00",
       "firstSeen": "2026-05-25T14:16:41.404897+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2815
+      "score": 2.2599
+    },
+    {
+      "title": "India’s AI ambitions hinge on turning 200 million workers into 350 million",
+      "url": "https://thenextweb.com/news/india-ai-workforce-reskilling-ibm-patel",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "IBM India’s Sandip Patel says the country can become the world’s AI skill capital by 2030. The arithmetic of getting there is harder than the headline number suggests. ndia has roughly six hundred million workers, and on a recent Bengaluru morning, the head of IBM’s India business put a number on how many of them [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/IBM.avif",
+      "published": "2026-05-25T13:57:44+00:00",
+      "firstSeen": "2026-05-25T15:00:01.280911+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8187
     },
     {
       "title": "Why EU business AI adoption is rising and still not catching up",
@@ -44,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-25T12:21:12+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7927
+      "score": 2.772
     },
     {
       "title": "US's big bet on quantum computing may not be entirely legal",
@@ -60,10 +108,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/image-2-1152x648.jpeg",
       "published": "2026-05-25T12:00:15+00:00",
       "firstSeen": "2026-05-25T14:00:01.195782+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7827
+      "score": 2.7622
     },
     {
       "title": "Microsoft’s quiet Claude Code retreat and the real cost of enterprise AI",
@@ -76,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/04/microsoft-voluntary-retirement-us-workers-ai.avif",
       "published": "2026-05-25T11:22:57+00:00",
       "firstSeen": "2026-05-25T13:00:01.691311+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.165
+      "score": 13.1448
     },
     {
       "title": "From the Vatican stage, Anthropic’s Chris Olah says AI cannot be steered by AI labs alone",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-25T10:51:41+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.1504
+      "score": 7.1305
     },
     {
       "title": "Pope Leo XIV tells the Vatican to disarm AI, in the first encyclical of his pontificate",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/pope-leo-ai-warfare-spiral-annihilation-sapienza.avif",
       "published": "2026-05-25T10:34:26+00:00",
       "firstSeen": "2026-05-25T12:00:01.545415+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.9424
+      "score": 0.9227
     },
     {
       "title": "Best Authentication Platforms for AI Agents and MCP Servers in 2026",
@@ -124,10 +172,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-47-1024x731.png",
       "published": "2026-05-25T10:34:02+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.8123
+      "score": 2.7926
     },
     {
       "title": "The AI Era Is Creating a Bug Hunting Arms Race",
@@ -140,10 +188,10 @@
       "image": "https://media.wired.com/photos/6a0e3a04aa8901b570a25720/master/pass/security_bug_gettyimages.jpg",
       "published": "2026-05-25T10:30:00+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2804
+      "score": 4.2607
     },
     {
       "title": "Ericsson is leaving Kista for central Stockholm, in the largest office lease in Swedish history",
@@ -156,10 +204,10 @@
       "image": "https://media.thenextweb.com/2015/12/Ericsson.avif",
       "published": "2026-05-25T10:17:04+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0345
+      "score": 2.0149
     },
     {
       "title": "UK venture funding doubled to $10.5bn in the first four months of 2026, on the back of three giant rounds",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/UK.avif",
       "published": "2026-05-25T10:06:48+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7298
+      "score": 2.7104
     },
     {
       "title": "Blue Origin commits another $600m to its Florida campus",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/Blue-Origin.avif",
       "published": "2026-05-25T09:32:54+00:00",
       "firstSeen": "2026-05-25T10:45:25.804243+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0146
+      "score": 1.9954
     },
     {
       "title": "Schneider Electric expects its India data-centre business to outgrow the rest of the company",
@@ -204,10 +252,10 @@
       "image": "https://media.thenextweb.com/2026/05/Schneider-Electric.avif",
       "published": "2026-05-25T08:37:57+00:00",
       "firstSeen": "2026-05-25T10:00:01.479670+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9903
+      "score": 1.9717
     },
     {
       "title": "Most organisations still store their passwords wrong. Here is what actually works.",
@@ -223,7 +271,7 @@
       "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9902
+      "score": 1.9715
     },
     {
       "title": "Uber goes after Delivery Hero in full, with an offer that sits below the close",
@@ -239,7 +287,7 @@
       "lastSeen": "2026-05-25T14:16:41.404897+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9721
+      "score": 1.9538
     },
     {
       "title": "The ECB is convening banks to fix the cybersecurity flaws that AI models like Mythos keep finding",
@@ -255,7 +303,7 @@
       "lastSeen": "2026-05-25T13:00:01.691311+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9712
+      "score": 7.9529
     },
     {
       "title": "WorkOS Releases auth.md: An Open Agent Registration Protocol Built on OAuth Standards",
@@ -268,10 +316,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-46.png",
       "published": "2026-05-25T07:38:15+00:00",
       "firstSeen": "2026-05-25T08:00:01.269025+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5347
+      "score": 6.5165
     },
     {
       "title": "SoftBank hits a fresh record as Tokyo bets the OpenAI IPO is finally coming",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-05-25T12:00:01.545415+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0599
+      "score": 6.0418
     },
     {
       "title": "Huawei unveils ‘Tau Scaling Law’ as China’s workaround for US chip sanctions",
@@ -303,7 +351,7 @@
       "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9537
+      "score": 1.9357
     },
     {
       "title": "datasette 1.0a30",
@@ -316,10 +364,10 @@
       "image": "https://static.simonwillison.net/static/2026/menu.gif",
       "published": "2026-05-24T23:52:37+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0273
+      "score": 4.0127
     },
     {
       "title": "datasette-agent 0.1a4",
@@ -332,10 +380,10 @@
       "image": "https://static.simonwillison.net/static/2026/menu-agent.gif",
       "published": "2026-05-24T23:19:34+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.3161
+      "score": 5.3017
     },
     {
       "title": "Build a Complete Langfuse Observability and Evaluation Pipeline for Tracing, Prompt Management, Scoring, and Experiments",
@@ -348,10 +396,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2-5-1024x731.png",
       "published": "2026-05-24T23:03:09+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2906
+      "score": 5.2763
     },
     {
       "title": "StepFun Releases StepAudio 2.5 Realtime: An End-to-End Voice Model with Roleplay-Specific RLHF and Paralinguistic Comprehension",
@@ -364,10 +412,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-24-at-3.50.40-PM-1-150x150.png",
       "published": "2026-05-24T22:51:05+00:00",
       "firstSeen": "2026-05-24T23:00:01.944544+00:00",
-      "lastSeen": "2026-05-25T14:00:01.195782+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4366
+      "score": 7.4224
     },
     {
       "title": "Everyone is navigating AI security in real time — even Google",
@@ -380,10 +428,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2266466589.jpg?w=1024",
       "published": "2026-05-24T21:39:21+00:00",
       "firstSeen": "2026-05-24T22:00:01.583723+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8832
+      "score": 1.8694
     },
     {
       "title": "datasette-fixtures 0.1a0",
@@ -396,10 +444,10 @@
       "image": "",
       "published": "2026-05-24T21:38:32+00:00",
       "firstSeen": "2026-05-25T00:00:01.971231+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2829
+      "score": 3.2692
     },
     {
       "title": "McKinsey built a free AI tool so candidates stop paying $500/hour interview coaches",
@@ -415,7 +463,7 @@
       "lastSeen": "2026-05-25T10:45:25.804243+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.5177
+      "score": 3.5044
     },
     {
       "title": "The AI security gap nobody wants to admit is already here",
@@ -431,7 +479,7 @@
       "lastSeen": "2026-05-25T10:00:01.479670+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.7
+      "score": 6.6871
     },
     {
       "title": "Quoting Armin Ronacher",
@@ -444,10 +492,10 @@
       "image": "",
       "published": "2026-05-24T18:46:53+00:00",
       "firstSeen": "2026-05-24T19:00:02.076741+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.83
+      "score": 1.8173
     },
     {
       "title": "Mad House — Usborne Creepy Computer Games",
@@ -460,10 +508,10 @@
       "image": "https://static.simonwillison.net/static/2026/mad-house.jpg",
       "published": "2026-05-24T17:14:11+00:00",
       "firstSeen": "2026-05-24T21:00:01.935579+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8031
+      "score": 5.7909
     },
     {
       "title": "The SEO conference circuit in 2026 is one long argument about what comes next",
@@ -479,7 +527,7 @@
       "lastSeen": "2026-05-25T10:00:01.479670+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6588
+      "score": 1.6467
     },
     {
       "title": "HP pushed a critical BIOS update through Windows Update. It bricked its most expensive laptops.",
@@ -495,7 +543,7 @@
       "lastSeen": "2026-05-25T10:00:01.479670+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7558
+      "score": 2.7438
     },
     {
       "title": "The Gulf was supposed to power the AI boom. Then the war started.",
@@ -511,7 +559,7 @@
       "lastSeen": "2026-05-25T09:00:02.023574+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6477
+      "score": 1.6358
     },
     {
       "title": "The US blacklisted Anthropic as a security threat. Its spy agencies are using Claude anyway.",
@@ -527,7 +575,7 @@
       "lastSeen": "2026-05-25T09:00:02.023574+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.6407
+      "score": 10.629
     },
     {
       "title": "This Zurich startup built a four-armed robot for space stations. Each astronaut hour it saves is worth $140,000.",
@@ -543,7 +591,7 @@
       "lastSeen": "2026-05-25T08:00:01.269025+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6322
+      "score": 1.6206
     },
     {
       "title": "The Apple Watch is 11 years old and losing momentum. Screenless rivals are winning the next phase.",
@@ -559,7 +607,7 @@
       "lastSeen": "2026-05-25T08:00:01.269025+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4271
+      "score": 3.4156
     },
     {
       "title": "I tried Amazon’s Bee wearable and am both intrigued and slightly creeped out",
@@ -572,10 +620,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/17.png?resize=1200%2C750",
       "published": "2026-05-24T15:00:00+00:00",
       "firstSeen": "2026-05-24T15:19:07.974284+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7662
+      "score": 1.7548
     },
     {
       "title": "India’s SolarSquare is raising $60M at a $500M valuation. It has powered 50,000 homes.",
@@ -591,55 +639,7 @@
       "lastSeen": "2026-05-25T08:00:01.269025+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3233
-    },
-    {
-      "title": "Hackers are learning to exploit chatbot &#8216;personalities&#8217;",
-      "url": "https://www.theverge.com/column/935545/hackers-ai-chatbots",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more on AI mischief, follow Robert Hart. The Stepback arrives in our subscribers' inboxes at 8AM ET. Opt in for The Stepback here. How it started Hacking the first generation of AI chatbots was a laughably simple affair. [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK414_AI_CVIRGINIA_I__0005_3.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-24T12:00:00+00:00",
-      "firstSeen": "2026-05-24T13:00:01.277430+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7901
-    },
-    {
-      "title": "These Robots Are Making Meals for a Nonprofit in San Francisco’s Tenderloin",
-      "url": "https://www.wired.com/story/these-robots-are-making-meals-for-a-nonprofit-in-san-franciscos-tenderloin",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A nonprofit in the city’s most troubled district has turned to robotic meal prep tech to make up for a dearth of human volunteers.",
-      "image": "https://media.wired.com/photos/6a10ce314007cbd416b6e106/master/pass/Robot-Meals-Gear-Chef+-robot-(1).jpg",
-      "published": "2026-05-24T10:30:00+00:00",
-      "firstSeen": "2026-05-24T11:00:01.114620+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.6985
-    },
-    {
-      "title": "Former Citadel quants raised $78M for the AI operating system Wall Street’s wealth managers didn’t have",
-      "url": "https://thenextweb.com/news/moment-78-million-citadel-quants-ai-trading-wealth-management",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Moment, the fintech company founded by a cohort of former Citadel Securities quantitative traders and researchers, has raised $78 million. The round was led by Index Ventures with participation from existing investors Andreessen Horowitz and Avra. The company last raised $36 million in July 2025. Moment builds infrastructure that allows wealth management firms to deploy [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/moment-78-million-citadel-quants-ai-trading-wealth-management.avif",
-      "published": "2026-05-24T09:02:04+00:00",
-      "firstSeen": "2026-05-24T10:00:01.689950+00:00",
-      "lastSeen": "2026-05-25T07:00:02.064298+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 2.9382
+      "score": 2.3119
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -652,10 +652,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1372
+      "score": 1.1368
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -668,10 +668,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.8979
+      "score": -1.8981
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -684,7 +684,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-12T07:30:00+00:00",
       "firstSeen": "2026-05-12T08:00:01.937266+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1202
@@ -700,7 +700,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-11T20:00:00+00:00",
       "firstSeen": "2026-05-11T21:00:02.002219+00:00",
-      "lastSeen": "2026-05-25T14:16:41.404897+00:00",
+      "lastSeen": "2026-05-25T15:00:01.280911+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.5901
@@ -738,11 +738,5 @@
       "score": 1.89
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
