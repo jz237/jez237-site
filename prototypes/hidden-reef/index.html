@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Hidden Reef - Storefront Prototype</title>
   <link rel="icon" type="image/png" href="assets/site/logo.png" />
-  <link rel="stylesheet" href="assets/thr-cards.css?v=20260525-card-depth" />
+  <link rel="stylesheet" href="assets/thr-cards.css?v=20260525-card-depth-left" />
   <style>
     :root {
       --blue-950: #003b63;
@@ -23,8 +23,10 @@
       --orange: #ff7b32;
       --green: #23a86b;
       --shadow: 0 18px 44px rgba(0, 65, 105, 0.14);
-      --card-depth: 0 20px 42px rgba(0,0,0,0.3);
-      --card-depth-light: 0 18px 36px rgba(24,69,91,0.16);
+      --card-depth: -10px 14px 24px rgba(0,0,0,0.34);
+      --card-depth-hover: -14px 20px 30px rgba(0,0,0,0.42);
+      --card-depth-light: -8px 12px 20px rgba(24,69,91,0.18);
+      --card-depth-light-hover: -10px 16px 24px rgba(24,69,91,0.24);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
@@ -357,7 +359,7 @@
     .cat:hover {
       transform: translateY(-4px);
       border-color: rgba(116,205,235,0.42);
-      box-shadow: 0 26px 54px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: var(--card-depth-hover), inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .cat:hover::after {
       opacity: 1;
@@ -521,7 +523,7 @@
         #edf8fb;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.65),
-        0 18px 38px rgba(0,0,0,0.26);
+        -8px 12px 22px rgba(0,0,0,0.28);
     }
     .special-art-image {
       position: absolute;
@@ -559,7 +561,7 @@
       border: 1px solid rgba(6,48,70,0.12);
       border-radius: 8px;
       background: rgba(255,255,255,0.92);
-      box-shadow: 0 12px 26px rgba(8,30,45,0.14);
+      box-shadow: -6px 10px 18px rgba(8,30,45,0.16);
     }
     .special-product-card:nth-child(2) {
       transform: translateY(-10px);
@@ -718,13 +720,13 @@
       background:
         radial-gradient(circle at 100% 0%, rgba(116,205,235,0.14), transparent 38%),
         #071a27;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+      box-shadow: var(--card-depth);
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .path-link:hover {
       transform: translateY(-4px);
       border-color: rgba(116,205,235,0.55);
-      box-shadow: 0 16px 34px rgba(0,0,0,0.3);
+      box-shadow: var(--card-depth-hover);
     }
     .path-link span {
       color: #40d9ff;
@@ -755,7 +757,7 @@
       overflow: hidden;
       border-radius: 8px;
       background: var(--blue-900);
-      box-shadow: var(--shadow);
+      box-shadow: var(--card-depth-light);
       color: inherit;
       text-decoration: none;
       transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
@@ -763,7 +765,7 @@
     .promo-card[href]:hover,
     .promo-card[href]:focus-visible {
       transform: translateY(-4px);
-      box-shadow: 0 20px 46px rgba(0, 43, 68, 0.2);
+      box-shadow: var(--card-depth-light-hover);
       outline: 2px solid rgba(116,205,235, 0.75);
       outline-offset: 3px;
     }
@@ -868,13 +870,13 @@
       background:
         linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%),
         #fff;
-      box-shadow: 0 12px 30px rgba(0,65,105,0.1);
+      box-shadow: var(--card-depth-light);
       transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
     }
     .product:hover {
       transform: translateY(-3px);
       border-color: rgba(116,205,235,0.65);
-      box-shadow: 0 20px 42px rgba(0,0,0,0.28), 0 0 0 1px rgba(116,205,235,0.14);
+      box-shadow: var(--card-depth-hover);
     }
     .product img {
       width: 100%;
@@ -1006,7 +1008,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
-      box-shadow: 0 8px 18px rgba(0,65,105,0.06);
+      box-shadow: var(--card-depth-light);
     }
     .brand-tile img { max-width: 100%; max-height: 46px; object-fit: contain; }
     .brand-tile--emblem img { max-height: 58px; }
@@ -1087,7 +1089,7 @@
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
       background: rgba(255,255,255,0.06);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.22);
+      box-shadow: -8px 12px 20px rgba(0,0,0,0.24);
     }
     .learn-column h4 {
       margin: 0;
@@ -1108,13 +1110,13 @@
       border: 1px solid rgba(116,205,235,0.22);
       border-radius: 8px;
       background: #fff;
-      box-shadow: 0 18px 38px rgba(0,0,0,0.28);
+      box-shadow: var(--card-depth);
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .learn-preview:hover {
       transform: translateY(-4px);
       border-color: rgba(116,205,235,0.58);
-      box-shadow: 0 18px 38px rgba(0,0,0,0.3);
+      box-shadow: var(--card-depth-hover);
     }
     .learn-preview img {
       width: 100%;
@@ -1133,7 +1135,7 @@
       background: rgba(3,18,29,0.88);
       font-size: 12px;
       line-height: 1.2;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      box-shadow: -4px 7px 14px rgba(0,0,0,0.28);
     }
     .live-links {
       display: grid;
@@ -1159,7 +1161,7 @@
     .live-link:hover {
       transform: translateY(-2px);
       border-color: rgba(116,205,235,0.58);
-      box-shadow: 0 18px 38px rgba(0,0,0,0.32), 0 0 0 1px rgba(116,205,235,0.14);
+      box-shadow: var(--card-depth-hover), inset 0 1px 0 rgba(255,255,255,0.04);
     }
     .live-link span {
       color: #40d9ff;
@@ -2076,10 +2078,10 @@
     #products .product {
       background: #fff;
       border-color: #d5e7ee;
-      box-shadow: 0 12px 28px rgba(24,69,91,0.11);
+      box-shadow: var(--card-depth-light);
     }
     #products .product:hover {
-      box-shadow: 0 18px 38px rgba(24,69,91,0.18), 0 0 0 1px rgba(0,139,173,0.16);
+      box-shadow: var(--card-depth-light-hover);
     }
     #products .product img {
       border-color: #d8e8ef;
@@ -2094,12 +2096,12 @@
     .guide {
       background: #071a27;
       border-color: rgba(116,205,235,0.18);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.035);
+      box-shadow: var(--card-depth), inset 0 1px 0 rgba(255,255,255,0.035);
     }
     .brand-tile {
       background: #fff;
       border-color: rgba(195,222,232,0.74);
-      box-shadow: 0 8px 18px rgba(0,65,105,0.12);
+      box-shadow: var(--card-depth-light);
     }
     .cat strong { color: #dff8ff; }
     .cat span { color: #9fc6d6; }
@@ -2111,7 +2113,7 @@
     }
     .promo-card {
       border: 1px solid rgba(116,205,235,0.18);
-      box-shadow: 0 16px 34px rgba(0,0,0,0.34);
+      box-shadow: var(--card-depth);
     }
     .filters button {
       background: #071a27;
@@ -2330,7 +2332,7 @@
     .guide:hover {
       transform: translateY(-4px);
       border-color: rgba(116,205,235,0.55);
-      box-shadow: 0 16px 34px rgba(0,0,0,0.3);
+      box-shadow: var(--card-depth-hover);
     }
     .guide h3 {
       font-size: 20px;
@@ -2519,7 +2521,7 @@
       border-bottom: 0;
       border-radius: 0;
       background: #020914;
-      box-shadow: 0 12px 34px rgba(0,0,0,0.22);
+      box-shadow: -8px 12px 22px rgba(0,0,0,0.24);
     }
     .header.masthead .brand {
       display: block;
