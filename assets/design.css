@@ -1064,10 +1064,9 @@ header#site-nav .links a[aria-current="page"] {
   isolation: isolate;
   overflow: hidden;
   background:
-    radial-gradient(circle at 89% 27%, rgba(255,142,207,0.58) 0 7px, rgba(108,90,255,0.34) 8px 18px, transparent 19px),
-    radial-gradient(circle at 72% 17%, rgba(255,216,84,0.32), transparent 9%),
-    radial-gradient(circle at 18% 28%, rgba(57,210,255,0.3), transparent 18%),
-    linear-gradient(180deg, #070a2a 0%, #111b58 48%, #07142b 100%);
+    linear-gradient(180deg, rgba(5,10,31,0.22), rgba(3,12,28,0.78)),
+    url('assets/home-cards/games-space-bg.jpg') center / cover no-repeat,
+    linear-gradient(180deg, #080b2b 0%, #101955 54%, #061328 100%);
 }
 .game-card-animation::before,
 .game-card-animation::after,
@@ -1081,109 +1080,67 @@ header#site-nav .links a[aria-current="page"] {
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(rgba(98,208,255,0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(98,208,255,0.1) 1px, transparent 1px);
-  background-size: 24px 24px;
-  transform: perspective(130px) rotateX(60deg) translateY(16px) scale(1.58);
+    linear-gradient(rgba(98,208,255,0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(98,208,255,0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+  transform: perspective(130px) rotateX(58deg) translateY(10px) scale(1.45);
   transform-origin: 50% 100%;
-  animation: arcade-grid 1.8s linear infinite;
+  animation: arcade-grid 2.2s linear infinite;
 }
 .game-card-animation::after {
   inset: 0;
   z-index: 6;
   background:
-    linear-gradient(180deg, transparent 0 47%, rgba(255,255,255,0.055) 49%, transparent 51%),
-    radial-gradient(circle at 42% 52%, transparent 0 31%, rgba(0,0,0,0.38) 100%),
-    linear-gradient(90deg, rgba(14,250,255,0.12), transparent 18% 78%, rgba(255,82,196,0.12));
+    linear-gradient(180deg, transparent 0 48%, rgba(255,255,255,0.05) 50%, transparent 52%),
+    radial-gradient(circle at 50% 52%, transparent 0 35%, rgba(0,0,0,0.34) 100%);
   background-size: 100% 5px, 100% 100%;
   mix-blend-mode: screen;
-  opacity: 0.62;
+  opacity: 0.58;
 }
 .game-stars {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(circle, #ffffff 0 1px, transparent 1.6px) 8px 14px / 58px 34px,
-    radial-gradient(circle, rgba(87,214,255,0.95) 0 1px, transparent 1.8px) 34px 5px / 72px 42px,
-    radial-gradient(circle, rgba(255,223,117,0.92) 0 1px, transparent 1.8px) 18px 22px / 86px 48px,
-    linear-gradient(115deg, transparent 0 38%, rgba(78,217,255,0.18) 42%, transparent 47% 100%);
-  animation: arcade-stars 3.2s linear infinite;
+    radial-gradient(circle, rgba(255,255,255,0.55) 0 1px, transparent 1.6px) 8px 14px / 58px 34px,
+    radial-gradient(circle, rgba(87,214,255,0.45) 0 1px, transparent 1.7px) 34px 5px / 72px 42px,
+    radial-gradient(circle, rgba(255,223,117,0.45) 0 1px, transparent 1.7px) 18px 22px / 86px 48px;
+  opacity: 0.5;
+  animation: arcade-stars 3.6s linear infinite;
 }
 .game-terrain {
-  left: -160px;
-  right: -160px;
-  bottom: -1px;
+  left: -14%;
+  right: -14%;
+  bottom: -6px;
   z-index: 2;
-  height: 42px;
+  height: 24px;
   background:
-    linear-gradient(135deg, transparent 0 26px, rgba(27,244,255,0.9) 27px 30px, transparent 31px) 0 10px / 70px 32px,
-    linear-gradient(225deg, transparent 0 22px, rgba(255,218,83,0.86) 23px 26px, transparent 27px) 34px 13px / 88px 32px,
-    linear-gradient(180deg, transparent 0 22px, rgba(3,15,36,0.98) 23px 100%);
-  filter: drop-shadow(0 0 9px rgba(55,214,255,0.7));
-  animation: arcade-terrain 1.05s linear infinite;
-}
-.game-terrain::before,
-.game-terrain::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  display: block;
-  pointer-events: none;
-}
-.game-terrain::before {
-  bottom: 16px;
-  height: 40px;
-  background:
-    linear-gradient(150deg, transparent 0 22px, rgba(44,106,208,0.7) 23px 27px, transparent 28px) 0 8px / 96px 38px,
-    linear-gradient(210deg, transparent 0 24px, rgba(119,74,255,0.5) 25px 29px, transparent 30px) 42px 12px / 112px 40px;
-  opacity: 0.9;
-  animation: arcade-mountains-far 2.4s linear infinite;
-}
-.game-terrain::after {
-  bottom: -2px;
-  height: 20px;
-  background:
-    linear-gradient(90deg, rgba(27,244,255,0.95) 0 12px, transparent 12px 34px, rgba(255,218,83,0.86) 34px 44px, transparent 44px 72px) 0 12px / 72px 12px,
-    linear-gradient(180deg, rgba(8,34,72,0.72), rgba(2,8,22,0.98));
-  box-shadow: inset 0 1px rgba(104,239,255,0.45);
-  animation: arcade-ground-lights 1.05s linear infinite;
+    linear-gradient(135deg, transparent 0 18px, rgba(44,233,255,0.86) 19px 22px, transparent 23px) 0 0 / 58px 24px,
+    linear-gradient(225deg, transparent 0 16px, rgba(255,211,80,0.72) 17px 20px, transparent 21px) 27px 2px / 72px 24px;
+  filter: drop-shadow(0 0 7px rgba(55,214,255,0.55));
+  animation: arcade-terrain 1.15s linear infinite;
 }
 .game-ship {
   z-index: 4;
-  left: 22px;
-  top: 39px;
-  width: 48px;
-  height: 26px;
-  background:
-    radial-gradient(circle at 48% 48%, rgba(255,255,255,0.95) 0 4px, rgba(88,221,255,0.9) 5px 8px, transparent 9px),
-    linear-gradient(90deg, #f8fdff 0 28%, #55e4ff 29% 58%, #ff4dba 59% 82%, #ffe35a 83% 100%);
-  clip-path: polygon(0 50%, 21% 25%, 48% 14%, 100% 50%, 48% 86%, 21% 75%);
-  filter: drop-shadow(0 0 8px rgba(80,217,255,0.9)) drop-shadow(0 0 10px rgba(255,73,190,0.35));
+  left: 24px;
+  top: 42px;
+  width: 38px;
+  height: 23px;
+  background: linear-gradient(90deg, #f6fbff 0 34%, #54ddff 35% 68%, #ff4d9d 69% 100%);
+  clip-path: polygon(0 50%, 34% 13%, 100% 50%, 34% 87%);
+  filter: drop-shadow(0 0 8px rgba(80,217,255,0.8));
   animation: arcade-ship 1.55s ease-in-out infinite;
 }
 .game-ship::before {
   content: "";
   position: absolute;
-  left: -21px;
-  top: 8px;
-  width: 28px;
-  height: 9px;
+  left: -14px;
+  top: 7px;
+  width: 18px;
+  height: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, #ff3bc4 18%, #ff8a36 58%, #fff06f);
+  background: linear-gradient(90deg, transparent, #ff8a36, #ffe56d);
   filter: blur(1px);
   animation: arcade-thrust .18s ease-in-out infinite alternate;
-}
-.game-ship::after {
-  content: "";
-  position: absolute;
-  right: 14px;
-  top: 7px;
-  width: 12px;
-  height: 8px;
-  border-radius: 50% 50% 45% 45%;
-  background: radial-gradient(circle at 35% 35%, #fff, #73f3ff 38%, rgba(40,101,255,0.9) 70%);
-  box-shadow: 0 0 8px rgba(115,243,255,0.9);
 }
 .game-laser {
   z-index: 3;
@@ -1208,10 +1165,9 @@ header#site-nav .links a[aria-current="page"] {
   height: 22px;
   border-radius: 42% 58% 44% 56%;
   background:
-    radial-gradient(circle at 68% 32%, rgba(255,255,255,0.48), transparent 0 13%),
-    radial-gradient(circle at 28% 68%, rgba(0,0,0,0.28), transparent 0 22%),
-    linear-gradient(135deg, #ffcf5a, #b559ff 60%, #2639a5);
-  box-shadow: 0 0 10px rgba(181,89,255,0.62);
+    radial-gradient(circle at 68% 32%, rgba(255,255,255,0.45), transparent 0 13%),
+    linear-gradient(135deg, #ffcf5a, #b559ff 62%, #2639a5);
+  box-shadow: 0 0 10px rgba(181,89,255,0.55);
 }
 .rock-one {
   top: 28px;
@@ -1227,11 +1183,11 @@ header#site-nav .links a[aria-current="page"] {
 }
 .game-pickup {
   z-index: 3;
-  right: 42px;
-  top: 26px;
-  width: 14px;
-  height: 14px;
-  background: linear-gradient(135deg, #fff16a, #55e8ff 58%, #ff5bd0);
+  right: 44px;
+  top: 30px;
+  width: 12px;
+  height: 12px;
+  background: #fff16a;
   clip-path: polygon(50% 0, 61% 36%, 100% 50%, 61% 64%, 50% 100%, 39% 64%, 0 50%, 39% 36%);
   box-shadow: 0 0 10px rgba(255,241,106,0.9);
   animation: arcade-pickup 1.4s ease-in-out infinite;
@@ -1243,7 +1199,7 @@ header#site-nav .links a[aria-current="page"] {
   width: 58px;
   height: 9px;
   background:
-    linear-gradient(90deg, #58e5ff 0 9px, transparent 9px 13px, #58e5ff 13px 22px, transparent 22px 26px, #ffd95c 26px 35px, transparent 35px 39px, #ff5bd0 39px 48px, transparent 48px);
+    linear-gradient(90deg, #58e5ff 0 9px, transparent 9px 13px, #58e5ff 13px 22px, transparent 22px 26px, #ffd95c 26px 35px, transparent 35px 39px, #ff5bd0 39px 48px);
   opacity: 0.9;
   filter: drop-shadow(0 0 5px rgba(88,229,255,0.7));
 }
@@ -1257,23 +1213,15 @@ header#site-nav .links a[aria-current="page"] {
 }
 @keyframes arcade-terrain {
   from { transform: translateX(0); }
-  to { transform: translateX(-88px); }
-}
-@keyframes arcade-mountains-far {
-  from { transform: translateX(0); }
-  to { transform: translateX(-112px); }
-}
-@keyframes arcade-ground-lights {
-  from { background-position-x: 0, 0; }
-  to { background-position-x: -72px, -72px; }
+  to { transform: translateX(-72px); }
 }
 @keyframes arcade-ship {
-  0%, 100% { transform: translateY(-5px) rotate(-4deg); }
+  0%, 100% { transform: translateY(-4px) rotate(-3deg); }
   50% { transform: translateY(7px) rotate(4deg); }
 }
 @keyframes arcade-thrust {
-  from { opacity: 0.48; transform: scaleX(0.64); }
-  to { opacity: 1; transform: scaleX(1.18); }
+  from { opacity: 0.55; transform: scaleX(0.7); }
+  to { opacity: 1; transform: scaleX(1.12); }
 }
 @keyframes arcade-laser {
   from { transform: translateX(0) scaleX(0.2); opacity: 0; }
