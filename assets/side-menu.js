@@ -10,6 +10,7 @@
     games: '<path d="M7 10h10a4 4 0 0 1 3.8 2.8l.7 2.3a3 3 0 0 1-5 3l-1.4-1.6H8.9l-1.4 1.6a3 3 0 0 1-5-3l.7-2.3A4 4 0 0 1 7 10Z"/><path d="M7.5 14h4"/><path d="M9.5 12v4"/><path d="M16.5 13.2h.1"/><path d="M18.5 15.2h.1"/>',
     aiExplainer: '<path d="M12 4v16"/><path d="M5 7h4"/><path d="M15 7h4"/><path d="M5 17h4"/><path d="M15 17h4"/><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="1.7"/><circle cx="19" cy="7" r="1.7"/><circle cx="5" cy="17" r="1.7"/><circle cx="19" cy="17" r="1.7"/>',
     reef: '<path d="M12 21V8"/><path d="M12 14c-3.8-1.2-5.8-3.8-6-7.8 3.9 1 6 3.6 6 7.8Z"/><path d="M12 16c3.8-1 5.9-3.4 6.4-7.3-4.1.8-6.4 3.2-6.4 7.3Z"/><path d="M8 21h8"/><path d="M9 18c-2.4-.4-4-1.7-4.8-4"/><path d="M15 18c2.4-.5 4-1.8 4.8-4"/>',
+    ops: '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 15v-3"/><path d="M12 15V9"/><path d="M16 15v-5"/><path d="M7 18h10"/><path d="M8 8h3"/><path d="M14 8h2"/>',
     stocks: '<path d="M4 19h16"/><path d="m5.5 15.5 4-4 3 3 6-7"/><path d="M16 7.5h2.5V10"/>',
     archives: '<rect x="5" y="4" width="14" height="4" rx="1.5"/><path d="M6.5 8v10.5A1.5 1.5 0 0 0 8 20h8a1.5 1.5 0 0 0 1.5-1.5V8"/><path d="M10 12h4"/>',
     bauder: '<path d="m4 17 9.8-9.8a2.8 2.8 0 0 1 4 4L8 21H4v-4Z"/><path d="m12.5 8.5 3 3"/>'
@@ -26,6 +27,7 @@
     ['games', 'games/', 'games', 'GameMaster Arcade'],
     ['ai-explainer', 'experiments/ai-explainer/', 'aiExplainer', 'How AI Works'],
     ['hidden-reef', 'prototypes/hidden-reef/', 'reef', 'Hidden Reef Demo'],
+    ['ops', 'ops/', 'ops', 'Operations & Statistics'],
     ['stocks', 'https://jz237.github.io/stock-command-center/', 'stocks', 'Stock Command Center'],
     ['archives', 'plants/past-years/', 'archives', 'Archives'],
     ['bauder', 'https://baudersigns.com/', 'bauder', 'Bauder Signs']
