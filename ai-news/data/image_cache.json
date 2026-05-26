@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T08:41:33.144051+00:00",
+  "updatedAt": "2026-05-26T10:00:01.795139+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8044,6 +8044,14 @@
     "http://www.bbc.co.uk/programmes/m002vmd6": {
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "checkedAt": "2026-05-26T08:41:33.144051+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/26/1137855/a-reality-check-on-the-ai-jobs-hysteria": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/ai-jobs1b.jpg?resize=1200,600",
+      "checkedAt": "2026-05-26T10:00:01.795139+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/26/1137865/its-time-to-address-the-looming-crisis-in-entry-level-work": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/ladder3b.jpg?resize=1200,600",
+      "checkedAt": "2026-05-26T10:00:01.795139+00:00"
     }
   }
 }

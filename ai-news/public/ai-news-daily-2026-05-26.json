@@ -1,6 +1,6 @@
 {
   "date": "2026-05-26",
-  "updatedAt": "2026-05-26T08:41:33.144051+00:00",
+  "updatedAt": "2026-05-26T10:00:01.795139+00:00",
   "items": [
     {
       "title": "Design a Complete Multimodal RLVR Pipeline with Open-MM-RL, Vision-Language Prompting, Reward Scoring, and GRPO Export",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-05-26T07:25:55+00:00",
       "firstSeen": "2026-05-26T08:00:01.656732+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.7821
+      "score": 9.7443
     },
     {
       "title": "Meet OmniVoice Studio: A Local, Open-Source Alternative to ElevenLabs",
@@ -29,10 +29,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-51-1024x731.png",
       "published": "2026-05-26T07:56:17+00:00",
       "firstSeen": "2026-05-26T08:00:01.656732+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9972
+      "score": 7.9588
     },
     {
       "title": "Samsung’s non-chip union goes to court to halt bonus vote",
@@ -45,10 +45,26 @@
       "image": "https://media.thenextweb.com/2026/05/Samsung-strike-union.avif",
       "published": "2026-05-26T07:26:36+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.0125
+      "score": 5.9746
+    },
+    {
+      "title": "Avrea raises $4.7M to fix CI/CD before AI coding breaks it",
+      "url": "https://thenextweb.com/news/avrea-raises-47m-preseed-ai-cicd-helsinki",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Helsinki startup, founded by Aiven’s Hannu Valtonen and Nosto’s Juha Valvanne, is betting that AI-generated code will overwhelm existing build pipelines. Helsinki startup Avrea emerged from stealth on Tuesday with $4.7m in pre-seed funding led by Earlybird, pitching itself as a faster, AI-aware alternative to GitHub Actions for engineering teams that have started generating code faster than [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Avrea-founders.avif",
+      "published": "2026-05-26T09:16:15+00:00",
+      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5279
     },
     {
       "title": "Sam Altman says an AI jobs apocalypse is unlikely",
@@ -61,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
       "published": "2026-05-26T07:59:19+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1287
+      "score": 4.0902
     },
     {
       "title": "Quoting Corey Quinn",
@@ -77,10 +93,42 @@
       "image": "",
       "published": "2026-05-26T02:28:54+00:00",
       "firstSeen": "2026-05-26T03:00:01.483781+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1157
+      "score": 4.0827
+    },
+    {
+      "title": "Paris preventive-health startup Lucis raises $20M Series A four months after seed",
+      "url": "https://thenextweb.com/news/lucis-20m-series-a-preventive-health-europe",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Paris-based Lucis, a preventive-health platform that pairs blood biomarker testing with an AI-driven companion app, has raised a $20m Series A led by Singular, with participation from General Catalyst, Y Combinator and angel investors including Céline Lazorthes of Resilience, Manu Lecomte, and backers of the running-coach app Runna. The round arrives four months after the company’s $8.5m seed in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Lucis.avif",
+      "published": "2026-05-26T08:42:15+00:00",
+      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2111
+    },
+    {
+      "title": "GSR Ventures uses its RedNote stake to anchor a new $350M China fund",
+      "url": "https://thenextweb.com/news/gsr-ventures-rednote-350m-china-vc-fund",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SR Ventures Management Co., one of the earliest backers of the Chinese social commerce app Xiaohongshu, is raising about $350m for a new China-focused venture fund and is using its existing stake in the app, known internationally as RedNote, as the central pitch, according to a Bloomberg report on Tuesday citing people familiar with the [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/RedNote.avif",
+      "published": "2026-05-26T08:23:00+00:00",
+      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2017
     },
     {
       "title": "Finland’s Quanscient raises €10M to build a quantum- and AI-native simulation platform",
@@ -93,61 +141,13 @@
       "image": "https://media.thenextweb.com/2026/05/Quanscient.avif",
       "published": "2026-05-26T07:45:52+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.822
+      "score": 2.7838
     },
     {
-      "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
-      "url": "http://www.bbc.co.uk/programmes/m002vmd6",
-      "source": "BBC The Life Scientific",
-      "sourceUrl": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
-      "sourceWeight": 0.8,
-      "category": "Science",
-      "summary": "Have you ever been told you aren't good enough to do something, then gone ahead and proved the naysayers wrong by doing it anyway - in glorious, headline-grabbing style? That is the satisfying story of Dr Dean Lomax. Dean grew up in Doncaster with a passion for fossils but after failing various school exams, was told by teachers that he'd never make it as a palaeontologist. Undeterred by leaving school with no qualifications, Dean sold his childhood Star Wars collection to fund a fossil-hunting trip to America that changed his life - after which a chance discovery led to him publishing his fir",
-      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
-      "published": "2026-05-26T08:30:00+00:00",
-      "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2141
-    },
-    {
-      "title": "Ferrari unveils the Luce, a five-seat electric car co-designed with Jony Ive",
-      "url": "https://thenextweb.com/news/ferrari-luce-five-seat-electric-car-launch",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Maranello firm’s first all-electric model starts at €550,000, runs to more than 1,000 horsepower and arrives with deliveries in the fourth quarter. Ferrari pulled the covers off its first all-electric road car on Monday: the Luce, a four-door, five-seat liftback developed in collaboration with Jony Ive’s LoveFrom collective, priced from €550,000 in Italy and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Ferrari-Luce.avif",
-      "published": "2026-05-26T07:17:14+00:00",
-      "firstSeen": "2026-05-26T08:00:01.656732+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1079
-    },
-    {
-      "title": "Brussels prepares biggest-ever DMA penalty for Google",
-      "url": "https://thenextweb.com/news/eu-google-dma-fine-search-self-preferencing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The European Commission is preparing to fine Google a sum running into the high hundreds of millions of euros for breaching the Digital Markets Act, according to a Handelsblatt report on Monday, in what would be the largest penalty ever issued under the bloc’s new tech competition regime. The Commission’s case rests on the long-running complaint that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2024/09/Untitled-design-40.avif",
-      "published": "2026-05-26T07:08:25+00:00",
-      "firstSeen": "2026-05-26T08:00:01.656732+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1036
-    },
-    {
-      "title": "Maximillian Rossi, Prajwal Raghunath, Eugene Wu",
+      "title": "Multi-Persona Debate System for Automated Scientific Hypothesis Generation",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -155,12 +155,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-26T08:41:49.005227+00:00",
+      "published": "2026-05-26T10:00:12.493801+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-26T08:41:33.144051+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.74
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.36
+    },
+    {
+      "title": "US Law Enforcement Warns of ‘Anti-Tech Extremism’ as AI Hatred Grows",
+      "url": "https://www.wired.com/story/us-law-enforcement-warns-of-anti-tech-extremism",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As Americans stew over the looming risk of job-stealing AI and data centers in their back yards, the feds are raising the alarm about a new category of threat, documents obtained by WIRED show.",
+      "image": "https://media.wired.com/photos/6a10b0246e47ced150ad32d6/master/pass/US-Law-Enforcement-Warns-of-Anti-Tech-Extremism-Security.jpg",
+      "published": "2026-05-26T09:30:00+00:00",
+      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
+    },
+    {
+      "title": "A reality check on the AI jobs hysteria",
+      "url": "https://www.technologyreview.com/2026/05/26/1137855/a-reality-check-on-the-ai-jobs-hysteria",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Haven’t you heard? White-collar jobs are going away, decimated by AI. Waves of layoffs in the tech sector (most recently at Coinbase and Meta and Cisco) are said to presage what will soon come for all of us knowledge workers. But before you quit your job as a software developer or financial analyst—or tech journalist—and&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/ai-jobs1b.jpg?resize=1200%2C600",
+      "published": "2026-05-26T09:00:00+00:00",
+      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
+      "lastSeen": "2026-05-26T10:00:01.795139+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599
     }
   ],
   "errors": []
