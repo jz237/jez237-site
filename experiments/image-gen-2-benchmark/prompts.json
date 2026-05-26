@@ -898,5 +898,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-26-afternoon-moss-calendar-board",
+    "title": "Moss Calendar Board",
+    "tests": "Tests whether GPT Image 2 can make an outdoor interpretive trail sign feel physically painted, weathered, readable as a public nature-board format, and materially different from cinematic concept art.",
+    "prompt": "Title: Moss Calendar Board\nFormat name: Nature Trail Sign Illustration\nCategory/kind: sign\nTests/explores: Tests whether GPT Image 2 can make an outdoor interpretive trail sign feel physically painted, weathered, readable as a public nature-board format, and materially different from cinematic concept art.\n\nCreate a square image that looks like a real sun-faded painted nature trail interpretive sign mounted in a simple cedar frame beside a damp woodland path. The sign art explains an imaginary forest phenomenon called a moss calendar: twelve distinct moss patches growing on fallen logs and stones, each patch shaped by season, moisture, and light.\n\nVisual format requirements: the entire image must be the sign itself plus a little of its wooden frame and forest background; use flat wildlife-diagram illustration, muted park-service colors, hand-painted brush texture, slight UV fading, tiny chips in the varnish, screw heads, and weather stains. Arrange the illustrated moss patches in a clear circular seasonal diagram with small icon-like leaves, raindrops, frost crystals, and sun symbols. Include simplified cross-section mini-diagrams of log bark, spore capsules, lichen, and soil layers, but keep any text as invented unreadable marks or short pseudo-label blocks rather than real words.\n\nComposition: straight-on documentary view, the sign fills most of the frame, cedar posts visible at the sides, out-of-focus wet ferns and tree trunks behind it. No people. No animals. No logos. No copyrighted characters. No dancing, dancers, ballet, dance poses, stage performance, ceremonial movement, or implied choreography. Avoid glossy AI concept art, lab labels, specimen trays, archive paperwork, sci-fi machines, and tabletop artifact staging.",
+    "image": "images/2026-05-26-afternoon-moss-calendar-board.png",
+    "date": "2026-05-26",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
