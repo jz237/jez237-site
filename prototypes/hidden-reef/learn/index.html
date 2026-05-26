@@ -423,8 +423,8 @@
       margin-top: 14px;
     }
     .diagram {
-      display: none;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
       gap: 18px;
       align-items: start;
       padding: 18px;
@@ -434,18 +434,12 @@
       box-shadow: 0 12px 21px rgba(0,0,0,0.22);
       scroll-margin-top: 22px;
     }
-    .diagram.is-selected {
-      display: grid;
-    }
     .diagram-empty {
-      padding: 18px;
-      border: 1px dashed rgba(116,205,235,0.24);
-      border-radius: 8px;
-      color: #b9d9e7;
-      background: rgba(7,31,50,0.58);
-    }
-    body:has(.diagram.is-selected) .diagram-empty {
       display: none;
+    }
+    .diagram-img-col {
+      display: grid;
+      gap: 6px;
     }
     .diagram img {
       width: 100%;
@@ -453,6 +447,28 @@
       border: 1px solid rgba(195,222,232,0.74);
       border-radius: 8px;
       background: #fff;
+      cursor: zoom-in;
+      transition: box-shadow 0.2s ease;
+    }
+    .diagram img:hover {
+      box-shadow: 0 0 18px rgba(64,217,255,0.45);
+    }
+    .diagram-zoom-hint {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 999px;
+      width: fit-content;
+      color: #9eeeff;
+      background: rgba(1,12,20,0.72);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .diagram-copy {
+      display: grid;
+      gap: 10px;
     }
     .diagram h2 {
       margin: 0 0 10px;
@@ -491,6 +507,51 @@
       border-radius: 50%;
       background: var(--aqua);
       box-shadow: 0 0 12px rgba(64,217,255,0.6);
+    }
+    .poster-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: clamp(14px, 3vw, 34px);
+      background: rgba(0,8,18,0.86);
+      backdrop-filter: blur(7px);
+    }
+    .poster-modal[hidden] {
+      display: none;
+    }
+    .poster-modal__panel {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      max-width: min(1100px, 96vw);
+      max-height: 94vh;
+    }
+    .poster-modal__panel img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(94vh - 54px);
+      object-fit: contain;
+      border: 1px solid rgba(195,222,232,0.74);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.54);
+    }
+    .poster-modal__close {
+      justify-self: end;
+      min-width: 44px;
+      min-height: 38px;
+      border: 1px solid rgba(116,205,235,0.32);
+      border-radius: 7px;
+      color: #fff;
+      background: rgba(5,24,38,0.92);
+      font-size: 22px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    body.poster-modal-open {
+      overflow: hidden;
     }
     main.page > section:not(.hero):not(.diagram-list):not(.store-help) {
       margin-top: 28px;
@@ -661,10 +722,7 @@
         linear-gradient(90deg, rgba(164,137,255,0.08), transparent 34%),
         #07131f;
     }
-    .diagram-empty {
-      border-color: rgba(164,137,255,0.3);
-      background: rgba(9,15,30,0.62);
-    }
+
     .store-help {
       border-left: 6px solid #ffb45c;
       background:
@@ -717,7 +775,7 @@
     .checklist-card,
     .guide-card {
       display: grid;
-      grid-template-columns: 150px minmax(180px, 250px) minmax(0, 1fr) auto;
+      grid-template-columns: 150px minmax(180px, 250px) minmax(0, 1fr);
       gap: 18px;
       align-items: center;
       min-height: 0;
@@ -830,14 +888,11 @@
       padding: 2px 0 6px;
     }
     .guide-card {
-      grid-template-columns: 160px minmax(190px, 250px) minmax(0, 1fr) auto;
+      grid-template-columns: 160px minmax(190px, 250px) minmax(0, 1fr);
     }
     .guide-card div {
       display: contents;
-    }
-    .guide-card .btn {
-      margin: 0;
-    }
+        }
     .btn {
       border: 1px solid rgba(255,123,50,0.5);
       background: rgba(255,123,50,0.16);
@@ -849,12 +904,7 @@
       background: rgba(5,18,30,0.72);
       box-shadow: none;
     }
-    .diagram-empty {
-      border: 0;
-      border-top: 1px dashed rgba(164,137,255,0.42);
-      border-radius: 0;
-      background: transparent;
-    }
+
     .store-help {
       border: 0;
       border-top: 2px solid #ffb45c;
@@ -1866,27 +1916,21 @@
       <div class="guide-grid">
         <article class="guide-card">
           <div><span>Compact filter</span><h3>Internal Power Filter</h3><p>Shows intake slots, sponge/floss, ceramic biological media, optional carbon, motor head, return nozzle, and the basic nitrogen cycle.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="internal-power-filter">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Gentle biological filter</span><h3>Sponge Filter</h3><p>Explains air pump lift, bubbles, check valve, sponge pores, beneficial bacteria, and why sponge filters are useful for fry and shrimp tanks.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="sponge-filter">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>External filter</span><h3>Canister Filter</h3><p>Shows intake tube, impeller, sponge media, ceramic biological media, activated carbon, return flow, and the freshwater nitrogen cycle.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="freshwater-filter">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Easy all-around filter</span><h3>Hang-On-Back Filter</h3><p>Explains intake, strainer, media stack, impeller, waterfall return flow, bacteria colonies, and maintenance for small to medium freshwater tanks.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="hang-on-back-filter">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>High-capacity system</span><h3>Sump Filtration</h3><p>Maps overflow, drain line, mechanical stage, biological media chamber, chemical media, return pump, and return line for freshwater planted tanks and larger systems.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="sump-filter">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Water clarity support</span><h3>UV Sterilizer</h3><p>Explains UV-C exposure, quartz sleeve protection, contact time, flow-rate sizing, outlet plumbing, and why UV supports but does not replace filtration.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="uv-sterilizer">Inspect diagram</button>
         </article>
       </div>
 
@@ -1897,27 +1941,21 @@
       <div class="guide-grid">
         <article class="guide-card">
           <div><span>Natural biofilter</span><h3>Live Rock Biofiltration</h3><p>Explains porous live rock, surface bacteria, nitrifying zones, microfauna habitat, flow, detritus management, and reef stability.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="live-rock-saltwater">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Reef-ready sump</span><h3>Saltwater Sump</h3><p>Shows overflow, drain line, filter sock, protein skimmer, biological media, refugium, return pump, and return line.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="sump-saltwater">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Same HOB, marine use</span><h3>Using a HOB on Saltwater</h3><p>Shows the same basic HOB filter hardware, plus saltwater-specific media choices, salinity care, and extra flow needs.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="hang-on-back-saltwater">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Nano reef setup</span><h3>All-In-One Saltwater</h3><p>Shows rear filtration chambers, overflow slots, filter floss, media basket, live rock rubble, skimmer chamber, heater, pump, and return nozzle.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="all-in-one-saltwater">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Targeted chemical media</span><h3>Media Reactor</h3><p>Explains controlled reactor flow, media beds, phosphate and organics control, contact time, return plumbing, and maintenance for reef systems.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="media-reactor-saltwater">Inspect diagram</button>
         </article>
         <article class="guide-card">
           <div><span>Nutrient export</span><h3>Protein Skimmer</h3><p>Shows foam fractionation, venturi air intake, microbubble reaction chamber, collection cup, skimmate removal, and cleaner saltwater return.</p></div>
-          <button class="btn guide-select" type="button" data-diagram="protein-skimmer-saltwater">Inspect diagram</button>
         </article>
       </div>
       </div>
@@ -1992,7 +2030,10 @@
 
     <section class="diagram-list" aria-label="Freshwater and general full diagrams">
       <article class="diagram" id="internal-power-filter">
-        <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Internal Power Filter</h2>
           <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
@@ -2005,7 +2046,10 @@
       </article>
 
       <article class="diagram" id="sponge-filter">
-        <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Sponge Filter</h2>
           <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
@@ -2018,7 +2062,10 @@
       </article>
 
       <article class="diagram" id="freshwater-filter">
-        <img src="../assets/learn/freshwater-filter.png" alt="Canister aquarium filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/freshwater-filter.png" alt="Canister aquarium filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Canister Filter</h2>
           <p>Best when you want to understand an external canister system: intake, media layers, return flow, and routine maintenance.</p>
@@ -2031,7 +2078,10 @@
       </article>
 
       <article class="diagram" id="hang-on-back-filter">
-        <img src="../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Hang-On-Back Filter</h2>
           <p>Best for small to medium freshwater tanks when you want simple setup, easy access, and visible waterfall return flow.</p>
@@ -2044,7 +2094,10 @@
       </article>
 
       <article class="diagram" id="sump-filter">
-        <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram for a planted freshwater aquarium" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram for a planted freshwater aquarium" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Sump Filtration</h2>
           <p>Best for larger freshwater planted tanks, high bioload displays, reef tanks, and systems that need room for pumps, media, and hidden equipment.</p>
@@ -2057,7 +2110,10 @@
       </article>
 
       <article class="diagram" id="uv-sterilizer">
-        <img src="../assets/learn/uv-sterilizer.png" alt="UV sterilizer aquarium system diagram showing UV-C lamp, quartz sleeve, flow path, and return plumbing" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/uv-sterilizer.png" alt="UV sterilizer aquarium system diagram showing UV-C lamp, quartz sleeve, flow path, and return plumbing" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>UV Sterilizer</h2>
           <p>Best as a supplemental water-clarity and free-floating organism control tool for freshwater, saltwater, pond, and quarantine systems when matched to the right flow rate.</p>
@@ -2072,7 +2128,10 @@
 
     <section class="diagram-list" aria-label="Saltwater and reef full diagrams">
       <article class="diagram" id="live-rock-saltwater">
-        <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Live Rock Biofiltration</h2>
           <p>Best for reef aquariums where live rock is both habitat and a biological filter that supports bacteria, microfauna, and long-term stability.</p>
@@ -2085,7 +2144,10 @@
       </article>
 
       <article class="diagram" id="sump-saltwater">
-        <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Saltwater Sump</h2>
           <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
@@ -2098,7 +2160,10 @@
       </article>
 
       <article class="diagram" id="hang-on-back-saltwater">
-        <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back filter used on a saltwater aquarium diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back filter used on a saltwater aquarium diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Using a HOB on Saltwater</h2>
           <p>The filter body is not fundamentally different from a freshwater HOB. This guide shows how the same style of filter is used on small marine tanks, quarantine systems, nano reefs, hospital tanks, and fish-only saltwater aquariums.</p>
@@ -2111,7 +2176,10 @@
       </article>
 
       <article class="diagram" id="all-in-one-saltwater">
-        <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>All-In-One Saltwater</h2>
           <p>Best for nano and medium reef aquariums where the display and filtration chambers are combined into one compact footprint.</p>
@@ -2124,7 +2192,10 @@
       </article>
 
       <article class="diagram" id="media-reactor-saltwater">
-        <img src="../assets/learn/media-reactor-saltwater.png" alt="Media reactor saltwater filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/media-reactor-saltwater.png" alt="Media reactor saltwater filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Media Reactor</h2>
           <p>Best for reef and saltwater aquariums that need targeted phosphate, dissolved organics, or specialty media control with predictable flow.</p>
@@ -2137,7 +2208,10 @@
       </article>
 
       <article class="diagram" id="protein-skimmer-saltwater">
-        <img src="../assets/learn/protein-skimmer-saltwater.png" alt="Protein skimmer saltwater filtration system diagram" />
+        <div class="diagram-img-col">
+          <img src="../assets/learn/protein-skimmer-saltwater.png" alt="Protein skimmer saltwater filtration system diagram" />
+          <span class="diagram-zoom-hint">Click to enlarge</span>
+        </div>
         <div>
           <h2>Protein Skimmer</h2>
           <p>Best for reef tanks and saltwater aquariums where foam fractionation removes dissolved organics before they break down into nutrients.</p>
@@ -2169,11 +2243,16 @@
         <div><h4>Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
       </div>
     </footer>
+  <div class="poster-modal" hidden>
+      <div class="poster-modal__panel">
+        <button class="poster-modal__close" type="button" aria-label="Close">&times;</button>
+        <img src="" alt="" />
+      </div>
+    </div>
   </main>
   <script>
     (() => {
-      const diagrams = Array.from(document.querySelectorAll('.diagram'));
-
+      /* Open the disclosure that contains a hash-linked diagram */
       function openDisclosureFor(id) {
         if (!id) return null;
         const target = document.getElementById(id);
@@ -2184,36 +2263,75 @@
         return target;
       }
 
-      function showSelectedDiagram(id, shouldScroll = false) {
+      /* Scroll to a hash-linked diagram on load or hash change */
+      function scrollToDiagram(id) {
         const target = openDisclosureFor(id);
-        let selected = null;
-        diagrams.forEach((diagram) => {
-          const isSelected = diagram.id === id;
-          diagram.classList.toggle('is-selected', isSelected);
-          if (isSelected) selected = diagram;
-        });
-        if ((selected || target) && shouldScroll) {
+        if (target) {
           setTimeout(() => {
-            window.scrollTo({ top: (selected || target).offsetTop - 20, left: 0, behavior: 'auto' });
+            window.scrollTo({ top: target.offsetTop - 20, left: 0, behavior: 'auto' });
           }, 80);
         }
       }
 
-      document.addEventListener('click', (event) => {
-        const button = event.target.closest('.guide-select');
-        if (!button) return;
-        const id = button.dataset.diagram;
-        history.replaceState(null, '', '#' + id);
-        showSelectedDiagram(id, true);
-      });
-
       window.addEventListener('hashchange', () => {
         const id = decodeURIComponent(window.location.hash.replace('#', ''));
-        showSelectedDiagram(id, true);
+        scrollToDiagram(id);
       });
 
       const initialId = decodeURIComponent(window.location.hash.replace('#', ''));
-      showSelectedDiagram(initialId, Boolean(initialId));
+      if (initialId) scrollToDiagram(initialId);
+
+      /* Click-to-zoom: clicking a diagram image opens the poster modal fullscreen */
+      const modal = document.querySelector('.poster-modal');
+      const modalImg = modal?.querySelector('img');
+      const modalClose = modal?.querySelector('.poster-modal__close');
+
+      function openModal(src, alt) {
+        if (!modal || !modalImg) return;
+        modalImg.src = src;
+        modalImg.alt = alt || '';
+        modal.hidden = false;
+        document.body.classList.add('poster-modal-open');
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.hidden = true;
+        modalImg.src = '';
+        document.body.classList.remove('poster-modal-open');
+      }
+
+      document.addEventListener('click', (event) => {
+        /* Click on a diagram image or its zoom hint */
+        const img = event.target.closest('.diagram img');
+        const hint = event.target.closest('.diagram-zoom-hint');
+        if (img || hint) {
+          const diagram = (img || hint).closest('.diagram');
+          const diagramImg = diagram?.querySelector('img');
+          if (diagramImg) {
+            openModal(diagramImg.src, diagramImg.alt);
+            event.preventDefault();
+          }
+          return;
+        }
+
+        /* Close modal via close button or clicking outside the image */
+        if (modal && !modal.hidden) {
+          const panel = event.target.closest('.poster-modal__panel');
+          const closeBtn = event.target.closest('.poster-modal__close');
+          if (closeBtn || !panel) {
+            closeModal();
+            event.preventDefault();
+          }
+        }
+      });
+
+      /* Close modal on Escape */
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal && !modal.hidden) {
+          closeModal();
+        }
+      });
     })();
   </script>
 </body>
