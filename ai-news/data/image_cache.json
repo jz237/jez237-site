@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T16:00:01.513883+00:00",
+  "updatedAt": "2026-05-26T17:00:02.044544+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8092,6 +8092,10 @@
     "https://simonwillison.net/2026/May/26/paul-graham": {
       "image": "",
       "checkedAt": "2026-05-26T16:00:01.513883+00:00"
+    },
+    "https://techcrunch.com/2026/05/26/human-archive-taps-into-indias-services-startups-to-collect-data-for-physical-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Main-YC-Headshot-all-4-of-us.jpg?resize=1200,800",
+      "checkedAt": "2026-05-26T17:00:02.044544+00:00"
     }
   }
 }
