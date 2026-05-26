@@ -1,6 +1,6 @@
 {
   "date": "2026-05-26",
-  "updatedAt": "2026-05-26T04:22:46.095401+00:00",
+  "updatedAt": "2026-05-26T06:00:01.311801+00:00",
   "items": [
     {
       "title": "Quoting Corey Quinn",
@@ -13,13 +13,13 @@
       "image": "",
       "published": "2026-05-26T02:28:54+00:00",
       "firstSeen": "2026-05-26T03:00:01.483781+00:00",
-      "lastSeen": "2026-05-26T04:22:46.095401+00:00",
+      "lastSeen": "2026-05-26T06:00:01.311801+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2335
+      "score": 4.1876
     },
     {
-      "title": "Aliai Eusebi, Alexander Herzog, Xiaoyu Liang, Marie Vasek, Enrico Mariconti, Lorenzo Cavallaro",
+      "title": "Maximillian Rossi, Prajwal Raghunath, Eugene Wu",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,12 +27,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-26T04:22:49.987541+00:00",
+      "published": "2026-05-26T06:00:13.056934+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-26T04:22:46.095401+00:00",
+      "lastSeen": "2026-05-26T06:00:01.311801+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "editorial_reason": "framework_or_plumbing",
+      "score": -0.74
     }
   ],
   "errors": []
