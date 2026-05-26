@@ -16,21 +16,51 @@
     bauder: '<path d="m4 17 9.8-9.8a2.8 2.8 0 0 1 4 4L8 21H4v-4Z"/><path d="m12.5 8.5 3 3"/>'
   };
 
-  const items = [
-    ['overview', './', 'overview', 'Overview'],
-    ['weather', 'weather/', 'weather', 'Weather Console'],
-    ['plants', 'plants/', 'plants', 'Garden Center'],
-    ['garden', 'garden/', 'garden', 'Garden Calendar'],
-    ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'GPT Image 2 Gallery'],
-    ['ai-news', 'ai-news/', 'aiNews', 'AI News'],
-    ['photos', 'photos/', 'photos', 'Photos, kept casual'],
-    ['games', 'games/', 'games', 'GameMaster Arcade'],
-    ['ai-explainer', 'experiments/ai-explainer/', 'aiExplainer', 'How AI Works'],
-    ['hidden-reef', 'prototypes/hidden-reef/', 'reef', 'Hidden Reef Demo'],
-    ['ops', 'ops/', 'ops', 'Operations & Statistics'],
-    ['stocks', 'https://jz237.github.io/stock-command-center/', 'stocks', 'Stock Command Center'],
-    ['archives', 'plants/past-years/', 'archives', 'Archives'],
-    ['bauder', 'https://baudersigns.com/', 'bauder', 'Bauder Signs']
+  const sections = [
+    {
+      label: 'Home',
+      tone: 'home',
+      items: [
+        ['overview', './', 'overview', 'Overview'],
+        ['weather', 'weather/', 'weather', 'Weather Console']
+      ]
+    },
+    {
+      label: 'Garden',
+      tone: 'garden',
+      items: [
+        ['plants', 'plants/', 'plants', 'Garden Center'],
+        ['garden', 'garden/', 'garden', 'Garden Calendar']
+      ]
+    },
+    {
+      label: 'AI + Media',
+      tone: 'media',
+      items: [
+        ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'GPT Image 2 Gallery'],
+        ['ai-news', 'ai-news/', 'aiNews', 'AI News'],
+        ['photos', 'photos/', 'photos', 'Photos, kept casual'],
+        ['games', 'games/', 'games', 'GameMaster Arcade'],
+        ['ai-explainer', 'experiments/ai-explainer/', 'aiExplainer', 'How AI Works']
+      ]
+    },
+    {
+      label: 'Projects',
+      tone: 'projects',
+      items: [
+        ['hidden-reef', 'prototypes/hidden-reef/', 'reef', 'Hidden Reef Demo'],
+        ['ops', 'ops/', 'ops', 'Operations & Statistics'],
+        ['stocks', 'https://jz237.github.io/stock-command-center/', 'stocks', 'Stock Command Center']
+      ]
+    },
+    {
+      label: 'Archive + Work',
+      tone: 'archive',
+      items: [
+        ['archives', 'plants/past-years/', 'archives', 'Archives'],
+        ['bauder', 'https://baudersigns.com/', 'bauder', 'Bauder Signs']
+      ]
+    }
   ];
 
   function hrefFor(base, href) {
@@ -41,7 +71,7 @@
   document.querySelectorAll('.side-nav[data-site-menu]').forEach(nav => {
     const base = nav.dataset.base || '';
     const active = nav.dataset.active || '';
-    nav.innerHTML = items.map(([key, href, icon, label]) => {
+    const renderItem = ([key, href, icon, label]) => {
       const external = /^https?:\/\//.test(href);
       const attrs = [
         'href="' + hrefFor(base, href) + '"',
@@ -49,6 +79,12 @@
         external ? 'target="_blank" rel="noopener"' : ''
       ].filter(Boolean).join(' ');
       return '<a ' + attrs + '><svg class="side-nav-icon" viewBox="0 0 24 24" aria-hidden="true">' + icons[icon] + '</svg><span>' + label + '</span></a>';
+    };
+    nav.innerHTML = sections.map(section => {
+      return '<div class="side-nav-section side-nav-section--' + section.tone + '">'
+        + '<div class="side-nav-heading">' + section.label + '</div>'
+        + section.items.map(renderItem).join('')
+        + '</div>';
     }).join('');
   });
 })();
