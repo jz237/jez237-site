@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-26T21:56:41.607138+00:00",
+  "updatedAt": "2026-05-26T23:00:02.101729+00:00",
   "items": [
     {
-      "title": "Beomsoo Kim, Changho Choi, Dohyun Kim, Dongki Lee, Ethan Ewer, Eunchong Kim, Gyeongman Kim, Haechan Kim, Hyeonghwan K...",
+      "title": "Jaeha Oh, Byungchan Kim, Ju Li, Yang Jeong Park, Jin-Sung Park",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-26T21:56:45.752856+00:00",
+      "published": "2026-05-26T23:00:10.202473+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "DuckDuckGo installs are up 30% as users reject being ‘force-fed’ Google’s AI Search",
+      "url": "https://techcrunch.com/2026/05/26/duckduckgo-installs-are-up-30-as-users-reject-being-force-fed-googles-ai-search",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Google overhauled Search at I/O 2026, replacing blue links with AI agents. The backlash has been swift. DuckDuckGo app installs spiked 30% as users seek a way out.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200%2C784",
+      "published": "2026-05-26T22:32:56+00:00",
+      "firstSeen": "2026-05-26T23:00:02.101729+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.4763
+    },
+    {
+      "title": "Stability AI Releases Stable Audio 3: A Family of Fast Latent Diffusion Models for Audio Generation and Editing",
+      "url": "https://www.marktechpost.com/2026/05/26/stability-ai-releases-stable-audio-3-a-family-of-fast-latent-diffusion-models-for-audio-generation-and-editing",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Stability AI has released Stable Audio 3, a family of latent diffusion models for instrumental music and sound effects generation. The release includes open weights for the small and medium variants. Small runs on a MacBook Pro M4 CPU. Medium fits on consumer GPUs with 8 GB of VRAM. Both generate stereo audio at 44.1 kHz using a three-stage training pipeline: flow matching, distillation warmup, and adversarial post-training. On the BBC Sound Effects benchmark at 5 seconds, SA3 medium scores FAD 0.369 — lower than every open-weight baseline evaluated in the paper.\nThe post Stability AI Releases",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-26-at-3.08.35-PM-1-150x150.png",
+      "published": "2026-05-26T22:31:02+00:00",
+      "firstSeen": "2026-05-26T23:00:02.101729+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 4.2053
     },
     {
       "title": "NVIDIA Vera CPU Is ‘Packing a Heavy-Hitting Punch’ Against Competition",
@@ -28,10 +60,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Vera-CPU_Tray_Open-34_Wide_R6C-FNL-5260651-1.jpg",
       "published": "2026-05-26T21:15:15+00:00",
       "firstSeen": "2026-05-26T21:56:41.607138+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7191
+      "score": 5.6879
     },
     {
       "title": "Why the Vatican Invited Anthropic to the Pope’s AI Encyclical Presentation",
@@ -44,10 +76,10 @@
       "image": "https://media.wired.com/photos/6a15cbcd37553f2c38327fce/master/pass/2278118480",
       "published": "2026-05-26T20:46:03+00:00",
       "firstSeen": "2026-05-26T21:00:01.760287+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2546
+      "score": 5.2238
     },
     {
       "title": "What Pope Leo XIV’s First Encyclical Says About the Power of AI",
@@ -60,10 +92,26 @@
       "image": "https://media.wired.com/photos/6a15ce296bb944abda95a6f4/master/pass/2277573822",
       "published": "2026-05-26T20:17:47+00:00",
       "firstSeen": "2026-05-26T21:00:01.760287+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2408
+      "score": 2.2104
+    },
+    {
+      "title": "Millions of AI agents imperiled by critical vulnerability in open source package",
+      "url": "https://arstechnica.com/information-technology/2026/05/millions-of-ai-agents-imperiled-by-critical-vulnerability-in-open-source-package",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "\"BadHost\" was found in Starlette, a package with 325 million weekly downloads.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/gatekeeping-ai-agents-1152x648.jpg",
+      "published": "2026-05-26T19:50:33+00:00",
+      "firstSeen": "2026-05-26T23:00:02.101729+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.4576
     },
     {
       "title": "OpenRouter more than doubles valuation to $1.3B in a year",
@@ -76,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-157503102.jpg?resize=1200%2C776",
       "published": "2026-05-26T18:33:01+00:00",
       "firstSeen": "2026-05-26T19:00:01.907369+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.891
+      "score": 2.8621
     },
     {
       "title": "The Netherlands just blocked a US company from buying the cloud provider that runs Dutch digital identity",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/dutch-government-blocks-kyndryl-solvinity-digid-sovereignty.avif",
       "published": "2026-05-26T16:40:25+00:00",
       "firstSeen": "2026-05-26T18:00:01.974115+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0002
+      "score": 1.9727
     },
     {
       "title": "Dropbox founder Drew Houston steps down as CEO after 19 years as the company he built gets squeezed by Google and Apple",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/dropbox-ceo-drew-houston-steps-down-ashraf-alkarmi.avif",
       "published": "2026-05-26T16:20:05+00:00",
       "firstSeen": "2026-05-26T16:50:59.142081+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0913
+      "score": 3.0641
     },
     {
       "title": "This startup is betting India’s gig economy can train the world’s robots",
@@ -124,10 +172,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Main-YC-Headshot-all-4-of-us.jpg?resize=1200%2C800",
       "published": "2026-05-26T16:00:00+00:00",
       "firstSeen": "2026-05-26T16:50:59.142081+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8226
+      "score": 3.7956
     },
     {
       "title": "Some ideas for what comes next, May 2026",
@@ -140,11 +188,11 @@
       "image": "https://substackcdn.com/image/fetch/$s_!-711!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F723ba9cb-c351-4b89-8860-2ac4eda7f335_2288x1584.png",
       "published": "2026-05-26T15:39:02+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4835
+      "score": 14.4569
     },
     {
       "title": "Microsoft Copilot Cowork Exfiltrates Files",
@@ -157,10 +205,10 @@
       "image": "",
       "published": "2026-05-26T15:36:48+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.9126
+      "score": 7.8859
     },
     {
       "title": "Brussels plans to ringfence two-thirds of EU mobile-satellite spectrum for European firms",
@@ -173,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/05/European-Commision.avif",
       "published": "2026-05-26T15:24:01+00:00",
       "firstSeen": "2026-05-26T16:50:59.142081+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9671
+      "score": 1.9406
     },
     {
       "title": "Stord raises $250 million to give independent brands the shipping speed they need to compete with Amazon",
@@ -189,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/05/stord-250-million-funding-amazon-fulfillment-ai-robotics.avif",
       "published": "2026-05-26T15:16:40+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.664
+      "score": 2.6376
     },
     {
       "title": "Quoting Paul Graham",
@@ -205,10 +253,10 @@
       "image": "",
       "published": "2026-05-26T15:02:30+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0981
+      "score": 2.0718
     },
     {
       "title": "Universal Music Group and TikTok renew agreement to combat unauthorized AI music",
@@ -221,10 +269,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/tiktok-header.jpg?resize=1200%2C800",
       "published": "2026-05-26T14:55:05+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0949
+      "score": 2.0688
     },
     {
       "title": "Rethinking organizational design in the age of agentic AI",
@@ -237,10 +285,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-1-_-V2.png?resize=1200%2C600",
       "published": "2026-05-26T14:54:10+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4946
+      "score": 5.4684
     },
     {
       "title": "xAI told staff to stop mingling with Cursor employees, weeks after they started working together",
@@ -253,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
       "published": "2026-05-26T14:50:07+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3529
+      "score": 6.3268
     },
     {
       "title": "Ferrari stock drops 7% after Luce EV reveal as investors question design and strategy",
@@ -269,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/05/ferrari-luce-stock-drop-electric-vehicle-design.avif",
       "published": "2026-05-26T14:37:54+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9478
+      "score": 1.9218
     },
     {
       "title": "Sundar Pichai on AI, the future of search, and what’s happening to the web",
@@ -285,10 +333,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/DCD_2026.05.26_Sundar_Google.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-26T14:00:00+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6422
+      "score": 5.6167
     },
     {
       "title": "TechCrunch Disrupt 2026 Early Bird ticket rates end May 29",
@@ -301,10 +349,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-26T14:00:00+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0722
+      "score": 2.0467
     },
     {
       "title": "ClickUp Cuts 22% of Staff as CEO Pushes AI-First ‘100x Org’ Model",
@@ -317,10 +365,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05262026-clickup-cuts-staff.jpg?f=jpeg",
       "published": "2026-05-26T13:17:03+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0148
+      "score": 2.9898
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -333,10 +381,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg",
       "published": "2026-05-26T13:00:24+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.0082
+      "score": 10.9834
     },
     {
       "title": "Nobody wants to tell me why they only listen to their own Suno slop",
@@ -349,10 +397,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKS511_AI_SLOP_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-05-26T12:46:03+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1125
+      "score": 2.0878
     },
     {
       "title": "Spotify tests narrated magazine articles inside the audiobook tier",
@@ -365,10 +413,10 @@
       "image": "https://media.thenextweb.com/2026/05/Spotify.avif",
       "published": "2026-05-26T12:30:20+00:00",
       "firstSeen": "2026-05-26T14:00:01.621125+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5963
+      "score": 2.5718
     },
     {
       "title": "Wall Street is paying $25,000 a day for AI trainers who used to work there",
@@ -381,10 +429,10 @@
       "image": "https://media.thenextweb.com/2026/05/Wall-Street.avif",
       "published": "2026-05-26T12:06:21+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8869
+      "score": 1.8628
     },
     {
       "title": "AI warfare is already here",
@@ -397,10 +445,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268420_Military_AIs_red_lines_are_already_being_crossed_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-26T12:00:00+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0945
+      "score": 2.0704
     },
     {
       "title": "Honeywell’s Quantinuum settles on $12.7bn IPO target after $20bn whisper",
@@ -413,10 +461,10 @@
       "image": "https://media.thenextweb.com/2026/05/Quantinuum.avif",
       "published": "2026-05-26T11:56:16+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.883
+      "score": 1.859
     },
     {
       "title": "Pope Leo’s first encyclical reads as tech regulation as much as theology",
@@ -429,10 +477,10 @@
       "image": "https://media.thenextweb.com/2026/05/pope-leo-encyclical-magnifica-humanitas-anthropic-olah.avif",
       "published": "2026-05-26T11:37:01+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5757
+      "score": 2.5518
     },
     {
       "title": "BNP Paribas works with Mistral on a European answer to Anthropic’s Mythos",
@@ -448,7 +496,7 @@
       "lastSeen": "2026-05-26T16:50:59.142081+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8726
+      "score": 7.8488
     },
     {
       "title": "SpaceX wants the Pentagon to pay five times more for Starlink in the Iran war",
@@ -464,7 +512,7 @@
       "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8696
+      "score": 1.8459
     },
     {
       "title": "Iran-linked hackers reached LA Metro’s rail-yard control display in March, Israeli firm finds",
@@ -480,7 +528,7 @@
       "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2628
+      "score": 3.2393
     },
     {
       "title": "SPARQ opens $8.5M seed round for AI-native game engine, with a16z’s scout fund on the cap table",
@@ -496,7 +544,7 @@
       "lastSeen": "2026-05-26T15:00:01.893149+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8581
+      "score": 1.8348
     },
     {
       "title": "Pony AI raises year-end fleet goal to 3,500 robotaxis after a strong Q1",
@@ -512,7 +560,7 @@
       "lastSeen": "2026-05-26T15:00:01.893149+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5505
+      "score": 2.5274
     },
     {
       "title": "Foreign-brand phone shipments to China rose 1.8% in April, CAICT data shows",
@@ -528,7 +576,7 @@
       "lastSeen": "2026-05-26T15:00:01.893149+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3446
+      "score": 4.3216
     },
     {
       "title": "AI Agents Plunged the Tech World Into Chaos. Here’s Exactly How That Happened",
@@ -541,10 +589,10 @@
       "image": "https://media.wired.com/photos/69fdc08ed818d4f01db33c98/master/pass/wired_agents_web.gif",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.7794
+      "score": 9.7566
     },
     {
       "title": "Take This Mandatory AI Workplace Training Right Now—or Else",
@@ -557,10 +605,10 @@
       "image": "https://media.wired.com/photos/6a104f8cc9c138425f4055c9/master/pass/1-lets%20get%20oriented.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2794
+      "score": 2.2566
     },
     {
       "title": "Quiz: Will AI Destroy Your Career?",
@@ -573,10 +621,10 @@
       "image": "https://media.wired.com/photos/6a0b67820ce29a972051a9e8/master/pass/ai_exposed_jobs.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
+      "score": 1.9566
     },
     {
       "title": "AI Is Taking Over the Most Cursed Job in the World",
@@ -589,58 +637,10 @@
       "image": "https://media.wired.com/photos/6a047c1d138310676483b3fe/master/pass/AIDebtCollectors_v3.1.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
-    },
-    {
-      "title": "I Spent a Week Recording Myself Doing Chores for Money. Who's the Robot Now?",
-      "url": "https://www.wired.com/story/household-chores-training-robots",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Cooking. Doing laundry. Tidying up. All your household tasks can be turned into data to train future humanoids—if you’re prepared for the consequences.",
-      "image": "https://media.wired.com/photos/6a077b4e67132e88ffa730a4/master/pass/AIPanic_TrainingRobots_v2.1.jpg",
-      "published": "2026-05-26T10:00:00+00:00",
-      "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
-    },
-    {
-      "title": "I’m a Professional Fact-Checker. AI Is Wrong More Often Than You Think",
-      "url": "https://www.wired.com/story/fact-checking-ai",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Can AI do fact-checking? A WIRED fact-checker fact-checks.",
-      "image": "https://media.wired.com/photos/6a04e6a1d7be752b48cba500/master/pass/AiFactChecking-Final.jpg",
-      "published": "2026-05-26T10:00:00+00:00",
-      "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
-    },
-    {
-      "title": "To Land a Job in AI, Try Reading Kant",
-      "url": "https://www.wired.com/story/to-land-a-job-in-ai-try-reading-kant",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The world’s leading AI labs are hiring philosophers to think through ethical edge cases and grand questions of mind and morality. Are they another instrument of hype?",
-      "image": "https://media.wired.com/photos/6a0722c3cc137669535c6942/master/pass/AIPhilosophers_v2.jpg",
-      "published": "2026-05-26T10:00:00+00:00",
-      "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
+      "score": 1.9566
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8772
+      "score": 1.8553
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.8251
+      "score": 0.8096
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1271
+      "score": 1.1269
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -701,10 +701,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-26T21:56:41.607138+00:00",
+      "lastSeen": "2026-05-26T23:00:02.101729+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.905
+      "score": -1.9051
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
@@ -771,11 +771,5 @@
       "score": 1.89
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }

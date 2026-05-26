@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T21:56:41.607138+00:00",
+  "updatedAt": "2026-05-26T23:00:02.101729+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8100,6 +8100,14 @@
     "https://techcrunch.com/2026/05/26/openrouter-more-than-doubles-valuation-to-1-3b-in-a-year": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-157503102.jpg?resize=1200,776",
       "checkedAt": "2026-05-26T19:00:01.907369+00:00"
+    },
+    "https://techcrunch.com/2026/05/26/duckduckgo-installs-are-up-30-as-users-reject-being-force-fed-googles-ai-search": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200,784",
+      "checkedAt": "2026-05-26T23:00:02.101729+00:00"
+    },
+    "https://techcrunch.com/2026/05/24/xreal-googles-smartglasses-partner-thinks-it-has-finally-mastered-this-notoriously-tricky-industry": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-9.02.36-AM.png?resize=1200,673",
+      "checkedAt": "2026-05-26T23:00:02.101729+00:00"
     }
   }
 }
