@@ -1237,10 +1237,14 @@ header#site-nav .links a[aria-current="page"] {
   50% { transform: scale(1.12) rotate(45deg); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .game-card-animation::before,
-  .game-card-animation i {
-    animation-play-state: paused !important;
-  }
+  .game-card-animation::before { animation-duration: 5.5s; }
+  .game-stars { animation-duration: 9s; }
+  .game-terrain { animation-duration: 3.2s; }
+  .game-ship { animation-duration: 3.8s; }
+  .game-ship::before { animation-duration: .42s; }
+  .game-laser { animation-duration: 2.4s; }
+  .game-asteroid { animation-duration: 5.2s; }
+  .game-pickup { animation-duration: 3.4s; }
 }
 .hub-card h2 {
   margin: 0 0 9px;
