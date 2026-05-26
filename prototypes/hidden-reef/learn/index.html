@@ -508,6 +508,89 @@
       background: var(--aqua);
       box-shadow: 0 0 12px rgba(64,217,255,0.6);
     }
+    .filter-accordion {
+      display: grid;
+      gap: 10px;
+    }
+    .filter-card {
+      border: 1px solid rgba(74,152,221,0.34);
+      border-radius: 8px;
+      background: rgba(3,24,54,0.76);
+      overflow: hidden;
+      scroll-margin-top: 18px;
+    }
+    .filter-card summary {
+      position: relative;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(170px, 0.62fr) minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      min-height: 76px;
+      padding: 14px 54px 14px 14px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .filter-card summary::-webkit-details-marker {
+      display: none;
+    }
+    .filter-card summary::after {
+      content: "+";
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      color: #fff;
+      background: rgba(164,137,255,0.2);
+      font-size: 20px;
+      font-weight: 900;
+    }
+    .filter-card[open] summary {
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+      background: rgba(4,39,79,0.52);
+    }
+    .filter-card[open] summary::after {
+      content: "-";
+    }
+    .filter-card summary span {
+      color: #bdaaff;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .filter-card summary strong {
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 21px;
+      line-height: 1.05;
+    }
+    .filter-card summary p {
+      margin: 0;
+      padding-right: 34px;
+      color: #c9d9d7;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .filter-card__body {
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 16px;
+    }
+    .filter-card .diagram {
+      padding: 16px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
     .poster-modal {
       position: fixed;
       inset: 0;
@@ -1622,6 +1705,10 @@
       .equipment-choice {
         grid-template-columns: 1fr;
       }
+      .filter-card summary,
+      .filter-card__body {
+        grid-template-columns: 1fr;
+      }
       .store-help {
         grid-template-columns: minmax(0, 1fr) 250px;
       }
@@ -1910,53 +1997,281 @@
       </div>
 
       <div class="section-head">
-        <h2>Freshwater & General</h2>
-        <p>Dissected views for beginner tanks, planted displays, sponge filters, HOB filters, canisters, sumps, and common aquarium hardware.</p>
+        <h2>Freshwater &amp; General</h2>
+        <p>Click a filtration system to open its diagram, use case, and maintenance notes.</p>
       </div>
-      <div class="guide-grid">
-        <article class="guide-card">
-          <div><span>Compact filter</span><h3>Internal Power Filter</h3><p>Shows intake slots, sponge/floss, ceramic biological media, optional carbon, motor head, return nozzle, and the basic nitrogen cycle.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Gentle biological filter</span><h3>Sponge Filter</h3><p>Explains air pump lift, bubbles, check valve, sponge pores, beneficial bacteria, and why sponge filters are useful for fry and shrimp tanks.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>External filter</span><h3>Canister Filter</h3><p>Shows intake tube, impeller, sponge media, ceramic biological media, activated carbon, return flow, and the freshwater nitrogen cycle.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Easy all-around filter</span><h3>Hang-On-Back Filter</h3><p>Explains intake, strainer, media stack, impeller, waterfall return flow, bacteria colonies, and maintenance for small to medium freshwater tanks.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>High-capacity system</span><h3>Sump Filtration</h3><p>Maps overflow, drain line, mechanical stage, biological media chamber, chemical media, return pump, and return line for freshwater planted tanks and larger systems.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Water clarity support</span><h3>UV Sterilizer</h3><p>Explains UV-C exposure, quartz sleeve protection, contact time, flow-rate sizing, outlet plumbing, and why UV supports but does not replace filtration.</p></div>
-        </article>
+      <div class="filter-accordion" aria-label="Freshwater and general filtration diagrams">
+        <details class="filter-card" id="internal-power-filter">
+          <summary>
+            <span>Compact filter</span>
+            <strong>Internal Power Filter</strong>
+            <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Internal Power Filter</h2>
+                    <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
+                    <ul>
+                      <li>Good beginner visual for mechanical, biological, and optional chemical filtration.</li>
+                      <li>Pairs naturally with filter media, replacement sponges, cartridges, and water conditioners.</li>
+                      <li>Maintenance message is strong: rinse sponge in tank water and do not replace all biological media at once.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="sponge-filter">
+          <summary>
+            <span>Gentle biological filter</span>
+            <strong>Sponge Filter</strong>
+            <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Sponge Filter</h2>
+                    <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
+                    <ul>
+                      <li>Shows why the air pump, check valve, airline, uplift tube, and sponge all matter.</li>
+                      <li>Clear path for choosing air pumps, valves, tubing, replacement sponge, and brushes.</li>
+                      <li>Useful beginner note: old sponges are beneficial bacteria colonies, not trash.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="freshwater-filter">
+          <summary>
+            <span>External filter</span>
+            <strong>Canister Filter</strong>
+            <p>Best when you want to understand an external canister system: intake, media layers, return flow, and routine maintenance.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/freshwater-filter.png" alt="Canister aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Canister Filter</h2>
+                    <p>Best when you want to understand an external canister system: intake, media layers, return flow, and routine maintenance.</p>
+                    <ul>
+                      <li>Good bridge between simple internal filters and larger external filter systems.</li>
+                      <li>Clear path for choosing sponge media, ceramic rings, activated carbon, replacement parts, and impeller cleaning tools.</li>
+                      <li>Strong maintenance note: preserve biological media and keep water changes part of the routine.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="hang-on-back-filter">
+          <summary>
+            <span>Easy all-around filter</span>
+            <strong>Hang-On-Back Filter</strong>
+            <p>Best for small to medium freshwater tanks when you want simple setup, easy access, and visible waterfall return flow.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Hang-On-Back Filter</h2>
+                    <p>Best for small to medium freshwater tanks when you want simple setup, easy access, and visible waterfall return flow.</p>
+                    <ul>
+                      <li>Shows exactly why intake strainers, impellers, media order, and water level matter.</li>
+                      <li>Natural fit for cartridge/media replacement, intake sponges, carbon, ceramic media, and flow troubleshooting.</li>
+                      <li>Useful explanation for reducing noise, keeping flow strong, and avoiding tap-water media rinses.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="sump-filter">
+          <summary>
+            <span>High-capacity system</span>
+            <strong>Sump Filtration</strong>
+            <p>Best for larger freshwater planted tanks, high bioload displays, reef tanks, and systems that need room for pumps, media, and hidden equipment.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram for a planted freshwater aquarium" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Sump Filtration</h2>
+                    <p>Best for larger freshwater planted tanks, high bioload displays, reef tanks, and systems that need room for pumps, media, and hidden equipment.</p>
+                    <ul>
+                      <li>Explains the full water path from overflow to drain line, sump chambers, return pump, and display tank.</li>
+                      <li>Supports serious setup planning for plumbing, filter socks, ceramic media, carbon, pumps, and top-off habits.</li>
+                      <li>Works as a general sump visual because the same plumbing idea can support freshwater, planted, or reef systems with different media choices.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="uv-sterilizer">
+          <summary>
+            <span>Water clarity support</span>
+            <strong>UV Sterilizer</strong>
+            <p>Best as a supplemental water-clarity and free-floating organism control tool for freshwater, saltwater, pond, and quarantine systems when matched to the right flow rate.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/uv-sterilizer.png" alt="UV sterilizer aquarium system diagram showing UV-C lamp, quartz sleeve, flow path, and return plumbing" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>UV Sterilizer</h2>
+                    <p>Best as a supplemental water-clarity and free-floating organism control tool for freshwater, saltwater, pond, and quarantine systems when matched to the right flow rate.</p>
+                    <ul>
+                      <li>Shows the feed pump or manifold, inlet line, UV housing, quartz sleeve, UV-C lamp, water path, outlet line, and return to the aquarium or sump.</li>
+                      <li>Helps you compare UV wattage, replacement bulbs, pumps, tubing, flow control, and routine sleeve cleaning.</li>
+                      <li>Clear husbandry note: slower flow increases contact time, but UV does not replace biological filtration, quarantine, or good maintenance.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
       </div>
 
       <div class="section-head">
-        <h2 id="saltwater-guides-title">Saltwater & Reef</h2>
-        <p>Reef-specific filtration and saltwater use cases: live rock, reef-ready sumps, HOB filters, media reactors, skimmers, and all-in-one nano reef chambers.</p>
+        <h2 id="saltwater-guides-title">Saltwater &amp; Reef</h2>
+        <p>Click a reef or saltwater system to compare live rock, sumps, reactors, skimmers, and compact all-in-one filtration.</p>
       </div>
-      <div class="guide-grid">
-        <article class="guide-card">
-          <div><span>Natural biofilter</span><h3>Live Rock Biofiltration</h3><p>Explains porous live rock, surface bacteria, nitrifying zones, microfauna habitat, flow, detritus management, and reef stability.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Reef-ready sump</span><h3>Saltwater Sump</h3><p>Shows overflow, drain line, filter sock, protein skimmer, biological media, refugium, return pump, and return line.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Same HOB, marine use</span><h3>Using a HOB on Saltwater</h3><p>Shows the same basic HOB filter hardware, plus saltwater-specific media choices, salinity care, and extra flow needs.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Nano reef setup</span><h3>All-In-One Saltwater</h3><p>Shows rear filtration chambers, overflow slots, filter floss, media basket, live rock rubble, skimmer chamber, heater, pump, and return nozzle.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Targeted chemical media</span><h3>Media Reactor</h3><p>Explains controlled reactor flow, media beds, phosphate and organics control, contact time, return plumbing, and maintenance for reef systems.</p></div>
-        </article>
-        <article class="guide-card">
-          <div><span>Nutrient export</span><h3>Protein Skimmer</h3><p>Shows foam fractionation, venturi air intake, microbubble reaction chamber, collection cup, skimmate removal, and cleaner saltwater return.</p></div>
-        </article>
+      <div class="filter-accordion" aria-label="Saltwater and reef filtration diagrams">
+        <details class="filter-card" id="live-rock-saltwater">
+          <summary>
+            <span>Natural biofilter</span>
+            <strong>Live Rock Biofiltration</strong>
+            <p>Best for reef aquariums where live rock is both habitat and a biological filter that supports bacteria, microfauna, and long-term stability.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Live Rock Biofiltration</h2>
+                    <p>Best for reef aquariums where live rock is both habitat and a biological filter that supports bacteria, microfauna, and long-term stability.</p>
+                    <ul>
+                      <li>Explains why porous rock, water movement, microfauna, and bacterial colonies all matter in a saltwater system.</li>
+                      <li>Natural path for choosing live rock, reef-safe flow pumps, protein skimmers, saltwater test kits, and quarantine supplies.</li>
+                      <li>Strong husbandry message: never sterilize or replace all live rock at once, and keep detritus from building up.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="sump-saltwater">
+          <summary>
+            <span>Reef-ready sump</span>
+            <strong>Saltwater Sump</strong>
+            <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Saltwater Sump</h2>
+                    <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
+                    <ul>
+                      <li>Shows the full reef water path: overflow, drain line, mechanical stage, skimmer, live rock rubble, refugium, return pump, and return line.</li>
+                      <li>Helps you compare skimmers, socks, return pumps, macroalgae, live rock, and RO/DI top-off habits.</li>
+                      <li>Good planning visual when you are moving from basic filtration into a serious reef system.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="hang-on-back-saltwater">
+          <summary>
+            <span>Same HOB, marine use</span>
+            <strong>Using a HOB on Saltwater</strong>
+            <p>The filter body is not fundamentally different from a freshwater HOB. This guide shows how the same style of filter is used on small marine tanks, quarantine systems, nano reefs, hospital tanks, and fish-only saltwater aquariums.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back filter used on a saltwater aquarium diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Using a HOB on Saltwater</h2>
+                    <p>The filter body is not fundamentally different from a freshwater HOB. This guide shows how the same style of filter is used on small marine tanks, quarantine systems, nano reefs, hospital tanks, and fish-only saltwater aquariums.</p>
+                    <ul>
+                      <li>Shows intake, strainer, impeller, filter floss, carbon, live rock rubble, and waterfall return in one easy-to-follow layout.</li>
+                      <li>Highlights saltwater-specific care: rinse media in saltwater or removed tank water, monitor salinity, and add flow when needed.</li>
+                      <li>Useful bridge when you want marine filtration without drilling or plumbing.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="all-in-one-saltwater">
+          <summary>
+            <span>Nano reef setup</span>
+            <strong>All-In-One Saltwater</strong>
+            <p>Best for nano and medium reef aquariums where the display and filtration chambers are combined into one compact footprint.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>All-In-One Saltwater</h2>
+                    <p>Best for nano and medium reef aquariums where the display and filtration chambers are combined into one compact footprint.</p>
+                    <ul>
+                      <li>Explains rear-chamber filtration: overflow slots, filter floss, media basket, biological media, optional skimmer, baffles, heater, return pump, and nozzle.</li>
+                      <li>Natural fit for nano reef kits, media baskets, floss, carbon/GFO, small skimmers, heaters, and return-pump maintenance.</li>
+                      <li>Good beginner reef visual because it makes the hidden back chambers understandable.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="media-reactor-saltwater">
+          <summary>
+            <span>Targeted chemical media</span>
+            <strong>Media Reactor</strong>
+            <p>Best for reef and saltwater aquariums that need targeted phosphate, dissolved organics, or specialty media control with predictable flow.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/media-reactor-saltwater.png" alt="Media reactor saltwater filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Media Reactor</h2>
+                    <p>Best for reef and saltwater aquariums that need targeted phosphate, dissolved organics, or specialty media control with predictable flow.</p>
+                    <ul>
+                      <li>Shows feed pump, inlet line, reactor body, lower sponge, media bed, diffuser, flow-control valve, outlet line, and return to sump.</li>
+                      <li>Helps you compare activated carbon, GFO/phosphate remover, biopellets, tubing, valves, pumps, and replacement sponges.</li>
+                      <li>Strong maintenance message: rinse media first, set flow correctly, avoid tumbling GFO too aggressively, and replace exhausted media.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="protein-skimmer-saltwater">
+          <summary>
+            <span>Nutrient export</span>
+            <strong>Protein Skimmer</strong>
+            <p>Best for reef tanks and saltwater aquariums where foam fractionation removes dissolved organics before they break down into nutrients.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/protein-skimmer-saltwater.png" alt="Protein skimmer saltwater filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Protein Skimmer</h2>
+                    <p>Best for reef tanks and saltwater aquariums where foam fractionation removes dissolved organics before they break down into nutrients.</p>
+                    <ul>
+                      <li>Explains water inlet, air intake, venturi, pump, reaction chamber, rising microbubbles, foam head, neck, collection cup, and clean water outlet.</li>
+                      <li>Useful for choosing skimmers, replacement pumps, air-intake cleaning tools, collection-cup maintenance supplies, saltwater test kits, and nutrient-control options.</li>
+                      <li>Clear husbandry note: tune water level and airflow for stable foam, empty the cup regularly, and keep biological filtration in place.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
       </div>
       </div>
     </details>
@@ -2028,202 +2343,6 @@
     </details>
     </section>
 
-    <section class="diagram-list" aria-label="Freshwater and general full diagrams">
-      <article class="diagram" id="internal-power-filter">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Internal Power Filter</h2>
-          <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
-          <ul>
-            <li>Good beginner visual for mechanical, biological, and optional chemical filtration.</li>
-            <li>Pairs naturally with filter media, replacement sponges, cartridges, and water conditioners.</li>
-            <li>Maintenance message is strong: rinse sponge in tank water and do not replace all biological media at once.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="sponge-filter">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Sponge Filter</h2>
-          <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
-          <ul>
-            <li>Shows why the air pump, check valve, airline, uplift tube, and sponge all matter.</li>
-            <li>Clear path for choosing air pumps, valves, tubing, replacement sponge, and brushes.</li>
-            <li>Useful beginner note: old sponges are beneficial bacteria colonies, not trash.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="freshwater-filter">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/freshwater-filter.png" alt="Canister aquarium filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Canister Filter</h2>
-          <p>Best when you want to understand an external canister system: intake, media layers, return flow, and routine maintenance.</p>
-          <ul>
-            <li>Good bridge between simple internal filters and larger external filter systems.</li>
-            <li>Clear path for choosing sponge media, ceramic rings, activated carbon, replacement parts, and impeller cleaning tools.</li>
-            <li>Strong maintenance note: preserve biological media and keep water changes part of the routine.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="hang-on-back-filter">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Hang-On-Back Filter</h2>
-          <p>Best for small to medium freshwater tanks when you want simple setup, easy access, and visible waterfall return flow.</p>
-          <ul>
-            <li>Shows exactly why intake strainers, impellers, media order, and water level matter.</li>
-            <li>Natural fit for cartridge/media replacement, intake sponges, carbon, ceramic media, and flow troubleshooting.</li>
-            <li>Useful explanation for reducing noise, keeping flow strong, and avoiding tap-water media rinses.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="sump-filter">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram for a planted freshwater aquarium" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Sump Filtration</h2>
-          <p>Best for larger freshwater planted tanks, high bioload displays, reef tanks, and systems that need room for pumps, media, and hidden equipment.</p>
-          <ul>
-            <li>Explains the full water path from overflow to drain line, sump chambers, return pump, and display tank.</li>
-            <li>Supports serious setup planning for plumbing, filter socks, ceramic media, carbon, pumps, and top-off habits.</li>
-            <li>Works as a general sump visual because the same plumbing idea can support freshwater, planted, or reef systems with different media choices.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="uv-sterilizer">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/uv-sterilizer.png" alt="UV sterilizer aquarium system diagram showing UV-C lamp, quartz sleeve, flow path, and return plumbing" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>UV Sterilizer</h2>
-          <p>Best as a supplemental water-clarity and free-floating organism control tool for freshwater, saltwater, pond, and quarantine systems when matched to the right flow rate.</p>
-          <ul>
-            <li>Shows the feed pump or manifold, inlet line, UV housing, quartz sleeve, UV-C lamp, water path, outlet line, and return to the aquarium or sump.</li>
-            <li>Helps you compare UV wattage, replacement bulbs, pumps, tubing, flow control, and routine sleeve cleaning.</li>
-            <li>Clear husbandry note: slower flow increases contact time, but UV does not replace biological filtration, quarantine, or good maintenance.</li>
-          </ul>
-        </div>
-      </article>
-    </section>
-
-    <section class="diagram-list" aria-label="Saltwater and reef full diagrams">
-      <article class="diagram" id="live-rock-saltwater">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Live Rock Biofiltration</h2>
-          <p>Best for reef aquariums where live rock is both habitat and a biological filter that supports bacteria, microfauna, and long-term stability.</p>
-          <ul>
-            <li>Explains why porous rock, water movement, microfauna, and bacterial colonies all matter in a saltwater system.</li>
-            <li>Natural path for choosing live rock, reef-safe flow pumps, protein skimmers, saltwater test kits, and quarantine supplies.</li>
-            <li>Strong husbandry message: never sterilize or replace all live rock at once, and keep detritus from building up.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="sump-saltwater">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Saltwater Sump</h2>
-          <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
-          <ul>
-            <li>Shows the full reef water path: overflow, drain line, mechanical stage, skimmer, live rock rubble, refugium, return pump, and return line.</li>
-            <li>Helps you compare skimmers, socks, return pumps, macroalgae, live rock, and RO/DI top-off habits.</li>
-            <li>Good planning visual when you are moving from basic filtration into a serious reef system.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="hang-on-back-saltwater">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back filter used on a saltwater aquarium diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Using a HOB on Saltwater</h2>
-          <p>The filter body is not fundamentally different from a freshwater HOB. This guide shows how the same style of filter is used on small marine tanks, quarantine systems, nano reefs, hospital tanks, and fish-only saltwater aquariums.</p>
-          <ul>
-            <li>Shows intake, strainer, impeller, filter floss, carbon, live rock rubble, and waterfall return in one easy-to-follow layout.</li>
-            <li>Highlights saltwater-specific care: rinse media in saltwater or removed tank water, monitor salinity, and add flow when needed.</li>
-            <li>Useful bridge when you want marine filtration without drilling or plumbing.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="all-in-one-saltwater">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>All-In-One Saltwater</h2>
-          <p>Best for nano and medium reef aquariums where the display and filtration chambers are combined into one compact footprint.</p>
-          <ul>
-            <li>Explains rear-chamber filtration: overflow slots, filter floss, media basket, biological media, optional skimmer, baffles, heater, return pump, and nozzle.</li>
-            <li>Natural fit for nano reef kits, media baskets, floss, carbon/GFO, small skimmers, heaters, and return-pump maintenance.</li>
-            <li>Good beginner reef visual because it makes the hidden back chambers understandable.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="media-reactor-saltwater">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/media-reactor-saltwater.png" alt="Media reactor saltwater filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Media Reactor</h2>
-          <p>Best for reef and saltwater aquariums that need targeted phosphate, dissolved organics, or specialty media control with predictable flow.</p>
-          <ul>
-            <li>Shows feed pump, inlet line, reactor body, lower sponge, media bed, diffuser, flow-control valve, outlet line, and return to sump.</li>
-            <li>Helps you compare activated carbon, GFO/phosphate remover, biopellets, tubing, valves, pumps, and replacement sponges.</li>
-            <li>Strong maintenance message: rinse media first, set flow correctly, avoid tumbling GFO too aggressively, and replace exhausted media.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="diagram" id="protein-skimmer-saltwater">
-        <div class="diagram-img-col">
-          <img src="../assets/learn/protein-skimmer-saltwater.png" alt="Protein skimmer saltwater filtration system diagram" />
-          <span class="diagram-zoom-hint">Click to enlarge</span>
-        </div>
-        <div>
-          <h2>Protein Skimmer</h2>
-          <p>Best for reef tanks and saltwater aquariums where foam fractionation removes dissolved organics before they break down into nutrients.</p>
-          <ul>
-            <li>Explains water inlet, air intake, venturi, pump, reaction chamber, rising microbubbles, foam head, neck, collection cup, and clean water outlet.</li>
-            <li>Useful for choosing skimmers, replacement pumps, air-intake cleaning tools, collection-cup maintenance supplies, saltwater test kits, and nutrient-control options.</li>
-            <li>Clear husbandry note: tune water level and airflow for stable foam, empty the cup regularly, and keep biological filtration in place.</li>
-          </ul>
-        </div>
-      </article>
-    </section>
-
     <section class="store-help" aria-labelledby="store-help-title">
       <div>
         <h2 id="store-help-title">Still not sure what is happening?</h2>
@@ -2256,6 +2375,10 @@
       function openDisclosureFor(id) {
         if (!id) return null;
         const target = document.getElementById(id);
+        const filterCard = target?.matches('details.filter-card')
+          ? target
+          : target?.closest('details.filter-card');
+        if (filterCard) filterCard.open = true;
         const disclosure = target?.matches('details.learn-disclosure')
           ? target
           : target?.closest('details.learn-disclosure');
@@ -2272,6 +2395,16 @@
           }, 80);
         }
       }
+
+      document.querySelectorAll('.filter-card').forEach((card) => {
+        card.addEventListener('toggle', () => {
+          if (!card.open) return;
+          const group = card.closest('.filter-accordion');
+          group?.querySelectorAll('.filter-card[open]').forEach((otherCard) => {
+            if (otherCard !== card) otherCard.open = false;
+          });
+        });
+      });
 
       window.addEventListener('hashchange', () => {
         const id = decodeURIComponent(window.location.hash.replace('#', ''));
