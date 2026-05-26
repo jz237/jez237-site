@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T07:00:01.495733+00:00",
+  "updatedAt": "2026-05-26T08:00:01.656732+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8032,6 +8032,14 @@
     "https://simonwillison.net/2026/May/26/corey-quinn": {
       "image": "",
       "checkedAt": "2026-05-26T03:00:01.483781+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/26/meet-omnivoice-studio-a-local-open-source-alternative-to-elevenlabs": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-51-1024x731.png",
+      "checkedAt": "2026-05-26T08:00:01.656732+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/26/design-a-complete-multimodal-rlvr-pipeline-with-open-mm-rl-vision-language-prompting-reward-scoring-and-grpo-export": {
+      "image": "",
+      "checkedAt": "2026-05-26T08:00:01.656732+00:00"
     }
   }
 }
