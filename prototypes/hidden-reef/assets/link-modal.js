@@ -70,7 +70,7 @@
     const media = modal.querySelector('.link-modal__media');
     const image = modal.querySelector('.link-modal__image');
     media?.classList.remove('is-zoomed');
-    if (media) media.dataset.zoomIndex = '1';
+    if (media) media.dataset.zoomIndex = '0';
     if (image) {
       image.style.transformOrigin = '';
       image.style.removeProperty('--modal-image-zoom');
@@ -83,7 +83,7 @@
 
     media.addEventListener('pointermove', event => {
       if (event.pointerType !== 'mouse') return;
-      const level = Number(media.dataset.zoomIndex || 1);
+      const level = Number(media.dataset.zoomIndex || 0);
       setImageZoom(modal, event, level);
     });
 
@@ -104,7 +104,7 @@
 
     media.addEventListener('wheel', event => {
       event.preventDefault();
-      const currentIndex = Number(media.dataset.zoomIndex || 1);
+      const currentIndex = Number(media.dataset.zoomIndex || 0);
       const direction = event.deltaY < 0 ? 1 : -1;
       const nextIndex = Math.min(IMAGE_ZOOM_LEVELS.length - 1, Math.max(0, currentIndex + direction));
       setImageZoom(modal, event, nextIndex);
