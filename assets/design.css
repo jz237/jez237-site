@@ -1155,12 +1155,20 @@ header#site-nav .links a[aria-current="page"] {
     0 0 6px rgba(255,85,209,0.82);
 }
 .laser-one {
-  top: 54px;
-  animation: arcade-laser 1.05s linear infinite;
+  top: 52px;
+  animation: arcade-laser .92s linear infinite;
 }
 .laser-two {
-  top: 61px;
-  animation: arcade-laser 1.05s .46s linear infinite;
+  top: 59px;
+  animation: arcade-laser .92s .22s linear infinite;
+}
+.laser-three {
+  top: 55px;
+  animation: arcade-laser .92s .44s linear infinite;
+}
+.laser-four {
+  top: 62px;
+  animation: arcade-laser .92s .66s linear infinite;
 }
 .game-asteroid {
   z-index: 3;
@@ -1178,29 +1186,29 @@ header#site-nav .links a[aria-current="page"] {
 }
 .rock-one {
   top: 29px;
-  right: -30px;
-  animation: arcade-rock 2.4s linear infinite;
+  right: -34px;
+  animation: arcade-rock-one 2.18s -.35s linear infinite;
 }
 .rock-two {
   top: 70px;
-  right: -50px;
+  right: -58px;
   width: 10px;
   height: 10px;
-  animation: arcade-rock 2.1s .7s linear infinite;
+  animation: arcade-rock-two 2.72s .42s linear infinite;
 }
 .rock-three {
   top: 45px;
-  right: -42px;
+  right: -46px;
   width: 8px;
   height: 8px;
-  animation: arcade-rock 2.85s .28s linear infinite;
+  animation: arcade-rock-three 1.96s .95s linear infinite;
 }
 .rock-four {
   top: 83px;
-  right: -64px;
+  right: -70px;
   width: 12px;
   height: 12px;
-  animation: arcade-rock 2.55s 1.05s linear infinite;
+  animation: arcade-rock-four 3.18s .12s linear infinite;
 }
 .game-pickup {
   z-index: 3;
@@ -1239,8 +1247,8 @@ header#site-nav .links a[aria-current="page"] {
   to { transform: translateX(-72px); }
 }
 @keyframes arcade-ship {
-  0%, 100% { transform: translateY(-4px) rotate(-3deg); }
-  50% { transform: translateY(7px) rotate(4deg); }
+  0%, 100% { transform: translateY(-13px) rotate(-5deg); }
+  50% { transform: translateY(20px) rotate(6deg); }
 }
 @keyframes arcade-thrust {
   from { opacity: 0.55; transform: scaleX(0.7); }
@@ -1254,6 +1262,30 @@ header#site-nav .links a[aria-current="page"] {
 @keyframes arcade-rock {
   from { transform: translateX(0) rotate(0deg); }
   to { transform: translateX(-330px) rotate(-380deg); }
+}
+@keyframes arcade-rock-one {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  34% { transform: translate(-112px, 13px) rotate(-128deg); }
+  68% { transform: translate(-226px, -8px) rotate(-255deg); }
+  100% { transform: translate(-340px, 7px) rotate(-392deg); }
+}
+@keyframes arcade-rock-two {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  28% { transform: translate(-96px, -11px) rotate(96deg); }
+  63% { transform: translate(-214px, 10px) rotate(238deg); }
+  100% { transform: translate(-342px, -5px) rotate(410deg); }
+}
+@keyframes arcade-rock-three {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  42% { transform: translate(-145px, -16px) rotate(-186deg); }
+  72% { transform: translate(-246px, 4px) rotate(-312deg); }
+  100% { transform: translate(-338px, -12px) rotate(-455deg); }
+}
+@keyframes arcade-rock-four {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  31% { transform: translate(-105px, 7px) rotate(142deg); }
+  57% { transform: translate(-194px, -15px) rotate(264deg); }
+  100% { transform: translate(-348px, 12px) rotate(436deg); }
 }
 @keyframes arcade-pickup {
   0%, 100% { transform: scale(0.82) rotate(0deg); opacity: 0.7; }
