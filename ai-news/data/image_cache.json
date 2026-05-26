@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T10:00:01.795139+00:00",
+  "updatedAt": "2026-05-26T11:00:01.466652+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8052,6 +8052,10 @@
     "https://www.technologyreview.com/2026/05/26/1137865/its-time-to-address-the-looming-crisis-in-entry-level-work": {
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/ladder3b.jpg?resize=1200,600",
       "checkedAt": "2026-05-26T10:00:01.795139+00:00"
+    },
+    "https://www.theverge.com/transportation/937116/uber-ai-investment-hard-to-justify": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2245764686.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-05-26T11:00:01.466652+00:00"
     }
   }
 }
