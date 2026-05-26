@@ -19,4 +19,6 @@ Generated with GPT Image 2 for this Hidden Reef prototype image-quality pass. Th
 - aquascaping.png - decorations and aquascaping department thumbnail.
 - maintenance-care.png - maintenance and troubleshooting department thumbnail.
 - saltwater-reef.jpg - GPT Image 2 demo thumbnail for saltwater department, generated to show obvious marine fish and coral.
+- saltwater-hero-2.jpg - GPT Image 2 demo hero closeup for the saltwater department carousel.
+- saltwater-hero-3.jpg - GPT Image 2 demo hero closeup for the saltwater department carousel.
 - additives.png - GPT Image 2 demo thumbnail for aquarium additives, conditioners, test vials, and supplements.
