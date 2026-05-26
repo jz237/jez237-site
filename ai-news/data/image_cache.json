@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T23:00:02.101729+00:00",
+  "updatedAt": "2026-05-26T23:21:10.578779+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8108,6 +8108,10 @@
     "https://techcrunch.com/2026/05/24/xreal-googles-smartglasses-partner-thinks-it-has-finally-mastered-this-notoriously-tricky-industry": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-22-at-9.02.36-AM.png?resize=1200,673",
       "checkedAt": "2026-05-26T23:00:02.101729+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/26/design-a-high-precision-retrieve-and-rerank-pipeline-with-zeroentropy-zerank-2-reranker": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-18.png",
+      "checkedAt": "2026-05-26T23:21:10.578779+00:00"
     }
   }
 }
