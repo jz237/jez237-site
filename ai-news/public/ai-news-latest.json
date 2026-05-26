@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T15:00:01.893149+00:00",
+  "updatedAt": "2026-05-26T16:00:01.513883+00:00",
   "items": [
     {
       "title": "Beomsoo Kim, Changho Choi, Dohyun Kim, Dongki Lee, Ethan Ewer, Eunchong Kim, Gyeongman Kim, Haechan Kim, Hyeonghwan K...",
@@ -10,12 +10,77 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-26T15:00:11.358765+00:00",
+      "published": "2026-05-26T16:00:15.487971+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Some ideas for what comes next, May 2026",
+      "url": "https://www.interconnects.ai/p/some-ideas-for-what-comes-next-may",
+      "source": "Interconnects AI",
+      "sourceUrl": "https://www.interconnects.ai/feed",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Gemini Flash 3.5, Mythos, open-closed balance, America's open-source surge, emerging power struggles and more.",
+      "image": "https://substackcdn.com/image/fetch/$s_!-711!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F723ba9cb-c351-4b89-8860-2ac4eda7f335_2288x1584.png",
+      "published": "2026-05-26T15:39:02+00:00",
+      "firstSeen": "2026-05-26T16:00:01.513883+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.6494
+    },
+    {
+      "title": "Microsoft Copilot Cowork Exfiltrates Files",
+      "url": "https://simonwillison.net/2026/May/26/copilot-cowork-exfiltrates-files",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Microsoft Copilot Cowork Exfiltrates Files\nThe biggest challenge in designing agentic systems continues to be preventing them from enabling attackers to exfiltrate data.\nIn this case Microsoft Copilot Cowork (yes, that's a real product name) was allowing agents to send emails to the user's own inbox without approval... but those messages were then displayed in a way that could leak data to an attacker via rendered images:\n\nBecause these messages can contain external images that trigger network requests to external websites, data can be exfiltrated when a user opens a compromised message sent b",
+      "image": "",
+      "published": "2026-05-26T15:36:48+00:00",
+      "firstSeen": "2026-05-26T16:00:01.513883+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.0782
+    },
+    {
+      "title": "Stord raises $250 million to give independent brands the shipping speed they need to compete with Amazon",
+      "url": "https://thenextweb.com/news/stord-raises-250-million-to-give-independent-brands-the-shipping-speed-they-need-to-compete-with-amazon",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Stord, a logistics technology company that helps retailers manage inventory, checkout, and fulfillment, has raised $250 million in a Series F round that values the company at $3 billion. The round was led by Strike Capital with participation from Founders Fund, Kleiner Perkins, Franklin Templeton, Baillie Gifford, G Squared, and Bond. The funding doubles Stord’s valuation [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/stord-250-million-funding-amazon-fulfillment-ai-robotics.avif",
+      "published": "2026-05-26T15:16:40+00:00",
+      "firstSeen": "2026-05-26T16:00:01.513883+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8281
+    },
+    {
+      "title": "Quoting Paul Graham",
+      "url": "https://simonwillison.net/2026/May/26/paul-graham",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "A lot of the emails I get from founders are now written in a hard-hitting journalistic style. I know they're written by AI, because no founder ever wrote this way before. And once you realize something is written by AI, it's hard not to ignore it.\nI have never knowingly finished reading an email signed by a human but written by AI. It feels like being lied to, and who would stand for that?\n[...] It makes me think less of the author. It means they can't write well unaided (or feel they can't), and that they're trying to trick me. \nIt's not impressive to use AI to write stuff for you; any teenag",
+      "image": "",
+      "published": "2026-05-26T15:02:30+00:00",
+      "firstSeen": "2026-05-26T16:00:01.513883+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2611
     },
     {
       "title": "Universal Music Group and TikTok renew agreement to combat unauthorized AI music",
@@ -28,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/tiktok-header.jpg?resize=1200%2C800",
       "published": "2026-05-26T14:55:05+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2875
+      "score": 2.2574
     },
     {
       "title": "Rethinking organizational design in the age of agentic AI",
@@ -40,14 +105,46 @@
       "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "Amid rapidly growing adoption of enterprise-level AI agents, there’s a disconnect emerging between ambition and execution.&#160; Although 85% of organizations say they want to be agentic within the next three years, 76% say their current operations and infrastructure can’t support that change. They cite a lack of readiness across people, processes, and workflows.  The sticky&#8230;",
+      "summary": "Amid rapidly growing adoption of enterprise-level AI agents, there’s a disconnect emerging between ambition and execution.&#160; Although 85% of organizations say they want to be agentic within the next three years, 76% say their current operations and infrastructure can’t support that change. They cite a lack of readiness across people, processes, and workflows.&#160; The sticky&#8230;",
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-1-_-V2.png?resize=1200%2C600",
       "published": "2026-05-26T14:54:10+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.687
+      "score": 5.657
+    },
+    {
+      "title": "xAI told staff to stop mingling with Cursor employees, weeks after they started working together",
+      "url": "https://thenextweb.com/news/xai-cursor-gun-jumping-antitrust-spacex-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Elon Musk’s xAI has told employees to limit their contact with staff from Cursor , the AI coding startup that SpaceX has an option to acquire for $60 billion. The directive came from James Burnham, xAI’s general counsel and former chief lawyer at the Department of Government Efficiency, according to Bloomberg. Burnham sent guidelines to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif",
+      "published": "2026-05-26T14:50:07+00:00",
+      "firstSeen": "2026-05-26T16:00:01.513883+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.515
+    },
+    {
+      "title": "Ferrari stock drops 7% after Luce EV reveal as investors question design and strategy",
+      "url": "https://thenextweb.com/news/ferrari-stock-drops-7-after-luce-ev-reveal-as-investors-question-design-and-strategy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Ferrari shares fell as much as 7 per cent in Milan trading on Monday, dropping to €290.55 and wiping roughly £3 billion from the company’s market cap. The sell-off came one day after the Italian carmaker unveiled the Luce, its first fully electric vehicle, at the Città dello Sport in Rome. The Luce is a four-door, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ferrari-luce-stock-drop-electric-vehicle-design.avif",
+      "published": "2026-05-26T14:37:54+00:00",
+      "firstSeen": "2026-05-26T16:00:01.513883+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.109
     },
     {
       "title": "Sundar Pichai on AI, the future of search, and what’s happening to the web",
@@ -60,10 +157,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/DCD_2026.05.26_Sundar_Google.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-26T14:00:00+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8298
+      "score": 5.8005
     },
     {
       "title": "TechCrunch Disrupt 2026 Early Bird ticket rates end May 29",
@@ -76,10 +173,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-26T14:00:00+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2598
+      "score": 2.2305
     },
     {
       "title": "ClickUp Cuts 22% of Staff as CEO Pushes AI-First ‘100x Org’ Model",
@@ -92,10 +189,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05262026-clickup-cuts-staff.jpg?f=jpeg",
       "published": "2026-05-26T13:17:03+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1988
+      "score": 3.1701
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -108,10 +205,10 @@
       "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg",
       "published": "2026-05-26T13:00:24+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1907
+      "score": 11.1622
     },
     {
       "title": "Nobody wants to tell me why they only listen to their own Suno slop",
@@ -124,10 +221,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STKS511_AI_SLOP_A.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.9676601489831%2C100%2C80.064679702034&amp%3Bw=1200",
       "published": "2026-05-26T12:46:03+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2938
+      "score": 2.2655
     },
     {
       "title": "Spotify tests narrated magazine articles inside the audiobook tier",
@@ -140,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/05/Spotify.avif",
       "published": "2026-05-26T12:30:20+00:00",
       "firstSeen": "2026-05-26T14:00:01.621125+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7763
+      "score": 2.7482
     },
     {
       "title": "Wall Street is paying $25,000 a day for AI trainers who used to work there",
@@ -156,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/05/Wall-Street.avif",
       "published": "2026-05-26T12:06:21+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.065
+      "score": 2.0372
     },
     {
       "title": "AI warfare is already here",
@@ -172,10 +269,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268420_Military_AIs_red_lines_are_already_being_crossed_CVirginia.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-26T12:00:00+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.272
+      "score": 2.2443
     },
     {
       "title": "Honeywell’s Quantinuum settles on $12.7bn IPO target after $20bn whisper",
@@ -188,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/05/Quantinuum.avif",
       "published": "2026-05-26T11:56:16+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0603
+      "score": 2.0326
     },
     {
       "title": "Pope Leo’s first encyclical reads as tech regulation as much as theology",
@@ -204,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/05/pope-leo-encyclical-magnifica-humanitas-anthropic-olah.avif",
       "published": "2026-05-26T11:37:01+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7513
+      "score": 2.7239
     },
     {
       "title": "BNP Paribas works with Mistral on a European answer to Anthropic’s Mythos",
@@ -220,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/05/BNP-Paribas.avif",
       "published": "2026-05-26T11:28:53+00:00",
       "firstSeen": "2026-05-26T13:00:01.193937+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0476
+      "score": 8.0202
     },
     {
       "title": "SpaceX wants the Pentagon to pay five times more for Starlink in the Iran war",
@@ -236,10 +333,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
       "published": "2026-05-26T11:21:02+00:00",
       "firstSeen": "2026-05-26T12:00:01.499011+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0439
+      "score": 2.0167
     },
     {
       "title": "Iran-linked hackers reached LA Metro’s rail-yard control display in March, Israeli firm finds",
@@ -252,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/Hackers.avif",
       "published": "2026-05-26T11:03:02+00:00",
       "firstSeen": "2026-05-26T12:00:01.499011+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4357
+      "score": 3.4087
     },
     {
       "title": "SPARQ opens $8.5M seed round for AI-native game engine, with a16z’s scout fund on the cap table",
@@ -271,7 +368,7 @@
       "lastSeen": "2026-05-26T15:00:01.893149+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0301
+      "score": 2.0032
     },
     {
       "title": "Pony AI raises year-end fleet goal to 3,500 robotaxis after a strong Q1",
@@ -287,7 +384,7 @@
       "lastSeen": "2026-05-26T15:00:01.893149+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7208
+      "score": 2.6942
     },
     {
       "title": "Foreign-brand phone shipments to China rose 1.8% in April, CAICT data shows",
@@ -303,7 +400,7 @@
       "lastSeen": "2026-05-26T15:00:01.893149+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5136
+      "score": 4.4872
     },
     {
       "title": "AI Agents Plunged the Tech World Into Chaos. Here’s Exactly How That Happened",
@@ -316,10 +413,10 @@
       "image": "https://media.wired.com/photos/69fdc08ed818d4f01db33c98/master/pass/wired_agents_web.gif",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9473
+      "score": 9.9211
     },
     {
       "title": "Take This Mandatory AI Workplace Training Right Now—or Else",
@@ -332,10 +429,10 @@
       "image": "https://media.wired.com/photos/6a104f8cc9c138425f4055c9/master/pass/1-lets%20get%20oriented.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4473
+      "score": 2.4211
     },
     {
       "title": "Quiz: Will AI Destroy Your Career?",
@@ -348,10 +445,10 @@
       "image": "https://media.wired.com/photos/6a0b67820ce29a972051a9e8/master/pass/ai_exposed_jobs.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "AI Is Taking Over the Most Cursed Job in the World",
@@ -364,10 +461,10 @@
       "image": "https://media.wired.com/photos/6a047c1d138310676483b3fe/master/pass/AIDebtCollectors_v3.1.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "I Spent a Week Recording Myself Doing Chores for Money. Who's the Robot Now?",
@@ -380,10 +477,10 @@
       "image": "https://media.wired.com/photos/6a077b4e67132e88ffa730a4/master/pass/AIPanic_TrainingRobots_v2.1.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "I’m a Professional Fact-Checker. AI Is Wrong More Often Than You Think",
@@ -396,10 +493,10 @@
       "image": "https://media.wired.com/photos/6a04e6a1d7be752b48cba500/master/pass/AiFactChecking-Final.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "To Land a Job in AI, Try Reading Kant",
@@ -412,10 +509,10 @@
       "image": "https://media.wired.com/photos/6a0722c3cc137669535c6942/master/pass/AIPhilosophers_v2.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "7 Ways to Get So Good at AI, People Will Think You Are AI",
@@ -428,10 +525,10 @@
       "image": "https://media.wired.com/photos/6a0df9f99e7a013d4de6fd4e/master/pass/HowToBeANativeWithAI_v2.jpg",
       "published": "2026-05-26T10:00:00+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "Uber president says AI spending is getting ‘harder to justify’",
@@ -444,10 +541,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2245764686.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-05-26T09:55:09+00:00",
       "firstSeen": "2026-05-26T11:00:01.466652+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9152
+      "score": 6.889
     },
     {
       "title": "China extends AI travel curbs from DeepSeek to other private firms",
@@ -463,7 +560,7 @@
       "lastSeen": "2026-05-26T13:00:01.193937+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4034
+      "score": 6.3773
     },
     {
       "title": "US Law Enforcement Warns of ‘Anti-Tech Extremism’ as AI Hatred Grows",
@@ -476,10 +573,10 @@
       "image": "https://media.wired.com/photos/6a10b0246e47ced150ad32d6/master/pass/US-Law-Enforcement-Warns-of-Anti-Tech-Extremism-Security.jpg",
       "published": "2026-05-26T09:30:00+00:00",
       "firstSeen": "2026-05-26T10:00:01.795139+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1341
+      "score": 2.1083
     },
     {
       "title": "Avrea raises $4.7M to fix CI/CD before AI coding breaks it",
@@ -495,7 +592,7 @@
       "lastSeen": "2026-05-26T12:00:01.499011+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3881
+      "score": 4.3624
     },
     {
       "title": "A reality check on the AI jobs hysteria",
@@ -508,10 +605,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/ai-jobs1b.jpg?resize=1200%2C600",
       "published": "2026-05-26T09:00:00+00:00",
       "firstSeen": "2026-05-26T10:00:01.795139+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.0956
     },
     {
       "title": "It’s time to address the looming crisis in entry-level work.",
@@ -524,10 +621,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/ladder3b.jpg?resize=1200%2C600",
       "published": "2026-05-26T09:00:00+00:00",
       "firstSeen": "2026-05-26T10:00:01.795139+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.0956
     },
     {
       "title": "Spain blocks Polymarket and Kalshi over missing gambling licences",
@@ -543,103 +640,7 @@
       "lastSeen": "2026-05-26T12:00:01.499011+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9804
-    },
-    {
-      "title": "Paris preventive-health startup Lucis raises $20M Series A four months after seed",
-      "url": "https://thenextweb.com/news/lucis-20m-series-a-preventive-health-europe",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Paris-based Lucis, a preventive-health platform that pairs blood biomarker testing with an AI-driven companion app, has raised a $20m Series A led by Singular, with participation from General Catalyst, Y Combinator and angel investors including Céline Lazorthes of Resilience, Manu Lecomte, and backers of the running-coach app Runna. The round arrives four months after the company’s $8.5m seed in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Lucis.avif",
-      "published": "2026-05-26T08:42:15+00:00",
-      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
-      "lastSeen": "2026-05-26T12:00:01.499011+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0735
-    },
-    {
-      "title": "GSR Ventures uses its RedNote stake to anchor a new $350M China fund",
-      "url": "https://thenextweb.com/news/gsr-ventures-rednote-350m-china-vc-fund",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SR Ventures Management Co., one of the earliest backers of the Chinese social commerce app Xiaohongshu, is raising about $350m for a new China-focused venture fund and is using its existing stake in the app, known internationally as RedNote, as the central pitch, according to a Bloomberg report on Tuesday citing people familiar with the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/RedNote.avif",
-      "published": "2026-05-26T08:23:00+00:00",
-      "firstSeen": "2026-05-26T10:00:01.795139+00:00",
-      "lastSeen": "2026-05-26T12:00:01.499011+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0653
-    },
-    {
-      "title": "Sam Altman says an AI jobs apocalypse is unlikely",
-      "url": "https://thenextweb.com/news/sam-altman-says-an-ai-jobs-apocalypse-is-unlikely",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The OpenAI chief, speaking in the Asia-Pacific, walked back the more dramatic predictions of broad employment collapse. The data, so far, agrees with him. OpenAI chief executive Sam Altman said on Tuesday that artificial intelligence was unlikely to trigger the broad employment collapse that has come to be known, in the industry’s own shorthand, as [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
-      "published": "2026-05-26T07:59:19+00:00",
-      "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T11:00:01.466652+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9553
-    },
-    {
-      "title": "Meet OmniVoice Studio: A Local, Open-Source Alternative to ElevenLabs",
-      "url": "https://www.marktechpost.com/2026/05/26/meet-omnivoice-studio-a-local-open-source-alternative-to-elevenlabs",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "OmniVoice Studio runs voice cloning, video dubbing, real-time dictation, and speaker diarization entirely on your own hardware. No API keys, no cloud account, and no subscription required. The project supports 646 languages for TTS and exposes an MCP server for integration with Claude, Cursor, or any MCP client.\nThe post Meet OmniVoice Studio: A Local, Open-Source Alternative to ElevenLabs appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-51-1024x731.png",
-      "published": "2026-05-26T07:56:17+00:00",
-      "firstSeen": "2026-05-26T08:00:01.656732+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 7.8241
-    },
-    {
-      "title": "Finland’s Quanscient raises €10M to build a quantum- and AI-native simulation platform",
-      "url": "https://thenextweb.com/news/quanscient-raises-10m-series-a-quantum-multiphysics",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Tampere startup wants to rebuild physics simulation as the data engine for AI-driven hardware design. Tampere-based Quanscient has closed a €10 million Series A to scale its cloud-based multiphysics simulation platform, in a round led by Danish quantum fund 55 North and Austrian industrial investor B&amp;C Group, with full re-participation from existing backers Maki.vc, Crowberry Capital, QAI Ventures, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Quanscient.avif",
-      "published": "2026-05-26T07:45:52+00:00",
-      "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T11:00:01.466652+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6497
-    },
-    {
-      "title": "Samsung’s non-chip union goes to court to halt bonus vote",
-      "url": "https://thenextweb.com/news/samsung-non-chip-union-injunction-bonus-vote",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A smaller Samsung Electronics union representing roughly 13,000 workers in the company’s smartphones, televisions and home appliances divisions has filed an injunction at South Korea’s Suwon District Court to halt an ongoing companywide vote on a bonus deal that would deliver a windfall to memory chip workers and almost nothing to everyone else. The injunction [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Samsung-strike-union.avif",
-      "published": "2026-05-26T07:26:36+00:00",
-      "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T11:00:01.466652+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 5.8417
+      "score": 1.9549
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -652,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0383
+      "score": 2.0131
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -668,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.9389
+      "score": 0.9211
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -684,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1286
+      "score": 1.1284
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -700,10 +701,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-26T15:00:01.893149+00:00",
+      "lastSeen": "2026-05-26T16:00:01.513883+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9039
+      "score": -1.9041
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
