@@ -94,7 +94,7 @@
       border:1px solid rgba(116,205,235,.2);
       border-radius:8px;
       background:
-        linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.74) 48%,rgba(0,48,75,.06)),
+        linear-gradient(90deg,rgba(1,13,27,.96),rgba(1,31,51,.6) 47%,rgba(0,48,75,0) 74%),
         var(--cat-hero-image, url('../assets/site/hero-aquatic-world.jpg')) right center/cover no-repeat,
         linear-gradient(90deg,#021421,#05344f);
       box-shadow:0 22px 54px rgba(0,0,0,.28);
@@ -105,7 +105,7 @@
       inset:auto 0 0;
       z-index:1;
       height:32%;
-      background:linear-gradient(180deg,transparent,rgba(0,9,18,.46));
+      background:linear-gradient(180deg,transparent,rgba(0,9,18,.38));
       pointer-events:none;
     }
     .cat-header.is-rotating {
@@ -116,7 +116,7 @@
       position:absolute;
       inset:0;
       z-index:1;
-      background:linear-gradient(90deg,rgba(1,13,27,.97),rgba(1,31,51,.74) 48%,rgba(0,48,75,.06));
+      background:linear-gradient(90deg,rgba(1,13,27,.96),rgba(1,31,51,.6) 47%,rgba(0,48,75,0) 74%);
       pointer-events:none;
     }
     .cat-header > * { position:relative; z-index:2; }
@@ -135,7 +135,7 @@
       object-fit:cover;
       object-position:right center;
       opacity:0;
-      filter:saturate(1.2) contrast(1.08);
+      filter:saturate(1.36) contrast(1.16) brightness(1.03);
       transition:opacity 1.2s ease-in-out;
     }
     .cat-hero-slides img.is-active { opacity:1; }

@@ -302,7 +302,9 @@
       saltwater: [
         assetBase + '/department/saltwater-reef.jpg',
         assetBase + '/department/saltwater-hero-2.jpg',
-        assetBase + '/department/saltwater-hero-3.jpg'
+        assetBase + '/department/saltwater-hero-3.jpg',
+        assetBase + '/department/saltwater-hero-4.png',
+        assetBase + '/department/saltwater-hero-5.png'
       ],
       pond: [
         assetBase + '/department/pond.jpg',
