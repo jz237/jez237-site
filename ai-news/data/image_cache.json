@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T15:00:01.893149+00:00",
+  "updatedAt": "2026-05-26T16:00:01.513883+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8084,6 +8084,14 @@
     "https://www.techrepublic.com/article/news-clickup-cuts-staff-ai-restructuring": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05262026-clickup-cuts-staff.jpg?f=jpeg",
       "checkedAt": "2026-05-26T15:00:01.893149+00:00"
+    },
+    "https://simonwillison.net/2026/May/26/copilot-cowork-exfiltrates-files": {
+      "image": "",
+      "checkedAt": "2026-05-26T16:00:01.513883+00:00"
+    },
+    "https://simonwillison.net/2026/May/26/paul-graham": {
+      "image": "",
+      "checkedAt": "2026-05-26T16:00:01.513883+00:00"
     }
   }
 }
