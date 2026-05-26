@@ -512,10 +512,26 @@
       display: grid;
       gap: 10px;
     }
+    .filter-accordion--freshwater {
+      --filter-accent: #53d6c4;
+      --filter-accent-soft: rgba(83,214,196,0.16);
+      --filter-accent-line: rgba(83,214,196,0.46);
+      --filter-card-bg: rgba(4,38,59,0.78);
+      --filter-card-open-bg: rgba(5,58,82,0.55);
+    }
+    .filter-accordion--saltwater {
+      --filter-accent: #ffb45c;
+      --filter-accent-soft: rgba(255,180,92,0.16);
+      --filter-accent-line: rgba(255,180,92,0.46);
+      --filter-card-bg: rgba(48,24,56,0.78);
+      --filter-card-open-bg: rgba(72,38,70,0.55);
+    }
     .filter-card {
-      border: 1px solid rgba(74,152,221,0.34);
+      border: 1px solid var(--filter-accent-line, rgba(74,152,221,0.34));
       border-radius: 8px;
-      background: rgba(3,24,54,0.76);
+      background:
+        linear-gradient(90deg, var(--filter-accent-soft, rgba(164,137,255,0.12)), transparent 34%),
+        var(--filter-card-bg, rgba(3,24,54,0.76));
       overflow: hidden;
       scroll-margin-top: 18px;
     }
@@ -527,7 +543,7 @@
       gap: 12px;
       align-items: center;
       min-height: 76px;
-      padding: 14px 54px 14px 14px;
+      padding: 14px 54px 14px 28px;
       cursor: pointer;
       list-style: none;
     }
@@ -546,19 +562,19 @@
       height: 28px;
       border-radius: 7px;
       color: #fff;
-      background: rgba(164,137,255,0.2);
+      background: var(--filter-accent-soft, rgba(164,137,255,0.2));
       font-size: 20px;
       font-weight: 900;
     }
     .filter-card[open] summary {
       border-bottom: 1px solid rgba(116,205,235,0.14);
-      background: rgba(4,39,79,0.52);
+      background: var(--filter-card-open-bg, rgba(4,39,79,0.52));
     }
     .filter-card[open] summary::after {
       content: "-";
     }
     .filter-card summary span {
-      color: #bdaaff;
+      color: var(--filter-accent, #bdaaff);
       font-size: 11px;
       font-weight: 950;
       letter-spacing: 0.1em;
@@ -1362,6 +1378,22 @@
       font-weight: 550;
       line-height: 1.35;
     }
+    #filtration-equipment .filter-card summary {
+      border: 0;
+      padding: 14px 54px 14px 28px;
+    }
+    #filtration-equipment .filter-card[open] summary {
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+      background: var(--filter-card-open-bg, rgba(4,39,79,0.52));
+    }
+    #filtration-equipment .filter-card summary span {
+      color: var(--filter-accent, #bdaaff);
+    }
+    #filtration-equipment .filter-card summary p {
+      padding-right: 34px;
+      color: #c9d9d7;
+      font-weight: 500;
+    }
     #troubleshooting { --row-icon: "✚"; --row-accent: #df343d; --row-accent-dark: #a9172a; }
     #starter-checklists { --row-icon: "☑"; --row-accent: #19c1c9; --row-accent-dark: #0f778c; }
     #filtration-equipment { --row-icon: "▥"; --row-accent: #965cf2; --row-accent-dark: #5630bf; }
@@ -2000,7 +2032,7 @@
         <h2>Freshwater &amp; General</h2>
         <p>Click a filtration system to open its diagram, use case, and maintenance notes.</p>
       </div>
-      <div class="filter-accordion" aria-label="Freshwater and general filtration diagrams">
+      <div class="filter-accordion filter-accordion--freshwater" aria-label="Freshwater and general filtration diagrams">
         <details class="filter-card" id="internal-power-filter">
           <summary>
             <span>Compact filter</span>
@@ -2139,7 +2171,7 @@
         <h2 id="saltwater-guides-title">Saltwater &amp; Reef</h2>
         <p>Click a reef or saltwater system to compare live rock, sumps, reactors, skimmers, and compact all-in-one filtration.</p>
       </div>
-      <div class="filter-accordion" aria-label="Saltwater and reef filtration diagrams">
+      <div class="filter-accordion filter-accordion--saltwater" aria-label="Saltwater and reef filtration diagrams">
         <details class="filter-card" id="live-rock-saltwater">
           <summary>
             <span>Natural biofilter</span>
