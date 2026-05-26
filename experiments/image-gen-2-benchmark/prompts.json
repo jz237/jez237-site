@@ -874,5 +874,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-26-morning-orchard-moon-delivery-carton",
+    "title": "Orchard Moon Delivery Carton",
+    "tests": "Tests whether GPT Image 2 can make an explicit milk-carton package side panel read instantly, with waxed paperboard, refrigerator context, fictional nutrition graphics, and mundane product-photo texture instead of archive documents or glossy concept art.",
+    "prompt": "Title: Orchard Moon Delivery Carton\nFormat name: Milk Carton Side Panel\nCategory/kind: package\n\nCreate a square 1024x1024 image that is unmistakably a photographed side panel of a gable-top milk carton on a refrigerator shelf, not a poster, not a document scan, not a specimen tray, and not glossy AI concept art. The selected format must be obvious at first glance: waxed paperboard seams, folded carton edge, slight condensation beads, refrigerator shelf rails, cold interior light, and cropped neighboring groceries with no readable brands.\n\nSubject: the carton is for a fictional impossible dairy called Orchard Moon Milk, made from moonlit orchard fog rather than cows. The side panel art shows a charming but original graphic system: a small flat illustration of crescent-moon fruit hanging in a dark orchard, silver-white fog pouring into a pitcher icon, and tiny invented nutrition-panel boxes using mostly illegible microtext. Include a few large readable fictional words only: ORCHARD MOON, FOG MILK, KEEP COLD, 1 QUART. Do not include any real logos, real brands, certification marks, barcodes resembling real products, or copyrighted characters.\n\nVisual format rules: gable-top carton side art; waxed paperboard seams and folded crease lines; fictional nutrition grid and recycling-like symbols reduced to abstract marks; refrigerator shelf context with cold droplets and slight scuffs. Make the packaging feel commercially ordinary but strange, tactile, mundane, and physically photographed.\n\nComposition: close three-quarter product photo, the carton side panel fills most of the square frame with the top fold and one front edge visible. Leave a sliver of refrigerator shelf, frosted plastic drawer, and blurred unbranded jars at the edges for context. Realistic paper fiber, ink misregistration, tiny scratches, condensation, soft shadows, and cool refrigerator lighting.\n\nPalette and mood: cold white refrigerator light, deep midnight blue carton ink, pearly silver fog, orchard green, pale cream paperboard, tiny red date-stamp marks, transparent droplets. Quiet, ordinary, slightly magical.\n\nHard exclusions: no dancing, no dancers, no ballet, no ballroom, no stage dance, no ceremonial dance, no dance poses, no implied choreography, no performers, no people as central subjects, no copyrighted characters, no real logos, no watermark, no signature.",
+    "image": "images/2026-05-26-morning-orchard-moon-delivery-carton.png",
+    "date": "2026-05-26",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
