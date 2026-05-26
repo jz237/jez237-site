@@ -3,26 +3,57 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ops Center — Under Construction</title>
+  <title>Operations &amp; Statistics — Under Construction</title>
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/design.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <style>
-    main.container { max-width: 900px; margin: 0 auto; padding: 32px clamp(16px,3vw,40px) 80px; }
+    main.container { max-width: 980px; margin: 0 auto; padding: 32px clamp(16px,3vw,40px) 80px; }
+    .ops-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      padding: clamp(42px,7vw,76px) clamp(18px,5vw,70px);
+      background:
+        linear-gradient(135deg, rgba(3,12,25,0.88), rgba(3,21,35,0.76)),
+        url('../assets/home-cards/operations-statistics.jpg') center / cover;
+      border: 1px solid rgba(64,164,255,0.42);
+      box-shadow: 0 34px 90px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .ops-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 28%, rgba(41,201,255,0.18), transparent 36%),
+        linear-gradient(90deg, rgba(5,14,28,0.78), transparent 45%, rgba(5,14,28,0.74));
+      pointer-events: none;
+    }
+    .ops-hero > * { position: relative; z-index: 1; }
     .construction-icon {
-      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      display: inline-grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      color: #29c9ff;
+      background: rgba(5,20,40,0.78);
+      border: 1px solid rgba(64,164,255,0.52);
+      border-radius: 18px;
       text-align: center;
-      margin-bottom: 18px;
       animation: uc-bob 3s ease-in-out infinite;
     }
+    .construction-icon svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     @keyframes uc-bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-6px) rotate(3deg); } }
     .uc-actions { display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:26px; }
     .uc-actions a { padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:500;transition:transform 0.3s var(--ease-out), box-shadow 0.3s ease; }
     .uc-actions a:hover { transform:translateY(-2px); box-shadow:0 10px 26px rgba(0,0,0,0.3); }
-    .uc-actions a.primary { background:linear-gradient(120deg,rgba(232,197,122,0.9),rgba(224,102,126,0.85));color:#1d1811; }
-    .uc-actions a.secondary { background:rgba(255,255,255,0.06);color:var(--ink-hi);border:1px solid rgba(232,197,122,0.25); }
+    .uc-actions a.primary { background:linear-gradient(120deg,rgba(41,201,255,0.96),rgba(141,241,79,0.88));color:#03111f !important; }
+    .uc-actions a.secondary { background:rgba(255,255,255,0.06);color:var(--ink-hi) !important;border:1px solid rgba(64,164,255,0.36); }
   </style>
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
 </head>
@@ -30,14 +61,26 @@
   <header id="site-nav"></header>
 
   <main class="container">
-    <section class="hero-editorial" style="text-align:center;">
-      <div class="construction-icon">🚧</div>
+    <section class="hero-editorial ops-hero" style="text-align:center;">
+      <div>
+      <div class="construction-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="5" width="16" height="14" rx="2"></rect>
+          <path d="M8 15v-3"></path>
+          <path d="M12 15V9"></path>
+          <path d="M16 15v-5"></path>
+          <path d="M7 18h10"></path>
+          <path d="M8 8h3"></path>
+          <path d="M14 8h2"></path>
+        </svg>
+      </div>
       <div class="eyebrow">Soon</div>
-      <h1>Ops Center is under construction.</h1>
-      <p class="lede" style="margin-left:auto;margin-right:auto;">The real-time system visibility dashboard isn't ready yet. Check back later — or head somewhere that is.</p>
+      <h1>Operations &amp; Statistics is under construction.</h1>
+      <p class="lede" style="margin-left:auto;margin-right:auto;">This will collect computer info, agent statistics, runtime notes, and whatever else earns a place on the dashboard.</p>
       <div class="uc-actions">
-        <a class="primary" href="./">Back to Home</a>
+        <a class="primary" href="../">Back to Home</a>
         <a class="secondary" href="../garden/">Garden Calendar</a>
+      </div>
       </div>
     </section>
   </main>
