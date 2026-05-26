@@ -861,8 +861,12 @@ header#site-nav .links a[aria-current="page"] {
 .side-nav {
   display: grid;
   gap: 13px;
-  width: min(100%, 214px);
-  margin: 4px auto 0;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  max-width: none;
+  margin: 4px 0 0;
+  padding: 0;
 }
 .side-nav-section {
   display: grid;
