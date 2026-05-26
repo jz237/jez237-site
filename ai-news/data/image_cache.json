@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T00:00:01.335816+00:00",
+  "updatedAt": "2026-05-26T01:00:01.389376+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8024,6 +8024,10 @@
     "https://www.techrepublic.com/article/arta-ai-premium-5-year-subscription": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/tra-05252026-arta-ai.jpg?f=jpeg",
       "checkedAt": "2026-05-25T22:00:01.590724+00:00"
+    },
+    "https://simonwillison.net/2026/May/25/encyclical-on-ai": {
+      "image": "",
+      "checkedAt": "2026-05-26T01:00:01.389376+00:00"
     }
   }
 }
