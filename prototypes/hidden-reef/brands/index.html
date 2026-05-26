@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brands We Carry - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../assets/site/logo.png" />
+  <style>
+    :root {
+      --blue-950: #f0fbff;
+      --blue-900: #7ddfff;
+      --blue-700: #27c2e8;
+      --teal: #00a7b7;
+      --surface: #071a27;
+      --page: #04101a;
+      --ink: #f0fbff;
+      --muted: #a9cbd9;
+      --line: rgba(116,205,235,.2);
+      --orange: #ff7b32;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; scroll-behavior: smooth; }
+    body {
+      overflow-x: hidden;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,.22), transparent 32%),
+        linear-gradient(180deg,#031f42 0%,#021833 48%,#010b1c 100%);
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .hero-section {
+      position: relative;
+      display: grid;
+      align-content: end;
+      min-height: 230px;
+      margin: 0 0 22px;
+      overflow: hidden;
+      padding: clamp(24px,4vw,38px) 24px;
+      border: 1px solid rgba(116,205,235,.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg,rgba(1,13,27,.98),rgba(1,31,51,.86) 50%,rgba(0,48,75,.22)),
+        url("../assets/site/hero-aquatic-world.jpg") right center/cover no-repeat,
+        linear-gradient(90deg,#021421,#05344f);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .hero-section h1 {
+      max-width: 720px;
+      margin: 0 0 10px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1;
+      text-shadow: 0 8px 30px rgba(0,0,0,.58);
+    }
+    .hero-section p {
+      max-width: 650px;
+      margin: 0;
+      color: #d6f4fb;
+      font-size: 17px;
+    }
+    .brand-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: radial-gradient(circle at 100% 0%, rgba(64,217,255,.1), transparent 34%), var(--surface);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .brand-panel h2 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+    }
+    .brand-panel p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .brand-groups {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .brand-group {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,.18);
+      border-radius: 8px;
+      background: rgba(2, 19, 32, .66);
+    }
+    .brand-group h3 {
+      margin: 0 0 10px;
+      color: #40d9ff;
+      font-size: 17px;
+      line-height: 1;
+    }
+    .brand-group ul {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .brand-group li {
+      color: #e2f7fc;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .next-step {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid rgba(116,205,235,.18);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #052137, #083c57);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .next-step p { margin: 0; color: #c2e9f4; font-weight: 800; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    footer.footer {
+      margin-top: 24px;
+      background: linear-gradient(180deg,#052137,#031321);
+      border-top: 1px solid rgba(116,205,235,.14);
+      color: #c2e9f4;
+      font-size: 13px;
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    footer.footer h3,
+    footer.footer h4 { margin: 0 0 9px; color: #fff; }
+    footer.footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(194,233,244,.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap: 8px; }
+    .footer-link-grid a, footer.footer h4 + a { position: relative; padding-left: 12px; }
+    .footer-link-grid a::before, footer.footer h4 + a::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .72em;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #40d9ff;
+    }
+    @media (max-width: 1040px) {
+      .brand-groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 760px) {
+      .brand-panel { padding: 16px; }
+      .brand-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .brand-group { padding: 14px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .page { padding-inline: 8px; }
+      .brand-groups { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260525-learning-path-frame" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../">
+        <img src="../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../category/?cat=freshwater">Freshwater</a>
+      <a href="../category/?cat=saltwater">Saltwater</a>
+      <a href="../category/?cat=pond">Pond</a>
+      <a href="../category/?cat=equipment">Equipment</a>
+      <a href="../category/?cat=food">Food</a>
+      <a href="../category/?cat=decor">Decorations</a>
+      <a href="../category/?cat=maintenance">Maintenance</a>
+      <a href="../learn/">Help</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="hero-section" aria-labelledby="page-title">
+      <h1 id="page-title">Brands We Carry</h1>
+      <p>A full list of aquarium, pond, reptile, food, care, and equipment brands carried by The Hidden Reef.</p>
+    </section>
+
+    <section class="brand-panel" aria-labelledby="brand-list-title">
+      <h2 id="brand-list-title">Full Brand List</h2>
+      <p>Grouped alphabetically from The Hidden Reef's current brands page.</p>
+
+      <div class="brand-groups">
+        <section class="brand-group"><h3>A</h3><ul><li>A &amp; E CAGES</li><li>Acurel</li><li>ADA</li><li>Advatec Int.</li><li>Algae Barn</li><li>Algone</li><li>Allied Precision</li><li>American Sealant</li><li>Ani Mate</li><li>Anjon Manufacturing</li><li>API</li><li>Aqua One</li><li>AquaClear</li><li>Aquael</li><li>Aquaillumination</li><li>Aquarium Master</li><li>Aquarium Solution</li><li>Aquascape</li><li>Aquatic Life</li><li>Aquatop</li><li>AquaZen</li><li>Aqueon</li><li>ATASUKI</li><li>Atlantic Water Gardens</li></ul></section>
+        <section class="brand-group"><h3>B</h3><ul><li>Bashsea</li><li>Blue Ribbon</li><li>Boyd Enterprises</li></ul></section>
+        <section class="brand-group"><h3>C</h3><ul><li>Carib Sea</li><li>Cepex</li><li>Chihiros</li><li>Co2 Art</li><li>Coralife</li><li>CoralRX</li></ul></section>
+        <section class="brand-group"><h3>D</h3><ul><li>D D Aquarium Solution</li><li>Danner Manufacturing</li><li>Dennerle</li><li>DeWitt</li><li>Dinovite</li><li>Dr. Tim's</li><li>Dymax</li></ul></section>
+        <section class="brand-group"><h3>E</h3><ul><li>EasyPro</li><li>EcoTech Marine</li><li>Eheim</li><li>Eshopps</li><li>Ethical Pet</li><li>Evolution Aqua</li><li>Exo Terra</li></ul></section>
+        <section class="brand-group"><h3>F</h3><ul><li>Farm Innovators</li><li>Fauna Marin</li><li>FIJI CUBE</li><li>Flipper</li><li>FLORIDA MARINE RESEARCH</li><li>Fluker Farm</li><li>Fluval</li><li>Fritz Aquatics</li></ul></section>
+        <section class="brand-group"><h3>G</h3><ul><li>Galapagos</li><li>GloFish</li><li>Griffin's Wing Sauce</li><li>Gulfstream Tropical Aquarium</li></ul></section>
+        <section class="brand-group"><h3>H</h3><ul><li>Hanna Instruments</li><li>Hikari</li><li>Hydrofarm</li><li>Hygger</li></ul></section>
+        <section class="brand-group"><h3>I</h3><ul><li>IceCap</li><li>Innovative Marine</li><li>Instant Ocean</li><li>Ista</li></ul></section>
+        <section class="brand-group"><h3>J</h3><ul><li>Jack &amp; Pup</li><li>JBJ</li><li>Joe's Juice</li><li>Juwel</li></ul></section>
+        <section class="brand-group"><h3>K</h3><ul><li>KatsAquatics</li><li>Komodo</li><li>Kordon</li></ul></section>
+        <section class="brand-group"><h3>L</h3><ul><li>Laguna</li><li>Larry's Reef Service</li><li>Lee's</li><li>Level One Pets</li><li>LifegardAquatics</li><li>Loc-Line</li></ul></section>
+        <section class="brand-group"><h3>M</h3><ul><li>Marina</li><li>Marine Pure</li><li>Marineland</li><li>Maxspect</li><li>Microbe-Lift</li><li>Mossify</li></ul></section>
+        <section class="brand-group"><h3>N</h3><ul><li>Neptune System</li><li>New Life Spectrum</li><li>Northfin</li><li>Nyos</li></ul></section>
+        <section class="brand-group"><h3>O</h3><ul><li>Oase</li><li>Oatey</li><li>Ocean Nutrition</li><li>Omega One Aquatics</li></ul></section>
+        <section class="brand-group"><h3>P</h3><ul><li>Penn Plax</li><li>Poly Bio Marine</li><li>PolypLab</li><li>PondMaster</li><li>Pro Clear</li><li>Python</li></ul></section>
+        <section class="brand-group"><h3>R</h3><ul><li>Red Flag Products</li><li>Red Sea</li><li>Reef Factory</li><li>Reef Octopus</li><li>Rep-Cal</li><li>Ruby Reef</li></ul></section>
+        <section class="brand-group"><h3>S</h3><ul><li>Salifert</li><li>San Francisco</li><li>Seachem</li><li>Sera</li><li>Sicce</li><li>Sol Soils</li><li>Spot</li><li>Summit</li></ul></section>
+        <section class="brand-group"><h3>T</h3><ul><li>Tetra</li><li>Tetra Pond</li><li>Tideline</li><li>Tropic Marine</li><li>Tunze</li><li>Twinstar Eu</li><li>Two Little Fishies</li></ul></section>
+        <section class="brand-group"><h3>U</h3><ul><li>Ultralife</li><li>Ultum Nature System</li><li>Underwater Treasures</li></ul></section>
+        <section class="brand-group"><h3>V-Z</h3><ul><li>Vetericyn</li><li>Xtreme Aquatics Food</li><li>Zilla</li><li>Zoo Med</li></ul></section>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Looking for a specific product line?</p>
+      <a class="btn" href="../category/">Browse Products</a>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Cart handoff</a></div></div>
+        <div><h4>About This Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
