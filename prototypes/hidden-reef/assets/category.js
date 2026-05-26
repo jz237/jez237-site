@@ -299,6 +299,11 @@
         assetBase + '/department/freshwater.jpg',
         assetBase + '/department/freshwater-hero-2.jpg'
       ],
+      saltwater: [
+        assetBase + '/department/saltwater-reef.jpg',
+        assetBase + '/department/saltwater-hero-2.jpg',
+        assetBase + '/department/saltwater-hero-3.jpg'
+      ],
       pond: [
         assetBase + '/department/pond.jpg',
         assetBase + '/department/pond-hero-2.jpg',
