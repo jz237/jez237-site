@@ -1065,7 +1065,7 @@ header#site-nav .links a[aria-current="page"] {
   overflow: hidden;
   background:
     linear-gradient(180deg, rgba(5,10,31,0.22), rgba(3,12,28,0.78)),
-    url('assets/home-cards/games-space-bg.jpg') center / cover no-repeat,
+    url('home-cards/games-space-bg.jpg') center / cover no-repeat,
     linear-gradient(180deg, #080b2b 0%, #101955 54%, #061328 100%);
 }
 .game-card-animation::before,
