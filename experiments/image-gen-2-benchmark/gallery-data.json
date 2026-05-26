@@ -886,5 +886,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-26-midday-harbor-fog-vegetable-float",
+    "title": "Harbor Fog Vegetable Float",
+    "tests": "Tests whether GPT Image 2 can make a believable handcrafted food-based parade-float model with clear materials, scale cues, and non-glossy kitchen realism.",
+    "prompt": "Create a square 1024x1024 image that is unmistakably a miniature parade-float model made entirely from carved vegetables, toothpicks, kitchen twine, and edible scraps, photographed on a real kitchen prep board. The subject is a tiny harbor fog machine float: a zucchini barge hull, cauliflower fog banks, leek smokestacks, radish buoys, carrot signal towers, onion-skin sails, mushroom pier pilings, cucumber wheels, and toothpick rigging. Use natural vegetable colors, damp cut surfaces, knife marks, seeds, peel curls, tiny shadows, and crumbs on the cutting board. Composition: three-quarter overhead macro photograph, the whole float visible with a few loose peel offcuts and a paring knife partly cropped at the edge for scale. It should feel like a clever craft model built by hand in a kitchen, not a glossy advertisement, not a digital concept-art scene, not a still life bowl of produce, and not a museum specimen tray. No people, no performers, no dance, no stage, no copyrighted logos or characters, no readable brand names.",
+    "image": "images/2026-05-26-midday-harbor-fog-vegetable-float.png",
+    "date": "2026-05-26",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
