@@ -5,7 +5,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__media"><img class="link-modal__image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__media" aria-label="Product image. Hover or tap to zoom."><img class="link-modal__image" alt=""><span class="link-modal__zoom-hint">Hover or tap to zoom</span></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -32,6 +32,7 @@
         barcode: selected.dataset.barcode
       });
     });
+    initImageZoom(modal);
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(modal);
     });
@@ -39,9 +40,54 @@
   }
 
   function closeModal(modal) {
+    resetImageZoom(modal);
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('link-modal-open');
+  }
+
+  function setImageZoom(modal, event) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return;
+    if (event) {
+      const rect = media.getBoundingClientRect();
+      const x = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+      const y = Math.min(100, Math.max(0, ((event.clientY - rect.top) / rect.height) * 100));
+      image.style.transformOrigin = x.toFixed(1) + '% ' + y.toFixed(1) + '%';
+    }
+    media.classList.add('is-zoomed');
+  }
+
+  function resetImageZoom(modal) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    media?.classList.remove('is-zoomed');
+    if (image) image.style.transformOrigin = '';
+  }
+
+  function initImageZoom(modal) {
+    const media = modal.querySelector('.link-modal__media');
+    if (!media) return;
+
+    media.addEventListener('pointermove', event => {
+      if (event.pointerType !== 'mouse') return;
+      setImageZoom(modal, event);
+    });
+
+    media.addEventListener('pointerleave', event => {
+      if (event.pointerType === 'mouse') resetImageZoom(modal);
+    });
+
+    media.addEventListener('click', event => {
+      if (event.pointerType === 'mouse') return;
+      event.preventDefault();
+      if (media.classList.contains('is-zoomed')) {
+        resetImageZoom(modal);
+      } else {
+        setImageZoom(modal, event);
+      }
+    });
   }
 
   function escapeHtml(value) {
@@ -288,6 +334,7 @@
     addButton.dataset.url = url;
     addButton.dataset.image = image;
     const imageNode = modal.querySelector('.link-modal__image');
+    resetImageZoom(modal);
     if (image) imageNode.src = image;
     imageNode.alt = title;
     const priceFact = modal.querySelector('[data-modal-price]');
@@ -361,6 +408,7 @@
     modal.querySelector('.link-modal__related').innerHTML = relatedHtml;
     modal.querySelector('.link-modal__related').style.display = relatedHtml ? '' : 'none';
     modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__barcode"' + (barcode ? '' : ' style="display:none"') + '>' + (barcode ? 'Barcode: ' + escapeHtml(barcode) : '') + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
+    resetImageZoom(modal);
     modal.querySelector('.link-modal__image').src = product.imageUrl || img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg';
     modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
     modal.classList.add('is-open');
