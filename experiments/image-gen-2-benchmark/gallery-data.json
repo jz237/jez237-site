@@ -862,5 +862,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-25-evening-rainwater-switchyard-chalk-mural",
+    "title": "Rainwater Switchyard Chalk Mural",
+    "tests": "Tests whether GPT Image 2 can render a real overhead sidewalk chalk mural format with rain-smudged powder texture, concrete seams, civic water-routing symbols, and handmade pavement constraints instead of document/specimen/concept-art conventions.",
+    "prompt": "Title: Rainwater Switchyard Chalk Mural\nFormat name: Concrete Sidewalk Chalk Mural\nCategory/kind: chalk\n\nCreate a square 1024x1024 image that is unmistakably a real sidewalk chalk mural photographed straight down on outdoor concrete, not a poster, not glossy AI concept art, not an archive document, not a specimen tray, and not a studio tabletop scene.\n\nVisual format rules: powdery colored chalk sits on rough gray concrete slabs; expansion cracks, small pebbles, leaf fragments, and scuffed shoe marks interrupt the drawing; rain has softly blurred some edges into dusty pastel streaks; the camera is overhead with real daylight shadows at the slab seams.\n\nSubject: an impossible civic rainwater switchyard drawn as a playful but precise chalk mural across four concrete squares. Colored chalk channels route blue rainwater lines through hand-drawn curb drains, rooftop cistern icons, garden beds, tiny canal locks, reservoir circles, storm clouds, valve wheels, and neighborhood blocks. The central motif is a large chalk-drawn rotary valve shaped like a sunken plaza, with water routes branching out like a transit map but made from chalk arrows and simple symbols. Include chalk dust piles, eraser smears, fingerprints, snapped chalk sticks at one edge, and a few wet spots that make the blue pigment darker.\n\nComposition: square overhead pavement photograph, the mural fills most of the frame but leaves visible concrete border and seams. Strong graphic readability from the colored route lines, but tactile realism from sidewalk grit, chalk grain, broken lines over cracks, and rain-smudged patches. No people, no readable brand names, no copyrighted characters or logos. Any tiny labels must be abstract marks or illegible chalk ticks.\n\nMood and palette: fresh after a light rain, civic, handmade, optimistic, grounded; gray concrete, sky blue and cobalt water routes, leaf green gardens, white chalk outlines, coral arrows, yellow cistern circles, violet storm-cloud accents, muted by chalk dust.\n\nHard exclusions: no dancing, no dancers, no ballet, no ballroom, no stage dance, no ceremonial dance, no dance poses, no implied choreography, no performers, no stage performance, no watermark, no signature.",
+    "image": "images/2026-05-25-evening-rainwater-switchyard-chalk-mural.png",
+    "date": "2026-05-25",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
