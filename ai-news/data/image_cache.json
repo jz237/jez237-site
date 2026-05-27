@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T15:00:01.262845+00:00",
+  "updatedAt": "2026-05-27T16:00:01.308169+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8212,6 +8212,14 @@
     "https://www.techrepublic.com/article/news-apac-alipay-ai-wallet-token-pay-ai-agents": {
       "image": "https://assets.techrepublic.com/uploads/2026/05/ChatGPT-Image-May-27-2026-01_14_27-AM.png?f=jpeg",
       "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.theverge.com/policy/937650/ai-alex-bores-openai-anthropic-ny12": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2271137268.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.752607989199%2C100%2C78.494784021602&amp;w=1200",
+      "checkedAt": "2026-05-27T16:00:01.308169+00:00"
+    },
+    "https://huggingface.co/blog/local-reachy-mini-conversation": {
+      "image": "https://huggingface.co/blog/assets/local-reachy-mini-conversation/thumbnail.png",
+      "checkedAt": "2026-05-27T16:00:01.308169+00:00"
     }
   }
 }
