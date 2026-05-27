@@ -1,23 +1,40 @@
 {
   "date": "2026-05-27",
-  "updatedAt": "2026-05-27T16:45:25.942040+00:00",
+  "updatedAt": "2026-05-27T18:00:01.603109+00:00",
   "items": [
     {
-      "title": "ElevenLabs’s new music generation model can switch genres mid-track",
+      "title": "NVIDIA Releases Polar, a Token-Faithful Rollout Framework for GRPO Training Across Codex, Claude Code, and Qwen Code",
+      "url": "https://www.marktechpost.com/2026/05/27/nvidia-releases-polar-a-token-faithful-rollout-framework-for-grpo-training-across-codex-claude-code-and-qwen-code",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "NVIDIA researchers have introduced Polar, a rollout framework that trains language agents using reinforcement learning without modifying their agent harnesses. Polar places a model API proxy between the harness and the inference server, capturing token-level interactions and reconstructing trainer-ready trajectories. Using GRPO on a Qwen3.5-4B base model, Polar improves SWE-Bench Verified pass@1 by 22.6 points under the Codex harness, 4.8 points under Claude Code, and 6.2 points under Pi. The framework is registered as a NeMo Gym environment and released under the ProRL Agent Server repository",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-10.08.51-AM-1-150x150.png",
+      "published": "2026-05-27T17:09:38+00:00",
+      "firstSeen": "2026-05-27T18:00:01.603109+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 18.4946
+    },
+    {
+      "title": "ElevenLabs’ new music-generation model can switch genres mid-track",
       "url": "https://techcrunch.com/2026/05/27/elevenlabss-new-music-generation-model-can-switch-genres-mid-track",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "category": "AI",
-      "summary": "ElevenLabs' new model will let users regenerate a section of a song without affecting rest of the track",
+      "summary": "ElevenLabs' new model will let users regenerate a section of a song without affecting the rest of the track.",
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/ElevenLabs-feat.jpg?resize=1200%2C669",
       "published": "2026-05-27T14:14:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.2156
+      "score": 11.1808
     },
     {
       "title": "I think Anthropic and OpenAI have found product-market fit",
@@ -30,10 +47,10 @@
       "image": "",
       "published": "2026-05-27T16:38:35+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.9865
+      "score": 8.9493
     },
     {
       "title": "YouTube mentions are the single strongest predictor of whether AI will recommend your brand, according to a study of 75,000 companies",
@@ -46,10 +63,10 @@
       "image": "https://media.thenextweb.com/2026/05/ahrefs-youtube-mentions-ai-visibility-brand-search.avif",
       "published": "2026-05-27T16:22:41+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.6385
+      "score": 8.6015
     },
     {
       "title": "Former Google and Apple Researchers Launch a Startup to Build AI’s Missing Feedback Loop",
@@ -62,10 +79,10 @@
       "image": "https://media.wired.com/photos/6a15ed31ceac52c54a0384c0/master/pass/Model-Behavior-Ex-Google-Apple-AI-Researchers-Want-to-Make-AI-That-Gets-Smarter-as-You-Use-It-Business.jpg",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5089
+      "score": 8.4743
     },
     {
       "title": "Building self-improving tax agents with Codex",
@@ -78,10 +95,10 @@
       "image": "",
       "published": "2026-05-27T07:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9389
+      "score": 6.9104
     },
     {
       "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
@@ -94,10 +111,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
       "published": "2026-05-27T07:23:10+00:00",
       "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4679
+      "score": 6.4391
     },
     {
       "title": "Robinhood will let your AI agent trade stocks and make (or lose) lots of money",
@@ -110,10 +127,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/acastro_STK049_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-27T14:36:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3961
+      "score": 6.3609
     },
     {
       "title": "AI tried to bury this politician — now people have actually heard of him",
@@ -126,10 +143,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2271137268.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-05-27T15:40:00+00:00",
       "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3272
+      "score": 6.291
     },
     {
       "title": "Quoting Kyle Ferrana",
@@ -142,10 +159,10 @@
       "image": "",
       "published": "2026-05-27T06:41:43+00:00",
       "firstSeen": "2026-05-27T07:00:01.493393+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.2218
+      "score": 6.1935
     },
     {
       "title": "Amazon is now selling its AI shopping technology to other retailers, and Kate Spade is the first customer",
@@ -158,42 +175,26 @@
       "image": "https://media.thenextweb.com/2026/05/aws-agentic-shopping-assistant-kate-spade-retailers.avif",
       "published": "2026-05-27T15:55:25+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6248
+      "score": 5.5883
     },
     {
-      "title": "Robinhood now lets your AI agents trade stocks",
-      "url": "https://techcrunch.com/2026/05/27/robinhood-now-lets-your-ai-agents-trade-stocks",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
+      "title": "ITBench-AA: Frontier Models Score Below 50% on the First Benchmark for Agentic Enterprise IT Tasks — by Artificial Analysis and IBM",
+      "url": "https://huggingface.co/blog/ibm-research/itbench-aa",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
       "category": "AI",
-      "summary": "Robinhood will let users create a separate account with pre-loaded balance that an agent use to trade",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agentic-trading-feat.jpg?resize=1200%2C675",
-      "published": "2026-05-27T12:30:00+00:00",
-      "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
+      "summary": "",
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/64e8143f6de557454220921e/QzGxABeEDggNYzvgSLQqU.png",
+      "published": "2026-05-27T17:20:29+00:00",
+      "firstSeen": "2026-05-27T18:00:01.603109+00:00",
+      "lastSeen": "2026-05-27T18:00:01.603109+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8673
-    },
-    {
-      "title": "Extending Human Intelligence Through AI",
-      "url": "https://www.microsoft.com/en-us/research/blog/extending-human-intelligence-through-ai",
-      "source": "Microsoft Research Blog",
-      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Understanding AI as an extension of human intelligence—not a replacement for it—offers a more grounded path for building trustworthy AI systems.\nThe post Extending Human Intelligence Through AI appeared first on Microsoft Research.",
-      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/ExtendingHIthroughAI-TWLIFB-1200x627-1-scaled.jpg",
-      "published": "2026-05-27T16:00:00+00:00",
-      "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-27T16:45:25.942040+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.8371
+      "score": 5.46
     }
   ],
   "errors": []
