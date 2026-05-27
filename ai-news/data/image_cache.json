@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T19:00:01.980285+00:00",
+  "updatedAt": "2026-05-27T19:32:14.579586+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8268,6 +8268,10 @@
     "https://techcrunch.com/2026/05/27/clickhouse-triples-annualized-revenue-to-250m-charting-a-path-toward-an-ipo": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.53.09-AM.png?resize=1200,788",
       "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://www.techrepublic.com/article/news-supio-legal-ai-vertical-enterprise-ai": {
+      "image": "",
+      "checkedAt": "2026-05-27T19:32:14.579586+00:00"
     }
   }
 }
