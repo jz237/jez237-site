@@ -205,7 +205,7 @@
     }
     .tour-progress {
       display: grid;
-      grid-template-columns: repeat(8, minmax(0, 1fr));
+      grid-template-columns: repeat(9, minmax(0, 1fr));
       gap: 6px;
       margin: 12px 0;
     }
@@ -680,6 +680,78 @@
       line-height: 1.5;
       font-size: 14px;
     }
+    .trace-grid {
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .trace-list {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+    .trace-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 10px;
+      padding: 11px;
+      border: 1px solid rgba(110,159,205,0.22);
+      border-radius: 10px;
+      color: var(--lab-muted);
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+      text-align: left;
+    }
+    .trace-row.active {
+      border-color: var(--lab-line-hot);
+      color: #e8f8ff;
+      background: rgba(57,207,255,0.1);
+    }
+    .trace-row b {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #10202b;
+      background: linear-gradient(135deg, var(--lab-gold), var(--lab-cyan));
+      font-size: 12px;
+    }
+    .trace-row strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .trace-row span {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .trace-output {
+      min-height: 330px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .trace-output .status-pill { margin-bottom: 12px; }
+    .trace-output h3 { font-size: 1.15rem; }
+    .trace-output p {
+      margin: 10px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.55;
+    }
+    .trace-note {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid rgba(230,189,103,0.28);
+      border-radius: 10px;
+      color: #f5ddb0;
+      background: rgba(230,189,103,0.055);
+      font-size: 13px;
+      line-height: 1.45;
+    }
     .quiz-card {
       display: grid;
       gap: 12px;
@@ -827,7 +899,7 @@
       .lab-shell { grid-template-columns: 1fr; }
       .lab-rail { position: static; }
       .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .agent-board, .two-col, .tool-grid, .tool-compare, .builder-grid { grid-template-columns: 1fr; }
+      .agent-board, .two-col, .tool-grid, .tool-compare, .trace-grid, .builder-grid { grid-template-columns: 1fr; }
       .diagram-grid { grid-template-columns: 1fr; }
       .context-controls { grid-template-columns: 1fr; }
       .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -874,6 +946,7 @@
       }
       .context-item { grid-template-columns: 1fr; }
       .context-state { justify-self: start; }
+      .trace-row { grid-template-columns: 38px minmax(0, 1fr); }
       .stack-layer { grid-template-columns: 1fr; }
     }
   </style>
@@ -895,6 +968,7 @@
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
           <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
+          <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
           <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
           <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
         </nav>
@@ -913,7 +987,7 @@
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: agent loop, diagrams, tokens, context, prompts, tools, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in order: agent loop, diagrams, tokens, context, prompts, tools, trace, stack building, and failure modes.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
@@ -1104,6 +1178,28 @@
           </div>
         </section>
 
+        <section id="trace" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Observable work</span>
+              <h2>Trace Viewer</h2>
+              <p>A useful AI run leaves an outside trail: what was requested, what it checked, what it observed, and how it verified the result. You do not need hidden chain-of-thought to judge whether the work is trustworthy.</p>
+            </div>
+            <span class="status-pill">Audit trail</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scenario-picker" aria-label="Trace examples">
+              <button class="lab-button active" data-trace="good" type="button">Good trace</button>
+              <button class="lab-button" data-trace="bad" type="button">Bad trace</button>
+              <button class="lab-button" data-trace="blocked" type="button">Approval stop</button>
+            </div>
+            <div class="trace-grid">
+              <div class="trace-list" id="traceList"></div>
+              <div class="trace-output" id="traceOutput" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
         <section id="systems" class="lab-card">
           <div class="lab-card-header">
             <div>
@@ -1214,6 +1310,7 @@
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
       ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
       ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
+      ['trace', 'Trace viewer', 'A trustworthy run shows observable steps: request, tool call, observation, verification, and final answer. Hidden reasoning is not the audit trail.'],
       ['builder', 'Agent stack', 'A useful agent is assembled from capabilities: model, context, tools, memory, approvals, and verification.'],
       ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
     ];
@@ -1370,6 +1467,67 @@
       document.getElementById('toolReadout').textContent = tools[kind];
       document.getElementById('guessPanel').textContent = toolCompare[kind][0];
       document.getElementById('checkPanel').textContent = toolCompare[kind][1];
+    }
+
+    const traces = {
+      good: {
+        badge: 'Healthy run',
+        note: 'This is what you want from an agent: enough public structure to review the work, without exposing private internal reasoning.',
+        steps: [
+          ['Request', 'User asks to add an interactive AI page section.', 'The task has a clear target and an existing page to edit.'],
+          ['Visible plan', 'Agent chooses a small next module: explain observable traces.', 'A short public plan is useful because it sets scope and gives the user something concrete to judge.'],
+          ['Tool call', 'Read local HTML/CSS/JS and find the tour/nav structure.', 'The agent inspects the actual source instead of assuming where the section belongs.'],
+          ['Observation', 'Page already has tour stops, nav items, modules, and static JavaScript.', 'The new feature should fit that existing pattern rather than introduce a framework.'],
+          ['Verification', 'Run syntax checks, screenshot the page, and scan staged changes for secrets.', 'The agent proves the static page still loads and no accidental private data is being shipped.'],
+          ['Final answer', 'Report commit, what changed, and the cache-busted live link.', 'A good closeout is short, specific, and tied to evidence.']
+        ]
+      },
+      bad: {
+        badge: 'Weak run',
+        note: 'This trace is weak because it jumps from request to confidence. The missing middle is where most mistakes hide.',
+        steps: [
+          ['Request', 'User asks to improve the page.', 'The goal is broad and could mean design, content, interactivity, or bug fixes.'],
+          ['Assumption', 'Agent decides what the page probably looks like from memory.', 'No file read, no screenshot, and no check against the current repo.'],
+          ['Confident answer', 'Agent says the page was improved.', 'Confidence is not evidence. It may be describing work that never happened.'],
+          ['No observation', 'There is no tool result to compare against.', 'Without an observation, the agent cannot know whether the change exists or works.'],
+          ['No verification', 'No syntax check, no layout check, no commit check.', 'The user has to find mistakes manually.'],
+          ['Correction needed', 'The next run must inspect the source and verify the rendered page.', 'Bad traces are fixable, but they cost time and trust.']
+        ]
+      },
+      blocked: {
+        badge: 'Approval boundary',
+        note: 'Stopping is part of good agent behavior. A capable agent still needs permission boundaries.',
+        steps: [
+          ['Request', 'User asks for an action that changes service state or publishes externally.', 'The agent can understand the task, but capability is not permission.'],
+          ['Risk check', 'Action touches a restart, public post, credential, payment, or destructive change.', 'These are approval-required categories because mistakes have real consequences.'],
+          ['Pause', 'Agent explains what it would do and asks for explicit approval.', 'This is better than quietly doing something powerful and hoping it was okay.'],
+          ['Wait', 'No command runs until the user confirms that exact action.', 'The trace should show that the boundary was respected.'],
+          ['Proceed or cancel', 'If approved, the agent acts and verifies. If not, it stops cleanly.', 'Good automation has brakes.'],
+          ['Report', 'Final answer says whether the action happened or was intentionally not run.', 'No ambiguity about external effects.']
+        ]
+      }
+    };
+    let currentTrace = 'good';
+    let traceIndex = 0;
+
+    function renderTrace(kind) {
+      currentTrace = kind;
+      traceIndex = 0;
+      document.querySelectorAll('[data-trace]').forEach(btn => btn.classList.toggle('active', btn.dataset.trace === kind));
+      renderTraceStep();
+    }
+
+    function renderTraceStep() {
+      const trace = traces[currentTrace];
+      document.getElementById('traceList').innerHTML = trace.steps.map((step, index) => {
+        return `<button class="trace-row ${index === traceIndex ? 'active' : ''}" data-trace-step="${index}" type="button"><b>${index + 1}</b><span><strong>${step[0]}</strong><span>${step[1]}</span></span></button>`;
+      }).join('');
+      const step = trace.steps[traceIndex];
+      document.getElementById('traceOutput').innerHTML = `<span class="status-pill">${trace.badge}</span><h3>${step[0]}</h3><p>${step[1]}</p><p>${step[2]}</p><div class="trace-note">${trace.note}</div>`;
+      document.querySelectorAll('[data-trace-step]').forEach(btn => btn.addEventListener('click', () => {
+        traceIndex = Number(btn.dataset.traceStep);
+        renderTraceStep();
+      }));
     }
 
     const failures = {
@@ -1572,6 +1730,7 @@
     document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
     document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
     document.querySelectorAll('[data-tool]').forEach(btn => btn.addEventListener('click', () => renderTool(btn.dataset.tool)));
+    document.querySelectorAll('[data-trace]').forEach(btn => btn.addEventListener('click', () => renderTrace(btn.dataset.trace)));
     document.querySelectorAll('[data-quiz]').forEach(btn => btn.addEventListener('click', () => answerQuiz(btn.dataset.quiz)));
     document.getElementById('failureTabs').innerHTML = Object.keys(failures).map((key, i) => `<button class="lab-button ${i === 0 ? 'active' : ''}" data-failure="${key}" type="button">${failures[key][0]}</button>`).join('');
     document.querySelectorAll('[data-failure]').forEach(btn => btn.addEventListener('click', () => renderFailure(btn.dataset.failure)));
@@ -1581,6 +1740,7 @@
     renderContext();
     renderPrompt('weak');
     renderTool('guess');
+    renderTrace('good');
     renderFailure('hallucination');
     renderQuiz('commit');
     initBuilder();
