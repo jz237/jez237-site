@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T12:00:01.923016+00:00",
+  "updatedAt": "2026-05-27T12:30:51.020208+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8128,6 +8128,18 @@
     "https://simonwillison.net/2026/May/27/kyle-ferrana": {
       "image": "",
       "checkedAt": "2026-05-27T07:00:01.493393+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/robinhood-now-lets-your-ai-agents-trade-stocks": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agentic-trading-feat.jpg?resize=1200,675",
+      "checkedAt": "2026-05-27T12:30:51.020208+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/937689/new-york-times-tech-guild-ai-monitoring-performance-union-contract": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-1171305932.jpg?quality=90&amp;strip=all&amp;crop=0%2C15.095986038394%2C100%2C69.808027923211&amp;w=1200",
+      "checkedAt": "2026-05-27T12:30:51.020208+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/937933/pope-ai-encyclical-tech-industry-reactions": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2214106807.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.735754453032%2C100%2C78.528491093936&amp;w=1200",
+      "checkedAt": "2026-05-27T12:30:51.020208+00:00"
     }
   }
 }
