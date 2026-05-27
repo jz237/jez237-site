@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T14:00:01.215812+00:00",
+  "updatedAt": "2026-05-27T15:00:01.262845+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8164,6 +8164,54 @@
     "https://huggingface.co/blog/delta-weight-sync": {
       "image": "https://huggingface.co/blog/assets/delta-weight-sync/thumbnail.png",
       "checkedAt": "2026-05-27T14:00:01.215812+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/938095/robinhood-ai-agent-stock-trading": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/acastro_STK049_03.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/startup-battlefield-200-applications-close-today-nominate-a-founder-or-submit-your-startup": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200,800",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/elevenlabss-new-music-generation-model-can-switch-genres-mid-track": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/01/ElevenLabs-feat.jpg?resize=1200,669",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/sond-a-sleep-tech-startup-from-boses-former-head-of-sleep-exits-stealth-with-7m": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Travel-Sleeping-2000px.jpg?resize=1200,800",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/techcrunch-disrupt-2026-early-bird-ticket-savings-end-in-3-days": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_3Days-16X9-Dark.png?resize=1200,675",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.theverge.com/tech/937628/coolfly-aura-smart-bird-feeder-review": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/8A0A6250.jpeg?quality=90&amp;strip=all&amp;crop=0%2C10.725973578017%2C100%2C78.548052843967&amp;w=1200",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://openai.com/index/building-self-improving-tax-agents-with-codex": {
+      "image": "",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.techrepublic.com/article/ai-essentials-complete-guide": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-1-2.jpg?f=jpeg",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.techrepublic.com/article/news-china-military-robotics-ai-warfare-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/robot-soldier.jpg?f=jpeg",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.techrepublic.com/article/news-withings-scanwatch-2-glucose-tracking": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/cycling.jpg?f=jpeg",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-photo-editing-trends-2026": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/ai-photo-trends.png?f=jpeg",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apac-alipay-ai-wallet-token-pay-ai-agents": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/ChatGPT-Image-May-27-2026-01_14_27-AM.png?f=jpeg",
+      "checkedAt": "2026-05-27T15:00:01.262845+00:00"
     }
   }
 }
