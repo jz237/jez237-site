@@ -42,6 +42,16 @@ def formatted_date(day: dt.date) -> str:
     return f"{day.strftime('%A, %B')} {day.day}, {day.year}"
 
 
+def remove_old_archives(current_archive: Path) -> list[Path]:
+    removed = []
+    for path in OUT_DIR.glob("philly-weather-almanac-*.png"):
+        if path == current_archive:
+            continue
+        path.unlink()
+        removed.append(path)
+    return removed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--media-dir", type=Path, default=DEFAULT_MEDIA_DIR)
@@ -59,6 +69,7 @@ def main() -> int:
         shutil.copy2(source, latest)
     if source != archive.resolve():
         shutil.copy2(source, archive)
+    removed = remove_old_archives(archive)
 
     manifest = {
         "title": "Philly Weather Almanac",
@@ -70,6 +81,10 @@ def main() -> int:
     }
     (OUT_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"Published {source} -> {latest}")
+    if removed:
+        print("Removed old archive(s):")
+        for path in removed:
+            print(f"- {path}")
     return 0
 
 
