@@ -1154,15 +1154,16 @@
           <span>AI workbench / interactive guide</span>
         </a>
         <nav class="lab-nav">
-          <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
           <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
+          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training</a>
           <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Diagrams</a>
-          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training roadmap</a>
           <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
           <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
+          <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
           <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
+          <a href="#systems"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><path d="M8 6v12"/><path d="M16 6v12"/></svg>Systems</a>
           <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Concepts</a>
           <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
           <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
@@ -1183,7 +1184,7 @@
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: agent loop, illustrated system map, diagrams, training roadmap, tokens, context, prompts, tools, trace, concepts, stack building, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in order: system map, training, diagrams, tokens, context, prompts, tools, agent loop, trace, systems, concepts, stack building, and failure modes.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
@@ -1227,6 +1228,34 @@
           </div>
         </section>
 
+        <section id="training-roadmap" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Separate deep dive</span>
+              <h2>Training and Alignment Roadmap</h2>
+              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they now have their own outline page.</p>
+            </div>
+            <span class="status-pill">Future module</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scope-callout">
+              <div>
+                <h3>Coming next: how models are made</h3>
+                <p>The future page will cover pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants.</p>
+                <div class="scope-tags" aria-label="Training outline topics">
+                  <span>Pretraining</span>
+                  <span>Fine-tuning</span>
+                  <span>RLHF</span>
+                  <span>Alignment</span>
+                  <span>Evals</span>
+                  <span>Data issues</span>
+                </div>
+              </div>
+              <a class="lab-button primary" href="./training-alignment.html">Open outline</a>
+            </div>
+          </div>
+        </section>
+
         <section id="diagrams" class="lab-card">
           <div class="lab-card-header">
             <div>
@@ -1259,63 +1288,6 @@
               </div>
               <p>Context is the working desk. Memory is the labeled drawer. If a fact needs to survive future sessions, it belongs in memory or a source file.</p>
             </article>
-          </div>
-        </section>
-
-        <section id="agent-loop" class="lab-card lab-grid">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Step through it</span>
-              <h2>Agent Loop Simulator</h2>
-              <p>An agent is a model wrapped in a loop. It reads the request, checks context, chooses tools when needed, observes the result, and decides whether to keep going or answer.</p>
-            </div>
-            <span class="status-pill">No API required</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="scenario-picker" aria-label="Agent scenarios">
-              <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
-              <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
-              <button class="lab-button" data-scenario="layout" type="button">Fix layout</button>
-            </div>
-            <div class="agent-board">
-              <div class="agent-flow" id="agentFlow"></div>
-              <div class="agent-console">
-                <div class="console-readout" id="agentConsole"></div>
-                <div class="control-row">
-                  <button class="lab-button primary" id="nextStep" type="button">Next step</button>
-                  <button class="lab-button" id="autoStep" type="button">Auto run</button>
-                  <button class="lab-button" id="resetStep" type="button">Reset</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="training-roadmap" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Separate deep dive</span>
-              <h2>Training and Alignment Roadmap</h2>
-              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they now have their own outline page.</p>
-            </div>
-            <span class="status-pill">Future module</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="scope-callout">
-              <div>
-                <h3>Coming next: how models are made</h3>
-                <p>The future page will cover pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants.</p>
-                <div class="scope-tags" aria-label="Training outline topics">
-                  <span>Pretraining</span>
-                  <span>Fine-tuning</span>
-                  <span>RLHF</span>
-                  <span>Alignment</span>
-                  <span>Evals</span>
-                  <span>Data issues</span>
-                </div>
-              </div>
-              <a class="lab-button primary" href="./training-alignment.html">Open outline</a>
-            </div>
           </div>
         </section>
 
@@ -1424,6 +1396,35 @@
                 <div class="compare-panel">
                   <strong>Agent checks</strong>
                   <p id="checkPanel">A tool-using agent can inspect the actual source of truth, then answer with less guesswork and clearer evidence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="agent-loop" class="lab-card lab-grid">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Step through it</span>
+              <h2>Agent Loop Simulator</h2>
+              <p>An agent is a model wrapped in a loop. It reads the request, checks context, chooses tools when needed, observes the result, and decides whether to keep going or answer.</p>
+            </div>
+            <span class="status-pill">No API required</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scenario-picker" aria-label="Agent scenarios">
+              <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
+              <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
+              <button class="lab-button" data-scenario="layout" type="button">Fix layout</button>
+            </div>
+            <div class="agent-board">
+              <div class="agent-flow" id="agentFlow"></div>
+              <div class="agent-console">
+                <div class="console-readout" id="agentConsole"></div>
+                <div class="control-row">
+                  <button class="lab-button primary" id="nextStep" type="button">Next step</button>
+                  <button class="lab-button" id="autoStep" type="button">Auto run</button>
+                  <button class="lab-button" id="resetStep" type="button">Reset</button>
                 </div>
               </div>
             </div>
@@ -1571,15 +1572,16 @@
     let tourIndex = 0;
     let quizKind = 'commit';
     const tourStops = [
-      ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
       ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
+      ['training-roadmap', 'Training', 'This runtime guide points to a separate outline for model training, fine-tuning, RLHF, alignment, and evaluation.'],
       ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
-      ['training-roadmap', 'Training roadmap', 'This runtime guide now points to a separate outline for model training, fine-tuning, RLHF, alignment, and evaluation.'],
       ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
       ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
       ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
+      ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
       ['trace', 'Trace viewer', 'A trustworthy run shows observable steps: request, tool call, observation, verification, and final answer. Hidden reasoning is not the audit trail.'],
+      ['systems', 'Systems', 'Local models, cloud models, agents, and media models are different systems with different strengths and tradeoffs.'],
       ['concepts', 'Concept decoder', 'Once the moving pieces make sense, the vocabulary gets easier: tokens, context, memory, tools, grounding, verification, and approvals.'],
       ['builder', 'Agent stack', 'A useful agent is assembled from capabilities: model, context, tools, memory, approvals, and verification.'],
       ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
