@@ -1959,11 +1959,22 @@
 	      align-items: stretch;
 	      margin: 0 0 18px;
 	    }
+	    .department-tabs-wrap {
+	      display: grid;
+	      gap: 7px;
+	    }
+	    .department-tabs-label {
+	      color: #8fdcf0;
+	      font-size: 12px;
+	      font-weight: 950;
+	      letter-spacing: 0.12em;
+	      text-transform: uppercase;
+	    }
 	    .department-tabs {
 	      display: flex;
 	      flex-wrap: wrap;
 	      gap: 8px;
-	      padding: 12px;
+	      padding: 10px;
 	      border: 1px solid rgba(116,205,235,0.2);
 	      border-radius: 8px;
 	      background: radial-gradient(circle at 100% 0%, rgba(141,108,255,0.08), transparent 42%), rgba(7,26,39,0.72);
@@ -1972,8 +1983,8 @@
 	      display: inline-flex;
 	      align-items: center;
 	      justify-content: center;
-	      min-height: 36px;
-	      padding: 8px 14px;
+	      min-height: 30px;
+	      padding: 5px 12px;
 	      border: 1px solid rgba(116,205,235,0.22);
 	      border-radius: 999px;
 	      color: #284f65;
@@ -2006,7 +2017,7 @@
 	      display: block;
 	      margin-top: 4px;
 	      color: #021421;
-	      font-size: 20px;
+	      font-size: 18px;
 	      line-height: 1;
 	    }
 	    .shopping-layout {
@@ -2518,13 +2529,13 @@
 	        display: grid;
 	        grid-template-columns: repeat(2, minmax(0, 1fr));
 	        gap: 7px;
-	        padding: 9px;
+	        padding: 8px;
 	      }
 	      #products .department-tab {
 	        width: 100%;
 	        min-width: 0;
-	        min-height: 34px;
-	        padding: 7px 9px;
+	        min-height: 30px;
+	        padding: 5px 9px;
 	        font-size: 12px;
 	      }
 	      #products .department-all-products {
@@ -3075,6 +3086,6 @@
 	    }
 	    renderCart();
 	  </script>
-	  <script src="assets/category.js?v=20260525-nav-active"></script>
+	  <script src="assets/category.js?v=20260527-dept-labels"></script>
 	</body>
 	</html>
