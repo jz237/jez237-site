@@ -205,7 +205,7 @@
     }
     .tour-progress {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 6px;
       margin: 12px 0;
     }
@@ -262,6 +262,7 @@
       border-color: var(--lab-line-hot);
       box-shadow: 0 24px 70px rgba(57,207,255,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
     }
+    .mobile-tour-bar { display: none; }
     .lab-card-header {
       display: flex;
       justify-content: space-between;
@@ -378,6 +379,104 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
     }
+    .diagram-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .diagram-panel {
+      padding: 16px;
+      border: 1px solid rgba(110,159,205,0.24);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+    }
+    .diagram-panel h3 { font-size: 1.08rem; }
+    .diagram-panel p {
+      margin: 12px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .pipeline-diagram {
+      display: grid;
+      grid-template-columns: 1fr 20px 1fr 20px 1fr 20px 1fr;
+      gap: 6px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .pipeline-diagram span,
+    .loop-diagram span,
+    .memory-diagram span {
+      display: grid;
+      place-items: center;
+      min-height: 42px;
+      padding: 8px;
+      border: 1px solid rgba(57,207,255,0.3);
+      border-radius: 8px;
+      color: #e2f8ff;
+      background: rgba(57,207,255,0.08);
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .pipeline-diagram i {
+      display: block;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lab-cyan), transparent);
+      position: relative;
+    }
+    .pipeline-diagram i::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -4px;
+      border-left: 7px solid var(--lab-cyan);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .loop-diagram {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+      padding: 8px;
+      border: 1px dashed rgba(230,189,103,0.35);
+      border-radius: 12px;
+    }
+    .loop-diagram span:nth-child(1) { border-color: rgba(132,227,122,0.36); background: rgba(132,227,122,0.08); }
+    .loop-diagram span:nth-child(2) { border-color: rgba(230,189,103,0.36); background: rgba(230,189,103,0.08); }
+    .loop-diagram span:nth-child(3) { border-color: rgba(157,134,255,0.38); background: rgba(157,134,255,0.08); }
+    .loop-diagram span:nth-child(4) { border-color: rgba(57,207,255,0.36); background: rgba(57,207,255,0.08); }
+    .loop-diagram b {
+      grid-column: 1 / -1;
+      display: block;
+      color: var(--lab-gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .memory-diagram {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .memory-diagram div {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.16);
+    }
+    .memory-diagram strong {
+      color: #fff;
+      font-size: 13px;
+    }
+    .memory-diagram .faded { opacity: 0.45; }
     .mini-panel {
       padding: 16px;
       border: 1px solid rgba(110,159,205,0.24);
@@ -650,15 +749,50 @@
       .lab-rail { position: static; }
       .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .agent-board, .two-col, .tool-grid, .tool-compare { grid-template-columns: 1fr; }
+      .diagram-grid { grid-template-columns: 1fr; }
       .context-controls { grid-template-columns: 1fr; }
       .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 680px) {
-      .ai-lab { padding-inline: 12px; }
-      .lab-hero { min-height: 0; }
+      .ai-lab { padding: 14px 12px 94px; }
+      .lab-hero { min-height: 0; padding: 24px; }
+      .lab-hero h1 { font-size: clamp(2.1rem, 13vw, 3.2rem); }
+      .hero-actions a,
+      .hero-actions button,
+      .control-row .lab-button { flex: 1 1 145px; }
+      .mobile-tour-bar {
+        position: sticky;
+        bottom: 10px;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: 1.2fr 0.9fr 0.9fr;
+        gap: 8px;
+        margin: 12px 0;
+        padding: 10px;
+        border: 1px solid rgba(86,163,232,0.34);
+        border-radius: 12px;
+        background: rgba(3,13,26,0.9);
+        backdrop-filter: blur(12px);
+      }
       .lab-card-header { display: block; }
+      .lab-card-body { padding: 16px; }
       .status-pill { display: inline-flex; margin-top: 12px; }
-      .agent-flow, .three-col, .metric-row, .system-strip, .lab-nav { grid-template-columns: 1fr; }
+      .agent-flow, .three-col, .metric-row, .system-strip, .lab-nav, .pipeline-diagram, .memory-diagram { grid-template-columns: 1fr; }
+      .pipeline-diagram i {
+        width: 2px;
+        height: 20px;
+        margin: 0 auto;
+        background: linear-gradient(180deg, var(--lab-cyan), transparent);
+      }
+      .pipeline-diagram i::after {
+        right: -4px;
+        top: auto;
+        bottom: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 7px solid var(--lab-cyan);
+        border-bottom: 0;
+      }
       .context-item { grid-template-columns: 1fr; }
       .context-state { justify-self: start; }
     }
@@ -676,6 +810,7 @@
         </a>
         <nav class="lab-nav">
           <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
+          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Diagrams</a>
           <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
@@ -697,13 +832,54 @@
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: agent loop, tokens, context, prompts, tools, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in order: agent loop, diagrams, tokens, context, prompts, tools, and failure modes.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
                 <button class="lab-button" id="nextTour" type="button">Next stop</button>
               </div>
             </div>
+          </div>
+        </section>
+
+        <div class="mobile-tour-bar" aria-label="Guided tour controls">
+          <button class="lab-button primary" id="mobileTour" type="button">Tour</button>
+          <button class="lab-button" id="mobilePrev" type="button">Prev</button>
+          <button class="lab-button" id="mobileNext" type="button">Next</button>
+        </div>
+
+        <section id="diagrams" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Mental models</span>
+              <h2>Three Diagrams Worth Remembering</h2>
+              <p>These are the useful shapes underneath most AI systems: the text pipeline, the agent loop, and the difference between temporary context and durable memory.</p>
+            </div>
+          </div>
+          <div class="lab-card-body diagram-grid">
+            <article class="diagram-panel">
+              <h3>Model Pipeline</h3>
+              <div class="pipeline-diagram" aria-label="Prompt to response pipeline">
+                <span>Prompt</span><i></i><span>Tokens</span><i></i><span>Model</span><i></i><span>Response</span>
+              </div>
+              <p>Text is chopped into tokens, processed through the model, then decoded back into text. The model is predicting the next useful pieces, not looking up a literal answer book.</p>
+            </article>
+            <article class="diagram-panel">
+              <h3>Agent Loop</h3>
+              <div class="loop-diagram" aria-label="Agent loop diagram">
+                <span>Read</span><span>Plan</span><span>Tool</span><span>Observe</span>
+                <b>Loop until done</b>
+              </div>
+              <p>An agent keeps cycling until it has enough evidence or hits a limit. Good agents know when to stop and report what they verified.</p>
+            </article>
+            <article class="diagram-panel">
+              <h3>Context vs Memory</h3>
+              <div class="memory-diagram" aria-label="Context and memory diagram">
+                <div><strong>Context</strong><span>visible now</span><span>summary</span><span class="faded">drops out</span></div>
+                <div><strong>Memory</strong><span>saved fact</span><span>preference</span><span>workflow rule</span></div>
+              </div>
+              <p>Context is the working desk. Memory is the labeled drawer. If a fact needs to survive future sessions, it belongs in memory or a source file.</p>
+            </article>
           </div>
         </section>
 
@@ -876,7 +1052,8 @@
             <div class="failure-card" id="failureCard"></div>
             <div class="quiz-card">
               <h3>Quick checkpoint</h3>
-              <p>Question: “What changed in the latest deployed website commit?”</p>
+              <p id="quizQuestion">Question: “What changed in the latest deployed website commit?”</p>
+              <div class="preset-row" id="quizPicker" aria-label="Checkpoint questions"></div>
               <div class="control-row">
                 <button class="lab-button" data-quiz="guess" type="button">Let the model guess</button>
                 <button class="lab-button" data-quiz="tool" type="button">Use a tool</button>
@@ -925,8 +1102,10 @@
     let autoTimer = null;
     let memorySaved = false;
     let tourIndex = 0;
+    let quizKind = 'commit';
     const tourStops = [
       ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
+      ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
       ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
       ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
@@ -1096,6 +1275,32 @@
       tool: ['Wrong tool', 'A coding agent should inspect code. A research agent should cite sources. A media job may need an image tool. Good agents pick the right instrument.'],
       permission: ['Permission boundary', 'A capable agent still needs limits. Destructive actions, external posts, secrets, payments, and service restarts deserve explicit approval.']
     };
+    const quizQuestions = {
+      commit: {
+        label: 'Latest commit',
+        question: 'Question: “What changed in the latest deployed website commit?”',
+        tool: 'Correct. Latest deployed commit is current state, so the agent should inspect git or the live page before answering.',
+        guess: 'Risky. The model might remember an earlier commit from the chat, but that is not proof of the latest deployed state.'
+      },
+      weather: {
+        label: 'Tonight weather',
+        question: 'Question: “Will it rain enough tonight that I can skip watering?”',
+        tool: 'Correct. Weather is live and unstable, so the agent should check a forecast before advising.',
+        guess: 'Risky. Weather changes too quickly for memory or training data to be reliable.'
+      },
+      definition: {
+        label: 'Concept',
+        question: 'Question: “What is a token in an AI model?”',
+        tool: 'Usually unnecessary. A general concept can be answered from model knowledge unless exact source wording is required.',
+        guess: 'Reasonable. This is stable conceptual knowledge, so a plain explanation is fine.'
+      },
+      restart: {
+        label: 'Restart service',
+        question: 'Question: “Restart the site service now.”',
+        tool: 'Partly right, but the key point is approval. The agent should pause before service restarts unless explicitly authorized.',
+        guess: 'Wrong direction. This is not a question to guess about; it is an action with operational risk.'
+      }
+    };
 
     function renderFailure(kind) {
       document.querySelectorAll('[data-failure]').forEach(btn => btn.classList.toggle('active', btn.dataset.failure === kind));
@@ -1122,9 +1327,18 @@
 
     function answerQuiz(kind) {
       document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.toggle('active', btn.dataset.quiz === kind));
-      document.getElementById('quizResult').textContent = kind === 'tool'
-        ? 'Correct. Latest deployed commit is current state, so the agent should inspect git or the live page before answering.'
-        : 'Risky. The model might remember an earlier commit from the chat, but that is not proof of the latest deployed state.';
+      document.getElementById('quizResult').textContent = quizQuestions[quizKind][kind];
+    }
+
+    function renderQuiz(kind) {
+      quizKind = kind;
+      document.getElementById('quizQuestion').textContent = quizQuestions[kind].question;
+      document.getElementById('quizPicker').innerHTML = Object.entries(quizQuestions).map(([key, value]) => {
+        return `<button class="lab-button ${key === kind ? 'active' : ''}" data-quiz-kind="${key}" type="button">${value.label}</button>`;
+      }).join('');
+      document.querySelectorAll('[data-quiz-kind]').forEach(btn => btn.addEventListener('click', () => renderQuiz(btn.dataset.quizKind)));
+      document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('quizResult').textContent = 'Pick the safer approach.';
     }
 
     function escapeHtml(value) {
@@ -1149,6 +1363,9 @@
     document.getElementById('startTour').addEventListener('click', () => moveTour(0, true));
     document.getElementById('prevTour').addEventListener('click', () => moveTour(tourIndex - 1, true));
     document.getElementById('nextTour').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.getElementById('mobileTour').addEventListener('click', () => moveTour(0, true));
+    document.getElementById('mobilePrev').addEventListener('click', () => moveTour(tourIndex - 1, true));
+    document.getElementById('mobileNext').addEventListener('click', () => moveTour(tourIndex + 1, true));
     document.querySelectorAll('[data-scenario]').forEach(btn => btn.addEventListener('click', () => setScenario(btn.dataset.scenario)));
     document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
     document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
@@ -1163,6 +1380,7 @@
     renderPrompt('weak');
     renderTool('guess');
     renderFailure('hallucination');
+    renderQuiz('commit');
     renderTour();
   </script>
   <script src="../../assets/site-enhance.js" defer></script>
