@@ -30,6 +30,7 @@
       color: var(--ink);
       background: linear-gradient(180deg, #fff 0, #f4fbfd 92px, var(--page) 320px, #dcecf3 100%);
       line-height: 1.6;
+      overflow-x: hidden;
     }
     a { color: var(--teal); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -231,10 +232,48 @@
     .footer-link-grid a::before, footer.footer h4 + a::before { content: ""; position: absolute; left: 0; top: .72em; width: 4px; height: 4px; border-radius: 50%; background: #40d9ff; }
     @media (max-width: 1040px) { .footer-top { grid-template-columns: repeat(2,minmax(0,1fr)); } }
     @media (max-width: 760px) { .footer-top { grid-template-columns: 1fr; } }
+
+    body.lightspeed-page .header.masthead,
+    body.lightspeed-page .header.masthead + .main-nav {
+      width: min(1180px, calc(100% - 32px)) !important;
+      max-width: calc(100% - 32px) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    body.lightspeed-page .header.masthead {
+      margin-top: 16px !important;
+    }
+
+    body.lightspeed-page .header.masthead + .main-nav {
+      margin-bottom: 22px !important;
+    }
+
+    body.lightspeed-page .hero {
+      width: min(1180px, calc(100% - 32px));
+      max-width: calc(100% - 32px);
+      margin: 0 auto 28px;
+      padding: 44px 24px 38px;
+    }
+
+    @media (max-width: 760px) {
+      body.lightspeed-page .header.masthead,
+      body.lightspeed-page .header.masthead + .main-nav {
+        width: calc(100% - 16px) !important;
+        max-width: calc(100% - 16px) !important;
+      }
+
+      body.lightspeed-page .hero {
+        width: calc(100% - 16px);
+        max-width: calc(100% - 16px);
+        margin-bottom: 24px;
+        padding: 38px 16px 34px;
+      }
+    }
   </style>
   <link rel="stylesheet" href="../assets/site-masthead.css?v=20260525-learning-path-frame" />
 </head>
-<body>
+<body class="lightspeed-page">
 
   <header class="header masthead">
       <a class="brand" href="../">
