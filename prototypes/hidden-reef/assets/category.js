@@ -384,7 +384,7 @@
       const active = slug === activeCatSlug ? ' active' : '';
       return '<a class="department-tab' + active + '" href="' + categoryBase + '?cat=' + slug + '">' + label + '</a>';
     }).join('');
-    el.innerHTML = '<div class="department-tabs-wrap"><span class="department-tabs-label">Shop by department</span><div class="department-tabs" aria-label="Shop by department">' + tabs + '</div></div><a class="department-all-products" href="' + categoryBase + '"><span>Shop all products</span><strong>View entire catalog</strong></a>';
+    el.innerHTML = '<div class="department-tabs-wrap"><div class="department-tabs" aria-label="Shop by department"><span class="department-tabs-label">Shop by department</span>' + tabs + '</div></div><a class="department-all-products" href="' + categoryBase + '"><span>Shop all products</span><strong>View entire catalog</strong></a>';
   }
 
   const sidebarConfig = {
