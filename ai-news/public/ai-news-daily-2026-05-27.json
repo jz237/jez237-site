@@ -1,6 +1,6 @@
 {
   "date": "2026-05-27",
-  "updatedAt": "2026-05-27T04:45:30.008937+00:00",
+  "updatedAt": "2026-05-27T06:00:01.903569+00:00",
   "items": [
     {
       "title": "TSFMAudit: Data Contamination Auditing in Forecasting Time Series Foundation Models",
@@ -11,13 +11,29 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-27T04:45:34.027753+00:00",
+      "published": "2026-05-27T06:00:13.335786+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-27T04:45:30.008937+00:00",
+      "lastSeen": "2026-05-27T06:00:01.903569+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
       "score": 10.66
+    },
+    {
+      "title": "MEMO: A Modular Framework for Training a Dedicated Memory Model on New Knowledge Without Modifying LLM Parameters",
+      "url": "https://www.marktechpost.com/2026/05/26/memo-a-modular-framework-for-training-a-dedicated-memory-model-on-new-knowledge-without-modifying-llm-parameters",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Researchers from NUS, MIT, and A*STAR propose MEMO, a modular framework that encodes corpus knowledge into a separate trainable MEMORY model.\nThe post MEMO: A Modular Framework for Training a Dedicated Memory Model on New Knowledge Without Modifying LLM Parameters appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-26-at-10.24.07-PM-1-150x150.png",
+      "published": "2026-05-27T05:24:33+00:00",
+      "firstSeen": "2026-05-27T06:00:01.903569+00:00",
+      "lastSeen": "2026-05-27T06:00:01.903569+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.3021
     },
     {
       "title": "Did the Pope use AI to write about the dangers of AI?",
@@ -30,10 +46,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278118480.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-05-27T00:38:11+00:00",
       "firstSeen": "2026-05-27T01:00:01.916008+00:00",
-      "lastSeen": "2026-05-27T04:45:30.008937+00:00",
+      "lastSeen": "2026-05-27T06:00:01.903569+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.859
+      "score": -0.8923
     }
   ],
   "errors": []
