@@ -910,5 +910,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-26-evening-rain-harbor-foundry-mold",
+    "title": "Rain Harbor Foundry Mold",
+    "tests": "Tests whether GPT Image 2 can make a tactile industrial sand-casting mold read instantly as the visual format, with negative relief, casting vents, loose grains, and foundry tooling instead of a poster, document, specimen tray, or glossy concept-art scene.",
+    "prompt": "Title: Rain Harbor Foundry Mold\nFormat name: Foundry Sand Mold Impression\nCategory/kind: industrial\nTests/explores: Tests whether GPT Image 2 can make a tactile industrial sand-casting mold read instantly as the visual format, with negative relief, casting vents, loose grains, and foundry tooling instead of a poster, document, specimen tray, or glossy concept-art scene.\n\nCreate a square 1024x1024 image that is unmistakably a real foundry sand mold photographed overhead in a metal casting flask. The selected format must be obvious at first glance: compacted reddish-brown foundry sand, a negative relief cavity, sprue holes, runner channels, vent lines, trowel marks, loose sand grains, and a heavy blackened metal flask frame around the mold.\n\nSubject: the mold cavity depicts an impossible rain-harbor machine in negative relief, as if it is about to be cast in bronze: a small harbor basin with stepped piers, crescent breakwaters, valve wheels, roof cisterns, rain funnels, canal locks, tiny mooring posts, and cloud-shaped drainage reservoirs. Because it is a mold, every subject detail is recessed or raised in sand rather than painted or illustrated. Include thin carved channels leading to the harbor shapes, a few brass patternmaker pins, a wooden strike-off stick partly cropped at one edge, and chalky parting powder dusting the high spots.\n\nComposition: direct overhead industrial workshop photograph, the rectangular flask nearly fills the square frame with a little concrete foundry floor visible at the edges. The image should be tactile, dry, granular, and physically plausible, with crisp negative relief shadows and strong material contrast between compacted sand, black iron frame, brass pins, and dusty concrete.\n\nPalette and mood: warm reddish foundry sand, dark cast-iron frame, dull brass pins, pale parting powder, gray concrete, small charcoal smudges. Quiet workshop documentation, practical and strange, not cinematic fantasy and not a museum archive layout.\n\nHard exclusions: no readable text, no logos, no copyrighted characters, no people, no performers, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no watermark, no signature.",
+    "image": "images/2026-05-26-evening-rain-harbor-foundry-mold.png",
+    "date": "2026-05-26",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
