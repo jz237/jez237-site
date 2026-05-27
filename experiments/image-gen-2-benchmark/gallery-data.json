@@ -934,5 +934,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-27-midday-rain-canal-van-mural",
+    "title": "Rain Canal Van Mural",
+    "tests": "Tests whether GPT Image 2 can make a 1970s custom van mural read instantly as painted vehicle art, with metal flake paint, door seams, handle hardware, sun-faded airbrush gradients, and real driveway reflections rather than a poster, document, specimen tray, or glossy concept-art scene.",
+    "prompt": "Title: Rain Canal Van Mural\nFormat name: Airbrushed Van Side Panel\nCategory/kind: vehicle art\nTests/explores: Tests whether GPT Image 2 can make a 1970s custom van mural read instantly as painted vehicle art, with metal flake paint, door seams, handle hardware, sun-faded airbrush gradients, and real driveway reflections rather than a poster, document, specimen tray, or glossy concept-art scene.\n\nCreate a square 1024x1024 image that is unmistakably a close documentary photograph of the side panel of an old custom van parked in a suburban driveway. The selected visual format must be obvious at first glance: a 1970s airbrushed mural painted directly on a van body, metallic flake paint, a vertical sliding-door seam interrupting the image, a chrome handle and keyhole, rubber window trim at the upper edge, tiny paint chips, orange-peel clearcoat texture, sun fading, dust, and reflected driveway trees in the glossy panel.\n\nSubject of the mural: an impossible rain-canal city painted in vintage airbrush style across the van side. The mural shows curved canals carrying rainwater through rooftop gardens, crescent bridges, tiny lock gates, water towers shaped like clouds, low row houses, and a central glowing storm drain plaza. Make the city graphic and dreamy, with soft blended gradients and hand-masked edges, but keep every detail visibly part of the painted vehicle panel rather than a real landscape.\n\nComposition: square three-quarter side view, the painted van panel fills most of the frame, cropped so the front wheel arch and chrome handle are visible, with a strip of asphalt driveway and blurred garage siding at the edges. The door seam and handle should physically distort and break the mural. Use natural afternoon light, realistic reflections, road dust, small scratches, and subtle waviness in the old sheet metal.\n\nPalette and mood: faded teal, burnt orange, cream, dusty rose, cobalt canal water, silver metal flake sparkle, warm chrome highlights, muted green driveway reflections. Nostalgic, handmade, slightly strange, materially grounded.\n\nHard exclusions: no readable brand names, no real logos, no copyrighted characters, no people as central subjects, no performers, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no watermark, no signature.",
+    "image": "images/2026-05-27-midday-rain-canal-van-mural.png",
+    "date": "2026-05-27",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
