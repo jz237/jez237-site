@@ -205,7 +205,7 @@
     }
     .tour-progress {
       display: grid;
-      grid-template-columns: repeat(10, minmax(0, 1fr));
+      grid-template-columns: repeat(11, minmax(0, 1fr));
       gap: 6px;
       margin: 12px 0;
     }
@@ -477,6 +477,74 @@
       font-size: 13px;
     }
     .memory-diagram .faded { opacity: 0.45; }
+    .map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .map-figure {
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+      border: 1px solid rgba(86,163,232,0.3);
+      border-radius: 12px;
+      background: #020812;
+    }
+    .map-figure img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      object-fit: cover;
+    }
+    .map-marker {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(57,207,255,0.7);
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(3, 13, 26, 0.72);
+      box-shadow: 0 0 0 6px rgba(57,207,255,0.12), 0 0 22px rgba(57,207,255,0.42);
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+    .map-marker.active {
+      border-color: var(--lab-gold);
+      color: #10202b;
+      background: linear-gradient(135deg, var(--lab-gold), var(--lab-cyan));
+      box-shadow: 0 0 0 8px rgba(230,189,103,0.16), 0 0 28px rgba(230,189,103,0.44);
+    }
+    .map-side {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+    .map-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .map-readout {
+      min-height: 194px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .map-readout h3 { font-size: 1.2rem; }
+    .map-readout p {
+      margin: 10px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .map-readout .trace-note { margin-top: 12px; }
     .mini-panel {
       padding: 16px;
       border: 1px solid rgba(110,159,205,0.24);
@@ -986,7 +1054,7 @@
       .lab-shell { grid-template-columns: 1fr; }
       .lab-rail { position: static; }
       .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .agent-board, .two-col, .tool-grid, .tool-compare, .trace-grid, .concept-grid, .builder-grid { grid-template-columns: 1fr; }
+      .agent-board, .two-col, .map-layout, .tool-grid, .tool-compare, .trace-grid, .concept-grid, .builder-grid { grid-template-columns: 1fr; }
       .diagram-grid { grid-template-columns: 1fr; }
       .context-controls { grid-template-columns: 1fr; }
       .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1033,6 +1101,8 @@
       }
       .context-item { grid-template-columns: 1fr; }
       .context-state { justify-self: start; }
+      .map-figure, .map-figure img { min-height: 240px; }
+      .map-buttons { grid-template-columns: 1fr; }
       .trace-row { grid-template-columns: 38px minmax(0, 1fr); }
       .concept-list, .concept-pair { grid-template-columns: 1fr; }
       .stack-layer { grid-template-columns: 1fr; }
@@ -1051,6 +1121,7 @@
         </a>
         <nav class="lab-nav">
           <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
+          <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
           <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Diagrams</a>
           <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
@@ -1076,7 +1147,7 @@
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: agent loop, diagrams, tokens, context, prompts, tools, trace, concepts, stack building, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in order: agent loop, illustrated system map, diagrams, tokens, context, prompts, tools, trace, concepts, stack building, and failure modes.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
@@ -1091,6 +1162,34 @@
           <button class="lab-button" id="mobilePrev" type="button">Prev</button>
           <button class="lab-button" id="mobileNext" type="button">Next</button>
         </div>
+
+        <section id="map" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Illustrated overview</span>
+              <h2>AI System Map</h2>
+              <p>The illustration shows the same system as a physical workbench. Pick a station to see what that part contributes to an agent run.</p>
+            </div>
+            <span class="status-pill">Generated illustration</span>
+          </div>
+          <div class="lab-card-body map-layout">
+            <figure class="map-figure" aria-label="Illustrated AI agent system map">
+              <img src="../../assets/ai-explainer/ai-system-map.jpg?v=ai-system-map-20260526" alt="Illustrated AI agent system with input, token blocks, context window, model core, tools, memory, verification, and final output stations." />
+              <button class="map-marker active" style="--x: 10%; --y: 47%" data-map="input" type="button" aria-label="Input station">1</button>
+              <button class="map-marker" style="--x: 27%; --y: 56%" data-map="tokens" type="button" aria-label="Token station">2</button>
+              <button class="map-marker" style="--x: 43%; --y: 48%" data-map="context" type="button" aria-label="Context station">3</button>
+              <button class="map-marker" style="--x: 59%; --y: 43%" data-map="model" type="button" aria-label="Model core">4</button>
+              <button class="map-marker" style="--x: 74%; --y: 28%" data-map="tools" type="button" aria-label="Tool station">5</button>
+              <button class="map-marker" style="--x: 76%; --y: 61%" data-map="memory" type="button" aria-label="Memory station">6</button>
+              <button class="map-marker" style="--x: 84%; --y: 66%" data-map="verify" type="button" aria-label="Verification station">7</button>
+              <button class="map-marker" style="--x: 93%; --y: 55%" data-map="answer" type="button" aria-label="Final answer station">8</button>
+            </figure>
+            <div class="map-side">
+              <div class="map-buttons" id="mapButtons"></div>
+              <div class="map-readout" id="mapReadout" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
 
         <section id="diagrams" class="lab-card">
           <div class="lab-card-header">
@@ -1409,6 +1508,7 @@
     let quizKind = 'commit';
     const tourStops = [
       ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
+      ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
       ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
       ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
@@ -1440,6 +1540,27 @@
       stepIndex = 0;
       document.querySelectorAll('[data-scenario]').forEach(btn => btn.classList.toggle('active', btn.dataset.scenario === kind));
       renderAgent();
+    }
+
+    const mapStations = {
+      input: ['1', 'Input', 'The user request enters first. A good system extracts intent, constraints, and what done should look like.', 'Bad input is recoverable if the agent asks a focused question or checks the source of truth.'],
+      tokens: ['2', 'Tokens', 'Text becomes model-readable chunks. Token pressure matters because long messy input can bury the important clue.', 'Short, clear context usually beats a giant undigested paste.'],
+      context: ['3', 'Context', 'The working window holds instructions, visible conversation, files, tool results, and images for this run.', 'If a fact is not in context or retrievable by tool, the model may not know it.'],
+      model: ['4', 'Model core', 'The model predicts useful next text or actions from the current context. It is the reasoning engine, not the whole system.', 'Better models help, but even strong models need evidence.'],
+      tools: ['5', 'Tools', 'Tools let the agent inspect reality: files, commands, browser state, images, or live data.', 'Tool output still needs interpretation. The tool gives evidence; it does not replace judgment.'],
+      memory: ['6', 'Memory', 'Memory stores selected durable facts, preferences, and workflow lessons so they survive future sessions.', 'Memory should be curated. Saving everything creates noise.'],
+      verify: ['7', 'Verification', 'The checkpoint proves the work: tests, screenshots, scans, syntax checks, source comparisons, or live page checks.', 'This is where confident claims become inspected claims.'],
+      answer: ['8', 'Final answer', 'The final response should say what changed, what was verified, and where to see it.', 'A concise closeout is part of the system, not an afterthought.']
+    };
+
+    function renderMapStation(key) {
+      const item = mapStations[key];
+      document.querySelectorAll('[data-map]').forEach(btn => btn.classList.toggle('active', btn.dataset.map === key));
+      document.getElementById('mapButtons').innerHTML = Object.entries(mapStations).map(([id, station]) => {
+        return `<button class="lab-button ${id === key ? 'active' : ''}" data-map-button="${id}" type="button">${station[0]} ${station[1]}</button>`;
+      }).join('');
+      document.getElementById('mapReadout').innerHTML = `<span class="status-pill">Station ${item[0]}</span><h3>${item[1]}</h3><p>${item[2]}</p><div class="trace-note">${item[3]}</div>`;
+      document.querySelectorAll('[data-map-button]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.mapButton)));
     }
 
     function splitTokens(text) {
@@ -1925,6 +2046,7 @@
     document.getElementById('mobileTour').addEventListener('click', () => moveTour(0, true));
     document.getElementById('mobilePrev').addEventListener('click', () => moveTour(tourIndex - 1, true));
     document.getElementById('mobileNext').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.querySelectorAll('[data-map]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.map)));
     document.querySelectorAll('[data-scenario]').forEach(btn => btn.addEventListener('click', () => setScenario(btn.dataset.scenario)));
     document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
     document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
@@ -1935,6 +2057,7 @@
     document.querySelectorAll('[data-failure]').forEach(btn => btn.addEventListener('click', () => renderFailure(btn.dataset.failure)));
 
     renderAgent();
+    renderMapStation('input');
     renderTokens();
     renderContext();
     renderPrompt('weak');
