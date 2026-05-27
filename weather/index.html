@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Weather Console — Jez237</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css?v=20260506-mobile-overflow-fix" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .weather-page-intro { margin-bottom: 18px; }
+    .weather-page-intro h1 { margin-bottom: 8px; }
+    .weather-page-intro p { color: var(--ink-lo); max-width: 760px; }
+    @media (max-width: 760px) {
+      html, body { width: 100% !important; max-width: 100% !important; overflow-x: hidden !important; }
+      main.container.workbench-home { width: 100% !important; padding: 0 !important; max-width: 100% !important; overflow-x: hidden !important; }
+      .desktop-hub { width: 100% !important; max-width: 100% !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; min-height: auto !important; overflow-x: hidden !important; }
+      .hub-main { width: 100% !important; max-width: 100% !important; padding: 14px 10px 28px !important; overflow-x: hidden !important; }
+      .weather-dashboard, #philly-weather-widget, .weather-dashboard-card { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; overflow-x: hidden !important; }
+      .weather-dashboard-card * { box-sizing: border-box !important; max-width: 100% !important; }
+      .weather-page-intro { margin-bottom: 8px !important; }
+      .weather-page-intro h1 { font-size: 30px !important; }
+      .weather-page-intro p { font-size: 13px !important; line-height: 1.4 !important; }
+      .topbar-actions { display: none !important; }
+      .weather-dashboard { margin-top: 12px !important; }
+      .weather-dashboard-card { padding: 12px !important; border-radius: 12px !important; box-shadow: none !important; }
+      .weather-dashboard-top { gap: 12px !important; margin-bottom: 12px !important; }
+      .weather-dashboard-top h2 { font-size: 30px !important; }
+      .weather-dashboard-top p,
+      .weather-day-summary,
+      .weather-nws-summary { font-size: 13px !important; line-height: 1.45 !important; }
+      .weather-now-badge { width: 100% !important; min-width: 0 !important; display: flex !important; align-items: center !important; justify-content: space-between !important; text-align: left !important; }
+      .weather-now-badge::after { display: none !important; }
+      .weather-now-badge strong { font-size: 38px !important; }
+      .weather-dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 8px !important; }
+      .weather-metric { min-height: 88px !important; padding: 10px !important; border-radius: 12px !important; }
+      .weather-metric span { font-size: 10px !important; letter-spacing: .08em !important; }
+      .weather-metric strong { font-size: 22px !important; line-height: 1.05 !important; }
+      .weather-metric em { font-size: 12px !important; }
+      .weather-location-form { display: grid !important; grid-template-columns: minmax(0,1fr) auto auto !important; gap: 7px !important; }
+      .weather-location-form label { grid-column: 1 / -1 !important; }
+      .weather-location-form input { width: 100% !important; min-width: 0 !important; }
+      .weather-radar-link a { display: block !important; white-space: normal !important; overflow-wrap: anywhere !important; font-size: 22px !important; }
+      .weather-nws-summary,
+      .weather-air-detail,
+      .weather-alert,
+      .weather-stale-banner { padding: 12px !important; border-radius: 12px !important; }
+      .weather-timeline-head,
+      .weather-five-day-head { align-items: flex-start !important; }
+      .weather-timeline-head h3,
+      .weather-five-day-head h3 { font-size: 28px !important; }
+      .weather-timeline-head p { text-align: left !important; }
+      .weather-hourly-strip { display: flex !important; grid-template-columns: none !important; gap: 8px !important; width: 100% !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; scroll-snap-type: x mandatory !important; -webkit-overflow-scrolling: touch !important; }
+      .weather-hourly-strip div { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
+      .fishing-timeline div { min-height: 142px !important; }
+      .weather-five-day { display: flex !important; grid-template-columns: none !important; gap: 8px !important; width: 100% !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; padding-bottom: 6px !important; scroll-snap-type: x mandatory !important; -webkit-overflow-scrolling: touch !important; }
+      .weather-day { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav" class="home-hidden-nav"></header>
+
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="weather-title">
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="../">
+          <strong>Jez237</strong>
+          <span>Philadelphia · Zone 7a</span>
+        </a>
+        <p class="sidebar-note">A living journal. A garden journal and a workbench.</p>
+
+        <nav class="side-nav" data-site-menu data-active="weather" data-base="../"></nav>
+
+        <div class="side-controls" aria-hidden="true">
+          <span>☼</span><span>☾</span><span>⚙</span>
+        </div>
+      </aside>
+
+      <div class="hub-main">
+        <div class="hub-topbar weather-page-intro">
+          <div>
+            <h1 id="weather-title">Weather Console</h1>
+            <p>ZIP-aware weather with alerts, air quality, UV index, radar, and the next few days.</p>
+          </div>
+          <div class="topbar-actions">
+            <a href="../">Overview</a>
+            <button type="button" aria-label="Menu">☰</button>
+          </div>
+        </div>
+
+        <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
+          <div id="philly-weather-widget"></div>
+          <figure style="margin-top:22px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(135deg,rgba(13,19,28,.88),rgba(11,15,20,.7));box-shadow:0 18px 46px rgba(0,0,0,.22);">
+            <img src="almanac/latest.png" alt="Illustrated Philly 19111 weather almanac" loading="lazy" decoding="async" style="display:block;width:min(100%,760px);height:auto;margin:0 auto;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);">
+          </figure>
+        </section>
+      </div>
+    </section>
+
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
+      <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/side-menu.js?v=nav-sections-20260526" defer></script>
+  <script src="../assets/nav.js" defer></script>
+  <script src="../assets/weather-widget.js?v=20260506-forecast-audit" defer></script>
+</body>
+</html>
