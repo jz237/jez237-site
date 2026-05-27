@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T22:00:01.429321+00:00",
+  "updatedAt": "2026-05-27T22:06:09.408697+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8284,6 +8284,10 @@
     "https://openai.com/index/warp": {
       "image": "",
       "checkedAt": "2026-05-27T21:00:01.639902+00:00"
+    },
+    "https://openai.com/index/cisco": {
+      "image": "",
+      "checkedAt": "2026-05-27T22:06:09.408697+00:00"
     }
   }
 }
