@@ -1,6 +1,6 @@
 {
   "date": "2026-05-27",
-  "updatedAt": "2026-05-27T15:00:01.262845+00:00",
+  "updatedAt": "2026-05-27T16:00:01.308169+00:00",
   "items": [
     {
       "title": "ElevenLabs’s new music generation model can switch genres mid-track",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/ElevenLabs-feat.jpg?resize=1200%2C669",
       "published": "2026-05-27T14:14:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.2669
+      "score": 11.2374
     },
     {
       "title": "Former Google and Apple Researchers Launch a Startup to Build AI’s Missing Feedback Loop",
@@ -30,10 +30,10 @@
       "image": "https://media.wired.com/photos/6a15ed31ceac52c54a0384c0/master/pass/Model-Behavior-Ex-Google-Apple-AI-Researchers-Want-to-Make-AI-That-Gets-Smarter-as-You-Use-It-Business.jpg",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5599
+      "score": 8.5305
     },
     {
       "title": "Building self-improving tax agents with Codex",
@@ -46,10 +46,10 @@
       "image": "",
       "published": "2026-05-27T07:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9808
+      "score": 6.9567
     },
     {
       "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
@@ -62,10 +62,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
       "published": "2026-05-27T07:23:10+00:00",
       "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5103
+      "score": 6.4859
     },
     {
       "title": "Robinhood will let your AI agent trade stocks and make (or lose) lots of money",
@@ -78,10 +78,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/acastro_STK049_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-27T14:36:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4479
+      "score": 6.4181
+    },
+    {
+      "title": "AI tried to bury this politician — now people have actually heard of him",
+      "url": "https://www.theverge.com/policy/937650/ai-alex-bores-openai-anthropic-ny12",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "By the time that the Democratic primary for New York's 12th congressional district wraps up in June, Anthropic and OpenAI will have spent millions on their battle over the political future of AI: who gets to regulate it, or who will be punished for trying to regulate it. But the real winner of their feud [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2271137268.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
+      "published": "2026-05-27T15:40:00+00:00",
+      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3499
     },
     {
       "title": "Quoting Kyle Ferrana",
@@ -94,10 +110,10 @@
       "image": "",
       "published": "2026-05-27T06:41:43+00:00",
       "firstSeen": "2026-05-27T07:00:01.493393+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.2634
+      "score": 6.2395
     },
     {
       "title": "Robinhood now lets your AI agents trade stocks",
@@ -110,10 +126,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agentic-trading-feat.jpg?resize=1200%2C675",
       "published": "2026-05-27T12:30:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9162
+      "score": 4.8881
     },
     {
       "title": "Micron approaches $1tn as UBS sees a path to $1.8tn over 12 months",
@@ -129,7 +145,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5178
+      "score": 4.4913
     },
     {
       "title": "Europe’s push to loosen Big Tech’s grip runs into Europe’s own divisions",
@@ -145,7 +161,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3354
+      "score": 4.3112
     },
     {
       "title": "The Pope isn’t AGI-pilled",
@@ -158,26 +174,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2214106807.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.735754453032%2C100%2C78.528491093936&amp%3Bw=1200",
       "published": "2026-05-27T12:00:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.272
-    },
-    {
-      "title": "Startup Battlefield 200 applications close today: Nominate a founder or submit your startup",
-      "url": "https://techcrunch.com/2026/05/27/startup-battlefield-200-applications-close-today-nominate-a-founder-or-submit-your-startup",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Today is the final day to apply or nominate a startup for Startup Battlefield 200. Once the clock strikes 11:59 p.m. PT, the window closes on your chance to compete for $100,000 in equity-free funding, gain global visibility, connect directly with investors, and launch on the TechCrunch Disrupt stage.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200%2C800",
-      "published": "2026-05-27T14:15:00+00:00",
-      "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 4.0673
+      "score": 4.2443
     },
     {
       "title": "MEMO: A Modular Framework for Training a Dedicated Memory Model on New Knowledge Without Modifying LLM Parameters",
@@ -190,10 +190,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-26-at-10.24.07-PM-1-150x150.png",
       "published": "2026-05-27T05:24:33+00:00",
       "firstSeen": "2026-05-27T06:00:01.903569+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.0627
+      "score": 4.0396
     }
   ],
   "errors": []

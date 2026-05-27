@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T15:00:01.262845+00:00",
+  "updatedAt": "2026-05-27T16:00:01.308169+00:00",
   "items": [
     {
       "title": "Self-Verified Distillation: Your Language Model Is Secretly Its Own Synthetic Data Pipeline",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-27T15:00:17.171440+00:00",
+      "published": "2026-05-27T16:00:07.471259+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "AI tried to bury this politician — now people have actually heard of him",
+      "url": "https://www.theverge.com/policy/937650/ai-alex-bores-openai-anthropic-ny12",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "By the time that the Democratic primary for New York's 12th congressional district wraps up in June, Anthropic and OpenAI will have spent millions on their battle over the political future of AI: who gets to regulate it, or who will be punished for trying to regulate it. But the real winner of their feud [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2271137268.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
+      "published": "2026-05-27T15:40:00+00:00",
+      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3499
+    },
+    {
+      "title": "Spotify now lets listeners clip and share moments from any podcast",
+      "url": "https://thenextweb.com/news/spotify-podcast-clips-share-chapters-feature",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Spotify has launched a feature called Podcast Clips that lets listeners select, trim, and share specific moments from podcast episodes. A new scissors icon in the Now Playing view opens a clipping tool where users can mark a segment of audio, preview it, and share it via social media, messaging apps, or a direct link. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spotify-podcast-clips-share-chapters-feature.avif",
+      "published": "2026-05-27T15:01:14+00:00",
+      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9205
+    },
+    {
+      "title": "Robinhood is letting AI agents trade stocks and spend money on your credit card",
+      "url": "https://thenextweb.com/news/robinhood-is-letting-ai-agents-trade-stocks-and-spend-money-on-your-credit-card",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Robinhood has launched a platform that lets users connect AI agents to their brokerage accounts to execute stock trades autonomously. The company is also introducing a virtual credit card designed specifically for AI agents, making it the first major consumer brokerage to open both trading and spending to autonomous software. The agentic trading system [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/robinhood-ai-agentic-trading-mcp-credit-card.avif",
+      "published": "2026-05-27T14:51:39+00:00",
+      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 2.4157
     },
     {
       "title": "Robinhood will let your AI agent trade stocks and make (or lose) lots of money",
@@ -28,10 +76,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/acastro_STK049_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-27T14:36:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4479
+      "score": 6.4181
+    },
+    {
+      "title": "Airis Labs comes out of stealth with $60M and a video-intelligence pitch to defence agencies",
+      "url": "https://thenextweb.com/news/airis-labs-60m-stealth-exit-defence-video-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Tel Aviv-founded defence-AI firm has closed a $31M Series B led by PSG Equity, bringing total funding to $60M as it scales US operations from Washington DC. Airis Labs, the defence-AI startup that has spent the past two and a half years operating in stealth, emerged publicly on Tuesday with $60m in total funding, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Airis-Labs.avif",
+      "published": "2026-05-27T14:31:14+00:00",
+      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1057
     },
     {
       "title": "YouTube will now automatically label AI-generated videos, whether creators disclose them or not",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/youtube-automatic-ai-labels-c2pa-synthid-deepfake.avif",
       "published": "2026-05-27T14:15:09+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8274
+      "score": 2.7979
     },
     {
       "title": "Startup Battlefield 200 applications close today: Nominate a founder or submit your startup",
@@ -60,10 +124,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200%2C800",
       "published": "2026-05-27T14:15:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0673
+      "score": 4.0378
     },
     {
       "title": "ElevenLabs’s new music generation model can switch genres mid-track",
@@ -76,11 +140,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/ElevenLabs-feat.jpg?resize=1200%2C669",
       "published": "2026-05-27T14:14:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.2669
+      "score": 11.2374
     },
     {
       "title": "Germany and Spain push back on Brussels’ plans to ban Huawei gear bloc-wide",
@@ -93,10 +157,10 @@
       "image": "https://media.thenextweb.com/2021/05/huawei-man.avif",
       "published": "2026-05-27T14:12:25+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.126
+      "score": 2.0965
     },
     {
       "title": "Former Google and Apple Researchers Launch a Startup to Build AI’s Missing Feedback Loop",
@@ -109,10 +173,10 @@
       "image": "https://media.wired.com/photos/6a15ed31ceac52c54a0384c0/master/pass/Model-Behavior-Ex-Google-Apple-AI-Researchers-Want-to-Make-AI-That-Gets-Smarter-as-You-Use-It-Business.jpg",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5599
+      "score": 8.5305
     },
     {
       "title": "This smart bird feeder captures more of my backyard drama",
@@ -125,10 +189,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/8A0A6250.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.725973578017%2C100%2C78.548052843967&amp%3Bw=1200",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3299
+      "score": 2.3005
     },
     {
       "title": "SOND, a sleep tech startup from Bose’s former head of sleep, exits stealth with $7M",
@@ -141,10 +205,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Travel-Sleeping-2000px.jpg?resize=1200%2C800",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
     },
     {
       "title": "TechCrunch Disrupt 2026 Early Bird ticket savings end in 3 days",
@@ -157,10 +221,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_3Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
     },
     {
       "title": "China is increasingly keeping its best AI talent to itself",
@@ -173,10 +237,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/china-flag-shanghai.jpg?resize=1200%2C801",
       "published": "2026-05-27T13:48:41+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2543
+      "score": 2.2251
     },
     {
       "title": "The long view of property valuation: e2Value on why historical context matters in a new era of AI",
@@ -189,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/05/e2value-property-valuation-historical-context-ai.avif",
       "published": "2026-05-27T13:06:02+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0935
+      "score": 2.0649
     },
     {
       "title": "ClickHouse triples anualized revenue to $250M, charting a path toward an IPO",
@@ -205,10 +269,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.53.09-AM.png?resize=1200%2C788",
       "published": "2026-05-27T13:04:20+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9326
+      "score": 2.9041
     },
     {
       "title": "YouTube is putting AI labels where you’ll actually see them",
@@ -221,10 +285,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/YouTube-updated-AI-labels.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-27T13:00:00+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005
+      "score": 2.272
     },
     {
       "title": "YouTube will now automatically label AI videos",
@@ -237,10 +301,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/06/GettyImages-1149449083.jpg?resize=1200%2C800",
       "published": "2026-05-27T13:00:00+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.202
     },
     {
       "title": "Robinhood now lets your AI agents trade stocks",
@@ -253,10 +317,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agentic-trading-feat.jpg?resize=1200%2C675",
       "published": "2026-05-27T12:30:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9162
+      "score": 4.8881
     },
     {
       "title": "Tech CEOs are apparently suffering from AI psychosis",
@@ -269,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1265000101.jpg?resize=1200%2C857",
       "published": "2026-05-27T12:30:00+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3162
+      "score": 3.2881
     },
     {
       "title": "Female-founded climate-tech Mykor lands €4.6M to scale mycelium insulation panels",
@@ -285,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/Mykor.avif",
       "published": "2026-05-27T12:24:40+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0737
+      "score": 2.0456
     },
     {
       "title": "Schaeffler and Spire pair up to build sovereign European satellites in Germany",
@@ -301,10 +365,10 @@
       "image": "https://media.thenextweb.com/2026/05/Schaeffler-Group-Klaus-Rosenfeld.avif",
       "published": "2026-05-27T12:14:14+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0687
+      "score": 2.0408
     },
     {
       "title": "The Pope isn’t AGI-pilled",
@@ -317,10 +381,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2214106807.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.735754453032%2C100%2C78.528491093936&amp%3Bw=1200",
       "published": "2026-05-27T12:00:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.272
+      "score": 4.2443
     },
     {
       "title": "The AI fight brewing inside The New York Times",
@@ -333,10 +397,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-1171305932.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
       "published": "2026-05-27T12:00:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.272
+      "score": 2.2443
     },
     {
       "title": "Vučić flew to Beijing for a $1.1bn Chinese investment, while Belgrade burned",
@@ -349,10 +413,10 @@
       "image": "https://media.thenextweb.com/2026/05/China-Serbia.avif",
       "published": "2026-05-27T11:45:58+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7555
+      "score": 2.7279
     },
     {
       "title": "Vincent Bolloré rejects Ackman’s $64bn Universal Music bid",
@@ -365,10 +429,10 @@
       "image": "https://media.thenextweb.com/2026/05/Vincent-Bollore.avif",
       "published": "2026-05-27T11:32:38+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0493
+      "score": 2.0219
     },
     {
       "title": "The Samsung pay deal is the moment Korean unions changed register",
@@ -384,7 +448,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0208
+      "score": 1.9942
     },
     {
       "title": "Micron approaches $1tn as UBS sees a path to $1.8tn over 12 months",
@@ -400,7 +464,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5178
+      "score": 4.4913
     },
     {
       "title": "China’s market regulator fines Luxshare and Wingtech over their unwinding deal",
@@ -416,7 +480,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0144
+      "score": 1.988
     },
     {
       "title": "ECB tells eurozone banks to tighten cyber-security as AI shifts the threat picture",
@@ -432,7 +496,7 @@
       "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0056
+      "score": 1.9794
     },
     {
       "title": "Airbnb leads a $58M Series C in WeRoad and hires its CEO to run hotels",
@@ -448,7 +512,7 @@
       "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3942
+      "score": 3.3683
     },
     {
       "title": "The Qualcomm-ByteDance ASIC deal works around US export controls by design",
@@ -464,7 +528,7 @@
       "lastSeen": "2026-05-27T13:00:01.509424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0913
+      "score": 3.0655
     },
     {
       "title": "Taiwan suspects NVIDIA chips were smuggled to China via a Japan transshipment route",
@@ -480,7 +544,7 @@
       "lastSeen": "2026-05-27T12:00:01.923016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9863
+      "score": 1.9606
     },
     {
       "title": "Meet the speakers: Who is taking the stage at the TNW, Oneflow & Flexas gathering in Amsterdam?",
@@ -496,7 +560,7 @@
       "lastSeen": "2026-05-27T12:00:01.923016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6663
+      "score": 2.6412
     },
     {
       "title": "SpaceX wins a $2.29bn Space Force contract for the Golden Dome backbone",
@@ -512,7 +576,7 @@
       "lastSeen": "2026-05-27T12:00:01.923016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9597
+      "score": 1.9348
     },
     {
       "title": "Apple and Google push for judicial oversight of Canada’s lawful-access bill",
@@ -528,7 +592,7 @@
       "lastSeen": "2026-05-27T12:00:01.923016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0519
+      "score": 3.0272
     },
     {
       "title": "Samsung commits $1.5bn to a Vietnam chip-testing plant, with $2.5bn more on the table",
@@ -544,7 +608,7 @@
       "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9456
+      "score": 1.9211
     },
     {
       "title": "SK Hynix joins the trillion-dollar club, powered by Nvidia’s HBM4 orders",
@@ -560,7 +624,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0413
+      "score": 4.0169
     },
     {
       "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
@@ -573,74 +637,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
       "published": "2026-05-27T07:23:10+00:00",
       "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5103
-    },
-    {
-      "title": "NVIDIA’s Jensen Huang calls Taiwan the ‘epicentre’ of the AI revolution as spending hits $150bn a year",
-      "url": "https://thenextweb.com/news/nvidia-huang-taiwan-epicentre-150bn-spend",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "NVIDIA chief executive Jensen Huang told a Taipei audience at Computex 2026 on Wednesday that Taiwan is the “epicentre” of the AI revolution, and that the company’s annual spending on the island will reach roughly $150bn a year. The number, the highest specific Taiwan-spend figure Huang has yet disclosed publicly, makes Nvidia’s commitment to the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
-      "published": "2026-05-27T07:16:38+00:00",
-      "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9376
-    },
-    {
-      "title": "Europe’s push to loosen Big Tech’s grip runs into Europe’s own divisions",
-      "url": "https://thenextweb.com/news/europe-big-tech-grip-internal-debate-sovereignty",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Tech Sovereignty Package arrives on Wednesday, but the EU is still arguing internally over what ‘digital sovereignty’ should actually require. The European Commission is preparing to publish its Tech Sovereignty Package on Wednesday afternoon, the most concentrated single attempt yet to reduce European reliance on American cloud, AI and chip infrastructure. The package, according [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/European-flag.avif",
-      "published": "2026-05-27T07:11:18+00:00",
-      "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.3354
-    },
-    {
-      "title": "Building self-improving tax agents with Codex",
-      "url": "https://openai.com/index/building-self-improving-tax-agents-with-codex",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "category": "AI",
-      "summary": "See how OpenAI, Thrive, and Crete built a self-improving tax agent with Codex, automating filings, improving accuracy, and accelerating workflows.",
-      "image": "",
-      "published": "2026-05-27T07:00:00+00:00",
-      "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.9808
-    },
-    {
-      "title": "Quoting Kyle Ferrana",
-      "url": "https://simonwillison.net/2026/May/27/kyle-ferrana",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "PICARD: Data, shields up\nDATA: Brilliant! Shields can reduce damage we sustain. Not immunity. Not hubris. Just prudence. It's not precaution—it's strategy.\n[camera shakes]\nWORF: HULL BREACHES ON NINE DECKS\nDATA: Here's what happened: you told me to raise shields, and I didn't\n&mdash; Kyle Ferrana, @KyleTrainEmoji\n\n    Tags: ai-misuse, coding-agents, ai, llms",
-      "image": "",
-      "published": "2026-05-27T06:41:43+00:00",
-      "firstSeen": "2026-05-27T07:00:01.493393+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 6.2634
+      "score": 6.4859
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5915
+      "score": 1.5785
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.6232
+      "score": 0.614
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1244
+      "score": 1.1243
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -701,10 +701,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-27T15:00:01.262845+00:00",
+      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9069
+      "score": -1.907
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
