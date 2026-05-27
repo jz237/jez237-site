@@ -946,5 +946,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-27-afternoon-rain-index-microfiche-window",
+    "title": "Rain Index Microfiche Window",
+    "tests": "Tests whether GPT Image 2 can make a vintage library microfiche reader screen read instantly, with magnified film-frame optics, CRT green glow, dust, curved glass, and one enlarged panel rather than a poster, archive document, specimen tray, or glossy concept-art scene.",
+    "prompt": "Title: Rain Index Microfiche Window\nFormat name: Library Microfiche Reader Screen\nCategory/kind: screen\nTests/explores: Tests whether GPT Image 2 can make a vintage library microfiche reader screen read instantly, with magnified film-frame optics, CRT green glow, dust, curved glass, and one enlarged panel rather than a poster, archive document, specimen tray, or glossy concept-art scene.\n\nCreate a square 1024x1024 image that is unmistakably a documentary photograph of a vintage library microfiche reader in use. The selected visual format must be obvious at first glance: a greenish magnified microfiche viewer screen, a grid of tiny film frames visible around one enlarged central frame, CRT-like glow behind slightly curved dusty glass, faint scan lines, soft lens blur at the corners, beige plastic housing, focus knob and frame-advance controls cropped at the right edge, and a dark reading-room background.\n\nSubject inside the magnified microfiche: a fictional municipal rain index from an impossible harbor city, rendered as tiny high-contrast film imagery rather than modern UI. The enlarged central frame shows a simplified aerial map of canals, roof cisterns, cloud reservoirs, storm drains, lock gates, and rain garden blocks, all in monochrome green microfilm texture. Surrounding miniature frames show related abstract diagrams: bar charts made of rain lines, moon-tide circles, canal cross-sections, reservoir silhouettes, and tiny unreadable pseudo-label blocks. Include only a few large readable fictional words on the screen: RAIN INDEX, FRAME 18, HARBOR SHEET. Most text must be too small, blurred, or abstract marks.\n\nComposition: close three-quarter view looking directly into the reader screen, the glowing screen fills most of the image but the viewer housing, knobs, dust, fingerprints, and a sliver of tabletop remain visible. The image should feel like a real optical library machine photographed in dim room light, tactile and obsolete, not a clean infographic and not a newspaper clipping.\n\nPalette and mood: phosphor green, smoky black glass, yellowed beige plastic, dull gray metal screws, warm brown tabletop, low ambient library light, quiet archival technology mood.\n\nHard exclusions: no dancing, no dancers, no ballet, no ballroom, no stage dance, no ceremonial dance, no dance poses, no implied choreography, no performers, no people as central subjects, no copyrighted characters, no real logos, no watermark, no signature.",
+    "image": "images/2026-05-27-afternoon-rain-index-microfiche-window.png",
+    "date": "2026-05-27",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
