@@ -1,6 +1,6 @@
 {
   "date": "2026-05-27",
-  "updatedAt": "2026-05-27T22:06:09.408697+00:00",
+  "updatedAt": "2026-05-27T23:00:01.151270+00:00",
   "items": [
     {
       "title": "Warp’s big bet on building open source with GPT-5.5",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-05-27T00:00:00+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 19.0953
+      "score": 19.0807
     },
     {
       "title": "NVIDIA Releases Polar, a Token-Faithful Rollout Framework for GRPO Training Across Codex, Claude Code, and Qwen Code",
@@ -30,11 +30,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-10.08.51-AM-1-150x150.png",
       "published": "2026-05-27T17:09:38+00:00",
       "firstSeen": "2026-05-27T18:00:01.603109+00:00",
-      "lastSeen": "2026-05-27T22:00:01.429321+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.3789
+      "score": 18.3553
     },
     {
       "title": "Meta launches Instagram, Facebook, and WhatsApp subscriptions, with more to come, including AI plans",
@@ -47,11 +47,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2164040793.jpg?w=1024",
       "published": "2026-05-27T18:00:00+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4715
+      "score": 14.4473
     },
     {
       "title": "ElevenLabs’ new music-generation model can switch genres mid-track",
@@ -64,11 +64,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/ElevenLabs-feat.jpg?resize=1200%2C669",
       "published": "2026-05-27T14:14:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.0741
+      "score": 11.0523
     },
     {
       "title": "Daylight expands MDR into Claude Enterprise to address emerging AI security risks",
@@ -81,10 +81,10 @@
       "image": "https://media.thenextweb.com/2026/05/daylight-mdr-claude-enterprise-ai-security.avif",
       "published": "2026-05-27T18:39:48+00:00",
       "firstSeen": "2026-05-27T19:32:14.579586+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1498
+      "score": 10.1252
     },
     {
       "title": "I think Anthropic and OpenAI have found product-market fit",
@@ -97,10 +97,10 @@
       "image": "",
       "published": "2026-05-27T16:38:35+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.8352
+      "score": 8.8119
     },
     {
       "title": "YouTube mentions are the single strongest predictor of whether AI will recommend your brand, according to a study of 75,000 companies",
@@ -116,7 +116,7 @@
       "lastSeen": "2026-05-27T19:32:14.579586+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.4883
+      "score": 8.4652
     },
     {
       "title": "Former Google and Apple Researchers Launch a Startup to Build AI’s Missing Feedback Loop",
@@ -129,10 +129,10 @@
       "image": "https://media.wired.com/photos/6a15ed31ceac52c54a0384c0/master/pass/Model-Behavior-Ex-Google-Apple-AI-Researchers-Want-to-Make-AI-That-Gets-Smarter-as-You-Use-It-Business.jpg",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.3683
+      "score": 8.3467
     },
     {
       "title": "The Next AI Security Failure May Start With a Trusted Assistant",
@@ -145,10 +145,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/close-up-of-laptop-with-abstract-polygonal-head-ou-2026-03-26-05-09-31-utc.jpg?f=jpeg",
       "published": "2026-05-27T17:55:45+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.3296
+      "score": 7.3055
     },
     {
       "title": "Google AI Studio Cheat Sheet: Features, Pricing, and More",
@@ -161,10 +161,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/google-ai-studio.png?f=jpeg",
       "published": "2026-05-27T18:06:18+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1344
+      "score": 7.1101
     },
     {
       "title": "Building self-improving tax agents with Codex",
@@ -177,10 +177,10 @@
       "image": "",
       "published": "2026-05-27T07:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T22:06:09.408697+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.8231
+      "score": 6.8053
     },
     {
       "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
@@ -193,17 +193,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
       "published": "2026-05-27T07:23:10+00:00",
       "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T22:00:01.429321+00:00",
+      "lastSeen": "2026-05-27T23:00:01.151270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3509
+      "score": 6.3329
     }
   ],
-  "errors": [
-    {
-      "source": "MarkTechPost",
-      "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
-    }
-  ]
+  "errors": []
 }
