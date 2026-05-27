@@ -53,7 +53,7 @@
         saltwater: 'Reef systems, protein skimmers, coral supplements, and marine testing',
         pond: 'Koi, pumps, treatments, season prep, and pond food',
         equipment: 'Filtration, lighting, heating, air equipment, and maintenance',
-        food: 'Flakes, freeze-dried food, feeders, and pond nutrition',
+        food: 'Flakes, betta food, freeze-dried food, feeders, and pond nutrition',
         decor: 'Ornaments, accents, rockwork, and aquascaping pieces',
         maintenance: 'Cleaning tools, filter media, water care, and test kits'
       };
@@ -458,7 +458,7 @@
         title: 'Food & Care',
         items: [
           { type: 'link', label: 'Flake Food', href: '?cat=food&sub=flake-tropical' },
-          { type: 'link', label: 'Pellets & Granules', href: '?cat=food&sub=flake-tropical' },
+          { type: 'link', label: 'Betta Food', href: '?cat=food&sub=betta-food' },
           { type: 'link', label: 'Freeze-Dried', href: '?cat=food&sub=freeze-dry' },
           { type: 'link', label: 'Water Conditioner', href: '?cat=additives&sub=water-conditioners' }
         ]
@@ -578,7 +578,7 @@
         items: [
           { type: 'link', label: 'All Food & Care', href: '?cat=food', active: true },
           { type: 'link', label: 'Flake Food', href: '?cat=food&sub=flake-tropical' },
-          { type: 'link', label: 'Pellets & Granules', href: '?cat=food&sub=flake-tropical' },
+          { type: 'link', label: 'Betta Food', href: '?cat=food&sub=betta-food' },
           { type: 'link', label: 'Freeze-Dried Treats', href: '?cat=food&sub=freeze-dry' },
           { type: 'check', label: 'Frozen Food (in-store)' }
         ]

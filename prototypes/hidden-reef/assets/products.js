@@ -27,8 +27,14 @@ THR.categories = {
   food: {
     name: "Food",
     slug: "food",
-    description: "Fish food, feeders, and freeze-dried treats",
+    description: "Fish food, betta food, feeders, and freeze-dried treats",
     children: {
+      "betta-food": {
+        name: "Betta Food",
+        slug: "betta-food",
+        description: "Betta granules, pellets, and specialty foods",
+        sourceUrl: "https://www.thehiddenreef.com/search/sera%20betta/"
+      },
       "flake-tropical": {
         name: "Flake & Tropical Food",
         slug: "flake-tropical",
