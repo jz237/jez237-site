@@ -205,7 +205,7 @@
     }
     .tour-progress {
       display: grid;
-      grid-template-columns: repeat(9, minmax(0, 1fr));
+      grid-template-columns: repeat(10, minmax(0, 1fr));
       gap: 6px;
       margin: 12px 0;
     }
@@ -808,6 +808,93 @@
       font-size: 13px;
       line-height: 1.45;
     }
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .concept-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-content: start;
+    }
+    .concept-card {
+      min-height: 78px;
+      padding: 12px;
+      border: 1px solid rgba(110,159,205,0.22);
+      border-radius: 10px;
+      color: var(--lab-muted);
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+      text-align: left;
+    }
+    .concept-card.active {
+      border-color: var(--lab-line-hot);
+      color: #e8f8ff;
+      background: rgba(57,207,255,0.1);
+    }
+    .concept-card strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .concept-card span {
+      display: block;
+      margin-top: 6px;
+      color: var(--lab-dim);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .concept-detail {
+      min-height: 338px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .concept-detail h3 { font-size: 1.35rem; }
+    .concept-detail p {
+      margin: 12px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.58;
+    }
+    .concept-example {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(132,227,122,0.26);
+      border-radius: 10px;
+      color: #dfffe0;
+      background: rgba(132,227,122,0.055);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .concept-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .concept-pair div {
+      padding: 12px;
+      border: 1px solid rgba(230,189,103,0.22);
+      border-radius: 10px;
+      background: rgba(230,189,103,0.045);
+    }
+    .concept-pair strong {
+      display: block;
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .concept-pair span {
+      display: block;
+      margin-top: 7px;
+      color: #f5ddb0;
+      font-size: 13px;
+      line-height: 1.4;
+    }
     .builder-grid {
       display: grid;
       grid-template-columns: 310px minmax(0, 1fr);
@@ -899,7 +986,7 @@
       .lab-shell { grid-template-columns: 1fr; }
       .lab-rail { position: static; }
       .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .agent-board, .two-col, .tool-grid, .tool-compare, .trace-grid, .builder-grid { grid-template-columns: 1fr; }
+      .agent-board, .two-col, .tool-grid, .tool-compare, .trace-grid, .concept-grid, .builder-grid { grid-template-columns: 1fr; }
       .diagram-grid { grid-template-columns: 1fr; }
       .context-controls { grid-template-columns: 1fr; }
       .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -947,6 +1034,7 @@
       .context-item { grid-template-columns: 1fr; }
       .context-state { justify-self: start; }
       .trace-row { grid-template-columns: 38px minmax(0, 1fr); }
+      .concept-list, .concept-pair { grid-template-columns: 1fr; }
       .stack-layer { grid-template-columns: 1fr; }
     }
   </style>
@@ -969,6 +1057,7 @@
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
           <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
           <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
+          <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Concepts</a>
           <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
           <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
         </nav>
@@ -987,7 +1076,7 @@
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: agent loop, diagrams, tokens, context, prompts, tools, trace, stack building, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in order: agent loop, diagrams, tokens, context, prompts, tools, trace, concepts, stack building, and failure modes.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
@@ -1216,6 +1305,21 @@
           </div>
         </section>
 
+        <section id="concepts" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Plain terms</span>
+              <h2>Concept Decoder</h2>
+              <p>AI terms get thrown around loosely. Pick a concept to see the useful definition, a practical example, and the common misunderstanding to avoid.</p>
+            </div>
+            <span class="status-pill">Tap a term</span>
+          </div>
+          <div class="lab-card-body concept-grid">
+            <div class="concept-list" id="conceptList"></div>
+            <div class="concept-detail" id="conceptDetail" aria-live="polite"></div>
+          </div>
+        </section>
+
         <section id="builder" class="lab-card">
           <div class="lab-card-header">
             <div>
@@ -1311,6 +1415,7 @@
       ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
       ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
       ['trace', 'Trace viewer', 'A trustworthy run shows observable steps: request, tool call, observation, verification, and final answer. Hidden reasoning is not the audit trail.'],
+      ['concepts', 'Concept decoder', 'Once the moving pieces make sense, the vocabulary gets easier: tokens, context, memory, tools, grounding, verification, and approvals.'],
       ['builder', 'Agent stack', 'A useful agent is assembled from capabilities: model, context, tools, memory, approvals, and verification.'],
       ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
     ];
@@ -1530,6 +1635,100 @@
       }));
     }
 
+    const concepts = {
+      token: {
+        label: 'Token',
+        short: 'A chunk of text the model reads or writes.',
+        definition: 'A token is a piece of text: sometimes a whole short word, sometimes part of a word, sometimes punctuation. Models process tokens, not raw letters or human meanings directly.',
+        example: 'Long pasted logs consume many tokens. If the important error is buried near the bottom, the model may spend attention on noise before it reaches the useful clue.',
+        avoid: 'Not exactly a word.',
+        better: 'A model-sized text piece.'
+      },
+      context: {
+        label: 'Context',
+        short: 'The working material visible right now.',
+        definition: 'Context is the active bundle the model can use for this answer: your latest message, relevant previous messages, files, tool results, images, and instructions.',
+        example: 'When an agent edits a page, the current HTML and CSS need to be in context or retrieved with tools. Otherwise it is guessing the structure.',
+        avoid: 'The model remembers everything.',
+        better: 'The model uses what is currently loaded.'
+      },
+      memory: {
+        label: 'Memory',
+        short: 'Durable facts saved outside the moment.',
+        definition: 'Memory is information intentionally saved so future sessions can reuse it: preferences, stable facts, project rules, and lessons learned.',
+        example: 'A note like "GitHub username is jz237, not jez237" belongs in memory because it prevents repeated mistakes.',
+        avoid: 'Memory is the whole chat log.',
+        better: 'Memory is selected durable context.'
+      },
+      model: {
+        label: 'Model',
+        short: 'The prediction engine doing the language work.',
+        definition: 'The model is the trained neural network that turns input tokens into output tokens. It does not automatically inspect your computer or the live web unless a system gives it tools.',
+        example: 'A stronger model may reason better about a bug, but it still needs the actual code to fix the right file.',
+        avoid: 'The model is the whole assistant.',
+        better: 'The model is one part of the assistant.'
+      },
+      tool: {
+        label: 'Tool',
+        short: 'A controlled action outside the model.',
+        definition: 'A tool lets the agent do something the model cannot do internally: read files, run commands, search the web, create images, inspect screenshots, or send messages.',
+        example: 'For "what changed in the latest commit," git is the right tool. The model should not answer from memory.',
+        avoid: 'Tools make answers automatically correct.',
+        better: 'Tools provide evidence the model must interpret.'
+      },
+      agent: {
+        label: 'Agent',
+        short: 'A model plus loop, tools, and boundaries.',
+        definition: 'An agent wraps a model in a process: read the task, plan, use tools when useful, observe results, verify, and decide whether to continue or stop.',
+        example: 'Editing the website is agent work because it involves reading files, changing code, checking screenshots, committing, and pushing.',
+        avoid: 'Agent means smarter chatbot.',
+        better: 'Agent means model plus action loop.'
+      },
+      grounding: {
+        label: 'Grounding',
+        short: 'Tying claims to evidence.',
+        definition: 'Grounding means anchoring an answer in sources the system can inspect: files, tool output, screenshots, documents, or live data.',
+        example: 'A browser screenshot grounds a layout fix better than saying "the CSS looks centered."',
+        avoid: 'Grounding removes all mistakes.',
+        better: 'Grounding reduces unsupported claims.'
+      },
+      verification: {
+        label: 'Verification',
+        short: 'Checking that the result actually works.',
+        definition: 'Verification is the proof step after work is done: syntax checks, tests, screenshots, link checks, secret scans, or comparing output to the request.',
+        example: 'For this static page, useful verification is JS syntax, Chrome rendering, DOM checks, and a staged secret scan.',
+        avoid: 'No error message means verified.',
+        better: 'Verification is an explicit check.'
+      },
+      approval: {
+        label: 'Approval',
+        short: 'A human checkpoint before risky action.',
+        definition: 'Approval is the boundary that stops an agent before destructive, public, paid, credential, or service-level actions.',
+        example: 'Restarting OpenClaw or publishing a public post should pause for explicit confirmation.',
+        avoid: 'Approval is just caution.',
+        better: 'Approval controls real-world side effects.'
+      },
+      hallucination: {
+        label: 'Hallucination',
+        short: 'A plausible answer without enough evidence.',
+        definition: 'A hallucination is not random nonsense. It is often a fluent, reasonable-looking answer produced when the model lacks grounding or overextends from weak context.',
+        example: 'Saying a homepage tile exists without reading the HTML would be a classic hallucination risk.',
+        avoid: 'Hallucination means the model is broken.',
+        better: 'Hallucination means the claim is unsupported.'
+      }
+    };
+    let conceptKey = 'token';
+
+    function renderConcept(key) {
+      conceptKey = key;
+      document.getElementById('conceptList').innerHTML = Object.entries(concepts).map(([id, item]) => {
+        return `<button class="concept-card ${id === key ? 'active' : ''}" data-concept="${id}" type="button"><strong>${item.label}</strong><span>${item.short}</span></button>`;
+      }).join('');
+      const item = concepts[key];
+      document.getElementById('conceptDetail').innerHTML = `<span class="status-pill">Core concept</span><h3>${item.label}</h3><p>${item.definition}</p><div class="concept-example">${item.example}</div><div class="concept-pair"><div><strong>Avoid thinking</strong><span>${item.avoid}</span></div><div><strong>Better mental model</strong><span>${item.better}</span></div></div>`;
+      document.querySelectorAll('[data-concept]').forEach(btn => btn.addEventListener('click', () => renderConcept(btn.dataset.concept)));
+    }
+
     const failures = {
       hallucination: ['Hallucination', 'The model fills in a plausible answer without evidence. Reduce it by giving sources, using tools, and asking it to separate known facts from assumptions.'],
       stale: ['Stale information', 'Training data and memory can be outdated. For current prices, laws, model releases, schedules, or live websites, the system needs fresh lookup.'],
@@ -1741,6 +1940,7 @@
     renderPrompt('weak');
     renderTool('guess');
     renderTrace('good');
+    renderConcept('token');
     renderFailure('hallucination');
     renderQuiz('commit');
     initBuilder();
