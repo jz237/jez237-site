@@ -205,7 +205,7 @@
     }
     .tour-progress {
       display: grid;
-      grid-template-columns: repeat(11, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(14px, 1fr));
       gap: 6px;
       margin: 12px 0;
     }
@@ -249,6 +249,39 @@
       display: grid;
       gap: 18px;
       margin-top: 22px;
+    }
+    .scope-callout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid rgba(230,189,103,0.42);
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(230,189,103,0.13), rgba(57,207,255,0.07));
+    }
+    .scope-callout p {
+      margin: 8px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+    }
+    .scope-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .scope-tags span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      color: #dbeaf2;
+      background: rgba(255,255,255,0.055);
+      font-size: 12px;
+      font-weight: 800;
     }
     .lab-card {
       border: 1px solid var(--lab-line);
@@ -1101,6 +1134,7 @@
       }
       .context-item { grid-template-columns: 1fr; }
       .context-state { justify-self: start; }
+      .scope-callout { grid-template-columns: 1fr; }
       .map-figure, .map-figure img { min-height: 240px; }
       .map-buttons { grid-template-columns: 1fr; }
       .trace-row { grid-template-columns: 38px minmax(0, 1fr); }
@@ -1123,6 +1157,7 @@
           <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
           <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
           <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Diagrams</a>
+          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training roadmap</a>
           <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
@@ -1147,7 +1182,7 @@
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: agent loop, illustrated system map, diagrams, tokens, context, prompts, tools, trace, concepts, stack building, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in order: agent loop, illustrated system map, diagrams, training roadmap, tokens, context, prompts, tools, trace, concepts, stack building, and failure modes.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
@@ -1251,6 +1286,34 @@
                   <button class="lab-button" id="resetStep" type="button">Reset</button>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="training-roadmap" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Separate deep dive</span>
+              <h2>Training and Alignment Roadmap</h2>
+              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they now have their own outline page.</p>
+            </div>
+            <span class="status-pill">Future module</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="scope-callout">
+              <div>
+                <h3>Coming next: how models are made</h3>
+                <p>The future page will cover pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants.</p>
+                <div class="scope-tags" aria-label="Training outline topics">
+                  <span>Pretraining</span>
+                  <span>Fine-tuning</span>
+                  <span>RLHF</span>
+                  <span>Alignment</span>
+                  <span>Evals</span>
+                  <span>Data issues</span>
+                </div>
+              </div>
+              <a class="lab-button primary" href="./training-alignment.html">Open outline</a>
             </div>
           </div>
         </section>
@@ -1510,6 +1573,7 @@
       ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
       ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
       ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
+      ['training-roadmap', 'Training roadmap', 'This runtime guide now points to a separate outline for model training, fine-tuning, RLHF, alignment, and evaluation.'],
       ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
       ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
@@ -1788,6 +1852,22 @@
         example: 'A stronger model may reason better about a bug, but it still needs the actual code to fix the right file.',
         avoid: 'The model is the whole assistant.',
         better: 'The model is one part of the assistant.'
+      },
+      training: {
+        label: 'Training',
+        short: 'The process that creates the model weights.',
+        definition: 'Training is the expensive learning phase before normal use. The system shows the model many examples, measures prediction error, and adjusts weights so future predictions get better.',
+        example: 'A base language model learns broad text patterns during pretraining. Later tuning can make it follow instructions or specialize in code.',
+        avoid: 'Training happens every time you chat.',
+        better: 'Training creates the model; inference uses it.'
+      },
+      alignment: {
+        label: 'Alignment',
+        short: 'Tuning model behavior toward human goals.',
+        definition: 'Alignment is the post-training work that tries to make a capable model more useful, honest, safe, and controllable. RLHF is one common alignment method.',
+        example: 'Humans may rank two answers, a reward model learns that preference, and reinforcement learning nudges the assistant toward the preferred behavior.',
+        avoid: 'Alignment makes models perfect.',
+        better: 'Alignment shapes behavior and still needs evals.'
       },
       tool: {
         label: 'Tool',
