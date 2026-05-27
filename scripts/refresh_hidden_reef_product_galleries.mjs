@@ -79,7 +79,11 @@ async function fetchWithTimeout(url) {
         accept: 'text/html,application/xhtml+xml'
       }
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      const error = new Error(`HTTP ${response.status}`);
+      error.status = response.status;
+      throw error;
+    }
     return await response.text();
   } finally {
     clearTimeout(timeout);
@@ -95,6 +99,7 @@ function serializeProducts(productsBySlug, metadata) {
     `// Total: ${total} unique products across ${slugs.length} subcategories`,
     metadata.presentationLine,
     `// Gallery refresh: product image galleries refreshed ${metadata.timestamp}`,
+    `// Removed stale 404 product URLs: ${metadata.removedCount} removed ${metadata.removedDate}`,
     '',
     'const THR_PRODUCTS = {'
   ];
@@ -114,15 +119,21 @@ const productData = await fs.readFile(productDataPath, 'utf8');
 const dataWindow = loadBrowserScript(productData, productDataPath);
 const productsBySlug = dataWindow.THR_PRODUCTS;
 const presentationLine = productData.match(/^\/\/ Presentation refresh:.*$/m)?.[0] || '// Presentation refresh: unknown';
-const products = Object.values(productsBySlug).flat().slice(0, limit || undefined);
+const previousRemovedLine = productData.match(/^\/\/ Removed stale 404 product URLs:.*$/m)?.[0] || '';
+const previousRemovedCount = Number(previousRemovedLine.match(/: (\d+) removed/)?.[1] || 0);
+const previousRemovedDate = previousRemovedLine.match(/removed ([0-9-]+)/)?.[1] || timestamp.slice(0, 10);
+const products = Object.entries(productsBySlug)
+  .flatMap(([slug, items]) => items.map(product => ({ slug, product })))
+  .slice(0, limit || undefined);
 let cursor = 0;
 let enriched = 0;
 let unchanged = 0;
+const removed = [];
 const errors = [];
 
 async function worker() {
   while (cursor < products.length) {
-    const product = products[cursor];
+    const { slug, product } = products[cursor];
     cursor += 1;
     if (!product.productUrl) continue;
     try {
@@ -136,6 +147,11 @@ async function worker() {
         unchanged += 1;
       }
     } catch (error) {
+      if (error.status === 404) {
+        product.__remove404 = true;
+        removed.push({ slug, name: product.name, url: product.productUrl, error: error.message });
+        continue;
+      }
       errors.push({ name: product.name, url: product.productUrl, error: error.message });
     }
   }
@@ -143,13 +159,24 @@ async function worker() {
 
 await Promise.all(Array.from({ length: Math.max(1, concurrency) }, worker));
 
-const report = { timestamp, write, total: products.length, enriched, unchanged, failed: errors.length, errors };
+if (write && removed.length) {
+  for (const slug of Object.keys(productsBySlug)) {
+    productsBySlug[slug] = productsBySlug[slug].filter(product => !product.__remove404);
+  }
+}
+for (const { product } of products) {
+  delete product.__remove404;
+}
+
+const removedCount = previousRemovedCount + (write ? removed.length : 0);
+const removedDate = removed.length && write ? timestamp.slice(0, 10) : previousRemovedDate;
+const report = { timestamp, write, total: products.length, enriched, unchanged, removed404: removed.length, failed: errors.length, removed, errors };
 const reportDir = path.join(repoRoot, 'tmp', `hidden-reef-gallery-refresh-${timestamp.replace(/[:.]/g, '-')}`);
 await fs.mkdir(reportDir, { recursive: true });
 await fs.writeFile(path.join(reportDir, 'report.json'), JSON.stringify(report, null, 2));
 
 if (write) {
-  await fs.writeFile(productDataPath, serializeProducts(productsBySlug, { timestamp, presentationLine }));
+  await fs.writeFile(productDataPath, serializeProducts(productsBySlug, { timestamp, presentationLine, removedCount, removedDate }));
 }
 
 console.log(JSON.stringify({ ...report, report: path.relative(repoRoot, path.join(reportDir, 'report.json')) }, null, 2));
