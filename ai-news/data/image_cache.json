@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T19:32:14.579586+00:00",
+  "updatedAt": "2026-05-27T21:00:01.639902+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8272,6 +8272,18 @@
     "https://www.techrepublic.com/article/news-supio-legal-ai-vertical-enterprise-ai": {
       "image": "",
       "checkedAt": "2026-05-27T19:32:14.579586+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/in-more-good-news-for-amazon-snowflake-signs-6b-deal-with-aws-for-ai-cpu-chips": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/dollar-signs-data-center.png?w=1024",
+      "checkedAt": "2026-05-27T21:00:01.639902+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/payroll-startup-remote-says-it-grew-revenue-50-per-employee-without-adding-headcount": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/07/money-firehose.jpg?resize=1200,675",
+      "checkedAt": "2026-05-27T21:00:01.639902+00:00"
+    },
+    "https://openai.com/index/warp": {
+      "image": "",
+      "checkedAt": "2026-05-27T21:00:01.639902+00:00"
     }
   }
 }
