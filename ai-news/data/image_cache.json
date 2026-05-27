@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T23:21:10.578779+00:00",
+  "updatedAt": "2026-05-27T00:00:01.883049+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8112,6 +8112,14 @@
     "https://www.marktechpost.com/2026/05/26/design-a-high-precision-retrieve-and-rerank-pipeline-with-zeroentropy-zerank-2-reranker": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-18.png",
       "checkedAt": "2026-05-26T23:21:10.578779+00:00"
+    },
+    "https://simonwillison.net/2026/May/26/the-pressure": {
+      "image": "",
+      "checkedAt": "2026-05-27T00:00:01.883049+00:00"
+    },
+    "https://www.anthropic.com/news/kiyoung-choi-representative-director-anthropic-korea": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Globe&amp;backgroundColor=sky",
+      "checkedAt": "2026-05-27T00:00:01.883049+00:00"
     }
   }
 }
