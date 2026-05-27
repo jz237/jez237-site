@@ -193,6 +193,12 @@ body.department-page .section-band + .section-band {
 .link-modal__panel::-webkit-scrollbar {
   display: none;
 }
+.link-modal__gallery {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  background: #eef7fa;
+}
 .link-modal__media {
   position: relative;
   display: grid;
@@ -234,6 +240,33 @@ body.department-page .section-band + .section-band {
   letter-spacing: .05em;
   text-transform: uppercase;
   pointer-events: none;
+}
+.link-modal__thumbs {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  overflow-x: auto;
+  border-top: 1px solid rgba(13,47,65,.12);
+  background: rgba(255,255,255,.86);
+}
+.link-modal__thumb {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 5px 14px rgba(13,47,65,.12);
+  cursor: pointer;
+}
+.link-modal__thumb.active {
+  border-color: #007d9d;
+}
+.link-modal__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .link-modal__body {
   display: flex;
@@ -380,6 +413,17 @@ body.department-page .section-band + .section-band {
     min-height: 180px;
     max-height: 34vh;
     padding: 14px;
+  }
+  .link-modal__gallery {
+    flex: 0 0 auto;
+  }
+  .link-modal__thumbs {
+    padding: 8px;
+  }
+  .link-modal__thumb {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
   }
   .link-modal__image {
     max-height: 30vh;
