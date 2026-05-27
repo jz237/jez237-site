@@ -1,19 +1,878 @@
 <!doctype html>
-<html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/jez237-site/experiments/ai-explainer/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-    <title>How AI Works — Interactive Guide</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/jez237-site/experiments/ai-explainer/assets/index-D7HcO0Dy.js"></script>
-    <link rel="stylesheet" crossorigin href="/jez237-site/experiments/ai-explainer/assets/index-D22aqktn.css">
-    <link rel="stylesheet" href="../../assets/workbench-theme.css" />
-  </head>
-  <body class="antialiased">
-    <div id="root"></div>
-  </body>
+  <title>How AI Works - Interactive Guide</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg" />
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
+  <style>
+    :root {
+      --lab-bg: #020813;
+      --lab-panel: rgba(4, 17, 34, 0.82);
+      --lab-panel-2: rgba(8, 27, 48, 0.78);
+      --lab-line: rgba(74, 151, 242, 0.34);
+      --lab-line-hot: rgba(61, 208, 255, 0.72);
+      --lab-text: #eef7fb;
+      --lab-muted: #9fb8c9;
+      --lab-dim: #6f8da3;
+      --lab-cyan: #39cfff;
+      --lab-gold: #e6bd67;
+      --lab-green: #84e37a;
+      --lab-rose: #ff7f9c;
+      --lab-violet: #9d86ff;
+      --lab-orange: #ffb060;
+      --lab-shadow: 0 24px 70px rgba(0,0,0,0.42);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--lab-bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--lab-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 4%, rgba(57,207,255,0.16), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(230,189,103,0.12), transparent 26%),
+        linear-gradient(180deg, #020813 0%, #051427 52%, #020813 100%);
+    }
+    a { color: var(--lab-cyan); }
+    button, textarea, input { font: inherit; }
+    .ai-lab {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px clamp(14px, 3vw, 40px) 80px;
+    }
+    .lab-shell {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .lab-rail {
+      position: sticky;
+      top: 18px;
+      padding: 18px;
+      border: 1px solid var(--lab-line);
+      border-radius: 14px;
+      background: linear-gradient(160deg, rgba(8,28,48,0.92), rgba(3,12,24,0.94));
+      box-shadow: var(--lab-shadow);
+    }
+    .rail-brand {
+      display: block;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none;
+    }
+    .rail-brand strong {
+      display: block;
+      color: #f8ecd8;
+      font: 800 1.35rem/1.05 Georgia, serif;
+    }
+    .rail-brand span {
+      display: block;
+      margin-top: 6px;
+      color: var(--lab-muted);
+      font-size: 12px;
+    }
+    .lab-nav {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .lab-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 9px 10px;
+      border: 1px solid rgba(96,156,216,0.28);
+      border-radius: 8px;
+      color: #d8eaf2;
+      text-decoration: none;
+      background: rgba(255,255,255,0.035);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .lab-nav a:hover {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.11);
+    }
+    .lab-nav svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+    }
+    .lab-main { min-width: 0; }
+    .lab-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 390px;
+      padding: clamp(24px, 4vw, 46px);
+      border: 1px solid var(--lab-line);
+      border-radius: 18px;
+      background:
+        linear-gradient(115deg, rgba(2,8,19,0.98) 0%, rgba(5,18,34,0.9) 42%, rgba(8,25,45,0.56) 100%),
+        url("../../assets/home-cards/ai-explainer.jpg?v=neural-network-20260526") center/cover;
+      box-shadow: var(--lab-shadow);
+    }
+    .lab-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(57,207,255,0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(57,207,255,0.06) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(90deg, transparent, #000 52%, transparent);
+      pointer-events: none;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--lab-gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--lab-green);
+      box-shadow: 0 0 18px rgba(132,227,122,0.8);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #f8ecd8;
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: 0;
+    }
+    h1 {
+      max-width: 760px;
+      font-size: clamp(2.6rem, 7vw, 5.6rem);
+      line-height: 0.94;
+    }
+    .hero-copy p {
+      max-width: 640px;
+      margin: 18px 0 0;
+      color: #c1d3df;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.58;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .lab-button, .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border: 1px solid rgba(86,163,232,0.42);
+      border-radius: 8px;
+      color: var(--lab-text);
+      background: rgba(255,255,255,0.06);
+      text-decoration: none;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .lab-button:hover, .lab-button.active, .hero-actions a:hover {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.14);
+      color: #fff;
+    }
+    .lab-button.primary, .hero-actions a.primary {
+      color: #10202b !important;
+      border-color: rgba(230,189,103,0.8);
+      background: linear-gradient(135deg, var(--lab-gold), #ff8b74);
+    }
+    .lab-grid {
+      display: grid;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .lab-card {
+      border: 1px solid var(--lab-line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--lab-panel), rgba(2,10,22,0.9));
+      box-shadow: 0 18px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .lab-card + .lab-card { margin-top: 22px; }
+    .lab-card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px 22px 0;
+    }
+    .lab-card h2 { font-size: clamp(1.45rem, 3vw, 2.1rem); }
+    .lab-card-header p {
+      max-width: 720px;
+      margin: 8px 0 0;
+      color: var(--lab-muted);
+      line-height: 1.55;
+    }
+    .status-pill {
+      flex: 0 0 auto;
+      align-self: start;
+      padding: 7px 10px;
+      border: 1px solid rgba(132,227,122,0.36);
+      border-radius: 999px;
+      color: #caffc3;
+      background: rgba(132,227,122,0.08);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .lab-card-body { padding: 20px 22px 22px; }
+    .agent-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+    }
+    .agent-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .flow-step {
+      min-height: 112px;
+      padding: 14px;
+      border: 1px solid rgba(110,159,205,0.22);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+    .flow-step.active {
+      border-color: var(--lab-line-hot);
+      background: rgba(57,207,255,0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(57,207,255,0.12);
+    }
+    .flow-step.done {
+      border-color: rgba(132,227,122,0.38);
+      background: rgba(132,227,122,0.07);
+    }
+    .flow-step span {
+      color: var(--lab-gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .flow-step strong {
+      display: block;
+      margin-top: 8px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .flow-step p {
+      margin: 7px 0 0;
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .agent-console {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      min-height: 100%;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .console-readout {
+      min-height: 172px;
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      color: #d8eaf2;
+      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .mini-panel {
+      padding: 16px;
+      border: 1px solid rgba(110,159,205,0.24);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+    }
+    .mini-panel h3 {
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+    .mini-panel p {
+      margin: 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 116px;
+      resize: vertical;
+      padding: 13px;
+      border: 1px solid rgba(110,159,205,0.34);
+      border-radius: 8px;
+      color: var(--lab-text);
+      background: rgba(2,8,18,0.92);
+      line-height: 1.5;
+    }
+    .token-output {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-height: 104px;
+      align-content: start;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+    .token {
+      padding: 5px 8px;
+      border: 1px solid rgba(57,207,255,0.28);
+      border-radius: 7px;
+      color: #dcf8ff;
+      background: rgba(57,207,255,0.09);
+      font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .meter {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      margin-top: 12px;
+    }
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--lab-green), var(--lab-cyan), var(--lab-gold));
+      transition: width .2s ease;
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .metric {
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+    }
+    .metric span {
+      display: block;
+      color: var(--lab-dim);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .context-stack {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .context-item {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr) 96px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(110,159,205,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      color: var(--lab-muted);
+      font-size: 13px;
+    }
+    .context-item.visible { border-color: rgba(132,227,122,0.42); color: #dfffe0; }
+    .context-item.summary { border-color: rgba(230,189,103,0.38); color: #f4dfb5; opacity: 0.78; }
+    .context-item.dropped { color: #73879a; opacity: 0.42; }
+    .context-state {
+      justify-self: end;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--lab-cyan);
+    }
+    .prompt-output {
+      min-height: 180px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.22);
+      color: #d8eaf2;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .tool-list {
+      display: grid;
+      gap: 8px;
+    }
+    .tool-readout {
+      min-height: 252px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+      color: #d8eaf2;
+      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .failure-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .failure-card {
+      padding: 16px;
+      border: 1px solid rgba(255,127,156,0.28);
+      border-radius: 10px;
+      background: rgba(255,127,156,0.055);
+    }
+    .failure-card h3 { color: #ffe3e9; }
+    .failure-card p {
+      margin: 8px 0 0;
+      color: #f1bec9;
+      line-height: 1.55;
+    }
+    .system-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .system-tile {
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(110,159,205,0.24);
+      background: rgba(255,255,255,0.035);
+    }
+    .system-tile:nth-child(1) { border-color: rgba(132,227,122,0.34); }
+    .system-tile:nth-child(2) { border-color: rgba(57,207,255,0.34); }
+    .system-tile:nth-child(3) { border-color: rgba(157,134,255,0.34); }
+    .system-tile:nth-child(4) { border-color: rgba(230,189,103,0.34); }
+    .system-tile h3 { font-size: 1rem; }
+    .system-tile p {
+      margin: 8px 0 0;
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    footer {
+      margin-top: 38px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: var(--lab-muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    @media (max-width: 980px) {
+      .lab-shell { grid-template-columns: 1fr; }
+      .lab-rail { position: static; }
+      .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-board, .two-col, .tool-grid { grid-template-columns: 1fr; }
+      .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 680px) {
+      .ai-lab { padding-inline: 12px; }
+      .lab-hero { min-height: 0; }
+      .lab-card-header { display: block; }
+      .status-pill { display: inline-flex; margin-top: 12px; }
+      .agent-flow, .three-col, .metric-row, .system-strip, .lab-nav { grid-template-columns: 1fr; }
+      .context-item { grid-template-columns: 1fr; }
+      .context-state { justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="ai-lab">
+    <div class="lab-shell">
+      <aside class="lab-rail" aria-label="AI guide sections">
+        <a class="rail-brand" href="../../">
+          <strong>Jez237</strong>
+          <span>AI workbench / interactive guide</span>
+        </a>
+        <nav class="lab-nav">
+          <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
+          <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
+          <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
+          <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
+          <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
+          <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
+        </nav>
+      </aside>
+
+      <div class="lab-main">
+        <section class="lab-hero">
+          <div class="hero-copy">
+            <span class="kicker">Interactive AI lab</span>
+            <h1>How AI Works</h1>
+            <p>AI feels mysterious until you separate the parts: tokens, context, model prediction, tool use, memory, and verification. This page lets you poke each part directly.</p>
+            <div class="hero-actions">
+              <a class="primary" href="#agent-loop">Run the agent loop</a>
+              <a href="../../">Back to Home</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="agent-loop" class="lab-card lab-grid">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Step through it</span>
+              <h2>Agent Loop Simulator</h2>
+              <p>An agent is a model wrapped in a loop. It reads the request, checks context, chooses tools when needed, observes the result, and decides whether to keep going or answer.</p>
+            </div>
+            <span class="status-pill">No API required</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="agent-board">
+              <div class="agent-flow" id="agentFlow"></div>
+              <div class="agent-console">
+                <div class="console-readout" id="agentConsole"></div>
+                <div class="control-row">
+                  <button class="lab-button primary" id="nextStep" type="button">Next step</button>
+                  <button class="lab-button" id="autoStep" type="button">Auto run</button>
+                  <button class="lab-button" id="resetStep" type="button">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tokens" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Text becomes pieces</span>
+              <h2>Token Playground</h2>
+              <p>Models do not read text exactly like humans do. They see chunks called tokens. This is an approximate local demo, but it shows why wording and length matter.</p>
+            </div>
+          </div>
+          <div class="lab-card-body two-col">
+            <div>
+              <textarea id="tokenInput">Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.</textarea>
+              <div class="meter"><span id="tokenMeter"></span></div>
+              <div class="metric-row">
+                <div class="metric"><span>Approx tokens</span><strong id="tokenCount">0</strong></div>
+                <div class="metric"><span>Context use</span><strong id="contextUse">0%</strong></div>
+                <div class="metric"><span>Why it matters</span><strong id="tokenHint">Short</strong></div>
+              </div>
+            </div>
+            <div class="token-output" id="tokenOutput" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section id="context" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">What the model can see</span>
+              <h2>Context Window Visualizer</h2>
+              <p>A chat can be long while the model's active view is limited. Older material may stay visible, get summarized, or fall out unless it is saved somewhere durable.</p>
+            </div>
+          </div>
+          <div class="lab-card-body">
+            <label for="contextRange" class="status-pill">Conversation length: <span id="contextLabel">6</span> turns</label>
+            <input id="contextRange" type="range" min="4" max="14" value="6" />
+            <div class="context-stack" id="contextStack"></div>
+          </div>
+        </section>
+
+        <section id="prompts" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Same model, better instructions</span>
+              <h2>Prompt Quality Compare</h2>
+              <p>Better prompts do not make the model magical. They reduce ambiguity, supply constraints, and tell the model what a useful answer looks like.</p>
+            </div>
+          </div>
+          <div class="lab-card-body two-col">
+            <div class="mini-panel">
+              <h3>Choose the prompt</h3>
+              <div class="control-row">
+                <button class="lab-button active" data-prompt="weak" type="button">Vague</button>
+                <button class="lab-button" data-prompt="clear" type="button">Clear</button>
+                <button class="lab-button" data-prompt="agent" type="button">Agent-ready</button>
+              </div>
+              <div class="prompt-output" id="promptText"></div>
+            </div>
+            <div class="mini-panel">
+              <h3>Likely result</h3>
+              <div class="prompt-output" id="promptResult"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tools" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Guessing vs checking</span>
+              <h2>Tool Use Simulator</h2>
+              <p>A plain model predicts an answer from its training and current context. A tool-using agent can inspect files, search, run commands, generate images, or ask for approval.</p>
+            </div>
+          </div>
+          <div class="lab-card-body tool-grid">
+            <div class="tool-list">
+              <button class="lab-button active" data-tool="guess" type="button">No tool</button>
+              <button class="lab-button" data-tool="files" type="button">Search files</button>
+              <button class="lab-button" data-tool="web" type="button">Check web</button>
+              <button class="lab-button" data-tool="image" type="button">Generate image</button>
+              <button class="lab-button" data-tool="approve" type="button">Needs approval</button>
+            </div>
+            <div class="tool-readout" id="toolReadout"></div>
+          </div>
+        </section>
+
+        <section id="systems" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Different jobs, different tradeoffs</span>
+              <h2>Local, Cloud, Agent, Media</h2>
+              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it.</p>
+            </div>
+          </div>
+          <div class="lab-card-body system-strip">
+            <article class="system-tile"><h3>Local model</h3><p>Private and hardware-bound. Good for experiments, automation, and offline control. Quality depends on the model and machine.</p></article>
+            <article class="system-tile"><h3>Cloud model</h3><p>Usually stronger and faster to update. Great for hard reasoning, coding, and multimodal work, with external service tradeoffs.</p></article>
+            <article class="system-tile"><h3>Agent</h3><p>A model with tools, memory, permissions, and a loop. Powerful because it can act, risky if guardrails are sloppy.</p></article>
+            <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models translate prompts into pixels or sound. They need visual direction, not just facts.</p></article>
+          </div>
+        </section>
+
+        <section id="failure" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Where it goes wrong</span>
+              <h2>Failure Modes</h2>
+              <p>Most AI mistakes are not mysterious. They usually come from missing context, stale information, weak instructions, bad tool choice, or permission boundaries.</p>
+            </div>
+          </div>
+          <div class="lab-card-body">
+            <div class="failure-tabs" id="failureTabs"></div>
+            <div class="failure-card" id="failureCard"></div>
+          </div>
+        </section>
+
+        <footer>
+          <a href="../../">Home</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const steps = [
+      ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\\n\\nIntent: add a useful caption.\\nRisk: private metadata, wrong folder, stale assumptions.'],
+      ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\\nMEMORY: captions should be casual, not stiff.'],
+      ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\\n1. Inspect image.\\n2. Resize safely.\\n3. Add page entry.\\n4. Verify layout.'],
+      ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\\nReason: the model cannot know the file dimensions by memory.'],
+      ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\\nNext: crop/resize to site convention.'],
+      ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\\nLoop ends because verification passed.']
+    ];
+    let stepIndex = 0;
+    let autoTimer = null;
+
+    function renderAgent() {
+      const flow = document.getElementById('agentFlow');
+      const consoleBox = document.getElementById('agentConsole');
+      flow.innerHTML = steps.map((s, i) => {
+        const cls = i === stepIndex ? 'active' : i < stepIndex ? 'done' : '';
+        return `<article class="flow-step ${cls}"><span>${s[0]}</span><strong>${s[1]}</strong><p>${s[2]}</p></article>`;
+      }).join('');
+      consoleBox.textContent = steps[stepIndex][3];
+    }
+
+    function advanceAgent() {
+      stepIndex = (stepIndex + 1) % steps.length;
+      renderAgent();
+    }
+
+    function splitTokens(text) {
+      return (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?|\\d+|[^\\sA-Za-z\\d]/g) || []).flatMap(part => {
+        if (part.length <= 8 || /[^A-Za-z]/.test(part)) return [part];
+        const out = [];
+        for (let i = 0; i < part.length; i += 6) out.push(part.slice(i, i + 6));
+        return out;
+      });
+    }
+
+    function renderTokens() {
+      const input = document.getElementById('tokenInput').value;
+      const tokens = splitTokens(input);
+      document.getElementById('tokenOutput').innerHTML = tokens.map(t => `<span class="token">${escapeHtml(t)}</span>`).join('');
+      document.getElementById('tokenCount').textContent = tokens.length;
+      const pct = Math.min(100, Math.round(tokens.length / 120 * 100));
+      document.getElementById('contextUse').textContent = pct + '%';
+      document.getElementById('tokenMeter').style.width = pct + '%';
+      document.getElementById('tokenHint').textContent = tokens.length < 35 ? 'Short' : tokens.length < 80 ? 'Medium' : 'Crowded';
+    }
+
+    const contextMessages = [
+      ['Turn 1', 'User asks for a garden photo page.'],
+      ['Turn 2', 'Assistant checks project structure.'],
+      ['Turn 3', 'User says captions should be funny.'],
+      ['Turn 4', 'Assistant resizes images and edits HTML.'],
+      ['Turn 5', 'User changes the homepage nav.'],
+      ['Turn 6', 'Assistant verifies with screenshots.'],
+      ['Turn 7', 'User asks about AI education content.'],
+      ['Turn 8', 'Assistant proposes an agent simulator.'],
+      ['Turn 9', 'User says to proceed.'],
+      ['Turn 10', 'Assistant edits the AI explainer page.'],
+      ['Turn 11', 'Browser verification finds a mobile issue.'],
+      ['Turn 12', 'Assistant fixes responsive layout.'],
+      ['Turn 13', 'User asks for another interaction.'],
+      ['Turn 14', 'Assistant adds a tool-use demo.']
+    ];
+
+    function renderContext() {
+      const count = Number(document.getElementById('contextRange').value);
+      document.getElementById('contextLabel').textContent = count;
+      const visibleFrom = Math.max(0, count - 5);
+      const summaryFrom = Math.max(0, count - 9);
+      document.getElementById('contextStack').innerHTML = contextMessages.slice(0, count).map((msg, i) => {
+        let state = 'dropped';
+        let label = 'dropped';
+        if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
+        else if (i >= summaryFrom) { state = 'summary'; label = 'summary'; }
+        return `<div class="context-item ${state}"><strong>${msg[0]}</strong><span>${msg[1]}</span><span class="context-state">${label}</span></div>`;
+      }).join('');
+    }
+
+    const prompts = {
+      weak: {
+        text: 'Make the AI page better.',
+        result: 'The model has to guess what better means: more text, different styling, new sections, or bug fixes. You may get a generic answer.'
+      },
+      clear: {
+        text: 'Improve the How AI Works page by adding interactive demos for tokens, context, prompts, tools, and failure modes. Keep it static and compatible with GitHub Pages.',
+        result: 'The model has scope, constraints, and implementation boundaries. The output is more likely to match the actual job.'
+      },
+      agent: {
+        text: 'Edit the existing site, preserve unrelated files, verify desktop/mobile layout, commit the change, and give me the live cache-busted link.',
+        result: 'Now it is agent-ready: it describes actions, safety constraints, verification, and final reporting.'
+      }
+    };
+
+    function renderPrompt(kind) {
+      document.querySelectorAll('[data-prompt]').forEach(btn => btn.classList.toggle('active', btn.dataset.prompt === kind));
+      document.getElementById('promptText').textContent = prompts[kind].text;
+      document.getElementById('promptResult').textContent = prompts[kind].result;
+    }
+
+    const tools = {
+      guess: 'REQUEST: "What changed on the site?"\\n\\nMODEL ONLY: I can describe likely changes, but I may be wrong if I have not inspected the repo.',
+      files: 'TOOL: rg + file reads\\n\\nRESULT: The page contains an agent simulator, token playground, context visualizer, prompt comparison, tool simulator, system tradeoffs, and failure modes.',
+      web: 'TOOL: web/browser check\\n\\nRESULT: Useful for current facts or deployed pages. Also requires prompt-injection caution because external pages are untrusted input.',
+      image: 'TOOL: image generation\\n\\nRESULT: Best when the page needs a new bitmap asset, thumbnail, texture, or visual reference. Not needed for every UI.',
+      approve: 'TOOL: external action\\n\\nRESULT: Restarting services, spending money, publishing public posts, or changing credentials should pause for approval first.'
+    };
+
+    function renderTool(kind) {
+      document.querySelectorAll('[data-tool]').forEach(btn => btn.classList.toggle('active', btn.dataset.tool === kind));
+      document.getElementById('toolReadout').textContent = tools[kind];
+    }
+
+    const failures = {
+      hallucination: ['Hallucination', 'The model fills in a plausible answer without evidence. Reduce it by giving sources, using tools, and asking it to separate known facts from assumptions.'],
+      stale: ['Stale information', 'Training data and memory can be outdated. For current prices, laws, model releases, schedules, or live websites, the system needs fresh lookup.'],
+      context: ['Missing context', 'The model may not see the file, previous decision, image, or private instruction that matters. Put key facts in the current context or durable memory.'],
+      prompt: ['Weak prompt', 'Ambiguous requests force the model to choose hidden assumptions. Better prompts say the goal, constraints, output shape, and what not to change.'],
+      tool: ['Wrong tool', 'A coding agent should inspect code. A research agent should cite sources. A media job may need an image tool. Good agents pick the right instrument.'],
+      permission: ['Permission boundary', 'A capable agent still needs limits. Destructive actions, external posts, secrets, payments, and service restarts deserve explicit approval.']
+    };
+
+    function renderFailure(kind) {
+      document.querySelectorAll('[data-failure]').forEach(btn => btn.classList.toggle('active', btn.dataset.failure === kind));
+      const [title, copy] = failures[kind];
+      document.getElementById('failureCard').innerHTML = `<h3>${title}</h3><p>${copy}</p>`;
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    document.getElementById('nextStep').addEventListener('click', advanceAgent);
+    document.getElementById('resetStep').addEventListener('click', () => { stepIndex = 0; renderAgent(); });
+    document.getElementById('autoStep').addEventListener('click', (event) => {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        event.currentTarget.textContent = 'Auto run';
+        return;
+      }
+      event.currentTarget.textContent = 'Stop';
+      autoTimer = setInterval(advanceAgent, 1300);
+    });
+    document.getElementById('tokenInput').addEventListener('input', renderTokens);
+    document.getElementById('contextRange').addEventListener('input', renderContext);
+    document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
+    document.querySelectorAll('[data-tool]').forEach(btn => btn.addEventListener('click', () => renderTool(btn.dataset.tool)));
+    document.getElementById('failureTabs').innerHTML = Object.keys(failures).map((key, i) => `<button class="lab-button ${i === 0 ? 'active' : ''}" data-failure="${key}" type="button">${failures[key][0]}</button>`).join('');
+    document.querySelectorAll('[data-failure]').forEach(btn => btn.addEventListener('click', () => renderFailure(btn.dataset.failure)));
+
+    renderAgent();
+    renderTokens();
+    renderContext();
+    renderPrompt('weak');
+    renderTool('guess');
+    renderFailure('hallucination');
+  </script>
+  <script src="../../assets/site-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
+</body>
 </html>
