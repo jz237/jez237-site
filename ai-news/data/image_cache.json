@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T18:00:01.603109+00:00",
+  "updatedAt": "2026-05-27T19:00:01.980285+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8240,6 +8240,34 @@
     "https://openai.com/index/election-safeguards-2026": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2dvhkO8Np9OWEp2HogwXgV/02e53a0aaad16044ed65fd0d8dc7a981/Election-information-and-safeguards-2026-16x9.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-27T18:00:01.603109+00:00"
+    },
+    "https://techcrunch.com/podcast/your-seo-strategy-is-optimized-for-a-search-engine-that-no-longer-exists": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-ai-sign-Getty.jpg?resize=1200,800",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://www.techrepublic.com/article/news-google-ai-studio-cheat-sheet": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/google-ai-studio.png?f=jpeg",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/meta-officially-launches-instagram-facebook-and-whatsapp-subscriptions-with-more-to-come-including-ai-plans": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2164040793.jpg?w=1024",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-agent-data-layer-security-may-2026-2": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/close-up-of-laptop-with-abstract-polygonal-head-ou-2026-03-26-05-09-31-utc.jpg?f=jpeg",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://www.techrepublic.com/article/news-sk-hynix-trillion-ai-memory-chip-rally-apac": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-13.png?f=jpeg",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-layoffs-zuckerberg-stability-promise": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-12.png?f=jpeg",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/clickhouse-triples-annualized-revenue-to-250m-charting-a-path-toward-an-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.53.09-AM.png?resize=1200,788",
+      "checkedAt": "2026-05-27T19:00:01.980285+00:00"
     }
   }
 }
