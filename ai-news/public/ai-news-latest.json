@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T16:00:01.308169+00:00",
+  "updatedAt": "2026-05-27T17:00:02.050772+00:00",
   "items": [
     {
       "title": "Self-Verified Distillation: Your Language Model Is Secretly Its Own Synthetic Data Pipeline",
@@ -10,12 +10,108 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-27T16:00:07.471259+00:00",
+      "published": "2026-05-27T17:00:11.039572+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "I think Anthropic and OpenAI have found product-market fit",
+      "url": "https://simonwillison.net/2026/May/27/product-market-fit",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Anthropic are strongly rumored to be about to have their first profitable quarter. Stories are circulating of companies surprised at how expensive their LLM bills are becoming from usage by their staff. I think this is because OpenAI and Anthropic have both found product-market fit.\n\n\n  Enterprise customers are now paying API prices\n  I think they've found product-market fit\n  And they're ramping up\n  The AI-failure stories around this are pretty thin\n  We also know the labs are spending a lot\n  API revenue is becoming less important\n  April is a new inflection point\n\n\nEnterprise customers are",
+      "image": "",
+      "published": "2026-05-27T16:38:35+00:00",
+      "firstSeen": "2026-05-27T17:00:02.050772+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.9791
+    },
+    {
+      "title": "YouTube mentions are the single strongest predictor of whether AI will recommend your brand, according to a study of 75,000 companies",
+      "url": "https://thenextweb.com/news/ahrefs-youtube-mentions-ai-visibility-brand-search",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "A study of 75,000 brands by SEO platform Ahrefs has found that YouTube mentions are the strongest correlated signal for whether a brand appears in AI-generated search results, outperforming every other factor the researchers tested across ChatGPT, Google AI Mode, and Google AI Overviews. YouTube mentions, defined as any time a brand name appears in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ahrefs-youtube-mentions-ai-visibility-brand-search.avif",
+      "published": "2026-05-27T16:22:41+00:00",
+      "firstSeen": "2026-05-27T17:00:02.050772+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.6311
+    },
+    {
+      "title": "AI Factories: The New Infrastructure of Intelligence",
+      "url": "https://blogs.nvidia.com/blog/ai-factories-the-new-infrastructure-of-intelligence",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "AI factories are token factories, converting power into intelligence in real time. And as agentic AI scales and autonomous, always-on special agents are deployed in the enterprise, performance per watt and cost per token become the economics that matter.",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/AI_v001-scaled.png",
+      "published": "2026-05-27T16:00:36+00:00",
+      "firstSeen": "2026-05-27T17:00:02.050772+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.9601
+    },
+    {
+      "title": "Extending Human Intelligence Through AI",
+      "url": "https://www.microsoft.com/en-us/research/blog/extending-human-intelligence-through-ai",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Understanding AI as an extension of human intelligence—not a replacement for it—offers a more grounded path for building trustworthy AI systems.\nThe post Extending Human Intelligence Through AI appeared first on Microsoft Research.",
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/ExtendingHIthroughAI-TWLIFB-1200x627-1-scaled.jpg",
+      "published": "2026-05-27T16:00:00+00:00",
+      "firstSeen": "2026-05-27T17:00:02.050772+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8298
+    },
+    {
+      "title": "AI coding startup Cognition raises $1B at $25B pre-money valuation",
+      "url": "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "As Cognition reaches $492 million in annualized revenue run rate, it more than doubled its valuation in eight months, it says.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/Screenshot-2025-08-05-at-11.02.07AM.png?resize=1200%2C645",
+      "published": "2026-05-27T16:00:00+00:00",
+      "firstSeen": "2026-05-27T17:00:02.050772+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6598
+    },
+    {
+      "title": "Amazon is now selling its AI shopping technology to other retailers, and Kate Spade is the first customer",
+      "url": "https://thenextweb.com/news/amazon-is-now-selling-its-ai-shopping-technology-to-other-retailers-and-kate-spade-is-the-first-customer",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Amazon Web Services has launched a product that lets retailers build their own AI-powered shopping assistants using the same technology that powers Amazon’s Alexa for Shopping. The AWS Agentic Shopping Assistant packages architecture guidance, starter code, and hands-on support from AWS’s Generative AI Innovation Center into a solution that the company says can be deployed in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/aws-agentic-shopping-assistant-kate-spade-retailers.avif",
+      "published": "2026-05-27T15:55:25+00:00",
+      "firstSeen": "2026-05-27T17:00:02.050772+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6176
     },
     {
       "title": "AI tried to bury this politician — now people have actually heard of him",
@@ -28,10 +124,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2271137268.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-05-27T15:40:00+00:00",
       "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3499
+      "score": 6.32
     },
     {
       "title": "Spotify now lets listeners clip and share moments from any podcast",
@@ -44,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/spotify-podcast-clips-share-chapters-feature.avif",
       "published": "2026-05-27T15:01:14+00:00",
       "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9205
+      "score": 3.8911
     },
     {
       "title": "Robinhood is letting AI agents trade stocks and spend money on your credit card",
@@ -60,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/robinhood-ai-agentic-trading-mcp-credit-card.avif",
       "published": "2026-05-27T14:51:39+00:00",
       "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 2.4157
+      "score": 2.3865
     },
     {
       "title": "Robinhood will let your AI agent trade stocks and make (or lose) lots of money",
@@ -76,10 +172,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/acastro_STK049_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-27T14:36:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4181
+      "score": 6.3891
     },
     {
       "title": "Airis Labs comes out of stealth with $60M and a video-intelligence pitch to defence agencies",
@@ -92,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/Airis-Labs.avif",
       "published": "2026-05-27T14:31:14+00:00",
       "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1057
+      "score": 2.0768
     },
     {
       "title": "YouTube will now automatically label AI-generated videos, whether creators disclose them or not",
@@ -108,10 +204,10 @@
       "image": "https://media.thenextweb.com/2026/05/youtube-automatic-ai-labels-c2pa-synthid-deepfake.avif",
       "published": "2026-05-27T14:15:09+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7979
+      "score": 2.7692
     },
     {
       "title": "Startup Battlefield 200 applications close today: Nominate a founder or submit your startup",
@@ -124,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/11/54105085427_2cae9d0502_o.jpg?resize=1200%2C800",
       "published": "2026-05-27T14:15:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0378
+      "score": 4.0091
     },
     {
       "title": "ElevenLabs’s new music generation model can switch genres mid-track",
@@ -140,11 +236,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/01/ElevenLabs-feat.jpg?resize=1200%2C669",
       "published": "2026-05-27T14:14:10+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.2374
+      "score": 11.2087
     },
     {
       "title": "Germany and Spain push back on Brussels’ plans to ban Huawei gear bloc-wide",
@@ -157,10 +253,10 @@
       "image": "https://media.thenextweb.com/2021/05/huawei-man.avif",
       "published": "2026-05-27T14:12:25+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0965
+      "score": 2.0679
     },
     {
       "title": "Former Google and Apple Researchers Launch a Startup to Build AI’s Missing Feedback Loop",
@@ -173,10 +269,10 @@
       "image": "https://media.wired.com/photos/6a15ed31ceac52c54a0384c0/master/pass/Model-Behavior-Ex-Google-Apple-AI-Researchers-Want-to-Make-AI-That-Gets-Smarter-as-You-Use-It-Business.jpg",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.5305
+      "score": 8.502
     },
     {
       "title": "This smart bird feeder captures more of my backyard drama",
@@ -189,10 +285,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/8A0A6250.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.725973578017%2C100%2C78.548052843967&amp%3Bw=1200",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005
+      "score": 2.272
     },
     {
       "title": "SOND, a sleep tech startup from Bose’s former head of sleep, exits stealth with $7M",
@@ -205,10 +301,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Travel-Sleeping-2000px.jpg?resize=1200%2C800",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.202
     },
     {
       "title": "TechCrunch Disrupt 2026 Early Bird ticket savings end in 3 days",
@@ -221,10 +317,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_3Days-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-27T14:00:00+00:00",
       "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2305
+      "score": 2.202
     },
     {
       "title": "China is increasingly keeping its best AI talent to itself",
@@ -237,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/china-flag-shanghai.jpg?resize=1200%2C801",
       "published": "2026-05-27T13:48:41+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2251
+      "score": 2.1967
     },
     {
       "title": "The long view of property valuation: e2Value on why historical context matters in a new era of AI",
@@ -253,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/05/e2value-property-valuation-historical-context-ai.avif",
       "published": "2026-05-27T13:06:02+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0649
+      "score": 2.0371
     },
     {
       "title": "ClickHouse triples anualized revenue to $250M, charting a path toward an IPO",
@@ -269,10 +365,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.53.09-AM.png?resize=1200%2C788",
       "published": "2026-05-27T13:04:20+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9041
+      "score": 2.8763
     },
     {
       "title": "YouTube is putting AI labels where you’ll actually see them",
@@ -285,10 +381,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/YouTube-updated-AI-labels.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-27T13:00:00+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.272
+      "score": 2.2443
     },
     {
       "title": "YouTube will now automatically label AI videos",
@@ -301,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2020/06/GettyImages-1149449083.jpg?resize=1200%2C800",
       "published": "2026-05-27T13:00:00+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.1743
     },
     {
       "title": "Robinhood now lets your AI agents trade stocks",
@@ -317,10 +413,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agentic-trading-feat.jpg?resize=1200%2C675",
       "published": "2026-05-27T12:30:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8881
+      "score": 4.8607
     },
     {
       "title": "Tech CEOs are apparently suffering from AI psychosis",
@@ -333,10 +429,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1265000101.jpg?resize=1200%2C857",
       "published": "2026-05-27T12:30:00+00:00",
       "firstSeen": "2026-05-27T14:00:01.215812+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2881
+      "score": 3.2607
     },
     {
       "title": "Female-founded climate-tech Mykor lands €4.6M to scale mycelium insulation panels",
@@ -349,10 +445,10 @@
       "image": "https://media.thenextweb.com/2026/05/Mykor.avif",
       "published": "2026-05-27T12:24:40+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0456
+      "score": 2.0183
     },
     {
       "title": "Schaeffler and Spire pair up to build sovereign European satellites in Germany",
@@ -365,10 +461,10 @@
       "image": "https://media.thenextweb.com/2026/05/Schaeffler-Group-Klaus-Rosenfeld.avif",
       "published": "2026-05-27T12:14:14+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0408
+      "score": 2.0137
     },
     {
       "title": "The Pope isn’t AGI-pilled",
@@ -381,10 +477,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2214106807.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.735754453032%2C100%2C78.528491093936&amp%3Bw=1200",
       "published": "2026-05-27T12:00:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2443
+      "score": 4.2173
     },
     {
       "title": "The AI fight brewing inside The New York Times",
@@ -397,10 +493,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-1171305932.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C15.095986038394%2C100%2C69.808027923211&amp%3Bw=1200",
       "published": "2026-05-27T12:00:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2443
+      "score": 2.2173
     },
     {
       "title": "Vučić flew to Beijing for a $1.1bn Chinese investment, while Belgrade burned",
@@ -416,7 +512,7 @@
       "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7279
+      "score": 2.7011
     },
     {
       "title": "Vincent Bolloré rejects Ackman’s $64bn Universal Music bid",
@@ -432,7 +528,7 @@
       "lastSeen": "2026-05-27T16:00:01.308169+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0219
+      "score": 1.9953
     },
     {
       "title": "The Samsung pay deal is the moment Korean unions changed register",
@@ -448,7 +544,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9942
+      "score": 1.9684
     },
     {
       "title": "Micron approaches $1tn as UBS sees a path to $1.8tn over 12 months",
@@ -464,7 +560,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4913
+      "score": 4.4655
     },
     {
       "title": "China’s market regulator fines Luxshare and Wingtech over their unwinding deal",
@@ -480,7 +576,7 @@
       "lastSeen": "2026-05-27T15:00:01.262845+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.988
+      "score": 1.9623
     },
     {
       "title": "ECB tells eurozone banks to tighten cyber-security as AI shifts the threat picture",
@@ -496,7 +592,7 @@
       "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
+      "score": 1.9539
     },
     {
       "title": "Airbnb leads a $58M Series C in WeRoad and hires its CEO to run hotels",
@@ -512,7 +608,7 @@
       "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3683
+      "score": 3.3432
     },
     {
       "title": "The Qualcomm-ByteDance ASIC deal works around US export controls by design",
@@ -528,7 +624,7 @@
       "lastSeen": "2026-05-27T13:00:01.509424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0655
+      "score": 3.0405
     },
     {
       "title": "Taiwan suspects NVIDIA chips were smuggled to China via a Japan transshipment route",
@@ -544,103 +640,7 @@
       "lastSeen": "2026-05-27T12:00:01.923016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9606
-    },
-    {
-      "title": "Meet the speakers: Who is taking the stage at the TNW, Oneflow & Flexas gathering in Amsterdam?",
-      "url": "https://thenextweb.com/news/tnw-oneflow-flexas-amsterdam-speakers-announcement",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Four guests, one question: when everyone has AI, what will actually make a SaaS company win? The panel on 3 June in Amsterdam will try to answer it. There is a moment, somewhere between the third and the fourth AI feature release of the quarter, when even the most enthusiastic founder begins to wonder whether [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/TNW-Gathering-Amsterdam.avif",
-      "published": "2026-05-27T08:25:25+00:00",
-      "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T12:00:01.923016+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6412
-    },
-    {
-      "title": "SpaceX wins a $2.29bn Space Force contract for the Golden Dome backbone",
-      "url": "https://thenextweb.com/news/space-force-spacex-229bn-data-network-contract",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "The Space Data Network Backbone, built on Starshield satellites, is designed to link missile-defence sensors and interceptors in near real time. The US Space Force has awarded SpaceX a $2.29bn fixed-price contract to build the Space Data Network Backbone, a secure, high-speed satellite communications layer intended to underpin the Trump administration’s Golden Dome missile-defence initiative. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
-      "published": "2026-05-27T08:09:44+00:00",
-      "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T12:00:01.923016+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9348
-    },
-    {
-      "title": "Apple and Google push for judicial oversight of Canada’s lawful-access bill",
-      "url": "https://thenextweb.com/news/apple-google-canada-c22-lawful-access-judicial-oversight",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Apple and Google have formally pushed for amendments to Bill C-22, the Canadian government’s lawful-access legislation now working its way through the House of Commons, arguing that the bill as drafted creates a potential for secret orders to compel changes to the encryption underpinning their software and devices. Both companies want judicial oversight built into [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2021/08/apple-google.avif",
-      "published": "2026-05-27T07:51:06+00:00",
-      "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T12:00:01.923016+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0272
-    },
-    {
-      "title": "Samsung commits $1.5bn to a Vietnam chip-testing plant, with $2.5bn more on the table",
-      "url": "https://thenextweb.com/news/samsung-vietnam-15bn-chip-testing-plant",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Samsung Electronics will invest 39 trillion dong, or about $1.5bn, in a semiconductor testing plant in Vietnam, according to a document seen by Reuters on Wednesday. Construction has already begun in an industrial park 60 kilometres north of Hanoi, with operations scheduled to start in November 2027. The plant will be Samsung’s first dedicated chip-testing [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
-      "published": "2026-05-27T07:35:59+00:00",
-      "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9211
-    },
-    {
-      "title": "SK Hynix joins the trillion-dollar club, powered by Nvidia’s HBM4 orders",
-      "url": "https://thenextweb.com/news/sk-hynix-tops-1-trillion-market-cap",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A 10%+ surge in Seoul trading on Wednesday pushed the Korean memory firm past $1 trillion, making it the third chipmaker after Nvidia and TSMC to cross the line. SK Hynix’s market capitalisation pushed through $1 trillion in Seoul trading on Wednesday morning, on the back of a single-session rally of more than 10% that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/SK-Hynix.avif",
-      "published": "2026-05-27T07:25:39+00:00",
-      "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.0169
-    },
-    {
-      "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
-      "url": "https://www.marktechpost.com/2026/05/27/meet-eagle-3-1-the-speculative-decoding-algorithm-that-fixes-attention-drift-in-llm-inference",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "The EAGLE team, vLLM, and TorchSpec jointly release EAGLE 3.1 to fix speculative decoding instability in production.\nThe post Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
-      "published": "2026-05-27T07:23:10+00:00",
-      "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.4859
+      "score": 1.9357
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5785
+      "score": 1.566
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.614
+      "score": 0.6052
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1243
+      "score": 1.1242
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -701,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-27T16:00:01.308169+00:00",
+      "lastSeen": "2026-05-27T17:00:02.050772+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.907
