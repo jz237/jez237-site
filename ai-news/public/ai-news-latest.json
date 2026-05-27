@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T10:00:01.705127+00:00",
+  "updatedAt": "2026-05-27T11:00:01.833519+00:00",
   "items": [
     {
       "title": "Self-Verified Distillation: Your Language Model Is Secretly Its Own Synthetic Data Pipeline",
@@ -10,12 +10,76 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-27T10:00:11.782206+00:00",
+      "published": "2026-05-27T11:00:14.847908+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Micron approaches $1tn as UBS sees a path to $1.8tn over 12 months",
+      "url": "https://thenextweb.com/news/micron-ubs-18-trillion-projection-hbm-rally",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Timothy Arcuri lifted his price target to $1,625 from $535 on the back of long-term HBM supply agreements that, in his read, compress the boom-bust memory cycle into something closer to a structural duopoly. Micron Technology shares rose as much as 19% on Tuesday after UBS analyst Timothy Arcuri more than tripled his price target [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Micron.avif",
+      "published": "2026-05-27T10:23:25+00:00",
+      "firstSeen": "2026-05-27T11:00:01.833519+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6315
+    },
+    {
+      "title": "China’s market regulator fines Luxshare and Wingtech over their unwinding deal",
+      "url": "https://thenextweb.com/news/china-samr-fines-luxshare-wingtech-deal-violation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SAMR has penalised the two electronics firms for procedural violations in their now-collapsed asset sale, the latest signal of Beijing’s tightening merger-enforcement posture. China’s State Administration for Market Regulation has fined Luxshare Precision Industry and Wingtech Technology for violations in connection with their now-unravelling asset sale, according to a Reuters report on Wednesday. The fine [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2021/12/chinaAIflag.avif",
+      "published": "2026-05-27T10:15:55+00:00",
+      "firstSeen": "2026-05-27T11:00:01.833519+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1278
+    },
+    {
+      "title": "ECB tells eurozone banks to tighten cyber-security as AI shifts the threat picture",
+      "url": "https://thenextweb.com/news/ecb-eurozone-banks-tighter-cyber-security-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The European Central Bank has formally told eurozone banks they must tighten their cyber-security posture in response to AI-led attack tools, in a follow-up statement issued on Wednesday that turns earlier private guidance into something closer to a supervisory expectation. The ECB’s vice-chair of the Single Supervisory Mechanism, Frank Elderson, framed the shift in language [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/European-Central-Bank.avif",
+      "published": "2026-05-27T09:56:00+00:00",
+      "firstSeen": "2026-05-27T11:00:01.833519+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1179
+    },
+    {
+      "title": "Airbnb leads a $58M Series C in WeRoad and hires its CEO to run hotels",
+      "url": "https://thenextweb.com/news/weroad-58m-airbnb-led-series-c-us-expansion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Milan group-travel platform takes a $58M Series C and a strategic 10% Airbnb shareholding. Andrea D’Amico leaves to run Airbnb’s hotels division. Airbnb has led a $58m Series C in WeRoad, the Milan-based group-adventure-travel platform, taking a 10% stake and a board seat as part of the deal. Andrea D’Amico, the company’s chief executive [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/WeRoad.avif",
+      "published": "2026-05-27T09:30:10+00:00",
+      "firstSeen": "2026-05-27T11:00:01.833519+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5052
     },
     {
       "title": "The Qualcomm-ByteDance ASIC deal works around US export controls by design",
@@ -28,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/04/Qualcomm-President-and-CEO-Cristiano-Amon.avif",
       "published": "2026-05-27T09:23:34+00:00",
       "firstSeen": "2026-05-27T10:00:01.705127+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2316
+      "score": 3.202
     },
     {
       "title": "Taiwan suspects NVIDIA chips were smuggled to China via a Japan transshipment route",
@@ -44,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/Taiwan-flag.avif",
       "published": "2026-05-27T09:11:56+00:00",
       "firstSeen": "2026-05-27T10:00:01.705127+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1258
+      "score": 2.0963
     },
     {
       "title": "Meet the speakers: Who is taking the stage at the TNW, Oneflow & Flexas gathering in Amsterdam?",
@@ -60,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/TNW-Gathering-Amsterdam.avif",
       "published": "2026-05-27T08:25:25+00:00",
       "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8029
+      "score": 2.774
     },
     {
       "title": "SpaceX wins a $2.29bn Space Force contract for the Golden Dome backbone",
@@ -76,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-cursor-acquisition-ipo-60-billion-ai-coding.avif",
       "published": "2026-05-27T08:09:44+00:00",
       "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0952
+      "score": 2.0666
     },
     {
       "title": "Apple and Google push for judicial oversight of Canada’s lawful-access bill",
@@ -92,10 +156,10 @@
       "image": "https://media.thenextweb.com/2021/08/apple-google.avif",
       "published": "2026-05-27T07:51:06+00:00",
       "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1863
+      "score": 3.1579
     },
     {
       "title": "Samsung commits $1.5bn to a Vietnam chip-testing plant, with $2.5bn more on the table",
@@ -108,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/Samsung.avif",
       "published": "2026-05-27T07:35:59+00:00",
       "firstSeen": "2026-05-27T08:47:20.555745+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.079
+      "score": 2.0508
     },
     {
       "title": "SK Hynix joins the trillion-dollar club, powered by Nvidia’s HBM4 orders",
@@ -127,7 +191,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1741
+      "score": 4.1461
     },
     {
       "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
@@ -140,10 +204,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
       "published": "2026-05-27T07:23:10+00:00",
       "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6429
+      "score": 6.6149
     },
     {
       "title": "NVIDIA’s Jensen Huang calls Taiwan the ‘epicentre’ of the AI revolution as spending hits $150bn a year",
@@ -159,7 +223,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0699
+      "score": 2.0419
     },
     {
       "title": "Europe’s push to loosen Big Tech’s grip runs into Europe’s own divisions",
@@ -175,7 +239,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4673
+      "score": 4.4395
     },
     {
       "title": "Quoting Kyle Ferrana",
@@ -188,10 +252,10 @@
       "image": "",
       "published": "2026-05-27T06:41:43+00:00",
       "firstSeen": "2026-05-27T07:00:01.493393+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.3935
+      "score": 6.366
     },
     {
       "title": "MEMO: A Modular Framework for Training a Dedicated Memory Model on New Knowledge Without Modifying LLM Parameters",
@@ -204,10 +268,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-26-at-10.24.07-PM-1-150x150.png",
       "published": "2026-05-27T05:24:33+00:00",
       "firstSeen": "2026-05-27T06:00:01.903569+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.1883
+      "score": 4.1618
     },
     {
       "title": "Did the Pope use AI to write about the dangers of AI?",
@@ -220,10 +284,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278118480.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-05-27T00:38:11+00:00",
       "firstSeen": "2026-05-27T01:00:01.916008+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.9919
+      "score": -1.0152
     },
     {
       "title": "The pressure",
@@ -236,10 +300,10 @@
       "image": "",
       "published": "2026-05-26T23:48:45+00:00",
       "firstSeen": "2026-05-27T00:00:01.883049+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0811
+      "score": -1.1038
     },
     {
       "title": "Pope Leo Schooled the Tech Bros on Tolkien",
@@ -252,10 +316,10 @@
       "image": "https://media.wired.com/photos/6a15ebea591e522c95b4533e/master/pass/The-Pope-Gets-Tolkien-Culture-2277270022.jpg",
       "published": "2026-05-26T23:19:03+00:00",
       "firstSeen": "2026-05-27T00:00:01.883049+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0076
+      "score": 1.9852
     },
     {
       "title": "Design a High-Precision Retrieve-and-Rerank Pipeline with ZeroEntropy Zerank-2 Reranker",
@@ -268,10 +332,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-18.png",
       "published": "2026-05-26T23:13:09+00:00",
       "firstSeen": "2026-05-26T23:21:10.578779+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -0.0647
+      "score": -0.087
     },
     {
       "title": "DuckDuckGo installs are up 30% as users reject being ‘force-fed’ Google’s AI Search",
@@ -284,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200%2C784",
       "published": "2026-05-26T22:32:56+00:00",
       "firstSeen": "2026-05-26T23:00:02.101729+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.1903
+      "score": 7.1684
     },
     {
       "title": "Stability AI Releases Stable Audio 3: A Family of Fast Latent Diffusion Models for Audio Generation and Editing",
@@ -300,10 +364,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-26-at-3.08.35-PM-1-150x150.png",
       "published": "2026-05-26T22:31:02+00:00",
       "firstSeen": "2026-05-26T23:00:02.101729+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9196
+      "score": 3.8977
     },
     {
       "title": "NVIDIA Vera CPU Is ‘Packing a Heavy-Hitting Punch’ Against Competition",
@@ -316,10 +380,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Vera-CPU_Tray_Open-34_Wide_R6C-FNL-5260651-1.jpg",
       "published": "2026-05-26T21:15:15+00:00",
       "firstSeen": "2026-05-26T21:56:41.607138+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.412
+      "score": 5.3909
     },
     {
       "title": "Why the Vatican Invited Anthropic to the Pope’s AI Encyclical Presentation",
@@ -332,10 +396,10 @@
       "image": "https://media.wired.com/photos/6a15cbcd37553f2c38327fce/master/pass/2278118480",
       "published": "2026-05-26T20:46:03+00:00",
       "firstSeen": "2026-05-26T21:00:01.760287+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9516
+      "score": 4.9308
     },
     {
       "title": "What Pope Leo XIV’s First Encyclical Says About the Power of AI",
@@ -348,10 +412,10 @@
       "image": "https://media.wired.com/photos/6a15ce296bb944abda95a6f4/master/pass/2277573822",
       "published": "2026-05-26T20:17:47+00:00",
       "firstSeen": "2026-05-26T21:00:01.760287+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9417
+      "score": 1.9211
     },
     {
       "title": "Millions of AI agents imperiled by critical vulnerability in open source package",
@@ -364,10 +428,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/gatekeeping-ai-agents-1152x648.jpg",
       "published": "2026-05-26T19:50:33+00:00",
       "firstSeen": "2026-05-26T23:00:02.101729+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1923
+      "score": 5.172
     },
     {
       "title": "OpenRouter more than doubles valuation to $1.3B in a year",
@@ -380,10 +444,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-157503102.jpg?resize=1200%2C776",
       "published": "2026-05-26T18:33:01+00:00",
       "firstSeen": "2026-05-26T19:00:01.907369+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6062
+      "score": 2.5865
     },
     {
       "title": "The Netherlands just blocked a US company from buying the cloud provider that runs Dutch digital identity",
@@ -399,7 +463,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7298
+      "score": 1.7112
     },
     {
       "title": "Dropbox founder Drew Houston steps down as CEO after 19 years as the company he built gets squeezed by Google and Apple",
@@ -415,7 +479,7 @@
       "lastSeen": "2026-05-27T08:47:20.555745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8234
+      "score": 2.805
     },
     {
       "title": "This startup is betting India’s gig economy can train the world’s robots",
@@ -428,10 +492,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Main-YC-Headshot-all-4-of-us.jpg?resize=1200%2C800",
       "published": "2026-05-26T16:00:00+00:00",
       "firstSeen": "2026-05-26T16:50:59.142081+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5572
+      "score": 3.5389
     },
     {
       "title": "Some ideas for what comes next, May 2026",
@@ -444,11 +508,11 @@
       "image": "https://substackcdn.com/image/fetch/$s_!-711!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F723ba9cb-c351-4b89-8860-2ac4eda7f335_2288x1584.png",
       "published": "2026-05-26T15:39:02+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2207
+      "score": 14.2026
     },
     {
       "title": "Microsoft Copilot Cowork Exfiltrates Files",
@@ -461,10 +525,10 @@
       "image": "",
       "published": "2026-05-26T15:36:48+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.65
+      "score": 7.632
     },
     {
       "title": "Brussels plans to ringfence two-thirds of EU mobile-satellite spectrum for European firms",
@@ -480,7 +544,7 @@
       "lastSeen": "2026-05-27T08:47:20.555745+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7062
+      "score": 1.6882
     },
     {
       "title": "Stord raises $250 million to give independent brands the shipping speed they need to compete with Amazon",
@@ -496,7 +560,7 @@
       "lastSeen": "2026-05-27T08:00:01.990877+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4039
+      "score": 2.386
     },
     {
       "title": "Quoting Paul Graham",
@@ -509,10 +573,10 @@
       "image": "",
       "published": "2026-05-26T15:02:30+00:00",
       "firstSeen": "2026-05-26T16:00:01.513883+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8396
+      "score": 1.8219
     },
     {
       "title": "Universal Music Group and TikTok renew agreement to combat unauthorized AI music",
@@ -525,10 +589,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/tiktok-header.jpg?resize=1200%2C800",
       "published": "2026-05-26T14:55:05+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8374
+      "score": 1.8197
     },
     {
       "title": "Rethinking organizational design in the age of agentic AI",
@@ -541,10 +605,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MIT-Abstract-Thumbnail-1-_-V2.png?resize=1200%2C600",
       "published": "2026-05-26T14:54:10+00:00",
       "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2371
+      "score": 5.2194
     },
     {
       "title": "xAI told staff to stop mingling with Cursor employees, weeks after they started working together",
@@ -560,7 +624,7 @@
       "lastSeen": "2026-05-27T08:00:01.990877+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0959
+      "score": 6.0782
     },
     {
       "title": "Ferrari stock drops 7% after Luce EV reveal as investors question design and strategy",
@@ -576,71 +640,7 @@
       "lastSeen": "2026-05-27T08:00:01.990877+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6923
-    },
-    {
-      "title": "Sundar Pichai on AI, the future of search, and what’s happening to the web",
-      "url": "https://www.theverge.com/podcast/936445/sundar-pichai-ai-search-google-zero-youtube-web",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Today, I’m talking with Google and Alphabet CEO Sundar Pichai, in a conversation we recorded just after the Google I/O developer conference. This is the fifth year Sundar and I have sat down after I/O, and it’s become one of my favorite Decoder traditions. There’s always a lot of news at I/O, and this year [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/DCD_2026.05.26_Sundar_Google.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-26T14:00:00+00:00",
-      "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 5.3911
-    },
-    {
-      "title": "TechCrunch Disrupt 2026 Early Bird ticket rates end May 29",
-      "url": "https://techcrunch.com/2026/05/26/techcrunch-disrupt-2026-early-bird-ticket-rates-end-may-29",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Save up to $410 on your TechCrunch Disrupt 2026 pass before prices increase on May 29 at 11:59 p.m. PT. Register here to join the tech epicenter in San Francisco.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_4Days-16X9-Dark.png?resize=1200%2C675",
-      "published": "2026-05-26T14:00:00+00:00",
-      "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8211
-    },
-    {
-      "title": "ClickUp Cuts 22% of Staff as CEO Pushes AI-First ‘100x Org’ Model",
-      "url": "https://www.techrepublic.com/article/news-clickup-cuts-staff-ai-restructuring",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "ClickUp cut 22% of its staff, with CEO Zeb Evans framing the layoffs as part of an AI restructuring focused on 100x output.\nThe post ClickUp Cuts 22% of Staff as CEO Pushes AI-First ‘100x Org’ Model appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05262026-clickup-cuts-staff.jpg?f=jpeg",
-      "published": "2026-05-26T13:17:03+00:00",
-      "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7687
-    },
-    {
-      "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
-      "url": "https://www.techrepublic.com/article/chatplayground-ai",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Harness multiple top-tier models like GPT‑4o, Claude, Gemini, and more in one unified platform, now $60.\nThe post Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg",
-      "published": "2026-05-26T13:00:24+00:00",
-      "firstSeen": "2026-05-26T15:00:01.893149+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.7639
+      "score": 1.6747
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6617
+      "score": 1.6469
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.6728
+      "score": 0.6623
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,10 +685,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1251
+      "score": 1.125
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -701,10 +701,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-27T10:00:01.705127+00:00",
+      "lastSeen": "2026-05-27T11:00:01.833519+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9064
+      "score": -1.9065
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
