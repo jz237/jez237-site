@@ -1,0 +1,123 @@
+{
+  "name": "Jez",
+  "tagline": "Builder, experimenter, and curious human.",
+  "about": "Welcome to my public corner of the internet. This site is evolving into a home for projects, utilities, game prototypes, AI news, and personal creative stuff.",
+  "projects": [
+    {
+      "name": "How AI Works",
+      "desc": "Interactive explainer covering AI runtime concepts, agents, tokens, tools, hallucinations, and a roadmap for model training and alignment.",
+      "status": "live",
+      "link": "/experiments/ai-explainer/"
+    },
+    {
+      "name": "AI News Feed",
+      "desc": "Curated AI model releases, tooling updates, and notable research.",
+      "status": "live",
+      "link": "/news.html"
+    },
+    {
+      "name": "Game Experiments",
+      "desc": "Playable prototypes and mechanics tests from GameMaster runs.",
+      "status": "in-progress",
+      "link": "#games"
+    },
+    {
+      "name": "Photo Gallery",
+      "desc": "Personal photos, edits, and restoration showcases.",
+      "status": "live",
+      "link": "/photos/"
+    }
+  ],
+  "tools": [
+    {
+      "name": "Image Prep Utility",
+      "desc": "Resize + rename uploads for cleaner website workflows.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Print Sizing / DPI Checker",
+      "desc": "Quickly verify output dimensions and print-safe quality.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Filename Batch Cleaner",
+      "desc": "Normalize messy file names before publishing.",
+      "status": "planned",
+      "link": "#"
+    }
+  ],
+  "games": [
+    {
+      "name": "👷 Hard Hat Mac",
+      "desc": "Classic 1983 Apple II remake — 3 construction levels.",
+      "status": "live",
+      "link": "https://jz237.github.io/games/hard-hat-mac/"
+    },
+    {
+      "name": "💎 Crystal Cavern",
+      "desc": "Descend through dark crystal caves with dynamic lighting.",
+      "status": "live",
+      "link": "https://jz237.github.io/games/2026-03-16/crystal-cavern/"
+    },
+    {
+      "name": "🖖 Super Star Trek",
+      "desc": "The 70s computer classic — reborn with LCARS visuals.",
+      "status": "live",
+      "link": "https://jz237.github.io/games/2026-03-27/star-trek/"
+    },
+    {
+      "name": "🏮 Lantern Creek",
+      "desc": "Guide glowing lanterns down a moonlit stream.",
+      "status": "live",
+      "link": "https://jz237.github.io/games/2026-03-29/lantern-creek/"
+    },
+    {
+      "name": "⚡ Neon Qix",
+      "desc": "Modernized Qix with neon field capture.",
+      "status": "live",
+      "link": "https://jz237.github.io/games/2026-04-09/quix-modern/"
+    },
+    {
+      "name": "🎮 See all 25 games →",
+      "desc": "The full GameMaster Arcade — featured, classic, and experimental builds.",
+      "status": "live",
+      "link": "/games/"
+    }
+  ],
+  "photos": [
+    {
+      "name": "🐱 Cat Corner",
+      "desc": "Luca, Cosmo, Taco & Marty — 30 photos and counting.",
+      "status": "live",
+      "link": "/photos/cats/"
+    },
+    {
+      "name": "🌿 Garden",
+      "desc": "Small-space growing, seasonal progress, and green experiments.",
+      "status": "coming-soon",
+      "link": "/photos/garden/"
+    }
+  ],
+  "homelab": [
+    {
+      "name": "Model Runtime Snapshot",
+      "desc": "At-a-glance view of model/runtime usage and status.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "Agent Activity",
+      "desc": "Quick view of what assistants/agents are working on.",
+      "status": "planned",
+      "link": "#"
+    },
+    {
+      "name": "System Tiles",
+      "desc": "CPU / memory / process tiles for home lab visibility.",
+      "status": "planned",
+      "link": "#"
+    }
+  ]
+}
