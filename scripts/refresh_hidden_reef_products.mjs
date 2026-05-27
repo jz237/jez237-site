@@ -219,6 +219,8 @@ function serializeProducts(productsBySlug, metadata) {
     '// Each product links back to the original Hidden Reef product page',
     `// Total: ${total} unique products across ${slugs.length} subcategories`,
     `// Presentation refresh: ${metadata.refreshedSlugs.length} subcategories refreshed ${metadata.timestamp}`,
+    ...(metadata.galleryLine ? [metadata.galleryLine] : []),
+    ...(metadata.removedLine ? [metadata.removedLine] : []),
     '',
     'const THR_PRODUCTS = {'
   ];
@@ -243,6 +245,8 @@ const productWindow = loadBrowserScript(productsJs, productsJsPath);
 const dataWindow = loadBrowserScript(productDataJs, productDataPath);
 const sources = collectSourceUrls(productWindow.THR.categories);
 const productsBySlug = dataWindow.THR_PRODUCTS;
+const galleryLine = productDataJs.match(/^\/\/ Gallery refresh:.*$/m)?.[0] || '';
+const removedLine = productDataJs.match(/^\/\/ Removed stale 404 product URLs:.*$/m)?.[0] || '';
 
 await fs.mkdir(reportDir, { recursive: true });
 
@@ -290,7 +294,9 @@ await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
 if (write) {
   const nextJs = serializeProducts(productsBySlug, {
     refreshedSlugs: report.refreshed.map(item => item.slug),
-    timestamp
+    timestamp,
+    galleryLine,
+    removedLine
   });
   await fs.writeFile(productDataPath, nextJs);
 }
