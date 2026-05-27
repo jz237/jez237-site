@@ -1,8 +1,15 @@
+.header.masthead,
+.header.masthead + .main-nav,
+main.page > section,
+main.page > .footer {
+  --thr-page-gutter: clamp(12px, 2.5vw, 28px);
+}
+
 .header.masthead {
   display: block !important;
-  width: calc(100% + 48px) !important;
+  width: calc(100% + var(--thr-page-gutter) + var(--thr-page-gutter)) !important;
   max-width: 1180px !important;
-  margin: 18px -24px 0 !important;
+  margin: 18px calc(var(--thr-page-gutter) * -1) 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
   border: 1px solid rgba(116,205,235,0.24) !important;
@@ -47,9 +54,9 @@
   display: grid !important;
   grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
   gap: 0 !important;
-  width: calc(100% + 48px) !important;
+  width: calc(100% + var(--thr-page-gutter) + var(--thr-page-gutter)) !important;
   max-width: 1180px !important;
-  margin: 0 -24px 18px !important;
+  margin: 0 calc(var(--thr-page-gutter) * -1) 18px !important;
   padding: 0 !important;
   overflow: hidden !important;
   border-right: 1px solid rgba(116,205,235,0.24) !important;
@@ -97,9 +104,16 @@ main.page > section:not(.hero) {
 
 main.page > section,
 main.page > .footer {
-  width: calc(100% + 48px) !important;
-  margin-left: -24px !important;
-  margin-right: -24px !important;
+  width: calc(100% + var(--thr-page-gutter) + var(--thr-page-gutter)) !important;
+  margin-left: calc(var(--thr-page-gutter) * -1) !important;
+  margin-right: calc(var(--thr-page-gutter) * -1) !important;
+}
+
+body > .header.masthead,
+body > .header.masthead + .main-nav {
+  width: min(1180px, calc(100% - var(--thr-page-gutter) - var(--thr-page-gutter))) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 main.page > section[aria-labelledby="paths-title"] {

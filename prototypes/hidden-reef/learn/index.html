@@ -2397,7 +2397,7 @@
   <div class="poster-modal" hidden>
       <div class="poster-modal__panel">
         <button class="poster-modal__close" type="button" aria-label="Close">&times;</button>
-        <img src="" alt="" />
+        <img alt="" />
       </div>
     </div>
   </main>
@@ -2462,7 +2462,7 @@
       function closeModal() {
         if (!modal) return;
         modal.hidden = true;
-        modalImg.src = '';
+        modalImg.removeAttribute('src');
         document.body.classList.remove('poster-modal-open');
       }
 
