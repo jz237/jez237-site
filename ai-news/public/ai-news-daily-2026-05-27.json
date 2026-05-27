@@ -1,6 +1,6 @@
 {
   "date": "2026-05-27",
-  "updatedAt": "2026-05-27T13:00:01.509424+00:00",
+  "updatedAt": "2026-05-27T14:00:01.215812+00:00",
   "items": [
     {
       "title": "Meet EAGLE 3.1: The Speculative Decoding Algorithm That Fixes Attention Drift in LLM Inference",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-12.17.50-AM-150x150.png",
       "published": "2026-05-27T07:23:10+00:00",
       "firstSeen": "2026-05-27T08:00:01.990877+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5612
+      "score": 6.5354
     },
     {
       "title": "Quoting Kyle Ferrana",
@@ -29,10 +29,10 @@
       "image": "",
       "published": "2026-05-27T06:41:43+00:00",
       "firstSeen": "2026-05-27T07:00:01.493393+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 6.3133
+      "score": 6.288
     },
     {
       "title": "Robinhood now lets your AI agents trade stocks",
@@ -45,10 +45,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Agentic-trading-feat.jpg?resize=1200%2C675",
       "published": "2026-05-27T12:30:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9748
+      "score": 4.9451
     },
     {
       "title": "Micron approaches $1tn as UBS sees a path to $1.8tn over 12 months",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/Micron.avif",
       "published": "2026-05-27T10:23:25+00:00",
       "firstSeen": "2026-05-27T11:00:01.833519+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5731
+      "score": 4.545
     },
     {
       "title": "Europe’s push to loosen Big Tech’s grip runs into Europe’s own divisions",
@@ -80,7 +80,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.386
+      "score": 4.3604
     },
     {
       "title": "The Pope isn’t AGI-pilled",
@@ -93,10 +93,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2214106807.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.735754453032%2C100%2C78.528491093936&amp%3Bw=1200",
       "published": "2026-05-27T12:00:00+00:00",
       "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3299
+      "score": 4.3005
     },
     {
       "title": "MEMO: A Modular Framework for Training a Dedicated Memory Model on New Knowledge Without Modifying LLM Parameters",
@@ -109,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-26-at-10.24.07-PM-1-150x150.png",
       "published": "2026-05-27T05:24:33+00:00",
       "firstSeen": "2026-05-27T06:00:01.903569+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.1109
+      "score": 4.0865
     },
     {
       "title": "SK Hynix joins the trillion-dollar club, powered by Nvidia’s HBM4 orders",
@@ -128,7 +128,7 @@
       "lastSeen": "2026-05-27T10:00:01.705127+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0922
+      "score": 4.0664
     },
     {
       "title": "Airbnb leads a $58M Series C in WeRoad and hires its CEO to run hotels",
@@ -141,10 +141,26 @@
       "image": "https://media.thenextweb.com/2026/05/WeRoad.avif",
       "published": "2026-05-27T09:30:10+00:00",
       "firstSeen": "2026-05-27T11:00:01.833519+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4482
+      "score": 3.4208
+    },
+    {
+      "title": "Tech CEOs are apparently suffering from AI psychosis",
+      "url": "https://techcrunch.com/2026/05/27/tech-ceos-are-apparently-suffering-from-ai-psychosis",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "\"CEOs are uniquely prone to AI psychosis,\" Box CEO Aaron Levie opines. Maybe that explains the almost religious belief in AI productivity gains.",
+      "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1265000101.jpg?resize=1200%2C857",
+      "published": "2026-05-27T12:30:00+00:00",
+      "firstSeen": "2026-05-27T14:00:01.215812+00:00",
+      "lastSeen": "2026-05-27T14:00:01.215812+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3451
     },
     {
       "title": "The Qualcomm-ByteDance ASIC deal works around US export controls by design",
@@ -160,7 +176,7 @@
       "lastSeen": "2026-05-27T13:00:01.509424+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1451
+      "score": 3.1179
     },
     {
       "title": "Apple and Google push for judicial oversight of Canada’s lawful-access bill",
@@ -176,23 +192,7 @@
       "lastSeen": "2026-05-27T12:00:01.923016+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1034
-    },
-    {
-      "title": "Vučić flew to Beijing for a $1.1bn Chinese investment, while Belgrade burned",
-      "url": "https://thenextweb.com/news/china-serbia-11bn-eu-protests",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "China’s $1.1bn AI, robotics and EV package for Serbia lands four days after 34,000 protesters filled the capital demanding early elections. Brussels has yet to develop a coherent response to either. On Saturday, tens of thousands of Serbians filled the centre of Belgrade in what police estimated as a 34,300-person rally demanding early elections, accountability [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/China-Serbia.avif",
-      "published": "2026-05-27T11:45:58+00:00",
-      "firstSeen": "2026-05-27T12:30:51.020208+00:00",
-      "lastSeen": "2026-05-27T13:00:01.509424+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8129
+      "score": 3.0773
     }
   ],
   "errors": []
