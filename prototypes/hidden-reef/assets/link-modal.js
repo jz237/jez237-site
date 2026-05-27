@@ -161,8 +161,10 @@
 
   function renderImageGallery(modal, images, title) {
     const normalizedImages = uniqueList(images);
+    const gallery = modal.querySelector('.link-modal__gallery');
     const thumbs = modal.querySelector('.link-modal__thumbs');
     modal.dataset.images = JSON.stringify(normalizedImages);
+    gallery?.classList.toggle('has-thumbs', normalizedImages.length > 1);
     if (!thumbs) return;
     if (normalizedImages.length <= 1) {
       thumbs.innerHTML = '';
