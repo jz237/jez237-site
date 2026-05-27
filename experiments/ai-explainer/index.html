@@ -181,6 +181,45 @@
       gap: 10px;
       margin-top: 24px;
     }
+    .tour-panel {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin-top: 28px;
+      padding: 14px;
+      border: 1px solid rgba(86,163,232,0.34);
+      border-radius: 12px;
+      background: rgba(3, 13, 26, 0.72);
+      backdrop-filter: blur(10px);
+    }
+    .tour-panel strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .tour-panel p {
+      margin: 6px 0 0;
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .tour-progress {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 6px;
+      margin: 12px 0;
+    }
+    .tour-dot {
+      display: block;
+      height: 6px;
+      min-height: 0 !important;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12) !important;
+      border: 0 !important;
+      padding: 0 !important;
+      cursor: pointer;
+    }
+    .tour-dot.active { background: linear-gradient(90deg, var(--lab-gold), var(--lab-cyan)) !important; }
     .lab-button, .hero-actions a {
       display: inline-flex;
       align-items: center;
@@ -191,20 +230,20 @@
       border: 1px solid rgba(86,163,232,0.42);
       border-radius: 8px;
       color: var(--lab-text);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.06) !important;
       text-decoration: none;
       font-weight: 800;
       cursor: pointer;
     }
     .lab-button:hover, .lab-button.active, .hero-actions a:hover {
       border-color: var(--lab-line-hot);
-      background: rgba(57,207,255,0.14);
+      background: rgba(57,207,255,0.14) !important;
       color: #fff;
     }
     .lab-button.primary, .hero-actions a.primary {
       color: #10202b !important;
-      border-color: rgba(230,189,103,0.8);
-      background: linear-gradient(135deg, var(--lab-gold), #ff8b74);
+      border-color: rgba(230,189,103,0.8) !important;
+      background: linear-gradient(135deg, var(--lab-gold), #ff8b74) !important;
     }
     .lab-grid {
       display: grid;
@@ -216,8 +255,13 @@
       border-radius: 14px;
       background: linear-gradient(145deg, var(--lab-panel), rgba(2,10,22,0.9));
       box-shadow: 0 18px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+      scroll-margin-top: 20px;
     }
     .lab-card + .lab-card { margin-top: 22px; }
+    .lab-card.tour-active {
+      border-color: var(--lab-line-hot);
+      box-shadow: 0 24px 70px rgba(57,207,255,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
     .lab-card-header {
       display: flex;
       justify-content: space-between;
@@ -250,6 +294,13 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) 320px;
       gap: 18px;
+    }
+    .scenario-picker,
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
     }
     .agent-flow {
       display: grid;
@@ -418,6 +469,38 @@
       gap: 8px;
       margin-top: 14px;
     }
+    .context-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+    .context-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      color: var(--lab-muted);
+      background: rgba(255,255,255,0.035);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .legend-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pill-color, var(--lab-cyan));
+    }
     .context-item {
       display: grid;
       grid-template-columns: 90px minmax(0, 1fr) 96px;
@@ -432,6 +515,7 @@
     }
     .context-item.visible { border-color: rgba(132,227,122,0.42); color: #dfffe0; }
     .context-item.summary { border-color: rgba(230,189,103,0.38); color: #f4dfb5; opacity: 0.78; }
+    .context-item.memory { border-color: rgba(157,134,255,0.56); color: #e8e1ff; opacity: 1; }
     .context-item.dropped { color: #73879a; opacity: 0.42; }
     .context-state {
       justify-self: end;
@@ -472,6 +556,46 @@
       color: #d8eaf2;
       font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       white-space: pre-wrap;
+    }
+    .tool-compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .compare-panel {
+      min-height: 158px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.2);
+    }
+    .compare-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .compare-panel p {
+      margin: 0;
+      color: var(--lab-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .quiz-card {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid rgba(230,189,103,0.32);
+      border-radius: 10px;
+      background: rgba(230,189,103,0.055);
+      margin-top: 14px;
+    }
+    .quiz-card h3 { font-size: 1.1rem; }
+    .quiz-result {
+      min-height: 52px;
+      color: #f5ddb0;
+      line-height: 1.5;
+      font-size: 14px;
     }
     .failure-tabs {
       display: flex;
@@ -525,7 +649,8 @@
       .lab-shell { grid-template-columns: 1fr; }
       .lab-rail { position: static; }
       .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .agent-board, .two-col, .tool-grid { grid-template-columns: 1fr; }
+      .agent-board, .two-col, .tool-grid, .tool-compare { grid-template-columns: 1fr; }
+      .context-controls { grid-template-columns: 1fr; }
       .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 680px) {
@@ -566,8 +691,18 @@
             <h1>How AI Works</h1>
             <p>AI feels mysterious until you separate the parts: tokens, context, model prediction, tool use, memory, and verification. This page lets you poke each part directly.</p>
             <div class="hero-actions">
-              <a class="primary" href="#agent-loop">Run the agent loop</a>
+              <button class="lab-button primary" id="startTour" type="button">Start guided tour</button>
+              <a href="#agent-loop">Run the agent loop</a>
               <a href="../../">Back to Home</a>
+            </div>
+            <div class="tour-panel" aria-live="polite">
+              <strong id="tourTitle">Tour ready</strong>
+              <p id="tourCopy">Walk through the lab in order: agent loop, tokens, context, prompts, tools, and failure modes.</p>
+              <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
+              <div class="control-row">
+                <button class="lab-button" id="prevTour" type="button">Previous</button>
+                <button class="lab-button" id="nextTour" type="button">Next stop</button>
+              </div>
             </div>
           </div>
         </section>
@@ -582,6 +717,11 @@
             <span class="status-pill">No API required</span>
           </div>
           <div class="lab-card-body">
+            <div class="scenario-picker" aria-label="Agent scenarios">
+              <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
+              <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
+              <button class="lab-button" data-scenario="layout" type="button">Fix layout</button>
+            </div>
             <div class="agent-board">
               <div class="agent-flow" id="agentFlow"></div>
               <div class="agent-console">
@@ -606,6 +746,12 @@
           </div>
           <div class="lab-card-body two-col">
             <div>
+              <div class="preset-row" aria-label="Token examples">
+                <button class="lab-button" data-token-preset="short" type="button">Short</button>
+                <button class="lab-button active" data-token-preset="clear" type="button">Clear</button>
+                <button class="lab-button" data-token-preset="logs" type="button">Copied logs</button>
+                <button class="lab-button" data-token-preset="overloaded" type="button">Overloaded</button>
+              </div>
               <textarea id="tokenInput">Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.</textarea>
               <div class="meter"><span id="tokenMeter"></span></div>
               <div class="metric-row">
@@ -627,8 +773,19 @@
             </div>
           </div>
           <div class="lab-card-body">
-            <label for="contextRange" class="status-pill">Conversation length: <span id="contextLabel">6</span> turns</label>
-            <input id="contextRange" type="range" min="4" max="14" value="6" />
+            <div class="context-controls">
+              <div>
+                <label for="contextRange" class="status-pill">Conversation length: <span id="contextLabel">6</span> turns</label>
+                <input id="contextRange" type="range" min="4" max="14" value="6" />
+                <div class="context-legend">
+                  <span class="legend-pill" style="--pill-color: var(--lab-green)">visible now</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-violet)">saved memory</span>
+                  <span class="legend-pill" style="--pill-color: #60758a">dropped</span>
+                </div>
+              </div>
+              <button class="lab-button" id="memoryToggle" type="button" aria-pressed="false">Save key fact</button>
+            </div>
             <div class="context-stack" id="contextStack"></div>
           </div>
         </section>
@@ -674,7 +831,19 @@
               <button class="lab-button" data-tool="image" type="button">Generate image</button>
               <button class="lab-button" data-tool="approve" type="button">Needs approval</button>
             </div>
-            <div class="tool-readout" id="toolReadout"></div>
+            <div>
+              <div class="tool-readout" id="toolReadout"></div>
+              <div class="tool-compare">
+                <div class="compare-panel">
+                  <strong>Model guesses</strong>
+                  <p id="guessPanel">A model can produce a plausible answer from context, but it may invent details when the answer depends on current files, dates, or external state.</p>
+                </div>
+                <div class="compare-panel">
+                  <strong>Agent checks</strong>
+                  <p id="checkPanel">A tool-using agent can inspect the actual source of truth, then answer with less guesswork and clearer evidence.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -705,6 +874,15 @@
           <div class="lab-card-body">
             <div class="failure-tabs" id="failureTabs"></div>
             <div class="failure-card" id="failureCard"></div>
+            <div class="quiz-card">
+              <h3>Quick checkpoint</h3>
+              <p>Question: “What changed in the latest deployed website commit?”</p>
+              <div class="control-row">
+                <button class="lab-button" data-quiz="guess" type="button">Let the model guess</button>
+                <button class="lab-button" data-quiz="tool" type="button">Use a tool</button>
+              </div>
+              <div class="quiz-result" id="quizResult">Pick the safer approach.</div>
+            </div>
           </div>
         </section>
 
@@ -716,16 +894,45 @@
   </main>
 
   <script>
-    const steps = [
-      ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\\n\\nIntent: add a useful caption.\\nRisk: private metadata, wrong folder, stale assumptions.'],
-      ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\\nMEMORY: captions should be casual, not stiff.'],
-      ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\\n1. Inspect image.\\n2. Resize safely.\\n3. Add page entry.\\n4. Verify layout.'],
-      ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\\nReason: the model cannot know the file dimensions by memory.'],
-      ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\\nNext: crop/resize to site convention.'],
-      ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\\nLoop ends because verification passed.']
-    ];
+    const scenarios = {
+      garden: [
+        ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\\n\\nIntent: add a useful caption.\\nRisk: private metadata, wrong folder, stale assumptions.'],
+        ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\\nMEMORY: captions should be casual, not stiff.'],
+        ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\\n1. Inspect image.\\n2. Resize safely.\\n3. Add page entry.\\n4. Verify layout.'],
+        ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\\nReason: the model cannot know the file dimensions by memory.'],
+        ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\\nNext: crop/resize to site convention.'],
+        ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\\nLoop ends because verification passed.']
+      ],
+      weather: [
+        ['01', 'Read request', 'Find the actual decision being asked for.', 'USER: "Should I water tonight?"\\n\\nIntent: watering advice.\\nRisk: guessing weather from memory would be useless.'],
+        ['02', 'Load context', 'Use location, garden preferences, and recent task history.', 'CONTEXT: Philadelphia / Zone 7a.\\nMemory: new plantings dry out faster than established shrubs.'],
+        ['03', 'Plan', 'Separate facts from judgment.', 'PLAN:\\n1. Check forecast.\\n2. Check rain timing.\\n3. Consider new plantings.\\n4. Give concise recommendation.'],
+        ['04', 'Choose tool', 'Use live data for unstable facts.', 'TOOL SELECTED: weather lookup.\\nReason: precipitation and temperature change hourly.'],
+        ['05', 'Observe result', 'Turn raw data into a practical decision.', 'OBSERVATION: rain likely overnight, humidity high, no heat spike.\\nNext: advise skipping most watering, check containers.'],
+        ['06', 'Answer or continue', 'Answer with caveats when evidence is limited.', 'FINAL: skip beds tonight, water containers if light, revisit tomorrow morning if rain misses.']
+      ],
+      layout: [
+        ['01', 'Read request', 'Translate subjective feedback into testable layout checks.', 'USER: "Those buttons are not centered."\\n\\nIntent: visual alignment fix.\\nRisk: changing the wrong container.'],
+        ['02', 'Load context', 'Inspect CSS and the actual rendered page.', 'CONTEXT: sidebar uses generated nav plus shared global styles.\\nClue: inherited nav padding may affect alignment.'],
+        ['03', 'Plan', 'Make a small visual fix and verify at multiple widths.', 'PLAN:\\n1. Locate sidebar rules.\\n2. Reset inherited spacing.\\n3. Screenshot desktop/tablet.\\n4. Push cache-busted update.'],
+        ['04', 'Choose tool', 'Use browser screenshots because this is visual.', 'TOOL SELECTED: local server + Chrome screenshot.\\nReason: code inspection alone cannot prove centering.'],
+        ['05', 'Observe result', 'Compare screenshot against the requested frame.', 'OBSERVATION: button stack now fills the sidebar frame evenly.\\nNext: check labels do not clip.'],
+        ['06', 'Answer or continue', 'Report exactly what changed and how it was verified.', 'FINAL: sidebar nav centered, screenshots checked at 1280px and 1024px, commit pushed.']
+      ]
+    };
+    let steps = scenarios.garden;
     let stepIndex = 0;
     let autoTimer = null;
+    let memorySaved = false;
+    let tourIndex = 0;
+    const tourStops = [
+      ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
+      ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
+      ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
+      ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
+      ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
+      ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
+    ];
 
     function renderAgent() {
       const flow = document.getElementById('agentFlow');
@@ -739,6 +946,13 @@
 
     function advanceAgent() {
       stepIndex = (stepIndex + 1) % steps.length;
+      renderAgent();
+    }
+
+    function setScenario(kind) {
+      steps = scenarios[kind];
+      stepIndex = 0;
+      document.querySelectorAll('[data-scenario]').forEach(btn => btn.classList.toggle('active', btn.dataset.scenario === kind));
       renderAgent();
     }
 
@@ -760,6 +974,19 @@
       document.getElementById('contextUse').textContent = pct + '%';
       document.getElementById('tokenMeter').style.width = pct + '%';
       document.getElementById('tokenHint').textContent = tokens.length < 35 ? 'Short' : tokens.length < 80 ? 'Medium' : 'Crowded';
+    }
+
+    const tokenPresets = {
+      short: 'Explain AI agents simply.',
+      clear: 'Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.',
+      logs: 'Here is a copied error log: TypeError: Cannot read properties of undefined, at renderAgent, at HTMLButtonElement, after clicking Next step. Explain what likely broke and where to inspect first.',
+      overloaded: 'Fix the AI page and make it better and more interactive and add a bunch of examples and make the mobile layout nice and maybe add diagrams and also explain tokens and context and tools and hallucinations and memory and local models and cloud models and make it look cool.'
+    };
+
+    function setTokenPreset(kind) {
+      document.querySelectorAll('[data-token-preset]').forEach(btn => btn.classList.toggle('active', btn.dataset.tokenPreset === kind));
+      document.getElementById('tokenInput').value = tokenPresets[kind];
+      renderTokens();
     }
 
     const contextMessages = [
@@ -787,10 +1014,20 @@
       document.getElementById('contextStack').innerHTML = contextMessages.slice(0, count).map((msg, i) => {
         let state = 'dropped';
         let label = 'dropped';
-        if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
+        if (memorySaved && i === 2) { state = 'memory'; label = 'saved'; }
+        else if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
         else if (i >= summaryFrom) { state = 'summary'; label = 'summary'; }
         return `<div class="context-item ${state}"><strong>${msg[0]}</strong><span>${msg[1]}</span><span class="context-state">${label}</span></div>`;
       }).join('');
+    }
+
+    function toggleMemory() {
+      memorySaved = !memorySaved;
+      const button = document.getElementById('memoryToggle');
+      button.classList.toggle('active', memorySaved);
+      button.setAttribute('aria-pressed', String(memorySaved));
+      button.textContent = memorySaved ? 'Key fact saved' : 'Save key fact';
+      renderContext();
     }
 
     const prompts = {
@@ -821,10 +1058,34 @@
       image: 'TOOL: image generation\\n\\nRESULT: Best when the page needs a new bitmap asset, thumbnail, texture, or visual reference. Not needed for every UI.',
       approve: 'TOOL: external action\\n\\nRESULT: Restarting services, spending money, publishing public posts, or changing credentials should pause for approval first.'
     };
+    const toolCompare = {
+      guess: [
+        'A model may say the page was probably updated recently because the conversation mentioned it. That can sound confident while still being unverified.',
+        'An agent checks the repository, commit history, or deployed page before saying what changed.'
+      ],
+      files: [
+        'Without reading files, the model can only infer structure from memory or chat context.',
+        'File search gives exact paths, text, and line-level evidence. That is the right move for site edits.'
+      ],
+      web: [
+        'For current facts, a model-only answer can be stale the moment it is written.',
+        'A web check can confirm live state, but external pages must be treated as untrusted input.'
+      ],
+      image: [
+        'A text model can describe an image idea, but it cannot create the bitmap itself.',
+        'An image tool creates a real asset, then the agent should place it and verify that it loads.'
+      ],
+      approve: [
+        'The model may know what command would restart a service, but knowing is not permission.',
+        'A safer agent pauses before destructive, public, paid, credential, or service-level actions.'
+      ]
+    };
 
     function renderTool(kind) {
       document.querySelectorAll('[data-tool]').forEach(btn => btn.classList.toggle('active', btn.dataset.tool === kind));
       document.getElementById('toolReadout').textContent = tools[kind];
+      document.getElementById('guessPanel').textContent = toolCompare[kind][0];
+      document.getElementById('checkPanel').textContent = toolCompare[kind][1];
     }
 
     const failures = {
@@ -840,6 +1101,30 @@
       document.querySelectorAll('[data-failure]').forEach(btn => btn.classList.toggle('active', btn.dataset.failure === kind));
       const [title, copy] = failures[kind];
       document.getElementById('failureCard').innerHTML = `<h3>${title}</h3><p>${copy}</p>`;
+    }
+
+    function renderTour() {
+      const [id, title, copy] = tourStops[tourIndex];
+      document.getElementById('tourTitle').textContent = `${tourIndex + 1}/${tourStops.length}: ${title}`;
+      document.getElementById('tourCopy').textContent = copy;
+      document.getElementById('tourProgress').innerHTML = tourStops.map((stop, index) => {
+        return `<button class="tour-dot ${index === tourIndex ? 'active' : ''}" data-tour-index="${index}" type="button" aria-label="Tour stop ${index + 1}"></button>`;
+      }).join('');
+      document.querySelectorAll('.lab-card').forEach(card => card.classList.toggle('tour-active', card.id === id));
+      document.querySelectorAll('[data-tour-index]').forEach(btn => btn.addEventListener('click', () => moveTour(Number(btn.dataset.tourIndex), true)));
+    }
+
+    function moveTour(index, scroll) {
+      tourIndex = (index + tourStops.length) % tourStops.length;
+      renderTour();
+      if (scroll) document.getElementById(tourStops[tourIndex][0]).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function answerQuiz(kind) {
+      document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.toggle('active', btn.dataset.quiz === kind));
+      document.getElementById('quizResult').textContent = kind === 'tool'
+        ? 'Correct. Latest deployed commit is current state, so the agent should inspect git or the live page before answering.'
+        : 'Risky. The model might remember an earlier commit from the chat, but that is not proof of the latest deployed state.';
     }
 
     function escapeHtml(value) {
@@ -860,8 +1145,15 @@
     });
     document.getElementById('tokenInput').addEventListener('input', renderTokens);
     document.getElementById('contextRange').addEventListener('input', renderContext);
+    document.getElementById('memoryToggle').addEventListener('click', toggleMemory);
+    document.getElementById('startTour').addEventListener('click', () => moveTour(0, true));
+    document.getElementById('prevTour').addEventListener('click', () => moveTour(tourIndex - 1, true));
+    document.getElementById('nextTour').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.querySelectorAll('[data-scenario]').forEach(btn => btn.addEventListener('click', () => setScenario(btn.dataset.scenario)));
+    document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
     document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
     document.querySelectorAll('[data-tool]').forEach(btn => btn.addEventListener('click', () => renderTool(btn.dataset.tool)));
+    document.querySelectorAll('[data-quiz]').forEach(btn => btn.addEventListener('click', () => answerQuiz(btn.dataset.quiz)));
     document.getElementById('failureTabs').innerHTML = Object.keys(failures).map((key, i) => `<button class="lab-button ${i === 0 ? 'active' : ''}" data-failure="${key}" type="button">${failures[key][0]}</button>`).join('');
     document.querySelectorAll('[data-failure]').forEach(btn => btn.addEventListener('click', () => renderFailure(btn.dataset.failure)));
 
@@ -871,6 +1163,7 @@
     renderPrompt('weak');
     renderTool('guess');
     renderFailure('hallucination');
+    renderTour();
   </script>
   <script src="../../assets/site-enhance.js" defer></script>
   <script src="../../assets/nav.js" defer></script>
