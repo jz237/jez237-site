@@ -922,5 +922,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-27-morning-vacuum-fluorescent-tide-console",
+    "title": "Vacuum Fluorescent Tide Console",
+    "tests": "Tests whether GPT Image 2 can make an obsolete electronic display format read instantly through segmented cyan-green phosphor glow, black glass reflections, circuit hardware context, and abstract data visualization rather than a poster, document, specimen tray, or glossy concept-art scene.",
+    "prompt": "Title: Vacuum Fluorescent Tide Console\nFormat name: Vacuum Fluorescent Display Panel\nCategory/kind: electronics\nTests/explores: Tests whether GPT Image 2 can make an obsolete electronic display format read instantly through segmented cyan-green phosphor glow, black glass reflections, circuit hardware context, and abstract data visualization rather than a poster, document, specimen tray, or glossy concept-art scene.\n\nCreate a square 1024x1024 image that is unmistakably a close documentary photograph of a vintage vacuum fluorescent display module powered on at an electronics workbench. The selected format must be obvious at first glance: cyan-green segmented phosphor numerals and icon blocks glowing behind smoked black glass, fine horizontal grid wires, metal pins along the bottom edge, a dark ceramic backplate, tiny dust specks inside the faceplate, and faint reflections on the glossy glass.\n\nSubject: the lit display shows an imaginary harbor tide-control console rendered entirely in VFD segments, bars, dots, and simple icon cells. Use abstract segmented graphics to suggest moon phases, tide levels, canal gates, rain reservoirs, buoy signals, tiny wave bars, and a central circular current diagram. Include only sparse readable fictional display text such as TIDE MEMORY, GATE 07, LOW FOG, and HARBOR BUS; most characters should be abstract block patterns, numeric fragments, or unreadable diagnostic glyphs. No real brand names, no real logos, no copyrighted interface elements.\n\nComposition: macro three-quarter workbench photograph, the rectangular VFD panel fills most of the square frame with one corner of a small breadboard, colored jumper wires, a bench power lead, a black plastic connector, and a few dull screws visible around the edges. Keep the background practical and shallow-focus, not decorative. The image should feel like a real powered hardware component photographed under dim room light.\n\nPalette and mood: black glass, luminous cyan-green phosphor, dark teal shadows, dull silver pins, off-white breadboard plastic, red and yellow jumper wires used sparingly, warm brown workbench scratches, subtle electronic glow. Quiet, technical, tactile, retro, and strange.\n\nHard exclusions: no dancing, no dancers, no ballet, no ballroom, no stage dance, no ceremonial dance, no dance poses, no implied choreography, no performers, no people as central subjects, no copyrighted characters, no real logos, no watermark, no signature.",
+    "image": "images/2026-05-27-morning-vacuum-fluorescent-tide-console.png",
+    "date": "2026-05-27",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
