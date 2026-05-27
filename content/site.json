@@ -5,7 +5,7 @@
   "projects": [
     {
       "name": "How AI Works",
-      "desc": "Interactive explainer covering neural networks, LLMs, training, hallucinations, and more. Built with React + Framer Motion.",
+      "desc": "Interactive explainer covering AI runtime concepts, agents, tokens, tools, hallucinations, and a roadmap for model training and alignment.",
       "status": "live",
       "link": "/experiments/ai-explainer/"
     },
