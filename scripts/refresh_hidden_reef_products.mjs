@@ -200,7 +200,11 @@ function mergeProducts(fresh, existing) {
   });
   const freshWithBarcodes = fresh.map(product => {
     const previous = existingByUrl.get(productKey(product));
-    return previous?.barcode ? { ...product, barcode: previous.barcode } : product;
+    return {
+      ...product,
+      ...(previous?.barcode ? { barcode: previous.barcode } : {}),
+      ...(previous?.images ? { images: previous.images } : {})
+    };
   });
   const freshKeys = new Set(freshWithBarcodes.map(productKey));
   const tail = existing.filter(product => !freshKeys.has(productKey(product)));
