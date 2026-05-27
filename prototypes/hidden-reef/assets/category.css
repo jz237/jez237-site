@@ -184,8 +184,8 @@ body.department-page .section-band + .section-band {
   background: #40d9ff;
 }
 .link-modal__panel {
-  grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
-  width: min(1040px, 100%);
+  grid-template-columns: minmax(460px, 560px) minmax(0, 1fr);
+  width: min(1180px, 100%);
   max-height: min(760px, calc(100vh - 36px));
   overflow-y: auto;
   scrollbar-width: none;
@@ -195,13 +195,17 @@ body.department-page .section-band + .section-band {
 }
 .link-modal__gallery {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   min-height: 0;
   background: #eef7fa;
+}
+.link-modal__gallery.has-thumbs {
+  grid-template-columns: 72px minmax(0, 1fr);
 }
 .link-modal__media {
   position: relative;
   display: grid;
+  grid-column: 1;
   align-items: center;
   min-height: 520px;
   padding: 24px;
@@ -243,16 +247,22 @@ body.department-page .section-band + .section-band {
 }
 .link-modal__thumbs {
   display: flex;
+  grid-column: 1;
+  grid-row: 1;
+  flex-direction: column;
   gap: 8px;
   padding: 10px;
-  overflow-x: auto;
-  border-top: 1px solid rgba(13,47,65,.12);
+  overflow-y: auto;
+  border-right: 1px solid rgba(13,47,65,.12);
   background: rgba(255,255,255,.86);
 }
+.link-modal__gallery.has-thumbs .link-modal__media {
+  grid-column: 2;
+}
 .link-modal__thumb {
-  flex: 0 0 58px;
-  width: 58px;
-  height: 58px;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
   padding: 4px;
   border: 2px solid transparent;
   border-radius: 6px;
@@ -415,10 +425,24 @@ body.department-page .section-band + .section-band {
     padding: 14px;
   }
   .link-modal__gallery {
+    grid-template-columns: 1fr;
     flex: 0 0 auto;
   }
+  .link-modal__gallery.has-thumbs {
+    grid-template-columns: 1fr;
+  }
+  .link-modal__media {
+    grid-column: 1;
+  }
   .link-modal__thumbs {
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
     padding: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-top: 1px solid rgba(13,47,65,.12);
+    border-right: 0;
   }
   .link-modal__thumb {
     flex-basis: 48px;
