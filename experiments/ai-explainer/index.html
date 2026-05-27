@@ -205,7 +205,7 @@
     }
     .tour-progress {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(8, minmax(0, 1fr));
       gap: 6px;
       margin: 12px 0;
     }
@@ -736,6 +736,85 @@
       font-size: 13px;
       line-height: 1.45;
     }
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 16px;
+    }
+    .builder-options {
+      display: grid;
+      gap: 10px;
+    }
+    .builder-option {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid rgba(110,159,205,0.24);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+    }
+    .builder-option input {
+      margin-top: 3px;
+      accent-color: var(--lab-cyan);
+    }
+    .builder-option strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .builder-option span {
+      display: block;
+      margin-top: 4px;
+      color: var(--lab-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .builder-output {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: #020812;
+    }
+    .stack-visual {
+      display: grid;
+      gap: 8px;
+    }
+    .stack-layer {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(57,207,255,0.22);
+      border-left: 4px solid var(--layer-color, var(--lab-cyan));
+      border-radius: 9px;
+      background: rgba(255,255,255,0.035);
+    }
+    .stack-layer strong {
+      color: #fff;
+      font-size: 13px;
+    }
+    .stack-layer span {
+      color: var(--lab-muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .builder-summary {
+      min-height: 92px;
+      padding: 14px;
+      border: 1px solid rgba(230,189,103,0.28);
+      border-radius: 10px;
+      color: #f5ddb0;
+      background: rgba(230,189,103,0.055);
+      line-height: 1.5;
+      font-size: 14px;
+    }
     footer {
       margin-top: 38px;
       padding-top: 24px;
@@ -748,7 +827,7 @@
       .lab-shell { grid-template-columns: 1fr; }
       .lab-rail { position: static; }
       .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .agent-board, .two-col, .tool-grid, .tool-compare { grid-template-columns: 1fr; }
+      .agent-board, .two-col, .tool-grid, .tool-compare, .builder-grid { grid-template-columns: 1fr; }
       .diagram-grid { grid-template-columns: 1fr; }
       .context-controls { grid-template-columns: 1fr; }
       .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -795,6 +874,7 @@
       }
       .context-item { grid-template-columns: 1fr; }
       .context-state { justify-self: start; }
+      .stack-layer { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -815,6 +895,7 @@
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
           <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
+          <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
           <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
         </nav>
       </aside>
@@ -1039,6 +1120,29 @@
           </div>
         </section>
 
+        <section id="builder" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Assemble the system</span>
+              <h2>Build an Agent Stack</h2>
+              <p>Most real AI systems are a stack of choices. Add or remove capabilities below and watch the profile change.</p>
+            </div>
+            <span class="status-pill">Interactive model</span>
+          </div>
+          <div class="lab-card-body builder-grid">
+            <div class="builder-options" id="builderOptions"></div>
+            <div class="builder-output">
+              <div class="stack-visual" id="stackVisual" aria-label="Agent stack layers"></div>
+              <div class="metric-row">
+                <div class="metric"><span>Capability</span><strong id="builderCapability">0</strong></div>
+                <div class="metric"><span>Risk</span><strong id="builderRisk">0</strong></div>
+                <div class="metric"><span>Oversight</span><strong id="builderOversight">0</strong></div>
+              </div>
+              <div class="builder-summary" id="builderSummary"></div>
+            </div>
+          </div>
+        </section>
+
         <section id="failure" class="lab-card">
           <div class="lab-card-header">
             <div>
@@ -1110,6 +1214,7 @@
       ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
       ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
       ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
+      ['builder', 'Agent stack', 'A useful agent is assembled from capabilities: model, context, tools, memory, approvals, and verification.'],
       ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
     ];
 
@@ -1301,6 +1406,68 @@
         guess: 'Wrong direction. This is not a question to guess about; it is an action with operational risk.'
       }
     };
+    const builderLayers = [
+      {
+        key: 'model',
+        title: 'Reasoning model',
+        desc: 'Turns instructions and context into next actions or answers.',
+        color: 'var(--lab-cyan)',
+        capability: 2,
+        risk: 1,
+        oversight: 1,
+        defaultOn: true
+      },
+      {
+        key: 'context',
+        title: 'Context window',
+        desc: 'Carries the current task, visible chat, files, and constraints.',
+        color: 'var(--lab-green)',
+        capability: 2,
+        risk: 1,
+        oversight: 1,
+        defaultOn: true
+      },
+      {
+        key: 'tools',
+        title: 'Tools',
+        desc: 'Lets the agent inspect files, browse, run commands, or create media.',
+        color: 'var(--lab-violet)',
+        capability: 3,
+        risk: 3,
+        oversight: 2,
+        defaultOn: true
+      },
+      {
+        key: 'memory',
+        title: 'Memory',
+        desc: 'Persists preferences, facts, and workflow lessons across sessions.',
+        color: 'var(--lab-gold)',
+        capability: 2,
+        risk: 2,
+        oversight: 2,
+        defaultOn: true
+      },
+      {
+        key: 'approvals',
+        title: 'Approvals',
+        desc: 'Adds checkpoints for destructive, public, credential, or service actions.',
+        color: 'var(--lab-orange)',
+        capability: 1,
+        risk: -2,
+        oversight: 3,
+        defaultOn: true
+      },
+      {
+        key: 'verification',
+        title: 'Verification',
+        desc: 'Checks results with tests, screenshots, scans, or source comparisons.',
+        color: 'var(--lab-rose)',
+        capability: 2,
+        risk: -2,
+        oversight: 2,
+        defaultOn: true
+      }
+    ];
 
     function renderFailure(kind) {
       document.querySelectorAll('[data-failure]').forEach(btn => btn.classList.toggle('active', btn.dataset.failure === kind));
@@ -1339,6 +1506,41 @@
       document.querySelectorAll('[data-quiz-kind]').forEach(btn => btn.addEventListener('click', () => renderQuiz(btn.dataset.quizKind)));
       document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.remove('active'));
       document.getElementById('quizResult').textContent = 'Pick the safer approach.';
+    }
+
+    function renderBuilder() {
+      const selected = builderLayers.filter(layer => document.getElementById(`stack-${layer.key}`)?.checked);
+      document.getElementById('stackVisual').innerHTML = selected.length
+        ? selected.map(layer => `<div class="stack-layer" style="--layer-color:${layer.color}"><strong>${layer.title}</strong><span>${layer.desc}</span></div>`).join('')
+        : '<div class="stack-layer"><strong>No stack</strong><span>A model needs at least instructions and context to do useful work.</span></div>';
+      const capability = selected.reduce((sum, layer) => sum + layer.capability, 0);
+      const risk = Math.max(0, selected.reduce((sum, layer) => sum + layer.risk, 0));
+      const oversight = selected.reduce((sum, layer) => sum + layer.oversight, 0);
+      document.getElementById('builderCapability').textContent = capability;
+      document.getElementById('builderRisk').textContent = risk;
+      document.getElementById('builderOversight').textContent = oversight;
+      const hasTools = selected.some(layer => layer.key === 'tools');
+      const hasApprovals = selected.some(layer => layer.key === 'approvals');
+      const hasVerify = selected.some(layer => layer.key === 'verification');
+      let summary = 'This stack can answer basic questions, but it is limited.';
+      if (hasTools && hasVerify && hasApprovals) {
+        summary = 'This is the strongest practical setup: tools provide evidence, verification checks the result, and approvals keep risky actions bounded.';
+      } else if (hasTools && !hasApprovals) {
+        summary = 'Powerful but risky: tools let the agent act, but missing approvals makes destructive or public actions easier to mishandle.';
+      } else if (hasTools && !hasVerify) {
+        summary = 'Useful but less dependable: the agent can inspect or act, but it lacks a final proof step.';
+      } else if (!hasTools && hasVerify) {
+        summary = 'Conservative: it can reason and review, but without tools it cannot inspect current files or live state.';
+      }
+      document.getElementById('builderSummary').textContent = summary;
+    }
+
+    function initBuilder() {
+      document.getElementById('builderOptions').innerHTML = builderLayers.map(layer => {
+        return `<label class="builder-option"><input id="stack-${layer.key}" type="checkbox" ${layer.defaultOn ? 'checked' : ''}><span><strong>${layer.title}</strong><span>${layer.desc}</span></span></label>`;
+      }).join('');
+      builderLayers.forEach(layer => document.getElementById(`stack-${layer.key}`).addEventListener('change', renderBuilder));
+      renderBuilder();
     }
 
     function escapeHtml(value) {
@@ -1381,6 +1583,7 @@
     renderTool('guess');
     renderFailure('hallucination');
     renderQuiz('commit');
+    initBuilder();
     renderTour();
   </script>
   <script src="../../assets/site-enhance.js" defer></script>
