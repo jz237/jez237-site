@@ -1,6 +1,6 @@
 {
   "date": "2026-05-28",
-  "updatedAt": "2026-05-28T16:00:01.934343+00:00",
+  "updatedAt": "2026-05-28T17:00:01.348659+00:00",
   "items": [
     {
       "title": "Sesame, the conversational AI startup from Oculus founders, launches its iOS app",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/crossing-the-uncanny-valley-of-voice-hero.webp?resize=1200%2C900",
       "published": "2026-05-28T15:35:43+00:00",
       "firstSeen": "2026-05-28T16:00:01.934343+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1777
+      "score": 15.1479
     },
     {
       "title": "Mistral launches Industrial Engineering AI with Airbus, BMW and EDF as headline customers",
@@ -34,7 +34,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.0686
+      "score": 15.0435
     },
     {
       "title": "Meta sells AI subscriptions while OpenAI and xAI walk into the ad business",
@@ -47,10 +47,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-05-28T11:43:37+00:00",
       "firstSeen": "2026-05-28T12:43:30.233181+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.0269
+      "score": 10.0001
     },
     {
       "title": "Sneak peek at new Siri app reveals Apple’s plans to take on ChatGPT and more",
@@ -63,10 +63,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/1476x1375.webp?resize=1200%2C1118",
       "published": "2026-05-28T14:45:13+00:00",
       "firstSeen": "2026-05-28T15:00:01.379657+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3526
+      "score": 9.3234
     },
     {
       "title": "These new iOS 27 renders hint at Siri’s big redesign",
@@ -79,10 +79,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25698444/DSC08567_processed_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.723165084465%2C100%2C78.55366983107&amp%3Bw=1200",
       "published": "2026-05-28T14:33:31+00:00",
       "firstSeen": "2026-05-28T15:00:01.379657+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4168
+      "score": 7.3879
     },
     {
       "title": "How long is Anthropic’s lease with SpaceX? Opinions vary.",
@@ -95,10 +95,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200%2C801",
       "published": "2026-05-28T15:36:00+00:00",
       "firstSeen": "2026-05-28T16:00:01.934343+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2778
+      "score": 7.248
+    },
+    {
+      "title": "Data Formulator 0.7: AI-powered data analytics for enterprise data",
+      "url": "https://www.microsoft.com/en-us/research/blog/data-formulator-0-7-ai-powered-data-analytics-for-enterprise-data",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Data Formulator introduces AI-powered analytics for enterprise data workflows. Data teams can easily bring enterprise data into an AI-ready workspace where users can explore, analyze, and visualize data with AI agents to turn raw data into actionable insights.\nThe post Data Formulator 0.7: AI-powered data analytics for enterprise data appeared first on Microsoft Research.",
+      "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/DataFormulator-TWLIFB-1200x627-1-scaled.jpg",
+      "published": "2026-05-28T16:00:00+00:00",
+      "firstSeen": "2026-05-28T17:00:01.348659+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.2299
     },
     {
       "title": "Anthropic’s Milan office lands with Generali, Pirelli and Enel as named Italian customers",
@@ -111,10 +127,10 @@
       "image": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "published": "2026-05-28T15:19:09+00:00",
       "firstSeen": "2026-05-28T16:00:01.934343+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1294
+      "score": 5.0998
     },
     {
       "title": "Mistral’s Arthur Mensch directly rebuts Pope Leo on AI in warfare",
@@ -127,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/05/Arthur-Mensch.avif",
       "published": "2026-05-28T10:01:46+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9819
+      "score": 4.9564
     },
     {
       "title": "NVIDIA Research Advances Robotics From Simulation to the Real World",
@@ -143,10 +159,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/ICRA2026Blog-scaled.jpg",
       "published": "2026-05-28T13:00:51+00:00",
       "firstSeen": "2026-05-28T14:00:01.980868+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9524
+      "score": 4.9247
     },
     {
       "title": "Musk walks back the Anthropic Colossus deal to a six-month lease",
@@ -162,7 +178,7 @@
       "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9416
+      "score": 4.9172
     },
     {
       "title": "Visa invests in Replit to power agentic payments for developers",
@@ -175,26 +191,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200%2C715",
       "published": "2026-05-28T14:00:00+00:00",
       "firstSeen": "2026-05-28T15:00:01.379657+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
+      "lastSeen": "2026-05-28T17:00:01.348659+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9305
-    },
-    {
-      "title": "A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System",
-      "url": "https://www.marktechpost.com/2026/05/28/a-coding-guide-to-implement-a-pgvector-powered-semantic-hybrid-sparse-and-quantized-vector-search-system",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "In this tutorial, we build a complete pgvector playground inside Google Colab and explore how PostgreSQL can work as a powerful vector database for modern AI applications. We start by installing PostgreSQL, compiling the pgvector extension, connecting through Psycopg, and registering vector types for smooth Python integration. Then, we create embeddings with SentenceTransformers, store them [&#8230;]\nThe post A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
-      "published": "2026-05-28T08:07:09+00:00",
-      "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T16:00:01.934343+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 4.8037
+      "score": 4.902
     }
   ],
   "errors": []
