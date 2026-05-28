@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rotate Food Types - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      --panel: #071a27;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a {
+      color: #dff8ff;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.36);
+      text-underline-offset: 4px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(114,211,137,0.17), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .eyebrow,
+    .section-head span,
+    .rotation-card span,
+    .species-card span,
+    .schedule-card span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 620px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      overflow: hidden;
+      min-height: 310px;
+      margin: 0;
+      border: 1px solid rgba(114,211,137,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 21px rgba(114,211,137,0.18);
+    }
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.28);
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .section-head p { max-width: 450px; }
+    .rotation-grid,
+    .species-grid,
+    .schedule-grid {
+      display: grid;
+      gap: 14px;
+    }
+    .rotation-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .species-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .schedule-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .rotation-card,
+    .species-card,
+    .schedule-card,
+    .visual-band,
+    .callout {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(114,211,137,0.12), transparent 36%),
+        var(--panel);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .rotation-card,
+    .species-card,
+    .schedule-card { padding: 16px; }
+    .rotation-card h3,
+    .species-card h3,
+    .schedule-card h3,
+    .visual-band h2,
+    .callout h2 {
+      margin: 8px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .rotation-card ul,
+    .species-card ul,
+    .schedule-card ul {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .rotation-card li,
+    .species-card li,
+    .schedule-card li {
+      position: relative;
+      padding-left: 17px;
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .rotation-card li::before,
+    .species-card li::before,
+    .schedule-card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(114,211,137,0.48);
+    }
+    .visual-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 0.62fr);
+      gap: 18px;
+      align-items: center;
+      margin-top: 28px;
+      padding: 18px;
+    }
+    .visual-band img {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      max-height: 360px;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      background: #061a27;
+    }
+    .sample-week {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .sample-day {
+      min-height: 108px;
+      padding: 10px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: rgba(3,20,34,0.72);
+    }
+    .sample-day b {
+      display: block;
+      color: #fff;
+      font-size: 13px;
+    }
+    .sample-day small {
+      display: block;
+      margin-top: 7px;
+      color: #b9d9e7;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .callout {
+      margin-top: 28px;
+      padding: 20px;
+      border-left: 6px solid var(--orange);
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%),
+        #150f0b;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3,
+    .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero,
+      .visual-band { grid-template-columns: 1fr; }
+      .rotation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .species-grid,
+      .schedule-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sample-week { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .hero { padding: 20px 16px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .rotation-grid,
+      .species-grid,
+      .schedule-grid,
+      .sample-week { grid-template-columns: 1fr; }
+      .visual-band,
+      .callout { padding: 14px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260525-learning-path-frame" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums &middot; Fish &middot; Coral &middot; Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../">Home</a>
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Help</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs"><a href="../">Help Center</a><span>/</span><a href="../feeding-basics/">Feeding Basics</a><span>/</span><span>Rotate Food Types</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Food variety</span>
+        <h1>Rotate food types without overfeeding the tank</h1>
+        <p>A good rotation gives fish variety without turning every feeding into a buffet. Pick a dependable staple, add targeted foods for the livestock you keep, and use richer foods as planned supplements instead of extra meals.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=food">Browse food options</a>
+          <a class="btn secondary" href="../feeding-basics/">Back to Feeding Basics</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="../../assets/site/flip-feed.jpg" alt="Assorted aquarium foods for rotating fish diets" />
+      </figure>
+    </section>
+
+    <section aria-labelledby="rotation-types-title">
+      <div class="section-head">
+        <div>
+          <span>Core food types</span>
+          <h2 id="rotation-types-title">What each food type is good for</h2>
+        </div>
+        <p>Food rotation works best when each food has a job. Start with the livestock, then choose foods that solve actual feeding needs.</p>
+      </div>
+      <div class="rotation-grid">
+        <article class="rotation-card">
+          <span>Everyday staple</span>
+          <h3>Flakes</h3>
+          <p>Useful for many community fish that feed near the surface or mid-water.</p>
+          <ul>
+            <li>Easy to size by crushing</li>
+            <li>Can create dust if overhandled</li>
+            <li>Best in tiny, watched portions</li>
+          </ul>
+        </article>
+        <article class="rotation-card">
+          <span>Measured feeding</span>
+          <h3>Pellets</h3>
+          <p>Consistent portions and nutrition, especially when fish accept the pellet size.</p>
+          <ul>
+            <li>Floating, slow-sinking, or sinking options</li>
+            <li>Good for tracking how much is eaten</li>
+            <li>Match pellet size to mouth size</li>
+          </ul>
+        </article>
+        <article class="rotation-card">
+          <span>Enrichment</span>
+          <h3>Frozen</h3>
+          <p>Helpful for picky fish and variety, but easy to overuse in small tanks.</p>
+          <ul>
+            <li>Thaw and portion before feeding</li>
+            <li>Use less than the cube suggests if needed</li>
+            <li>Watch nutrient buildup after rich foods</li>
+          </ul>
+        </article>
+        <article class="rotation-card">
+          <span>Grazers</span>
+          <h3>Vegetable foods</h3>
+          <p>Important for herbivores, algae grazers, plecos, some cichlids, and many reef fish.</p>
+          <ul>
+            <li>Use wafers, sheets, or veg blends</li>
+            <li>Remove leftovers before they break down</li>
+            <li>Do not make protein foods the only option</li>
+          </ul>
+        </article>
+        <article class="rotation-card">
+          <span>Specific jobs</span>
+          <h3>Specialty foods</h3>
+          <p>Use fry foods, coral foods, wafers, medicated foods, or pond diets when the animal calls for it.</p>
+          <ul>
+            <li>Choose by species and tank type</li>
+            <li>Follow label portions conservatively</li>
+            <li>Ask before mixing with treatments</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-band" aria-labelledby="sample-week-title">
+      <img src="../../assets/site/red-parrot-pellets.jpg" alt="Aquarium pellet food as part of a fish food rotation plan" loading="lazy" />
+      <div>
+        <div class="section-head" style="display:block;margin:0 0 12px">
+          <span>Simple pattern</span>
+          <h2 id="sample-week-title">A rotation can be boring on purpose</h2>
+        </div>
+        <p>This is not a prescription for every tank. It is a model for thinking: stable staple food most days, a few planned variety meals, and at least one lighter day if the tank runs nutrient-heavy.</p>
+        <div class="sample-week" aria-label="Sample weekly food rotation">
+          <div class="sample-day"><b>Mon</b><small>Staple flakes or pellets.</small></div>
+          <div class="sample-day"><b>Tue</b><small>Staple, slightly smaller portion.</small></div>
+          <div class="sample-day"><b>Wed</b><small>Vegetable or grazer food if appropriate.</small></div>
+          <div class="sample-day"><b>Thu</b><small>Staple food, normal portion.</small></div>
+          <div class="sample-day"><b>Fri</b><small>Frozen or treat food, small portion.</small></div>
+          <div class="sample-day"><b>Sat</b><small>Staple food, watch leftovers.</small></div>
+          <div class="sample-day"><b>Sun</b><small>Light feeding or pause if water quality needs it.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="species-title">
+      <div class="section-head">
+        <div>
+          <span>Match livestock</span>
+          <h2 id="species-title">Rotate differently for different animals</h2>
+        </div>
+        <p>The wrong rotation can still be a problem. Goldfish, reef fish, bottom feeders, koi, shrimp, and coral do not all need the same mix.</p>
+      </div>
+      <div class="species-grid">
+        <article class="species-card">
+          <span>Community tanks</span>
+          <h3>Feed every level</h3>
+          <p>Use foods that reach surface, mid-water, and bottom feeders without dumping excess into the tank.</p>
+          <ul>
+            <li>Small flakes or micro pellets for schooling fish</li>
+            <li>Sinking foods only for animals that need them</li>
+            <li>Watch shy fish during feeding</li>
+          </ul>
+        </article>
+        <article class="species-card">
+          <span>Herbivores</span>
+          <h3>Do not skip greens</h3>
+          <p>Grazers often need algae or vegetable-based foods as a normal part of the routine.</p>
+          <ul>
+            <li>Use algae wafers, sheets, or veg blends</li>
+            <li>Keep protein treats limited</li>
+            <li>Remove uneaten vegetable pieces</li>
+          </ul>
+        </article>
+        <article class="species-card">
+          <span>Saltwater and reef</span>
+          <h3>Feed variety carefully</h3>
+          <p>Marine tanks can benefit from variety, but rich foods and coral foods can raise nutrients quickly.</p>
+          <ul>
+            <li>Target feed when appropriate</li>
+            <li>Use seaweed for grazers</li>
+            <li>Check nitrate and phosphate trends</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="schedule-title">
+      <div class="section-head">
+        <div>
+          <span>Build the habit</span>
+          <h2 id="schedule-title">Rules that keep rotation clean</h2>
+        </div>
+        <p>Food variety should improve nutrition and behavior without making water quality harder to manage.</p>
+      </div>
+      <div class="schedule-grid">
+        <article class="schedule-card">
+          <span>01</span>
+          <h3>One staple first</h3>
+          <p>Choose a daily food that most livestock eats cleanly before adding variety.</p>
+        </article>
+        <article class="schedule-card">
+          <span>02</span>
+          <h3>Rotate by purpose</h3>
+          <p>Add foods for grazing, bottom feeding, picky fish, fry, coral, or pond season.</p>
+        </article>
+        <article class="schedule-card">
+          <span>03</span>
+          <h3>Measure results</h3>
+          <p>Watch body condition, appetite, algae, cloudiness, nitrate, and phosphate together.</p>
+        </article>
+        <article class="schedule-card">
+          <span>04</span>
+          <h3>Change slowly</h3>
+          <p>Add one new food at a time so you can tell what helps and what pollutes.</p>
+        </article>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>Bring the food label and livestock list to the store</h2>
+      <p>If fish are picky, bloated, thin, or the tank gets cloudy after meals, bring the current food, tank size, livestock list, and water test results. That makes it easier to choose a better rotation instead of just buying another jar.</p>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="../">Help Center</a><a href="../feeding-basics/">Feeding Basics</a><a href="../weekly-maintenance/">Weekly Maintenance</a><a href="../cloudy-water/">Cloudy Water</a><a href="../algae/">Algae</a><a href="../ammonia-nitrite/">Ammonia Spike</a></div></div>
+        <div><h4>About This Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
