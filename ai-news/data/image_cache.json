@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T18:00:01.445446+00:00",
+  "updatedAt": "2026-05-28T19:00:02.100358+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8408,6 +8408,14 @@
     "https://www.anthropic.com/news/claude-opus-4-8": {
       "image": "https://cdn.sanity.io/images/4zrzovbb/website/0eaa0ed2dce9810169112e1c77de2585fcf1f5c2-2880x1620.jpg",
       "checkedAt": "2026-05-28T18:00:01.445446+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/anthropic-raises-65-billion-nears-1t-valuation-ahead-of-ipo": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Screenshot-2025-09-02-at-12.22.37PM.png?resize=1200,671",
+      "checkedAt": "2026-05-28T19:00:02.100358+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/just-like-gold-and-oil-well-soon-be-able-to-trade-ai-token-futures": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200,849",
+      "checkedAt": "2026-05-28T19:00:02.100358+00:00"
     }
   }
 }
