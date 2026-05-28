@@ -210,12 +210,11 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      min-height: 260px;
     }
     .portion-cup {
       display: grid;
-      align-content: end;
-      min-height: 260px;
+      grid-template-rows: minmax(132px, 1fr) auto auto;
+      min-height: 232px;
       padding: 12px;
       border: 1px solid rgba(116,205,235,0.18);
       border-radius: 8px;
@@ -235,21 +234,91 @@
       line-height: 1.35;
     }
     .flake-pile {
-      display: flex;
-      flex-wrap: wrap;
-      align-content: end;
-      gap: 4px;
-      min-height: 112px;
+      position: relative;
+      overflow: hidden;
+      min-height: 132px;
       margin-bottom: 12px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 7px;
+      background:
+        radial-gradient(circle at 22% 22%, rgba(114,211,137,0.2), transparent 17%),
+        radial-gradient(circle at 82% 36%, rgba(64,217,255,0.16), transparent 19%),
+        linear-gradient(180deg, rgba(5,61,91,0.74), rgba(3,21,35,0.94) 72%, rgba(74,45,24,0.32) 100%);
+      box-shadow: inset 0 0 22px rgba(64,217,255,0.12);
+    }
+    .flake-pile::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 26px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(179,238,255,0.56), transparent);
+    }
+    .flake-pile::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 20px;
+      background:
+        radial-gradient(circle at 12% 52%, rgba(255,177,77,0.36) 0 2px, transparent 3px),
+        radial-gradient(circle at 34% 44%, rgba(255,255,255,0.18) 0 1px, transparent 3px),
+        radial-gradient(circle at 64% 55%, rgba(255,177,77,0.26) 0 2px, transparent 4px),
+        linear-gradient(180deg, rgba(18,31,36,0), rgba(111,75,42,0.3));
     }
     .flake {
+      position: absolute;
+      left: var(--x, 50%);
+      top: var(--y, 58%);
       width: 10px;
       height: 7px;
       border-radius: 50%;
       background: #ffb14d;
       box-shadow: 0 0 8px rgba(255,177,77,0.35);
       transform: rotate(-18deg);
+      z-index: 1;
     }
+    .portion-small .flake:nth-child(1) { --x: 36%; --y: 43%; }
+    .portion-small .flake:nth-child(2) { --x: 43%; --y: 47%; }
+    .portion-small .flake:nth-child(3) { --x: 50%; --y: 45%; }
+    .portion-small .flake:nth-child(4) { --x: 57%; --y: 50%; }
+    .portion-small .flake:nth-child(5) { --x: 64%; --y: 46%; }
+    .portion-medium .flake:nth-child(1) { --x: 24%; --y: 41%; }
+    .portion-medium .flake:nth-child(2) { --x: 31%; --y: 45%; }
+    .portion-medium .flake:nth-child(3) { --x: 38%; --y: 43%; }
+    .portion-medium .flake:nth-child(4) { --x: 45%; --y: 48%; }
+    .portion-medium .flake:nth-child(5) { --x: 52%; --y: 44%; }
+    .portion-medium .flake:nth-child(6) { --x: 59%; --y: 49%; }
+    .portion-medium .flake:nth-child(7) { --x: 66%; --y: 46%; }
+    .portion-medium .flake:nth-child(8) { --x: 73%; --y: 50%; }
+    .portion-medium .flake:nth-child(9) { --x: 33%; --y: 60%; }
+    .portion-medium .flake:nth-child(10) { --x: 48%; --y: 63%; }
+    .portion-medium .flake:nth-child(11) { --x: 63%; --y: 61%; }
+    .portion-medium .flake:nth-child(12) { --x: 78%; --y: 58%; }
+    .portion-large .flake:nth-child(1) { --x: 16%; --y: 36%; }
+    .portion-large .flake:nth-child(2) { --x: 24%; --y: 39%; }
+    .portion-large .flake:nth-child(3) { --x: 32%; --y: 37%; }
+    .portion-large .flake:nth-child(4) { --x: 40%; --y: 41%; }
+    .portion-large .flake:nth-child(5) { --x: 48%; --y: 38%; }
+    .portion-large .flake:nth-child(6) { --x: 56%; --y: 42%; }
+    .portion-large .flake:nth-child(7) { --x: 64%; --y: 39%; }
+    .portion-large .flake:nth-child(8) { --x: 72%; --y: 43%; }
+    .portion-large .flake:nth-child(9) { --x: 80%; --y: 40%; }
+    .portion-large .flake:nth-child(10) { --x: 20%; --y: 52%; }
+    .portion-large .flake:nth-child(11) { --x: 28%; --y: 56%; }
+    .portion-large .flake:nth-child(12) { --x: 36%; --y: 54%; }
+    .portion-large .flake:nth-child(13) { --x: 44%; --y: 58%; }
+    .portion-large .flake:nth-child(14) { --x: 52%; --y: 55%; }
+    .portion-large .flake:nth-child(15) { --x: 60%; --y: 59%; }
+    .portion-large .flake:nth-child(16) { --x: 68%; --y: 56%; }
+    .portion-large .flake:nth-child(17) { --x: 76%; --y: 61%; }
+    .portion-large .flake:nth-child(18) { --x: 84%; --y: 58%; }
+    .portion-large .flake:nth-child(19) { --x: 34%; --y: 76%; }
+    .portion-large .flake:nth-child(20) { --x: 46%; --y: 81%; }
+    .portion-large .flake:nth-child(21) { --x: 58%; --y: 78%; }
+    .portion-large .flake:nth-child(22) { --x: 70%; --y: 83%; }
     .portion-cup.warning .flake { background: #ff6a32; }
     .portion-cup.good { border-color: rgba(114,211,137,0.44); }
     .portion-cup.warning { border-color: rgba(255,123,50,0.44); }
@@ -381,7 +450,7 @@
       .food-grid,
       .portion-demo,
       .rotation-strip { grid-template-columns: 1fr; }
-      .portion-cup { min-height: 150px; }
+      .portion-cup { min-height: 210px; }
       .portion-board,
       .visual-band,
       .callout { padding: 14px; }
@@ -449,21 +518,21 @@
         </div>
         <div class="portion-demo" aria-label="Food portion comparison">
           <div class="portion-cup good">
-            <div class="flake-pile">
+            <div class="flake-pile portion-small" aria-hidden="true">
               <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
             </div>
             <strong>Better start</strong>
             <small>Small amount, easy to watch, easy to repeat.</small>
           </div>
           <div class="portion-cup">
-            <div class="flake-pile">
+            <div class="flake-pile portion-medium" aria-hidden="true">
               <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
             </div>
             <strong>Maybe too much</strong>
             <small>Fine only if the whole tank eats it quickly.</small>
           </div>
           <div class="portion-cup warning">
-            <div class="flake-pile">
+            <div class="flake-pile portion-large" aria-hidden="true">
               <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
             </div>
             <strong>Waste risk</strong>
