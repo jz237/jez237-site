@@ -200,41 +200,32 @@
       box-shadow: 0 0 12px rgba(114,211,137,0.48);
     }
     .portion-board {
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-      gap: 18px;
-      align-items: center;
       padding: 18px;
-    }
-    .portion-photo-card {
-      overflow: hidden;
-      border: 1px solid rgba(114,211,137,0.28);
-      border-radius: 8px;
-      background: #061a27;
-    }
-    .portion-photo-card img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
     }
     .portion-checks {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      padding: 12px;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .portion-checks > div {
+      min-height: 108px;
+      padding: 14px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 8px;
+      background: rgba(5,22,34,0.72);
     }
     .portion-checks b {
       display: block;
       color: #fff;
-      font-size: 13px;
+      font-size: 17px;
       line-height: 1.25;
     }
     .portion-checks small {
       display: block;
-      margin-top: 5px;
+      margin-top: 7px;
       color: #b9d9e7;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
       line-height: 1.35;
     }
@@ -350,7 +341,6 @@
     .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
     @media (max-width: 1040px) {
       .hero,
-      .portion-board,
       .visual-band { grid-template-columns: 1fr; }
       .rotation-band { grid-template-columns: 1fr; }
       .lesson-grid,
@@ -423,30 +413,25 @@
         <p>Food that reaches the bottom and stays there is no longer nutrition. It becomes waste that can feed cloudy water, algae, ammonia, and filter buildup.</p>
       </div>
       <div class="portion-board">
-        <div>
-          <h3>The practical rule</h3>
-          <p>Start with less than feels right. Feed a small pinch, watch the fish eat, then add a second tiny amount only if they are still actively eating. For most community tanks, the meal should be gone in about a minute or two.</p>
-          <div class="hero-actions">
-            <a class="btn" href="../../category/?cat=food&amp;sub=flake-tropical">Browse flake foods</a>
-            <a class="btn secondary" href="../ammonia-nitrite/">Ammonia help</a>
+        <h3>The practical rule</h3>
+        <p>Start with less than feels right. Feed a small pinch, watch the fish eat, then add a second tiny amount only if they are still actively eating. For most community tanks, the meal should be gone in about a minute or two.</p>
+        <div class="portion-checks">
+          <div>
+            <b>Start tiny</b>
+            <small>Use a pinch you can watch disappear, not a full scoop.</small>
+          </div>
+          <div>
+            <b>Add only if needed</b>
+            <small>Wait for active feeding before adding a second small amount.</small>
+          </div>
+          <div>
+            <b>Stop before leftovers</b>
+            <small>If food is landing on the bottom, the portion is already too large.</small>
           </div>
         </div>
-        <div class="portion-photo-card" aria-label="Food portion guidance">
-          <img src="../../assets/learn/feed-less-than-you-think-gpt-image-2.png" alt="Small aquarium feeding portion with uneaten food warning illustration" loading="lazy" />
-          <div class="portion-checks">
-            <div>
-              <b>Start tiny</b>
-              <small>Use a pinch you can watch disappear.</small>
-            </div>
-            <div>
-              <b>Add only if needed</b>
-              <small>Wait for active feeding before adding more.</small>
-            </div>
-            <div>
-              <b>Stop before leftovers</b>
-              <small>Food on the bottom becomes waste.</small>
-            </div>
-          </div>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=food&amp;sub=flake-tropical">Browse flake foods</a>
+          <a class="btn secondary" href="../ammonia-nitrite/">Ammonia help</a>
         </div>
       </div>
     </section>
