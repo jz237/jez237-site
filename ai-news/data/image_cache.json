@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T08:00:01.615802+00:00",
+  "updatedAt": "2026-05-28T09:00:01.694725+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8296,6 +8296,10 @@
     "https://techcrunch.com/2026/05/27/why-googles-ai-cant-spell-google-or-anything-else": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200,675",
       "checkedAt": "2026-05-28T01:00:01.295852+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/28/a-coding-guide-to-implement-a-pgvector-powered-semantic-hybrid-sparse-and-quantized-vector-search-system": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
+      "checkedAt": "2026-05-28T09:00:01.694725+00:00"
     }
   }
 }

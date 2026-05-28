@@ -1,7 +1,39 @@
 {
   "date": "2026-05-28",
-  "updatedAt": "2026-05-28T08:00:01.615802+00:00",
+  "updatedAt": "2026-05-28T09:00:01.694725+00:00",
   "items": [
+    {
+      "title": "Musk walks back the Anthropic Colossus deal to a six-month lease",
+      "url": "https://thenextweb.com/news/musk-spacex-colossus-anthropic-180-day-lease",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX did not commit to a multi-year lease of its Memphis Colossus 1 cluster to Anthropic, Elon Musk said on Wednesday, describing the agreement as 180 days with a 90-day mutual cancellation right. Elon Musk has clarified that SpaceX did not commit to a multi-year lease of its Colossus 1 data centre to Anthropic, contradicting [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/musk-openai-testimony-charity-precedent.avif",
+      "published": "2026-05-28T08:26:16+00:00",
+      "firstSeen": "2026-05-28T09:00:01.694725+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 5.1329
+    },
+    {
+      "title": "A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System",
+      "url": "https://www.marktechpost.com/2026/05/28/a-coding-guide-to-implement-a-pgvector-powered-semantic-hybrid-sparse-and-quantized-vector-search-system",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "In this tutorial, we build a complete pgvector playground inside Google Colab and explore how PostgreSQL can work as a powerful vector database for modern AI applications. We start by installing PostgreSQL, compiling the pgvector extension, connecting through Psycopg, and registering vector types for smooth Python integration. Then, we create embeddings with SentenceTransformers, store them [&#8230;]\nThe post A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
+      "published": "2026-05-28T08:07:09+00:00",
+      "firstSeen": "2026-05-28T09:00:01.694725+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 4.9934
+    },
     {
       "title": "A Google engineer used internal search data to bet $2.7m on Polymarket. The DOJ has charged him.",
       "url": "https://thenextweb.com/news/google-engineer-polymarket-insider-trading-charges",
@@ -13,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
       "published": "2026-05-28T07:12:51+00:00",
       "firstSeen": "2026-05-28T08:00:01.615802+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5262
+      "score": 4.4968
     },
     {
       "title": "Illinois Lawmakers Just Passed America’s Strongest AI Safety Bill",
@@ -29,13 +61,13 @@
       "image": "https://media.wired.com/photos/6a1769e135f75a644600c4ac/master/pass/Illionois-AI-Safetry-Bill-Business-2270597563.jpg",
       "published": "2026-05-28T00:10:42+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 3.4752
+      "score": 3.4509
     },
     {
-      "title": "Jaehoon Kang, Yejin Lee, Yoonji Park, Kyuhong Shim",
+      "title": "Yidong Gan, David D. Nguyen, Yang Lin, Peter Zhong, Thanh Vu, Long Duong, Yuan-Fang Li",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -43,12 +75,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-28T08:00:10.714184+00:00",
+      "published": "2026-05-28T09:00:08.158636+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Orbital Industries raises $50M Series B for AI-designed data-centre hardware",
+      "url": "https://thenextweb.com/news/orbital-industries-50m-series-b-data-center-cooling",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The London-and-San-Francisco startup, formerly Orbital Materials, has closed $50M led by Plural for PFAS-free cooling fluid and modular high-density compute infrastructure. Orbital Industries, the London-and-San-Francisco AI-materials startup formerly known as Orbital Materials, has raised $50m in a Series B led by Plural with participation from Nvidia’s NVentures, Radical Ventures, Compound and Fly Ventures. The funding [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Orbital.avif",
+      "published": "2026-05-28T08:18:04+00:00",
+      "firstSeen": "2026-05-28T09:00:01.694725+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1288
+    },
+    {
+      "title": "Snowflake commits $6bn to AWS over five years, with Graviton chips at the centre",
+      "url": "https://thenextweb.com/news/snowflake-aws-6bn-graviton-ai-commitment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The five-year commitment is 2.4x larger than Snowflake’s 2023 AWS deal and lands as shares jump 38% on a Q1 earnings beat. The Graviton component is the part that matters strategically. Snowflake has signed a five-year, $6bn commitment to Amazon Web Services in what both companies are framing as the largest expansion of their 11-year [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Snowflake.avif",
+      "published": "2026-05-28T07:46:43+00:00",
+      "firstSeen": "2026-05-28T09:00:01.694725+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1133
     },
     {
       "title": "Jensen Huang joins the Tsinghua University advisory board chaired by Tim Cook",
@@ -61,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang.avif",
       "published": "2026-05-28T07:29:12+00:00",
       "firstSeen": "2026-05-28T08:00:01.615802+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1344
+      "score": 2.1047
     },
     {
       "title": "Pentagon gives Dell a $9.7bn contract to consolidate Microsoft licences across the military",
@@ -77,10 +141,10 @@
       "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
       "published": "2026-05-28T07:04:55+00:00",
       "firstSeen": "2026-05-28T08:00:01.615802+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1223
+      "score": 2.0929
     },
     {
       "title": "Why Google’s AI can’t spell Google (or anything else)",
@@ -93,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200%2C675",
       "published": "2026-05-28T00:17:41+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.078
+      "score": 2.0537
     },
     {
       "title": "Sakana AI Proposes DiffusionBlocks: a Block-wise Training Framework That Converts Residual Networks into Independently Trainable Denoising Modules",
@@ -109,10 +173,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.51.29-PM-1-150x150.png",
       "published": "2026-05-28T00:51:53+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T09:00:01.694725+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3222
+      "score": 0.2975
     }
   ],
   "errors": []
