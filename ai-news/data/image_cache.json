@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T17:00:01.348659+00:00",
+  "updatedAt": "2026-05-28T17:01:58.536944+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8392,6 +8392,14 @@
     "https://openai.com/index/openai-frontier-governance-framework": {
       "image": "",
       "checkedAt": "2026-05-28T17:00:01.348659+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/anthropic-releases-opus-4-8-with-new-dynamic-workflow-tool": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
+      "checkedAt": "2026-05-28T17:01:58.536944+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/939094/anthropic-claude-4-8-opus-honesty-effort": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STKB364_CLAUDE_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-28T17:01:58.536944+00:00"
     }
   }
 }
