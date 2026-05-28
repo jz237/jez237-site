@@ -210,7 +210,7 @@
     }
     .visual-band {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(270px, 0.62fr);
+      grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
       gap: 18px;
       align-items: center;
       margin-top: 28px;
@@ -264,16 +264,20 @@
     }
     .sample-week {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
       margin-top: 14px;
     }
     .sample-day {
-      min-height: 108px;
-      padding: 10px;
+      min-height: 74px;
+      padding: 12px;
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
       background: rgba(3,20,34,0.72);
+    }
+    .sample-day:last-child {
+      grid-column: 1 / -1;
+      min-height: auto;
     }
     .sample-day b {
       display: block;
@@ -320,7 +324,6 @@
       .rotation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .species-grid,
       .schedule-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .sample-week { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 760px) {
