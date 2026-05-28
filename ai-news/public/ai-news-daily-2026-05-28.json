@@ -1,6 +1,6 @@
 {
   "date": "2026-05-28",
-  "updatedAt": "2026-05-28T11:00:01.312571+00:00",
+  "updatedAt": "2026-05-28T12:00:01.512231+00:00",
   "items": [
     {
       "title": "Mistral launches Industrial Engineering AI with Airbus, BMW and EDF as headline customers",
@@ -13,11 +13,11 @@
       "image": "https://media.thenextweb.com/2026/05/Mistral-AI.avif",
       "published": "2026-05-28T09:30:48+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2055
+      "score": 15.1766
     },
     {
       "title": "Mistral’s Arthur Mensch directly rebuts Pope Leo on AI in warfare",
@@ -30,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/05/Arthur-Mensch.avif",
       "published": "2026-05-28T10:01:46+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1207
+      "score": 5.0914
     },
     {
       "title": "Musk walks back the Anthropic Colossus deal to a six-month lease",
@@ -46,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/04/musk-openai-testimony-charity-precedent.avif",
       "published": "2026-05-28T08:26:16+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0744
+      "score": 5.0464
     },
     {
       "title": "A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System",
@@ -62,10 +62,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
       "published": "2026-05-28T08:07:09+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.9354
+      "score": 4.9076
+    },
+    {
+      "title": "New Moms Are Returning to Coding Jobs Radically Reshaped by AI",
+      "url": "https://www.wired.com/story/women-parental-leave-return-office-ai",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "New mothers working in software development are staring down an AI-pilled workplace they barely recognize.",
+      "image": "https://media.wired.com/photos/6a0b7d9d4db62c986283e838/master/pass/Business_TheWomenWhoWentonMaternityLeaveandReturnedtoanOfficeReshapedbyAI_v2.jpg",
+      "published": "2026-05-28T11:00:00+00:00",
+      "firstSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.6599
     },
     {
       "title": "A Google engineer used internal search data to bet $2.7m on Polymarket. The DOJ has charged him.",
@@ -81,7 +97,23 @@
       "lastSeen": "2026-05-28T11:00:01.312571+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4402
+      "score": 4.4131
+    },
+    {
+      "title": "Vertu wants CEOs to run companies from an AI foldable starting at $6,880",
+      "url": "https://techcrunch.com/2026/05/28/vertu-wants-ceos-to-run-companies-from-an-ai-foldable-starting-at-6880",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Built on top of the open-source Hermes project, Vertu's new foldable combines AI-agent workflows, enterprise integrations, and ultra-premium luxury finishes.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/vertu-alphafold-foldable.jpg?resize=1200%2C800",
+      "published": "2026-05-28T07:00:00+00:00",
+      "firstSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8473
     },
     {
       "title": "JD.com’s founder vows to protect 900,000 jobs from AI. His warehouse strategy says otherwise.",
@@ -94,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/05/Liu-Qiangdong.avif",
       "published": "2026-05-28T09:11:44+00:00",
       "firstSeen": "2026-05-28T10:00:01.332917+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4962
+      "score": 3.4675
     },
     {
       "title": "Illinois Lawmakers Just Passed America’s Strongest AI Safety Bill",
@@ -110,10 +142,10 @@
       "image": "https://media.wired.com/photos/6a1769e135f75a644600c4ac/master/pass/Illionois-AI-Safetry-Bill-Business-2270597563.jpg",
       "published": "2026-05-28T00:10:42+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 3.4044
+      "score": 3.3821
     },
     {
       "title": "The AI Hype Index: AI gets booed in graduation season",
@@ -126,10 +158,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MJ26-Thumb.jpg?resize=1200%2C600",
       "published": "2026-05-28T09:51:11+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3555
+      "score": 3.3263
     },
     {
       "title": "Perplexity AI Open-Sources Unigram Tokenizer That Achieves 5x Lower p50 Latency Than Hugging Face tokenizers Crate",
@@ -142,58 +174,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-clean-modern-tech-editorial-banner-ill_o0XNxzSsWc-NAtXkWPloHQ_YJRkb0VeS-q2Fo-tl6Zmig_hd.png",
       "published": "2026-05-28T09:08:20+00:00",
       "firstSeen": "2026-05-28T10:00:01.332917+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2646
+      "score": 3.2359
     },
     {
-      "title": "YouTube will let you ask AI to make a custom video feed",
-      "url": "https://www.theverge.com/streaming/938759/youtube-custom-ai-feed-prompt-availability",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
+      "title": "Transition Ventures lands $150M Fund II with Olix, Applied Atomics and Seneca on the portfolio",
+      "url": "https://thenextweb.com/news/transition-ventures-150m-fund-ii-helgason-physical-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "category": "AI",
-      "summary": "YouTube is launching a new AI feature that creates a personalized video feed based on descriptions of what you want to watch. In its announcement, YouTube says custom content feeds can be built around your specific interests, moods, or favorite topics, which you can then pin to the top of your YouTube homepage - making [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/YouTube-AI-custom-feeds.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-28T08:49:07+00:00",
-      "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
+      "summary": "Transition Ventures, the London-based early-stage firm led by Unity co-founder David Helgason, has closed a $150m second fund, bringing the platform’s assets under management to over $300m. Fund II will continue Transition’s thesis that the most consequential companies of the coming decade will sit at the intersection of AI and the physical world: power, robotics, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Transition-Ventures.avif",
+      "published": "2026-05-28T11:03:18+00:00",
+      "firstSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9953
-    },
-    {
-      "title": "Jiayong Wan, Jiawei Chen, Zhaoxia Yin, Liu Shuyuan, Hang Su",
-      "url": "https://llm-stats.com/ai-news",
-      "source": "LLM Stats AI News",
-      "sourceUrl": "https://llm-stats.com/ai-news",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "",
-      "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-28T11:00:18.142616+00:00",
-      "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.36
-    },
-    {
-      "title": "Amazon Thinks the Future of Data Centers Depends on a Technical Problem It Just Solved",
-      "url": "https://www.wired.com/story/amazon-thinks-the-future-of-data-centers-depends-on-a-technical-problem-it-just-solved",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The tech giant says a breakthrough in data-center networking has dramatically accelerated the flow of information through its massive cloud infrastructure.",
-      "image": "https://media.wired.com/photos/6a173c117ababccb510cce19/master/pass/Amazon-AI-Future-Business-Ratul-Giacomo-Sesh-in-front-of-RNG-racks3.jpg",
-      "published": "2026-05-28T10:30:00+00:00",
-      "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T11:00:01.312571+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2748
+      "score": 3.2215
     }
   ],
   "errors": []
