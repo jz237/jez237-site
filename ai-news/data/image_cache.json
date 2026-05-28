@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T08:00:01.615802+00:00",
+  "updatedAt": "2026-05-28T08:51:39.890160+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8296,6 +8296,18 @@
     "https://techcrunch.com/2026/05/27/why-googles-ai-cant-spell-google-or-anything-else": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200,675",
       "checkedAt": "2026-05-28T01:00:01.295852+00:00"
+    },
+    "https://www.theverge.com/streaming/938759/youtube-custom-ai-feed-prompt-availability": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/YouTube-AI-custom-feeds.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-28T08:51:39.890160+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/28/a-coding-guide-to-implement-a-pgvector-powered-semantic-hybrid-sparse-and-quantized-vector-search-system": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
+      "checkedAt": "2026-05-28T08:51:39.890160+00:00"
+    },
+    "https://www.techrepublic.com/article/news-ai-prompts-restore-old-photos": {
+      "image": "",
+      "checkedAt": "2026-05-28T08:51:39.890160+00:00"
     }
   }
 }
