@@ -272,6 +272,9 @@
       border-radius: 8px;
       background: #061a27;
     }
+    .rotation-band {
+      grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+    }
     .food-gallery {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -310,12 +313,12 @@
     }
     .rotation-strip {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       margin-top: 14px;
     }
     .rotation-item {
-      min-height: 118px;
+      min-height: 132px;
       padding: 12px;
       border: 1px solid rgba(116,205,235,0.2);
       border-radius: 8px;
@@ -364,6 +367,7 @@
       .hero,
       .portion-board,
       .visual-band { grid-template-columns: 1fr; }
+      .rotation-band { grid-template-columns: 1fr; }
       .lesson-grid,
       .food-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -511,24 +515,21 @@
       </div>
     </section>
 
-    <section class="visual-band" id="rotation" aria-labelledby="rotation-title">
+    <section class="visual-band rotation-band" id="rotation" aria-labelledby="rotation-title">
       <img src="../../assets/learn/rotate-food-types-gpt-image-2.png" alt="Weekly aquarium food rotation schedule illustration" loading="lazy" />
       <div>
         <div class="section-head" style="display:block;margin:0 0 12px">
           <span>Food rotation</span>
           <h2 id="rotation-title">Rotate food types without making feeding complicated</h2>
         </div>
-        <p>Rotation does not mean five foods every day. It means the main diet fits the fish, then a few appropriate foods fill in texture, nutrition, and natural feeding behavior.</p>
+        <p>Rotation does not mean five foods every day. Keep one reliable staple, then add a few foods that match the animals you keep, their mouth size, and where they feed in the tank.</p>
         <div class="rotation-strip">
-          <div class="rotation-item"><b>Flakes</b><small>Good for surface and mid-water community fish when sized correctly.</small></div>
-          <div class="rotation-item"><b>Pellets</b><small>Consistent nutrition, useful for fish that need measured portions.</small></div>
-          <div class="rotation-item"><b>Frozen</b><small>Great enrichment, but easy to overuse. Rinse or portion carefully.</small></div>
-          <div class="rotation-item"><b>Veg</b><small>Important for many herbivores, grazers, plecos, and some reef fish.</small></div>
-          <div class="rotation-item"><b>Specialty</b><small>Use wafers, coral foods, fry foods, or pond diets for specific needs.</small></div>
+          <div class="rotation-item"><b>Daily staple</b><small>Use flakes or pellets that fit the fish and disappear quickly with little waste.</small></div>
+          <div class="rotation-item"><b>Targeted variety</b><small>Add sinking foods, algae sheets, wafers, or small frozen portions for species that need them.</small></div>
+          <div class="rotation-item"><b>Occasional extras</b><small>Treat rich foods, coral foods, and fry foods as planned supplements, not extra meals.</small></div>
         </div>
         <div class="hero-actions">
-          <a class="btn" href="../rotate-food-types/">Open full rotation guide</a>
-          <a class="btn secondary" href="../../category/?cat=food">Browse food options</a>
+          <a class="btn" href="../../category/?cat=food">Browse food options</a>
         </div>
       </div>
     </section>
