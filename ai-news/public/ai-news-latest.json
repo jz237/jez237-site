@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-05-28T07:00:01.822366+00:00",
+  "updatedAt": "2026-05-28T08:00:01.615802+00:00",
   "items": [
     {
-      "title": "Jiayong Wan, Jiawei Chen, Zhaoxia Yin, Liu Shuyuan, Hang Su",
+      "title": "Jaehoon Kang, Yejin Lee, Yoonji Park, Kyuhong Shim",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-28T07:00:07.772005+00:00",
+      "published": "2026-05-28T08:00:10.714184+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Jensen Huang joins the Tsinghua University advisory board chaired by Tim Cook",
+      "url": "https://thenextweb.com/news/jensen-huang-tsinghua-advisory-board-beijing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Nvidia CEO accepts a seat on Tsinghua’s School of Economics and Management board alongside Musk, Dell, Nadella, Zuckerberg, Dimon and Fink, days after travelling to China with Trump. Jensen Huang has accepted an invitation to join the advisory board of Tsinghua University’s School of Economics and Management, according to a Financial Times report. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang.avif",
+      "published": "2026-05-28T07:29:12+00:00",
+      "firstSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1344
+    },
+    {
+      "title": "A Google engineer used internal search data to bet $2.7m on Polymarket. The DOJ has charged him.",
+      "url": "https://thenextweb.com/news/google-engineer-polymarket-insider-trading-charges",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Michele Spagnuolo allegedly traded under the handle ‘AlphaRaccoon’, netting $1.2m on Google’s Year-in-Search outcomes. It is the second federal criminal case tied to Polymarket. Federal prosecutors in the Southern District of New York have charged Michele Spagnuolo, a 36-year-old Google information-security engineer based in Switzerland, with using internal Google search-trend data to bet $2.7m on [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
+      "published": "2026-05-28T07:12:51+00:00",
+      "firstSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5262
+    },
+    {
+      "title": "Pentagon gives Dell a $9.7bn contract to consolidate Microsoft licences across the military",
+      "url": "https://thenextweb.com/news/pentagon-dell-microsoft-97bn-software-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The five-year deal consolidates scattered Microsoft 365 and cloud subscriptions for the Defense Department, intelligence community and Coast Guard. Dell, not Microsoft, is the prime contractor. The US Department of Defense has awarded Dell a five-year, roughly $9.7bn contract to consolidate Microsoft software licensing across the entire US military, the intelligence community and the Coast [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
+      "published": "2026-05-28T07:04:55+00:00",
+      "firstSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1223
     },
     {
       "title": "Sakana AI Proposes DiffusionBlocks: a Block-wise Training Framework That Converts Residual Networks into Independently Trainable Denoising Modules",
@@ -28,10 +76,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.51.29-PM-1-150x150.png",
       "published": "2026-05-28T00:51:53+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3476
+      "score": 0.3222
     },
     {
       "title": "Why Google’s AI can’t spell Google (or anything else)",
@@ -44,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200%2C675",
       "published": "2026-05-28T00:17:41+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1031
+      "score": 2.078
     },
     {
       "title": "Illinois Lawmakers Just Passed America’s Strongest AI Safety Bill",
@@ -60,10 +108,10 @@
       "image": "https://media.wired.com/photos/6a1769e135f75a644600c4ac/master/pass/Illionois-AI-Safetry-Bill-Business-2270597563.jpg",
       "published": "2026-05-28T00:10:42+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 3.5001
+      "score": 3.4752
     },
     {
       "title": "sqlite AGENTS.md",
@@ -76,10 +124,10 @@
       "image": "",
       "published": "2026-05-27T23:44:37+00:00",
       "firstSeen": "2026-05-28T00:00:01.543922+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1392
+      "score": 5.1145
     },
     {
       "title": "Websites have a new way to spy on visitors: analyzing their SSD activity",
@@ -92,10 +140,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/solid-state-drive-ssd-1152x648.jpg",
       "published": "2026-05-27T20:56:03+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2817
+      "score": 3.2589
     },
     {
       "title": "France’s startup scene is falling behind the US and Europe, and AI is both the cause and the cure",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/french-tech-ecosystem-2025-ai-defence-mistral.avif",
       "published": "2026-05-27T20:44:26+00:00",
       "firstSeen": "2026-05-27T22:00:01.429321+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8772
+      "score": 1.8546
     },
     {
       "title": "Chile’s Atacama desert is becoming the world’s biggest battery farm",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/05/chile-atacama-battery-storage-contourglobal-solar.avif",
       "published": "2026-05-27T20:25:52+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2299
+      "score": -1.2523
     },
     {
       "title": "Spotify and Netflix are paying Jay Shetty up to $100 million to take his podcast off YouTube",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2026/05/spotify-netflix-jay-shetty-podcast-100-million-deal.avif",
       "published": "2026-05-27T20:12:29+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8651
+      "score": 1.8427
     },
     {
       "title": "In more good news for Amazon, Snowflake signs $6B deal with AWS for AI CPU chips",
@@ -156,10 +204,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/dollar-signs-data-center.png?w=1024",
       "published": "2026-05-27T20:10:00+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0041
+      "score": 1.9818
     },
     {
       "title": "Cognition just raised $1 billion at a $26 billion valuation, and 90% of its own code is written by its AI",
@@ -172,10 +220,10 @@
       "image": "https://media.thenextweb.com/2026/05/cognition-devin-1-billion-funding-26-billion-valuation.avif",
       "published": "2026-05-27T20:00:33+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5606
+      "score": 2.5384
     },
     {
       "title": "Dutch police seized 800 servers used by Russian hackers to attack Europe",
@@ -188,10 +236,10 @@
       "image": "https://media.thenextweb.com/2026/05/dutch-police-800-servers-russian-hackers-noname057.avif",
       "published": "2026-05-27T19:40:05+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8529
+      "score": 1.8309
     },
     {
       "title": "Payroll startup Remote says it grew revenue 50% per employee without adding headcount",
@@ -204,10 +252,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/money-firehose.jpg?resize=1200%2C675",
       "published": "2026-05-27T19:39:45+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9928
+      "score": 1.9708
     },
     {
       "title": "Meta is charging for its AI chatbot for the first time, starting at $7.99 a month",
@@ -220,10 +268,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-ai-chatbot-subscription-meta-one-pricing.avif",
       "published": "2026-05-27T19:30:52+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2495
+      "score": 5.2276
     },
     {
       "title": "Talkdesk wants its AI agents to call your customers before they call you",
@@ -236,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/05/talkdesk-proactive-ai-agents-retail-financial-services.avif",
       "published": "2026-05-27T18:53:06+00:00",
       "firstSeen": "2026-05-27T19:32:14.579586+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2357
+      "score": 5.2141
     },
     {
       "title": "Daylight expands MDR into Claude Enterprise to address emerging AI security risks",
@@ -255,7 +303,7 @@
       "lastSeen": "2026-05-28T07:00:01.822366+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9308
+      "score": 9.9094
     },
     {
       "title": "Your SEO strategy is optimized for a search engine that no longer exists.",
@@ -268,10 +316,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-ai-sign-Getty.jpg?resize=1200%2C800",
       "published": "2026-05-27T18:39:17+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3707
+      "score": 4.3493
     },
     {
       "title": "NATO just formalised cybersecurity partnerships with Microsoft, Palo Alto Networks, and ESET",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-05-28T07:00:01.822366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8267
+      "score": 1.8054
     },
     {
       "title": "Why ‘Vertical AI’ is the Practical Future for Most Companies",
@@ -300,10 +348,10 @@
       "image": "",
       "published": "2026-05-27T18:19:53+00:00",
       "firstSeen": "2026-05-27T19:32:14.579586+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9237
+      "score": 2.9025
     },
     {
       "title": "ElevenLabs is bringing Stan Lee back from the dead with AI voice cloning and digital cameos",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-05-28T07:00:01.822366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9194
+      "score": 2.8984
     },
     {
       "title": "Google AI Studio Cheat Sheet: Features, Pricing, and More",
@@ -332,10 +380,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/google-ai-studio.png?f=jpeg",
       "published": "2026-05-27T18:06:18+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9188
+      "score": 6.8978
     },
     {
       "title": "Meta launches Instagram, Facebook, and WhatsApp subscriptions, with more to come, including AI plans",
@@ -348,11 +396,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2164040793.jpg?w=1024",
       "published": "2026-05-27T18:00:00+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2566
+      "score": 14.2356
     },
     {
       "title": "Huawei's ‘Chip Queen’ Throws Down the Gauntlet",
@@ -365,10 +413,10 @@
       "image": "https://media.wired.com/photos/6a1615f55f7c39896f97f413/master/pass/AI-Lab-Huawei-Chip-Queen-Says-No-More-Moores-Law-Business.jpg",
       "published": "2026-05-27T18:00:00+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9566
+      "score": 1.9356
     },
     {
       "title": "The Next AI Security Failure May Start With a Trusted Assistant",
@@ -381,10 +429,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/close-up-of-laptop-with-abstract-polygonal-head-ou-2026-03-26-05-09-31-utc.jpg?f=jpeg",
       "published": "2026-05-27T17:55:45+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.1151
+      "score": 7.0941
     },
     {
       "title": "Zendesk hires serial enterprise CMO Tifenn Dano Kwan as it bets everything on AI agents",
@@ -400,7 +448,7 @@
       "lastSeen": "2026-05-27T21:00:01.639902+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6099
+      "score": 5.5891
     },
     {
       "title": "Capchase raises $200 million to replace the banks slowing down enterprise tech deals",
@@ -416,7 +464,7 @@
       "lastSeen": "2026-05-27T19:32:14.579586+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8068
+      "score": 1.7861
     },
     {
       "title": "ITBench-AA: Frontier Models Score Below 50% on the First Benchmark for Agentic Enterprise IT Tasks — by Artificial Analysis and IBM",
@@ -429,10 +477,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/64e8143f6de557454220921e/QzGxABeEDggNYzvgSLQqU.png",
       "published": "2026-05-27T17:20:29+00:00",
       "firstSeen": "2026-05-27T18:00:01.603109+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1327
+      "score": 5.1121
     },
     {
       "title": "NVIDIA Releases Polar, a Token-Faithful Rollout Framework for GRPO Training Across Codex, Claude Code, and Qwen Code",
@@ -445,11 +493,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-10.08.51-AM-1-150x150.png",
       "published": "2026-05-27T17:09:38+00:00",
       "firstSeen": "2026-05-27T18:00:01.603109+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1689
+      "score": 18.1484
     },
     {
       "title": "I think Anthropic and OpenAI have found product-market fit",
@@ -462,10 +510,10 @@
       "image": "",
       "published": "2026-05-27T16:38:35+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.6282
+      "score": 8.608
     },
     {
       "title": "YouTube mentions are the single strongest predictor of whether AI will recommend your brand, according to a study of 75,000 companies",
@@ -481,7 +529,7 @@
       "lastSeen": "2026-05-27T19:32:14.579586+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.2828
+      "score": 8.2627
     },
     {
       "title": "AI Factories: The New Infrastructure of Intelligence",
@@ -494,10 +542,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/AI_v001-scaled.png",
       "published": "2026-05-27T16:00:36+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.6154
+      "score": 3.5955
     },
     {
       "title": "Extending Human Intelligence Through AI",
@@ -510,10 +558,10 @@
       "image": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/05/ExtendingHIthroughAI-TWLIFB-1200x627-1-scaled.jpg",
       "published": "2026-05-27T16:00:00+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4852
+      "score": 4.4653
     },
     {
       "title": "AI coding startup Cognition raises $1B at $25B pre-money valuation",
@@ -526,10 +574,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/08/Screenshot-2025-08-05-at-11.02.07AM.png?resize=1200%2C645",
       "published": "2026-05-27T16:00:00+00:00",
       "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3152
+      "score": 4.2953
     },
     {
       "title": "Amazon is now selling its AI shopping technology to other retailers, and Kate Spade is the first customer",
@@ -545,7 +593,7 @@
       "lastSeen": "2026-05-27T19:32:14.579586+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2736
+      "score": 5.2538
     },
     {
       "title": "SK Hynix Tops $1 Trillion Valuation as AI Memory Boom Reshapes Chip Market",
@@ -558,10 +606,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-13.png?f=jpeg",
       "published": "2026-05-27T15:41:42+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.269
+      "score": 5.2493
     },
     {
       "title": "AI tried to bury this politician — now people have actually heard of him",
@@ -574,10 +622,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2271137268.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.752607989199%2C100%2C78.494784021602&amp%3Bw=1200",
       "published": "2026-05-27T15:40:00+00:00",
       "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9785
+      "score": 5.9588
     },
     {
       "title": "Meta Layoffs Leave Employees Wary Despite Zuckerberg’s Reassurance",
@@ -590,58 +638,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/unnamed-12.png?f=jpeg",
       "published": "2026-05-27T15:31:41+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8657
-    },
-    {
-      "title": "Spotify now lets listeners clip and share moments from any podcast",
-      "url": "https://thenextweb.com/news/spotify-podcast-clips-share-chapters-feature",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Spotify has launched a feature called Podcast Clips that lets listeners select, trim, and share specific moments from podcast episodes. A new scissors icon in the Now Playing view opens a clipping tool where users can mark a segment of audio, preview it, and share it via social media, messaging apps, or a direct link. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/spotify-podcast-clips-share-chapters-feature.avif",
-      "published": "2026-05-27T15:01:14+00:00",
-      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T19:32:14.579586+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.5557
-    },
-    {
-      "title": "Robinhood is letting AI agents trade stocks and spend money on your credit card",
-      "url": "https://thenextweb.com/news/robinhood-is-letting-ai-agents-trade-stocks-and-spend-money-on-your-credit-card",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Robinhood has launched a platform that lets users connect AI agents to their brokerage accounts to execute stock trades autonomously. The company is also introducing a virtual credit card designed specifically for AI agents, making it the first major consumer brokerage to open both trading and spending to autonomous software. The agentic trading system [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/robinhood-ai-agentic-trading-mcp-credit-card.avif",
-      "published": "2026-05-27T14:51:39+00:00",
-      "firstSeen": "2026-05-27T16:00:01.308169+00:00",
-      "lastSeen": "2026-05-27T19:32:14.579586+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 2.0526
-    },
-    {
-      "title": "Robinhood will let your AI agent trade stocks and make (or lose) lots of money",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/938095/robinhood-ai-agent-stock-trading",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "Robinhood is opening its trading platform to AI agents. In an announcement on Wednesday, Robinhood says traders can now create a separate account for an AI agent and add a specific amount of money, allowing the agent to buy and sell stocks across the market. The company pitches the feature as a way for traders [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/acastro_STK049_03.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-27T14:36:10+00:00",
-      "firstSeen": "2026-05-27T15:00:01.262845+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.0575
+      "score": 2.8461
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4223
+      "score": 1.414
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.5036
+      "score": 0.4978
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -686,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1228
@@ -702,7 +702,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.908
