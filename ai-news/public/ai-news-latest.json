@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T08:51:39.890160+00:00",
+  "updatedAt": "2026-05-28T10:00:01.332917+00:00",
   "items": [
     {
       "title": "Yidong Gan, David D. Nguyen, Yang Lin, Peter Zhong, Thanh Vu, Long Duong, Yuan-Fang Li",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-28T08:51:44.936935+00:00",
+      "published": "2026-05-28T10:00:09.702170+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "JD.com’s founder vows to protect 900,000 jobs from AI. His warehouse strategy says otherwise.",
+      "url": "https://thenextweb.com/news/jd-com-liu-protect-jobs-ai-robots-vow",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Liu Qiangdong’s pledge to safeguard JD.com’s workforce from automation sits uncomfortably with his own ‘unmanned era’ vision and a flagship warehouse already running on four employees. Liu Qiangdong, the founder of Chinese e-commerce giant JD.com, vowed in an internal speech this week to protect the company’s 900,000-strong workforce from AI and robotics, according to a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Liu-Qiangdong.avif",
+      "published": "2026-05-28T09:11:44+00:00",
+      "firstSeen": "2026-05-28T10:00:01.332917+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5257
+    },
+    {
+      "title": "Perplexity AI Open-Sources Unigram Tokenizer That Achieves 5x Lower p50 Latency Than Hugging Face tokenizers Crate",
+      "url": "https://www.marktechpost.com/2026/05/28/perplexity-ai-open-sources-unigram-tokenizer-that-achieves-5x-lower-p50-latency-than-hugging-face-tokenizers-crate",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Perplexity AI open-sources a rewritten Unigram tokenizer that reduces reranker latency and cuts production CPU utilization by 5-6x.\nThe post Perplexity AI Open-Sources Unigram Tokenizer That Achieves 5x Lower p50 Latency Than Hugging Face tokenizers Crate appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-clean-modern-tech-editorial-banner-ill_o0XNxzSsWc-NAtXkWPloHQ_YJRkb0VeS-q2Fo-tl6Zmig_hd.png",
+      "published": "2026-05-28T09:08:20+00:00",
+      "firstSeen": "2026-05-28T10:00:01.332917+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.294
     },
     {
       "title": "YouTube will let you ask AI to make a custom video feed",
@@ -28,10 +60,26 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/YouTube-AI-custom-feeds.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-28T08:49:07+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0587
+      "score": 3.0245
+    },
+    {
+      "title": "ByteDance is building its own CPUs on Arm and RISC-V to feed its AI infrastructure",
+      "url": "https://thenextweb.com/news/bytedance-custom-cpu-arm-riscv-ai-rollout",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The TikTok parent is developing custom data-centre processors on two parallel architectures as Intel and AMD push prices up 10-35% a quarter and US export controls bite. ByteDance is developing its own central processing units to power the data centres behind its expanding AI infrastructure, according to a Reuters report on Thursday citing people familiar [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
+      "published": "2026-05-28T08:38:50+00:00",
+      "firstSeen": "2026-05-28T10:00:01.332917+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1094
     },
     {
       "title": "Musk walks back the Anthropic Colossus deal to a six-month lease",
@@ -44,10 +92,10 @@
       "image": "https://media.thenextweb.com/2026/04/musk-openai-testimony-charity-precedent.avif",
       "published": "2026-05-28T08:26:16+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1371
+      "score": 5.1033
     },
     {
       "title": "Orbital Industries raises $50M Series B for AI-designed data-centre hardware",
@@ -60,10 +108,10 @@
       "image": "https://media.thenextweb.com/2026/05/Orbital.avif",
       "published": "2026-05-28T08:18:04+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.133
+      "score": 2.0993
     },
     {
       "title": "A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System",
@@ -76,10 +124,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
       "published": "2026-05-28T08:07:09+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.9976
+      "score": 4.964
     },
     {
       "title": "Snowflake commits $6bn to AWS over five years, with Graviton chips at the centre",
@@ -92,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/Snowflake.avif",
       "published": "2026-05-28T07:46:43+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1174
+      "score": 2.0842
     },
     {
       "title": "Jensen Huang joins the Tsinghua University advisory board chaired by Tim Cook",
@@ -108,10 +156,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang.avif",
       "published": "2026-05-28T07:29:12+00:00",
       "firstSeen": "2026-05-28T08:00:01.615802+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1088
+      "score": 2.0758
     },
     {
       "title": "A Google engineer used internal search data to bet $2.7m on Polymarket. The DOJ has charged him.",
@@ -124,10 +172,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
       "published": "2026-05-28T07:12:51+00:00",
       "firstSeen": "2026-05-28T08:00:01.615802+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5008
+      "score": 4.4681
     },
     {
       "title": "Pentagon gives Dell a $9.7bn contract to consolidate Microsoft licences across the military",
@@ -140,10 +188,10 @@
       "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
       "published": "2026-05-28T07:04:55+00:00",
       "firstSeen": "2026-05-28T08:00:01.615802+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.097
+      "score": 2.0643
     },
     {
       "title": "Sakana AI Proposes DiffusionBlocks: a Block-wise Training Framework That Converts Residual Networks into Independently Trainable Denoising Modules",
@@ -156,10 +204,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.51.29-PM-1-150x150.png",
       "published": "2026-05-28T00:51:53+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3009
+      "score": 0.2735
     },
     {
       "title": "Why Google’s AI can’t spell Google (or anything else)",
@@ -172,10 +220,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200%2C675",
       "published": "2026-05-28T00:17:41+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0571
+      "score": 2.0301
     },
     {
       "title": "Illinois Lawmakers Just Passed America’s Strongest AI Safety Bill",
@@ -188,10 +236,10 @@
       "image": "https://media.wired.com/photos/6a1769e135f75a644600c4ac/master/pass/Illionois-AI-Safetry-Bill-Business-2270597563.jpg",
       "published": "2026-05-28T00:10:42+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 3.4543
+      "score": 3.4273
     },
     {
       "title": "sqlite AGENTS.md",
@@ -204,10 +252,10 @@
       "image": "",
       "published": "2026-05-27T23:44:37+00:00",
       "firstSeen": "2026-05-28T00:00:01.543922+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0939
+      "score": 5.0673
     },
     {
       "title": "Websites have a new way to spy on visitors: analyzing their SSD activity",
@@ -220,10 +268,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/05/solid-state-drive-ssd-1152x648.jpg",
       "published": "2026-05-27T20:56:03+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2398
+      "score": 3.2152
     },
     {
       "title": "France’s startup scene is falling behind the US and Europe, and AI is both the cause and the cure",
@@ -236,10 +284,10 @@
       "image": "https://media.thenextweb.com/2026/05/french-tech-ecosystem-2025-ai-defence-mistral.avif",
       "published": "2026-05-27T20:44:26+00:00",
       "firstSeen": "2026-05-27T22:00:01.429321+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8356
+      "score": 1.8111
     },
     {
       "title": "Chile’s Atacama desert is becoming the world’s biggest battery farm",
@@ -252,10 +300,10 @@
       "image": "https://media.thenextweb.com/2026/05/chile-atacama-battery-storage-contourglobal-solar.avif",
       "published": "2026-05-27T20:25:52+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.2712
+      "score": -1.2954
     },
     {
       "title": "6 AI Prompts That Can Restore Old Photos in Seconds",
@@ -271,7 +319,7 @@
       "lastSeen": "2026-05-28T08:51:39.890160+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9272
+      "score": 10.9029
     },
     {
       "title": "Spotify and Netflix are paying Jay Shetty up to $100 million to take his podcast off YouTube",
@@ -287,7 +335,7 @@
       "lastSeen": "2026-05-28T08:51:39.890160+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.824
+      "score": 1.7999
     },
     {
       "title": "In more good news for Amazon, Snowflake signs $6B deal with AWS for AI CPU chips",
@@ -300,10 +348,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/04/dollar-signs-data-center.png?w=1024",
       "published": "2026-05-27T20:10:00+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9631
+      "score": 1.939
     },
     {
       "title": "Cognition just raised $1 billion at a $26 billion valuation, and 90% of its own code is written by its AI",
@@ -319,7 +367,7 @@
       "lastSeen": "2026-05-28T08:51:39.890160+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5198
+      "score": 2.4958
     },
     {
       "title": "Dutch police seized 800 servers used by Russian hackers to attack Europe",
@@ -335,7 +383,7 @@
       "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8125
+      "score": 1.7887
     },
     {
       "title": "Payroll startup Remote says it grew revenue 50% per employee without adding headcount",
@@ -348,10 +396,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/07/money-firehose.jpg?resize=1200%2C675",
       "published": "2026-05-27T19:39:45+00:00",
       "firstSeen": "2026-05-27T21:00:01.639902+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9524
+      "score": 1.9286
     },
     {
       "title": "Meta is charging for its AI chatbot for the first time, starting at $7.99 a month",
@@ -367,7 +415,7 @@
       "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2092
+      "score": 5.1856
     },
     {
       "title": "Talkdesk wants its AI agents to call your customers before they call you",
@@ -383,7 +431,7 @@
       "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1961
+      "score": 5.1728
     },
     {
       "title": "Daylight expands MDR into Claude Enterprise to address emerging AI security risks",
@@ -399,7 +447,7 @@
       "lastSeen": "2026-05-28T07:00:01.822366+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.8915
+      "score": 9.8684
     },
     {
       "title": "Your SEO strategy is optimized for a search engine that no longer exists.",
@@ -412,10 +460,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-ai-sign-Getty.jpg?resize=1200%2C800",
       "published": "2026-05-27T18:39:17+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3313
+      "score": 4.3082
     },
     {
       "title": "NATO just formalised cybersecurity partnerships with Microsoft, Palo Alto Networks, and ESET",
@@ -431,7 +479,7 @@
       "lastSeen": "2026-05-28T07:00:01.822366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7876
+      "score": 1.7646
     },
     {
       "title": "Why ‘Vertical AI’ is the Practical Future for Most Companies",
@@ -444,10 +492,10 @@
       "image": "",
       "published": "2026-05-27T18:19:53+00:00",
       "firstSeen": "2026-05-27T19:32:14.579586+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8847
+      "score": 2.8618
     },
     {
       "title": "ElevenLabs is bringing Stan Lee back from the dead with AI voice cloning and digital cameos",
@@ -463,7 +511,7 @@
       "lastSeen": "2026-05-28T07:00:01.822366+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8807
+      "score": 2.8579
     },
     {
       "title": "Google AI Studio Cheat Sheet: Features, Pricing, and More",
@@ -476,10 +524,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/google-ai-studio.png?f=jpeg",
       "published": "2026-05-27T18:06:18+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.8801
+      "score": 6.8574
     },
     {
       "title": "Meta launches Instagram, Facebook, and WhatsApp subscriptions, with more to come, including AI plans",
@@ -492,11 +540,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-apps-GettyImages-2164040793.jpg?w=1024",
       "published": "2026-05-27T18:00:00+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.218
+      "score": 14.1953
     },
     {
       "title": "Huawei's ‘Chip Queen’ Throws Down the Gauntlet",
@@ -509,10 +557,10 @@
       "image": "https://media.wired.com/photos/6a1615f55f7c39896f97f413/master/pass/AI-Lab-Huawei-Chip-Queen-Says-No-More-Moores-Law-Business.jpg",
       "published": "2026-05-27T18:00:00+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.918
+      "score": 1.8953
     },
     {
       "title": "The Next AI Security Failure May Start With a Trusted Assistant",
@@ -525,10 +573,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/close-up-of-laptop-with-abstract-polygonal-head-ou-2026-03-26-05-09-31-utc.jpg?f=jpeg",
       "published": "2026-05-27T17:55:45+00:00",
       "firstSeen": "2026-05-27T19:00:01.980285+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.0765
+      "score": 7.0539
     },
     {
       "title": "Zendesk hires serial enterprise CMO Tifenn Dano Kwan as it bets everything on AI agents",
@@ -544,7 +592,7 @@
       "lastSeen": "2026-05-27T21:00:01.639902+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5717
+      "score": 5.5492
     },
     {
       "title": "Capchase raises $200 million to replace the banks slowing down enterprise tech deals",
@@ -560,7 +608,7 @@
       "lastSeen": "2026-05-27T19:32:14.579586+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7687
+      "score": 1.7463
     },
     {
       "title": "ITBench-AA: Frontier Models Score Below 50% on the First Benchmark for Agentic Enterprise IT Tasks — by Artificial Analysis and IBM",
@@ -573,10 +621,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/64e8143f6de557454220921e/QzGxABeEDggNYzvgSLQqU.png",
       "published": "2026-05-27T17:20:29+00:00",
       "firstSeen": "2026-05-27T18:00:01.603109+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0948
+      "score": 5.0725
     },
     {
       "title": "NVIDIA Releases Polar, a Token-Faithful Rollout Framework for GRPO Training Across Codex, Claude Code, and Qwen Code",
@@ -589,59 +637,11 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-10.08.51-AM-1-150x150.png",
       "published": "2026-05-27T17:09:38+00:00",
       "firstSeen": "2026-05-27T18:00:01.603109+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 18.1312
-    },
-    {
-      "title": "I think Anthropic and OpenAI have found product-market fit",
-      "url": "https://simonwillison.net/2026/May/27/product-market-fit",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Anthropic are strongly rumored to be about to have their first profitable quarter. Stories are circulating of companies surprised at how expensive their LLM bills are becoming from usage by their staff. I think this is because OpenAI and Anthropic have both found product-market fit.\n\n\n  Enterprise customers are now paying API prices\n  I think they've found product-market fit\n  And they're ramping up\n  The AI-failure stories around this are pretty thin\n  We also know the labs are spending a lot\n  API revenue is becoming less important\n  April is a new inflection point\n\n\nEnterprise customers are",
-      "image": "",
-      "published": "2026-05-27T16:38:35+00:00",
-      "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.591
-    },
-    {
-      "title": "YouTube mentions are the single strongest predictor of whether AI will recommend your brand, according to a study of 75,000 companies",
-      "url": "https://thenextweb.com/news/ahrefs-youtube-mentions-ai-visibility-brand-search",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A study of 75,000 brands by SEO platform Ahrefs has found that YouTube mentions are the strongest correlated signal for whether a brand appears in AI-generated search results, outperforming every other factor the researchers tested across ChatGPT, Google AI Mode, and Google AI Overviews. YouTube mentions, defined as any time a brand name appears in [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/ahrefs-youtube-mentions-ai-visibility-brand-search.avif",
-      "published": "2026-05-27T16:22:41+00:00",
-      "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-27T19:32:14.579586+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 8.2459
-    },
-    {
-      "title": "AI Factories: The New Infrastructure of Intelligence",
-      "url": "https://blogs.nvidia.com/blog/ai-factories-the-new-infrastructure-of-intelligence",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "AI factories are token factories, converting power into intelligence in real time. And as agentic AI scales and autonomous, always-on special agents are deployed in the enterprise, performance per watt and cost per token become the economics that matter.",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/AI_v001-scaled.png",
-      "published": "2026-05-27T16:00:36+00:00",
-      "firstSeen": "2026-05-27T16:45:25.942040+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.5788
+      "score": 18.109
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -654,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.4071
+      "score": 1.3981
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -670,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.4929
+      "score": 0.4865
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -686,10 +686,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1227
+      "score": 1.1226
     },
     {
       "title": "The Life Scientific: Washington Yotto Ochieng",
@@ -702,10 +702,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-28T08:51:39.890160+00:00",
+      "lastSeen": "2026-05-28T10:00:01.332917+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9081
+      "score": -1.9082
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
