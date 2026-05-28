@@ -1496,12 +1496,30 @@
       align-self: start;
       white-space: normal;
     }
+    .equipment-feature-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, 280px);
+      gap: 12px;
+      align-items: stretch;
+      margin: 4px 0 18px;
+    }
+    .problem-grid--filter-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0;
+    }
+    .problem-grid--filter-links .problem-card {
+      min-height: 100%;
+    }
     .equipment-choice {
       display: grid;
-      grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1fr);
-      gap: 16px;
-      margin: 4px 0 18px;
-      padding: 16px;
+      align-content: space-between;
+      align-self: start;
+      justify-self: end;
+      gap: 12px;
+      width: min(100%, 280px);
+      min-height: 0;
+      aspect-ratio: 1 / 1;
+      padding: 15px;
       border: 1px solid rgba(164,137,255,0.3);
       border-radius: 8px;
       background:
@@ -1513,44 +1531,33 @@
       margin: 0 0 8px;
       color: #fff;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 26px;
+      font-size: 22px;
       line-height: 1.05;
     }
     .equipment-choice__intro p {
       margin: 0;
       color: #c9d9d7;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 12.5px;
+      line-height: 1.4;
     }
     .equipment-choice__grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .equipment-choice__item {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      padding: 12px;
-      border: 1px solid rgba(116,205,235,0.16);
-      border-radius: 8px;
-      background: rgba(3,35,77,0.36);
     }
     .equipment-choice__item span {
-      color: #bdaaff;
-      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 8px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 999px;
+      color: #dcd4ff;
+      background: rgba(3,35,77,0.36);
+      font-size: 10px;
       font-weight: 950;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-    }
-    .equipment-choice__item strong {
-      color: #fff;
-      font-size: 14px;
-    }
-    .equipment-choice__item p {
-      margin: 0;
-      color: #c9d9d7;
-      font-size: 12.5px;
-      line-height: 1.35;
     }
     .store-help {
       position: relative;
@@ -1786,6 +1793,14 @@
       .equipment-choice__grid {
         grid-template-columns: 1fr;
       }
+      .equipment-feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .equipment-choice {
+        justify-self: stretch;
+        width: 100%;
+        aspect-ratio: auto;
+      }
       .starter-section__meta {
         white-space: normal;
       }
@@ -1974,47 +1989,33 @@
         </div>
       </summary>
       <div class="learn-disclosure__body">
-      <div class="problem-grid">
-        <article class="problem-card">
-          <span>Filter choice</span>
-          <h3>Which Filter Do I Need?</h3>
-          <p>Compare HOB filters, sponge filters, canisters, sumps, all-in-one chambers, flow needs, and maintenance tradeoffs.</p>
-          <a href="which-filter/">Open guide</a>
-        </article>
-        <article class="problem-card">
-          <span>Media roles</span>
-          <h3>Filter Media Types</h3>
-          <p>Understand sponge, floss, ceramic bio media, carbon, phosphate remover, and safe replacement habits.</p>
-          <a href="filter-media/">Open guide</a>
-        </article>
-      </div>
-      <div class="equipment-choice">
-        <div class="equipment-choice__intro">
-          <h3>Start with tradeoffs, not one right answer</h3>
-          <p>Most aquarium equipment can work in more than one kind of tank. The better question is what you want the setup to feel like day to day: quiet, easy to service, expandable, compact, reef-ready, budget-conscious, or built around a specific animal.</p>
+      <div class="equipment-feature-grid">
+        <div class="problem-grid problem-grid--filter-links">
+          <article class="problem-card">
+            <span>Filter choice</span>
+            <h3>Which Filter Do I Need?</h3>
+            <p>Compare HOB filters, sponge filters, canisters, sumps, all-in-one chambers, flow needs, and maintenance tradeoffs.</p>
+            <a href="which-filter/">Open guide</a>
+          </article>
+          <article class="problem-card">
+            <span>Media roles</span>
+            <h3>Filter Media Types</h3>
+            <p>Understand sponge, floss, ceramic bio media, carbon, phosphate remover, and safe replacement habits.</p>
+            <a href="filter-media/">Open guide</a>
+          </article>
         </div>
-        <div class="equipment-choice__grid" aria-label="Equipment choice factors">
-          <div class="equipment-choice__item">
-            <span>Maintenance style</span>
-            <strong>Easy access vs hidden gear</strong>
-            <p>HOB filters, sponge filters, canisters, and sumps all solve filtration differently. The right choice often depends on how you like to clean.</p>
+        <aside class="equipment-choice" aria-label="Equipment choice note">
+          <div class="equipment-choice__intro">
+            <h3>There's not always one right answer</h3>
+            <p>Filter choice depends on tank size, livestock, noise, access, budget, and whether you want simple service or room to expand later.</p>
           </div>
-          <div class="equipment-choice__item">
-            <span>Livestock needs</span>
-            <strong>Flow, safety, and stability</strong>
-            <p>Fry, shrimp, goldfish, coral, pond fish, and planted tanks can push the same equipment choice in different directions.</p>
+          <div class="equipment-choice__grid" aria-label="Equipment choice factors">
+            <div class="equipment-choice__item"><span>Service</span></div>
+            <div class="equipment-choice__item"><span>Flow</span></div>
+            <div class="equipment-choice__item"><span>Space</span></div>
+            <div class="equipment-choice__item"><span>Growth</span></div>
           </div>
-          <div class="equipment-choice__item">
-            <span>Room to grow</span>
-            <strong>Simple now, expandable later</strong>
-            <p>A compact setup may be perfect today. A larger reef, high-bioload tank, or automated system may benefit from space for future gear.</p>
-          </div>
-          <div class="equipment-choice__item">
-            <span>Store conversation</span>
-            <strong>Bring the tank details</strong>
-            <p>Tank size, livestock, photos, goals, and current test results let staff compare good options instead of forcing a generic answer.</p>
-          </div>
-        </div>
+        </aside>
       </div>
 
       <div class="section-head">
