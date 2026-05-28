@@ -1,7 +1,23 @@
 {
   "date": "2026-05-28",
-  "updatedAt": "2026-05-28T07:00:01.822366+00:00",
+  "updatedAt": "2026-05-28T08:00:01.615802+00:00",
   "items": [
+    {
+      "title": "A Google engineer used internal search data to bet $2.7m on Polymarket. The DOJ has charged him.",
+      "url": "https://thenextweb.com/news/google-engineer-polymarket-insider-trading-charges",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Michele Spagnuolo allegedly traded under the handle ‘AlphaRaccoon’, netting $1.2m on Google’s Year-in-Search outcomes. It is the second federal criminal case tied to Polymarket. Federal prosecutors in the Southern District of New York have charged Michele Spagnuolo, a 36-year-old Google information-security engineer based in Switzerland, with using internal Google search-trend data to bet $2.7m on [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
+      "published": "2026-05-28T07:12:51+00:00",
+      "firstSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5262
+    },
     {
       "title": "Illinois Lawmakers Just Passed America’s Strongest AI Safety Bill",
       "url": "https://www.wired.com/story/illinois-pass-major-ai-safety-law-pritzker",
@@ -13,13 +29,13 @@
       "image": "https://media.wired.com/photos/6a1769e135f75a644600c4ac/master/pass/Illionois-AI-Safetry-Bill-Business-2270597563.jpg",
       "published": "2026-05-28T00:10:42+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 3.5001
+      "score": 3.4752
     },
     {
-      "title": "Jiayong Wan, Jiawei Chen, Zhaoxia Yin, Liu Shuyuan, Hang Su",
+      "title": "Jaehoon Kang, Yejin Lee, Yoonji Park, Kyuhong Shim",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,12 +43,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-28T07:00:07.772005+00:00",
+      "published": "2026-05-28T08:00:10.714184+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "Jensen Huang joins the Tsinghua University advisory board chaired by Tim Cook",
+      "url": "https://thenextweb.com/news/jensen-huang-tsinghua-advisory-board-beijing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The Nvidia CEO accepts a seat on Tsinghua’s School of Economics and Management board alongside Musk, Dell, Nadella, Zuckerberg, Dimon and Fink, days after travelling to China with Trump. Jensen Huang has accepted an invitation to join the advisory board of Tsinghua University’s School of Economics and Management, according to a Financial Times report. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang.avif",
+      "published": "2026-05-28T07:29:12+00:00",
+      "firstSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1344
+    },
+    {
+      "title": "Pentagon gives Dell a $9.7bn contract to consolidate Microsoft licences across the military",
+      "url": "https://thenextweb.com/news/pentagon-dell-microsoft-97bn-software-deal",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The five-year deal consolidates scattered Microsoft 365 and cloud subscriptions for the Defense Department, intelligence community and Coast Guard. Dell, not Microsoft, is the prime contractor. The US Department of Defense has awarded Dell a five-year, roughly $9.7bn contract to consolidate Microsoft software licensing across the entire US military, the intelligence community and the Coast [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2024/12/microsoft-cloud-uk-fine.avif",
+      "published": "2026-05-28T07:04:55+00:00",
+      "firstSeen": "2026-05-28T08:00:01.615802+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1223
     },
     {
       "title": "Why Google’s AI can’t spell Google (or anything else)",
@@ -45,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200%2C675",
       "published": "2026-05-28T00:17:41+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1031
+      "score": 2.078
     },
     {
       "title": "Sakana AI Proposes DiffusionBlocks: a Block-wise Training Framework That Converts Residual Networks into Independently Trainable Denoising Modules",
@@ -61,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-27-at-5.51.29-PM-1-150x150.png",
       "published": "2026-05-28T00:51:53+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T07:00:01.822366+00:00",
+      "lastSeen": "2026-05-28T08:00:01.615802+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.3476
+      "score": 0.3222
     }
   ],
   "errors": []
