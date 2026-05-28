@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prevent the Crash - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --red: #ff715f;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      --panel: #071a27;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(255,113,95,0.18), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 0 clamp(12px, 2.5vw, 28px) 42px; }
+    .crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; color: #9fc6d6; font-size: 13px; font-weight: 850; }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(255,113,95,0.44);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(255,113,95,0.17), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(255,113,95,0.16);
+    }
+    .eyebrow, .section-head span, .guard-card span, .trigger-card span {
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 { max-width: 650px; margin: 8px 0 12px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 4.7vw, 58px); line-height: 0.98; }
+    p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 10px 16px; border-radius: 6px; color: #fff; background: var(--orange); font-weight: 900; }
+    .btn.secondary { border: 1px solid rgba(116,205,235,0.32); background: rgba(8,35,52,0.72); }
+    .hero-visual, .diagram-panel, .guard-card, .trigger-card, .callout {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: radial-gradient(circle at 100% 0%, rgba(255,113,95,0.1), transparent 36%), var(--panel);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .hero-visual { display: grid; place-items: center; min-height: 330px; padding: 14px; margin: 0; background: #f8fbff; }
+    .hero-visual svg, .diagram-panel svg { width: 100%; height: auto; display: block; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 30px 0 14px; }
+    .section-head h2 { margin: 5px 0 0; color: #f7fcff; font-family: Georgia, "Times New Roman", serif; font-size: 30px; line-height: 1.05; }
+    .section-head p { max-width: 450px; }
+    .guard-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .trigger-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .guard-card, .trigger-card { padding: 16px; }
+    .guard-card h3, .trigger-card h3, .callout h2 { margin: 8px 0 8px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: 24px; line-height: 1.05; }
+    .guard-card ul, .trigger-card ul { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .guard-card li, .trigger-card li { position: relative; padding-left: 17px; color: #d9f5fc; font-size: 13px; line-height: 1.4; }
+    .guard-card li::before, .trigger-card li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+    .diagram-panel { margin-top: 28px; padding: 18px; background: #f8fbff; }
+    .callout { margin-top: 28px; padding: 20px; border-left: 6px solid var(--orange); background: linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%), #150f0b; }
+    .footer { margin-top: 28px; overflow: hidden; border: 1px solid rgba(116,205,235,0.14); border-radius: 8px 8px 0 0; color: #d8f6ff; background: linear-gradient(180deg, #052137, #031321); }
+    .footer-top { display: grid; grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr; gap: 24px; padding: 26px; }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) { .hero, .guard-grid, .trigger-grid, .footer-top { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .hero, .diagram-panel, .callout { padding: 14px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .footer-link-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260525-learning-path-frame" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums &middot; Fish &middot; Coral &middot; Ponds</span></span>
+      </a>
+    </header>
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../">Home</a><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a><a class="active" href="../">Help</a><a href="../../#visit">Visit Us</a>
+    </nav>
+    <div class="crumbs"><a href="../">Help Center</a><span>/</span><span>Prevent the Crash</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Stability</span>
+        <h1>Prevent the crash before the tank is in trouble</h1>
+        <p>Most aquarium crashes are not one mystery event. They are a chain: too much change, weakened bacteria, low oxygen, rising waste, stressed animals, then panic fixes. Break the chain early.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../track-parameters/">Track parameters</a>
+          <a class="btn secondary" href="../ammonia-nitrite/">Emergency spike guide</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Aquarium crash chain illustration">
+        <svg viewBox="0 0 720 440" role="img" aria-labelledby="crash-title crash-desc">
+          <title id="crash-title">Aquarium crash chain</title>
+          <desc id="crash-desc">Illustration showing how overcleaning, overfeeding, low oxygen, ammonia, and stressed fish can connect into a tank crash.</desc>
+          <rect x="24" y="34" width="672" height="372" rx="24" fill="#ffffff" stroke="#194563" stroke-width="4"/>
+          <text x="68" y="86" fill="#123047" font-size="27" font-weight="800">Crash chain: break it before livestock pays</text>
+          <g stroke="#456276" stroke-width="3" fill="none">
+            <path d="M158 194 H255"/><path d="M365 194 H462"/><path d="M572 194 H638"/>
+          </g>
+          <g font-family="Arial, sans-serif" font-size="18" font-weight="800">
+            <rect x="56" y="144" width="122" height="100" rx="14" fill="#fff1e5" stroke="#d9955b"/>
+            <text x="82" y="180" fill="#8a4214">Big</text><text x="78" y="205" fill="#8a4214">change</text>
+            <rect x="254" y="144" width="132" height="100" rx="14" fill="#fff8dd" stroke="#d8bd61"/>
+            <text x="278" y="180" fill="#735a00">Bacteria</text><text x="284" y="205" fill="#735a00">setback</text>
+            <rect x="462" y="144" width="132" height="100" rx="14" fill="#ffe7e4" stroke="#d7867a"/>
+            <text x="496" y="180" fill="#933327">Waste</text><text x="490" y="205" fill="#933327">spike</text>
+            <rect x="608" y="144" width="64" height="100" rx="14" fill="#eef0ff" stroke="#9da3df"/>
+            <text x="626" y="180" fill="#333b8d">Fish</text><text x="622" y="205" fill="#333b8d">stress</text>
+          </g>
+          <g font-family="Arial, sans-serif" font-size="16" fill="#456276">
+            <text x="70" y="296">Overcleaning, overfeeding, stocking too fast, power loss, heat, or medication</text>
+            <text x="70" y="320">can all start the chain.</text>
+            <text x="70" y="350">The goal is stability: wet media, oxygen, gentle cleaning, and slow stocking.</text>
+          </g>
+        </svg>
+      </figure>
+    </section>
+
+    <section aria-labelledby="guards-title">
+      <div class="section-head">
+        <div><span>Crash guards</span><h2 id="guards-title">Four habits protect most tanks</h2></div>
+        <p>These are simple, but they prevent the common chain reaction that turns a small issue into an emergency.</p>
+      </div>
+      <div class="guard-grid">
+        <article class="guard-card"><span>Biology</span><h3>Protect filter bacteria</h3><p>The filter is alive. Treat media like a colony, not disposable trash.</p><ul><li>Keep media wet</li><li>Rinse in removed tank water</li><li>Do not replace everything at once</li></ul></article>
+        <article class="guard-card"><span>Oxygen</span><h3>Keep water moving</h3><p>Low oxygen makes every other problem worse, especially during heat, medication, or power issues.</p><ul><li>Check surface agitation</li><li>Keep air pumps ready</li><li>Watch fish breathing</li></ul></article>
+        <article class="guard-card"><span>Waste load</span><h3>Feed and stock slowly</h3><p>New food and new animals add waste before the system has proven it can process it.</p><ul><li>Add livestock gradually</li><li>Feed less during stress</li><li>Remove leftovers</li></ul></article>
+        <article class="guard-card"><span>Routine</span><h3>Change water calmly</h3><p>Regular partial changes beat dramatic emergency swings.</p><ul><li>Match temperature</li><li>Condition tap water</li><li>Do not shock salinity</li></ul></article>
+      </div>
+    </section>
+
+    <section class="diagram-panel" aria-label="Tank crash prevention loop illustration">
+      <svg viewBox="0 0 920 380" role="img" aria-labelledby="loop-title loop-desc">
+        <title id="loop-title">Tank crash prevention loop</title>
+        <desc id="loop-desc">A loop showing observe, test, stabilize, change slowly, and retest.</desc>
+        <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#456276"/></marker></defs>
+        <rect width="920" height="380" rx="18" fill="#ffffff"/>
+        <g stroke="#456276" stroke-width="3" fill="none" marker-end="url(#arrow)">
+          <path d="M238 92 C360 34 560 34 682 92"/><path d="M744 170 C790 246 684 318 584 314"/><path d="M340 314 C222 310 128 246 176 170"/>
+        </g>
+        <g font-family="Arial, sans-serif">
+          <text x="42" y="54" fill="#123047" font-size="26" font-weight="800">Prevention is a loop, not a one-time fix</text>
+          <rect x="90" y="108" width="170" height="86" rx="14" fill="#e8f7ff" stroke="#70aed0" stroke-width="3"/>
+          <text x="134" y="142" fill="#123047" font-size="20" font-weight="800">Observe</text><text x="118" y="170" fill="#456276" font-size="15">breathing, appetite,</text><text x="132" y="190" fill="#456276" font-size="15">cloudiness</text>
+          <rect x="374" y="80" width="170" height="86" rx="14" fill="#fff8dd" stroke="#d8bd61" stroke-width="3"/>
+          <text x="420" y="114" fill="#123047" font-size="20" font-weight="800">Test</text><text x="408" y="142" fill="#456276" font-size="15">ammonia, nitrite,</text><text x="420" y="162" fill="#456276" font-size="15">nitrate, pH</text>
+          <rect x="658" y="108" width="170" height="86" rx="14" fill="#e9fbf1" stroke="#72a986" stroke-width="3"/>
+          <text x="704" y="142" fill="#123047" font-size="20" font-weight="800">Stabilize</text><text x="692" y="170" fill="#456276" font-size="15">oxygen, water,</text><text x="704" y="190" fill="#456276" font-size="15">temperature</text>
+          <rect x="516" y="250" width="170" height="86" rx="14" fill="#eef0ff" stroke="#9da3df" stroke-width="3"/>
+          <text x="548" y="284" fill="#123047" font-size="20" font-weight="800">Change slowly</text><text x="546" y="312" fill="#456276" font-size="15">one clear move</text>
+          <rect x="232" y="250" width="170" height="86" rx="14" fill="#fff1e5" stroke="#d9955b" stroke-width="3"/>
+          <text x="282" y="284" fill="#123047" font-size="20" font-weight="800">Retest</text><text x="266" y="312" fill="#456276" font-size="15">confirm direction</text>
+        </g>
+      </svg>
+    </section>
+
+    <section aria-labelledby="triggers-title">
+      <div class="section-head">
+        <div><span>High-risk moments</span><h2 id="triggers-title">Watch closer after disruptions</h2></div>
+        <p>Most crashes follow a trigger. The trigger is not always bad by itself; the problem is doing too much at once.</p>
+      </div>
+      <div class="trigger-grid">
+        <article class="trigger-card"><span>Cleaning</span><h3>Filter service plus big water change</h3><p>This can remove bacteria and shift chemistry on the same day.</p><ul><li>Stagger major work</li><li>Preserve old media</li><li>Retest the next day</li></ul></article>
+        <article class="trigger-card"><span>Livestock</span><h3>Adding too many animals</h3><p>The waste load rises faster than the biological filter can respond.</p><ul><li>Stock in stages</li><li>Feed lightly at first</li><li>Test ammonia and nitrite</li></ul></article>
+        <article class="trigger-card"><span>Power or heat</span><h3>Low oxygen event</h3><p>Warm water, outages, blocked filters, and medication can reduce oxygen fast.</p><ul><li>Add air immediately</li><li>Point flow at the surface</li><li>Watch gasping fish</li></ul></article>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>If something looks wrong, slow the tank down</h2>
+      <p>Pause new livestock, feed lightly, test water, add oxygen, protect biological media, and make one clear correction. Fast stacking of fixes can turn a manageable problem into the actual crash.</p>
+      <div class="hero-actions"><a class="btn" href="../fish-gasping/">Fish gasping guide</a><a class="btn secondary" href="../cloudy-water/">Cloudy water guide</a></div>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=maintenance">Maintenance</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="../">Help Center</a><a href="../track-parameters/">Track Parameters</a><a href="../ammonia-nitrite/">Ammonia Spike</a><a href="../fish-gasping/">Fish Gasping</a><a href="../weekly-maintenance/">Maintenance</a><a href="../feeding-basics/">Feeding</a></div></div>
+        <div><h4>About This Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

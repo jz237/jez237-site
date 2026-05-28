@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Track Parameters - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      --panel: #071a27;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 0 clamp(12px, 2.5vw, 28px) 42px; }
+    .crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; color: #9fc6d6; font-size: 13px; font-weight: 850; }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(114,211,137,0.17), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .eyebrow, .section-head span, .metric-card span, .rhythm-card span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 { max-width: 650px; margin: 8px 0 12px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 4.7vw, 58px); line-height: 0.98; }
+    p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 10px 16px; border-radius: 6px; color: #fff; background: var(--orange); font-weight: 900; }
+    .btn.secondary { border: 1px solid rgba(116,205,235,0.32); background: rgba(8,35,52,0.72); }
+    .hero-visual, .diagram-panel, .metric-card, .rhythm-card, .callout {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: radial-gradient(circle at 100% 0%, rgba(114,211,137,0.12), transparent 36%), var(--panel);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .hero-visual { display: grid; place-items: center; min-height: 330px; padding: 14px; margin: 0; background: #f8fbff; }
+    .hero-visual svg, .diagram-panel svg { width: 100%; height: auto; display: block; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 30px 0 14px; }
+    .section-head h2 { margin: 5px 0 0; color: #f7fcff; font-family: Georgia, "Times New Roman", serif; font-size: 30px; line-height: 1.05; }
+    .section-head p { max-width: 450px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .rhythm-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .metric-card, .rhythm-card { padding: 16px; }
+    .metric-card h3, .rhythm-card h3, .callout h2 { margin: 8px 0 8px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: 24px; line-height: 1.05; }
+    .metric-card ul, .rhythm-card ul { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .metric-card li, .rhythm-card li { position: relative; padding-left: 17px; color: #d9f5fc; font-size: 13px; line-height: 1.4; }
+    .metric-card li::before, .rhythm-card li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .diagram-panel { margin-top: 28px; padding: 18px; background: #f8fbff; }
+    .callout { margin-top: 28px; padding: 20px; border-left: 6px solid var(--orange); background: linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%), #150f0b; }
+    .footer { margin-top: 28px; overflow: hidden; border: 1px solid rgba(116,205,235,0.14); border-radius: 8px 8px 0 0; color: #d8f6ff; background: linear-gradient(180deg, #052137, #031321); }
+    .footer-top { display: grid; grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr; gap: 24px; padding: 26px; }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero, .metric-grid, .rhythm-grid, .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .hero, .diagram-panel, .callout { padding: 14px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .footer-link-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260525-learning-path-frame" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums &middot; Fish &middot; Coral &middot; Ponds</span></span>
+      </a>
+    </header>
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../">Home</a><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a><a class="active" href="../">Help</a><a href="../../#visit">Visit Us</a>
+    </nav>
+    <div class="crumbs"><a href="../">Help Center</a><span>/</span><span>Track Parameters</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Health &amp; water quality</span>
+        <h1>Track parameters so problems show up early</h1>
+        <p>Testing works best as a pattern, not a panic button. Record the few numbers that explain most aquarium problems, then watch whether they are stable, rising, falling, or suddenly out of character.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=maintenance">Shop test kits</a>
+          <a class="btn secondary" href="../prevent-crash/">Prevent a crash</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Aquarium parameter dashboard illustration">
+        <svg viewBox="0 0 720 440" role="img" aria-labelledby="dash-title dash-desc">
+          <title id="dash-title">Aquarium parameter dashboard</title>
+          <desc id="dash-desc">Illustration showing temperature, pH, ammonia, nitrite, nitrate, and salinity as tracked water readings.</desc>
+          <rect x="24" y="28" width="672" height="384" rx="24" fill="#ffffff" stroke="#194563" stroke-width="4"/>
+          <rect x="54" y="64" width="612" height="58" rx="12" fill="#e8f6fb" stroke="#9cc9d8"/>
+          <text x="84" y="100" fill="#123047" font-size="24" font-weight="800">Tank Log: look for trends, not one weird number</text>
+          <g font-family="Arial, sans-serif" font-size="18" font-weight="800">
+            <rect x="64" y="154" width="170" height="86" rx="14" fill="#e9fbf1" stroke="#72a986"/>
+            <text x="86" y="188" fill="#0b4f2b">Temperature</text><text x="86" y="218" fill="#123047">steady range</text>
+            <rect x="274" y="154" width="170" height="86" rx="14" fill="#e8f7ff" stroke="#70aed0"/>
+            <text x="296" y="188" fill="#14557a">pH</text><text x="296" y="218" fill="#123047">stable pattern</text>
+            <rect x="484" y="154" width="170" height="86" rx="14" fill="#fff1e5" stroke="#d9955b"/>
+            <text x="506" y="188" fill="#8a4214">Ammonia</text><text x="506" y="218" fill="#123047">zero target</text>
+            <rect x="64" y="276" width="170" height="86" rx="14" fill="#fff1e5" stroke="#d9955b"/>
+            <text x="86" y="310" fill="#8a4214">Nitrite</text><text x="86" y="340" fill="#123047">zero target</text>
+            <rect x="274" y="276" width="170" height="86" rx="14" fill="#fff8dd" stroke="#d8bd61"/>
+            <text x="296" y="310" fill="#735a00">Nitrate</text><text x="296" y="340" fill="#123047">trend down</text>
+            <rect x="484" y="276" width="170" height="86" rx="14" fill="#eef0ff" stroke="#9da3df"/>
+            <text x="506" y="310" fill="#333b8d">Salinity</text><text x="506" y="340" fill="#123047">reef/marine</text>
+          </g>
+        </svg>
+      </figure>
+    </section>
+
+    <section aria-labelledby="what-title">
+      <div class="section-head">
+        <div><span>What to test</span><h2 id="what-title">Start with the numbers that explain the most</h2></div>
+        <p>You can add specialty tests later. These core readings catch most beginner and maintenance problems.</p>
+      </div>
+      <div class="metric-grid">
+        <article class="metric-card"><span>Emergency</span><h3>Ammonia and nitrite</h3><p>These should be zero in a stable stocked tank. Any measurable result means livestock may be under stress.</p><ul><li>Retest before adding animals</li><li>Reduce feeding during spikes</li><li>Protect filter bacteria</li></ul></article>
+        <article class="metric-card"><span>Trend</span><h3>Nitrate and phosphate</h3><p>These show nutrient buildup, feeding pressure, maintenance gaps, and algae risk.</p><ul><li>Watch the weekly direction</li><li>Use water changes and cleaning</li><li>Reef tanks need tighter control</li></ul></article>
+        <article class="metric-card"><span>Stability</span><h3>pH and temperature</h3><p>Stable is usually more important than chasing a perfect number. Sudden swings matter.</p><ul><li>Check heater behavior</li><li>Measure at similar times</li><li>Do not dose blindly</li></ul></article>
+        <article class="metric-card"><span>Marine</span><h3>Salinity and alkalinity</h3><p>Saltwater and reef systems need consistent salinity; reefs also depend heavily on alkalinity stability.</p><ul><li>Top off evaporated water</li><li>Mix saltwater fully</li><li>Track alkalinity changes</li></ul></article>
+      </div>
+    </section>
+
+    <section class="diagram-panel" aria-label="Parameter response flow illustration">
+      <svg viewBox="0 0 920 360" role="img" aria-labelledby="flow-title flow-desc">
+        <title id="flow-title">Parameter response flow</title>
+        <desc id="flow-desc">A simple decision flow for responding to water test results.</desc>
+        <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#456276"/></marker></defs>
+        <rect width="920" height="360" rx="18" fill="#ffffff"/>
+        <g stroke="#456276" stroke-width="3" fill="none" marker-end="url(#arrow)">
+          <path d="M168 176 H300"/><path d="M444 176 H576"/><path d="M720 176 H828"/>
+        </g>
+        <g font-family="Arial, sans-serif">
+          <rect x="34" y="116" width="134" height="120" rx="14" fill="#e8f7ff" stroke="#70aed0" stroke-width="3"/>
+          <text x="64" y="158" fill="#123047" font-size="19" font-weight="800">Test</text><text x="55" y="190" fill="#456276" font-size="15">same kit</text><text x="54" y="211" fill="#456276" font-size="15">same habit</text>
+          <rect x="300" y="116" width="144" height="120" rx="14" fill="#fff8dd" stroke="#d8bd61" stroke-width="3"/>
+          <text x="330" y="158" fill="#123047" font-size="19" font-weight="800">Record</text><text x="322" y="190" fill="#456276" font-size="15">date, value,</text><text x="326" y="211" fill="#456276" font-size="15">recent changes</text>
+          <rect x="576" y="116" width="144" height="120" rx="14" fill="#e9fbf1" stroke="#72a986" stroke-width="3"/>
+          <text x="606" y="158" fill="#123047" font-size="19" font-weight="800">Compare</text><text x="604" y="190" fill="#456276" font-size="15">stable, rising,</text><text x="622" y="211" fill="#456276" font-size="15">or falling</text>
+          <rect x="828" y="116" width="58" height="120" rx="14" fill="#fff1e5" stroke="#d9955b" stroke-width="3"/>
+          <text x="840" y="158" fill="#123047" font-size="19" font-weight="800">Act</text><text x="839" y="190" fill="#456276" font-size="15">only</text><text x="838" y="211" fill="#456276" font-size="15">if clear</text>
+          <text x="38" y="54" fill="#123047" font-size="26" font-weight="800">A test result is useful when it has context</text>
+          <text x="38" y="322" fill="#456276" font-size="18">The pattern tells you whether to feed less, change water, clean gently, wait, or ask for help.</text>
+        </g>
+      </svg>
+    </section>
+
+    <section aria-labelledby="rhythm-title">
+      <div class="section-head">
+        <div><span>Testing rhythm</span><h2 id="rhythm-title">Use a schedule that matches the risk</h2></div>
+        <p>New tanks and problem tanks need more frequent checks. Stable mature tanks can use a steadier weekly rhythm.</p>
+      </div>
+      <div class="rhythm-grid">
+        <article class="rhythm-card"><span>New tank</span><h3>Test often during cycling</h3><p>Ammonia and nitrite can change fast while bacteria colonies are still building.</p><ul><li>Test before adding livestock</li><li>Write down each result</li><li>Do not rush stocking</li></ul></article>
+        <article class="rhythm-card"><span>Stable tank</span><h3>Check weekly trends</h3><p>A simple weekly log catches slow nitrate rise, heater drift, and maintenance changes.</p><ul><li>Test before water changes</li><li>Compare to last week</li><li>Adjust routine slowly</li></ul></article>
+        <article class="rhythm-card"><span>After changes</span><h3>Retest after disruptions</h3><p>Big cleaning, new fish, filter service, power outages, and illness are all reasons to watch closely.</p><ul><li>Check the next day</li><li>Feed lightly</li><li>Keep media wet</li></ul></article>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>Do not chase numbers without a reason</h2>
+      <p>Fast chemical changes can be harder on livestock than a slightly imperfect but stable range. If a reading looks wrong, retest, check the date on reagents, compare to livestock behavior, and make one correction at a time.</p>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=maintenance">Test kits</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="../">Help Center</a><a href="../prevent-crash/">Prevent Crash</a><a href="../ammonia-nitrite/">Ammonia Spike</a><a href="../cloudy-water/">Cloudy Water</a><a href="../weekly-maintenance/">Maintenance</a><a href="../feeding-basics/">Feeding</a></div></div>
+        <div><h4>About This Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
