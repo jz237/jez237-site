@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T14:00:01.980868+00:00",
+  "updatedAt": "2026-05-28T15:00:01.379657+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8328,6 +8328,42 @@
     "https://www.anthropic.com/news/milan-office-opening": {
       "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20City&amp;backgroundColor=fig",
       "checkedAt": "2026-05-28T14:00:01.980868+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/sneak-peek-at-new-siri-app-reveals-apples-plans-to-take-on-chatgpt-and-more": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/1476x1375.webp?resize=1200,1118",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://www.theverge.com/tech/938915/ios-27-siri-renders-bloomberg": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25698444/DSC08567_processed_2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.723165084465%2C100%2C78.55366983107&amp;w=1200",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/rsi-is-the-new-agi-and-its-just-as-hard-to-pin-down": {
+      "image": "https://techcrunch.com/wp-content/uploads/2022/12/GettyImages-1202271610.jpg?resize=1200,900",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/techcrunch-disrupt-2026-databricks-co-founder-on-what-kills-enterprise-ai-deals": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/TCD26_1-Arsalan-Tavakoli-Shiraji_Speaker-16x9-Dark.png?resize=1200,675",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/youtube-adds-new-podcast-features-including-an-ai-recommendation-tool-and-auto-speed": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2242441443.jpg?resize=1200,800",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/938893/cnn-perplexity-ai-copyright-lawsuit": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/STK_Cnn_K_Radtke_2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/2-days-left-lock-in-ticket-savings-of-up-to-410-to-techcrunch-disrupt-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_2Days-16X9-dark.png?resize=1200,675",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/visa-invests-in-replit-to-power-agentic-payments-for-developers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/09/Replit-founder-CEO-Amjad-Masad.png?resize=1200,715",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://www.theverge.com/podcast/929940/rivian-wassym-bensaid-software-volkswagen-carplay-assistant-ai": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/DCD-Wassym-Bensaid.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
+      "checkedAt": "2026-05-28T15:00:01.379657+00:00"
     }
   }
 }
