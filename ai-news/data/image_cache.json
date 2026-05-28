@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T10:00:01.332917+00:00",
+  "updatedAt": "2026-05-28T11:00:01.312571+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8312,6 +8312,10 @@
     "https://www.marktechpost.com/2026/05/28/perplexity-ai-open-sources-unigram-tokenizer-that-achieves-5x-lower-p50-latency-than-hugging-face-tokenizers-crate": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-clean-modern-tech-editorial-banner-ill_o0XNxzSsWc-NAtXkWPloHQ_YJRkb0VeS-q2Fo-tl6Zmig_hd.png",
       "checkedAt": "2026-05-28T10:00:01.332917+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/28/1138053/the-ai-hype-index-ai-gets-booed-in-graduation-season": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MJ26-Thumb.jpg?resize=1200,600",
+      "checkedAt": "2026-05-28T11:00:01.312571+00:00"
     }
   }
 }
