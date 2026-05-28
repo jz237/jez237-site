@@ -958,5 +958,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-27-evening-abbey-orchard-endgame",
+    "title": "Abbey Orchard Endgame",
+    "tests": "Tests whether GPT Image 2 can make a playable-looking medieval ceramic tile floor game read instantly through worn glaze, grout lines, carved bone pieces, abbey light, and physical foot-polished surface texture rather than a board-game box, tabletop artifact, document, or glossy concept art.",
+    "prompt": "Title: Abbey Orchard Endgame\nFormat name: Medieval Tile Floor Game Board\nCategory/kind: game\nTests/explores: Tests whether GPT Image 2 can make a playable-looking medieval ceramic tile floor game read instantly through worn glaze, grout lines, carved bone pieces, abbey light, and physical foot-polished surface texture rather than a board-game box, tabletop artifact, document, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a real medieval abbey floor where painted ceramic tiles form an invented strategy game board. The selected visual format must be obvious at first glance: square encaustic floor tiles, dark grout seams, chipped glaze, foot-worn dull patches, uneven handmade tile edges, small cracks, dust in corners, and angled sunlight from high abbey windows falling across the floor.\n\nSubject: the floor game depicts an imaginary quiet orchard endgame played with carved bone and dark horn pieces resting on the tiles. The board pattern is built into the floor itself: red clay and cream tiles form branching orchard paths, blue-green water channels, leaf-shaped goal spaces, small crescent wells, root symbols, and circular harvest spaces. Include several carved bone pieces shaped like tiny trees, wells, seed baskets, and gatehouses; include a few dark horn pieces as opposing markers. All pieces are static and unplayed by any visible hands or people.\n\nComposition: direct overhead-to-slight-oblique documentary photograph, the game-board floor fills the frame with one stone column base and a strip of shadow at the edge for abbey context. Keep the arrangement legible as a game board while preserving real ceramic material: glaze crazing, pigment rubbed away on high spots, gritty grout, waxy dust, and subtle reflections in worn tile hollows.\n\nMood and palette: quiet, old, tactile, contemplative; terracotta red, cream slip, muted blue-green glaze, dark oxblood accents, smoky horn black, warm bone ivory, gray stone shadow, golden late-afternoon window light.\n\nHard exclusions: no readable text, no letters, no logos, no copyrighted characters, no people as central subjects, no performers, no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no fantasy battle scene, no watermark, no signature.",
+    "image": "images/2026-05-27-evening-abbey-orchard-endgame.png",
+    "date": "2026-05-27",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
