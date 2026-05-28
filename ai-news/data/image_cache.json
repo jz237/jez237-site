@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T15:00:01.379657+00:00",
+  "updatedAt": "2026-05-28T16:00:01.934343+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8364,6 +8364,18 @@
     "https://www.theverge.com/podcast/929940/rivian-wassym-bensaid-software-volkswagen-carplay-assistant-ai": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/DCD-Wassym-Bensaid.png?quality=90&amp;strip=all&amp;crop=0%2C10.711631919237%2C100%2C78.576736161526&amp;w=1200",
       "checkedAt": "2026-05-28T15:00:01.379657+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/how-long-is-anthropics-lease-with-spacex-opinions-vary": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/04/musk-court-2273245544.jpg?resize=1200,801",
+      "checkedAt": "2026-05-28T16:00:01.934343+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/sesame-the-conversational-ai-startup-from-oculus-founders-launches-its-ios-app": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/crossing-the-uncanny-valley-of-voice-hero.webp?resize=1200,900",
+      "checkedAt": "2026-05-28T16:00:01.934343+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-subscription-tiers-facebook-instagram-whatsapp": {
+      "image": "https://assets.techrepublic.com/uploads/2026/05/Untitled-design-19.png?f=jpeg",
+      "checkedAt": "2026-05-28T16:00:01.934343+00:00"
     }
   }
 }
