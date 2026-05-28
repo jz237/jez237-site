@@ -279,6 +279,7 @@
       height: 100%;
       min-height: 300px;
     }
+    .food-gallery.single { grid-template-columns: 1fr; }
     .food-gallery figure {
       position: relative;
       overflow: hidden;
@@ -575,19 +576,7 @@
     </section>
 
     <section class="visual-band" aria-labelledby="store-help-title">
-      <div class="food-gallery" aria-label="Food examples to compare during a store visit">
-        <figure>
-          <img src="../../assets/site/baby-flakes.jpg" alt="Flake fish food container for aquarium feeding" loading="lazy" />
-          <figcaption>Flake size and crumbs</figcaption>
-        </figure>
-        <figure>
-          <img src="../../assets/site/red-parrot-pellets.jpg" alt="Pellet fish food container for aquarium feeding" loading="lazy" />
-          <figcaption>Pellet size and sink rate</figcaption>
-        </figure>
-        <figure>
-          <img src="../../assets/site/flip-feed.jpg" alt="Automatic feeder and aquarium food setup" loading="lazy" />
-          <figcaption>Daily schedule fit</figcaption>
-        </figure>
+      <div class="food-gallery single" aria-label="Food example to compare during a store visit">
         <figure>
           <img src="../../assets/department/food-care.jpg" alt="Aquarium food and care display in a store department" loading="lazy" />
           <figcaption>Species-specific choices</figcaption>
