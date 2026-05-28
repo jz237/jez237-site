@@ -18,3 +18,7 @@ assets, not photos from The Hidden Reef:
 - saltwater-setup-basics-gpt-image-2.jpg - beginner saltwater setup basics hero image showing water mixing, marine tank setup, testing supplies, live rock, and livestock acclimation.
 - saltwater-tank-stabilizing-gpt-image-2.png - beginner saltwater tank stabilizing image showing live rock, clear water, testing supplies, refractometer, and maintenance notebook.
 - weekly-maintenance-checklist-gpt-image-2.jpg - weekly aquarium maintenance checklist hero image showing a healthy aquarium, test vials, siphon, bucket, filter media, and care notebook.
+- track-parameters-dashboard-gpt-image-2.png - water parameter tracking hero image showing a healthy aquarium, test vials, color chart, thermometer, salinity tool, and log notebook.
+- track-parameters-response-flow-gpt-image-2.png - water testing workflow image showing test, record, compare, and act steps around a healthy aquarium.
+- prevent-crash-chain-gpt-image-2.png - aquarium crash-chain image showing how too much change, bacteria setback, waste spike, and fish stress connect.
+- prevent-crash-loop-gpt-image-2.png - aquarium crash-prevention loop image showing observation, testing, oxygen/flow, slow correction, and retesting.

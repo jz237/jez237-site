@@ -61,8 +61,16 @@
       background: radial-gradient(circle at 100% 0%, rgba(114,211,137,0.12), transparent 36%), var(--panel);
       box-shadow: 0 16px 34px rgba(0,0,0,0.22);
     }
-    .hero-visual { display: grid; place-items: center; min-height: 330px; padding: 14px; margin: 0; background: #f8fbff; }
-    .hero-visual svg, .diagram-panel svg { width: 100%; height: auto; display: block; }
+    .hero-visual { overflow: hidden; min-height: 330px; max-height: 640px; margin: 0; background: #061a27; }
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 330px;
+      max-height: 640px;
+      object-fit: cover;
+      object-position: center;
+    }
     .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 30px 0 14px; }
     .section-head h2 { margin: 5px 0 0; color: #f7fcff; font-family: Georgia, "Times New Roman", serif; font-size: 30px; line-height: 1.05; }
     .section-head p { max-width: 450px; }
@@ -73,7 +81,29 @@
     .metric-card ul, .rhythm-card ul { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
     .metric-card li, .rhythm-card li { position: relative; padding-left: 17px; color: #d9f5fc; font-size: 13px; line-height: 1.4; }
     .metric-card li::before, .rhythm-card li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
-    .diagram-panel { margin-top: 28px; padding: 18px; background: #f8fbff; }
+    .diagram-panel {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      margin-top: 28px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(64,217,255,0.14), transparent 36%),
+        radial-gradient(circle at 100% 0%, rgba(114,211,137,0.12), transparent 32%),
+        var(--panel);
+    }
+    .diagram-panel img {
+      display: block;
+      width: 100%;
+      max-height: 520px;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .diagram-panel .section-head { display: block; margin: 0 0 12px; }
     .callout { margin-top: 28px; padding: 20px; border-left: 6px solid var(--orange); background: linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%), #150f0b; }
     .footer { margin-top: 28px; overflow: hidden; border: 1px solid rgba(116,205,235,0.14); border-radius: 8px 8px 0 0; color: #d8f6ff; background: linear-gradient(180deg, #052137, #031321); }
     .footer-top { display: grid; grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr; gap: 24px; padding: 26px; }
@@ -82,11 +112,13 @@
     .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
     .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
     @media (max-width: 1040px) {
-      .hero, .metric-grid, .rhythm-grid, .footer-top { grid-template-columns: 1fr; }
+      .hero, .diagram-panel, .metric-grid, .rhythm-grid, .footer-top { grid-template-columns: 1fr; }
     }
     @media (max-width: 760px) {
       .page { padding-inline: 8px; }
       .hero, .diagram-panel, .callout { padding: 14px; }
+      .hero-visual { min-height: 280px; }
+      .hero-visual img { min-height: 280px; }
       .section-head { display: block; }
       .section-head p { margin-top: 6px; }
       .footer-link-grid { grid-template-columns: 1fr; }
@@ -117,28 +149,8 @@
           <a class="btn secondary" href="../prevent-crash/">Prevent a crash</a>
         </div>
       </div>
-      <figure class="hero-visual" aria-label="Aquarium parameter dashboard illustration">
-        <svg viewBox="0 0 720 440" role="img" aria-labelledby="dash-title dash-desc">
-          <title id="dash-title">Aquarium parameter dashboard</title>
-          <desc id="dash-desc">Illustration showing temperature, pH, ammonia, nitrite, nitrate, and salinity as tracked water readings.</desc>
-          <rect x="24" y="28" width="672" height="384" rx="24" fill="#ffffff" stroke="#194563" stroke-width="4"/>
-          <rect x="54" y="64" width="612" height="58" rx="12" fill="#e8f6fb" stroke="#9cc9d8"/>
-          <text x="84" y="100" fill="#123047" font-size="24" font-weight="800">Tank Log: look for trends, not one weird number</text>
-          <g font-family="Arial, sans-serif" font-size="18" font-weight="800">
-            <rect x="64" y="154" width="170" height="86" rx="14" fill="#e9fbf1" stroke="#72a986"/>
-            <text x="86" y="188" fill="#0b4f2b">Temperature</text><text x="86" y="218" fill="#123047">steady range</text>
-            <rect x="274" y="154" width="170" height="86" rx="14" fill="#e8f7ff" stroke="#70aed0"/>
-            <text x="296" y="188" fill="#14557a">pH</text><text x="296" y="218" fill="#123047">stable pattern</text>
-            <rect x="484" y="154" width="170" height="86" rx="14" fill="#fff1e5" stroke="#d9955b"/>
-            <text x="506" y="188" fill="#8a4214">Ammonia</text><text x="506" y="218" fill="#123047">zero target</text>
-            <rect x="64" y="276" width="170" height="86" rx="14" fill="#fff1e5" stroke="#d9955b"/>
-            <text x="86" y="310" fill="#8a4214">Nitrite</text><text x="86" y="340" fill="#123047">zero target</text>
-            <rect x="274" y="276" width="170" height="86" rx="14" fill="#fff8dd" stroke="#d8bd61"/>
-            <text x="296" y="310" fill="#735a00">Nitrate</text><text x="296" y="340" fill="#123047">trend down</text>
-            <rect x="484" y="276" width="170" height="86" rx="14" fill="#eef0ff" stroke="#9da3df"/>
-            <text x="506" y="310" fill="#333b8d">Salinity</text><text x="506" y="340" fill="#123047">reef/marine</text>
-          </g>
-        </svg>
+      <figure class="hero-visual" aria-label="GPT Image 2 aquarium parameter dashboard illustration">
+        <img src="../../assets/learn/track-parameters-dashboard-gpt-image-2.png" alt="GPT Image 2 illustration showing an aquarium testing station with pH, ammonia, nitrite, nitrate, temperature, salinity, and a water log" loading="eager" />
       </figure>
     </section>
 
@@ -155,28 +167,15 @@
       </div>
     </section>
 
-    <section class="diagram-panel" aria-label="Parameter response flow illustration">
-      <svg viewBox="0 0 920 360" role="img" aria-labelledby="flow-title flow-desc">
-        <title id="flow-title">Parameter response flow</title>
-        <desc id="flow-desc">A simple decision flow for responding to water test results.</desc>
-        <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#456276"/></marker></defs>
-        <rect width="920" height="360" rx="18" fill="#ffffff"/>
-        <g stroke="#456276" stroke-width="3" fill="none" marker-end="url(#arrow)">
-          <path d="M168 176 H300"/><path d="M444 176 H576"/><path d="M720 176 H828"/>
-        </g>
-        <g font-family="Arial, sans-serif">
-          <rect x="34" y="116" width="134" height="120" rx="14" fill="#e8f7ff" stroke="#70aed0" stroke-width="3"/>
-          <text x="64" y="158" fill="#123047" font-size="19" font-weight="800">Test</text><text x="55" y="190" fill="#456276" font-size="15">same kit</text><text x="54" y="211" fill="#456276" font-size="15">same habit</text>
-          <rect x="300" y="116" width="144" height="120" rx="14" fill="#fff8dd" stroke="#d8bd61" stroke-width="3"/>
-          <text x="330" y="158" fill="#123047" font-size="19" font-weight="800">Record</text><text x="322" y="190" fill="#456276" font-size="15">date, value,</text><text x="326" y="211" fill="#456276" font-size="15">recent changes</text>
-          <rect x="576" y="116" width="144" height="120" rx="14" fill="#e9fbf1" stroke="#72a986" stroke-width="3"/>
-          <text x="606" y="158" fill="#123047" font-size="19" font-weight="800">Compare</text><text x="604" y="190" fill="#456276" font-size="15">stable, rising,</text><text x="622" y="211" fill="#456276" font-size="15">or falling</text>
-          <rect x="828" y="116" width="58" height="120" rx="14" fill="#fff1e5" stroke="#d9955b" stroke-width="3"/>
-          <text x="840" y="158" fill="#123047" font-size="19" font-weight="800">Act</text><text x="839" y="190" fill="#456276" font-size="15">only</text><text x="838" y="211" fill="#456276" font-size="15">if clear</text>
-          <text x="38" y="54" fill="#123047" font-size="26" font-weight="800">A test result is useful when it has context</text>
-          <text x="38" y="322" fill="#456276" font-size="18">The pattern tells you whether to feed less, change water, clean gently, wait, or ask for help.</text>
-        </g>
-      </svg>
+    <section class="diagram-panel" aria-labelledby="flow-title">
+      <img src="../../assets/learn/track-parameters-response-flow-gpt-image-2.png" alt="GPT Image 2 illustration showing a test, record, compare, act workflow for aquarium water parameters" loading="lazy" />
+      <div>
+        <div class="section-head">
+          <span>Response flow</span>
+          <h2 id="flow-title">A test result is useful when it has context</h2>
+        </div>
+        <p>The pattern tells you whether to feed less, change water, clean gently, wait, or ask for help. Test, record, compare, then make one clear correction instead of stacking guesses.</p>
+      </div>
     </section>
 
     <section aria-labelledby="rhythm-title">
