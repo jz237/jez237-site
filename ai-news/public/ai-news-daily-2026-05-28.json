@@ -1,6 +1,6 @@
 {
   "date": "2026-05-28",
-  "updatedAt": "2026-05-28T12:00:01.512231+00:00",
+  "updatedAt": "2026-05-28T12:43:30.233181+00:00",
   "items": [
     {
       "title": "Mistral launches Industrial Engineering AI with Airbus, BMW and EDF as headline customers",
@@ -13,11 +13,27 @@
       "image": "https://media.thenextweb.com/2026/05/Mistral-AI.avif",
       "published": "2026-05-28T09:30:48+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.1766
+      "score": 15.1561
+    },
+    {
+      "title": "Meta sells AI subscriptions while OpenAI and xAI walk into the ad business",
+      "url": "https://thenextweb.com/news/meta-ai-subscriptions-openai-xai-ad-business-collision",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta’s $7.99-and-$19.99 chatbot tiers and OpenAI’s push into advertising mark the moment the AI revenue-model question becomes a cross-cutting collision. Meta’s decision to begin selling consumer subscriptions to its Meta AI chatbot at $7.99 and $19.99 a month, announced on Tuesday, lands at exactly the moment OpenAI and xAI are visibly moving the other way: into [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-05-28T11:43:37+00:00",
+      "firstSeen": "2026-05-28T12:43:30.233181+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 10.1199
     },
     {
       "title": "Mistral’s Arthur Mensch directly rebuts Pope Leo on AI in warfare",
@@ -30,10 +46,10 @@
       "image": "https://media.thenextweb.com/2026/05/Arthur-Mensch.avif",
       "published": "2026-05-28T10:01:46+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0914
+      "score": 5.0706
     },
     {
       "title": "Musk walks back the Anthropic Colossus deal to a six-month lease",
@@ -49,7 +65,7 @@
       "lastSeen": "2026-05-28T12:00:01.512231+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0464
+      "score": 5.0265
     },
     {
       "title": "A Coding Guide to Implement a pgvector-Powered Semantic, Hybrid, Sparse, and Quantized Vector Search System",
@@ -62,10 +78,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-1-1-1024x731.png",
       "published": "2026-05-28T08:07:09+00:00",
       "firstSeen": "2026-05-28T08:51:39.890160+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 4.9076
+      "score": 4.8879
     },
     {
       "title": "New Moms Are Returning to Coding Jobs Radically Reshaped by AI",
@@ -78,10 +94,10 @@
       "image": "https://media.wired.com/photos/6a0b7d9d4db62c986283e838/master/pass/Business_TheWomenWhoWentonMaternityLeaveandReturnedtoanOfficeReshapedbyAI_v2.jpg",
       "published": "2026-05-28T11:00:00+00:00",
       "firstSeen": "2026-05-28T12:00:01.512231+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6599
+      "score": 4.6385
     },
     {
       "title": "A Google engineer used internal search data to bet $2.7m on Polymarket. The DOJ has charged him.",
@@ -97,7 +113,7 @@
       "lastSeen": "2026-05-28T11:00:01.312571+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4131
+      "score": 4.3939
     },
     {
       "title": "Vertu wants CEOs to run companies from an AI foldable starting at $6,880",
@@ -110,10 +126,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/vertu-alphafold-foldable.jpg?resize=1200%2C800",
       "published": "2026-05-28T07:00:00+00:00",
       "firstSeen": "2026-05-28T12:00:01.512231+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8473
+      "score": 3.8283
+    },
+    {
+      "title": "Meta is about to overtake Google as the world’s biggest advertising company",
+      "url": "https://thenextweb.com/news/meta-surpass-google-digital-ad-revenue-emarketer-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Meta is on track to dethrone Google as the world’s largest digital advertising business by the end of 2026, according to Emarketer. The market research firm projects Meta’s global net ad revenues will reach $243.46 billion this year, edging past Google’s projected $239.54 billion. It would be the first time in the history of digital advertising [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/meta-surpass-google-digital-ad-revenue-emarketer-2026.avif",
+      "published": "2026-05-28T12:22:33+00:00",
+      "firstSeen": "2026-05-28T12:43:30.233181+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5394
     },
     {
       "title": "JD.com’s founder vows to protect 900,000 jobs from AI. His warehouse strategy says otherwise.",
@@ -126,10 +158,10 @@
       "image": "https://media.thenextweb.com/2026/05/Liu-Qiangdong.avif",
       "published": "2026-05-28T09:11:44+00:00",
       "firstSeen": "2026-05-28T10:00:01.332917+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4675
+      "score": 3.4473
     },
     {
       "title": "Illinois Lawmakers Just Passed America’s Strongest AI Safety Bill",
@@ -142,10 +174,10 @@
       "image": "https://media.wired.com/photos/6a1769e135f75a644600c4ac/master/pass/Illionois-AI-Safetry-Bill-Business-2270597563.jpg",
       "published": "2026-05-28T00:10:42+00:00",
       "firstSeen": "2026-05-28T01:00:01.295852+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "fluff",
-      "score": 3.3821
+      "score": 3.3663
     },
     {
       "title": "The AI Hype Index: AI gets booed in graduation season",
@@ -158,42 +190,10 @@
       "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/MJ26-Thumb.jpg?resize=1200%2C600",
       "published": "2026-05-28T09:51:11+00:00",
       "firstSeen": "2026-05-28T11:00:01.312571+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
+      "lastSeen": "2026-05-28T12:43:30.233181+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3263
-    },
-    {
-      "title": "Perplexity AI Open-Sources Unigram Tokenizer That Achieves 5x Lower p50 Latency Than Hugging Face tokenizers Crate",
-      "url": "https://www.marktechpost.com/2026/05/28/perplexity-ai-open-sources-unigram-tokenizer-that-achieves-5x-lower-p50-latency-than-hugging-face-tokenizers-crate",
-      "source": "MarkTechPost",
-      "sourceUrl": "https://www.marktechpost.com/feed/",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "Perplexity AI open-sources a rewritten Unigram tokenizer that reduces reranker latency and cuts production CPU utilization by 5-6x.\nThe post Perplexity AI Open-Sources Unigram Tokenizer That Achieves 5x Lower p50 Latency Than Hugging Face tokenizers Crate appeared first on MarkTechPost.",
-      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-clean-modern-tech-editorial-banner-ill_o0XNxzSsWc-NAtXkWPloHQ_YJRkb0VeS-q2Fo-tl6Zmig_hd.png",
-      "published": "2026-05-28T09:08:20+00:00",
-      "firstSeen": "2026-05-28T10:00:01.332917+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2359
-    },
-    {
-      "title": "Transition Ventures lands $150M Fund II with Olix, Applied Atomics and Seneca on the portfolio",
-      "url": "https://thenextweb.com/news/transition-ventures-150m-fund-ii-helgason-physical-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Transition Ventures, the London-based early-stage firm led by Unity co-founder David Helgason, has closed a $150m second fund, bringing the platform’s assets under management to over $300m. Fund II will continue Transition’s thesis that the most consequential companies of the coming decade will sit at the intersection of AI and the physical world: power, robotics, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Transition-Ventures.avif",
-      "published": "2026-05-28T11:03:18+00:00",
-      "firstSeen": "2026-05-28T12:00:01.512231+00:00",
-      "lastSeen": "2026-05-28T12:00:01.512231+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2215
+      "score": 3.3057
     }
   ],
   "errors": []
