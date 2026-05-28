@@ -215,7 +215,7 @@
       margin-top: 28px;
       padding: 18px;
     }
-    .visual-band img {
+    .visual-band > img {
       width: 100%;
       height: 100%;
       min-height: 300px;
@@ -225,6 +225,41 @@
       border: 1px solid rgba(114,211,137,0.28);
       border-radius: 8px;
       background: #061a27;
+    }
+    .food-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      height: 100%;
+      min-height: 300px;
+    }
+    .food-gallery figure {
+      position: relative;
+      overflow: hidden;
+      min-height: 145px;
+      margin: 0;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      background: #061a27;
+    }
+    .food-gallery img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .food-gallery figcaption {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      color: #fff;
+      background: rgba(1,13,24,0.78);
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.2;
     }
     .sample-week {
       display: grid;
@@ -298,6 +333,7 @@
       .sample-week { grid-template-columns: 1fr; }
       .visual-band,
       .callout { padding: 14px; }
+      .food-gallery { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
     }
   </style>
@@ -405,7 +441,24 @@
     </section>
 
     <section class="visual-band" aria-labelledby="sample-week-title">
-      <img src="../../assets/site/red-parrot-pellets.jpg" alt="Aquarium pellet food as part of a fish food rotation plan" loading="lazy" />
+      <div class="food-gallery" aria-label="Examples of different fish food types used in a rotation">
+        <figure>
+          <img src="../../assets/site/baby-flakes.jpg" alt="Flake fish food container for small tropical fish" loading="lazy" />
+          <figcaption>Flakes for small community fish</figcaption>
+        </figure>
+        <figure>
+          <img src="../../assets/site/red-parrot-pellets.jpg" alt="Pellet fish food container for cichlids and larger fish" loading="lazy" />
+          <figcaption>Pellets for measured portions</figcaption>
+        </figure>
+        <figure>
+          <img src="../../assets/site/flip-feed.jpg" alt="Automatic feeder and aquarium food setup" loading="lazy" />
+          <figcaption>Staple foods on a schedule</figcaption>
+        </figure>
+        <figure>
+          <img src="../../assets/department/food-care.jpg" alt="Aquarium food and care department display" loading="lazy" />
+          <figcaption>Specialty foods by livestock</figcaption>
+        </figure>
+      </div>
       <div>
         <div class="section-head" style="display:block;margin:0 0 12px">
           <span>Simple pattern</span>
