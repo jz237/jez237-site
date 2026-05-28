@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feeding Basics - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      --panel: #071a27;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a {
+      color: #dff8ff;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.36);
+      text-underline-offset: 4px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(105,237,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(255,123,50,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(64,217,255,0.2);
+    }
+    .eyebrow,
+    .section-head span,
+    .lesson-card span,
+    .food-card span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 620px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      overflow: hidden;
+      min-height: 310px;
+      margin: 0;
+      border: 1px solid rgba(114,211,137,0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.18), transparent 36%),
+        #061a27;
+      box-shadow: 0 0 21px rgba(114,211,137,0.18);
+    }
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: cover;
+      object-position: center 55%;
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .section-head p { max-width: 440px; }
+    .lesson-grid,
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .lesson-card,
+    .food-card,
+    .callout,
+    .visual-band,
+    .portion-board {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(114,211,137,0.12), transparent 36%),
+        var(--panel);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .lesson-card,
+    .food-card { padding: 16px; }
+    .lesson-card h3,
+    .food-card h3,
+    .callout h2,
+    .visual-band h2,
+    .portion-board h3 {
+      margin: 8px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .lesson-card ul,
+    .food-card ul {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .lesson-card li,
+    .food-card li {
+      position: relative;
+      padding-left: 17px;
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .lesson-card li::before,
+    .food-card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(114,211,137,0.48);
+    }
+    .portion-board {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+    }
+    .portion-demo {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      min-height: 260px;
+    }
+    .portion-cup {
+      display: grid;
+      align-content: end;
+      min-height: 260px;
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(64,217,255,0.08), rgba(4,24,39,0.94)),
+        #061a27;
+    }
+    .portion-cup strong {
+      color: #fff;
+      font-size: 14px;
+    }
+    .portion-cup small {
+      display: block;
+      margin-top: 4px;
+      color: #b9d9e7;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+    .flake-pile {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: end;
+      gap: 4px;
+      min-height: 112px;
+      margin-bottom: 12px;
+    }
+    .flake {
+      width: 10px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffb14d;
+      box-shadow: 0 0 8px rgba(255,177,77,0.35);
+      transform: rotate(-18deg);
+    }
+    .portion-cup.warning .flake { background: #ff6a32; }
+    .portion-cup.good { border-color: rgba(114,211,137,0.44); }
+    .portion-cup.warning { border-color: rgba(255,123,50,0.44); }
+    .visual-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 0.62fr);
+      gap: 18px;
+      align-items: center;
+      margin-top: 28px;
+      padding: 18px;
+    }
+    .visual-band img {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      max-height: 360px;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      background: #061a27;
+    }
+    .rotation-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .rotation-item {
+      min-height: 118px;
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: rgba(3,20,34,0.72);
+    }
+    .rotation-item b {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+    }
+    .rotation-item small {
+      display: block;
+      margin-top: 7px;
+      color: #b9d9e7;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .callout {
+      margin-top: 28px;
+      padding: 20px;
+      border-left: 6px solid var(--orange);
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%),
+        #150f0b;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3,
+    .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .hero,
+      .portion-board,
+      .visual-band { grid-template-columns: 1fr; }
+      .lesson-grid,
+      .food-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .hero { padding: 20px 16px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .lesson-grid,
+      .food-grid,
+      .portion-demo,
+      .rotation-strip { grid-template-columns: 1fr; }
+      .portion-cup { min-height: 150px; }
+      .portion-board,
+      .visual-band,
+      .callout { padding: 14px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260525-learning-path-frame" />
+</head>
+<body>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums &middot; Fish &middot; Coral &middot; Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../">Home</a>
+      <a href="../../category/?cat=freshwater">Freshwater</a>
+      <a href="../../category/?cat=saltwater">Saltwater</a>
+      <a href="../../category/?cat=pond">Pond</a>
+      <a href="../../category/?cat=equipment">Equipment</a>
+      <a href="../../category/?cat=food">Food</a>
+      <a href="../../category/?cat=decor">Decorations</a>
+      <a href="../../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../">Help</a>
+      <a href="../../#visit">Visit Us</a>
+    </nav>
+
+    <div class="crumbs"><a href="../">Help Center</a><span>/</span><span>Feeding Basics</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Daily feeding</span>
+        <h1>Feed less than you think, then rotate smarter</h1>
+        <p>Most aquarium feeding problems start with good intentions: too much food, one food used for every fish, or treats that become the whole diet. This guide keeps feeding simple, cleaner, and easier to match to the animals in the tank.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=food">Shop food &amp; care</a>
+          <a class="btn secondary" href="../#food-feeding">Back to Food &amp; Feeding</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="../../assets/site/baby-flakes.jpg" alt="Fish food flakes close-up for aquarium feeding guide" />
+      </figure>
+    </section>
+
+    <section id="portion-size" aria-labelledby="portion-title">
+      <div class="section-head">
+        <div>
+          <span>Portion size</span>
+          <h2 id="portion-title">Use the smallest portion that gets eaten quickly</h2>
+        </div>
+        <p>Food that reaches the bottom and stays there is no longer nutrition. It becomes waste that can feed cloudy water, algae, ammonia, and filter buildup.</p>
+      </div>
+      <div class="portion-board">
+        <div>
+          <h3>The practical rule</h3>
+          <p>Start with less than feels right. Feed a small pinch, watch the fish eat, then add a second tiny amount only if they are still actively eating. For most community tanks, the meal should be gone in about a minute or two.</p>
+          <div class="hero-actions">
+            <a class="btn" href="../../category/?cat=food&amp;sub=flake-tropical">Browse flake foods</a>
+            <a class="btn secondary" href="../ammonia-nitrite/">Ammonia help</a>
+          </div>
+        </div>
+        <div class="portion-demo" aria-label="Food portion comparison">
+          <div class="portion-cup good">
+            <div class="flake-pile">
+              <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+            </div>
+            <strong>Better start</strong>
+            <small>Small amount, easy to watch, easy to repeat.</small>
+          </div>
+          <div class="portion-cup">
+            <div class="flake-pile">
+              <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+            </div>
+            <strong>Maybe too much</strong>
+            <small>Fine only if the whole tank eats it quickly.</small>
+          </div>
+          <div class="portion-cup warning">
+            <div class="flake-pile">
+              <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+            </div>
+            <strong>Waste risk</strong>
+            <small>Leftovers sink, rot, and load the filter.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="warning-title">
+      <div class="section-head">
+        <div>
+          <span>Warning signs</span>
+          <h2 id="warning-title">How overfeeding shows up</h2>
+        </div>
+        <p>If two or more of these are happening, reduce food before adding more bottles or changing equipment.</p>
+      </div>
+      <div class="lesson-grid">
+        <article class="lesson-card">
+          <span>Water</span>
+          <h3>Cloudy or hazy water</h3>
+          <p>Extra food breaks down into organics the tank has to process.</p>
+          <ul>
+            <li>Check ammonia and nitrite first</li>
+            <li>Remove visible debris</li>
+            <li>Reduce feeding while the filter catches up</li>
+          </ul>
+        </article>
+        <article class="lesson-card">
+          <span>Algae</span>
+          <h3>Fast algae growth</h3>
+          <p>Food adds nutrients. If export is weak, algae uses the leftovers.</p>
+          <ul>
+            <li>Review light schedule and phosphate</li>
+            <li>Siphon trapped waste</li>
+            <li>Feed smaller meals more intentionally</li>
+          </ul>
+        </article>
+        <article class="lesson-card">
+          <span>Fish behavior</span>
+          <h3>Picky or bloated fish</h3>
+          <p>Constant heavy feeding can make fish selective and can stress digestion.</p>
+          <ul>
+            <li>Use species-appropriate foods</li>
+            <li>Skip rich treats as the daily staple</li>
+            <li>Ask the store if appetite changes suddenly</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-band" id="rotation" aria-labelledby="rotation-title">
+      <img src="../../assets/site/flip-feed.jpg" alt="Assorted aquarium foods for rotating fish diets" loading="lazy" />
+      <div>
+        <div class="section-head" style="display:block;margin:0 0 12px">
+          <span>Food rotation</span>
+          <h2 id="rotation-title">Rotate food types without making feeding complicated</h2>
+        </div>
+        <p>Rotation does not mean five foods every day. It means the main diet fits the fish, then a few appropriate foods fill in texture, nutrition, and natural feeding behavior.</p>
+        <div class="rotation-strip">
+          <div class="rotation-item"><b>Flakes</b><small>Good for surface and mid-water community fish when sized correctly.</small></div>
+          <div class="rotation-item"><b>Pellets</b><small>Consistent nutrition, useful for fish that need measured portions.</small></div>
+          <div class="rotation-item"><b>Frozen</b><small>Great enrichment, but easy to overuse. Rinse or portion carefully.</small></div>
+          <div class="rotation-item"><b>Veg</b><small>Important for many herbivores, grazers, plecos, and some reef fish.</small></div>
+          <div class="rotation-item"><b>Specialty</b><small>Use wafers, coral foods, fry foods, or pond diets for specific needs.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="match-title">
+      <div class="section-head">
+        <div>
+          <span>Match the tank</span>
+          <h2 id="match-title">Choose food by animal, mouth, and tank level</h2>
+        </div>
+        <p>The best food is not just a brand. It is the right size, texture, sinking behavior, and protein or plant balance for the livestock.</p>
+      </div>
+      <div class="food-grid">
+        <article class="food-card">
+          <span>Community fish</span>
+          <h3>Small flakes and micro pellets</h3>
+          <p>Best when fish can eat pieces whole without spitting clouds of crumbs into the water.</p>
+          <ul>
+            <li>Crush large flakes for small fish</li>
+            <li>Use slow-sinking foods for mid-water feeders</li>
+            <li>Watch shy fish during the first minute</li>
+          </ul>
+        </article>
+        <article class="food-card">
+          <span>Bottom feeders</span>
+          <h3>Wafers and sinking foods</h3>
+          <p>Bottom feeders need food that reaches them, but leftovers under decor still become waste.</p>
+          <ul>
+            <li>Feed after lights dim if needed</li>
+            <li>Use target portions, not a handful</li>
+            <li>Remove uneaten large pieces</li>
+          </ul>
+        </article>
+        <article class="food-card">
+          <span>Saltwater and reef</span>
+          <h3>Careful variety</h3>
+          <p>Marine fish, coral, and inverts can have different needs, so variety matters more than volume.</p>
+          <ul>
+            <li>Use seaweed or algae foods for grazers</li>
+            <li>Feed coral foods only where appropriate</li>
+            <li>Protect water quality with smaller servings</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-band" aria-labelledby="store-help-title">
+      <img src="../../assets/site/red-parrot-pellets.jpg" alt="Aquarium pellet food container and fish food example" loading="lazy" />
+      <div>
+        <div class="section-head" style="display:block;margin:0 0 12px">
+          <span>Store visit</span>
+          <h2 id="store-help-title">Bring the fish list when choosing food</h2>
+        </div>
+        <p>When you ask for food help, bring the tank size, fish list, current food, feeding schedule, and any water test results. Staff can narrow the choice much faster when they know whether you are feeding tetras, cichlids, goldfish, koi, reef fish, shrimp, or coral.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=food">Browse feeding options</a>
+          <a class="btn secondary" href="../../contact/">Visit the store</a>
+        </div>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>If the tank is sick, feeding is part of the diagnosis</h2>
+      <p>Cloudy water, algae, ammonia spikes, gasping fish, and finicky appetite often overlap with feeding habits. Before adding products, check the water, reduce excess food, and make one clear change at a time.</p>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="../">Help Center</a><a href="../first-tank/">First Tank</a><a href="../weekly-maintenance/">Weekly Maintenance</a><a href="../cloudy-water/">Cloudy Water</a><a href="../algae/">Algae</a><a href="../ammonia-nitrite/">Ammonia Spike</a></div></div>
+        <div><h4>About This Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
