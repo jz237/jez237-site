@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T19:00:02.100358+00:00",
+  "updatedAt": "2026-05-28T19:44:03.163562+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8416,6 +8416,10 @@
     "https://techcrunch.com/2026/05/28/just-like-gold-and-oil-well-soon-be-able-to-trade-ai-token-futures": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200,849",
       "checkedAt": "2026-05-28T19:00:02.100358+00:00"
+    },
+    "https://www.anthropic.com/news/series-h": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Object%20Growth&amp;backgroundColor=coral",
+      "checkedAt": "2026-05-28T19:44:03.163562+00:00"
     }
   }
 }
