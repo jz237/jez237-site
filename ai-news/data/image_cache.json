@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T23:37:03.581796+00:00",
+  "updatedAt": "2026-05-28T01:00:01.295852+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8292,6 +8292,10 @@
     "https://simonwillison.net/2026/May/27/sqlite-agents": {
       "image": "",
       "checkedAt": "2026-05-28T00:00:01.543922+00:00"
+    },
+    "https://techcrunch.com/2026/05/27/why-googles-ai-cant-spell-google-or-anything-else": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/google-two-ps.jpg?resize=1200,675",
+      "checkedAt": "2026-05-28T01:00:01.295852+00:00"
     }
   }
 }
