@@ -109,20 +109,67 @@
     }
     .hero-visual {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 12px;
       margin: 0;
+      min-height: 390px;
     }
-    .hero-visual img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 1 / 0.8;
-      object-fit: contain;
-      padding: 10px;
+    .filter-photo {
+      position: relative;
+      overflow: hidden;
       border: 1px solid rgba(164,137,255,0.28);
       border-radius: 8px;
       background: #f9fcff;
       box-shadow: 0 0 21px rgba(164,137,255,0.14);
+    }
+    .filter-photo.featured {
+      min-height: 390px;
+    }
+    .filter-stack {
+      display: grid;
+      gap: 12px;
+    }
+    .filter-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 16px;
+    }
+    .filter-photo.featured img {
+      padding: 20px;
+    }
+    .filter-photo figcaption {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display: inline-flex;
+      width: fit-content;
+      max-width: calc(100% - 20px);
+      padding: 6px 9px;
+      border-radius: 6px;
+      color: #082036;
+      background: rgba(255,255,255,0.88);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.2;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.16);
+    }
+    .filter-photo-strip {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .filter-photo-strip .filter-photo {
+      min-height: 116px;
+    }
+    .filter-photo-strip img {
+      padding: 12px;
+    }
+    .hero-visual img {
+      background: #f9fcff;
     }
     .section-head {
       display: flex;
@@ -252,7 +299,13 @@
     }
     @media (max-width: 620px) {
       .hero { padding: 20px 16px; }
-      .hero-visual { grid-template-columns: 1fr; }
+      .hero-visual,
+      .filter-photo-strip { grid-template-columns: 1fr; }
+      .hero-visual,
+      .filter-photo.featured { min-height: 0; }
+      .filter-photo.featured { height: 310px; }
+      .filter-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .filter-stack .filter-photo { height: 150px; }
       .section-head { display: block; }
       .footer-link-grid { grid-template-columns: 1fr; }
     }
@@ -272,11 +325,35 @@
           <a class="btn secondary" href="../#filtration-equipment">Compare diagrams</a>
         </div>
       </div>
-      <figure class="hero-visual" aria-label="Common aquarium filter diagrams">
-        <img src="../../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filter diagram" />
-        <img src="../../assets/learn/sponge-filter.png" alt="Sponge filter aquarium diagram" />
-        <img src="../../assets/learn/freshwater-filter.png" alt="Canister filter aquarium diagram" />
-        <img src="../../assets/learn/sump-saltwater.png" alt="Saltwater sump filtration diagram" />
+      <figure class="hero-visual" aria-label="Real aquarium filter examples">
+        <div class="filter-photo featured">
+          <img src="https://cdn.shoplightspeed.com/shops/648211/files/53292018/600x800x2/fluval-207-canister-filter.jpg" alt="Fluval 207 canister filter product photo" />
+          <figcaption>Canister filters for larger media capacity</figcaption>
+        </div>
+        <div class="filter-stack">
+          <div class="filter-photo">
+            <img src="https://cdn.shoplightspeed.com/shops/648211/files/52709265/800x800x2/aquatop-internal-filter-uv-7-watt.jpg" alt="Aquatop internal aquarium filter product photo" />
+            <figcaption>Internal filters</figcaption>
+          </div>
+          <div class="filter-photo">
+            <img src="https://cdn.shoplightspeed.com/shops/648211/files/65104372/600x800x2/fluval-ac70-110-intake-strainer-sponge.jpg" alt="Fluval intake strainer sponge product photo" />
+            <figcaption>Sponge protection</figcaption>
+          </div>
+        </div>
+        <div class="filter-photo-strip" aria-label="Additional filter styles">
+          <div class="filter-photo">
+            <img src="https://cdn.shoplightspeed.com/shops/648211/files/53292359/600x800x2/fluval-canister-filter-fx-4.jpg" alt="Fluval FX4 canister filter product photo" />
+            <figcaption>High-flow canister</figcaption>
+          </div>
+          <div class="filter-photo">
+            <img src="https://cdn.shoplightspeed.com/shops/648211/files/73779910/600x800x2/aquael-ultramax-filter-1500.jpg" alt="Aquael Ultramax filter product photo" />
+            <figcaption>External filter</figcaption>
+          </div>
+          <div class="filter-photo">
+            <img src="https://cdn.shoplightspeed.com/shops/648211/files/72426676/600x800x2/danner-manufacturing-pond-prefilt-sponge.jpg" alt="Pond prefilter sponge product photo" />
+            <figcaption>Pond prefilter</figcaption>
+          </div>
+        </div>
       </figure>
     </section>
 
