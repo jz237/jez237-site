@@ -2458,14 +2458,14 @@
       function openDisclosureFor(id) {
         if (!id) return null;
         const target = document.getElementById(id);
-        const filterCard = target?.matches('details.filter-card')
-          ? target
-          : target?.closest('details.filter-card');
-        if (filterCard) filterCard.open = true;
         const disclosure = target?.matches('details.learn-disclosure')
           ? target
           : target?.closest('details.learn-disclosure');
         if (disclosure) disclosure.open = true;
+        const filterCard = target?.matches('details.filter-card')
+          ? target
+          : target?.closest('details.filter-card');
+        if (filterCard) filterCard.open = true;
         return target;
       }
 
@@ -2473,9 +2473,12 @@
       function scrollToDiagram(id) {
         const target = openDisclosureFor(id);
         if (target) {
-          setTimeout(() => {
-            window.scrollTo({ top: target.offsetTop - 20, left: 0, behavior: 'auto' });
-          }, 80);
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              const top = target.getBoundingClientRect().top + window.pageYOffset - 18;
+              window.scrollTo({ top, left: 0, behavior: 'auto' });
+            });
+          });
         }
       }
 
