@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T21:00:01.803979+00:00",
+  "updatedAt": "2026-05-28T22:00:01.710005+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8428,6 +8428,10 @@
     "https://techcrunch.com/2026/05/28/asana-acquires-no-code-agent-builder-stack-ai": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/asana-illustration-getty.jpg?resize=1200,800",
       "checkedAt": "2026-05-28T21:00:01.803979+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/the-internet-is-being-rebuilt-for-machines": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?resize=1200,675",
+      "checkedAt": "2026-05-28T22:00:01.710005+00:00"
     }
   }
 }
