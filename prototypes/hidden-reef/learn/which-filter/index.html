@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Which Filter Do I Need? - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --violet: #a489ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(164,137,255,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .crumbs a {
+      color: #dff8ff;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.36);
+      text-underline-offset: 4px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 1.1fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(164,137,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(164,137,255,0.2), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(164,137,255,0.18);
+    }
+    .eyebrow,
+    .section-head span,
+    .choice-card span,
+    .rule-card span,
+    .pick-row span {
+      color: var(--violet);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 640px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 0.98;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .btn.secondary {
+      border: 1px solid rgba(116,205,235,0.32);
+      background: rgba(8,35,52,0.72);
+    }
+    .hero-visual {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0;
+    }
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 0.8;
+      object-fit: contain;
+      padding: 10px;
+      border: 1px solid rgba(164,137,255,0.28);
+      border-radius: 8px;
+      background: #f9fcff;
+      box-shadow: 0 0 21px rgba(164,137,255,0.14);
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid rgba(116,205,235,0.2);
+    }
+    .section-head h2 {
+      margin: 5px 0 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .section-head p { max-width: 440px; }
+    .choice-grid,
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .choice-card,
+    .rule-card,
+    .callout {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(164,137,255,0.12), transparent 36%),
+        #071a27;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .choice-card,
+    .rule-card { padding: 16px; }
+    .choice-card h3,
+    .rule-card h3,
+    .callout h2,
+    .pick-row h3 {
+      margin: 8px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .choice-card ul,
+    .rule-card ul {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .choice-card li,
+    .rule-card li {
+      position: relative;
+      padding-left: 17px;
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .choice-card li::before,
+    .rule-card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--violet);
+      box-shadow: 0 0 12px rgba(164,137,255,0.5);
+    }
+    .pick-list {
+      display: grid;
+      gap: 10px;
+    }
+    .pick-row {
+      display: grid;
+      grid-template-columns: 150px minmax(190px, 260px) minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+    }
+    .pick-row h3 { margin: 0; }
+    .pick-row a {
+      justify-self: end;
+      white-space: nowrap;
+      color: #fff;
+      font-weight: 900;
+      border-bottom: 2px solid rgba(255,123,50,0.82);
+    }
+    .callout {
+      margin-top: 28px;
+      padding: 20px;
+      border-left: 6px solid var(--orange);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,180,92,0.13), transparent 36%),
+        #150f0b;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 980px) {
+      .hero,
+      .choice-grid,
+      .rule-grid,
+      .footer-top { grid-template-columns: 1fr; }
+      .pick-row { grid-template-columns: 1fr; gap: 7px; }
+      .pick-row a { justify-self: start; }
+    }
+    @media (max-width: 620px) {
+      .hero { padding: 20px 16px; }
+      .hero-visual { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .footer-link-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="crumbs"><a href="../">Help Center</a><span>/</span><span>Which Filter Do I Need?</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Filtration &amp; Equipment</span>
+        <h1>Which filter do I need?</h1>
+        <p>Start with the tank size, livestock, maintenance style, and where the equipment can live. Most filters can keep a tank healthy when they are sized correctly and maintained without destroying the bacteria living inside them.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=equipment">Browse equipment</a>
+          <a class="btn secondary" href="../#filtration-equipment">Compare diagrams</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Common aquarium filter diagrams">
+        <img src="../../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filter diagram" />
+        <img src="../../assets/learn/sponge-filter.png" alt="Sponge filter aquarium diagram" />
+        <img src="../../assets/learn/freshwater-filter.png" alt="Canister filter aquarium diagram" />
+        <img src="../../assets/learn/sump-saltwater.png" alt="Saltwater sump filtration diagram" />
+      </figure>
+    </section>
+
+    <section aria-labelledby="quick-pick-title">
+      <div class="section-head">
+        <div>
+          <span>Fast answer</span>
+          <h2 id="quick-pick-title">Match the filter to the job</h2>
+        </div>
+        <p>Use this as a starting point, then adjust for stocking level, feeding, plants, coral, and how often the tank will be serviced.</p>
+      </div>
+      <div class="pick-list">
+        <article class="pick-row">
+          <span>Small freshwater</span>
+          <h3>Hang-on-back filter</h3>
+          <p>Good all-around choice for beginner freshwater tanks when you want simple setup, easy access, and visible return flow.</p>
+          <a href="../#hang-on-back-filter">Open diagram</a>
+        </article>
+        <article class="pick-row">
+          <span>Fry, shrimp, quarantine</span>
+          <h3>Sponge filter</h3>
+          <p>Gentle flow, strong biological filtration, low cost, and very low risk of pulling tiny animals into the intake.</p>
+          <a href="../#sponge-filter">Open diagram</a>
+        </article>
+        <article class="pick-row">
+          <span>Medium display</span>
+          <h3>Canister filter</h3>
+          <p>Useful when you want more media capacity, cleaner display lines, and flexible mechanical, biological, and chemical media.</p>
+          <a href="../#freshwater-filter">Open diagram</a>
+        </article>
+        <article class="pick-row">
+          <span>Large or expandable</span>
+          <h3>Sump filtration</h3>
+          <p>Best when the system needs extra water volume, hidden equipment, stronger oxygen exchange, and room for future gear.</p>
+          <a href="../#sump-filter">Open diagram</a>
+        </article>
+        <article class="pick-row">
+          <span>Nano reef</span>
+          <h3>All-in-one chambers</h3>
+          <p>Good for compact saltwater setups where filtration, heater, media basket, and return pump sit behind the display.</p>
+          <a href="../#all-in-one-saltwater">Open diagram</a>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="rules-title">
+      <div class="section-head">
+        <div>
+          <span>Decision rules</span>
+          <h2 id="rules-title">What matters more than the box</h2>
+        </div>
+        <p>The filter style matters, but the habits around it matter more.</p>
+      </div>
+      <div class="rule-grid">
+        <article class="rule-card">
+          <span>Biology</span>
+          <h3>Do not reset the bacteria</h3>
+          <p>Filter media is living biological infrastructure. Clean it gently and keep some seasoned media in place.</p>
+          <ul>
+            <li>Rinse reusable media in removed tank water</li>
+            <li>Do not replace all cartridges at once</li>
+            <li>Keep media wet during service</li>
+          </ul>
+        </article>
+        <article class="rule-card">
+          <span>Flow</span>
+          <h3>Match current to animals</h3>
+          <p>High flow helps oxygen and debris pickup, but some fish, fry, shrimp, and long-finned species need gentler movement.</p>
+          <ul>
+            <li>Add intake sponges for safety</li>
+            <li>Use spray bars or baffles if needed</li>
+            <li>Reef tanks may need separate flow pumps</li>
+          </ul>
+        </article>
+        <article class="rule-card">
+          <span>Access</span>
+          <h3>Buy what you will clean</h3>
+          <p>The best filter is the one that is sized well and easy enough for the owner to maintain consistently.</p>
+          <ul>
+            <li>HOBs are easy to reach</li>
+            <li>Canisters hide gear but take longer to service</li>
+            <li>Sumps give space but need planning</li>
+          </ul>
+        </article>
+        <article class="rule-card">
+          <span>Water quality</span>
+          <h3>Filtration is not a water change</h3>
+          <p>A filter processes and traps waste. It does not erase nitrate, dissolved organics, or the need for regular maintenance.</p>
+          <ul>
+            <li>Test ammonia, nitrite, nitrate, and pH</li>
+            <li>Change water on a schedule</li>
+            <li>Do not overfeed the system</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="shopping-title">
+      <div class="section-head">
+        <div>
+          <span>Store checklist</span>
+          <h2 id="shopping-title">Bring these details when choosing</h2>
+        </div>
+        <p>A quick photo and a few tank facts make filter recommendations much more accurate.</p>
+      </div>
+      <div class="choice-grid">
+        <article class="choice-card">
+          <span>Tank facts</span>
+          <h3>Size and shape</h3>
+          <p>Gallons matter, but so do footprint, height, stand space, and whether the tank is drilled.</p>
+        </article>
+        <article class="choice-card">
+          <span>Livestock</span>
+          <h3>Current and planned animals</h3>
+          <p>Goldfish, cichlids, shrimp, reef fish, coral, and pond fish put very different demands on filtration.</p>
+        </article>
+        <article class="choice-card">
+          <span>Symptoms</span>
+          <h3>Photos and test results</h3>
+          <p>Bring current ammonia, nitrite, nitrate, pH, temperature, and salinity if the tank is already running.</p>
+        </article>
+        <article class="choice-card">
+          <span>Maintenance</span>
+          <h3>How you want to service it</h3>
+          <p>Hidden equipment, quiet operation, low cost, easy cleaning, and future upgrades all change the right pick.</p>
+        </article>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>Oversizing helps only if flow and maintenance still fit the tank</h2>
+      <p>A larger filter can add media capacity, but too much current can stress livestock and too much neglected media can become a waste trap. Choose a filter you can service on schedule, then protect the biological media during cleaning.</p>
+      <div class="hero-actions">
+        <a class="btn" href="../weekly-maintenance/">Open maintenance checklist</a>
+        <a class="btn secondary" href="../feeding-basics/">Read feeding basics</a>
+      </div>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food &amp; Care</a><a href="../../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="../">Help Center</a><a href="../cloudy-water/">Cloudy Water</a><a href="../algae/">Algae</a><a href="../ammonia-nitrite/">Ammonia Spike</a><a href="../weekly-maintenance/">Maintenance</a><a href="../feeding-basics/">Feeding</a></div></div>
+        <div><h4>About This Demo</h4><a href="../../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
