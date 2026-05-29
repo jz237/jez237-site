@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T16:00:01.107711+00:00",
+  "updatedAt": "2026-05-29T16:52:35.975384+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8504,6 +8504,14 @@
     "https://techcrunch.com/2026/05/29/kiwibits-ai-powered-bird-feeder-is-my-new-backyard-buddy": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Solar-Roof-Beako-Lifestyle-Image-3.png?w=1200",
       "checkedAt": "2026-05-29T16:00:01.107711+00:00"
+    },
+    "https://techcrunch.com/2026/05/29/cognitions-scott-wu-says-ai-coding-agents-shouldnt-replace-humans": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200,1004",
+      "checkedAt": "2026-05-29T16:52:35.975384+00:00"
+    },
+    "https://openai.com/index/boston-childrens-hospital": {
+      "image": "",
+      "checkedAt": "2026-05-29T16:52:35.975384+00:00"
     }
   }
 }
