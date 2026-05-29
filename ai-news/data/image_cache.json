@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T03:00:01.226233+00:00",
+  "updatedAt": "2026-05-29T04:00:01.563557+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8448,6 +8448,10 @@
     "https://simonwillison.net/2026/May/28/llm-anthropic": {
       "image": "",
       "checkedAt": "2026-05-29T01:00:01.830907+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/28/how-to-design-an-end-to-end-ansible-automation-lab-with-playbooks-inventories-roles-vault-dynamic-inventory-and-custom-modules": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-5-1024x731.png",
+      "checkedAt": "2026-05-29T04:00:01.563557+00:00"
     }
   }
 }
