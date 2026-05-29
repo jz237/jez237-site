@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T06:00:01.562099+00:00",
+  "updatedAt": "2026-05-29T07:00:01.545397+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8456,6 +8456,10 @@
     "https://openai.com/index/mufg": {
       "image": "",
       "checkedAt": "2026-05-29T06:00:01.562099+00:00"
+    },
+    "https://simonwillison.net/2026/May/28/markdown-svg-renderer": {
+      "image": "",
+      "checkedAt": "2026-05-29T07:00:01.545397+00:00"
     }
   }
 }
