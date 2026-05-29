@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T11:00:01.934687+00:00",
+  "updatedAt": "2026-05-29T12:00:01.359514+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8480,6 +8480,10 @@
     "https://huggingface.co/blog/torch-profiler": {
       "image": "https://huggingface.co/blog/assets/torch-profiler/thumbnail.png",
       "checkedAt": "2026-05-29T11:00:01.934687+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/939765/ai-training-data-startup-shift-free-cleaning": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-29-at-12.44.12.png?quality=90&amp;strip=all&amp;crop=0,1.3015853110533,100,97.396829377893",
+      "checkedAt": "2026-05-29T12:00:01.359514+00:00"
     }
   }
 }
