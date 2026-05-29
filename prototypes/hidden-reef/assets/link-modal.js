@@ -7,7 +7,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image. Hover to zoom in the preview pane."><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span><span class="link-modal__zoom-hint">Roll over image to zoom in</span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image. Hover to zoom in the preview pane."><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span><span class="link-modal__zoom-hint">Roll over image to zoom in</span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -188,19 +188,19 @@
   }
 
   function ensureCartDrawer() {
-    const drawerNoteHtml = '<strong>Free shipping on qualifying orders over $49.</strong> Prototype only: at checkout this order would hand off to Lightspeed for live inventory, tax, payment, and fulfillment. <span class="drawer-note__checkout">Discounts, shipping, and tax are calculated at checkout.</span>';
+    const drawerNoteHtml = '<strong>Free shipping on qualifying orders over $49.</strong> Final availability, discounts, shipping, and tax are confirmed during checkout.';
     let drawer = document.querySelector('.drawer');
     if (!drawer) {
       drawer = document.createElement('aside');
       drawer.className = 'drawer';
-      drawer.setAttribute('aria-label', 'Demo cart drawer');
-      drawer.innerHTML = '<div class="drawer-head"><h2>Demo cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to preview the Lightspeed handoff.</p><div class="cart-summary"></div><p class="drawer-note">' + drawerNoteHtml + '</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue in Lightspeed →</a>';
+      drawer.setAttribute('aria-label', 'Shopping cart drawer');
+      drawer.innerHTML = '<div class="drawer-head"><h2>Your cart</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your cart is empty. Add products to get started.</p><div class="cart-summary"></div><p class="drawer-note">' + drawerNoteHtml + '</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Continue to checkout →</a>';
       document.body.appendChild(drawer);
     }
     const title = drawer.querySelector('.drawer-head h2');
-    if (title) title.textContent = 'Demo cart';
+    if (title) title.textContent = 'Your cart';
     const empty = drawer.querySelector('#empty-cart');
-    if (empty) empty.textContent = 'Your cart is empty. Add products to preview the Lightspeed handoff.';
+    if (empty) empty.textContent = 'Your cart is empty. Add products to get started.';
     if (!drawer.querySelector('.cart-summary')) {
       const summary = document.createElement('div');
       summary.className = 'cart-summary';
@@ -217,7 +217,7 @@
     const handoff = drawer.querySelector('.cart-handoff') || drawer.querySelector('.drawer .btn, .btn');
     if (handoff) {
       handoff.classList.add('cart-handoff');
-      handoff.textContent = 'Continue in Lightspeed →';
+      handoff.textContent = 'Continue to checkout →';
       handoff.setAttribute('href', LIGHTSPEED_CART_URL);
       handoff.setAttribute('target', '_blank');
       handoff.setAttribute('rel', 'noopener');
@@ -231,7 +231,7 @@
       countNode.textContent = String(count);
     });
     document.querySelectorAll('.cart-button').forEach(button => {
-      button.setAttribute('aria-label', count ? 'Open demo cart with ' + count + ' item' + (count === 1 ? '' : 's') : 'Open empty demo cart');
+      button.setAttribute('aria-label', count ? 'Open cart with ' + count + ' item' + (count === 1 ? '' : 's') : 'Open empty cart');
     });
   }
 
@@ -249,7 +249,7 @@
       list.innerHTML = items.map((item, index) => '<div class="cart-item"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.price || 'See site') + '</span><div class="cart-qty" aria-label="Quantity controls"><button type="button" data-cart-dec="' + index + '" aria-label="Decrease quantity">−</button><strong>' + item.qty + '</strong><button type="button" data-cart-inc="' + index + '" aria-label="Increase quantity">+</button></div></div><button type="button" data-cart-remove="' + index + '">Remove</button></div>').join('');
     }
     if (summary) {
-      summary.innerHTML = items.length ? '<span>Demo subtotal</span><strong>$' + total.toFixed(2) + '</strong>' : '<span>Demo subtotal</span><strong>$0.00</strong>';
+      summary.innerHTML = items.length ? '<span>Estimated subtotal</span><strong>$' + total.toFixed(2) + '</strong>' : '<span>Estimated subtotal</span><strong>$0.00</strong>';
     }
   }
 
@@ -433,7 +433,7 @@
     wrap.innerHTML = '<label for="link-modal-variant">Options</label><select id="link-modal-variant" class="link-modal__variant-select">' + variants.map(item => {
       const selected = normalizeUrl(item.productUrl) === normalizeUrl(activeUrl) ? ' selected' : '';
       return '<option value="' + escapeHtml(item.productUrl || '') + '" data-name="' + escapeHtml(item.name || '') + '" data-price="' + escapeHtml(item.price || 'See site') + '" data-image="' + escapeHtml(item.imageUrl || '') + '" data-images="' + escapeHtml(JSON.stringify(item.images || [])) + '" data-barcode="' + escapeHtml(item.barcode || '') + '"' + selected + '>' + escapeHtml(item.name || 'Option') + ' - ' + escapeHtml(item.price || 'See site') + '</option>';
-    }).join('') + '</select><span>Select the exact color, size, or package before adding it to the demo cart.</span>';
+    }).join('') + '</select><span>Select the exact color, size, or package before adding it to your cart.</span>';
   }
 
   document.addEventListener('click', event => {
@@ -448,7 +448,7 @@
     const title = product.name || card?.querySelector('h3, strong')?.textContent?.trim() || link.textContent.trim() || 'Hidden Reef item';
     const categoryName = context.category.childName || card?.dataset.category || card?.querySelector('.thr-brand, span')?.textContent?.trim() || 'Catalog item';
     const departmentName = context.category.groupName || 'Hidden Reef catalog';
-    const desc = card?.dataset.info || context.category.description || card?.querySelector('p, em')?.textContent?.trim() || 'Product details are from the current demo catalog import.';
+    const desc = card?.dataset.info || context.category.description || card?.querySelector('p, em')?.textContent?.trim() || 'Check the product page for current details, options, and availability.';
     const img = card?.querySelector('img');
     const productImages = getProductImages(product, img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg');
     const price = product.price || card?.dataset.price || card?.querySelector('.price, .thr-price')?.textContent?.trim() || 'See site';
@@ -459,8 +459,8 @@
     const brand = card?.querySelector('.thr-brand')?.textContent?.trim() || extractBrand(title) || 'Hidden Reef';
     const detailItems = details.length ? details : [
       'Listed under ' + departmentName + ' / ' + categoryName + '.',
-      'Price reflects the latest static catalog import for this demo.',
-      'Availability and final price should be confirmed on the store page or in person.'
+      'Current online price is shown for reference.',
+      'Availability and final price are confirmed on the store page or in person.'
     ];
     const relatedHtml = context.related.length
       ? '<strong>Related products</strong><div>' + context.related.map(item => '<a class="product-link" href="' + escapeHtml(item.productUrl) + '">' + escapeHtml(item.name) + '</a>').join('') + '</div>'
@@ -476,7 +476,7 @@
     addButton.dataset.image = productImages[0] || '';
     modal.querySelector('.link-modal__facts').innerHTML = '<span><strong>Brand</strong>' + escapeHtml(brand) + '</span><span><strong>Price</strong><em data-modal-price>' + escapeHtml(price) + '</em></span><span><strong>Department</strong>' + escapeHtml(departmentName) + '</span><span><strong>Category</strong>' + escapeHtml(categoryName) + '</span>';
     renderVariantSelector(modal, context.variants, link.href);
-    modal.querySelector('.link-modal__status').innerHTML = '<strong>Store availability</strong><span>Confirm current stock before visiting. Live inventory comes later when API access is available.</span>';
+    modal.querySelector('.link-modal__status').innerHTML = '<strong>Store availability</strong><span>Stock can change quickly. Check the product page or contact the store before making a special trip.</span>';
     modal.querySelector('.link-modal__details').innerHTML = detailItems.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
     modal.querySelector('.link-modal__details').style.display = detailItems.length ? '' : 'none';
     modal.querySelector('.link-modal__related').innerHTML = relatedHtml;
