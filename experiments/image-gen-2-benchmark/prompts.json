@@ -1006,5 +1006,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-29-afternoon-transit-seat-river-myth",
+    "title": "Transit Seat River Myth",
+    "tests": "Tests whether GPT Image 2 can make a public-transit upholstery swatch read instantly as the image format, with woven repeat patterns, frayed textile edge, dull synthetic thread, and tiny pictograms forming a strange river-service myth rather than a poster, document, specimen tray, or glossy concept-art scene.",
+    "prompt": "Title: Transit Seat River Myth\nFormat name: Transit Seat Fabric Myth\nCategory/kind: textile\nTests/explores: Tests whether GPT Image 2 can make a public-transit upholstery swatch read instantly as the image format, with woven repeat patterns, frayed textile edge, dull synthetic thread, and tiny pictograms forming a strange river-service myth rather than a poster, document, specimen tray, or glossy concept-art scene.\n\nCreate a square 1024x1024 image that is unmistakably a close photographed flat swatch of old bus or train seat fabric, not a poster, not a document, not a wall mural, and not a digital illustration. The whole picture is the textile: coarse woven jacquard upholstery with a slightly frayed edge, visible warp and weft threads, faint seat-wear sheen, lint, and small snags. The repeating pattern should be made of tiny simplified pictograms that together suggest an invented civic myth about a nighttime river ferry, signal lamps, rain gutters, lost umbrellas, and maintenance keys. Use a restrained but varied palette typical of transit upholstery: teal, burgundy, gray, mustard, black, and off-white threads. Make the format obvious at first glance by showing textile thickness, edge stitching, a few loose fibers, and a shallow tabletop shadow. No dancing, no dancers, no copyrighted logos, no brand names, no readable text, no specimen tray, no archive paper, no glossy AI concept art.",
+    "image": "images/2026-05-29-afternoon-transit-seat-river-myth.png",
+    "date": "2026-05-29",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
