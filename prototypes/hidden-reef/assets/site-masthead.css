@@ -201,6 +201,12 @@ main.page > section[aria-labelledby="paths-title"] {
     margin-bottom: 12px !important;
   }
 
+  .header.masthead + .main-nav a {
+    min-height: 34px !important;
+    padding: 6px 8px !important;
+    line-height: 1.12 !important;
+  }
+
   main.page > section,
   main.page > .footer {
     width: 100% !important;
