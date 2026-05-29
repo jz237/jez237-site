@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T10:00:01.115841+00:00",
+  "updatedAt": "2026-05-29T11:00:01.934687+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8464,6 +8464,22 @@
     "https://www.marktechpost.com/2026/05/29/meet-mkernel-a-multi-gpu-multi-node-fused-kernel-library-for-gpu-driven-communication": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-7-1024x731.png",
       "checkedAt": "2026-05-29T08:50:28.519293+00:00"
+    },
+    "https://www.technologyreview.com/2026/05/29/1138107/how-the-popes-magnifica-humanitas-offers-a-template-for-individuals-to-meet-the-ai-moment": {
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/AP26148386379363.jpg?resize=1200,600",
+      "checkedAt": "2026-05-29T11:00:01.934687+00:00"
+    },
+    "https://www.theverge.com/tech/939686/adobes-conversational-ai-agent-is-a-mediocre-design-intern": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Adobe-Firefly-AI-Assistant-hands-on-hero.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-05-29T11:00:01.934687+00:00"
+    },
+    "https://openai.com/index/strengthening-societal-resilience-with-rosalind-biodefense": {
+      "image": "",
+      "checkedAt": "2026-05-29T11:00:01.934687+00:00"
+    },
+    "https://huggingface.co/blog/torch-profiler": {
+      "image": "https://huggingface.co/blog/assets/torch-profiler/thumbnail.png",
+      "checkedAt": "2026-05-29T11:00:01.934687+00:00"
     }
   }
 }
