@@ -982,5 +982,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-29-morning-reservoir-maintenance-level",
+    "title": "Reservoir Maintenance Level",
+    "tests": "Tests whether GPT Image 2 can make an early handheld 3D game screenshot read instantly through low-poly geometry, a limited HUD, foggy draw distance, and chunky texture constraints without becoming photorealistic or glossy concept art.",
+    "prompt": "Title: Reservoir Maintenance Level\nFormat name: Low-Poly Handheld Screenshot\nCategory/kind: game-screenshot\nTests/explores: Tests whether GPT Image 2 can make an early handheld 3D game screenshot read instantly through low-poly geometry, a limited HUD, foggy draw distance, and chunky texture constraints without becoming photorealistic or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a screenshot from an invented early 1990s handheld low-poly 3D game, not modern concept art, not a poster, not an archive document, and not a specimen tray. The scene is a quiet reservoir maintenance level inside a concrete waterworks: angular polygonal sluice gates, blocky aqueduct walls, triangular puddles, chunky valve wheels, and a small boxy maintenance cart parked beside a glowing blue canal. Use flat-shaded polygons, visible jagged edges, low texture resolution, short foggy draw distance, and a thin pixel HUD frame with invented unreadable symbols, simple bars, and tiny map blocks. Camera/viewpoint: fixed third-person game camera, slightly elevated behind the cart, with the level geometry receding into gray-green fog. Palette: muted concrete gray, algae green, dull safety yellow, and small cyan water highlights. No logos, no copyrighted characters, no dancing, no performers, no readable real-world text.",
+    "image": "images/2026-05-29-morning-reservoir-maintenance-level.png",
+    "date": "2026-05-29",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
