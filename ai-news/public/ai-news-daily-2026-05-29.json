@@ -1,7 +1,23 @@
 {
   "date": "2026-05-29",
-  "updatedAt": "2026-05-29T07:00:01.545397+00:00",
+  "updatedAt": "2026-05-29T08:00:01.255735+00:00",
   "items": [
+    {
+      "title": "Hexo Labs Open-Sources SIA: A Self-Improving Agent That Updates Both the Harness and the Model Weights",
+      "url": "https://www.marktechpost.com/2026/05/29/hexo-labs-open-sources-sia-a-self-improving-agent-that-updates-both-the-harness-and-the-model-weights",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Hexo Labs released SIA, an open-source self-improving loop, under an MIT license. A Feedback-Agent reads each run's trajectory, then either rewrites the scaffold or triggers a LoRA weight update on gpt-oss-120b. Combining both levers beat scaffold-only iteration on LawBench, TriMul GPU kernels, and scRNA-seq denoising.\nThe post Hexo Labs Open-Sources SIA: A Self-Improving Agent That Updates Both the Harness and the Model Weights appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-29-at-12.13.58-AM-1-150x150.png",
+      "published": "2026-05-29T07:28:37+00:00",
+      "firstSeen": "2026-05-29T08:00:01.255735+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.0041
+    },
     {
       "title": "Anthropic's run-rate revenue hits $47 billion",
       "url": "https://simonwillison.net/2026/May/29/anthropic",
@@ -13,10 +29,26 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-run-rate.png",
       "published": "2026-05-29T01:23:08+00:00",
       "firstSeen": "2026-05-29T02:00:01.253463+00:00",
-      "lastSeen": "2026-05-29T07:00:01.545397+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1311
+      "score": 5.1054
+    },
+    {
+      "title": "Asana buys no-code agent builder Stack AI as it tries to become the operating system for human-agent teams",
+      "url": "https://thenextweb.com/news/asana-acquires-stack-ai-agent-builder-saas",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Asana has acquired Stack AI, a no-code platform for building AI agents that operate across enterprise systems like Salesforce, Slack, and Google Workspace. The deal, reported at $75 million, was announced on 28 May after market close, timed to coincide with Asana’s first-quarter earnings call. Stack AI founders Tony Rosinol and Bernard Aceituno will join Asana. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/asana-acquires-stack-ai-agent-builder-saas.avif",
+      "published": "2026-05-29T06:40:34+00:00",
+      "firstSeen": "2026-05-29T08:00:01.255735+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.8103
     },
     {
       "title": "Blue Origin’s New Glenn rocket exploded on the launch pad, destroying its only pad and threatening Amazon’s satellite deadline",
@@ -29,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/blue-origin-new-glenn-rocket-explosion-florida-launch-pad.avif",
       "published": "2026-05-29T06:26:03+00:00",
       "firstSeen": "2026-05-29T07:00:01.545397+00:00",
-      "lastSeen": "2026-05-29T07:00:01.545397+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9328
+      "score": 3.9032
     },
     {
       "title": "datasette 1.0a31",
@@ -45,10 +77,10 @@
       "image": "https://datasette.io/static/blog/2026/sql-write-ui.gif",
       "published": "2026-05-29T03:32:02+00:00",
       "firstSeen": "2026-05-29T06:00:01.562099+00:00",
-      "lastSeen": "2026-05-29T07:00:01.545397+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.589
+      "score": 3.5617
     },
     {
       "title": "Glean’s top line crosses $300M as AI budget-cutting becomes its major selling point",
@@ -61,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2259183614.jpg?resize=1200%2C800",
       "published": "2026-05-29T00:44:37+00:00",
       "firstSeen": "2026-05-29T01:00:01.830907+00:00",
-      "lastSeen": "2026-05-29T07:00:01.545397+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5145
+      "score": 3.4892
     },
     {
       "title": "How to Design an End-to-End Ansible Automation Lab with Playbooks, Inventories, Roles, Vault, Dynamic Inventory, and Custom Modules",
@@ -77,13 +109,13 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-5-1024x731.png",
       "published": "2026-05-29T03:49:31+00:00",
       "firstSeen": "2026-05-29T04:00:01.563557+00:00",
-      "lastSeen": "2026-05-29T07:00:01.545397+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2271
+      "score": 3.1995
     },
     {
-      "title": "Ji-jun Park, Soo-joon Choi, Jiwon Jeong, Taeyang Yoon, Ju-Wan Lee",
+      "title": "Sankalp Tattwadarshi Swain, Dhruv Kumar",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -91,12 +123,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-29T07:00:12.000328+00:00",
+      "published": "2026-05-29T08:00:16.473435+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-29T07:00:01.545397+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "SpaceX has cut its IPO valuation target to $1.8 trillion as marketing begins next week",
+      "url": "https://thenextweb.com/news/spacex-has-cut-its-ipo-valuation-target-to-1-8-trillion-as-marketing-begins-next-week",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "SpaceX is targeting a valuation of at least $1.8 trillion in its initial public offering, down from the $2 trillion-plus it was aiming for as recently as April, according to Bloomberg. The target was adjusted after consultations with advisers and investors, and could still move higher depending on feedback during the formal marketing period, which is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2014/11/SpaceX.avif",
+      "published": "2026-05-29T07:07:57+00:00",
+      "firstSeen": "2026-05-29T08:00:01.255735+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1238
+    },
+    {
+      "title": "Nvidia has spent $6.5 billion in three months to replace copper with light inside AI data centres",
+      "url": "https://thenextweb.com/news/nvidia-photonics-investment-copper-bottleneck-ai-data-centre",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nvidia has committed at least $6.5 billion to photonics companies since the beginning of March, making it the largest single investor in the technology that many in the industry believe will replace copper wiring as the backbone of AI data centres. The spending spree reflects a calculation that copper, the standard medium for moving data [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/nvidia-photonics-investment-copper-bottleneck-ai-data-centre.avif",
+      "published": "2026-05-29T06:59:16+00:00",
+      "firstSeen": "2026-05-29T08:00:01.255735+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1195
+    },
+    {
+      "title": "EU-Nough tech rules? Founders, policymakers, and operators meet in Amsterdam to discuss Europeʼs scaling reality",
+      "url": "https://thenextweb.com/news/eu-nough-tech-rules-founders-meet-in-amsterdam",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Independent research by DutchBasecamp and Ogni, based on 150+ founder perspectives acrossEurope, will be revealed at an exclusive Amsterdam event co-hosted with CCIA Europe on June 30. Across Europe, startup and scale-up founders are increasingly warning that fragmented and overlapping digital regulation is slowing down innovation, delaying expansion, and making it harder tocompete globally. GDPR, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/DutchBasecamp.avif",
+      "published": "2026-05-29T07:04:41+00:00",
+      "firstSeen": "2026-05-29T08:00:01.255735+00:00",
+      "lastSeen": "2026-05-29T08:00:01.255735+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.5222
     }
   ],
   "errors": []
