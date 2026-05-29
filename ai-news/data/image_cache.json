@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T04:39:27.662236+00:00",
+  "updatedAt": "2026-05-29T06:00:01.562099+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8452,6 +8452,10 @@
     "https://www.marktechpost.com/2026/05/28/how-to-design-an-end-to-end-ansible-automation-lab-with-playbooks-inventories-roles-vault-dynamic-inventory-and-custom-modules": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-5-1024x731.png",
       "checkedAt": "2026-05-29T04:00:01.563557+00:00"
+    },
+    "https://openai.com/index/mufg": {
+      "image": "",
+      "checkedAt": "2026-05-29T06:00:01.562099+00:00"
     }
   }
 }
