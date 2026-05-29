@@ -1,5 +1,5 @@
 (function () {
-  const IMAGE_ZOOM_LEVELS = [1.6, 2.35, 3.2, 4];
+  const IMAGE_ZOOM_SCALE = 2.55;
 
   function ensureModal() {
     let modal = document.querySelector('.link-modal');
@@ -7,7 +7,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image. Hover, tap, or use the mouse wheel to zoom."><img class="link-modal__image" alt=""><span class="link-modal__zoom-hint">Hover, tap, or wheel to zoom</span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image. Hover to zoom in the preview pane."><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span><span class="link-modal__zoom-hint">Roll over image to zoom in</span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product preview</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to demo cart</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -54,32 +54,37 @@
     document.body.classList.remove('link-modal-open');
   }
 
-  function setImageZoom(modal, event, level) {
+  function setImageZoom(modal, event) {
+    const panel = modal.querySelector('.link-modal__panel');
     const media = modal.querySelector('.link-modal__media');
-    const image = modal.querySelector('.link-modal__image');
-    if (!media || !image) return;
-    const currentIndex = Number(media.dataset.zoomIndex || 0);
-    const zoomIndex = Math.min(IMAGE_ZOOM_LEVELS.length - 1, Math.max(0, Number.isFinite(level) ? level : currentIndex));
-    const zoomScale = IMAGE_ZOOM_LEVELS[zoomIndex];
-    if (event) {
-      const rect = media.getBoundingClientRect();
-      const x = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
-      const y = Math.min(100, Math.max(0, ((event.clientY - rect.top) / rect.height) * 100));
-      image.style.transformOrigin = x.toFixed(1) + '% ' + y.toFixed(1) + '%';
-    }
-    media.dataset.zoomIndex = String(zoomIndex);
-    image.style.setProperty('--modal-image-zoom', String(zoomScale));
+    const zoomImage = modal.querySelector('.link-modal__zoom-image');
+    if (!panel || !media || !zoomImage || !event) return;
+    const rect = media.getBoundingClientRect();
+    const x = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+    const y = Math.min(100, Math.max(0, ((event.clientY - rect.top) / rect.height) * 100));
+    media.style.setProperty('--modal-lens-x', x.toFixed(2) + '%');
+    media.style.setProperty('--modal-lens-y', y.toFixed(2) + '%');
+    zoomImage.style.setProperty('--modal-zoom-x', x.toFixed(2) + '%');
+    zoomImage.style.setProperty('--modal-zoom-y', y.toFixed(2) + '%');
+    zoomImage.style.setProperty('--modal-image-zoom', String(IMAGE_ZOOM_SCALE));
     media.classList.add('is-zoomed');
+    panel.classList.add('is-image-zooming');
   }
 
   function resetImageZoom(modal) {
+    const panel = modal.querySelector('.link-modal__panel');
     const media = modal.querySelector('.link-modal__media');
-    const image = modal.querySelector('.link-modal__image');
+    const zoomImage = modal.querySelector('.link-modal__zoom-image');
     media?.classList.remove('is-zoomed');
-    if (media) media.dataset.zoomIndex = '0';
-    if (image) {
-      image.style.transformOrigin = '';
-      image.style.removeProperty('--modal-image-zoom');
+    panel?.classList.remove('is-image-zooming');
+    if (media) {
+      media.style.removeProperty('--modal-lens-x');
+      media.style.removeProperty('--modal-lens-y');
+    }
+    if (zoomImage) {
+      zoomImage.style.removeProperty('--modal-zoom-x');
+      zoomImage.style.removeProperty('--modal-zoom-y');
+      zoomImage.style.removeProperty('--modal-image-zoom');
     }
   }
 
@@ -89,32 +94,16 @@
 
     media.addEventListener('pointermove', event => {
       if (event.pointerType !== 'mouse') return;
-      const level = Number(media.dataset.zoomIndex || 0);
-      setImageZoom(modal, event, level);
+      setImageZoom(modal, event);
     });
 
     media.addEventListener('pointerleave', event => {
       if (event.pointerType === 'mouse') resetImageZoom(modal);
     });
 
-    media.addEventListener('click', event => {
-      if (event.pointerType === 'mouse') return;
-      event.preventDefault();
-      const currentIndex = Number(media.dataset.zoomIndex || 0);
-      if (media.classList.contains('is-zoomed') && currentIndex >= IMAGE_ZOOM_LEVELS.length - 1) {
-        resetImageZoom(modal);
-      } else {
-        setImageZoom(modal, event, media.classList.contains('is-zoomed') ? currentIndex + 1 : 0);
-      }
+    media.addEventListener('pointerdown', event => {
+      if (event.pointerType !== 'mouse') resetImageZoom(modal);
     });
-
-    media.addEventListener('wheel', event => {
-      event.preventDefault();
-      const currentIndex = Number(media.dataset.zoomIndex || 0);
-      const direction = event.deltaY < 0 ? 1 : -1;
-      const nextIndex = Math.min(IMAGE_ZOOM_LEVELS.length - 1, Math.max(0, currentIndex + direction));
-      setImageZoom(modal, event, nextIndex);
-    }, { passive: false });
   }
 
   function escapeHtml(value) {
@@ -149,9 +138,11 @@
     const images = parseJsonList(modal.dataset.images);
     const image = images[imageIndex] || images[0] || '';
     const imageNode = modal.querySelector('.link-modal__image');
+    const zoomImage = modal.querySelector('.link-modal__zoom-image');
     if (!imageNode || !image) return;
     resetImageZoom(modal);
     imageNode.src = image;
+    if (zoomImage) zoomImage.src = image;
     modal.querySelector('.link-modal__add').dataset.image = image;
     modal.querySelectorAll('.link-modal__thumb').forEach((button, index) => {
       button.classList.toggle('active', index === imageIndex);
