@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Jez237 — Garden Timeline</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/design.css" />
+  <style>
+    .intro-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+    .timeline {
+      display: grid;
+      gap: 28px;
+    }
+    .month-block {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .month-title {
+      margin: 0;
+      font-size: 24px;
+    }
+    .month-count {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .photo-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .photo-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-meta {
+      padding: 10px 12px 12px;
+    }
+    .photo-date {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .photo-caption {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      background: var(--panel-2);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+    }
+    .empty-state .emoji { font-size: 48px; }
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      padding: 24px;
+    }
+    .lightbox-overlay.active { display: flex; }
+    .lightbox-content {
+      max-width: 92vw;
+      max-height: 92vh;
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+    }
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 82vh;
+      border-radius: 10px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    }
+    .lightbox-caption {
+      color: #fff;
+      font-size: 15px;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 18px;
+      border-radius: 8px;
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Garden</div>
+      <h1 class="title">Garden Timeline</h1>
+      <p class="muted">Month-by-month progress, organized as photos get added.</p>
+    </section>
+
+    <section class="intro-card">
+      <strong>How this works:</strong>
+      <p class="muted" style="margin-bottom:0;">Drop garden photos into <code>photos/garden/images/YYYY/MM/</code> and add entries to the photo list below. Each month becomes its own timeline section automatically.</p>
+    </section>
+
+    <div id="timeline" class="timeline"></div>
+
+    <div class="empty-state" id="empty-state">
+      <div class="emoji">🌱</div>
+      <p>No garden timeline photos yet.</p>
+      <p>Add images under <code>photos/garden/images/YYYY/MM/</code> and they’ll slot into the right month.</p>
+    </div>
+
+    <footer>
+      <a href="">← Back to Photos</a>
+    </footer>
+  </main>
+
+  <div class="lightbox-overlay" id="lightbox">
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="" / loading="lazy" decoding="async">
+      <div class="lightbox-caption" id="lightbox-cap"></div>
+    </div>
+  </div>
+
+  <script>
+    const photos = [
+      {
+        src: "images/2026/05/side-house-foundation-bed-2026-05-27.jpg",
+        alt: "Side-house foundation bed under the rhododendron in late May",
+        caption: "The side-house foundation bed reading as a full layered planting: rhododendron canopy overhead, Shaina maple and Sunshine ligustrum glowing behind, hostas, heuchera, sweetspire, and low front growth filling the edge.",
+        date: "2026-05-27"
+      },
+      {
+        src: "images/2026/05/little-henry-sweetspire-bloom-2026-05-27.jpg",
+        alt: "Little Henry sweetspire blooming with white flower racemes",
+        caption: "Little Henry sweetspire has moved from bud stage into bloom, with white racemes arching out over clean green foliage after rain.",
+        date: "2026-05-27"
+      },
+      {
+        src: "images/2026/05/sunshine-ligustrum-liriope-2026-05-27.jpg",
+        alt: "Sunshine ligustrum with variegated liriope in the side-house bed",
+        caption: "Sunshine ligustrum at peak chartreuse against the brick, with variegated liriope repeating along the front edge and dark loropetalum tucked below.",
+        date: "2026-05-27"
+      },
+      {
+        src: "images/2026/05/grapevine-arbor-gate-lush-2026-05-27.jpg",
+        alt: "Lush grapevine arbor and garden gate in late May",
+        caption: "The garden gate fully framed by late-May growth: Rising Sun redbud glowing on the left, grapevine leaves and young clusters filling the arbor and lattice, and the path still holding a clear line through the dense planting.",
+        date: "2026-05-27"
+      },
+      {
+        src: "images/2026/05/bobo-heuchera-salvia-front-bed-2026-05-26.jpg",
+        alt: "Front raised bed with Bobo hydrangea, heuchera, and salvia",
+        caption: "The front raised box filling in with Bobo hydrangea, burgundy heuchera, and purple salvia holding the edge by the railing.",
+        date: "2026-05-26"
+      },
+      {
+        src: "images/2026/05/raised-mixed-perennial-bed-pugster-milkweed-2026-05-25.jpg",
+        alt: "Raised mixed perennial bed with Pugster and milkweed",
+        caption: "The raised mixed perennial bed moving into late-May fullness: Pugster foliage, milkweed buds, speedwell in the back, and sedum at the front edge.",
+        date: "2026-05-25"
+      },
+      {
+        src: "images/2026/05/speedwell-bloom-close-2026-05-24.jpg",
+        alt: "Purple speedwell flower spikes in bloom",
+        caption: "Purple speedwell in a strong late-May bloom flush, with violet spikes still carrying fresh buds at the tips after rain.",
+        date: "2026-05-24"
+      },
+      {
+        src: "images/2026/05/speedwell-aucuba-corner-2026-05-24.jpg",
+        alt: "Purple speedwell blooming below Gold Dust aucuba",
+        caption: "The shaded aucuba corner with speedwell blooming in front, hostas tucked behind, and the raised-bed edge keeping the dense planting tidy.",
+        date: "2026-05-24"
+      },
+      {
+        src: "images/2026/05/hoverfly-on-purple-salvia-2026-05-23.png",
+        alt: "Hoverfly visiting purple salvia flowers",
+        caption: "Hoverfly working the purple salvia in full sun, wings shining and yellow markings clear against the magenta blooms.",
+        date: "2026-05-23"
+      },
+      {
+        src: "images/2026/05/garden-overview-lush-2026-05-23.jpg",
+        alt: "Lush late-May garden overview with redbud and grapevine",
+        caption: "The back garden in full late-May leaf, with Rising Sun redbud glowing, grapevine softening the lattice, and the lower perennial layers filling in around the path.",
+        date: "2026-05-23"
+      },
+      {
+        src: "images/2026/05/raised-beds-and-white-rose-2026-05-23.jpg",
+        alt: "Raised beds with vegetables, white rose, and coreopsis",
+        caption: "Raised beds settling in after rain, white rose blooming along the fence, coreopsis lighting the front edge, and the vines starting to claim the backdrop.",
+        date: "2026-05-23"
+      },
+      {
+        src: "images/2026/04/rising-sun-redbud-2026-04-12.jpg",
+        alt: "Rising Sun redbud in bloom with golden new leaves",
+        caption: "Rising Sun redbud hitting that electric overlap of hot pink bloom and golden new foliage. One of those brief spring windows where it looks lit from inside.",
+        date: "2026-04-12"
+      },
+      {
+        src: "images/2026/04/climbing-hydrangea-2026-04-12.jpg",
+        alt: "Climbing hydrangea training up a trellis fence",
+        caption: "Climbing hydrangea in a clean spring push, bright foliage, good upward reach, and just starting to claim its support with real confidence.",
+        date: "2026-04-12"
+      },
+    ];
+
+    const timeline = document.getElementById('timeline');
+    const emptyState = document.getElementById('empty-state');
+
+    function formatMonth(dateStr) {
+      const date = new Date(dateStr + 'T12:00:00');
+      return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    }
+
+    function formatDay(dateStr) {
+      const date = new Date(dateStr + 'T12:00:00');
+      return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function groupPhotos(items) {
+      const sorted = [...items].sort((a, b) => b.date.localeCompare(a.date));
+      const groups = new Map();
+      for (const photo of sorted) {
+        const key = photo.date.slice(0, 7);
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(photo);
+      }
+      return groups;
+    }
+
+    function openLightbox(src, caption) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-cap').textContent = caption;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    document.getElementById('lightbox').addEventListener('click', () => {
+      document.getElementById('lightbox').classList.remove('active');
+      document.getElementById('lightbox-img').src = '';
+    });
+
+    if (photos.length) {
+      emptyState.style.display = 'none';
+      const grouped = groupPhotos(photos);
+
+      for (const [monthKey, items] of grouped) {
+        const block = document.createElement('section');
+        block.className = 'month-block';
+
+        const monthTitle = formatMonth(monthKey + '-01');
+        block.innerHTML = `
+          <div class="month-header">
+            <h2 class="month-title">${monthTitle}</h2>
+            <div class="month-count">${items.length} photo${items.length === 1 ? '' : 's'}</div>
+          </div>
+          <div class="month-grid"></div>
+        `;
+
+        const grid = block.querySelector('.month-grid');
+        for (const photo of items) {
+          const card = document.createElement('article');
+          card.className = 'photo-card';
+          card.innerHTML = `
+            <img src="${photo.src}" alt="${photo.alt}" loading="lazy" / decoding="async">
+            <div class="photo-meta">
+              <div class="photo-date">${formatDay(photo.date)}</div>
+              <div class="photo-caption">${photo.caption}</div>
+            </div>
+          `;
+          card.addEventListener('click', () => openLightbox(photo.src, `${formatDay(photo.date)} • ${photo.caption}`));
+          grid.appendChild(card);
+        }
+
+        timeline.appendChild(block);
+      }
+    }
+  </script>
+  <script src="../../assets/site-enhance.js" defer></script>
+  <script src="../../assets/nav.js" defer></script>
+</body>
+</html>
