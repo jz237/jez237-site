@@ -1,6 +1,6 @@
 {
   "date": "2026-05-29",
-  "updatedAt": "2026-05-29T09:00:01.234165+00:00",
+  "updatedAt": "2026-05-29T08:50:28.519293+00:00",
   "items": [
     {
       "title": "Hexo Labs Open-Sources SIA: A Self-Improving Agent That Updates Both the Harness and the Model Weights",
@@ -13,10 +13,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-29-at-12.13.58-AM-1-150x150.png",
       "published": "2026-05-29T07:28:37+00:00",
       "firstSeen": "2026-05-29T08:00:01.255735+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.9744
+      "score": 6.9791
     },
     {
       "title": "Anthropic's run-rate revenue hits $47 billion",
@@ -29,10 +29,10 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-run-rate.png",
       "published": "2026-05-29T01:23:08+00:00",
       "firstSeen": "2026-05-29T02:00:01.253463+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0803
+      "score": 5.0842
     },
     {
       "title": "Asana buys no-code agent builder Stack AI as it tries to become the operating system for human-agent teams",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/asana-acquires-stack-ai-agent-builder-saas.avif",
       "published": "2026-05-29T06:40:34+00:00",
       "firstSeen": "2026-05-29T08:00:01.255735+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7812
+      "score": 4.7858
     },
     {
       "title": "Blue Origin’s New Glenn rocket exploded on the launch pad, destroying its only pad and threatening Amazon’s satellite deadline",
@@ -61,10 +61,10 @@
       "image": "https://media.thenextweb.com/2026/05/blue-origin-new-glenn-rocket-explosion-florida-launch-pad.avif",
       "published": "2026-05-29T06:26:03+00:00",
       "firstSeen": "2026-05-29T07:00:01.545397+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8743
+      "score": 3.8789
     },
     {
       "title": "datasette 1.0a31",
@@ -77,10 +77,10 @@
       "image": "https://datasette.io/static/blog/2026/sql-write-ui.gif",
       "published": "2026-05-29T03:32:02+00:00",
       "firstSeen": "2026-05-29T06:00:01.562099+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.535
+      "score": 3.5392
     },
     {
       "title": "Glean’s top line crosses $300M as AI budget-cutting becomes its major selling point",
@@ -93,10 +93,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2259183614.jpg?resize=1200%2C800",
       "published": "2026-05-29T00:44:37+00:00",
       "firstSeen": "2026-05-29T01:00:01.830907+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4646
+      "score": 3.4684
     },
     {
       "title": "How to Design an End-to-End Ansible Automation Lab with Playbooks, Inventories, Roles, Vault, Dynamic Inventory, and Custom Modules",
@@ -109,10 +109,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-5-1024x731.png",
       "published": "2026-05-29T03:49:31+00:00",
       "firstSeen": "2026-05-29T04:00:01.563557+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1727
+      "score": 3.1769
     },
     {
       "title": "Sankalp Tattwadarshi Swain, Dhruv Kumar",
@@ -123,9 +123,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-29T09:00:13.783117+00:00",
+      "published": "2026-05-29T08:50:34.618268+00:00",
       "firstSeen": "2026-03-21T00:00:01.995031+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2014/11/SpaceX.avif",
       "published": "2026-05-29T07:07:57+00:00",
       "firstSeen": "2026-05-29T08:00:01.255735+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0944
+      "score": 2.099
     },
     {
       "title": "Nvidia has spent $6.5 billion in three months to replace copper with light inside AI data centres",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/nvidia-photonics-investment-copper-bottleneck-ai-data-centre.avif",
       "published": "2026-05-29T06:59:16+00:00",
       "firstSeen": "2026-05-29T08:00:01.255735+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0902
+      "score": 2.0948
     },
     {
       "title": "EU-Nough tech rules? Founders, policymakers, and operators meet in Amsterdam to discuss Europeʼs scaling reality",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/DutchBasecamp.avif",
       "published": "2026-05-29T07:04:41+00:00",
       "firstSeen": "2026-05-29T08:00:01.255735+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.4928
+      "score": 1.4974
     },
     {
       "title": "Meet mKernel: A Multi-GPU, Multi-Node Fused Kernel Library for GPU-Driven Communication",
@@ -186,13 +186,13 @@
       "sourceWeight": 0.8,
       "category": "AI",
       "summary": "UC Berkeley's UCCL team releases mKernel, fusing intra-node NVLink, inter-node RDMA, and dense compute into a single persistent CUDA kernel.\nThe post Meet mKernel: A Multi-GPU, Multi-Node Fused Kernel Library for GPU-Driven Communication appeared first on MarkTechPost.",
-      "image": "",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-7-1024x731.png",
       "published": "2026-05-29T08:43:32+00:00",
-      "firstSeen": "2026-05-29T09:00:01.234165+00:00",
-      "lastSeen": "2026-05-29T09:00:01.234165+00:00",
+      "firstSeen": "2026-05-29T08:50:28.519293+00:00",
+      "lastSeen": "2026-05-29T08:50:28.519293+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.2116
+      "score": 1.2165
     }
   ],
   "errors": []
