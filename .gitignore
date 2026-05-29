@@ -5,5 +5,13 @@ __pycache__/
 # Local logs
 *.log
 
+# Generated/local tool output
+tmp/
+.wrangler/
+.cache/
+node_modules/
+dist/
+build/
+
 # macOS
 .DS_Store
