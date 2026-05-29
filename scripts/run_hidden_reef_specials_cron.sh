@@ -20,11 +20,6 @@ git add prototypes/hidden-reef/index.html
 git commit -m "Refresh Hidden Reef weekly specials"
 git push origin main
 
-npx --yes wrangler@latest pages deploy prototypes/hidden-reef \
-  --project-name hidden-reef \
-  --branch main
-
-curl -A "Mozilla/5.0 Hidden Reef cron verify" -fsSI --max-time 20 \
-  https://hidden-reef.pages.dev/ >/dev/null
+scripts/deploy_hidden_reef_cloudflare.sh
 
 echo "Hidden Reef weekly specials refreshed, pushed, deployed, and verified."
