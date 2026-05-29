@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T21:00:01.522609+00:00",
+  "updatedAt": "2026-05-29T22:00:01.353325+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8544,6 +8544,22 @@
     "https://www.techrepublic.com/article/news-australia-ai-data-center-investment-boom-apac": {
       "image": "",
       "checkedAt": "2026-05-29T19:39:25.932431+00:00"
+    },
+    "https://www.marktechpost.com/2026/05/29/stepfun-releases-step-3-7-flash-a-198b-moe-vision-language-model-for-coding-agents-and-search-workflows": {
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/the-text-stepfun-releases-step-3-7-flash_d7bnPEHmXw6AEF0qaPsf2Q_FOOxpvf4QP6bL_3-0HyjfA_cover_2k-1024x683.png",
+      "checkedAt": "2026-05-29T22:00:01.353325+00:00"
+    },
+    "https://techcrunch.com/2026/05/29/after-nvidias-20b-not-acqui-hire-ai-chip-startup-groq-reportedly-raising-650m": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200,800",
+      "checkedAt": "2026-05-29T22:00:01.353325+00:00"
+    },
+    "https://techcrunch.com/podcast/does-your-ceo-have-ai-psychosis-aaron-levie-thinks-most-of-them-do": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
+      "checkedAt": "2026-05-29T22:00:01.353325+00:00"
+    },
+    "https://www.together.ai/blog/how-together-ai-built-the-worlds-fastest-speech-to-text-stack": {
+      "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a19c7173dd9ce6d2660f358_OG-image_20260508_Pearl%20(1).png",
+      "checkedAt": "2026-05-29T22:00:01.353325+00:00"
     }
   }
 }

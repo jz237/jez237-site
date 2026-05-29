@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T21:00:01.522609+00:00",
+  "updatedAt": "2026-05-29T22:00:01.353325+00:00",
   "items": [
     {
       "title": "MechELK: A Mechanistic Interpretability Framework for Eliciting Latent Knowledge in Large Language Models",
@@ -10,12 +10,44 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-29T21:00:09.707583+00:00",
+      "published": "2026-05-29T22:00:09.628163+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -0.74
+    },
+    {
+      "title": "StepFun Releases Step 3.7 Flash: A 198B MoE Vision-Language Model for Coding Agents and Search Workflows",
+      "url": "https://www.marktechpost.com/2026/05/29/stepfun-releases-step-3-7-flash-a-198b-moe-vision-language-model-for-coding-agents-and-search-workflows",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "StepFun releases Step 3.7 Flash, a 198B MoE model with native vision, 256k context, and Advisor Mode.\nThe post StepFun Releases Step 3.7 Flash: A 198B MoE Vision-Language Model for Coding Agents and Search Workflows appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/the-text-stepfun-releases-step-3-7-flash_d7bnPEHmXw6AEF0qaPsf2Q_FOOxpvf4QP6bL_3-0HyjfA_cover_2k-1024x683.png",
+      "published": "2026-05-29T21:25:05+00:00",
+      "firstSeen": "2026-05-29T22:00:01.353325+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 12.5024
+    },
+    {
+      "title": "Amazon Is Making an AI-Animated ‘Good Advice Cupcake’ TV Show. Its Original Creator Is Furious",
+      "url": "https://www.wired.com/story/story/amazon-is-making-an-ai-animated-good-advice-cupcake-tv-show-its-original-creator-is-furious",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Loryn Brantz created The Good Advice Cupcake for BuzzFeed years ago. The company licensed the character for a new Amazon series—made with AI—without her consent.",
+      "image": "https://media.wired.com/photos/6a18c5e0148c56039b79b0d5/master/pass/Amazon-Turns-Buzzfeed-Good-Advice-Cupcake-Into-AI-Series-Culture-1164238077.jpg",
+      "published": "2026-05-29T20:56:59+00:00",
+      "firstSeen": "2026-05-29T22:00:01.353325+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2584
     },
     {
       "title": "Hands-On With Gemini Spark: I Gave It Access to My Life and It Friend-Zoned My Boyfriend",
@@ -28,10 +60,10 @@
       "image": "https://media.wired.com/photos/6a19d3576c603cc05220330d/master/pass/Gear_HandsOnWithGeminiSparkGoogle%E2%80%99sAIAgentThatLivesinYourPhone_v1.jpg",
       "published": "2026-05-29T19:07:46+00:00",
       "firstSeen": "2026-05-29T19:39:25.932431+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9343
+      "score": 9.9057
     },
     {
       "title": "Take our I/O 2026 quiz, vibe coded in Google AI Studio.",
@@ -44,10 +76,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IOQuiz2026_social.max-600x600.format-webp.webp",
       "published": "2026-05-29T19:00:00+00:00",
       "firstSeen": "2026-05-29T19:39:25.932431+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3705
+      "score": 2.342
     },
     {
       "title": "So you’ve heard these AI terms and nodded along; let’s fix that",
@@ -60,10 +92,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
       "published": "2026-05-29T18:49:19+00:00",
       "firstSeen": "2026-05-29T19:00:02.012663+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2254
+      "score": 2.197
     },
     {
       "title": "Botnet of more than 17 million devices dismantled",
@@ -76,10 +108,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2020/04/botnet6.jpg",
       "published": "2026-05-29T18:46:33+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0841
+      "score": 2.0558
     },
     {
       "title": "AI Data Centers Now Account for 17% of Australia’s Private Investment",
@@ -92,10 +124,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/data-center-ai-demand.jpg?f=jpeg",
       "published": "2026-05-29T18:22:02+00:00",
       "firstSeen": "2026-05-29T20:00:01.785002+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1724
+      "score": 3.1444
     },
     {
       "title": "What happens when companies become too AI-pilled?",
@@ -108,10 +140,10 @@
       "image": "",
       "published": "2026-05-29T17:57:05+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0007
+      "score": 4.973
     },
     {
       "title": "Tech companies desperately want to film you doing chores",
@@ -124,10 +156,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STK414_AI_CVIRGINIA_I__0009_7.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-29T17:37:43+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.6617
+      "score": 3.6342
     },
     {
       "title": "9 demos of Gemini Omni and Gemini 3.5 in action",
@@ -140,11 +172,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_Omni_and_Gemini_3.5_hero.max-600x600.format-webp.webp",
       "published": "2026-05-29T17:30:00+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.6281
+      "score": 16.6007
     },
     {
       "title": "After Nvidia’s $20B not-aqui-hire, AI chip startup Groq reportedly raising $650M",
@@ -160,7 +192,23 @@
       "lastSeen": "2026-05-29T21:00:01.522609+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4868
+      "score": 2.4595
+    },
+    {
+      "title": "After Nvidia’s $20B not-acqui-hire, AI chip startup Groq reportedly raising $650M",
+      "url": "https://techcrunch.com/2026/05/29/after-nvidias-20b-not-acqui-hire-ai-chip-startup-groq-reportedly-raising-650m",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Chipmaker Groq is looking to raise $650 million in internal funding as it pivots from hardware to focus more on AI inference, the process of refining the way AI models respond to prompted requests, per Axios.",
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200%2C800",
+      "published": "2026-05-29T17:27:13+00:00",
+      "firstSeen": "2026-05-29T22:00:01.353325+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4595
     },
     {
       "title": "We Asked the ‘Future of Truth’ Author to Explain How He Used AI. It Didn’t Go Well",
@@ -173,10 +221,10 @@
       "image": "https://media.wired.com/photos/6a173332faa2148b4ab454b6/master/pass/Business_AIBookAuthorUsedAItoWriteHisBook_v1.jpg",
       "published": "2026-05-29T16:30:00+00:00",
       "firstSeen": "2026-05-29T16:52:35.975384+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1607
+      "score": 2.1341
     },
     {
       "title": "Cognition’s Scott Wu says AI coding agents shouldn’t replace humans",
@@ -189,10 +237,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200%2C1004",
       "published": "2026-05-29T16:13:47+00:00",
       "firstSeen": "2026-05-29T16:52:35.975384+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2535
+      "score": 7.2271
     },
     {
       "title": "ChargePoint partners with Powers Parts to fix the charging and support gap hitting electric transit fleets",
@@ -205,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/05/chargepoint-powers-parts-transit-ev-bus-charging.avif",
       "published": "2026-05-29T15:35:56+00:00",
       "firstSeen": "2026-05-29T16:52:35.975384+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9967
+      "score": 1.9708
     },
     {
       "title": "The Vatican’s Man Inside Anthropic",
@@ -221,10 +269,10 @@
       "image": "https://media.wired.com/photos/6a1898e5148c56039b79abe1/master/pass/Backchannel-Pope-Leo-AI-Business-2214167500.jpg",
       "published": "2026-05-29T15:00:00+00:00",
       "firstSeen": "2026-05-29T16:00:01.107711+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1211
+      "score": 5.0956
     },
     {
       "title": "CoStar is paying $800 million for Zonda to close the last gap in its real estate data empire",
@@ -237,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/05/costar-acquires-zonda-new-home-data-real-estate.avif",
       "published": "2026-05-29T14:43:56+00:00",
       "firstSeen": "2026-05-29T16:00:01.107711+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9742
+      "score": 1.9489
     },
     {
       "title": "Dutch Uptmz acquired by Aizy to build one AI ad platform across Google, Microsoft and Meta",
@@ -253,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/05/Aizy.avif",
       "published": "2026-05-29T14:30:52+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9686
+      "score": 1.9435
     },
     {
       "title": "Samsung and LG Uplus want to turn cell towers into radar for 6G",
@@ -269,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/05/samsung-lg-uplus-isac-6g-sensing-communication.avif",
       "published": "2026-05-29T14:27:44+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7673
+      "score": 4.7422
     },
     {
       "title": "Today is the last day to apply to speak at TechCrunch Disrupt 2026",
@@ -285,10 +333,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/05/breakout_1200x600_a9107e.png?w=1200",
       "published": "2026-05-29T14:15:00+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2019
+      "score": 3.1769
     },
     {
       "title": "Intel and 3DGS back a $3.3bn glass-substrate plant in India’s Odisha",
@@ -301,10 +349,10 @@
       "image": "https://media.thenextweb.com/2026/04/Intel.avif",
       "published": "2026-05-29T14:09:16+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9595
+      "score": 1.9346
     },
     {
       "title": "Australia’s workplace tribunal says AI-assisted claims have helped drive a 70% workload increase in three years",
@@ -317,10 +365,26 @@
       "image": "https://media.thenextweb.com/2026/05/australia-fair-work-commission-ai-workload-generative-tribunals.avif",
       "published": "2026-05-29T14:03:14+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.957
+      "score": 1.9321
+    },
+    {
+      "title": "Does your CEO have AI psychosis? Aaron Levie thinks most of them do.",
+      "url": "https://techcrunch.com/podcast/does-your-ceo-have-ai-psychosis-aaron-levie-thinks-most-of-them-do",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The people deciding that AI can replace your job are also the ones least likely to understand what your job truly involves, according to Box founder Aaron Levie, who pointed to this as an example of &#8220;AI psychosis.” Indeed, ClickUp recently cut 22% of its workforce for AI agents, tech layoffs in 2026 are already nearly matching all of 2025, [&#8230;]",
+      "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
+      "published": "2026-05-29T14:00:00+00:00",
+      "firstSeen": "2026-05-29T22:00:01.353325+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.7708
     },
     {
       "title": "Final 24 hours to save up to $410 on your TechCrunch Disrupt 2026 ticket",
@@ -333,10 +397,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_24Hours-16X9-Dark.png?resize=1200%2C675",
       "published": "2026-05-29T14:00:00+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0956
+      "score": 2.0708
     },
     {
       "title": "iOS 27 Rumor: Siri Could Become Apple’s Answer to ChatGPT",
@@ -349,10 +413,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05292026-ios-27-siri-ai-redesign-apple.jpg?f=jpeg",
       "published": "2026-05-29T13:53:36+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.4529
+      "score": 10.4282
     },
     {
       "title": "An Indian court says Google can be liable for selling rivals a brand’s name",
@@ -365,10 +429,10 @@
       "image": "https://media.thenextweb.com/2026/04/google-cloud-750m-partner-fund-agentic-ai.avif",
       "published": "2026-05-29T13:53:28+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3529
+      "score": 3.3281
     },
     {
       "title": "A Danish pension fund has blacklisted SpaceX, calling it grossly overvalued with catastrophic governance",
@@ -381,10 +445,10 @@
       "image": "https://media.thenextweb.com/2026/05/danish-pension-spacex-blacklist-governance-overvalued.avif",
       "published": "2026-05-29T13:46:24+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9499
+      "score": 1.9253
     },
     {
       "title": "Autodesk buys MaintainX for $3.6bn to push from design into operations",
@@ -397,10 +461,10 @@
       "image": "https://media.thenextweb.com/2026/05/MaintainX-Autodesk.avif",
       "published": "2026-05-29T13:06:04+00:00",
       "firstSeen": "2026-05-29T14:00:01.799564+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0333
+      "score": 3.0091
     },
     {
       "title": "Picogrid raises $45M to become the neutral integration layer for modern defence",
@@ -413,10 +477,10 @@
       "image": "https://media.thenextweb.com/2026/05/Picogrid.avif",
       "published": "2026-05-29T13:00:46+00:00",
       "firstSeen": "2026-05-29T14:00:01.799564+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9311
+      "score": 1.907
     },
     {
       "title": "Kiwibit’s AI-powered bird feeder is my new backyard buddy",
@@ -429,10 +493,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Solar-Roof-Beako-Lifestyle-Image-3.png?w=1200",
       "published": "2026-05-29T13:00:00+00:00",
       "firstSeen": "2026-05-29T16:00:01.107711+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1708
+      "score": 3.1467
     },
     {
       "title": "Jony Ive’s funky Ferrari",
@@ -445,10 +509,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/VRG_VST_052926_Site.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-29T12:25:12+00:00",
       "firstSeen": "2026-05-29T12:25:50.056602+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1267
+      "score": 2.103
     },
     {
       "title": "OpenAI gives Japan’s megabanks its newest model for cyber defence",
@@ -465,7 +529,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.2101
+      "score": 15.1865
     },
     {
       "title": "How Braintrust turns customer requests into code with Codex",
@@ -478,11 +542,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/5RgT3cPhA5Fs0Nm9sjhmwV/bfa31b3a64ed1689da20b7ae1fc8a3d1/oai_Braintrust_SEO.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-05-29T12:00:00+00:00",
       "firstSeen": "2026-05-29T19:00:02.012663+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.5567
+      "score": 12.5332
     },
     {
       "title": "This chip startup just raised $135M on a bet that AI’s biggest bottleneck isn’t compute — it’s memory",
@@ -495,10 +559,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/MX1P_CSB_REV20_-2_black.jpg?resize=1200%2C750",
       "published": "2026-05-29T12:00:00+00:00",
       "firstSeen": "2026-05-29T14:00:01.799564+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.4467
+      "score": 4.4232
     },
     {
       "title": "Boston Children’s uses AI to unlock new diagnoses",
@@ -511,10 +575,10 @@
       "image": "",
       "published": "2026-05-29T12:00:00+00:00",
       "firstSeen": "2026-05-29T16:52:35.975384+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2567
+      "score": 4.2332
     },
     {
       "title": "Check out real-life AI prototypes from the Futures Lab.",
@@ -527,10 +591,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/FutureLabs_social.max-600x600.format-webp.webp",
       "published": "2026-05-29T12:00:00+00:00",
       "firstSeen": "2026-05-29T12:25:50.056602+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1867
+      "score": 2.1632
     },
     {
       "title": "This AI startup will clean your home for free to train future robots",
@@ -543,10 +607,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-29-at-12.44.12.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C1.3015853110533%2C100%2C97.396829377893",
       "published": "2026-05-29T11:58:40+00:00",
       "firstSeen": "2026-05-29T12:00:01.359514+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4161
+      "score": 2.3927
     },
     {
       "title": "Fonoa raises $110M and buys PwC’s tax software to build a real-time compliance platform",
@@ -562,7 +626,7 @@
       "lastSeen": "2026-05-29T15:00:01.364067+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8946
+      "score": 1.8715
     },
     {
       "title": "Bank of Italy says it is talking to the world’s big AI firms",
@@ -578,71 +642,7 @@
       "lastSeen": "2026-05-29T14:00:01.799564+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8859
-    },
-    {
-      "title": "Reflections from GLOBSEC Forum 2026: Europe’s two paths forward",
-      "url": "https://thenextweb.com/news/reflections-from-globsec-forum-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Prague, late May. GLOBSEC Forum 2026, now in its 21st year, welcomed over 2,000 participants, 270 speakers, and a dense programme of conversations about AI, cybersecurity and digital trust. European technology company Nebi joined the forum as an official Content Partner, and over three days, we had the chance to listen, engage, and reflect on [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/GLOBSEC-Forum-2026.avif",
-      "published": "2026-05-29T10:25:34+00:00",
-      "firstSeen": "2026-05-29T11:00:01.934687+00:00",
-      "lastSeen": "2026-05-29T14:00:01.799564+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.23
-    },
-    {
-      "title": "Adobe’s conversational AI agent is a mediocre design intern",
-      "url": "https://www.theverge.com/tech/939686/adobes-conversational-ai-agent-is-a-mediocre-design-intern",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "AI image tools rarely make me feel like I'm part of the creative process. They are, after all, mostly designed so that people with no design experience can type in a few words and get back a usable result. So I was pleasantly surprised by Adobe's latest take on an AI image assistant: It's a [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Adobe-Firefly-AI-Assistant-hands-on-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-29T10:00:00+00:00",
-      "firstSeen": "2026-05-29T11:00:01.934687+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8704
-    },
-    {
-      "title": "How the Pope’s Magnifica Humanitas offers a template for individuals to meet the AI moment",
-      "url": "https://www.technologyreview.com/2026/05/29/1138107/how-the-popes-magnifica-humanitas-offers-a-template-for-individuals-to-meet-the-ai-moment",
-      "source": "MIT Technology Review AI",
-      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Pope Leo XIV’s new encyclical on artificial intelligence includes a statement that warrants serious attention from technologists and policymakers: “Technology is never neutral.” Magnifica Humanitas (“Magnificent Humanity”) is a clarion call to all people to act with courage and solidarity as we enter an age already being transformed by artificial intelligence, the greatest change in&#8230;",
-      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/05/AP26148386379363.jpg?resize=1200%2C600",
-      "published": "2026-05-29T10:00:00+00:00",
-      "firstSeen": "2026-05-29T11:00:01.934687+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.0996
-    },
-    {
-      "title": "Dell rallies on Nvidia-powered AI server demand as it lifts its forecast",
-      "url": "https://thenextweb.com/news/dell-ai-server-rally-q1-fy27",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Dell spent years being valued as a maker of laptops and storage boxes, a solid, unexciting business in a mature market. The AI build-out has rewritten that story in a single quarter. The company’s shares have climbed around 40% across the run into and out of its latest results, after record numbers and a raised [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/DELL.avif",
-      "published": "2026-05-29T09:52:10+00:00",
-      "firstSeen": "2026-05-29T11:00:01.934687+00:00",
-      "lastSeen": "2026-05-29T14:00:01.799564+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.2426
+      "score": 1.863
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -655,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.2252
+      "score": 1.2223
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -671,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3643
+      "score": 0.3623
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -687,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.121
@@ -703,7 +703,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
+      "lastSeen": "2026-05-29T22:00:01.353325+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9093
@@ -739,22 +739,6 @@
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 2.59
-    },
-    {
-      "title": "Hiranya Peiris on unravelling the story of the universe",
-      "url": "http://www.bbc.co.uk/programmes/m002tpng",
-      "source": "BBC The Life Scientific",
-      "sourceUrl": "https://podcasts.files.bbci.co.uk/b015sqc7.rss",
-      "sourceWeight": 0.8,
-      "category": "Science",
-      "summary": "Hiranya Peiris is playing a starring role in a movie that promises to tell perhaps the greatest story of all time. However, it’s a movie with a difference – there’s no director and no script. The Legacy Survey of Space and Time is one of the most ambitious projects in the world of astronomy, with a mission to create a decade-long time-lapse movie of the visible universe, to answer fundamental questions about its origin, evolution and, ultimately, its fate.Hiranya is Professor of Astrophysics 1909, the prestigious Chair at the Institute of Astronomy at Cambridge University.  Over her career she",
-      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
-      "published": "2026-05-05T08:30:00+00:00",
-      "firstSeen": "2026-05-05T09:00:01.367340+00:00",
-      "lastSeen": "2026-05-19T08:00:01.281130+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 0.22
     }
   ],
   "errors": []
