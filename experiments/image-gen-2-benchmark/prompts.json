@@ -994,5 +994,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-29-midday-tidelock-backglass-jackpot",
+    "title": "Tidelock Backglass Jackpot",
+    "tests": "Tests whether GPT Image 2 can make a vintage pinball backglass read instantly through reverse-painted glass, score windows, mirrored wear, bulb reflections, and arcade cabinet context instead of a poster, document, specimen tray, or glossy concept art.",
+    "prompt": "Title: Tidelock Backglass Jackpot\nFormat name: Pinball Backglass\nCategory/kind: signage\nTests/explores: Tests whether GPT Image 2 can make a vintage pinball backglass read instantly through reverse-painted glass, score windows, mirrored wear, bulb reflections, and arcade cabinet context instead of a poster, document, specimen tray, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a documentary photograph of an illuminated vintage pinball machine backglass. The selected visual format must be obvious at first glance: reverse-painted glass artwork, black masked score windows, unlit numeric reels behind the glass, chrome trim, tiny flaked paint at the edges, mirrored silver wear, warm arcade bulbs reflected on the surface, faint dust, and shallow reflections of an empty arcade room.\n\nSubject in the backglass art: an invented harbor tide-control jackpot scene painted in bold late-1970s arcade style. Show a whimsical mechanical waterfront with lock gates, crescent breakwaters, canal ramps, buoy bumpers, rain reservoirs, lighthouse spinners, shell-shaped targets, and a central glowing tide engine. Use dynamic graphic diagonals and starburst score motifs, but no people, no performers, and no dance imagery. Include sparse fictional pinball-style text only: TIDELOCK, BONUS, GATE 5, BALL 1. No real brand names, no real logos, no copyrighted characters, no real machine names.\n\nComposition: close straight-on photograph of the backglass filling the frame, with a little cabinet woodgrain and chrome side rails visible. The score windows and reflections should physically interrupt the painted harbor art. Keep it tactile and materially grounded: glass glare, worn paint layers, tiny scratches, warm bulb glow, dust along the lower trim, slightly yellowed whites, and aged arcade color.\n\nPalette and mood: saturated but aged teal, cherry red, golden yellow, cream, black glass masks, chrome highlights, warm amber bulbs, smoky arcade shadows. Nostalgic, graphic, strange, and physical, not a clean digital illustration.\n\nHard exclusions: no dancers, no dancing, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no real logos, no watermark, no signature.",
+    "image": "images/2026-05-29-midday-tidelock-backglass-jackpot.png",
+    "date": "2026-05-29",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
