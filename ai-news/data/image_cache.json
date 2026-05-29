@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T22:04:35.886205+00:00",
+  "updatedAt": "2026-05-29T00:00:01.906891+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8436,6 +8436,10 @@
     "https://www.marktechpost.com/2026/05/28/anthropic-ships-claude-opus-4-8-alongside-dynamic-workflows-and-cheaper-fast-mode-with-workflows-capped-at-1000-subagents": {
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-sophisticated-editorial-tech-blog-bann_vSwy_EFzXUO34W12imUATQ_ocul5iSRSs2CQaLX3dwcUQ_cover_hd.png",
       "checkedAt": "2026-05-28T23:00:01.638553+00:00"
+    },
+    "https://openai.com/index/endava": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4gxDAOkxUXKVkAcM8eGhNj/03482b84b74c225d36ad173865b67b14/oai_Endava_SEO.png?w=1600&amp;h=900&amp;fit=fill",
+      "checkedAt": "2026-05-29T00:00:01.906891+00:00"
     }
   }
 }
