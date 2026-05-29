@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T22:00:01.353325+00:00",
+  "updatedAt": "2026-05-29T23:00:01.508595+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8560,6 +8560,10 @@
     "https://www.together.ai/blog/how-together-ai-built-the-worlds-fastest-speech-to-text-stack": {
       "image": "https://cdn.prod.website-files.com/69654e88dce9154b5f12070c/6a19c7173dd9ce6d2660f358_OG-image_20260508_Pearl%20(1).png",
       "checkedAt": "2026-05-29T22:00:01.353325+00:00"
+    },
+    "https://techcrunch.com/2026/05/29/coders-are-refusing-to-work-without-ai-and-that-could-come-back-to-bite-them": {
+      "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
+      "checkedAt": "2026-05-29T23:00:01.508595+00:00"
     }
   }
 }
