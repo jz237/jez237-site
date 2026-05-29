@@ -1,6 +1,6 @@
 {
   "date": "2026-05-29",
-  "updatedAt": "2026-05-29T17:00:01.546606+00:00",
+  "updatedAt": "2026-05-29T16:52:35.975384+00:00",
   "items": [
     {
       "title": "OpenAI gives Japan’s megabanks its newest model for cyber defence",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 15.3111
+      "score": 15.3145
     },
     {
       "title": "Strengthening societal resilience with Rosalind Biodefense",
@@ -30,27 +30,11 @@
       "image": "",
       "published": "2026-05-29T03:00:00+00:00",
       "firstSeen": "2026-05-29T11:00:01.934687+00:00",
-      "lastSeen": "2026-05-29T16:00:01.107711+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2456
-    },
-    {
-      "title": "iOS 27 Rumor: Siri Could Become Apple’s Answer to ChatGPT",
-      "url": "https://www.techrepublic.com/article/news-ios-27-siri-ai-redesign-apple",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "iOS 27 could bring a rebuilt Siri, Dynamic Island AI search, chatbot-style tools, and deeper AI features across iPhone apps.\nThe post iOS 27 Rumor: Siri Could Become Apple’s Answer to ChatGPT appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/05/tr-05292026-ios-27-siri-ai-redesign-apple.jpg?f=jpeg",
-      "published": "2026-05-29T13:53:36+00:00",
-      "firstSeen": "2026-05-29T17:00:01.546606+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 10.559
+      "score": 14.2481
     },
     {
       "title": "Cognition’s Scott Wu says AI coding agents shouldn’t replace humans",
@@ -62,11 +46,11 @@
       "summary": "Cognition makes Devin, the first and arguably most successful AI coding agent. But famed coder Wu says it isn't designed to supplant human programmers.",
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200%2C1004",
       "published": "2026-05-29T16:13:47+00:00",
-      "firstSeen": "2026-05-29T17:00:01.546606+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
+      "firstSeen": "2026-05-29T16:52:35.975384+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3667
+      "score": 7.3704
     },
     {
       "title": "Hexo Labs Open-Sources SIA: A Self-Improving Agent That Updates Both the Harness and the Model Weights",
@@ -79,10 +63,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-29-at-12.13.58-AM-1-150x150.png",
       "published": "2026-05-29T07:28:37+00:00",
       "firstSeen": "2026-05-29T08:00:01.255735+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.7643
+      "score": 6.7672
     },
     {
       "title": "Adobe’s conversational AI agent is a mediocre design intern",
@@ -95,10 +79,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Adobe-Firefly-AI-Assistant-hands-on-hero.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-29T10:00:00+00:00",
       "firstSeen": "2026-05-29T11:00:01.934687+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9656
+      "score": 5.9687
     },
     {
       "title": "The Vatican’s Man Inside Anthropic",
@@ -111,10 +95,10 @@
       "image": "https://media.wired.com/photos/6a1898e5148c56039b79abe1/master/pass/Backchannel-Pope-Leo-AI-Business-2214167500.jpg",
       "published": "2026-05-29T15:00:00+00:00",
       "firstSeen": "2026-05-29T16:00:01.107711+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2305
+      "score": 5.2341
     },
     {
       "title": "Apollo and Blackstone shop a $36bn debt deal to buy Anthropic its chips",
@@ -130,7 +114,7 @@
       "lastSeen": "2026-05-29T14:00:01.799564+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9286
+      "score": 4.9316
     },
     {
       "title": "Anthropic's run-rate revenue hits $47 billion",
@@ -143,10 +127,10 @@
       "image": "https://static.simonwillison.net/static/2026/anthropic-run-rate.png",
       "published": "2026-05-29T01:23:08+00:00",
       "firstSeen": "2026-05-29T02:00:01.253463+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9029
+      "score": 4.9053
     },
     {
       "title": "Samsung and LG Uplus want to turn cell towers into radar for 6G",
@@ -159,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/05/samsung-lg-uplus-isac-6g-sensing-communication.avif",
       "published": "2026-05-29T14:27:44+00:00",
       "firstSeen": "2026-05-29T15:00:01.364067+00:00",
-      "lastSeen": "2026-05-29T17:00:01.546606+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8751
+      "score": 4.8786
     },
     {
       "title": "How to stop holding AI agents back",
@@ -178,7 +162,7 @@
       "lastSeen": "2026-05-29T12:25:50.056602+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.6215
+      "score": 4.6245
     },
     {
       "title": "Asana buys no-code agent builder Stack AI as it tries to become the operating system for human-agent teams",
@@ -194,7 +178,23 @@
       "lastSeen": "2026-05-29T11:00:01.934687+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5757
+      "score": 4.5786
+    },
+    {
+      "title": "This chip startup just raised $135M on a bet that AI’s biggest bottleneck isn’t compute — it’s memory",
+      "url": "https://techcrunch.com/2026/05/29/xcena-secures-135m-at-570m-valuation-betting-on-memory-as-ais-real-bottleneck",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "South Korean chip startup XCENA is betting that AI's real bottleneck is not compute, but memory.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/MX1P_CSB_REV20_-2_black.jpg?resize=1200%2C750",
+      "published": "2026-05-29T12:00:00+00:00",
+      "firstSeen": "2026-05-29T14:00:01.799564+00:00",
+      "lastSeen": "2026-05-29T16:52:35.975384+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.5506
     }
   ],
   "errors": [
