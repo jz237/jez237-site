@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T09:00:01.234165+00:00",
+  "updatedAt": "2026-05-29T08:50:28.519293+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8462,8 +8462,8 @@
       "checkedAt": "2026-05-29T07:00:01.545397+00:00"
     },
     "https://www.marktechpost.com/2026/05/29/meet-mkernel-a-multi-gpu-multi-node-fused-kernel-library-for-gpu-driven-communication": {
-      "image": "",
-      "checkedAt": "2026-05-29T09:00:01.234165+00:00"
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/blog13-7-1024x731.png",
+      "checkedAt": "2026-05-29T08:50:28.519293+00:00"
     }
   }
 }
