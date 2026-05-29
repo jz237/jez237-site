@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-28T23:41:25.988124+00:00",
+  "updatedAt": "2026-05-29T01:00:01.830907+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8440,6 +8440,14 @@
     "https://openai.com/index/endava": {
       "image": "https://images.ctfassets.net/kftzwdyauwt9/4gxDAOkxUXKVkAcM8eGhNj/03482b84b74c225d36ad173865b67b14/oai_Endava_SEO.png?w=1600&amp;h=900&amp;fit=fill",
       "checkedAt": "2026-05-29T00:00:01.906891+00:00"
+    },
+    "https://techcrunch.com/2026/05/28/gleans-top-line-crosses-300m-as-ai-budget-cutting-becomes-its-major-selling-point": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2259183614.jpg?resize=1200,800",
+      "checkedAt": "2026-05-29T01:00:01.830907+00:00"
+    },
+    "https://simonwillison.net/2026/May/28/llm-anthropic": {
+      "image": "",
+      "checkedAt": "2026-05-29T01:00:01.830907+00:00"
     }
   }
 }
