@@ -970,5 +970,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-29-morning-tide-engine-commemorative-obverse",
+    "title": "Tide Engine Commemorative Obverse",
+    "tests": "Tests GPT Image 2 on a macro numismatic format: raised relief, worn bronze patina, circular obverse composition, and invented symbolic detail without collapsing into a poster, document, or generic concept-art artifact.",
+    "prompt": "Title: Tide Engine Commemorative Obverse\nFormat: Ceremonial Coin Obverse\nCategory/kind: coin\n\nCreate a square macro product photograph of a single invented ceremonial coin face filling the frame. The selected format must be obvious immediately: a circular coin obverse, raised relief metalwork, worn patina, rim beading, shallow engraved fields, and tactile minted details.\n\nSubject: an imaginary coastal city honoring a nonfunctional ancient tide engine. In raised relief, show a circular harbor wall, nested water channels, small gear teeth shaped like shells, two still lighthouse towers, a calm crescent of waves, and tiny maintenance boats as simple relief marks. Make it feel numismatic and sculptural, not like a poster or flat illustration.\n\nComposition and material: coin centered and cropped close with the full circular rim visible; oblique studio light from upper left; dark neutral background; aged bronze and traces of verdigris in recessed grooves; polished high points on waves and gear edges; tiny scratches, minting imperfections, and realistic metal depth. Include invented abstract emblems only, no readable country name, no real currency symbols, no logos, no copyrighted characters.\n\nStrict constraints: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage performance, no ceremonial dance, no people as central subject, no text-heavy design, no watermark, no signature.",
+    "image": "images/2026-05-29-morning-tide-engine-commemorative-obverse.png",
+    "date": "2026-05-29",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
