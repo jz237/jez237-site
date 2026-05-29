@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-29T14:00:01.799564+00:00",
+  "updatedAt": "2026-05-29T15:00:01.364067+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8492,6 +8492,14 @@
     "https://techcrunch.com/2026/05/29/xcena-secures-135m-at-570m-valuation-betting-on-memory-as-ais-real-bottleneck": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/MX1P_CSB_REV20_-2_black.jpg?resize=1200,750",
       "checkedAt": "2026-05-29T14:00:01.799564+00:00"
+    },
+    "https://techcrunch.com/2026/05/29/today-is-the-last-day-to-apply-to-speak-at-techcrunch-disrupt-2026": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/05/breakout_1200x600_a9107e.png?w=1200",
+      "checkedAt": "2026-05-29T15:00:01.364067+00:00"
+    },
+    "https://techcrunch.com/2026/05/29/final-24-hours-to-save-up-to-410-on-your-techcrunch-disrupt-2026-ticket": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/TCD26_24Hours-16X9-Dark.png?resize=1200,675",
+      "checkedAt": "2026-05-29T15:00:01.364067+00:00"
     }
   }
 }
