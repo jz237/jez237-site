@@ -58,9 +58,60 @@ nav {
 
 .links {
   display: flex;
-  gap: 14px;
-  font-size: 14px;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
   flex-wrap: wrap;
+}
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid rgba(142, 182, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.045);
+  color: #d8e5ff;
+  font-weight: 650;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.links a:hover,
+.links a[aria-current="page"] {
+  border-color: rgba(142, 182, 255, 0.5);
+  background: rgba(79, 140, 255, 0.18);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (max-width: 720px) {
+  header nav,
+  header#site-nav > nav {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-mark,
+  .brand {
+    min-width: 0;
+    order: 1;
+  }
+  .theme-toggle {
+    justify-self: end;
+    order: 2;
+  }
+  .links {
+    grid-column: 1 / -1;
+    order: 3;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
 }
 
 .hero {
