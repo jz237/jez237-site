@@ -3441,3 +3441,5 @@ const THR_PRODUCTS = {
 };
 
 window.THR_PRODUCTS = THR_PRODUCTS;
+const THR_PRODUCT_META = {"total":3362,"subcategories":35,"refreshedAt":"2026-05-30T22:03:57.506Z"};
+window.THR_PRODUCT_META = THR_PRODUCT_META;

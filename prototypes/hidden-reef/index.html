@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Hidden Reef - Aquariums, Fish, Coral, Ponds</title>
   <link rel="icon" type="image/png" href="assets/site/logo.png" />
-  <link rel="stylesheet" href="assets/thr-cards.css?v=20260525-card-depth-less-blur" />
+  <link rel="stylesheet" href="assets/thr-cards.css?v=20260530-public-preview" />
   <style>
     :root {
       --blue-950: #003b63;
@@ -51,6 +51,62 @@
       color: #fff;
       background: linear-gradient(90deg, #007498, #00a7b7);
       font-size: 13px;
+      font-weight: 800;
+    }
+    .preview-banner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin: 14px 0 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(116,205,235,0.24);
+      border-radius: 8px;
+      background: rgba(7,26,39,0.82);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+    }
+    .preview-banner strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #fff;
+      font-size: 13px;
+    }
+    .preview-banner span {
+      display: block;
+      color: #a9cbd9;
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .preview-banner a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid rgba(64,217,255,0.34);
+      border-radius: 6px;
+      color: #032033;
+      background: #40d9ff;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+    .inventory-status {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 7px;
+      color: #a9cbd9;
+      background: rgba(3,18,29,0.64);
+      font-size: 12.5px;
+      font-weight: 750;
+      line-height: 1.4;
+    }
+    .count-bar .total small {
+      display: block;
+      margin-top: 3px;
+      color: #a9cbd9;
+      font-size: 11px;
       font-weight: 800;
     }
     .page {
@@ -1725,6 +1781,8 @@
       .main-nav { justify-content: flex-start; overflow-x: auto; scrollbar-width: thin; padding-bottom: 11px; }
       .main-nav::-webkit-scrollbar { display: block; height: 6px; }
       .main-nav::-webkit-scrollbar-thumb { background: rgba(116,205,235,0.35); border-radius: 999px; }
+      .preview-banner { grid-template-columns: 1fr; }
+      .preview-banner a { justify-self: start; }
       .hero {
         min-height: 238px;
         background-position: 62% center;
@@ -2839,6 +2897,14 @@
       <a href="#visit">Visit Us</a>
     </nav>
 
+    <div class="preview-banner" role="note" aria-label="Preview site notice">
+      <div>
+        <strong>Preview storefront</strong>
+        <span>This site is being reviewed. Prices and availability are shown from the current catalog feed and should be confirmed with The Hidden Reef before making a special trip. Call (215) 269-4930 for the final word.</span>
+      </div>
+      <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current official site</a>
+    </div>
+
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-slides" aria-hidden="true">
         <img class="hero-slide is-active" src="assets/site/hero-aquatic-world.jpg" alt="" fetchpriority="high" />
@@ -2959,7 +3025,7 @@
         </form>
         <a class="cart-button shopping-cart" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on Hidden Reef">
           🛒
-          <strong>Cart</strong>
+          <strong>List</strong>
           <span id="cart-count">↗</span>
         </a>
       </div>
@@ -2968,6 +3034,7 @@
       <div class="shopping-layout">
         <aside class="department-sidebar" id="department-sidebar" aria-label="Department filters"></aside>
         <section class="product-results" aria-label="Products">
+          <div class="inventory-status" id="inventory-status"></div>
           <div class="count-bar" id="count-bar"></div>
           <div class="thr-product-grid" id="product-grid"></div>
           <div class="pagination" id="pagination"></div>
@@ -2980,7 +3047,7 @@
       <div class="pin">⌖</div>
       <div>
         <h2>Visit Our Levittown Superstore</h2>
-        <p>4501 New Falls Rd, Levittown, PA 19056 · Browse the tanks, ask questions, and take home the right setup.</p>
+        <p>4501 New Falls Rd, Levittown, PA 19056 · Open daily 10 AM–7 PM · Call <a href="tel:+12152694930">(215) 269-4930</a> to confirm price or stock before a special trip.</p>
       </div>
       <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
       </div>
@@ -3023,10 +3090,10 @@
   </aside>
 
 	  <script src="assets/products.js"></script>
-	  <script src="assets/product-data.js"></script>
+	  <script src="assets/product-data.js?v=20260530-public-preview"></script>
 	  <script src="assets/catalog-utils.js"></script>
 	  <script src="assets/thr-cards.js"></script>
-	  <script src="assets/link-modal.js"></script>
+	  <script src="assets/link-modal.js?v=20260530-public-preview"></script>
 	  <script>
 	    window.THR_CATEGORY_CONFIG = {
 	      assetBase: 'assets',
@@ -3149,6 +3216,6 @@
 	    }
 	    renderCart();
 	  </script>
-	  <script src="assets/category.js?v=20260527-dept-labels"></script>
+	  <script src="assets/category.js?v=20260530-public-preview"></script>
 	</body>
 	</html>
