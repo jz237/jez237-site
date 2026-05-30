@@ -4,7 +4,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Checkout & Online Orders - The Hidden Reef</title>
+  <title>Cart Handoff and Lightspeed POS Plan - The Hidden Reef</title>
   <link rel="icon" type="image/png" href="../assets/site/logo.png" />
   <style>
     :root {
@@ -316,125 +316,156 @@
     </nav>
 
   <div class="hero">
-    <h1>Checkout & Online Orders</h1>
-    <p class="sub">Browse products, build a cart, and finish checkout through The Hidden Reef's secure online store. Final discounts, shipping, tax, and availability are confirmed at checkout.</p>
+    <h1>Cart Handoff and Lightspeed POS Plan</h1>
+    <p class="sub">A practical way this redesigned storefront could work next to the existing Lightspeed site while keeping checkout, discounts, customer accounts, and inventory inside the system Hidden Reef already uses.</p>
   </div>
 
   <div class="content">
 
-    <p>The Hidden Reef catalog helps you plan before you visit or order online. Product pages show current store information where available, but aquarium inventory can move quickly, especially livestock, frozen foods, and popular equipment.</p>
+    <p>The current Hidden Reef website runs on <strong>Lightspeed eCom</strong> (Shop ID 648211), which is connected to the store's point-of-sale workflow. Product inventory, sale pricing, orders, checkout, customer accounts, and customer-specific discounts already belong in Lightspeed.</p>
 
-    <p>For the most accurate answer on stock, pricing, pickup timing, or compatibility, contact the store or continue through checkout.</p>
+    <p>The safest approach is not to replace that system. The redesigned site can run beside the existing Lightspeed site as a better shopping front end, while Lightspeed remains the final source of truth.</p>
 
     <div class="callout">
-      <strong>Good to know:</strong> account discounts, rewards, shipping, tax, and final totals are calculated during checkout after any required login.
+      <strong>Recommended direction:</strong> let customers browse and build a cart on the new site, then hand that cart to Lightspeed checkout. At checkout, Lightspeed handles login, final pricing, customer discounts, taxes, payment, and the order record.
     </div>
 
-    <h2>Before You Checkout</h2>
-
-    <div class="option-card">
-      <h3>Check the product details</h3>
-      <p>Choose the exact size, color, model, or package before adding an item to your cart. Some products have multiple variants with different prices.</p>
-      <div class="pros-cons">
-        <div class="pros">
-          <h4>Helpful to review</h4>
-          <ul>
-            <li>Tank size and compatibility</li>
-            <li>Replacement part model numbers</li>
-            <li>Food size, package size, or formula</li>
-          </ul>
-        </div>
-        <div class="cons">
-          <h4>Ask the store about</h4>
-          <ul>
-            <li>Livestock compatibility</li>
-            <li>Water testing results</li>
-            <li>Equipment fit before a special trip</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <h2>Cart & Pricing</h2>
+    <h2>Step 1: Keep The Existing Store Live <span class="badge badge-easy">Lowest Risk</span></h2>
 
     <div class="option-card">
       <h3>How it works</h3>
-      <p>Your cart shows selected items, quantities, and an estimated subtotal. Final pricing is confirmed during checkout.</p>
-      <p>If your account has discounts, rewards, or special pricing, log in during checkout so those can be applied.</p>
+      <p>The redesigned site runs on a separate domain or subdomain, such as <strong>new.thehiddenreef.com</strong> or <strong>shop.thehiddenreef.com</strong>. The current Lightspeed site stays online and continues to work normally.</p>
+      <p>If the new site has a problem, customers and staff still have the existing tested store available.</p>
       <div class="pros-cons">
         <div class="pros">
-          <h4>Your cart can include</h4>
+          <h4>What stays safe</h4>
           <ul>
-            <li>Dry goods and equipment</li>
-            <li>Food, media, and maintenance supplies</li>
-            <li>Items you want to compare before ordering</li>
+            <li>Existing checkout remains available</li>
+            <li>Staff keep using the Lightspeed admin they already know</li>
+            <li>No payment or order workflow changes are required at launch</li>
           </ul>
         </div>
         <div class="cons">
-          <h4>Confirmed at checkout</h4>
+          <h4>Boundary</h4>
           <ul>
-            <li>Final product availability</li>
-            <li>Tax, shipping, and pickup details</li>
-            <li>Account discounts or rewards</li>
+            <li>The new site should launch as an optional front end first</li>
+            <li>The old site should not be turned off until the new flow is proven</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <h2>Pickup, Shipping & Special Orders</h2>
+    <h2>Step 2: Let The Demo Cart Behave Like A Real Cart</h2>
 
     <div class="option-card">
-      <h3>Plan the easiest way to get what you need</h3>
-      <p>Some items are easy to ship. Others are better handled in store, especially live animals, frozen food, heavy aquariums, rock, sand, and fragile glass.</p>
+      <h3>How it works</h3>
+      <p>Customers browse the redesigned site and add products to the cart here. The cart can show product names, quantities, images, and an estimated subtotal.</p>
+      <p>The cart should also make the pricing boundary clear: <strong>log in at checkout to see account discounts, rewards, and final pricing.</strong></p>
       <div class="pros-cons">
         <div class="pros">
-          <h4>Good online order candidates</h4>
+          <h4>Customer experience</h4>
           <ul>
-            <li>Dry foods and additives</li>
-            <li>Replacement media and parts</li>
-            <li>Standard equipment and supplies</li>
+            <li>Browsing feels modern and fast</li>
+            <li>Customers can build a cart before leaving the new site</li>
+            <li>The site can show public prices and sale badges</li>
           </ul>
         </div>
         <div class="cons">
-          <h4>Best to confirm first</h4>
+          <h4>Boundary</h4>
           <ul>
-            <li>Live fish, coral, and plants</li>
-            <li>Large aquariums and stands</li>
-            <li>Special-order equipment</li>
+            <li>Customer-specific discounts should not be guessed on the new site</li>
+            <li>Lightspeed checkout should calculate the final total after login</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <h2>Need Help Choosing?</h2>
+    <h2>Step 3: Send The Cart To Lightspeed Checkout <span class="badge badge-medium">API Phase</span></h2>
 
     <div class="option-card">
-      <h3>Bring the tank details with you</h3>
-      <p>The right product depends on your tank, livestock, water test results, and maintenance routine. A little context helps the staff recommend something that actually fits.</p>
+      <h3>How it works</h3>
+      <p>Each product on the redesigned site needs to map to its real Lightspeed product or variant ID. When the customer clicks checkout, a small private backend sends those cart items to Lightspeed and then redirects the customer to the Lightspeed cart or checkout page.</p>
+      <p>API credentials stay on the private backend. They should never be placed in browser JavaScript.</p>
       <div class="pros-cons">
         <div class="pros">
-          <h4>Useful details</h4>
+          <h4>What Lightspeed handles</h4>
           <ul>
-            <li>Tank size and age</li>
-            <li>Freshwater, saltwater, reef, pond, or planted setup</li>
-            <li>Recent water test numbers</li>
+            <li>Customer login</li>
+            <li>Special customer discounts</li>
+            <li>Final price, tax, and shipping rules</li>
+            <li>Payment and order creation</li>
           </ul>
         </div>
         <div class="cons">
-          <h4>Photos help with</h4>
+          <h4>What must be confirmed</h4>
           <ul>
-            <li>Algae and cloudy water problems</li>
-            <li>Lighting and filtration questions</li>
-            <li>Livestock identification</li>
+            <li>The exact Lightspeed API/cart capabilities available on their plan</li>
+            <li>How product variants are represented</li>
+            <li>Whether cart creation or checkout links are supported directly</li>
           </ul>
         </div>
       </div>
+    </div>
+
+    <h2>Step 4: Sync Inventory And Sale Items</h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Lightspeed should remain the place where staff add products, receive stock, change inventory, and create or remove sale items. The redesigned site should copy that information from Lightspeed instead of becoming another admin system.</p>
+      <p>For inventory that changes constantly, the best setup is a combination of webhooks and scheduled checks. Webhooks catch updates quickly; scheduled checks are the backup in case any webhook is missed.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Can sync from Lightspeed</h4>
+          <ul>
+            <li>Product names, images, categories, and brands</li>
+            <li>Inventory availability</li>
+            <li>Sale products and sale pricing</li>
+            <li>Product additions and removals</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>The new site should not require staff to update products twice</li>
+            <li>If the API is unavailable, checkout should still fall back to Lightspeed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 5: Keep Store Management In Lightspeed</h2>
+
+    <div class="option-card">
+      <h3>Operational boundary</h3>
+      <p>The new site should be built so regular store work still happens in Lightspeed. Product updates, inventory changes, sale pricing, customer records, and order management should remain in the system staff already uses.</p>
+      <ul>
+        <li>Hidden Reef keeps managing products, customers, sales, and orders in Lightspeed.</li>
+        <li>The redesigned site automatically reads from Lightspeed where possible.</li>
+        <li>Any custom code should be limited to the storefront, cart handoff, and sync layer.</li>
+      </ul>
+    </div>
+
+    <h2>Getting Lightspeed API Access</h2>
+
+    <p>To move beyond simple product links, Hidden Reef would need API access from the Lightspeed admin area:</p>
+
+    <ul>
+      <li>Log into <strong>Lightspeed eCom admin</strong></li>
+      <li>Go to <strong>Settings - Apps</strong></li>
+      <li>Create or locate an API integration</li>
+      <li>Store the generated client ID and secret on a private backend only</li>
+    </ul>
+
+    <p>The exact integration depends on the Lightspeed plan and API features available to this store. The first technical check should confirm product, variant, inventory, cart, customer, and sale-data access.</p>
+
+    <div class="callout">
+      <strong>Practical first milestone:</strong> keep the current demo cart, add checkout messaging about account discounts, map demo products to real Lightspeed product IDs, and test whether a cart can be created or prefilled in Lightspeed checkout.
     </div>
 
     <div class="next-step">
-      <h3>Ready to browse?</h3>
-      <p>Start with the main catalog, compare options, and contact the store if you want help choosing the right product before checkout.</p>
-      <a class="btn" href="../">Browse The Store →</a>
+      <h3>Current demo behavior</h3>
+      <p>Browse the demo storefront and try adding items to the cart. The next improvement would be handing that cart to Lightspeed checkout while keeping final discounts and payment inside Lightspeed.</p>
+      <a class="btn" href="../">Browse the Demo Store →</a>
     </div>
 
   </div>
@@ -443,8 +474,8 @@
     <div class="footer-top">
       <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
       <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
-      <div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Checkout info</a></div></div>
-      <div><h4>Helpful Info</h4><a href="../learn/">Help Center</a><a href="../contact/">Visit Us</a></div>
+      <div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Cart handoff</a></div></div>
+      <div><h4>About This Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
     </div>
   </footer>
 
