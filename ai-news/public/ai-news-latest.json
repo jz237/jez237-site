@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-30T21:00:01.223962+00:00",
+  "updatedAt": "2026-05-30T22:00:01.156933+00:00",
   "items": [
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -10,12 +10,45 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-30T21:00:05.717091+00:00",
+      "published": "2026-05-30T22:00:09.849632+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
       "score": 4.76
+    },
+    {
+      "title": "How we contain Claude across products",
+      "url": "https://simonwillison.net/2026/May/30/how-we-contain-claude",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "How we contain Claude across products\nA complaint I often have about sandboxing products is that they are rarely thoroughly documented, and in the absence of detailed documentation it's hard to know how much I can trust them.\nAnthropic just published a fantastic overview of how their various sandbox techniques work across Claude.ai, Claude Code, and Cowork.\n\nWe constrain where and how an agent can act with process sandboxes, VMs, filesystem boundaries, and egress controls. The goal is to set a hard boundary on what an agent can reach. For example, if credentials never enter the sandbox, they c",
+      "image": "",
+      "published": "2026-05-30T21:36:24+00:00",
+      "firstSeen": "2026-05-30T22:00:01.156933+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.078
+    },
+    {
+      "title": "Running Python ASGI apps in the browser via Pyodide + a service worker",
+      "url": "https://simonwillison.net/2026/May/30/pyodide-asgi-browser",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Research: Running Python ASGI apps in the browser via Pyodide + a service worker\n        Datasette Lite is my version of Datasette that runs entirely in the browser using Pyodide in WebAssembly.\nWhen I first built it four years ago I used Web Workers and code that intercepts navigation operations and fetches the generated HTML by running the Python app.\nThis worked, but had the disadvantage that any JavaScript in &lt;script&gt; tags would not be executed - breaking some Datasette functionality and a whole lot of Datasette plugins.\nThis morning I set Claude Opus 4.8 the task (in Claude Code for",
+      "image": "",
+      "published": "2026-05-30T21:02:16+00:00",
+      "firstSeen": "2026-05-30T22:00:01.156933+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 20.561
     },
     {
       "title": "I Am Retiring from Tech to Live Offline",
@@ -28,10 +61,10 @@
       "image": "",
       "published": "2026-05-30T19:39:08+00:00",
       "firstSeen": "2026-05-30T20:15:58.969723+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9496
+      "score": 2.9205
     },
     {
       "title": "Quoting Daniel Jalkut",
@@ -44,10 +77,10 @@
       "image": "",
       "published": "2026-05-30T17:29:55+00:00",
       "firstSeen": "2026-05-30T18:00:01.097680+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.188
+      "score": 2.1607
     },
     {
       "title": "Meta is building an AI pendant. It also plans a business subscription called Wearables for Work.",
@@ -60,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-ai-pendant-limitless-wearables-for-work.avif",
       "published": "2026-05-30T16:36:23+00:00",
       "firstSeen": "2026-05-30T17:00:01.121098+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0236
+      "score": 1.9969
     },
     {
       "title": "‘What a joke’: Github Copilot’s new token-based billing spurs consternation among devs",
@@ -76,10 +109,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/11/github-copilot-chat-2.webp?w=1200",
       "published": "2026-05-30T16:30:00+00:00",
       "firstSeen": "2026-05-30T17:00:01.121098+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2607
+      "score": 6.2341
     },
     {
       "title": "Meta is reportedly developing an AI pendant",
@@ -92,10 +125,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-ai-GettyImages-2264943773.jpg?w=1024",
       "published": "2026-05-30T15:59:58+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1473
+      "score": 2.1211
     },
     {
       "title": "Social media companies paid a school district more than its annual budget to avoid trial",
@@ -108,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/social-media-27-million-settlement-breathitt-county-details.avif",
       "published": "2026-05-30T15:52:43+00:00",
       "firstSeen": "2026-05-30T18:00:01.097680+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0041
+      "score": 1.978
     },
     {
       "title": "I put Google’s 24/7 AI assistant Gemini Spark to work, and it’s actually pretty useful",
@@ -124,10 +157,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/gemini-spark-GettyImages-2276583186-1.jpg?w=1024",
       "published": "2026-05-30T15:30:00+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2341
+      "score": 9.2083
     },
     {
       "title": "Anthropic named eight firms selling its shares illegally. After the backlash, it quietly removed four.",
@@ -140,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/anthropic-cuts-unauthorized-platform-list-965-billion-valuation.avif",
       "published": "2026-05-30T14:50:14+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9769
+      "score": 4.9515
     },
     {
       "title": "A startup with Eric Trump as adviser is testing humanoid robots in Ukraine. It wants them on US front lines within 18 months.",
@@ -156,10 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/foundation-humanoid-robots-military-ukraine-eric-trump.avif",
       "published": "2026-05-30T14:30:14+00:00",
       "firstSeen": "2026-05-30T15:00:01.929308+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9684
+      "score": 1.9432
     },
     {
       "title": "As the browser wars heat up, here are the hottest alternatives to Chrome and Safari in 2026",
@@ -172,11 +205,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/08/search-engine.jpg?resize=1200%2C700",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.8708
+      "score": 13.8467
     },
     {
       "title": "How one founder’s bet on ‘the old school web’ is paying off",
@@ -189,10 +222,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-27-at-11.17.27AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.2187253673634%2C100%2C81.562549265273&amp%3Bw=1200",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1408
+      "score": 2.1167
     },
     {
       "title": "AI grifters are creating fake Black people to sell Shein junk",
@@ -205,10 +238,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268550_Crying_AI_avatars_AParkin_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1408
+      "score": 2.1167
     },
     {
       "title": "Your power bank is probably overheating. But don’t worry, TORRAS fixed that.",
@@ -221,10 +254,10 @@
       "image": "https://media.thenextweb.com/2026/05/torras-minimag-pro-power-bank-overheating.avif",
       "published": "2026-05-30T12:05:15+00:00",
       "firstSeen": "2026-05-30T13:00:01.867125+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9088
+      "score": 1.8852
     },
     {
       "title": "The SpaceX IPO is great for Elon Musk and terrible for you",
@@ -237,10 +270,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKB355_SPACE_X_IPO_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-30T12:00:00+00:00",
       "firstSeen": "2026-05-30T13:00:01.867125+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1167
+      "score": 2.0932
     },
     {
       "title": "Ex-DeepMind researchers raised $50M to build AI that figures out which scientific questions are worth asking",
@@ -253,10 +286,10 @@
       "image": "https://media.thenextweb.com/2026/05/inherent-ai-50-million-seed-deepmind-faraday-science.avif",
       "published": "2026-05-30T11:32:37+00:00",
       "firstSeen": "2026-05-30T12:00:02.061773+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9959
+      "score": 7.9727
     },
     {
       "title": "Microsoft threatened a security researcher with criminal prosecution. The cybersecurity community is furious.",
@@ -269,10 +302,10 @@
       "image": "https://media.thenextweb.com/2026/05/microsoft-threatens-security-researcher-nightmare-eclipse.avif",
       "published": "2026-05-30T10:39:36+00:00",
       "firstSeen": "2026-05-30T12:00:02.061773+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.1754
+      "score": 1.1528
     },
     {
       "title": "HeartFocus Link adds AI cardiac imaging to any hospital ultrasound machine with a tablet and an HDMI cable",
@@ -285,10 +318,10 @@
       "image": "https://media.thenextweb.com/2026/05/heartfocus-link-ai-cardiac-ultrasound-cart-based.avif",
       "published": "2026-05-30T10:23:24+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5692
+      "score": 2.5468
     },
     {
       "title": "Nvidia paid Groq $20 billion and took its top engineers. Now Groq is raising $650 million for what’s left.",
@@ -301,10 +334,10 @@
       "image": "https://media.thenextweb.com/2026/05/groq-650-million-raise-nvidia-20-billion-inference-cloud-1.avif",
       "published": "2026-05-30T10:16:25+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1666
+      "score": 2.1442
     },
     {
       "title": "Parloa turns its $350 million war chest into a partnership web spanning SAP, Microsoft, and OpenAI",
@@ -317,10 +350,10 @@
       "image": "https://media.thenextweb.com/2026/05/parloa-350m-ai-agent-sap-microsoft-partnerships.avif",
       "published": "2026-05-30T10:15:50+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5663
+      "score": 6.544
     },
     {
       "title": "Developers won’t work without AI anymore. The research says it might be making them worse.",
@@ -336,7 +369,7 @@
       "lastSeen": "2026-05-30T16:14:44.220303+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.2592
+      "score": 4.2371
     },
     {
       "title": "Do You Actually Need to Pay for Transcription Software?",
@@ -349,10 +382,10 @@
       "image": "https://media.wired.com/photos/6a16ee1164b9036ecc8e9699/master/pass/GettyImages-1241968547.jpg",
       "published": "2026-05-30T09:30:00+00:00",
       "firstSeen": "2026-05-30T10:00:01.242289+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9892
+      "score": 1.9673
     },
     {
       "title": "Genesis AI Releases Nyx, Quadrants, and Genesis World 1.0 Physics Platform for Scalable Robotics Foundation Model Evaluation",
@@ -369,7 +402,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.3674
+      "score": 12.3456
     },
     {
       "title": "SpaceX just won a second Golden Dome contract. This one is $4.16 billion.",
@@ -385,7 +418,7 @@
       "lastSeen": "2026-05-30T16:14:44.220303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.847
+      "score": 1.8251
     },
     {
       "title": "Berlin’s Stark is raising €300M at a €2.5B valuation. The kamikaze drone maker was founded 18 months ago.",
@@ -401,7 +434,7 @@
       "lastSeen": "2026-05-30T15:00:01.929308+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9368
+      "score": 2.9153
     },
     {
       "title": "Ferrari’s CEO says the Luce deserves “respect.” Its former chairman says it deserves a different logo.",
@@ -417,7 +450,7 @@
       "lastSeen": "2026-05-30T14:00:01.830099+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8313
+      "score": 1.8099
     },
     {
       "title": "AI is killing the summer internship. The entry-level pipeline that built careers is breaking.",
@@ -433,7 +466,7 @@
       "lastSeen": "2026-05-30T12:13:52.858175+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8197
+      "score": 1.7986
     },
     {
       "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
@@ -449,7 +482,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 10.9909
+      "score": 10.9725
     },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
@@ -465,7 +498,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5471
+      "score": 5.5299
     },
     {
       "title": "NVIDIA Introduces X-Token: Projection-Guided Cross-Tokenizer KD That Outperforms GOLD by +3.82 Average Points on Llama-3.2-1B",
@@ -481,7 +514,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.4224
+      "score": 3.4059
     },
     {
       "title": "Coders are refusing to work without AI — and that could come back to bite them",
@@ -494,10 +527,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-05-29T22:14:22+00:00",
       "firstSeen": "2026-05-29T23:00:01.508595+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.1745
+      "score": 3.1585
     },
     {
       "title": "StepFun Releases Step 3.7 Flash: A 198B MoE Vision-Language Model for Coding Agents and Search Workflows",
@@ -513,7 +546,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.9914
+      "score": 11.9757
     },
     {
       "title": "Amazon Is Making an AI-Animated ‘Good Advice Cupcake’ TV Show. Its Original Creator Is Furious",
@@ -526,10 +559,10 @@
       "image": "https://media.wired.com/photos/6a18c5e0148c56039b79b0d5/master/pass/Amazon-Turns-Buzzfeed-Good-Advice-Cupcake-Into-AI-Series-Culture-1164238077.jpg",
       "published": "2026-05-29T20:56:59+00:00",
       "firstSeen": "2026-05-29T22:00:01.353325+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.754
+      "score": 1.7385
     },
     {
       "title": "Hands-On With Gemini Spark: I Gave It Access to My Life and It Friend-Zoned My Boyfriend",
@@ -542,10 +575,10 @@
       "image": "https://media.wired.com/photos/6a19d3576c603cc05220330d/master/pass/Gear_HandsOnWithGeminiSparkGoogle%E2%80%99sAIAgentThatLivesinYourPhone_v1.jpg",
       "published": "2026-05-29T19:07:46+00:00",
       "firstSeen": "2026-05-29T19:39:25.932431+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4262
+      "score": 9.4115
     },
     {
       "title": "Take our I/O 2026 quiz, vibe coded in Google AI Studio.",
@@ -558,10 +591,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IOQuiz2026_social.max-600x600.format-webp.webp",
       "published": "2026-05-29T19:00:00+00:00",
       "firstSeen": "2026-05-29T19:39:25.932431+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8642
+      "score": 1.8496
     },
     {
       "title": "So you’ve heard these AI terms and nodded along; let’s fix that",
@@ -574,10 +607,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
       "published": "2026-05-29T18:49:19+00:00",
       "firstSeen": "2026-05-29T19:00:02.012663+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7216
+      "score": 1.707
     },
     {
       "title": "Botnet of more than 17 million devices dismantled",
@@ -590,10 +623,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2020/04/botnet6.jpg",
       "published": "2026-05-29T18:46:33+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.5809
+      "score": 1.5664
     },
     {
       "title": "AI Data Centers Now Account for 17% of Australia’s Private Investment",
@@ -606,42 +639,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/data-center-ai-demand.jpg?f=jpeg",
       "published": "2026-05-29T18:22:02+00:00",
       "firstSeen": "2026-05-29T20:00:01.785002+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6749
-    },
-    {
-      "title": "What happens when companies become too AI-pilled?",
-      "url": "https://techcrunch.com/video/what-happens-when-companies-become-too-ai-pilled",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The people deciding that AI can replace your job are also the ones least likely to understand what your job truly involves, according to Box founder Aaron Levie, who pointed to this as an example of &#8220;AI psychosis.” Indeed, ClickUp recently cut 22% of its workforce for AI agents, tech layoffs in 2026 are already nearly matching all of 2025, [&#8230;]",
-      "image": "",
-      "published": "2026-05-29T17:57:05+00:00",
-      "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.5089
-    },
-    {
-      "title": "Tech companies desperately want to film you doing chores",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/940007/ai-companies-will-pay-for-robot-training-data",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "category": "AI",
-      "summary": "This week, an AI training startup called Shift said it would clean New Yorkers' homes for free. It has plans to expand into other cities as well, including London, and looking around my flat, I get the appeal. But there's a catch. There's always a catch. In exchange for the cleaning, Shift wants footage of [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STK414_AI_CVIRGINIA_I__0009_7.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
-      "published": "2026-05-29T17:37:43+00:00",
-      "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1743
+      "score": 2.6605
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -654,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.174
+      "score": 1.1725
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -670,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3282
+      "score": 0.3271
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -686,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1205
@@ -702,10 +703,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-30T21:00:01.223962+00:00",
+      "lastSeen": "2026-05-30T22:00:01.156933+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.9096
+      "score": -1.9097
     },
     {
       "title": "Seth Berkley on the importance of vaccinating the world",
