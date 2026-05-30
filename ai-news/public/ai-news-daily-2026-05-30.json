@@ -1,7 +1,24 @@
 {
   "date": "2026-05-30",
-  "updatedAt": "2026-05-30T09:00:01.819808+00:00",
+  "updatedAt": "2026-05-30T10:00:01.242289+00:00",
   "items": [
+    {
+      "title": "Genesis AI Releases Nyx, Quadrants, and Genesis World 1.0 Physics Platform for Scalable Robotics Foundation Model Evaluation",
+      "url": "https://www.marktechpost.com/2026/05/30/genesis-ai-releases-nyx-quadrants-and-genesis-world-1-0-physics-platform-for-scalable-robotics-foundation-model-evaluation",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Genesis AI released Genesis World 1.0 on May 27, 2026 — a four-component simulation platform covering physics, rendering, compilation, and tooling. The system achieves a Pearson correlation of 0.8996 between simulation and real-world robot rollouts, and reduces policy evaluation time from over 200 hours to under 0.5 hours.\nThe post Genesis AI Releases Nyx, Quadrants, and Genesis World 1.0 Physics Platform for Scalable Robotics Foundation Model Evaluation appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-30-at-2.19.49-AM-1-150x150.png",
+      "published": "2026-05-30T09:25:14+00:00",
+      "firstSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 12.6524
+    },
     {
       "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
       "url": "https://www.marktechpost.com/2026/05/29/hermes-agent-ships-tool-search-for-mcp-anthropic-evals-show-49-to-74-accuracy-gain-on-opus-4",
@@ -13,10 +30,10 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-29-at-7.56.04-PM-1-150x150.png",
       "published": "2026-05-30T03:11:59+00:00",
       "firstSeen": "2026-05-30T04:00:01.260497+00:00",
-      "lastSeen": "2026-05-30T09:00:01.819808+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.2563
+      "score": 11.2307
     },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
@@ -29,10 +46,26 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-wide-horizontal-tech-blog-banner-with-_exn1JoBlVYKF8lccW5kKUQ_EVzgbipGSKeV7Wo-w24mrw.png",
       "published": "2026-05-30T00:46:05+00:00",
       "firstSeen": "2026-05-30T01:00:01.201245+00:00",
-      "lastSeen": "2026-05-30T09:00:01.819808+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7951
+      "score": 5.7712
+    },
+    {
+      "title": "Berlin’s Stark is raising €300M at a €2.5B valuation. The kamikaze drone maker was founded 18 months ago.",
+      "url": "https://thenextweb.com/news/stark-defence-300-million-raise-drone-unicorn-berlin",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Stark, a Berlin-based strike drone startup founded in 2024, is in discussions to raise at least €300 million at a valuation of approximately €2.5 billion, the Financial Times reported. If completed, the deal would more than double the company’s valuation from earlier this year, when it crossed the €1 billion mark. The company is 18 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/TNW-Article-Banner-1-1.avif",
+      "published": "2026-05-30T08:56:17+00:00",
+      "firstSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.218
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -43,12 +76,60 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-30T09:00:09.787516+00:00",
+      "published": "2026-05-30T10:00:10.097570+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T09:00:01.819808+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
+    },
+    {
+      "title": "Do You Actually Need to Pay for Transcription Software?",
+      "url": "https://www.wired.com/story/do-you-actually-need-to-pay-for-transcription-software",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "I tested Wispr Flow and various AI-powered transcription software to see whether you should bother subscribing or stick with free services.",
+      "image": "https://media.wired.com/photos/6a16ee1164b9036ecc8e9699/master/pass/GettyImages-1241968547.jpg",
+      "published": "2026-05-30T09:30:00+00:00",
+      "firstSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
+    },
+    {
+      "title": "SpaceX just won a second Golden Dome contract. This one is $4.16 billion.",
+      "url": "https://thenextweb.com/news/spacex-4-billion-golden-dome-amti-satellite-contract",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The US Space Force awarded SpaceX a $4.16 billion contract on Friday to build satellites that track foreign aircraft and missiles. The programme is called Space-Based Advanced Moving Target Indicator, or SB-AMTI. It is part of the Trump administration’s $185 billion Golden Dome missile defence initiative. Two days earlier, the Space Force awarded SpaceX $2.29 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/spacex-4-billion-golden-dome-amti-satellite-contract.avif",
+      "published": "2026-05-30T09:23:59+00:00",
+      "firstSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1318
+    },
+    {
+      "title": "Ferrari’s CEO says the Luce deserves “respect.” Its former chairman says it deserves a different logo.",
+      "url": "https://thenextweb.com/news/ferrari-luce-backlash-stock-drop-montezemolo-salvini",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Ferrari CEO Benedetto Vigna used a round table in Modena on Thursday to defend the €550,000 ($640,000) price tag for the Luce, the company’s first fully electric vehicle. The car was unveiled on Monday. By Tuesday, Ferrari’s Milan-listed stock had fallen 8%. Vigna said the price was fair for innovation and that the Luce has [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/ferrari-luce-backlash-stock-drop-montezemolo-salvini.avif",
+      "published": "2026-05-30T08:41:09+00:00",
+      "firstSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1106
     },
     {
       "title": "AI is killing the summer internship. The entry-level pipeline that built careers is breaking.",
@@ -61,10 +142,10 @@
       "image": "https://media.thenextweb.com/2026/05/ai-replacing-summer-internships-college-students.avif",
       "published": "2026-05-30T08:08:46+00:00",
       "firstSeen": "2026-05-30T09:00:01.819808+00:00",
-      "lastSeen": "2026-05-30T09:00:01.819808+00:00",
+      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1242
+      "score": 2.0948
     }
   ],
   "errors": []
