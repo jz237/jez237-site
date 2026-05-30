@@ -1030,5 +1030,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-05-30-morning-soap-bubble-canal-oracle",
+    "title": "Soap Bubble Canal Oracle",
+    "tests": "Tests whether GPT Image 2 can make an invented civic canal diagram appear only through real macro soap-film interference, with black-background optics, iridescent membranes, shallow focus, and no document/table/specimen visual language.",
+    "prompt": "Title: Soap Bubble Canal Oracle\nFormat name: Soap Bubble Macro Photo\nCategory/kind: photograph\nTests/explores: Tests whether GPT Image 2 can make an invented civic canal diagram appear only through real macro soap-film interference, with black-background optics, iridescent membranes, shallow focus, and no document/table/specimen visual language.\n\nCreate a square 1024x1024 image that is unmistakably an extreme macro photograph of soap bubbles and soap-film surfaces, not a poster, not a map on paper, not a sci-fi hologram, and not glossy concept art. The selected visual format must be obvious at first glance: overlapping circular bubble rims, ultra-thin iridescent membranes, rainbow interference bands, black void background, tiny dust specks on the film, bead-like droplets at bubble junctions, shallow macro depth of field, and bright curved studio reflections.\n\nSubject: within the natural interference patterns, suggest an impossible quiet canal city oracle. The canal plan should be implied only by the bubble geometry and color bands: thin dark drainage lines where films meet, luminous cyan and magenta bands like waterways, small golden nodes like lock gates, crescent arcs like harbor basins, and a few tiny island-like shapes formed by oil-slick color cells. It should feel discovered inside fluid optics rather than drawn.\n\nComposition: edge-to-edge macro view, three large overlapping soap bubbles dominate the frame with smaller bubbles tucked behind them. The most legible canal-like network sits near the center where the membranes overlap, but all detail remains physically plausible as soap-film interference. No hands, no tools, no table, no labels, no readable text.\n\nPalette and mood: black background, electric cyan, magenta, violet, gold, emerald, pearly white highlights, with delicate transparent grays. Quiet, delicate, optical, uncanny, and photographic.\n\nHard exclusions: no dancing, no dancers, no ballet, no ballroom, no stage dance, no ceremonial dance, no dance poses, no implied choreography, no performers, no people, no copyrighted characters, no logos, no watermark, no signature.",
+    "image": "images/2026-05-30-morning-soap-bubble-canal-oracle.png",
+    "date": "2026-05-30",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
