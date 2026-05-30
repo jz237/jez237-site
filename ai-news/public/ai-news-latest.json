@@ -1,6 +1,22 @@
 {
-  "updatedAt": "2026-05-30T16:14:44.220303+00:00",
+  "updatedAt": "2026-05-30T18:00:01.097680+00:00",
   "items": [
+    {
+      "title": "Quoting Daniel Jalkut",
+      "url": "https://simonwillison.net/2026/May/30/daniel-jalkut",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "My take on AI is, essentially, everybody who’s against it is too against it and everybody who’s for it is too for it.\n&mdash; Daniel Jalkut, via John Gruber\n\n    Tags: ai",
+      "image": "",
+      "published": "2026-05-30T17:29:55+00:00",
+      "firstSeen": "2026-05-30T18:00:01.097680+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
+    },
     {
       "title": "Meta is building an AI pendant. It also plans a business subscription called Wearables for Work.",
       "url": "https://thenextweb.com/news/meta-ai-pendant-limitless-wearables-for-work",
@@ -12,10 +28,10 @@
       "image": "https://media.thenextweb.com/2026/05/meta-ai-pendant-limitless-wearables-for-work.avif",
       "published": "2026-05-30T16:36:23+00:00",
       "firstSeen": "2026-05-30T17:00:01.121098+00:00",
-      "lastSeen": "2026-05-30T17:00:01.121098+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.138
+      "score": 2.1082
     },
     {
       "title": "‘What a joke’: Github Copilot’s new token-based billing spurs consternation among devs",
@@ -28,10 +44,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/11/github-copilot-chat-2.webp?w=1200",
       "published": "2026-05-30T16:30:00+00:00",
       "firstSeen": "2026-05-30T17:00:01.121098+00:00",
-      "lastSeen": "2026-05-30T17:00:01.121098+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3748
+      "score": 6.3451
     },
     {
       "title": "A verified subset of 500 software engineering problems from real GitHub issues, validated by human annotators for evaluating language models' ability to resolve real-world coding issues by generating patches for Python codebases.",
@@ -47,7 +63,7 @@
       "lastSeen": "2026-05-30T16:00:01.437838+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.7527
+      "score": 4.7008
     },
     {
       "title": "Meta is reportedly developing an AI pendant",
@@ -60,10 +76,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/meta-ai-GettyImages-2264943773.jpg?w=1024",
       "published": "2026-05-30T15:59:58+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2825
+      "score": 2.2305
+    },
+    {
+      "title": "Social media companies paid a school district more than its annual budget to avoid trial",
+      "url": "https://thenextweb.com/news/social-media-27-million-settlement-breathitt-county-details",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The financial terms of the Breathitt County social media settlement have been disclosed for the first time. Meta is paying $9 million. Snap and TikTok are each paying $8 million. YouTube negotiated a payout of slightly more than $2 million. The combined $27 million is 8% more than the Kentucky school district’s $25 million annual [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/social-media-27-million-settlement-breathitt-county-details.avif",
+      "published": "2026-05-30T15:52:43+00:00",
+      "firstSeen": "2026-05-30T18:00:01.097680+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.087
     },
     {
       "title": "I put Google’s 24/7 AI assistant Gemini Spark to work, and it’s actually pretty useful",
@@ -76,10 +108,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/gemini-spark-GettyImages-2276583186-1.jpg?w=1024",
       "published": "2026-05-30T15:30:00+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3675
+      "score": 9.3162
     },
     {
       "title": "Anthropic named eight firms selling its shares illegally. After the backlash, it quietly removed four.",
@@ -92,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/05/anthropic-cuts-unauthorized-platform-list-965-billion-valuation.avif",
       "published": "2026-05-30T14:50:14+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1078
+      "score": 5.0575
     },
     {
       "title": "A startup with Eric Trump as adviser is testing humanoid robots in Ukraine. It wants them on US front lines within 18 months.",
@@ -108,10 +140,10 @@
       "image": "https://media.thenextweb.com/2026/05/foundation-humanoid-robots-military-ukraine-eric-trump.avif",
       "published": "2026-05-30T14:30:14+00:00",
       "firstSeen": "2026-05-30T15:00:01.929308+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.098
+      "score": 2.0482
     },
     {
       "title": "As the browser wars heat up, here are the hottest alternatives to Chrome and Safari in 2026",
@@ -124,11 +156,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/08/search-engine.jpg?resize=1200%2C700",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.9952
+      "score": 13.9473
     },
     {
       "title": "How one founder’s bet on ‘the old school web’ is paying off",
@@ -141,10 +173,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot-2026-05-27-at-11.17.27AM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C9.2187253673634%2C100%2C81.562549265273&amp%3Bw=1200",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2652
+      "score": 2.2173
     },
     {
       "title": "AI grifters are creating fake Black people to sell Shein junk",
@@ -157,10 +189,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268550_Crying_AI_avatars_AParkin_2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2652
+      "score": 2.2173
     },
     {
       "title": "Your power bank is probably overheating. But don’t worry, TORRAS fixed that.",
@@ -173,10 +205,10 @@
       "image": "https://media.thenextweb.com/2026/05/torras-minimag-pro-power-bank-overheating.avif",
       "published": "2026-05-30T12:05:15+00:00",
       "firstSeen": "2026-05-30T13:00:01.867125+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.03
+      "score": 1.9834
     },
     {
       "title": "The SpaceX IPO is great for Elon Musk and terrible for you",
@@ -189,10 +221,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STKB355_SPACE_X_IPO_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-30T12:00:00+00:00",
       "firstSeen": "2026-05-30T13:00:01.867125+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2376
+      "score": 2.1911
     },
     {
       "title": "Ex-DeepMind researchers raised $50M to build AI that figures out which scientific questions are worth asking",
@@ -205,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/05/inherent-ai-50-million-seed-deepmind-faraday-science.avif",
       "published": "2026-05-30T11:32:37+00:00",
       "firstSeen": "2026-05-30T12:00:02.061773+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.1153
+      "score": 8.0694
     },
     {
       "title": "Microsoft threatened a security researcher with criminal prosecution. The cybersecurity community is furious.",
@@ -221,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/05/microsoft-threatens-security-researcher-nightmare-eclipse.avif",
       "published": "2026-05-30T10:39:36+00:00",
       "firstSeen": "2026-05-30T12:00:02.061773+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.2919
+      "score": 1.2471
     },
     {
       "title": "HeartFocus Link adds AI cardiac imaging to any hospital ultrasound machine with a tablet and an HDMI cable",
@@ -237,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/05/heartfocus-link-ai-cardiac-ultrasound-cart-based.avif",
       "published": "2026-05-30T10:23:24+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.6849
+      "score": 2.6404
     },
     {
       "title": "Nvidia paid Groq $20 billion and took its top engineers. Now Groq is raising $650 million for what’s left.",
@@ -253,10 +285,10 @@
       "image": "https://media.thenextweb.com/2026/05/groq-650-million-raise-nvidia-20-billion-inference-cloud-1.avif",
       "published": "2026-05-30T10:16:25+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2819
+      "score": 2.2375
     },
     {
       "title": "Parloa turns its $350 million war chest into a partnership web spanning SAP, Microsoft, and OpenAI",
@@ -269,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/05/parloa-350m-ai-agent-sap-microsoft-partnerships.avif",
       "published": "2026-05-30T10:15:50+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6816
+      "score": 6.6373
     },
     {
       "title": "Developers won’t work without AI anymore. The research says it might be making them worse.",
@@ -288,7 +320,7 @@
       "lastSeen": "2026-05-30T16:14:44.220303+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3735
+      "score": 4.3296
     },
     {
       "title": "Do You Actually Need to Pay for Transcription Software?",
@@ -301,10 +333,10 @@
       "image": "https://media.wired.com/photos/6a16ee1164b9036ecc8e9699/master/pass/GettyImages-1241968547.jpg",
       "published": "2026-05-30T09:30:00+00:00",
       "firstSeen": "2026-05-30T10:00:01.242289+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.102
+      "score": 2.0587
     },
     {
       "title": "Genesis AI Releases Nyx, Quadrants, and Genesis World 1.0 Physics Platform for Scalable Robotics Foundation Model Evaluation",
@@ -321,7 +353,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.48
+      "score": 12.4367
     },
     {
       "title": "SpaceX just won a second Golden Dome contract. This one is $4.16 billion.",
@@ -337,7 +369,7 @@
       "lastSeen": "2026-05-30T16:14:44.220303+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9595
+      "score": 1.9162
     },
     {
       "title": "Berlin’s Stark is raising €300M at a €2.5B valuation. The kamikaze drone maker was founded 18 months ago.",
@@ -353,7 +385,7 @@
       "lastSeen": "2026-05-30T15:00:01.929308+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0479
+      "score": 3.0052
     },
     {
       "title": "Ferrari’s CEO says the Luce deserves “respect.” Its former chairman says it deserves a different logo.",
@@ -369,7 +401,7 @@
       "lastSeen": "2026-05-30T14:00:01.830099+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9416
+      "score": 1.8992
     },
     {
       "title": "AI is killing the summer internship. The entry-level pipeline that built careers is breaking.",
@@ -385,7 +417,7 @@
       "lastSeen": "2026-05-30T12:13:52.858175+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9284
+      "score": 1.8866
     },
     {
       "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
@@ -401,7 +433,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.0856
+      "score": 11.0492
     },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
@@ -417,7 +449,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6356
+      "score": 5.6016
     },
     {
       "title": "NVIDIA Introduces X-Token: Projection-Guided Cross-Tokenizer KD That Outperforms GOLD by +3.82 Average Points on Llama-3.2-1B",
@@ -433,7 +465,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 3.5074
+      "score": 3.4747
     },
     {
       "title": "Coders are refusing to work without AI — and that could come back to bite them",
@@ -446,10 +478,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2018/02/tc-backlight-e1689786273147.png?w=1200",
       "published": "2026-05-29T22:14:22+00:00",
       "firstSeen": "2026-05-29T23:00:01.508595+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.2571
+      "score": 3.2253
     },
     {
       "title": "StepFun Releases Step 3.7 Flash: A 198B MoE Vision-Language Model for Coding Agents and Search Workflows",
@@ -465,7 +497,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 12.072
+      "score": 12.041
     },
     {
       "title": "Amazon Is Making an AI-Animated ‘Good Advice Cupcake’ TV Show. Its Original Creator Is Furious",
@@ -478,10 +510,10 @@
       "image": "https://media.wired.com/photos/6a18c5e0148c56039b79b0d5/master/pass/Amazon-Turns-Buzzfeed-Good-Advice-Cupcake-Into-AI-Series-Culture-1164238077.jpg",
       "published": "2026-05-29T20:56:59+00:00",
       "firstSeen": "2026-05-29T22:00:01.353325+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8336
+      "score": 1.803
     },
     {
       "title": "Hands-On With Gemini Spark: I Gave It Access to My Life and It Friend-Zoned My Boyfriend",
@@ -494,10 +526,10 @@
       "image": "https://media.wired.com/photos/6a19d3576c603cc05220330d/master/pass/Gear_HandsOnWithGeminiSparkGoogle%E2%80%99sAIAgentThatLivesinYourPhone_v1.jpg",
       "published": "2026-05-29T19:07:46+00:00",
       "firstSeen": "2026-05-29T19:39:25.932431+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.5019
+      "score": 9.4728
     },
     {
       "title": "Take our I/O 2026 quiz, vibe coded in Google AI Studio.",
@@ -510,10 +542,10 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IOQuiz2026_social.max-600x600.format-webp.webp",
       "published": "2026-05-29T19:00:00+00:00",
       "firstSeen": "2026-05-29T19:39:25.932431+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9397
+      "score": 1.9107
     },
     {
       "title": "So you’ve heard these AI terms and nodded along; let’s fix that",
@@ -526,10 +558,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024",
       "published": "2026-05-29T18:49:19+00:00",
       "firstSeen": "2026-05-29T19:00:02.012663+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.7967
+      "score": 1.7678
     },
     {
       "title": "Botnet of more than 17 million devices dismantled",
@@ -542,10 +574,10 @@
       "image": "https://cdn.arstechnica.net/wp-content/uploads/2020/04/botnet6.jpg",
       "published": "2026-05-29T18:46:33+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.6559
+      "score": 1.6271
     },
     {
       "title": "AI Data Centers Now Account for 17% of Australia’s Private Investment",
@@ -558,10 +590,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/04/data-center-ai-demand.jpg?f=jpeg",
       "published": "2026-05-29T18:22:02+00:00",
       "firstSeen": "2026-05-29T20:00:01.785002+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.749
+      "score": 2.7205
     },
     {
       "title": "What happens when companies become too AI-pilled?",
@@ -574,10 +606,10 @@
       "image": "",
       "published": "2026-05-29T17:57:05+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.5822
+      "score": 4.554
     },
     {
       "title": "Tech companies desperately want to film you doing chores",
@@ -590,10 +622,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STK414_AI_CVIRGINIA_I__0009_7.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-29T17:37:43+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2469
+      "score": 3.219
     },
     {
       "title": "9 demos of Gemini Omni and Gemini 3.5 in action",
@@ -606,75 +638,11 @@
       "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_Omni_and_Gemini_3.5_hero.max-600x600.format-webp.webp",
       "published": "2026-05-29T17:30:00+00:00",
       "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.2148
-    },
-    {
-      "title": "After Nvidia’s $20B not-aqui-hire, AI chip startup Groq reportedly raising $650M",
-      "url": "https://techcrunch.com/2026/05/29/after-nvidias-20b-not-aqui-hire-ai-chip-startup-groq-reportedly-raising-650m",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Chipmaker Groq is looking to raise $650 million in internal funding as it pivots from hardware to focus more on AI inference, the process of refining the way AI models respond to prompted requests, per Axios.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200%2C800",
-      "published": "2026-05-29T17:27:13+00:00",
-      "firstSeen": "2026-05-29T18:00:01.225102+00:00",
-      "lastSeen": "2026-05-29T21:00:01.522609+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.074
-    },
-    {
-      "title": "After Nvidia’s $20B not-acqui-hire, AI chip startup Groq reportedly raising $650M",
-      "url": "https://techcrunch.com/2026/05/29/after-nvidias-20b-not-acqui-hire-ai-chip-startup-groq-reportedly-raising-650m",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Chipmaker Groq is looking to raise $650 million in internal funding as it pivots from hardware to focus more on AI inference, the process of refining the way AI models respond to prompted requests, per Axios.",
-      "image": "https://techcrunch.com/wp-content/uploads/2024/03/GettyImages-1502217391.jpg?resize=1200%2C800",
-      "published": "2026-05-29T17:27:13+00:00",
-      "firstSeen": "2026-05-29T22:00:01.353325+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.074
-    },
-    {
-      "title": "We Asked the ‘Future of Truth’ Author to Explain How He Used AI. It Didn’t Go Well",
-      "url": "https://www.wired.com/story/future-of-truth-ai-interview",
-      "source": "Wired AI",
-      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "A book about how AI shapes perceptions of reality came under fire for using AI-generated quotes. Its problems go beyond that.",
-      "image": "https://media.wired.com/photos/6a173332faa2148b4ab454b6/master/pass/Business_AIBookAuthorUsedAItoWriteHisBook_v1.jpg",
-      "published": "2026-05-29T16:30:00+00:00",
-      "firstSeen": "2026-05-29T16:52:35.975384+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7588
-    },
-    {
-      "title": "Cognition’s Scott Wu says AI coding agents shouldn’t replace humans",
-      "url": "https://techcrunch.com/2026/05/29/cognitions-scott-wu-says-ai-coding-agents-shouldnt-replace-humans",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Cognition makes Devin, the first and arguably most successful AI coding agent. But famed coder Wu says it isn't designed to supplant human programmers.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200%2C1004",
-      "published": "2026-05-29T16:13:47+00:00",
-      "firstSeen": "2026-05-29T16:52:35.975384+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.8545
+      "score": 16.187
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -687,10 +655,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1816
+      "score": 1.1787
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -703,10 +671,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3336
+      "score": 0.3315
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -719,7 +687,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1206
@@ -735,7 +703,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-05-30T16:14:44.220303+00:00",
+      "lastSeen": "2026-05-30T18:00:01.097680+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9096
