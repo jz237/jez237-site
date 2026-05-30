@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-30T23:00:01.384790+00:00",
+  "updatedAt": "2026-05-30T23:14:42.593329+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8612,6 +8612,10 @@
     "https://simonwillison.net/2026/May/30/pyodide-asgi-browser": {
       "image": "",
       "checkedAt": "2026-05-30T22:00:01.156933+00:00"
+    },
+    "https://techcrunch.com/2026/05/30/softbank-says-it-will-invest-up-to-e75-billion-to-build-french-data-centers": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2224533087.jpg?w=1024",
+      "checkedAt": "2026-05-30T23:14:42.593329+00:00"
     }
   }
 }
