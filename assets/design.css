@@ -845,8 +845,33 @@ header#site-nav .links a:hover { transform: translateY(-1px); }
    -------------------------------------------------------------- */
 .home-hidden-nav { display: none !important; }
 .workbench-home {
+  position: relative;
+  z-index: 1;
   max-width: 1480px !important;
   padding: 26px clamp(16px, 3vw, 42px) 70px !important;
+}
+body.home-page {
+  background:
+    radial-gradient(ellipse at 0% 54%, rgba(76,211,255,0.55), transparent 31%),
+    radial-gradient(ellipse at 100% 54%, rgba(40,153,255,0.48), transparent 33%),
+    linear-gradient(180deg, #020711, #061833 62%, #020711) !important;
+}
+body.home-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 0% 52%, rgba(102,226,255,0.62), transparent 31%),
+    radial-gradient(ellipse at 100% 51%, rgba(52,158,255,0.54), transparent 33%),
+    radial-gradient(ellipse at 30% 48%, rgba(240,252,255,0.54) 0 5%, rgba(107,225,255,0.48) 13%, rgba(14,176,255,0.3) 30%, transparent 57%),
+    radial-gradient(ellipse at 72% 31%, rgba(38,155,255,0.28), transparent 42%),
+    radial-gradient(circle at 79% 74%, rgba(54,211,255,0.17), transparent 26%),
+    radial-gradient(circle, rgba(255,255,255,0.34) 0 1px, transparent 1.6px) 0 0 / 48px 36px,
+    radial-gradient(circle, rgba(114,226,255,0.28) 0 1px, transparent 1.8px) 21px 14px / 84px 63px,
+    linear-gradient(180deg, #020711, #061833 62%, #020711);
+  animation: galaxy-drift 24s ease-in-out infinite alternate;
 }
 .desktop-hub {
   position: relative;
@@ -856,26 +881,24 @@ header#site-nav .links a:hover { transform: translateY(-1px); }
   min-height: calc(100vh - 52px);
   border: 1px solid rgba(55, 111, 215, 0.44);
   border-radius: 18px;
-  overflow: hidden;
-  clip-path: inset(0 round 18px);
+  overflow: visible;
   background: #020813;
   box-shadow: 0 32px 90px rgba(0,0,0,0.62), inset 0 1px 0 rgba(91,154,255,0.12);
 }
 .desktop-hub::before {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -2;
   background:
     radial-gradient(ellipse at 35% 44%, rgba(103,221,255,0.32), transparent 38%),
     radial-gradient(ellipse at 73% 24%, rgba(19,133,255,0.22), transparent 34%),
     radial-gradient(circle at 82% 72%, rgba(54,211,255,0.18), transparent 24%),
     linear-gradient(180deg, #020711, #061833 62%, #020711);
-  pointer-events: none;
 }
 .galaxy-backdrop {
   position: absolute;
-  inset: 0;
+  inset: -12%;
   z-index: 0;
   overflow: hidden;
   background:
@@ -1010,6 +1033,8 @@ header#site-nav .links a:hover { transform: translateY(-1px); }
   flex-direction: column;
   gap: 18px;
   padding: 28px 18px;
+  border-radius: 18px 0 0 18px;
+  overflow: hidden;
   background:
     radial-gradient(circle at 65% 0%, rgba(18,98,223,0.26), transparent 44%),
     linear-gradient(180deg, rgba(4,16,34,0.76), rgba(2,9,20,0.82));
