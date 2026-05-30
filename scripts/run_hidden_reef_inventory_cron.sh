@@ -61,6 +61,7 @@ const ignoreRefreshTimestamps = value =>
   value
     .replace(/^\/\/ Presentation refresh:.*$/m, '// Presentation refresh: <ignored>')
     .replace(/^\/\/ Public sitemap import:.*$/m, '// Public sitemap import: <ignored>')
+    .replace(/"refreshedAt":"[^"]+"/, '"refreshedAt":"<ignored>"')
     .replace(/"publicSitemapCheckedAt":"[^"]+"/, '"publicSitemapCheckedAt":"<ignored>"');
 if (current !== previous && ignoreRefreshTimestamps(current) === ignoreRefreshTimestamps(previous)) {
   fs.writeFileSync(file, previous);
