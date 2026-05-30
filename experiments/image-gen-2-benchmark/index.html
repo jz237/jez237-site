@@ -33,48 +33,15 @@
     }
     .gallery-hero, main, footer { max-width: 1180px; margin: 0 auto; }
     .gallery-hero {
-      position: sticky;
-      top: var(--nav-height, 54px);
-      z-index: 8;
+      position: relative;
+      top: auto;
+      z-index: 1;
       padding: 56px 22px 28px;
-      transition: padding .24s ease, max-width .24s ease, background .24s ease, border-color .24s ease, box-shadow .24s ease, backdrop-filter .24s ease;
-    }
-    .gallery-hero.is-collapsed {
-      max-width: none;
-      padding: 8px clamp(12px, 2vw, 22px);
-      background: rgba(12,15,20,.92);
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 14px 36px rgba(0,0,0,.28);
-      backdrop-filter: blur(16px) saturate(1.1);
-      -webkit-backdrop-filter: blur(16px) saturate(1.1);
     }
     .gallery-hero-inner { max-width: 1180px; margin: 0 auto; }
-    .gallery-hero.is-collapsed .gallery-hero-inner {
-      display: grid;
-      grid-template-columns: auto minmax(190px, 1fr) auto;
-      align-items: center;
-      gap: 10px;
-    }
     h1 { margin: 0 0 12px; font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.07em; line-height: .92; }
-    .gallery-hero.is-collapsed h1 {
-      margin: 0;
-      font-size: 1rem;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .gallery-hero.is-collapsed h1 br { display: none; }
     .lede { max-width: 850px; color: var(--muted); font-size: 1.1rem; }
-    .gallery-hero.is-collapsed .lede { display: none; }
     .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-    .gallery-hero.is-collapsed .meta,
-    .gallery-hero.is-collapsed .controls {
-      margin-top: 0;
-      gap: 8px;
-      min-width: 0;
-    }
-    .gallery-hero.is-collapsed .meta { justify-content: flex-end; }
-    .gallery-hero.is-collapsed .controls { flex-wrap: nowrap; }
     .pill, .control, button.control {
       border: 1px solid var(--line);
       background: rgba(255,255,255,.05);
@@ -85,22 +52,68 @@
     }
     a.pill { text-decoration: none; color: var(--accent); }
     .control { min-height: 40px; }
-    .gallery-hero.is-collapsed .control {
+    select.control, input.control { outline: none; }
+    button.control { cursor: pointer; color: var(--text); }
+    .compact-toolbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: var(--nav-height, 54px);
+      z-index: 9;
+      padding: 8px clamp(12px, 2vw, 22px);
+      background: rgba(12,15,20,.92);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 36px rgba(0,0,0,.28);
+      backdrop-filter: blur(16px) saturate(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(1.1);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity .16s ease, transform .16s ease;
+    }
+    .compact-toolbar.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .compact-toolbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto minmax(220px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+    }
+    .compact-title {
+      font-weight: 800;
+      white-space: nowrap;
+      letter-spacing: -0.02em;
+    }
+    .compact-controls {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      min-width: 0;
+    }
+    .compact-controls .control {
       min-height: 34px;
       padding: 6px 10px;
       font-size: .9rem;
     }
-    .gallery-hero.is-collapsed .pill {
+    #toolbar-search { width: min(42vw, 420px); }
+    .compact-count {
       min-height: 34px;
-      padding: 6px 10px;
-      font-size: .86rem;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: .86rem;
+      white-space: nowrap;
     }
-    .gallery-hero.is-collapsed .meta .pill:not(#count-pill) { display: none; }
-    .gallery-hero.is-collapsed #search { width: min(42vw, 420px); }
-    select.control, input.control { outline: none; }
-    button.control { cursor: pointer; color: var(--text); }
     main { padding: 12px 22px 70px; }
     .load-more-row { display: flex; justify-content: center; margin: 30px 0 0; }
     .day-group { margin-top: 28px; }
@@ -115,7 +128,7 @@
     }
     .day-heading h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2.2rem); letter-spacing: -.04em; }
     .day-heading span { color: var(--muted); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
     .card {
       overflow: hidden;
       border: 1px solid var(--line);
@@ -176,12 +189,12 @@
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     @media (max-width: 680px) {
-      .gallery-hero.is-collapsed .gallery-hero-inner {
+      .compact-toolbar-inner {
         grid-template-columns: 1fr;
         align-items: stretch;
       }
-      .gallery-hero.is-collapsed .meta { justify-content: flex-start; }
-      .gallery-hero.is-collapsed #search { width: 100%; }
+      #toolbar-search { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
       .day-heading { display: block; }
       .lightbox-hint { display: none; }
     }
@@ -206,6 +219,17 @@
       </div>
     </div>
   </header>
+
+  <div class="compact-toolbar" id="compact-toolbar" aria-label="Gallery quick controls">
+    <div class="compact-toolbar-inner">
+      <div class="compact-title">GPT Image 2</div>
+      <div class="compact-controls">
+        <input class="control" id="toolbar-search" type="search" placeholder="Search prompts...">
+        <select class="control" id="toolbar-date-filter"><option value="all">All dates</option></select>
+      </div>
+      <span class="compact-count" id="toolbar-count">Images: loading...</span>
+    </div>
+  </div>
 
   <main>
     <div id="gallery" class="archive" aria-live="polite"></div>
@@ -233,6 +257,10 @@
       const countPill = document.getElementById('count-pill');
       const search = document.getElementById('search');
       const dateFilter = document.getElementById('date-filter');
+      const toolbar = document.getElementById('compact-toolbar');
+      const toolbarSearch = document.getElementById('toolbar-search');
+      const toolbarDateFilter = document.getElementById('toolbar-date-filter');
+      const toolbarCount = document.getElementById('toolbar-count');
       const loadMore = document.getElementById('load-more');
       const loadMoreRow = document.getElementById('load-more-row');
       const hero = document.querySelector('.gallery-hero');
@@ -240,15 +268,23 @@
       const pageSize = 12;
       let allItems = [];
       let visibleCount = pageSize;
+      let ticking = false;
 
       function updateHeroChrome() {
-        if (siteNav) {
-          document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 54}px`);
-        }
-        if (hero) hero.classList.toggle('is-collapsed', window.scrollY > 24);
+        if (siteNav) document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 54}px`);
+        if (!toolbar || !hero) return;
+        const threshold = hero.offsetTop + hero.offsetHeight - 40;
+        toolbar.classList.toggle('is-visible', window.scrollY > threshold);
       }
 
-      window.addEventListener('scroll', updateHeroChrome, { passive: true });
+      window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateHeroChrome();
+          ticking = false;
+        });
+      }, { passive: true });
       window.addEventListener('resize', updateHeroChrome);
       window.addEventListener('load', updateHeroChrome);
       setTimeout(updateHeroChrome, 0);
@@ -276,6 +312,7 @@
         const items = filteredItems();
         const shown = items.slice(0, visibleCount);
         countPill.textContent = `Images: ${allItems.length}`;
+        toolbarCount.textContent = `Images: ${allItems.length}`;
         loadMoreRow.hidden = visibleCount >= items.length;
         if (!shown.length) {
           gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
@@ -317,11 +354,24 @@
 
       function populateDates() {
         const dates = [...new Set(allItems.map((item) => item.date).filter(Boolean))].sort().reverse();
-        dateFilter.innerHTML = '<option value="all">All dates</option>' + dates.map((date) => `<option value="${escapeHtml(date)}">${escapeHtml(formatDate(date))}</option>`).join('');
+        const options = '<option value="all">All dates</option>' + dates.map((date) => `<option value="${escapeHtml(date)}">${escapeHtml(formatDate(date))}</option>`).join('');
+        dateFilter.innerHTML = options;
+        toolbarDateFilter.innerHTML = options;
       }
 
-      search.addEventListener('input', () => { visibleCount = pageSize; render(); });
-      dateFilter.addEventListener('change', () => { visibleCount = pageSize; render(); });
+      function applyFilters(nextSearch, nextDate) {
+        search.value = nextSearch;
+        toolbarSearch.value = nextSearch;
+        dateFilter.value = nextDate;
+        toolbarDateFilter.value = nextDate;
+        visibleCount = pageSize;
+        render();
+      }
+
+      search.addEventListener('input', () => applyFilters(search.value, dateFilter.value));
+      toolbarSearch.addEventListener('input', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
+      dateFilter.addEventListener('change', () => applyFilters(search.value, dateFilter.value));
+      toolbarDateFilter.addEventListener('change', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
       loadMore.addEventListener('click', () => { visibleCount += pageSize; render(); });
 
       fetch('gallery-data.json', { cache: 'no-cache' })
