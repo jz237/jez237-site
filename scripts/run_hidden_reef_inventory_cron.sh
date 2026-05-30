@@ -39,9 +39,14 @@ node scripts/refresh_hidden_reef_products.mjs \
   --slugs "$SLUGS" \
   --max-pages 30
 
+node scripts/import_hidden_reef_sitemap_products.mjs \
+  --write \
+  --concurrency 4
+
 node --check prototypes/hidden-reef/assets/product-data.js
 node --check prototypes/hidden-reef/assets/products.js
 node --check scripts/refresh_hidden_reef_products.mjs
+node --check scripts/import_hidden_reef_sitemap_products.mjs
 
 node - <<'NODE'
 const cp = require('node:child_process');
@@ -52,11 +57,14 @@ const previous = cp.execFileSync('git', ['show', `HEAD:${file}`], {
   encoding: 'utf8',
   maxBuffer: 10 * 1024 * 1024
 });
-const ignoreRefreshTimestamp = value =>
-  value.replace(/^\/\/ Presentation refresh:.*$/m, '// Presentation refresh: <ignored>');
-if (current !== previous && ignoreRefreshTimestamp(current) === ignoreRefreshTimestamp(previous)) {
+const ignoreRefreshTimestamps = value =>
+  value
+    .replace(/^\/\/ Presentation refresh:.*$/m, '// Presentation refresh: <ignored>')
+    .replace(/^\/\/ Public sitemap import:.*$/m, '// Public sitemap import: <ignored>')
+    .replace(/"publicSitemapCheckedAt":"[^"]+"/, '"publicSitemapCheckedAt":"<ignored>"');
+if (current !== previous && ignoreRefreshTimestamps(current) === ignoreRefreshTimestamps(previous)) {
   fs.writeFileSync(file, previous);
-  console.log('Only the inventory refresh timestamp changed; no commit or deploy needed.');
+  console.log('Only inventory refresh timestamps changed; no commit or deploy needed.');
 }
 NODE
 
