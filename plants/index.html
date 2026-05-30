@@ -31,6 +31,15 @@
     .dir-item:hover .dir-thumb img { transform:scale(1.06); }
     .dir-label { padding:6px 8px 8px; font-size:.72rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--pc-text); }
     .dir-count { font-size:.62rem; color:var(--pc-muted); font-weight:500; }
+    .garden-feature-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:0 0 34px; }
+    .garden-feature-link { display:block; padding:24px; border-radius:18px; border:1px solid rgba(255,255,255,.12); background:linear-gradient(135deg, rgba(79,140,255,.08), rgba(192,132,252,.06)); text-decoration:none; color:inherit; transition:transform .35s cubic-bezier(.23,1,.32,1), border-color .3s ease, box-shadow .3s ease; }
+    .garden-feature-link:hover { transform:translateY(-3px); border-color:rgba(79,140,255,.35); box-shadow:0 18px 40px rgba(0,0,0,.3); text-decoration:none; }
+    .garden-feature-link-inner { display:flex; align-items:center; gap:16px; }
+    .garden-feature-icon { font-size:2rem; line-height:1; }
+    .garden-feature-copy { min-width:0; }
+    .garden-feature-copy h2 { margin:0 0 4px; font-size:1.35rem; letter-spacing:-.03em; }
+    .garden-feature-copy p { margin:0; color:var(--pc-muted,#97a4b5); font-size:.95rem; }
+    .garden-feature-arrow { margin-left:auto; font-size:1.35rem; color:var(--pc-accent,#4f8cff); }
     @media(max-width:680px) { .dir-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); } }
   </style>
 </head>
@@ -58,6 +67,30 @@
   </div>
 
   <div class="plant-main">
+    <div class="garden-feature-links" aria-label="Garden reference sections">
+      <a class="garden-feature-link" href="interesting-insects/">
+        <div class="garden-feature-link-inner">
+          <div class="garden-feature-icon">🦋</div>
+          <div class="garden-feature-copy">
+            <h2>Interesting Insects &amp; Wildlife</h2>
+            <p>Pollinators, butterflies, caterpillars, and other garden visitors.</p>
+          </div>
+          <div class="garden-feature-arrow">→</div>
+        </div>
+      </a>
+
+      <a class="garden-feature-link" href="past-years/">
+        <div class="garden-feature-link-inner">
+          <div class="garden-feature-icon">📷</div>
+          <div class="garden-feature-copy">
+            <h2>2025 Reference Photos</h2>
+            <p>Year-over-year comparison — garden overview, bed compositions, and reference shots from last year.</p>
+          </div>
+          <div class="garden-feature-arrow">→</div>
+        </div>
+      </a>
+    </div>
+
     <div class="plant-directory">
       <h2>Individual Plants</h2>
       <p class="dir-subtitle">Click any plant to see its full season timeline</p>
@@ -753,31 +786,6 @@
       </div>
 
           </div><!-- end card-grid -->
-
-    
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:48px;">
-      <a href="interesting-insects/" style="display:block; padding:32px; border-radius:24px; border:1px solid rgba(255,255,255,.12); background:linear-gradient(135deg, rgba(79,140,255,.08), rgba(192,132,252,.06)); text-decoration:none; color:inherit; transition:transform .35s cubic-bezier(.23,1,.32,1), border-color .3s ease, box-shadow .3s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='rgba(79,140,255,.35)';this.style.boxShadow='0 18px 40px rgba(0,0,0,.3)';" onmouseout="this.style.transform='';this.style.borderColor='rgba(255,255,255,.12)';this.style.boxShadow='';">
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="font-size:2rem;">🦋</div>
-          <div>
-            <h2 style="margin:0 0 4px; font-size:1.4rem; letter-spacing:-.03em;">Interesting Insects &amp; Wildlife</h2>
-            <p style="margin:0; color:var(--pc-muted,#97a4b5); font-size:.95rem;">Pollinators, butterflies, caterpillars, and other garden visitors.</p>
-          </div>
-          <div style="margin-left:auto; font-size:1.4rem; color:var(--pc-accent,#4f8cff);">→</div>
-        </div>
-      </a>
-
-      <a href="past-years/" style="display:block; padding:32px; border-radius:24px; border:1px solid rgba(255,255,255,.12); background:linear-gradient(135deg, rgba(79,140,255,.08), rgba(192,132,252,.06)); text-decoration:none; color:inherit; transition:transform .35s cubic-bezier(.23,1,.32,1), border-color .3s ease, box-shadow .3s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='rgba(79,140,255,.35)';this.style.boxShadow='0 18px 40px rgba(0,0,0,.3)';" onmouseout="this.style.transform='';this.style.borderColor='rgba(255,255,255,.12)';this.style.boxShadow='';">
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="font-size:2rem;">📷</div>
-          <div>
-            <h2 style="margin:0 0 4px; font-size:1.4rem; letter-spacing:-.03em;">2025 Reference Photos</h2>
-            <p style="margin:0; color:var(--pc-muted,#97a4b5); font-size:.95rem;">Year-over-year comparison — garden overview, bed compositions, and reference shots from last year.</p>
-          </div>
-          <div style="margin-left:auto; font-size:1.4rem; color:var(--pc-accent,#4f8cff);">→</div>
-        </div>
-      </a>
-    </div>
 
   </div><!-- end plant-main -->
 
