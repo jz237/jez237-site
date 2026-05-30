@@ -1,6 +1,6 @@
 {
   "date": "2026-05-30",
-  "updatedAt": "2026-05-30T10:00:01.242289+00:00",
+  "updatedAt": "2026-05-30T10:14:00.055123+00:00",
   "items": [
     {
       "title": "Genesis AI Releases Nyx, Quadrants, and Genesis World 1.0 Physics Platform for Scalable Robotics Foundation Model Evaluation",
@@ -17,7 +17,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.6524
+      "score": 12.6454
     },
     {
       "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
@@ -33,7 +33,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.2307
+      "score": 11.2248
     },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
@@ -49,7 +49,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7712
+      "score": 5.7657
     },
     {
       "title": "Berlin’s Stark is raising €300M at a €2.5B valuation. The kamikaze drone maker was founded 18 months ago.",
@@ -62,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/05/TNW-Article-Banner-1-1.avif",
       "published": "2026-05-30T08:56:17+00:00",
       "firstSeen": "2026-05-30T10:00:01.242289+00:00",
-      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:14:00.055123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.218
+      "score": 3.2111
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -81,7 +81,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.71
+      "score": 2.703
     },
     {
       "title": "Do You Actually Need to Pay for Transcription Software?",
@@ -94,10 +94,10 @@
       "image": "https://media.wired.com/photos/6a16ee1164b9036ecc8e9699/master/pass/GettyImages-1241968547.jpg",
       "published": "2026-05-30T09:30:00+00:00",
       "firstSeen": "2026-05-30T10:00:01.242289+00:00",
-      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:14:00.055123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2748
+      "score": 2.2678
     },
     {
       "title": "SpaceX just won a second Golden Dome contract. This one is $4.16 billion.",
@@ -110,10 +110,10 @@
       "image": "https://media.thenextweb.com/2026/05/spacex-4-billion-golden-dome-amti-satellite-contract.avif",
       "published": "2026-05-30T09:23:59+00:00",
       "firstSeen": "2026-05-30T10:00:01.242289+00:00",
-      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:14:00.055123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1318
+      "score": 2.1248
     },
     {
       "title": "Ferrari’s CEO says the Luce deserves “respect.” Its former chairman says it deserves a different logo.",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/05/ferrari-luce-backlash-stock-drop-montezemolo-salvini.avif",
       "published": "2026-05-30T08:41:09+00:00",
       "firstSeen": "2026-05-30T10:00:01.242289+00:00",
-      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:14:00.055123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1106
+      "score": 2.1037
     },
     {
       "title": "AI is killing the summer internship. The entry-level pipeline that built careers is breaking.",
@@ -142,11 +142,17 @@
       "image": "https://media.thenextweb.com/2026/05/ai-replacing-summer-internships-college-students.avif",
       "published": "2026-05-30T08:08:46+00:00",
       "firstSeen": "2026-05-30T09:00:01.819808+00:00",
-      "lastSeen": "2026-05-30T10:00:01.242289+00:00",
+      "lastSeen": "2026-05-30T10:14:00.055123+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0948
+      "score": 2.088
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
 }
