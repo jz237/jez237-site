@@ -1,7 +1,7 @@
 // The Hidden Reef - Product Data (scraped from thehiddenreef.com)
 // Each product links back to the original Hidden Reef product page
 // Total: 3362 unique products across 35 subcategories
-// Presentation refresh: 35 subcategories refreshed 2026-05-30T22:01:41.588Z
+// Presentation refresh: 35 subcategories refreshed 2026-05-30T22:03:57.506Z
 // Gallery refresh: product image galleries refreshed 2026-05-27T14:49:37.209Z
 // Removed stale 404 product URLs: 7 removed 2026-05-27
 
