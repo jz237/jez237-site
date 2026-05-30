@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>GPT Image 2 — Daily Image Prompts</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/design.css">
   <style>
     :root {
       color-scheme: dark;
@@ -27,8 +31,8 @@
       color: var(--text);
       line-height: 1.5;
     }
-    header, main, footer { max-width: 1180px; margin: 0 auto; }
-    header { padding: 56px 22px 28px; }
+    .gallery-hero, main, footer { max-width: 1180px; margin: 0 auto; }
+    .gallery-hero { padding: 56px 22px 28px; }
     h1 { margin: 0 0 12px; font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.07em; line-height: .92; }
     .lede { max-width: 850px; color: var(--muted); font-size: 1.1rem; }
     .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
@@ -125,7 +129,9 @@
   </style>
 </head>
 <body>
-  <header>
+  <header id="site-nav"></header>
+
+  <header class="gallery-hero">
     <h1>GPT Image 2<br>Daily Image Prompts</h1>
     <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Four new prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
     <div class="meta">
@@ -298,5 +304,6 @@
       document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer.classList.contains('open')) closeViewer(); });
     })();
   </script>
+  <script src="../../assets/nav.js" defer></script>
 </body>
 </html>
