@@ -1,6 +1,6 @@
 {
   "date": "2026-05-30",
-  "updatedAt": "2026-05-30T18:14:25.582289+00:00",
+  "updatedAt": "2026-05-30T19:00:01.853204+00:00",
   "items": [
     {
       "title": "As the browser wars heat up, here are the hottest alternatives to Chrome and Safari in 2026",
@@ -13,11 +13,11 @@
       "image": "https://techcrunch.com/wp-content/uploads/2024/08/search-engine.jpg?resize=1200%2C700",
       "published": "2026-05-30T13:00:00+00:00",
       "firstSeen": "2026-05-30T14:00:01.830099+00:00",
-      "lastSeen": "2026-05-30T18:14:25.582289+00:00",
+      "lastSeen": "2026-05-30T19:00:01.853204+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.941
+      "score": 13.9211
     },
     {
       "title": "Genesis AI Releases Nyx, Quadrants, and Genesis World 1.0 Physics Platform for Scalable Robotics Foundation Model Evaluation",
@@ -34,7 +34,7 @@
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.431
+      "score": 12.413
     },
     {
       "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
@@ -50,7 +50,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.0443
+      "score": 11.0292
     },
     {
       "title": "I put Google’s 24/7 AI assistant Gemini Spark to work, and it’s actually pretty useful",
@@ -63,10 +63,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/gemini-spark-GettyImages-2276583186-1.jpg?w=1024",
       "published": "2026-05-30T15:30:00+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T18:14:25.582289+00:00",
+      "lastSeen": "2026-05-30T19:00:01.853204+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3094
+      "score": 9.2881
     },
     {
       "title": "Ex-DeepMind researchers raised $50M to build AI that figures out which scientific questions are worth asking",
@@ -79,10 +79,10 @@
       "image": "https://media.thenextweb.com/2026/05/inherent-ai-50-million-seed-deepmind-faraday-science.avif",
       "published": "2026-05-30T11:32:37+00:00",
       "firstSeen": "2026-05-30T12:00:02.061773+00:00",
-      "lastSeen": "2026-05-30T18:14:25.582289+00:00",
+      "lastSeen": "2026-05-30T19:00:01.853204+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0633
+      "score": 8.0442
     },
     {
       "title": "Parloa turns its $350 million war chest into a partnership web spanning SAP, Microsoft, and OpenAI",
@@ -95,10 +95,10 @@
       "image": "https://media.thenextweb.com/2026/05/parloa-350m-ai-agent-sap-microsoft-partnerships.avif",
       "published": "2026-05-30T10:15:50+00:00",
       "firstSeen": "2026-05-30T11:00:01.989823+00:00",
-      "lastSeen": "2026-05-30T18:14:25.582289+00:00",
+      "lastSeen": "2026-05-30T19:00:01.853204+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.6314
+      "score": 6.613
     },
     {
       "title": "‘What a joke’: Github Copilot’s new token-based billing spurs consternation among devs",
@@ -111,10 +111,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2023/11/github-copilot-chat-2.webp?w=1200",
       "published": "2026-05-30T16:30:00+00:00",
       "firstSeen": "2026-05-30T17:00:01.121098+00:00",
-      "lastSeen": "2026-05-30T18:14:25.582289+00:00",
+      "lastSeen": "2026-05-30T19:00:01.853204+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3381
+      "score": 6.3162
     },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
@@ -130,7 +130,7 @@
       "lastSeen": "2026-05-30T10:00:01.242289+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.597
+      "score": 5.5829
     },
     {
       "title": "Anthropic named eight firms selling its shares illegally. After the backlash, it quietly removed four.",
@@ -143,10 +143,10 @@
       "image": "https://media.thenextweb.com/2026/05/anthropic-cuts-unauthorized-platform-list-965-billion-valuation.avif",
       "published": "2026-05-30T14:50:14+00:00",
       "firstSeen": "2026-05-30T16:00:01.437838+00:00",
-      "lastSeen": "2026-05-30T18:14:25.582289+00:00",
+      "lastSeen": "2026-05-30T19:00:01.853204+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0508
+      "score": 5.0299
     },
     {
       "title": "Live model battles across chat, coding, image, video, and audio modalities",
@@ -162,7 +162,7 @@
       "lastSeen": "2026-05-30T18:14:25.582289+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.76
+      "score": 4.7373
     },
     {
       "title": "Developers won’t work without AI anymore. The research says it might be making them worse.",
@@ -178,7 +178,7 @@
       "lastSeen": "2026-05-30T16:14:44.220303+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.3237
+      "score": 4.3055
     },
     {
       "title": "Berlin’s Stark is raising €300M at a €2.5B valuation. The kamikaze drone maker was founded 18 months ago.",
@@ -194,7 +194,7 @@
       "lastSeen": "2026-05-30T15:00:01.929308+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.9995
+      "score": 2.9818
     }
   ],
   "errors": [
