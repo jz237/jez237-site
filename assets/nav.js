@@ -8,14 +8,20 @@
 
   const ROOT = siteRoot();
   const LINKS = [
-    { href: ROOT + '/index.html',          label: 'Home' },
-    { href: ROOT + '/plants/',             label: 'Garden' },
-    { href: ROOT + '/garden/',             label: 'Calendar' },
-    { href: ROOT + '/photos/',             label: 'Photos' },
-    { href: ROOT + '/games/',              label: 'Games' },
-    { href: ROOT + '/ai-news/',            label: 'AI News' },
-    { href: ROOT + '/plex/',               label: 'Plex' },
-    { href: ROOT + '/ops/',                label: 'Ops' }
+    { href: ROOT + '/index.html', label: 'Home', section: 'index' },
+    { href: ROOT + '/weather/', label: 'Weather', section: 'weather' },
+    { href: ROOT + '/plants/', label: 'Garden Center', section: 'plants' },
+    { href: ROOT + '/garden/', label: 'Garden Calendar', section: 'garden' },
+    { href: ROOT + '/experiments/image-gen-2-benchmark/', label: 'GPT Image 2', section: 'experiments/image-gen-2-benchmark' },
+    { href: ROOT + '/ai-news/', label: 'AI News', section: 'ai-news' },
+    { href: ROOT + '/photos/', label: 'Photos', section: 'photos' },
+    { href: ROOT + '/games/', label: 'Arcade', section: 'games' },
+    { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', section: 'experiments/ai-explainer' },
+    { href: ROOT + '/prototypes/hidden-reef/', label: 'Hidden Reef', section: 'prototypes/hidden-reef' },
+    { href: ROOT + '/ops/', label: 'Ops', section: 'ops' },
+    { href: 'https://jz237.github.io/stock-command-center/', label: 'Stocks', external: true },
+    { href: ROOT + '/plants/past-years/', label: 'Archives', section: 'plants/past-years' },
+    { href: 'https://baudersigns.com/', label: 'Bauder Signs', external: true }
   ];
 
   // Inline brand SVG — small botanical monogram
@@ -36,11 +42,15 @@
     '</svg>';
 
   function currentSection() {
-    // Normalize path to the first meaningful segment
+    // Normalize path to the active section, keeping nested feature pages distinct.
     const path = location.pathname.replace(/^\/jez237-site/, '') || '/';
-    if (path === '/' || /^\/(index\.html)?$/.test(path)) return ROOT + '/index.html';
-    const firstSeg = path.split('/').filter(Boolean)[0] || '';
-    return ROOT + '/' + firstSeg + '/';
+    if (path === '/' || /^\/(index\.html)?$/.test(path)) return 'index';
+    const segments = path.split('/').filter(Boolean);
+    const first = segments[0] || '';
+    if (first === 'experiments' && segments[1]) return 'experiments/' + segments[1];
+    if (first === 'prototypes' && segments[1]) return 'prototypes/' + segments[1];
+    if (first === 'plants' && segments[1] === 'past-years') return 'plants/past-years';
+    return first;
   }
 
   function render() {
@@ -63,7 +73,11 @@
       const a = document.createElement('a');
       a.href = l.href;
       a.textContent = l.label;
-      if (l.href === current) a.setAttribute('aria-current', 'page');
+      if (l.external) {
+        a.target = '_blank';
+        a.rel = 'noopener';
+      }
+      if (l.section === current) a.setAttribute('aria-current', 'page');
       linkBox.appendChild(a);
     });
 
