@@ -1054,5 +1054,17 @@
     "slot": "midday",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-30-afternoon-clockwork-estuary-cake-window",
+    "title": "Clockwork Estuary Cake Window",
+    "tests": "Tests whether GPT Image 2 can make an entire invented mechanical estuary scene read as a real bakery display cake tableau, with icing, fondant, display-case reflections, piped borders, cake crumbs, and edible construction cues instead of a clay model, archive document, specimen tray, or glossy concept art.",
+    "prompt": "Title: Clockwork Estuary Cake Window\nFormat name: Bakery Window Cake Tableau\nCategory/kind: edible\nTests/explores: Tests whether GPT Image 2 can make an entire invented mechanical estuary scene read as a real bakery display cake tableau, with icing, fondant, display-case reflections, piped borders, cake crumbs, and edible construction cues instead of a clay model, archive document, specimen tray, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a photographed bakery window cake tableau. The whole scene is edible: a tiered sheet-cake landscape of a tiny clockwork estuary, with blue gelatin canals, fondant lock gates, piped buttercream reeds, sugar-glass tide wheels, marzipan maintenance boats, and tiny frosting labels on edible plaques. Show the cake inside a real bakery display case with subtle glass reflections, stainless shelf edges, bakery tongs partly visible, piped borders, crumbs, smudged icing, and small imperfections from hand decoration. Use bright bakery-case lighting, appetizing but slightly odd colors, shallow depth of field, and a practical product-photo viewpoint from just outside the glass. No copyrighted logos, no characters, no dancing, no poster layout, no museum/archive/lab/specimen/table document framing, no glossy fantasy concept art.",
+    "image": "images/2026-05-30-afternoon-clockwork-estuary-cake-window.png",
+    "date": "2026-05-30",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
