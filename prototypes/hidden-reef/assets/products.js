@@ -33,7 +33,7 @@ THR.categories = {
         name: "Betta Food",
         slug: "betta-food",
         description: "Betta granules, pellets, and specialty foods",
-        sourceUrl: "https://www.thehiddenreef.com/search/sera%20betta/"
+        sourceUrl: "https://www.thehiddenreef.com/food/betta/"
       },
       "flake-tropical": {
         name: "Flake & Tropical Food",
