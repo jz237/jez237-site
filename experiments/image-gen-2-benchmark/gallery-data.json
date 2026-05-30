@@ -1018,5 +1018,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-29-evening-foldout-guide-to-the-cistern-tram",
+    "title": "Foldout Guide to the Cistern Tram",
+    "tests": "Tests whether GPT Image 2 can make a physical accordion-fold travel pamphlet read instantly through repeated folds, panoramic route continuity, panel-by-panel tourist graphics, creases, offset print texture, and tabletop shadows rather than a postcard rack, archive map, document packet, or glossy concept art.",
+    "prompt": "Title: Foldout Guide to the Cistern Tram\nFormat name: Accordion Fold Travel Guide\nCategory/kind: brochure\nTests/explores: Tests whether GPT Image 2 can make a physical accordion-fold travel pamphlet read instantly through repeated folds, panoramic route continuity, panel-by-panel tourist graphics, creases, offset print texture, and tabletop shadows rather than a postcard rack, archive map, document packet, or glossy concept art.\n\nCreate a vertical 1024x1536 documentary product photograph of an invented accordion-fold travel guide stretched open in a zigzag on a plain laminate table. The selected visual format must be obvious at first glance: six connected brochure panels, alternating mountain-and-valley folds, visible crease wear, uneven tabletop shadows between raised panels, slightly curled corners, cheap offset-print dots, small registration errors, and a folded cover flap partly visible at the bottom edge.\n\nSubject printed across the panels: a panoramic route for an impossible public tram that travels through underground rain cisterns below a quiet coastal town. The route should flow continuously from panel to panel: tiled cistern halls, shallow reflective water channels, tiny maintenance platforms, colored station dots, pipe bridges, stair shafts, lantern niches, rooftop rain intakes, and a final seaside outflow garden. Use cheerful mid-century tourist-brochure illustration, simplified shapes, limited flat colors, and small icon blocks. Include only sparse large fictional text such as CISTERN TRAM, ROUTE 4, LOWER RAIN WALK, and TIDE GARDEN; most small type should be unreadable print texture.\n\nComposition: the open pamphlet fills most of the frame diagonally, with the zigzag folds creating real depth. A dull pencil, two blank ticket stubs, and a ceramic coffee cup ring near the edge provide scale, but the brochure remains the main subject. Keep it materially grounded: paper fibers, fold cracks, ink rub, tiny staple holes, soft overhead light, and realistic shadows under each raised fold.\n\nPalette and mood: faded turquoise, tomato red, warm cream paper, moss green, dark navy ink, mustard station dots, pale gray table, a few coffee stains. Friendly, odd, tactile, practical, and travel-guide specific.\n\nHard exclusions: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no real logos, no real transit brands, no watermark, no signature.",
+    "image": "images/2026-05-29-evening-foldout-guide-to-the-cistern-tram.png",
+    "date": "2026-05-29",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536"
   }
 ]
