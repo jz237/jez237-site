@@ -416,6 +416,241 @@
     .game-card .tag.demo{background:linear-gradient(135deg,#44d1ff33,#4d96ff33);color:#b9f3ff;border:1px solid #44d1ff66}
     .game-card .tag.experimental{background:linear-gradient(135deg,#9b59b633,#6666aa33);color:#d7b8ff;border:1px solid #a377d966}
     .game-card .tag.unfinished{background:linear-gradient(135deg,#ff6b6b33,#ff5fa233);color:#ffc1cd;border:1px solid #ff7f9f66}
+    .game-card .icon-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 30% 18%, color-mix(in srgb, var(--icon-hot, #fff) 92%, transparent), transparent 14px),
+        radial-gradient(circle at 72% 75%, color-mix(in srgb, var(--icon-cool, #44d1ff) 62%, transparent), transparent 18px),
+        linear-gradient(135deg, var(--icon-a, #4d96ff), var(--icon-b, #7f6bff) 52%, var(--icon-c, #ff5fa2));
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.38),
+        inset 0 -12px 24px rgba(3,7,20,.28),
+        0 12px 26px color-mix(in srgb, var(--icon-b, #7f6bff) 38%, transparent),
+        0 0 0 1px rgba(0,0,0,.22);
+    }
+    .game-card .icon-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+      background-size: 10px 10px;
+      mask-image: radial-gradient(circle at center, #000 55%, transparent 88%);
+      opacity: .42;
+      animation: icon-grid-drift 8s linear infinite;
+    }
+    .game-card .icon-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -40% -70%;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.35) 48%, transparent 62%);
+      transform: translateX(-55%) rotate(8deg);
+      animation: icon-sheen 4.8s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .game-card:hover .icon-wrap {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.48),
+        inset 0 -12px 24px rgba(3,7,20,.24),
+        0 18px 34px color-mix(in srgb, var(--icon-b, #7f6bff) 50%, transparent),
+        0 0 24px color-mix(in srgb, var(--icon-hot, #fff) 34%, transparent);
+    }
+    .game-card .icon-wrap > span { font-size: inherit; line-height: normal; }
+    .arcade-icon {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: block;
+      color: #fff;
+    }
+    .arcade-icon .halo,
+    .arcade-icon .burst,
+    .arcade-icon .trail,
+    .arcade-icon .spark,
+    .arcade-icon .floor {
+      position: absolute;
+      pointer-events: none;
+    }
+    .arcade-icon .halo {
+      inset: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--icon-hot, #fff) 60%, transparent), transparent 63%);
+      filter: blur(1px);
+      opacity: .72;
+      animation: icon-pulse 2.7s ease-in-out infinite;
+    }
+    .arcade-icon .glyph {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      transform: translate(-50%,-50%);
+      font-size: 1.95rem;
+      line-height: 1;
+      filter:
+        drop-shadow(0 2px 0 rgba(0,0,0,.32))
+        drop-shadow(0 0 9px color-mix(in srgb, var(--icon-hot, #fff) 70%, transparent));
+      animation: icon-float 3s ease-in-out infinite;
+    }
+    .arcade-icon .burst {
+      inset: 10px;
+      border-radius: 50%;
+      background:
+        conic-gradient(from 12deg, transparent 0 9%, color-mix(in srgb, var(--icon-hot, #fff) 82%, transparent) 10% 12%, transparent 13% 24%, color-mix(in srgb, var(--icon-c, #ff5fa2) 76%, transparent) 25% 28%, transparent 29% 46%, color-mix(in srgb, var(--icon-hot, #fff) 82%, transparent) 47% 49%, transparent 50% 100%);
+      mask-image: radial-gradient(circle, transparent 0 39%, #000 42% 62%, transparent 65%);
+      opacity: .78;
+      animation: icon-spin 9s linear infinite;
+    }
+    .arcade-icon .trail {
+      width: 34px;
+      height: 9px;
+      left: 7px;
+      top: 35px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--icon-hot, #fff) 82%, transparent), var(--icon-c, #ff5fa2));
+      filter: blur(.6px);
+      animation: icon-trail 1.2s ease-in-out infinite;
+    }
+    .arcade-icon .spark {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--icon-hot, #fff);
+      box-shadow: 0 0 10px var(--icon-hot, #fff);
+      animation: icon-orbit 3.2s linear infinite;
+    }
+    .arcade-icon .spark.s1 { left: 13px; top: 13px; animation-delay: -.7s; }
+    .arcade-icon .spark.s2 { right: 12px; top: 17px; width: 3px; height: 3px; animation-delay: -1.8s; }
+    .arcade-icon .spark.s3 { left: 36px; bottom: 12px; width: 5px; height: 5px; animation-delay: -2.5s; }
+    .arcade-icon .floor {
+      left: 10px;
+      right: 10px;
+      bottom: 11px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--icon-hot, #fff) 75%, transparent), transparent);
+      opacity: .72;
+    }
+    .icon-rocket .glyph,
+    .icon-joust .glyph { animation: icon-glyph-thrust 1.8s ease-in-out infinite; }
+    .icon-fireworks .burst { animation: icon-pop 1.35s ease-in-out infinite; }
+    .icon-fireworks .glyph { animation: icon-glyph-burst 1.8s ease-in-out infinite; }
+    .icon-crystal .glyph,
+    .icon-magic .glyph { animation: icon-glyph-twinkle 2.2s ease-in-out infinite; }
+    .icon-build .glyph { animation: icon-glyph-hammer .95s ease-in-out infinite; }
+    .icon-brick .glyph { animation: icon-glyph-shake 1.25s ease-in-out infinite; }
+    .icon-pong .glyph,
+    .icon-sword .glyph { animation: icon-glyph-swing 1.45s ease-in-out infinite; }
+    .icon-lantern .glyph,
+    .icon-web .glyph { animation: icon-glyph-sway 2.9s ease-in-out infinite; }
+    .icon-moon .glyph { animation: icon-glyph-rotate 16s linear infinite; }
+    .icon-lightning .glyph { animation: icon-glyph-flash 1.9s ease-in-out infinite; }
+    .icon-wave .glyph { animation: icon-glyph-wave 2.2s ease-in-out infinite; }
+    .icon-serpent .glyph { animation: icon-glyph-slither 2s ease-in-out infinite; }
+    .icon-train .glyph { animation: icon-glyph-chug .42s steps(4) infinite; }
+    .icon-storm .glyph,
+    .icon-tessera .glyph { animation: icon-glyph-spin 4.5s linear infinite; }
+    .icon-void .glyph,
+    .icon-trek .glyph,
+    .icon-star .glyph { animation: icon-float 3.1s ease-in-out infinite; }
+    @keyframes icon-grid-drift { to { background-position: 20px 20px; } }
+    @keyframes icon-sheen {
+      0%, 46% { transform: translateX(-60%) rotate(8deg); opacity: 0; }
+      58% { opacity: .75; }
+      78%, 100% { transform: translateX(60%) rotate(8deg); opacity: 0; }
+    }
+    @keyframes icon-pulse {
+      0%, 100% { transform: scale(.88); opacity: .48; }
+      50% { transform: scale(1.16); opacity: .88; }
+    }
+    @keyframes icon-float {
+      0%, 100% { transform: translate(-50%,-50%) translateY(1px); }
+      50% { transform: translate(-50%,-50%) translateY(-3px); }
+    }
+    @keyframes icon-glyph-thrust {
+      0%, 100% { transform: translate(-50%,-50%) translateY(2px) rotate(-5deg); }
+      45% { transform: translate(-50%,-50%) translateY(-8px) rotate(4deg); }
+      68% { transform: translate(-50%,-50%) translate(-1px,-2px) rotate(-2deg); }
+    }
+    @keyframes icon-glyph-burst {
+      0%, 100% { transform: translate(-50%,-50%) scale(.94) rotate(0); opacity: .94; }
+      42% { transform: translate(-50%,-50%) scale(1.18) rotate(10deg); opacity: 1; }
+      58% { transform: translate(-50%,-50%) scale(.98) rotate(-7deg); opacity: .96; }
+    }
+    @keyframes icon-glyph-twinkle {
+      0%, 100% { transform: translate(-50%,-50%) scale(1) rotate(0); filter: drop-shadow(0 2px 0 rgba(0,0,0,.32)) drop-shadow(0 0 8px color-mix(in srgb, var(--icon-hot, #fff) 70%, transparent)); }
+      48% { transform: translate(-50%,-50%) scale(1.18) rotate(14deg); filter: drop-shadow(0 2px 0 rgba(0,0,0,.28)) drop-shadow(0 0 18px var(--icon-hot, #fff)); }
+    }
+    @keyframes icon-glyph-hammer {
+      0%, 100% { transform: translate(-50%,-50%) rotate(-12deg); }
+      36% { transform: translate(-50%,-50%) translateY(-3px) rotate(16deg); }
+      52% { transform: translate(-50%,-50%) translateY(2px) rotate(8deg); }
+    }
+    @keyframes icon-glyph-shake {
+      0%, 100% { transform: translate(-50%,-50%) rotate(0); }
+      16% { transform: translate(calc(-50% - 2px),calc(-50% + 1px)) rotate(-4deg); }
+      32% { transform: translate(calc(-50% + 2px),calc(-50% - 1px)) rotate(4deg); }
+      48% { transform: translate(calc(-50% - 1px),calc(-50% - 2px)) rotate(-2deg); }
+      64% { transform: translate(-50%,-50%) rotate(0); }
+    }
+    @keyframes icon-glyph-swing {
+      0%, 100% { transform: translate(-50%,-50%) rotate(-17deg); }
+      50% { transform: translate(-50%,-50%) rotate(17deg); }
+    }
+    @keyframes icon-glyph-sway {
+      0%, 100% { transform: translate(-50%,-50%) rotate(-7deg) translateY(1px); }
+      50% { transform: translate(-50%,-50%) rotate(7deg) translateY(-3px); }
+    }
+    @keyframes icon-glyph-rotate {
+      to { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+    @keyframes icon-glyph-flash {
+      0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      12% { transform: translate(-50%,-50%) scale(1.22); opacity: .38; }
+      20% { transform: translate(-50%,-50%) scale(.95); opacity: 1; }
+      34% { transform: translate(-50%,-50%) scale(1.12); opacity: .58; }
+    }
+    @keyframes icon-glyph-wave {
+      0%, 100% { transform: translate(-50%,-50%) translateY(1px) rotate(-4deg); }
+      50% { transform: translate(-50%,-50%) translateY(-5px) rotate(4deg); }
+    }
+    @keyframes icon-glyph-slither {
+      0%, 100% { transform: translate(calc(-50% - 4px),-50%) skewX(-7deg); }
+      50% { transform: translate(calc(-50% + 4px),-50%) skewX(7deg); }
+    }
+    @keyframes icon-glyph-chug {
+      0%, 100% { transform: translate(-50%,-50%); }
+      25% { transform: translate(calc(-50% - 2px),calc(-50% - 1px)); }
+      50% { transform: translate(calc(-50% + 2px),-50%); }
+      75% { transform: translate(calc(-50% - 1px),calc(-50% + 1px)); }
+    }
+    @keyframes icon-glyph-spin {
+      to { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+    @keyframes icon-spin { to { transform: rotate(360deg); } }
+    @keyframes icon-pop {
+      0%, 100% { transform: scale(.78) rotate(0); opacity: .42; }
+      38% { transform: scale(1.16) rotate(40deg); opacity: .96; }
+      64% { transform: scale(.94) rotate(80deg); opacity: .72; }
+    }
+    @keyframes icon-trail {
+      0%, 100% { transform: translateX(-3px) scaleX(.72); opacity: .48; }
+      50% { transform: translateX(5px) scaleX(1.15); opacity: .92; }
+    }
+    @keyframes icon-orbit {
+      0% { transform: translate(0,0) scale(.8); opacity: .35; }
+      35% { opacity: 1; }
+      70% { transform: translate(7px,-8px) scale(1.1); opacity: .7; }
+      100% { transform: translate(0,0) scale(.8); opacity: .35; }
+    }
     .game-count { color: #aab7e4; }
     main.container footer { border-top-color: rgba(255,255,255,.1) !important; }
     main.container footer a { color: #8fa3ff !important; }
@@ -424,6 +659,7 @@
       .game-card{padding:18px 16px;min-height:170px}
       .game-card .icon-wrap{width:64px;height:64px;border-radius:18px}
       .game-card .icon-wrap > span{font-size:2.25rem}
+      .arcade-icon .glyph{font-size:2.15rem}
     }
     @media (max-width:620px){
       header#site-nav > nav{padding-inline:10px;gap:8px;width:390px;max-width:100%;margin:0}
@@ -545,43 +781,62 @@
            : '🧪 Experimental';
     }
 
-    // Map each emoji to an appropriate motion
-    const EMOJI_ANIM = {
-      '🪲': 'slither',  // millipede
-      '👷': 'hammer',   // construction worker
-      '💎': 'twinkle',  // crystal
-      '💚': 'twinkle',  // emerald
-      '🧱': 'shake',    // brick shatter
-      '🏓': 'swing',    // pong paddle
-      '🚀': 'thrust',   // rocket
-      '🎆': 'burst',    // firework
-      '🎇': 'burst',
-      '✨': 'twinkle',  // sparkles
-      '🏮': 'sway',     // lantern
-      '🖖': 'float',    // vulcan salute — steady, intentional
-      '☄️': 'streak',   // comet
-      '🌕': 'rotate-slow', // moon
-      '⚡': 'flash',    // lightning
-      '🌊': 'wave',
-      '🐍': 'slither',  // snake
-      '⚔️': 'swing',    // sword
-      '🚂': 'chug',     // train
-      '🌪️': 'spin',    // tornado
-      '🧙': 'float',    // wizard
-      '⬡':  'spin',     // hexagon
-      '🌌': 'float',    // void
-      '🕸️': 'sway',     // web
-      '🦅': 'thrust'      // jousting bird
-    };
-    function animForEmoji(e) {
-      return EMOJI_ANIM[e] || 'float';
+    const ICON_PALETTES = [
+      ['#4d96ff', '#7f6bff', '#ff5fa2', '#fff4c7'],
+      ['#ffd93d', '#ff9f43', '#ff5f6d', '#fff7b8'],
+      ['#6bcb77', '#2ed3c6', '#44d1ff', '#efffd0'],
+      ['#c66bff', '#ff5fa2', '#7f6bff', '#ffe0ff'],
+      ['#ff7a00', '#ffd93d', '#ff5f6d', '#fff4c7'],
+      ['#44d1ff', '#4d96ff', '#7f6bff', '#e5fbff'],
+      ['#99ffcc', '#36d399', '#0ea5e9', '#f0fff7'],
+      ['#ff6bcb', '#8b5cf6', '#22d3ee', '#fff1fb']
+    ];
+    const ICON_EFFECTS = [
+      ['millipede', 'serpent'], ['emerald', 'crystal'], ['crystal', 'crystal'], ['firework', 'fireworks'],
+      ['missile', 'fireworks'], ['asteroid', 'rocket'], ['lunar', 'moon'], ['joust', 'joust'],
+      ['hard hat', 'build'], ['shatter', 'brick'], ['pong', 'pong'], ['star trek', 'trek'],
+      ['stellar', 'star'], ['lantern', 'lantern'], ['qix', 'lightning'], ['depth', 'wave'],
+      ['ember', 'sword'], ['glassrail', 'train'], ['vortex', 'storm'], ['runecaster', 'magic'],
+      ['tessera', 'tessera'], ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
+      ['serpent', 'serpent']
+    ];
+    function iconEffect(g) {
+      const key = slugTitle(g.title);
+      const match = ICON_EFFECTS.find(([needle]) => key.includes(needle));
+      if (match) return match[1];
+      if (g.emoji === '🚀' || g.emoji === '☄️') return 'rocket';
+      if (g.emoji === '🎆' || g.emoji === '🎇') return 'fireworks';
+      if (g.emoji === '⚔️') return 'sword';
+      if (g.emoji === '⚡') return 'lightning';
+      return g.cat === 'puzzle' ? 'crystal' : 'star';
+    }
+    function iconStyle(g, index) {
+      const p = ICON_PALETTES[(index + slugTitle(g.title).length) % ICON_PALETTES.length];
+      return `--icon-a:${p[0]};--icon-b:${p[1]};--icon-c:${p[2]};--icon-hot:${p[3]};--icon-cool:${p[0]}`;
+    }
+    function gameIcon(g, index) {
+      const effect = iconEffect(g);
+      return `
+        <span class="icon-wrap" style="${iconStyle(g, index)}" aria-hidden="true">
+          <span class="arcade-icon icon-${effect}">
+            <span class="halo"></span>
+            <span class="burst"></span>
+            <span class="trail"></span>
+            <span class="spark s1"></span>
+            <span class="spark s2"></span>
+            <span class="spark s3"></span>
+            <span class="glyph">${g.emoji}</span>
+            <span class="floor"></span>
+          </span>
+        </span>
+      `;
     }
 
-    function gameCard(g) {
+    function gameCard(g, index) {
       const isNew = g.date.startsWith('May');
       return `
         <a class="game-card" href="${BASE}${g.path}" target="_blank" rel="noopener">
-          <span class="icon-wrap"><span data-anim="${animForEmoji(g.emoji)}">${g.emoji}</span></span>
+          ${gameIcon(g, index)}
           ${isNew ? '<span class="new-badge">NEW</span>' : ''}
           <span class="title">${g.title}</span>
           ${g.desc ? `<span class="desc">${g.desc}</span>` : ''}
@@ -638,7 +893,7 @@
 
     // Randomize animation-delay per icon so the grid doesn't pulse in unison
     function jitterIconDelays() {
-      document.querySelectorAll('.game-card .icon-wrap > span').forEach(el => {
+      document.querySelectorAll('.game-card .arcade-icon .glyph, .game-card .arcade-icon .burst, .game-card .arcade-icon .spark').forEach(el => {
         el.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's';
       });
     }
