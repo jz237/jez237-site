@@ -30,8 +30,10 @@
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; background: var(--lab-bg); }
     body {
+      position: relative;
       margin: 0;
       min-height: 100vh;
+      overflow-x: hidden;
       color: var(--lab-text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
@@ -39,9 +41,44 @@
         radial-gradient(circle at 88% 8%, rgba(230,189,103,0.12), transparent 26%),
         linear-gradient(180deg, #020813 0%, #051427 52%, #020813 100%);
     }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      inset: -8vh -18vw -14vh;
+      background:
+        linear-gradient(90deg, rgba(2,7,17,0.82), rgba(2,7,17,0.02) 17%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.82)),
+        linear-gradient(180deg, rgba(2,7,17,0.62), rgba(2,7,17,0.02) 24%, rgba(2,7,17,0.18) 70%, rgba(2,7,17,0.84)),
+        url("../../assets/galaxy-home-20260530.png") center 42% / cover no-repeat;
+      opacity: 0.96;
+      filter: saturate(1.28) contrast(1.08);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      animation: galaxy-drift 28s ease-in-out infinite alternate;
+    }
+    body::after {
+      inset: -38vmax -42vmax;
+      background:
+        linear-gradient(90deg, rgba(1,4,12,0.52), rgba(1,4,12,0.0) 17%, rgba(1,4,12,0.0) 83%, rgba(1,4,12,0.52)),
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.08), transparent 34%),
+        url("../../assets/galaxy-home-20260530.png") center 50% / cover no-repeat;
+      opacity: 0.3;
+      filter: saturate(1.22) contrast(1.06) blur(0.4px);
+      mix-blend-mode: screen;
+      transform-origin: 50% 50%;
+      animation: galaxy-slow-turn 210s linear infinite;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+      mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+    }
     a { color: var(--lab-cyan); }
     button, textarea, input { font: inherit; }
     .ai-lab {
+      position: relative;
+      z-index: 1;
       max-width: 1240px;
       margin: 0 auto;
       padding: 24px clamp(14px, 3vw, 40px) 80px;
@@ -167,6 +204,14 @@
       max-width: 760px;
       font-size: clamp(2.6rem, 7vw, 5.6rem);
       line-height: 0.94;
+    }
+    @keyframes galaxy-slow-turn {
+      from { transform: rotate(-1deg) scale(1.03); }
+      to { transform: rotate(359deg) scale(1.03); }
+    }
+    @keyframes galaxy-drift {
+      from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
+      to { transform: translate3d(1.5%, 1%, 0) scale(1.08); }
     }
     .hero-copy p {
       max-width: 640px;
