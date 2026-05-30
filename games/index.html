@@ -1,0 +1,1360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Jez237 — Game Experiments</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+
+    .game-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 24px 0 26px;
+    }
+    .game-filters button {
+      background: rgba(40,33,26,0.6);
+      border: 1px solid rgba(232,197,122,0.2);
+      color: var(--ink-mid);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .game-filters button:hover {
+      background: rgba(232,197,122,0.12);
+      border-color: rgba(232,197,122,0.4);
+      color: var(--brand-gold);
+      transform: translateY(-1px);
+    }
+    .game-filters button.active {
+      background: linear-gradient(120deg, rgba(232,197,122,0.22), rgba(224,102,126,0.2));
+      border-color: rgba(232,197,122,0.55);
+      color: var(--ink-hi);
+    }
+
+    .game-section { margin-top: 22px; }
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 18px 0 12px;
+      font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+      color: var(--ink-hi);
+    }
+    .section-title h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); font-weight: 500; }
+    .section-title span { color: var(--ink-lo); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 20px 18px;
+      border-radius: var(--r-md);
+      background: var(--surf-2);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      text-decoration: none;
+    }
+    .game-card .icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8em;
+      background: linear-gradient(135deg, rgba(232,197,122,0.25), rgba(122,179,98,0.18));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: visible;
+    }
+    .game-card .icon-wrap > span {
+      display: inline-block;
+      transform-origin: center center;
+      will-change: transform, filter, opacity;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
+    }
+
+    /* Appropriate per-icon animations. Type picked by JS from emoji. */
+    @keyframes g-thrust {
+      0%   { transform: translateY(0) rotate(-2deg); }
+      30%  { transform: translateY(-6px) rotate(0deg); }
+      40%  { transform: translateY(-10px) translateX(1px) rotate(2deg); }
+      60%  { transform: translateY(-3px) translateX(-1px) rotate(-1deg); }
+      100% { transform: translateY(0) rotate(-2deg); }
+    }
+    @keyframes g-twinkle {
+      0%,100% { transform: scale(1) rotate(0); opacity: 1; }
+      40%     { transform: scale(1.25) rotate(15deg); opacity: 0.85; }
+      60%     { transform: scale(0.92) rotate(-10deg); opacity: 1; }
+    }
+    @keyframes g-burst {
+      0%,100% { transform: scale(1) rotate(0); opacity: 1; }
+      40%     { transform: scale(1.35) rotate(10deg); opacity: 0.9; }
+      55%     { transform: scale(0.95) rotate(-8deg); opacity: 1; }
+    }
+    @keyframes g-swing {
+      0%,100% { transform: rotate(-18deg); }
+      50%     { transform: rotate(18deg); }
+    }
+    @keyframes g-sway {
+      0%,100% { transform: rotate(-6deg) translateY(0); }
+      50%     { transform: rotate(6deg) translateY(-2px); }
+    }
+    @keyframes g-spin {
+      0%   { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes g-chug {
+      0%,100% { transform: translateX(0) translateY(0); }
+      25%     { transform: translateX(-2px) translateY(-1px); }
+      50%     { transform: translateX(2px) translateY(0); }
+      75%     { transform: translateX(-1px) translateY(1px); }
+    }
+    @keyframes g-wave {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      25%     { transform: translateY(-2px) rotate(2deg); }
+      50%     { transform: translateY(-4px) rotate(-2deg); }
+      75%     { transform: translateY(-2px) rotate(3deg); }
+    }
+    @keyframes g-flash {
+      0%,100% { transform: scale(1);    opacity: 1; }
+      10%     { transform: scale(1.2);  opacity: 0.25; }
+      15%     { transform: scale(0.95); opacity: 1; }
+      25%     { transform: scale(1.1);  opacity: 0.5; }
+      35%     { transform: scale(1);    opacity: 1; }
+    }
+    @keyframes g-streak {
+      0%   { transform: translateX(-6px) rotate(-10deg); opacity: 0.6; }
+      50%  { transform: translateX(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateX(6px) rotate(10deg); opacity: 0.6; }
+    }
+    @keyframes g-rotate-slow {
+      0%   { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes g-float {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%     { transform: translateY(-4px) rotate(1deg); }
+    }
+    @keyframes g-shake {
+      0%,100% { transform: translate(0,0) rotate(0); }
+      10% { transform: translate(-1px,1px) rotate(-2deg); }
+      20% { transform: translate(1px,-1px) rotate(2deg); }
+      30% { transform: translate(-1px,-1px) rotate(-1deg); }
+      40% { transform: translate(1px,1px) rotate(1deg); }
+      50% { transform: translate(-1px,1px) rotate(-2deg); }
+      60% { transform: translate(0,0) rotate(0); }
+    }
+    @keyframes g-hammer {
+      0%,100% { transform: rotate(-10deg) translateY(0); }
+      30%     { transform: rotate(12deg) translateY(-2px); }
+      40%     { transform: rotate(15deg) translateY(0); }
+      50%     { transform: rotate(10deg) translateY(1px); }
+    }
+    @keyframes g-slither {
+      0%,100% { transform: translateX(-4px) skewX(-6deg); }
+      50%     { transform: translateX(4px) skewX(6deg); }
+    }
+
+    .game-card .icon-wrap > span[data-anim="thrust"]      { animation: g-thrust      2.0s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="twinkle"]     { animation: g-twinkle     2.6s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="burst"]       { animation: g-burst       1.8s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="swing"]       { animation: g-swing       1.6s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="sway"]        { animation: g-sway        3.2s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="spin"]        { animation: g-spin        4s linear infinite; }
+    .game-card .icon-wrap > span[data-anim="chug"]        { animation: g-chug        0.4s steps(4) infinite; }
+    .game-card .icon-wrap > span[data-anim="wave"]        { animation: g-wave        2.8s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="flash"]       { animation: g-flash       2.2s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="streak"]      { animation: g-streak      3s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="rotate-slow"] { animation: g-rotate-slow 16s linear infinite; }
+    .game-card .icon-wrap > span[data-anim="float"]       { animation: g-float       3.4s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="shake"]       { animation: g-shake       1.4s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="hammer"]      { animation: g-hammer      0.9s ease-in-out infinite; }
+    .game-card .icon-wrap > span[data-anim="slither"]     { animation: g-slither     2.2s ease-in-out infinite; }
+    /* User explicitly asked for animations — reduced-motion is ignored here. */
+    /* Color variety so the grid feels playful without clashing with the site */
+    .game-card:nth-child(6n+1) .icon-wrap { background: linear-gradient(135deg, rgba(77,150,255,.32), rgba(127,107,255,.2)); }
+    .game-card:nth-child(6n+2) .icon-wrap { background: linear-gradient(135deg, rgba(255,217,61,.3), rgba(255,107,107,.2)); }
+    .game-card:nth-child(6n+3) .icon-wrap { background: linear-gradient(135deg, rgba(107,203,119,.3), rgba(68,209,255,.2)); }
+    .game-card:nth-child(6n+4) .icon-wrap { background: linear-gradient(135deg, rgba(198,107,255,.3), rgba(255,95,162,.2)); }
+    .game-card:nth-child(6n+5) .icon-wrap { background: linear-gradient(135deg, rgba(255,122,0,.28), rgba(255,217,61,.2)); }
+    .game-card:nth-child(6n+6) .icon-wrap { background: linear-gradient(135deg, rgba(68,209,255,.28), rgba(107,107,255,.22)); }
+
+    .game-card .title {
+      font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+      font-weight: 500;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      letter-spacing: -0.005em;
+      color: var(--ink-hi);
+    }
+    .game-card .desc {
+      font-size: 12.5px;
+      color: var(--ink-mid);
+      line-height: 1.45;
+    }
+    .game-card .date {
+      font-size: 11px;
+      color: var(--ink-lo);
+      letter-spacing: 0.03em;
+    }
+    .game-card .tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      width: fit-content;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .game-card .tag.featured     { background: rgba(127,149,255,0.18); color: #c8d1ff; border: 1px solid rgba(127,149,255,0.4); }
+    .game-card .tag.classic      { background: rgba(255,217,61,0.18);  color: #ffe38a; border: 1px solid rgba(255,217,61,0.4); }
+    .game-card .tag.experimental { background: rgba(198,107,255,0.16); color: #d7b8ff; border: 1px solid rgba(163,119,217,0.4); }
+    .game-card .tag.unfinished   { background: rgba(224,102,126,0.14); color: #ffc1cd; border: 1px solid rgba(224,102,126,0.38); }
+    .game-card .tag.demo         { background: rgba(68,209,255,0.16); color: #b9f3ff; border: 1px solid rgba(68,209,255,0.42); }
+
+    .game-count {
+      text-align: center;
+      color: var(--ink-lo);
+      font-size: 13px;
+      margin-top: 28px;
+      letter-spacing: 0.02em;
+    }
+
+    .game-card { position: relative; }
+    .game-card .new-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: linear-gradient(135deg, #ff4444, #ff6b00);
+      color: #fff; font-size: 10px; font-weight: 800;
+      padding: 2px 7px; border-radius: 999px;
+      letter-spacing: .08em; text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(255,68,68,.45);
+      z-index: 2;
+    }
+    .game-card .play-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(8,8,20,.65); border-radius: var(--r-md);
+      color: #fff; font-size: 18px; font-weight: 800;
+      letter-spacing: .06em; opacity: 0; transition: opacity .25s ease;
+      pointer-events: none; z-index: 3;
+    }
+    .game-card:hover .play-overlay { opacity: 1; }
+
+    @media (max-width: 620px) {
+      main.container { padding-inline: 10px; }
+      .game-filters { gap: 6px; margin: 18px 0 18px; }
+      .game-filters button { padding: 7px 10px; font-size: 11px; }
+      .game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .game-card { padding: 10px 8px; gap: 6px; border-radius: 14px; align-items: center; text-align: center; }
+      .game-card .icon-wrap { width: 42px; height: 42px; border-radius: 11px; font-size: 1.45em; }
+      .game-card .title { font-size: 0.78rem; line-height: 1.08; min-height: 2.1em; display: flex; align-items: center; }
+      .game-card .desc { display: none; }
+      .game-card .date { font-size: 9px; }
+      .game-card .tag { font-size: 8px; padding: 2px 6px; margin-top: 0; }
+      .section-title { margin: 16px 0 8px; padding-inline: 2px; }
+      .section-title h2 { font-size: 1.25rem; }
+      .section-title span { font-size: 10px; }
+    }
+
+    @media (max-width: 370px) {
+      .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    /* Match the dedicated GameMaster Arcade page while preserving this page's sections/nav. */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
+    html:not([data-theme="light"]), body, :root[data-theme="light"] body {
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255,107,107,.28), transparent 18%),
+        radial-gradient(circle at 24% 82%, rgba(255,217,61,.18), transparent 20%),
+        radial-gradient(circle at 88% 12%, rgba(77,150,255,.24), transparent 22%),
+        radial-gradient(circle at 78% 78%, rgba(107,203,119,.18), transparent 22%),
+        radial-gradient(circle at 52% 100%, rgba(198,107,255,.22), transparent 26%),
+        linear-gradient(180deg,#080814 0%,#100f24 42%,#15112b 100%) !important;
+      color: #f2f4ff !important;
+    }
+    body { min-height: 100vh; position: relative; background-color: #080814 !important; }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255,107,107,.28), transparent 18%),
+        radial-gradient(circle at 24% 82%, rgba(255,217,61,.18), transparent 20%),
+        radial-gradient(circle at 88% 12%, rgba(77,150,255,.24), transparent 22%),
+        radial-gradient(circle at 78% 78%, rgba(107,203,119,.18), transparent 22%),
+        radial-gradient(circle at 52% 100%, rgba(198,107,255,.22), transparent 26%),
+        linear-gradient(180deg,#080814 0%,#100f24 42%,#15112b 100%);
+    }
+    header#site-nav, :root[data-theme="light"] header#site-nav { background: rgba(8,8,20,.78) !important; border-bottom: 1px solid rgba(255,255,255,.08) !important; backdrop-filter: blur(14px); }
+    header#site-nav .links a, :root[data-theme="light"] header#site-nav .links a { color: #cfd6ff !important; }
+    header#site-nav .links a:hover, header#site-nav .links a[aria-current="page"], :root[data-theme="light"] header#site-nav .links a:hover, :root[data-theme="light"] header#site-nav .links a[aria-current="page"] { background: rgba(127,107,255,.22) !important; color: #fff !important; }
+    main.container { max-width: 1100px; padding-top: 20px; overflow-x: hidden; }
+    .hero-editorial {
+      text-align: center;
+      margin: 14px auto 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+    .hero-editorial .eyebrow { color: #d3dcff; letter-spacing: .08em; }
+    .hero-editorial h1 {
+      margin: 16px 0 6px;
+      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      font-size: clamp(2rem, 7vw, 2.8rem);
+      font-weight: 850;
+      line-height: 1.05;
+      background: linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c66bff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 28px rgba(122,115,255,.18);
+    }
+    .hero-editorial .lede {
+      max-width: 720px;
+      margin: 0 auto;
+      color: #d3dcff;
+      font-size: .98rem;
+      line-height: 1.5;
+    }
+    .game-filters { margin: 26px 0 26px; gap: 8px; }
+    .game-filters button {
+      background: linear-gradient(180deg,#1f1b3b,#18162f);
+      border: 1px solid #403b73;
+      color: #cfd6ff;
+      padding: 7px 14px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.16);
+    }
+    .game-filters button:hover,
+    .game-filters button.active {
+      background: linear-gradient(135deg,#ff5fa2,#7f6bff 50%,#44d1ff);
+      border-color: #ffd2f0;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(133,96,255,.34);
+    }
+    .section-title { color: #f2f4ff; margin: 24px 0 12px; }
+    .section-title h2 {
+      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      font-weight: 800;
+      background: linear-gradient(135deg,#ffd93d,#6bcb77,#4d96ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-title span { color: #aab7e4; }
+    .game-grid { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 14px; width: 100%; }
+    .game-card {
+      border: 1px solid #343064;
+      border-radius: 14px;
+      padding: 16px 14px;
+      color: #eef2ff;
+      box-shadow: 0 14px 34px rgba(0,0,0,.22);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      min-width: 0;
+    }
+    .game-card:hover { transform: translateY(-4px) scale(1.01); border-color: #ffffffaa; box-shadow: 0 18px 40px rgba(90,95,255,.32); }
+    .game-card:nth-child(6n+1){background:radial-gradient(circle at top right, rgba(77,150,255,.24), transparent 26%), radial-gradient(circle at bottom left, rgba(255,107,107,.18), transparent 28%), linear-gradient(145deg,#171733,#221b48)}
+    .game-card:nth-child(6n+2){background:radial-gradient(circle at top right, rgba(255,217,61,.26), transparent 24%), radial-gradient(circle at bottom left, rgba(255,140,66,.18), transparent 30%), linear-gradient(145deg,#2c1a20,#4a2332)}
+    .game-card:nth-child(6n+3){background:radial-gradient(circle at top right, rgba(107,203,119,.24), transparent 24%), radial-gradient(circle at bottom left, rgba(68,209,255,.16), transparent 28%), linear-gradient(145deg,#14232b,#183b42)}
+    .game-card:nth-child(6n+4){background:radial-gradient(circle at top right, rgba(198,107,255,.28), transparent 24%), radial-gradient(circle at bottom left, rgba(255,107,209,.16), transparent 28%), linear-gradient(145deg,#241336,#39214d)}
+    .game-card:nth-child(6n+5){background:radial-gradient(circle at top right, rgba(255,122,0,.24), transparent 24%), radial-gradient(circle at bottom left, rgba(255,217,61,.16), transparent 28%), linear-gradient(145deg,#2c180f,#4a2a16)}
+    .game-card:nth-child(6n+6){background:radial-gradient(circle at top right, rgba(68,209,255,.24), transparent 24%), radial-gradient(circle at bottom left, rgba(107,107,255,.18), transparent 28%), linear-gradient(145deg,#101e31,#1c2b52)}
+    .game-card .icon-wrap {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 10px 24px rgba(0,0,0,.18);
+    }
+    .game-card:nth-child(6n+1) .icon-wrap{background:linear-gradient(135deg,#4d96ff,#7f6bff 58%,#ff6b6b)}
+    .game-card:nth-child(6n+2) .icon-wrap{background:linear-gradient(135deg,#ffd93d,#ff9f43 58%,#ff6b6b)}
+    .game-card:nth-child(6n+3) .icon-wrap{background:linear-gradient(135deg,#6bcb77,#2ed3c6 58%,#44d1ff)}
+    .game-card:nth-child(6n+4) .icon-wrap{background:linear-gradient(135deg,#c66bff,#ff5fa2 58%,#7f6bff)}
+    .game-card:nth-child(6n+5) .icon-wrap{background:linear-gradient(135deg,#ff7a00,#ffd93d 58%,#ff5f6d)}
+    .game-card:nth-child(6n+6) .icon-wrap{background:linear-gradient(135deg,#44d1ff,#4d96ff 58%,#7f6bff)}
+    .game-card .icon-wrap > span { font-size: 2rem; line-height: 1; }
+    .game-card .title { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; font-weight: 800; font-size: .98rem; color:#fff; }
+    .game-card .desc { color: #b7c3ea; }
+    .game-card .date { color: #aab7e4; }
+    .game-card .tag { font-size: .65rem; padding: 3px 9px; }
+    .game-card .tag.featured{background:linear-gradient(135deg,#6b6bff33,#4d96ff33);color:#c8d1ff;border:1px solid #7f95ff66}
+    .game-card .tag.classic{background:linear-gradient(135deg,#ffd93d33,#ffb34733);color:#ffe38a;border:1px solid #ffd93d66}
+    .game-card .tag.demo{background:linear-gradient(135deg,#44d1ff33,#4d96ff33);color:#b9f3ff;border:1px solid #44d1ff66}
+    .game-card .tag.experimental{background:linear-gradient(135deg,#9b59b633,#6666aa33);color:#d7b8ff;border:1px solid #a377d966}
+    .game-card .tag.unfinished{background:linear-gradient(135deg,#ff6b6b33,#ff5fa233);color:#ffc1cd;border:1px solid #ff7f9f66}
+    .game-card .icon-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 30% 18%, color-mix(in srgb, var(--icon-hot, #fff) 92%, transparent), transparent 14px),
+        radial-gradient(circle at 72% 75%, color-mix(in srgb, var(--icon-cool, #44d1ff) 62%, transparent), transparent 18px),
+        linear-gradient(135deg, var(--icon-a, #4d96ff), var(--icon-b, #7f6bff) 52%, var(--icon-c, #ff5fa2));
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.38),
+        inset 0 -12px 24px rgba(3,7,20,.28),
+        0 12px 26px color-mix(in srgb, var(--icon-b, #7f6bff) 38%, transparent),
+        0 0 0 1px rgba(0,0,0,.22);
+    }
+    .game-card .icon-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+      background-size: 10px 10px;
+      mask-image: radial-gradient(circle at center, #000 55%, transparent 88%);
+      opacity: .42;
+      animation: icon-grid-drift 8s linear infinite;
+    }
+    .game-card .icon-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -40% -70%;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.35) 48%, transparent 62%);
+      transform: translateX(-55%) rotate(8deg);
+      animation: icon-sheen 4.8s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .game-card:hover .icon-wrap {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.48),
+        inset 0 -12px 24px rgba(3,7,20,.24),
+        0 18px 34px color-mix(in srgb, var(--icon-b, #7f6bff) 50%, transparent),
+        0 0 24px color-mix(in srgb, var(--icon-hot, #fff) 34%, transparent);
+    }
+    .game-card .icon-wrap > span { font-size: inherit; line-height: normal; }
+    .arcade-icon {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: block;
+      color: #fff;
+    }
+    .arcade-icon .halo,
+    .arcade-icon .burst,
+    .arcade-icon .trail,
+    .arcade-icon .spark,
+    .arcade-icon .floor {
+      position: absolute;
+      pointer-events: none;
+    }
+    .arcade-icon .halo {
+      inset: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--icon-hot, #fff) 60%, transparent), transparent 63%);
+      filter: blur(1px);
+      opacity: .72;
+      animation: icon-pulse 2.7s ease-in-out infinite;
+    }
+    .arcade-icon .glyph {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      transform: translate(-50%,-50%);
+      font-size: 1.95rem;
+      line-height: 1;
+      filter:
+        drop-shadow(0 2px 0 rgba(0,0,0,.32))
+        drop-shadow(0 0 9px color-mix(in srgb, var(--icon-hot, #fff) 70%, transparent));
+      animation: icon-float 3s ease-in-out infinite;
+    }
+    .arcade-icon .burst {
+      inset: 10px;
+      border-radius: 50%;
+      background:
+        conic-gradient(from 12deg, transparent 0 9%, color-mix(in srgb, var(--icon-hot, #fff) 82%, transparent) 10% 12%, transparent 13% 24%, color-mix(in srgb, var(--icon-c, #ff5fa2) 76%, transparent) 25% 28%, transparent 29% 46%, color-mix(in srgb, var(--icon-hot, #fff) 82%, transparent) 47% 49%, transparent 50% 100%);
+      mask-image: radial-gradient(circle, transparent 0 39%, #000 42% 62%, transparent 65%);
+      opacity: .78;
+      animation: icon-spin 9s linear infinite;
+    }
+    .arcade-icon .trail {
+      width: 34px;
+      height: 9px;
+      left: 7px;
+      top: 35px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--icon-hot, #fff) 82%, transparent), var(--icon-c, #ff5fa2));
+      filter: blur(.6px);
+      animation: icon-trail 1.2s ease-in-out infinite;
+    }
+    .arcade-icon .spark {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--icon-hot, #fff);
+      box-shadow: 0 0 10px var(--icon-hot, #fff);
+      animation: icon-orbit 3.2s linear infinite;
+    }
+    .arcade-icon .spark.s1 { left: 13px; top: 13px; animation-delay: -.7s; }
+    .arcade-icon .spark.s2 { right: 12px; top: 17px; width: 3px; height: 3px; animation-delay: -1.8s; }
+    .arcade-icon .spark.s3 { left: 36px; bottom: 12px; width: 5px; height: 5px; animation-delay: -2.5s; }
+    .arcade-icon .floor {
+      left: 10px;
+      right: 10px;
+      bottom: 11px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--icon-hot, #fff) 75%, transparent), transparent);
+      opacity: .72;
+    }
+    .icon-rocket .glyph,
+    .icon-joust .glyph { animation: icon-glyph-thrust 1.8s ease-in-out infinite; }
+    .icon-fireworks .burst { animation: icon-pop 1.35s ease-in-out infinite; }
+    .icon-fireworks .glyph { animation: icon-glyph-burst 1.8s ease-in-out infinite; }
+    .icon-crystal .glyph,
+    .icon-magic .glyph { animation: icon-glyph-twinkle 2.2s ease-in-out infinite; }
+    .icon-build .glyph { animation: icon-glyph-hammer .95s ease-in-out infinite; }
+    .icon-brick .glyph { animation: icon-glyph-shake 1.25s ease-in-out infinite; }
+    .icon-pong .glyph,
+    .icon-sword .glyph { animation: icon-glyph-swing 1.45s ease-in-out infinite; }
+    .icon-lantern .glyph,
+    .icon-web .glyph { animation: icon-glyph-sway 2.9s ease-in-out infinite; }
+    .icon-moon .glyph { animation: icon-glyph-rotate 16s linear infinite; }
+    .icon-lightning .glyph { animation: icon-glyph-flash 1.9s ease-in-out infinite; }
+    .icon-wave .glyph { animation: icon-glyph-wave 2.2s ease-in-out infinite; }
+    .icon-serpent .glyph { animation: icon-glyph-slither 2s ease-in-out infinite; }
+    .icon-train .glyph { animation: icon-glyph-chug .42s steps(4) infinite; }
+    .icon-storm .glyph,
+    .icon-tessera .glyph { animation: icon-glyph-spin 4.5s linear infinite; }
+    .icon-void .glyph,
+    .icon-trek .glyph,
+    .icon-star .glyph { animation: icon-float 3.1s ease-in-out infinite; }
+    @keyframes icon-grid-drift { to { background-position: 20px 20px; } }
+    @keyframes icon-sheen {
+      0%, 46% { transform: translateX(-60%) rotate(8deg); opacity: 0; }
+      58% { opacity: .75; }
+      78%, 100% { transform: translateX(60%) rotate(8deg); opacity: 0; }
+    }
+    @keyframes icon-pulse {
+      0%, 100% { transform: scale(.88); opacity: .48; }
+      50% { transform: scale(1.16); opacity: .88; }
+    }
+    @keyframes icon-float {
+      0%, 100% { transform: translate(-50%,-50%) translateY(1px); }
+      50% { transform: translate(-50%,-50%) translateY(-3px); }
+    }
+    @keyframes icon-glyph-thrust {
+      0%, 100% { transform: translate(-50%,-50%) translateY(2px) rotate(-5deg); }
+      45% { transform: translate(-50%,-50%) translateY(-8px) rotate(4deg); }
+      68% { transform: translate(-50%,-50%) translate(-1px,-2px) rotate(-2deg); }
+    }
+    @keyframes icon-glyph-burst {
+      0%, 100% { transform: translate(-50%,-50%) scale(.94) rotate(0); opacity: .94; }
+      42% { transform: translate(-50%,-50%) scale(1.18) rotate(10deg); opacity: 1; }
+      58% { transform: translate(-50%,-50%) scale(.98) rotate(-7deg); opacity: .96; }
+    }
+    @keyframes icon-glyph-twinkle {
+      0%, 100% { transform: translate(-50%,-50%) scale(1) rotate(0); filter: drop-shadow(0 2px 0 rgba(0,0,0,.32)) drop-shadow(0 0 8px color-mix(in srgb, var(--icon-hot, #fff) 70%, transparent)); }
+      48% { transform: translate(-50%,-50%) scale(1.18) rotate(14deg); filter: drop-shadow(0 2px 0 rgba(0,0,0,.28)) drop-shadow(0 0 18px var(--icon-hot, #fff)); }
+    }
+    @keyframes icon-glyph-hammer {
+      0%, 100% { transform: translate(-50%,-50%) rotate(-12deg); }
+      36% { transform: translate(-50%,-50%) translateY(-3px) rotate(16deg); }
+      52% { transform: translate(-50%,-50%) translateY(2px) rotate(8deg); }
+    }
+    @keyframes icon-glyph-shake {
+      0%, 100% { transform: translate(-50%,-50%) rotate(0); }
+      16% { transform: translate(calc(-50% - 2px),calc(-50% + 1px)) rotate(-4deg); }
+      32% { transform: translate(calc(-50% + 2px),calc(-50% - 1px)) rotate(4deg); }
+      48% { transform: translate(calc(-50% - 1px),calc(-50% - 2px)) rotate(-2deg); }
+      64% { transform: translate(-50%,-50%) rotate(0); }
+    }
+    @keyframes icon-glyph-swing {
+      0%, 100% { transform: translate(-50%,-50%) rotate(-17deg); }
+      50% { transform: translate(-50%,-50%) rotate(17deg); }
+    }
+    @keyframes icon-glyph-sway {
+      0%, 100% { transform: translate(-50%,-50%) rotate(-7deg) translateY(1px); }
+      50% { transform: translate(-50%,-50%) rotate(7deg) translateY(-3px); }
+    }
+    @keyframes icon-glyph-rotate {
+      to { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+    @keyframes icon-glyph-flash {
+      0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      12% { transform: translate(-50%,-50%) scale(1.22); opacity: .38; }
+      20% { transform: translate(-50%,-50%) scale(.95); opacity: 1; }
+      34% { transform: translate(-50%,-50%) scale(1.12); opacity: .58; }
+    }
+    @keyframes icon-glyph-wave {
+      0%, 100% { transform: translate(-50%,-50%) translateY(1px) rotate(-4deg); }
+      50% { transform: translate(-50%,-50%) translateY(-5px) rotate(4deg); }
+    }
+    @keyframes icon-glyph-slither {
+      0%, 100% { transform: translate(calc(-50% - 4px),-50%) skewX(-7deg); }
+      50% { transform: translate(calc(-50% + 4px),-50%) skewX(7deg); }
+    }
+    @keyframes icon-glyph-chug {
+      0%, 100% { transform: translate(-50%,-50%); }
+      25% { transform: translate(calc(-50% - 2px),calc(-50% - 1px)); }
+      50% { transform: translate(calc(-50% + 2px),-50%); }
+      75% { transform: translate(calc(-50% - 1px),calc(-50% + 1px)); }
+    }
+    @keyframes icon-glyph-spin {
+      to { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+    @keyframes icon-spin { to { transform: rotate(360deg); } }
+    @keyframes icon-pop {
+      0%, 100% { transform: scale(.78) rotate(0); opacity: .42; }
+      38% { transform: scale(1.16) rotate(40deg); opacity: .96; }
+      64% { transform: scale(.94) rotate(80deg); opacity: .72; }
+    }
+    @keyframes icon-trail {
+      0%, 100% { transform: translateX(-3px) scaleX(.72); opacity: .48; }
+      50% { transform: translateX(5px) scaleX(1.15); opacity: .92; }
+    }
+    @keyframes icon-orbit {
+      0% { transform: translate(0,0) scale(.8); opacity: .35; }
+      35% { opacity: 1; }
+      70% { transform: translate(7px,-8px) scale(1.1); opacity: .7; }
+      100% { transform: translate(0,0) scale(.8); opacity: .35; }
+    }
+    .game-card .icon-wrap {
+      width: 100%;
+      height: 92px;
+      align-self: stretch;
+      border-radius: 13px;
+      margin-bottom: 10px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.08), transparent 14%, transparent 86%, rgba(255,255,255,.08)),
+        radial-gradient(circle at 22% 16%, color-mix(in srgb, var(--icon-hot, #fff) 52%, transparent), transparent 18px),
+        radial-gradient(circle at 76% 74%, color-mix(in srgb, var(--icon-c, #ff5fa2) 36%, transparent), transparent 28px),
+        linear-gradient(145deg, rgba(5,11,28,.96), color-mix(in srgb, var(--icon-b, #4d96ff) 24%, #0b1026) 58%, rgba(2,7,19,.98));
+      border: 1px solid color-mix(in srgb, var(--icon-a, #4d96ff) 52%, rgba(255,255,255,.18));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.24),
+        inset 0 -22px 30px rgba(0,0,0,.36),
+        inset 8px 0 18px rgba(255,255,255,.04),
+        inset -8px 0 18px rgba(0,0,0,.28),
+        0 0 0 1px rgba(0,0,0,.44),
+        0 16px 30px color-mix(in srgb, var(--icon-b, #4d96ff) 28%, transparent),
+        0 7px 0 rgba(0,0,0,.2);
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .game-card .icon-wrap::before {
+      z-index: 0;
+      background:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 5px),
+        radial-gradient(circle at 50% 58%, color-mix(in srgb, var(--icon-a, #4d96ff) 20%, transparent), transparent 58%);
+      background-size: 12px 12px, 12px 12px, 100% 100%, 100% 100%;
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      opacity: .82;
+    }
+    .game-card .icon-wrap::after {
+      z-index: 5;
+      mix-blend-mode: screen;
+    }
+    .game-card:hover .icon-wrap {
+      transform: translateY(-3px) scale(1.07);
+      border-color: color-mix(in srgb, var(--icon-hot, #fff) 60%, transparent);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.35),
+        inset 0 -22px 30px rgba(0,0,0,.3),
+        0 0 0 1px rgba(0,0,0,.36),
+        0 18px 34px color-mix(in srgb, var(--icon-b, #4d96ff) 42%, transparent),
+        0 0 30px color-mix(in srgb, var(--icon-a, #4d96ff) 26%, transparent);
+    }
+    .arcade-icon {
+      z-index: 1;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: inherit;
+      background: transparent;
+    }
+    .arcade-icon::before,
+    .arcade-icon::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+    .arcade-icon::before {
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.1), transparent 18%, transparent 82%, rgba(0,0,0,.16)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.055) 0 1px, transparent 1px 4px);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--icon-hot, #fff) 20%, transparent);
+      opacity: .58;
+    }
+    .arcade-icon::after {
+      left: 12px;
+      right: 12px;
+      bottom: 11px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--icon-hot, #fff) 78%, transparent), transparent);
+      box-shadow: 0 0 14px color-mix(in srgb, var(--icon-a, #4d96ff) 72%, transparent);
+      opacity: .78;
+    }
+    .arcade-icon .halo,
+    .arcade-icon .burst,
+    .arcade-icon .trail,
+    .arcade-icon .spark,
+    .arcade-icon .floor,
+    .arcade-icon .glyph { display: none; }
+    .arcade-svg {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+      padding: 3px 10px 6px;
+      filter: drop-shadow(0 3px 0 rgba(0,0,0,.34)) drop-shadow(0 0 14px color-mix(in srgb, var(--icon-a, #4d96ff) 64%, transparent));
+    }
+    .arcade-icon.icon-fireworks { background: radial-gradient(circle at 40% 28%, color-mix(in srgb, var(--icon-hot, #fff) 35%, transparent), transparent 9%), radial-gradient(circle at 70% 40%, color-mix(in srgb, var(--icon-c, #ff5fa2) 28%, transparent), transparent 14%), linear-gradient(180deg,#101944,#080b20 74%); }
+    .arcade-icon.icon-crystal { background: radial-gradient(circle at 50% 72%, color-mix(in srgb, var(--icon-a, #4d96ff) 36%, transparent), transparent 28%), linear-gradient(180deg,#061821,#0d1028 72%); }
+    .arcade-icon.icon-serpent { background: radial-gradient(circle at 28% 72%, color-mix(in srgb, var(--icon-c, #ff5fa2) 34%, transparent), transparent 18%), radial-gradient(circle at 76% 30%, color-mix(in srgb, var(--icon-a, #4d96ff) 28%, transparent), transparent 18%), linear-gradient(180deg,#081b32,#090b1d 74%); }
+    .arcade-icon.icon-rocket,
+    .arcade-icon.icon-joust,
+    .arcade-icon.icon-trek,
+    .arcade-icon.icon-star,
+    .arcade-icon.icon-void { background: radial-gradient(circle at 18% 20%, rgba(255,255,255,.75) 0 1px, transparent 2px), radial-gradient(circle at 76% 24%, rgba(255,255,255,.55) 0 1px, transparent 2px), radial-gradient(circle at 64% 66%, color-mix(in srgb, var(--icon-a, #4d96ff) 28%, transparent), transparent 22%), linear-gradient(180deg,#090f2f,#050713 76%); }
+    .arcade-icon.icon-moon { background: radial-gradient(circle at 72% 25%, rgba(255,255,255,.5), transparent 14%), linear-gradient(180deg,#11183f,#070819 76%); }
+    .arcade-icon.icon-lightning { background: linear-gradient(135deg, color-mix(in srgb, var(--icon-a, #44d1ff) 22%, #071222), #11102a 58%, color-mix(in srgb, var(--icon-c, #ff5fa2) 16%, #070819)); }
+    .arcade-icon.icon-wave { background: linear-gradient(180deg,#071632 0 48%, color-mix(in srgb, var(--icon-a, #44d1ff) 30%, #061026) 49% 100%); }
+    .arcade-icon.icon-train { background: linear-gradient(180deg,#101936 0 58%, #07101d 59% 100%); }
+    .arcade-icon.icon-storm { background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--icon-b, #7f6bff) 36%, transparent), transparent 28%), linear-gradient(180deg,#15102f,#060815 74%); }
+    .arcade-icon.icon-magic,
+    .arcade-icon.icon-tessera,
+    .arcade-icon.icon-web { background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--icon-b, #7f6bff) 28%, transparent), transparent 32%), linear-gradient(180deg,#14112f,#070819 76%); }
+    .arcade-svg .neon {
+      fill: none;
+      stroke: var(--icon-hot, #fff);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 5px var(--icon-hot, #fff));
+    }
+    .arcade-svg .a { fill: var(--icon-a, #4d96ff); }
+    .arcade-svg .b { fill: var(--icon-b, #7f6bff); }
+    .arcade-svg .c { fill: var(--icon-c, #ff5fa2); }
+    .arcade-svg .hot { fill: var(--icon-hot, #fff); }
+    .arcade-svg .cool-stroke { stroke: var(--icon-a, #4d96ff); }
+    .arcade-svg .hot-stroke { stroke: var(--icon-hot, #fff); }
+    .arcade-svg .soft { opacity: .42; }
+    .arcade-svg .mid { opacity: .72; }
+    .arcade-svg .piece { transform-box: fill-box; transform-origin: center; }
+    .arcade-svg .floaty { animation: svg-float 3s ease-in-out infinite; }
+    .arcade-svg .pulse { animation: svg-pulse 2s ease-in-out infinite; }
+    .arcade-svg .spinny { animation: svg-spin 8s linear infinite; transform-box: fill-box; transform-origin: center; }
+    .arcade-svg .orbit { animation: svg-orbit 3.2s ease-in-out infinite; }
+    .arcade-svg .thrust { animation: svg-thrust 1.65s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .arcade-svg .wiggle { animation: svg-wiggle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .arcade-svg .blink { animation: svg-blink 1.35s ease-in-out infinite; }
+    .arcade-svg .sweep { animation: svg-sweep 2.8s ease-in-out infinite; }
+    .arcade-svg .dash { stroke-dasharray: 6 8; animation: svg-dash 2.2s linear infinite; }
+    @keyframes svg-float {
+      0%, 100% { transform: translateY(1px); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes svg-pulse {
+      0%, 100% { transform: scale(.92); opacity: .58; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+    @keyframes svg-spin { to { transform: rotate(360deg); } }
+    @keyframes svg-orbit {
+      0%, 100% { transform: translate(0,0); opacity: .55; }
+      50% { transform: translate(5px,-7px); opacity: 1; }
+    }
+    @keyframes svg-thrust {
+      0%, 100% { transform: translateY(2px) rotate(-3deg); }
+      45% { transform: translateY(-7px) rotate(4deg); }
+      70% { transform: translateY(-2px) rotate(-1deg); }
+    }
+    @keyframes svg-wiggle {
+      0%, 100% { transform: rotate(-5deg) translateX(-2px); }
+      50% { transform: rotate(5deg) translateX(2px); }
+    }
+    @keyframes svg-blink {
+      0%, 100% { opacity: 1; }
+      45% { opacity: .28; }
+      55% { opacity: 1; }
+    }
+    @keyframes svg-sweep {
+      0%, 100% { transform: translateX(-5px); opacity: .45; }
+      50% { transform: translateX(7px); opacity: 1; }
+    }
+    @keyframes svg-dash { to { stroke-dashoffset: -28; } }
+    .game-count { color: #aab7e4; }
+    main.container footer { border-top-color: rgba(255,255,255,.1) !important; }
+    main.container footer a { color: #8fa3ff !important; }
+    @media (min-width: 900px){
+      .game-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+      .game-card{padding:18px 16px 20px;min-height:210px}
+      .game-card .icon-wrap{width:100%;height:104px;border-radius:13px}
+      .game-card .icon-wrap > span{font-size:2.25rem}
+      .arcade-icon .glyph{font-size:2.15rem}
+    }
+    @media (max-width:620px){
+      header#site-nav > nav{padding-inline:10px;gap:8px;width:390px;max-width:100%;margin:0}
+      header#site-nav .links{gap:2px;justify-content:flex-start;max-width:300px;overflow:hidden}
+      header#site-nav .links a{font-size:11px;padding:5px 7px}
+      .brand-mark .brand-text{display:none}
+      .theme-toggle{padding:5px 8px;margin-left:0}
+      main.container{padding-inline:10px;width:390px;max-width:100%;margin:0}
+      .hero-editorial h1{font-size:clamp(1.55rem,7vw,1.85rem); overflow-wrap:anywhere}
+      .hero-editorial .lede{font-size:.9rem}
+      .game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .game-card{padding:9px 8px 10px;gap:6px;border-radius:14px;align-items:center;text-align:center}
+      .game-card .icon-wrap{width:100%;height:64px;border-radius:11px;margin-bottom:4px}
+      .game-card .icon-wrap > span{font-size:1.45rem}
+      .arcade-svg{width:100%;padding:3px 8px 5px}
+      .game-card .title{font-size:.78rem;line-height:1.08;min-height:2.1em;display:flex;align-items:center}
+      .game-card .desc{display:none}
+      .game-card .date{font-size:9px}
+      .game-card .tag{font-size:8px;padding:2px 6px;margin-top:0}
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="container">
+
+    <section class="hero-editorial" style="position:relative;overflow:hidden;border-radius:20px;padding:38px 24px 34px;margin-bottom:8px;border:1px solid rgba(118,199,255,.42);box-shadow:0 0 0 1px rgba(77,150,255,.08),0 18px 42px rgba(24,92,180,.14);">
+      <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+      <div style="position:relative;z-index:1;">
+        <div class="eyebrow" style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">🎮 Playable prototypes, built by AI</div>
+	        <h1 style="margin:18px 0 10px;font-size:clamp(2rem,7vw,3rem);font-weight:900;line-height:1.05;">GameMaster <span style="background:linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c66bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Arcade</span></h1>
+        <p class="lede" style="max-width:640px;">Mobile-first HTML5 games — built by AI agents, tuned for touch, playable right here. Model showdowns, mechanics experiments, and rebuilds of 70s classics.</p>
+      </div>
+    </section>
+
+    <div class="game-filters" id="game-filters">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="featured">⭐ Featured</button>
+      <button data-filter="classic">🎮 Classic</button>
+      <button data-filter="experimental">🧪 Experimental</button>
+      <button data-filter="arcade">🕹️ Arcade</button>
+      <button data-filter="puzzle">🧩 Puzzle</button>
+      <button data-filter="adventure">🗺️ Adventure</button>
+      <button data-filter="retro70s">📺 70s Classics</button>
+    </div>
+
+    <div style="max-width:480px;margin:0 auto 18px;position:relative;">
+      <input id="game-search" type="text" placeholder="Search games…" style="width:100%;padding:10px 16px 10px 40px;border-radius:999px;border:1px solid rgba(232,197,122,0.25);background:rgba(15,12,30,.55);color:#f2f4ff;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;" onfocus="this.style.borderColor='rgba(232,197,122,.6)';this.style.boxShadow='0 0 0 3px rgba(232,197,122,.12)'" onblur="this.style.borderColor='rgba(232,197,122,.25)';this.style.boxShadow='none'">
+      <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;opacity:.5;pointer-events:none;" viewBox="0 0 24 24" fill="none" stroke="#d3dcff" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+
+    <div id="game-sections"></div>
+    <p class="game-count" id="game-count"></p>
+
+    <footer style="margin-top:60px;padding:40px 0 24px;text-align:center;border-top:1px solid rgba(255,255,255,.06);">
+      <p style="color:var(--ink-lo);font-size:13px;margin-bottom:8px;">Built with 🎮 by GameMaster · Powered by AI</p>
+      <p style="color:var(--ink-lo);font-size:12px;"><a href="../" style="color:var(--brand-gold);text-decoration:none;">← Home</a> · <a href="../weather/" style="color:var(--brand-gold);text-decoration:none;">Weather</a> · <a href="../plants/" style="color:var(--brand-gold);text-decoration:none;">Garden</a></p>
+    </footer>
+  </main>
+
+  <script>
+    const BASE = 'https://jz237.github.io/games/';
+    const games = [
+      // Featured (polished)
+      { title: 'Millipede',                     path: '2026-04-28/millipede/',             emoji: '🪲', date: 'Apr 28', cat: 'arcade',   tag: 'featured',     desc: 'Touch-first fungal swarm shooter with power-ups and queen waves' },
+      { title: 'Emerald Mine: Crystal Caves',   path: '2026-03-05/boulder-dash/',              emoji: '💚', date: 'Mar 5',  cat: 'puzzle',   tag: 'featured',     desc: 'Released Boulder Dash-style cave arcade with handmade lesson caves, global scores, and touch controls' },
+      { title: 'Night Fireworks Show',          path: '2026-04-23/fireworks-nocturne/',          emoji: '🎆', date: 'Apr 23', cat: 'arcade',   tag: 'demo',         desc: 'Realistic night fireworks demo with smoke, bloom, crackle, and touch launches' },
+      { title: 'Hard Hat Mac',                  path: 'hard-hat-mac/',                         emoji: '👷', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: 'Classic 1983 Apple II remake — 3 construction levels' },
+      { title: 'Crystal Cavern',                path: '2026-03-16/crystal-cavern/',            emoji: '💎', date: 'Mar 16', cat: 'arcade',   tag: 'featured',     desc: 'Descend through dark crystal caves with dynamic lighting' },
+      { title: 'Shatter Storm',                 path: '2026-03-11/shatter-storm/',             emoji: '🧱', date: 'Mar 11', cat: 'arcade',   tag: 'featured',     desc: 'Stained-glass breakout' },
+      { title: 'Plasma Pong',                   path: '2026-03-10/plasma-pong/',               emoji: '🏓', date: 'Mar 10', cat: 'arcade',   tag: 'featured',     desc: 'Neon pong with plasma trails' },
+      { title: 'Asteroids HD',                  path: '2026-03-09/asteroids-hd/',              emoji: '🚀', date: 'Mar 9',  cat: 'arcade',   tag: 'featured',     desc: '3D asteroids, powerups, boost' },
+      { title: 'Missile Command: Aurora Siege', path: '2026-03-08/missile-command/',           emoji: '🎆', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Defend cities from the sky' },
+      { title: 'Missile Command (GPT)',         path: 'gpt-missile-command/',                  emoji: '🎇', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: "GPT's take on Missile Command" },
+      { title: 'Missile Command 3D',            path: '2026-03-17/missile-command-3d/',        emoji: '🚀', date: 'Mar 17', cat: 'arcade',   tag: 'featured',     desc: '3D perspective with destructible cities' },
+      { title: 'Stellar Drift',                 path: '2026-03-25/stellar-drift/',             emoji: '✨', date: 'Mar 25', cat: 'arcade',   tag: 'featured',     desc: 'One-finger auto-fire space shooter' },
+      { title: 'Lantern Creek',                 path: '2026-03-29/lantern-creek/',             emoji: '🏮', date: 'Mar 29', cat: 'puzzle',   tag: 'featured',     desc: 'Guide glowing lanterns down a moonlit stream' },
+      { title: 'SUPER STAR TREK',               path: '2026-03-27/star-trek/',                 emoji: '🖖', date: 'Mar 27', cat: 'retro70s', tag: 'featured',     desc: 'The 70s computer classic — reborn with LCARS visuals' },
+      { title: 'Asteroids',                     path: '2026-03-08/asteroids/',                 emoji: '☄️', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Classic asteroids, mobile controls' },
+      { title: 'Lunar Lander',                  path: 'lunar-lander/lunar-lander.html',        emoji: '🌕', date: 'Apr 7',  cat: 'arcade',   tag: 'featured',     desc: 'Precision moon landing with retro vibes' },
+      { title: 'Neon Qix',                      path: '2026-04-09/quix-modern/',               emoji: '⚡', date: 'Apr 9',  cat: 'arcade',   tag: 'featured',     desc: 'Modernized Qix with neon field capture' },
+      { title: 'Sky Joust',                      path: '2026-05-11/sky-joust/',                 emoji: '🦅', date: 'May 11', cat: 'arcade',   tag: 'featured',     desc: 'Aerial jousting over molten lava — knights on ostriches battle for the sky' },
+
+      // Classic
+      { title: 'Depth Charge',                  path: '2026-03-08/depth-charge/',              emoji: '🌊', date: 'Mar 8',  cat: 'arcade',   tag: 'classic',      desc: 'Sonar submarine hunt' },
+      { title: 'Neon Serpent',                  path: '2026-03-05/neon-serpent/',              emoji: '🐍', date: 'Mar 5',  cat: 'arcade',   tag: 'classic',      desc: 'Snake with neon style' },
+      { title: 'Ember Knight',                  path: '2026-03-06/ember-knight/',              emoji: '⚔️', date: 'Mar 6',  cat: 'adventure',tag: 'classic',      desc: 'Dungeon crawler' },
+      { title: 'Glassrail Bastion',             path: '2026-03-06/glassrail-bastion/',         emoji: '🚂', date: 'Mar 6',  cat: 'arcade',   tag: 'classic',      desc: 'Rail defense' },
+
+      // Experimental
+      { title: 'Vortex: Storm Eater',           path: '2026-03-04/vortex/',                    emoji: '🌪️', date: 'Mar 4', cat: 'arcade',   tag: 'experimental', desc: 'Early-build storm shooter' },
+      { title: 'Runecaster',                    path: '2026-03-04/runecaster/',                emoji: '🧙', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Magic-mechanic prototype' },
+      { title: 'Tessera',                       path: '2026-03-04/tessera/',                   emoji: '⬡',  date: 'Mar 4',  cat: 'puzzle',   tag: 'experimental', desc: 'Hex-grid puzzle experiment' },
+      { title: 'Slash',                         path: '2026-03-04/slash/',                     emoji: '⚡', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Reflex swipe-action test' },
+      { title: 'Void Echo',                     path: '2026-03-03/void-echo/',                 emoji: '🌌', date: 'Mar 3',  cat: 'arcade',   tag: 'experimental', desc: 'Space-ambient exploration' },
+      { title: 'Gravity Weaver',                path: '2026-03-03/gravity-weaver/',            emoji: '🕸️', date: 'Mar 3', cat: 'puzzle',   tag: 'experimental', desc: 'Gravity-puzzle prototype' }
+    ];
+
+    const sections = document.getElementById('game-sections');
+    const count  = document.getElementById('game-count');
+    const filters= document.getElementById('game-filters');
+
+    let currentFilter = 'all';
+
+    const UNFINISHED = new Set([
+      'hard hat mac', 'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
+      'lantern creek', 'super star trek', 'depth charge', 'ember knight',
+      'vortex storm eater', 'runecaster', 'tessera', 'void echo', 'gravity weaver', 'storm echo'
+    ]);
+    const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
+
+    function tagLabel(t, status) {
+      if (status === 'unfinished') return '🚧 Unfinished';
+      return t === 'featured' ? '⭐ Featured'
+           : t === 'classic'  ? '🎮 Classic'
+           : t === 'demo'     ? '🎆 Demo'
+           : '🧪 Experimental';
+    }
+
+    const ICON_PALETTES = [
+      ['#4d96ff', '#7f6bff', '#ff5fa2', '#fff4c7'],
+      ['#ffd93d', '#ff9f43', '#ff5f6d', '#fff7b8'],
+      ['#6bcb77', '#2ed3c6', '#44d1ff', '#efffd0'],
+      ['#c66bff', '#ff5fa2', '#7f6bff', '#ffe0ff'],
+      ['#ff7a00', '#ffd93d', '#ff5f6d', '#fff4c7'],
+      ['#44d1ff', '#4d96ff', '#7f6bff', '#e5fbff'],
+      ['#99ffcc', '#36d399', '#0ea5e9', '#f0fff7'],
+      ['#ff6bcb', '#8b5cf6', '#22d3ee', '#fff1fb']
+    ];
+    const ICON_EFFECTS = [
+      ['millipede', 'serpent'], ['emerald', 'crystal'], ['crystal', 'crystal'], ['firework', 'fireworks'],
+      ['missile', 'fireworks'], ['asteroid', 'rocket'], ['lunar', 'moon'], ['joust', 'joust'],
+      ['hard hat', 'build'], ['shatter', 'brick'], ['pong', 'pong'], ['star trek', 'trek'],
+      ['stellar', 'star'], ['lantern', 'lantern'], ['qix', 'lightning'], ['depth', 'wave'],
+      ['ember', 'sword'], ['glassrail', 'train'], ['vortex', 'storm'], ['runecaster', 'magic'],
+      ['tessera', 'tessera'], ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
+      ['serpent', 'serpent']
+    ];
+    function iconEffect(g) {
+      const key = slugTitle(g.title);
+      const match = ICON_EFFECTS.find(([needle]) => key.includes(needle));
+      if (match) return match[1];
+      if (g.emoji === '🚀' || g.emoji === '☄️') return 'rocket';
+      if (g.emoji === '🎆' || g.emoji === '🎇') return 'fireworks';
+      if (g.emoji === '⚔️') return 'sword';
+      if (g.emoji === '⚡') return 'lightning';
+      return g.cat === 'puzzle' ? 'crystal' : 'star';
+    }
+    function iconStyle(g, index) {
+      const p = ICON_PALETTES[(index + slugTitle(g.title).length) % ICON_PALETTES.length];
+      return `--icon-a:${p[0]};--icon-b:${p[1]};--icon-c:${p[2]};--icon-hot:${p[3]};--icon-cool:${p[0]}`;
+    }
+    function iconSvg(effect) {
+      const common = 'viewBox="0 0 64 64" class="arcade-svg" aria-hidden="true" focusable="false"';
+      const bg = '<circle class="soft a pulse" cx="32" cy="32" r="21"/><path class="neon soft dash" d="M12 48 C24 40 40 40 52 48"/>';
+      const art = {
+        rocket: `${bg}<path class="trail c sweep" d="M13 43 C24 39 31 36 39 27"/><g class="thrust"><path class="hot" d="M38 10 C48 17 49 30 39 42 C36 35 30 29 22 26 C27 18 32 13 38 10Z"/><path class="a" d="M30 27 L17 33 L27 38Z"/><path class="c" d="M39 42 L34 52 L29 40Z"/><circle class="b" cx="38" cy="23" r="4"/></g><circle class="hot orbit" cx="18" cy="18" r="2"/>`,
+        fireworks: `<circle class="soft b pulse" cx="32" cy="33" r="20"/><g class="spinny">${[0,45,90,135,180,225,270,315].map(a=>`<path class="neon" transform="rotate(${a} 32 30)" d="M32 13 L32 21"/>`).join('')}</g><circle class="hot pulse" cx="32" cy="30" r="5"/><circle class="c orbit" cx="46" cy="18" r="3"/><path class="neon dash" d="M18 50 C25 38 30 32 32 22"/>`,
+        serpent: `<path class="neon soft dash" d="M10 46 C18 35 27 42 35 30 C41 21 51 23 55 13"/><g class="wiggle"><circle class="a" cx="17" cy="43" r="7"/><circle class="b" cx="28" cy="38" r="7"/><circle class="c" cx="38" cy="30" r="7"/><circle class="hot" cx="49" cy="22" r="7"/><circle cx="51" cy="20" r="1.4" fill="#07111f"/></g>`,
+        crystal: `<g class="floaty"><path class="hot" d="M32 7 L49 25 L39 55 L24 55 L15 25Z"/><path class="a" d="M32 7 L32 55 L15 25Z" opacity=".7"/><path class="b" d="M32 7 L49 25 L32 55Z" opacity=".72"/><path class="c" d="M15 25 H49 L39 55 H24Z" opacity=".58"/><path class="neon" d="M32 7 L49 25 L39 55 L24 55 L15 25Z"/></g><circle class="hot orbit" cx="18" cy="17" r="2.3"/><circle class="a orbit" cx="49" cy="42" r="2"/>`,
+        build: `${bg}<g class="floaty"><path class="c" d="M14 43 H50 V50 H14Z"/><path class="hot" d="M20 26 H44 A12 12 0 0 0 20 26Z"/><path class="a" d="M18 26 H46 V32 H18Z"/><path class="neon" d="M19 39 H45 M23 32 V50 M41 32 V50 M18 26 H46"/></g><path class="neon blink" d="M27 18 H37"/>`,
+        brick: `<g class="pulse"><path class="a" d="M12 14 H31 V28 H12Z"/><path class="b" d="M33 14 H52 V28 H33Z"/><path class="c" d="M17 30 H37 V44 H17Z"/><path class="hot" d="M39 30 H53 V44 H39Z"/></g><path class="neon dash" d="M31 14 L24 28 L37 30 L29 44 M33 14 L41 28 L35 30 L43 44"/>`,
+        pong: `<path class="neon soft dash" d="M12 47 C27 10 39 54 52 17"/><rect class="hot floaty" x="12" y="20" width="6" height="24" rx="3"/><rect class="a floaty" x="46" y="20" width="6" height="24" rx="3"/><circle class="c pulse" cx="32" cy="31" r="5"/>`,
+        trek: `<g class="floaty"><path class="hot" d="M32 8 L45 52 L33 43 L21 52Z"/><path class="a" d="M32 8 L33 43 L26 36Z" opacity=".72"/><path class="b" d="M32 8 L38 36 L33 43Z" opacity=".72"/><path class="neon" d="M32 8 L45 52 L33 43 L21 52Z"/></g><ellipse class="neon soft spinny" cx="32" cy="35" rx="23" ry="7"/>`,
+        moon: `<circle class="hot pulse" cx="32" cy="30" r="18"/><circle fill="#101a36" cx="39" cy="24" r="17"/><path class="neon soft" d="M15 47 C25 43 38 43 50 48"/><circle class="a" cx="26" cy="33" r="2"/><circle class="b" cx="31" cy="42" r="1.6"/>`,
+        lightning: `<path class="hot blink" d="M37 6 L16 35 H30 L25 58 L49 27 H34Z"/><path class="neon pulse" d="M37 6 L16 35 H30 L25 58 L49 27 H34Z"/><path class="neon soft dash" d="M11 18 H23 M43 45 H54"/>`,
+        wave: `<path class="neon dash" d="M11 43 C18 32 26 52 34 40 C42 29 48 45 55 35"/><path class="a floaty" d="M18 36 H44 L52 42 H23Z"/><circle class="hot pulse" cx="48" cy="38" r="2.5"/><path class="neon soft" d="M15 24 C25 15 39 15 49 24 M20 29 C27 24 37 24 44 29"/>`,
+        sword: `<g class="floaty"><path class="hot" d="M43 8 L49 14 L27 39 L23 35Z"/><path class="c" d="M18 38 L26 30 L34 38 L26 46Z"/><path class="a" d="M15 45 L20 50 L28 42 L23 37Z"/><path class="neon" d="M43 8 L49 14 L27 39 M18 38 L34 38"/></g>`,
+        train: `<g class="floaty"><path class="a" d="M13 34 H46 L53 44 H13Z"/><path class="hot" d="M19 23 H37 V34 H19Z"/><path class="c" d="M39 28 H48 V38 H39Z"/><circle class="hot-stroke" cx="23" cy="47" r="5" fill="none" stroke-width="3"/><circle class="hot-stroke" cx="43" cy="47" r="5" fill="none" stroke-width="3"/></g><path class="neon soft sweep" d="M18 18 C24 9 33 16 39 8"/>`,
+        storm: `<g class="spinny"><path class="neon" d="M50 18 C35 10 15 18 17 33 C19 49 45 50 49 34 C52 22 31 21 28 33 C26 42 40 43 41 34"/><path class="c" d="M31 23 L42 31 L31 41 L20 31Z" opacity=".55"/></g>`,
+        magic: `<circle class="soft b pulse" cx="32" cy="32" r="19"/><path class="neon spinny" d="M32 14 L37 27 L51 27 L40 36 L44 50 L32 42 L20 50 L24 36 L13 27 L27 27Z"/><circle class="hot pulse" cx="32" cy="32" r="5"/>`,
+        tessera: `${[[22,20],[38,20],[30,34],[46,34],[18,34]].map(([x,y],i)=>`<path class="${i%2?'b':'a'} floaty" d="M${x} ${y-8} L${x+8} ${y-4} L${x+8} ${y+5} L${x} ${y+9} L${x-8} ${y+5} L${x-8} ${y-4}Z"/>`).join('')}<path class="neon soft dash" d="M14 50 H50"/>`,
+        void: `<circle class="soft a pulse" cx="32" cy="32" r="23"/><path class="neon spinny" d="M50 30 C43 13 17 15 15 33 C13 50 42 53 47 38 C51 27 28 24 25 35 C22 44 38 45 40 35"/><circle class="hot orbit" cx="20" cy="20" r="2"/><circle class="c orbit" cx="47" cy="44" r="2.5"/>`,
+        web: `<g class="pulse"><path class="neon soft" d="M32 11 V54 M12 32 H53 M18 18 L47 47 M47 18 L18 47"/><circle class="neon" cx="32" cy="32" r="9"/><circle class="neon soft" cx="32" cy="32" r="19"/></g><circle class="hot floaty" cx="38" cy="27" r="4"/>`,
+        joust: `<path class="trail c sweep" d="M12 44 C24 38 37 33 54 22"/><g class="thrust"><path class="hot" d="M15 34 C24 18 43 18 51 32 C39 28 31 34 24 45Z"/><path class="a" d="M25 37 L42 27 L53 32 L32 43Z"/><path class="neon" d="M18 34 C27 20 41 20 51 32 M31 39 L56 20"/></g>`
+      };
+      return `<svg ${common}>${art[effect] || art.star || `${bg}<path class="hot pulse" d="M32 9 L38 25 L55 25 L41 35 L46 52 L32 42 L18 52 L23 35 L9 25 L26 25Z"/>`}</svg>`;
+    }
+    function gameIcon(g, index) {
+      const effect = iconEffect(g);
+      return `
+        <span class="icon-wrap" style="${iconStyle(g, index)}" aria-hidden="true">
+          <span class="arcade-icon icon-${effect}">
+            ${iconSvg(effect)}
+          </span>
+        </span>
+      `;
+    }
+
+    function gameCard(g, index) {
+      const isNew = g.date.startsWith('May');
+      return `
+        <a class="game-card" href="${BASE}${g.path}" target="_blank" rel="noopener">
+          ${gameIcon(g, index)}
+          ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+          <span class="title">${g.title}</span>
+          ${g.desc ? `<span class="desc">${g.desc}</span>` : ''}
+          <span class="date">${g.date}</span>
+          <span class="tag ${g.status === 'unfinished' ? 'unfinished' : g.tag}">${tagLabel(g.tag, g.status)}</span>
+          <span class="play-overlay">▶ Play</span>
+        </a>
+      `;
+    }
+
+    function renderSection(title, list) {
+      if (!list.length) return '';
+      return `
+        <section class="game-section" aria-label="${title} games">
+          <div class="section-title"><h2>${title}</h2><span>${list.length} game${list.length === 1 ? '' : 's'}</span></div>
+          <div class="game-grid">${list.map(gameCard).join('')}</div>
+        </section>
+      `;
+    }
+
+    function render() {
+      const q = (document.getElementById('game-search')?.value || '').toLowerCase().trim();
+      const base = currentFilter === 'all'
+        ? games
+        : games.filter(g => g.tag === currentFilter || g.cat === currentFilter || g.status === currentFilter);
+      const list = q
+        ? base.filter(g => g.title.toLowerCase().includes(q) || (g.desc||'').toLowerCase().includes(q) || g.cat.includes(q) || g.tag.includes(q))
+        : base;
+      const released = list.filter(g => g.status !== 'unfinished');
+      const unfinished = list.filter(g => g.status === 'unfinished');
+      sections.innerHTML = renderSection('Released Games', released) + (unfinished.length ? renderSection('Unfinished Games', unfinished) : '');
+      count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}${currentFilter === 'all' ? '' : ' · ' + currentFilter}${q ? ' matching \"' + q + '\"' : ''}`;
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.game-card').forEach((el,i) => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(14px)';
+          el.style.transition = 'opacity .35s ease ' + (i * 0.03) + 's, transform .35s ease ' + (i * 0.03) + 's';
+          requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+        });
+      });
+    }
+
+    filters.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-filter]');
+      if (!btn) return;
+      currentFilter = btn.dataset.filter;
+      filters.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    });
+
+    document.getElementById('game-search')?.addEventListener('input', () => render());
+
+    render();
+
+    // Randomize animation-delay per icon so the grid doesn't pulse in unison
+    function jitterIconDelays() {
+      document.querySelectorAll('.game-card .arcade-svg .floaty, .game-card .arcade-svg .pulse, .game-card .arcade-svg .spinny, .game-card .arcade-svg .orbit, .game-card .arcade-svg .thrust, .game-card .arcade-svg .wiggle, .game-card .arcade-svg .blink, .game-card .arcade-svg .sweep, .game-card .arcade-svg .dash').forEach(el => {
+        el.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's';
+      });
+    }
+    jitterIconDelays();
+    // Re-jitter after each filter change (re-renders new cards)
+    filters.addEventListener('click', jitterIconDelays);
+
+    // Hero canvas animation - adapted from Night Fireworks Show
+    (function(){
+      const canvas=document.getElementById('hero-canvas');
+      if(!canvas)return;
+      const ctx=canvas.getContext('2d');
+      const TAU=Math.PI*2;
+      const palettes=[
+        ['#fff4c7','#ffd766','#ff9e42','#ff5a36'],
+        ['#fefefe','#ff8ac8','#ff5f7a','#d42b58'],
+        ['#f4ffda','#b8ff7a','#5bd368','#1f9759'],
+        ['#ffffff','#8fd9ff','#59a8ff','#4775ff'],
+        ['#ffffff','#d7b0ff','#af76ff','#833dff'],
+        ['#fff8dc','#44d1ff','#7f6bff','#ff5fa2']
+      ];
+      const state={w:0,h:0,dpr:1,now:0,last:0,wind:0,auto:0,rockets:[],sparks:[],smoke:[],flashes:[],embers:[],stars:[],skyline:[]};
+      const rand=(min,max)=>Math.random()*(max-min)+min;
+      const pick=a=>a[(Math.random()*a.length)|0];
+      const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+      const lerp=(a,b,t)=>a+(b-a)*t;
+      function hexToRgba(hex,alpha){
+        const clean=hex.replace('#','');
+        const int=parseInt(clean.length===3?clean.split('').map(p=>p+p).join(''):clean,16);
+        return 'rgba('+((int>>16)&255)+','+((int>>8)&255)+','+(int&255)+','+alpha+')';
+      }
+      function resize(){
+        const box=canvas.getBoundingClientRect();
+        state.w=Math.max(1,box.width);
+        state.h=Math.max(1,box.height);
+        state.dpr=Math.min(window.devicePixelRatio||1,2);
+        canvas.width=Math.floor(state.w*state.dpr);
+        canvas.height=Math.floor(state.h*state.dpr);
+        ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
+        buildBackdrop();
+      }
+      function buildBackdrop(){
+        state.stars=[];state.skyline=[];
+        for(let i=0;i<70;i++){
+          state.stars.push({x:Math.random()*state.w,y:Math.random()*state.h*.66,size:rand(.45,1.5),alpha:rand(.18,.75),twinkle:rand(.5,1.4)});
+        }
+        let x=-20;
+        while(x<state.w+30){
+          const width=rand(22,58),height=rand(state.h*.13,state.h*.34),lights=[];
+          const rows=Math.max(1,Math.floor(height/14));
+          for(let r=0;r<rows;r++){
+            if(Math.random()>.38)lights.push({x:rand(4,width-7),y:8+r*12,w:rand(1.5,3.5),h:rand(2,4),a:rand(.08,.22)});
+          }
+          state.skyline.push({x,width,height,lights});
+          x+=width-rand(4,12);
+        }
+      }
+      function addSmoke(x,y,radius,count,tint,alpha){
+        for(let i=0;i<count;i++){
+          state.smoke.push({x:x+rand(-radius*.18,radius*.18),y:y+rand(-radius*.1,radius*.1),vx:rand(-10,10),vy:rand(-10,-3),radius:rand(radius*.08,radius*.2),growth:rand(7,20),alpha:rand(alpha*.35,alpha),ttl:rand(1.5,3.4),life:0,tint});
+        }
+      }
+      function addSpark(cfg){
+        state.sparks.push({x:cfg.x,y:cfg.y,vx:cfg.vx,vy:cfg.vy,drag:cfg.drag,gravity:cfg.gravity,radius:cfg.radius,color:cfg.color,glow:cfg.glow,ttl:cfg.ttl,life:0,trail:[],ember:cfg.ember||false,crackle:cfg.crackle||false,strobe:cfg.strobe||0,fadeFloor:cfg.fadeFloor||.06});
+      }
+      function createRocket(xRatio,targetX,targetY,heavy){
+        const x=clamp(state.w*xRatio,18,state.w-18);
+        const y=state.h+rand(4,18);
+        const tx=targetX==null?lerp(state.w*.15,state.w*.85,xRatio):targetX;
+        const ty=targetY==null?rand(state.h*.08,state.h*.45):targetY;
+        const travel=Math.max(.42,(y-ty)/rand(260,360));
+        const palette=pick(palettes);
+        const roll=Math.random();
+        const shell=roll>.76?'willow':roll>.56?'crackle':roll>.34?'ring':roll>.16?'palm':'peony';
+        state.rockets.push({x,y,vx:(tx-x)/travel,vy:-rand(230,heavy?380:320),life:0,targetY:ty,fuse:rand(.62,1.05),shell,palette,size:heavy?rand(1.05,1.42):rand(.72,1.06),heavy:!!heavy,trail:[]});
+      }
+      function explodeRocket(rocket){
+        const x=rocket.x,y=rocket.y,palette=rocket.palette,core=palette[0],size=rocket.size,style=rocket.shell;
+        let layers=rocket.heavy?2:1;
+        if(style==='crackle')layers=2;
+        state.flashes.push({x,y,radius:rand(30,64)*size,color:core,life:0,ttl:rocket.heavy ? .34 : .24,alpha:rocket.heavy ? .2 : .14});
+        addSmoke(x,y,52*size,rocket.heavy?12:7,'232,236,244',.16);
+        addSmoke(x,y,28*size,rocket.heavy?7:4,'255,175,130',.11);
+        for(let layer=0;layer<layers;layer++){
+          const count=Math.floor((rocket.heavy?62:42)*(1-layer*.18));
+          const speed=rand(54,122)*size*(1+layer*.24);
+          for(let i=0;i<count;i++){
+            const angle=rand(0,TAU);
+            let spread=style==='ring'?rand(.78,.96):style==='palm'?Math.pow(Math.random(),1.9):style==='willow'?Math.pow(Math.random(),1.15):Math.pow(Math.random(),.72);
+            const shellSpeed=speed*spread;
+            let vy=Math.sin(angle)*shellSpeed+rand(-8,8);
+            if(style==='ring')vy*=.48;
+            if(style==='palm')vy=Math.sin(angle)*shellSpeed*.3-shellSpeed*.42;
+            const color=pick(palette);
+            addSpark({x,y,vx:Math.cos(angle)*shellSpeed+rand(-8,8),vy,drag:style==='willow' ? .989 : .984,gravity:style==='willow'?72:style==='palm'?88:82,radius:rand(.75,1.8)*size,color,glow:rand(8,18)*size,ttl:style==='willow'?rand(1.15,1.9):rand(.85,1.45),ember:Math.random()>.58,crackle:style==='crackle'&&Math.random()>.85,strobe:color==='#ffffff'?rand(0,18):0,fadeFloor:rand(.02,.08)});
+          }
+        }
+        for(let i=0;i<(rocket.heavy?14:8);i++){
+          state.embers.push({x:x+rand(-14,14),y:y+rand(-14,14),vx:rand(-24,24),vy:rand(6,58),radius:rand(.6,1.8)*size,life:0,ttl:rand(.65,1.7),color:pick(['#ffdf9b','#ff9f50','#ff7347','#fff8db'])});
+        }
+        if(rocket.heavy&&Math.random()>.62){
+          for(let i=0;i<3;i++){
+            const a=i/3*TAU+rand(-.12,.12);
+            createRocket(x/state.w,x+Math.cos(a)*rand(45,95),y+Math.sin(a)*rand(18,58),false);
+          }
+        }
+      }
+      function updateRocket(r,dt){
+        r.life+=dt;r.vx+=state.wind*dt*.45;r.x+=r.vx*dt;r.y+=r.vy*dt;r.vy+=108*dt;
+        r.trail.push({x:r.x,y:r.y,age:0});
+        if(r.trail.length>18)r.trail.shift();
+        r.trail.forEach(p=>p.age+=dt);
+        if(r.vy>=-18||r.y<=r.targetY||r.life>=r.fuse){explodeRocket(r);return false;}
+        return r.x>-80&&r.x<state.w+80&&r.y<state.h+40;
+      }
+      function updateSpark(s,dt){
+        s.life+=dt;s.vx*=s.drag;s.vy=s.vy*s.drag+s.gravity*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;
+        s.trail.push({x:s.x,y:s.y,age:0});
+        if(s.trail.length>12)s.trail.shift();
+        s.trail.forEach(p=>p.age+=dt);
+        if(s.crackle&&Math.random()>.86)state.flashes.push({x:s.x,y:s.y,radius:rand(5,13),color:s.color,life:0,ttl:.12,alpha:.2});
+        if(s.ember&&Math.random()>.94)addSmoke(s.x,s.y,s.glow*.45,1,'185,190,210',.08);
+        return s.life<s.ttl;
+      }
+      function updateSmoke(p,dt){p.life+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.radius+=p.growth*dt;return p.life<p.ttl;}
+      function updateFlash(f,dt){f.life+=dt;return f.life<f.ttl;}
+      function updateEmber(e,dt){e.life+=dt;e.x+=e.vx*dt;e.y+=e.vy*dt;e.vy+=38*dt;return e.life<e.ttl&&e.y<state.h+20;}
+      function schedule(dt){
+        state.auto-=dt;
+        const busy=state.rockets.length+state.sparks.length*.007;
+        if(state.auto<=0&&busy<3.8){
+          createRocket(rand(.12,.88),null,null,Math.random()>.68);
+          state.auto=rand(.18,.48);
+        }
+      }
+      function drawBackground(){
+        const bg=ctx.createLinearGradient(0,0,0,state.h);
+        bg.addColorStop(0,'#06111f');
+        bg.addColorStop(.52,'#081a2d');
+        bg.addColorStop(1,'#10070f');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,state.w,state.h);
+        ctx.save();
+        ctx.globalCompositeOperation='screen';
+        const ground=ctx.createRadialGradient(state.w*.5,state.h*1.08,0,state.w*.5,state.h*1.08,state.w*.8);
+        ground.addColorStop(0,'rgba(255,137,66,.18)');
+        ground.addColorStop(.45,'rgba(127,107,255,.08)');
+        ground.addColorStop(1,'rgba(255,137,66,0)');
+        ctx.fillStyle=ground;ctx.fillRect(0,0,state.w,state.h);
+        for(const star of state.stars){
+          const pulse=.55+.45*Math.sin(state.now*star.twinkle+star.x);
+          ctx.globalAlpha=star.alpha*pulse;
+          ctx.fillStyle='#dfe9ff';
+          ctx.beginPath();ctx.arc(star.x,star.y,star.size,0,TAU);ctx.fill();
+        }
+        ctx.restore();
+        const horizon=state.h*.8;
+        ctx.fillStyle='rgba(3,7,18,.82)';
+        for(const b of state.skyline){
+          ctx.fillRect(b.x,horizon-b.height,b.width,b.height);
+          ctx.fillStyle='rgba(255,216,141,.22)';
+          for(const l of b.lights)ctx.fillRect(b.x+l.x,horizon-b.height+l.y,l.w,l.h);
+          ctx.fillStyle='rgba(3,7,18,.82)';
+        }
+        const veil=ctx.createRadialGradient(state.w*.5,state.h*.48,state.w*.05,state.w*.5,state.h*.5,state.w*.55);
+        veil.addColorStop(0,'rgba(8,8,20,.55)');
+        veil.addColorStop(.65,'rgba(8,8,20,.2)');
+        veil.addColorStop(1,'rgba(8,8,20,0)');
+        ctx.fillStyle=veil;ctx.fillRect(0,0,state.w,state.h);
+      }
+      function drawSmoke(){
+        for(const p of state.smoke){
+          const fade=1-p.life/p.ttl;
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius);
+          g.addColorStop(0,'rgba('+p.tint+','+(p.alpha*fade)+')');
+          g.addColorStop(.4,'rgba('+p.tint+','+(p.alpha*fade*.45)+')');
+          g.addColorStop(1,'rgba(30,35,45,0)');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,TAU);ctx.fill();
+        }
+      }
+      function drawRocket(r){
+        ctx.save();ctx.globalCompositeOperation='lighter';
+        for(let i=0;i<r.trail.length;i++){
+          const p=r.trail[i],ratio=i/r.trail.length,alpha=ratio*.16,radius=1.5+ratio*5.5;
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius);
+          g.addColorStop(0,'rgba(255,246,219,'+alpha+')');
+          g.addColorStop(.45,'rgba(255,169,89,'+(alpha*.7)+')');
+          g.addColorStop(1,'rgba(255,80,25,0)');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,radius,0,TAU);ctx.fill();
+        }
+        const glow=ctx.createRadialGradient(r.x,r.y,0,r.x,r.y,22);
+        glow.addColorStop(0,'rgba(255,255,240,.55)');
+        glow.addColorStop(.3,'rgba(255,200,110,.28)');
+        glow.addColorStop(1,'rgba(255,110,48,0)');
+        ctx.fillStyle=glow;ctx.beginPath();ctx.arc(r.x,r.y,22,0,TAU);ctx.fill();
+        ctx.restore();
+      }
+      function drawSpark(s){
+        ctx.save();ctx.globalCompositeOperation='lighter';
+        for(let i=1;i<s.trail.length;i++){
+          const prev=s.trail[i-1],point=s.trail[i],ratio=i/s.trail.length;
+          ctx.strokeStyle=hexToRgba(s.color,ratio*.13);
+          ctx.lineWidth=Math.max(.35,s.radius*ratio*.7);
+          ctx.beginPath();ctx.moveTo(prev.x,prev.y);ctx.lineTo(point.x,point.y);ctx.stroke();
+        }
+        const visible=!s.strobe||((s.life*1000+s.x)%s.strobe>s.strobe*.4);
+        if(visible){
+          const fade=Math.max(s.fadeFloor,1-s.life/s.ttl);
+          const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.glow);
+          g.addColorStop(0,s.color+'88');
+          g.addColorStop(.2,s.color+'44');
+          g.addColorStop(.48,s.color+'14');
+          g.addColorStop(1,s.color+'00');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(s.x,s.y,s.glow,0,TAU);ctx.fill();
+          ctx.globalAlpha=fade;ctx.fillStyle=s.color;ctx.beginPath();ctx.arc(s.x,s.y,s.radius,0,TAU);ctx.fill();
+        }
+        ctx.restore();
+      }
+      function drawFlash(f){
+        const t=f.life/f.ttl,alpha=f.alpha*(1-t);
+        ctx.save();ctx.globalCompositeOperation='screen';
+        const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.radius*(1+t*.8));
+        g.addColorStop(0,hexToRgba(f.color,alpha));
+        g.addColorStop(.5,hexToRgba(f.color,alpha*.34));
+        g.addColorStop(1,hexToRgba(f.color,0));
+        ctx.fillStyle=g;ctx.beginPath();ctx.arc(f.x,f.y,f.radius*(1+t*.8),0,TAU);ctx.fill();
+        ctx.restore();
+      }
+      function drawEmber(e){
+        const fade=1-e.life/e.ttl;
+        ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=fade*.78;ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(e.x,e.y,e.radius,0,TAU);ctx.fill();ctx.restore();
+      }
+      function loop(ts){
+        if(!state.last)state.last=ts;
+        const dt=Math.min(.033,(ts-state.last)/1000);
+        state.last=ts;state.now+=dt;state.wind=Math.sin(state.now*.18)*5+Math.sin(state.now*.71)*2;
+        schedule(dt);
+        state.rockets=state.rockets.filter(r=>updateRocket(r,dt));
+        state.sparks=state.sparks.filter(s=>updateSpark(s,dt));
+        state.smoke=state.smoke.filter(p=>updateSmoke(p,dt));
+        state.flashes=state.flashes.filter(f=>updateFlash(f,dt));
+        state.embers=state.embers.filter(e=>updateEmber(e,dt));
+        if(state.sparks.length>520)state.sparks.splice(0,state.sparks.length-520);
+        if(state.smoke.length>140)state.smoke.splice(0,state.smoke.length-140);
+        drawBackground();
+        drawSmoke();
+        state.flashes.forEach(drawFlash);
+        state.rockets.forEach(drawRocket);
+        state.sparks.forEach(drawSpark);
+        state.embers.forEach(drawEmber);
+        requestAnimationFrame(loop);
+      }
+      resize();
+      window.addEventListener('resize',resize);
+      for(let i=0;i<5;i++){
+        explodeRocket({
+          x:rand(state.w*.13,state.w*.87),
+          y:rand(state.h*.1,state.h*.46),
+          palette:pick(palettes),
+          size:rand(.82,1.28),
+          shell:pick(['peony','ring','crackle','willow','palm']),
+          heavy:i%2===0,
+          trail:[]
+        });
+      }
+      for(let i=0;i<4;i++)createRocket(rand(.18,.82),null,rand(state.h*.12,state.h*.42),i===1);
+      requestAnimationFrame(loop);
+    })();
+  </script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js" defer></script>
+</body>
+</html>
