@@ -51,7 +51,7 @@ body > header:not(.home-hidden-nav) {
   -webkit-backdrop-filter: blur(14px) saturate(1.1) !important;
 }
 header#site-nav > nav,
-body > header > nav { max-width: 1240px !important; }
+body > header > nav { max-width: 1440px !important; }
 .brand-mark .brand-text,
 .brand,
 h1, h2, h3,

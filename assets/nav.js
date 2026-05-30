@@ -8,19 +8,17 @@
 
   const ROOT = siteRoot();
   const LINKS = [
-    { href: ROOT + '/index.html', label: 'Home', section: 'index' },
-    { href: ROOT + '/weather/', label: 'Weather', section: 'weather' },
-    { href: ROOT + '/plants/', label: 'Garden Center', section: 'plants' },
-    { href: ROOT + '/garden/', label: 'Garden Calendar', section: 'garden' },
-    { href: ROOT + '/experiments/image-gen-2-benchmark/', label: 'GPT Image 2', section: 'experiments/image-gen-2-benchmark' },
-    { href: ROOT + '/ai-news/', label: 'AI News', section: 'ai-news' },
-    { href: ROOT + '/photos/', label: 'Photos', section: 'photos' },
-    { href: ROOT + '/games/', label: 'Arcade', section: 'games' },
-    { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', section: 'experiments/ai-explainer' },
-    { href: ROOT + '/prototypes/hidden-reef/', label: 'Hidden Reef', section: 'prototypes/hidden-reef' },
-    { href: ROOT + '/ops/', label: 'Ops', section: 'ops' },
+    { href: ROOT + '/index.html', label: 'Home', sections: ['index'] },
+    { href: ROOT + '/weather/', label: 'Weather', sections: ['weather'] },
+    { href: ROOT + '/plants/', label: 'Garden', sections: ['plants', 'garden'] },
+    { href: ROOT + '/experiments/image-gen-2-benchmark/', label: 'GPT Image 2', sections: ['experiments/image-gen-2-benchmark'] },
+    { href: ROOT + '/ai-news/', label: 'AI News', sections: ['ai-news'] },
+    { href: ROOT + '/photos/', label: 'Photos', sections: ['photos', 'plants/past-years'] },
+    { href: ROOT + '/games/', label: 'Arcade', sections: ['games'] },
+    { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', sections: ['experiments/ai-explainer'] },
+    { href: ROOT + '/prototypes/hidden-reef/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'] },
+    { href: ROOT + '/ops/', label: 'Ops', sections: ['ops'] },
     { href: 'https://jz237.github.io/stock-command-center/', label: 'Stocks', external: true },
-    { href: ROOT + '/plants/past-years/', label: 'Archives', section: 'plants/past-years' },
     { href: 'https://baudersigns.com/', label: 'Bauder Signs', external: true }
   ];
 
@@ -77,7 +75,7 @@
         a.target = '_blank';
         a.rel = 'noopener';
       }
-      if (l.section === current) a.setAttribute('aria-current', 'page');
+      if ((l.sections || []).includes(current)) a.setAttribute('aria-current', 'page');
       linkBox.appendChild(a);
     });
 
