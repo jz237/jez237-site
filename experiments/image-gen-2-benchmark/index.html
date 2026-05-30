@@ -32,10 +32,49 @@
       line-height: 1.5;
     }
     .gallery-hero, main, footer { max-width: 1180px; margin: 0 auto; }
-    .gallery-hero { padding: 56px 22px 28px; }
+    .gallery-hero {
+      position: sticky;
+      top: var(--nav-height, 54px);
+      z-index: 8;
+      padding: 56px 22px 28px;
+      transition: padding .24s ease, max-width .24s ease, background .24s ease, border-color .24s ease, box-shadow .24s ease, backdrop-filter .24s ease;
+    }
+    .gallery-hero.is-collapsed {
+      max-width: none;
+      padding: 8px clamp(12px, 2vw, 22px);
+      background: rgba(12,15,20,.92);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 36px rgba(0,0,0,.28);
+      backdrop-filter: blur(16px) saturate(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(1.1);
+    }
+    .gallery-hero-inner { max-width: 1180px; margin: 0 auto; }
+    .gallery-hero.is-collapsed .gallery-hero-inner {
+      display: grid;
+      grid-template-columns: auto minmax(190px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+    }
     h1 { margin: 0 0 12px; font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.07em; line-height: .92; }
+    .gallery-hero.is-collapsed h1 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .gallery-hero.is-collapsed h1 br { display: none; }
     .lede { max-width: 850px; color: var(--muted); font-size: 1.1rem; }
+    .gallery-hero.is-collapsed .lede { display: none; }
     .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .gallery-hero.is-collapsed .meta,
+    .gallery-hero.is-collapsed .controls {
+      margin-top: 0;
+      gap: 8px;
+      min-width: 0;
+    }
+    .gallery-hero.is-collapsed .meta { justify-content: flex-end; }
+    .gallery-hero.is-collapsed .controls { flex-wrap: nowrap; }
     .pill, .control, button.control {
       border: 1px solid var(--line);
       background: rgba(255,255,255,.05);
@@ -46,6 +85,20 @@
     }
     a.pill { text-decoration: none; color: var(--accent); }
     .control { min-height: 40px; }
+    .gallery-hero.is-collapsed .control {
+      min-height: 34px;
+      padding: 6px 10px;
+      font-size: .9rem;
+    }
+    .gallery-hero.is-collapsed .pill {
+      min-height: 34px;
+      padding: 6px 10px;
+      font-size: .86rem;
+      display: inline-flex;
+      align-items: center;
+    }
+    .gallery-hero.is-collapsed .meta .pill:not(#count-pill) { display: none; }
+    .gallery-hero.is-collapsed #search { width: min(42vw, 420px); }
     select.control, input.control { outline: none; }
     button.control { cursor: pointer; color: var(--text); }
     main { padding: 12px 22px 70px; }
@@ -123,6 +176,12 @@
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
     @media (max-width: 680px) {
+      .gallery-hero.is-collapsed .gallery-hero-inner {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+      .gallery-hero.is-collapsed .meta { justify-content: flex-start; }
+      .gallery-hero.is-collapsed #search { width: 100%; }
       .day-heading { display: block; }
       .lightbox-hint { display: none; }
     }
@@ -132,17 +191,19 @@
   <header id="site-nav"></header>
 
   <header class="gallery-hero">
-    <h1>GPT Image 2<br>Daily Image Prompts</h1>
-    <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Four new prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
-    <div class="meta">
-      <span class="pill">Model: openai/gpt-image-2</span>
-      <span class="pill" id="count-pill">Images: loading…</span>
-      <span class="pill">Prompts collapsed by default</span>
-      <a class="pill" href="../../">← Home</a>
-    </div>
-    <div class="controls" aria-label="Gallery controls">
-      <input class="control" id="search" type="search" placeholder="Search prompts…">
-      <select class="control" id="date-filter"><option value="all">All dates</option></select>
+    <div class="gallery-hero-inner">
+      <h1>GPT Image 2<br>Daily Image Prompts</h1>
+      <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Four new prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
+      <div class="meta">
+        <span class="pill">Model: openai/gpt-image-2</span>
+        <span class="pill" id="count-pill">Images: loading…</span>
+        <span class="pill">Prompts collapsed by default</span>
+        <a class="pill" href="../../">← Home</a>
+      </div>
+      <div class="controls" aria-label="Gallery controls">
+        <input class="control" id="search" type="search" placeholder="Search prompts…">
+        <select class="control" id="date-filter"><option value="all">All dates</option></select>
+      </div>
     </div>
   </header>
 
@@ -174,9 +235,24 @@
       const dateFilter = document.getElementById('date-filter');
       const loadMore = document.getElementById('load-more');
       const loadMoreRow = document.getElementById('load-more-row');
+      const hero = document.querySelector('.gallery-hero');
+      const siteNav = document.getElementById('site-nav');
       const pageSize = 12;
       let allItems = [];
       let visibleCount = pageSize;
+
+      function updateHeroChrome() {
+        if (siteNav) {
+          document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 54}px`);
+        }
+        if (hero) hero.classList.toggle('is-collapsed', window.scrollY > 24);
+      }
+
+      window.addEventListener('scroll', updateHeroChrome, { passive: true });
+      window.addEventListener('resize', updateHeroChrome);
+      window.addEventListener('load', updateHeroChrome);
+      setTimeout(updateHeroChrome, 0);
+      setTimeout(updateHeroChrome, 150);
 
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
       const formatDate = (value) => {
