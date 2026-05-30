@@ -1,6 +1,6 @@
 {
   "date": "2026-05-30",
-  "updatedAt": "2026-05-30T08:00:01.594777+00:00",
+  "updatedAt": "2026-05-30T07:49:52.576491+00:00",
   "items": [
     {
       "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
@@ -16,7 +16,7 @@
       "lastSeen": "2026-05-30T08:00:01.594777+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 11.2827
+      "score": 11.2872
     },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
@@ -32,7 +32,7 @@
       "lastSeen": "2026-05-30T08:00:01.594777+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8198
+      "score": 5.824
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -43,13 +43,19 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-30T08:00:11.677306+00:00",
+      "published": "2026-05-30T07:49:56.691056+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T08:00:01.594777+00:00",
+      "lastSeen": "2026-05-30T07:49:52.576491+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "not well-formed (invalid token): line 1, column 119"
+    }
+  ]
 }
