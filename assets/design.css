@@ -945,7 +945,20 @@ body.home-page::before {
     linear-gradient(180deg, rgba(1,5,14,0.22), rgba(1,5,14,0.0) 38%, rgba(1,5,14,0.52));
 }
 .galaxy-spiral {
-  display: none !important;
+  display: block !important;
+  inset: -34vmax -38vmax;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(1,4,12,0.54), rgba(1,4,12,0.0) 17%, rgba(1,4,12,0.0) 83%, rgba(1,4,12,0.54)),
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.08), transparent 34%),
+    url("galaxy-home-20260530.png") center 50% / cover no-repeat;
+  opacity: 0.32;
+  filter: saturate(1.22) contrast(1.06) blur(0.4px);
+  mix-blend-mode: screen;
+  transform-origin: 50% 50%;
+  animation: galaxy-slow-turn 210s linear infinite;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
 }
 .galaxy-spiral::before {
   content: none;
@@ -959,7 +972,7 @@ body.home-page::before {
     radial-gradient(circle at 76% 72%, rgba(124,250,255,0.12), transparent 23%);
   filter: blur(11px);
   opacity: 0.78;
-  animation: galaxy-drift 18s ease-in-out infinite alternate;
+  animation: galaxy-dust-orbit 42s ease-in-out infinite alternate;
 }
 .galaxy-stars {
   display: none !important;
@@ -1559,9 +1572,18 @@ body.home-page::before {
   from { rotate: 0deg; }
   to { rotate: 360deg; }
 }
+@keyframes galaxy-slow-turn {
+  from { transform: rotate(-1deg) scale(1.03); }
+  to { transform: rotate(359deg) scale(1.03); }
+}
 @keyframes galaxy-drift {
   from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
   to { transform: translate3d(1.5%, 1%, 0) scale(1.08); }
+}
+@keyframes galaxy-dust-orbit {
+  0% { transform: translate3d(-1.2%, 0.5%, 0) rotate(-0.4deg) scale(1.01); }
+  50% { transform: translate3d(0.7%, -0.8%, 0) rotate(0.45deg) scale(1.035); }
+  100% { transform: translate3d(1.4%, 0.8%, 0) rotate(0.85deg) scale(1.055); }
 }
 @keyframes galaxy-star-slide {
   from { background-position: 14px 8px, 38px 25px; }
@@ -1574,6 +1596,8 @@ body.home-page::before {
   .game-laser { animation-duration: 2.4s; }
   .game-asteroid { animation-duration: 5.2s; }
   .game-pickup { animation-duration: 3.4s; }
+  body.home-page::before,
+  .desktop-hub::before,
   .galaxy-backdrop::before,
   .galaxy-spiral,
   .galaxy-dust,
