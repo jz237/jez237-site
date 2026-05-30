@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-30T20:00:01.187066+00:00",
+  "updatedAt": "2026-05-30T20:15:58.969723+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8600,6 +8600,10 @@
     "https://simonwillison.net/2026/May/30/daniel-jalkut": {
       "image": "",
       "checkedAt": "2026-05-30T18:00:01.097680+00:00"
+    },
+    "https://simonwillison.net/2026/May/30/retiring-from-tech-to-live-offline": {
+      "image": "",
+      "checkedAt": "2026-05-30T20:15:58.969723+00:00"
     }
   }
 }
