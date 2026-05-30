@@ -29,8 +29,8 @@
       label: 'Garden',
       tone: 'garden',
       items: [
-        ['plants', 'plants/', 'plants', 'Garden Center'],
-        ['garden', 'garden/', 'garden', 'Garden Calendar']
+        ['plants', 'plants/', 'plants', 'Garden'],
+        ['garden', 'garden/', 'garden', 'Calendar']
       ]
     },
     {
@@ -57,7 +57,7 @@
       label: 'Archive + Work',
       tone: 'archive',
       items: [
-        ['archives', 'plants/past-years/', 'archives', 'Archives'],
+        ['archives', 'plants/past-years/', 'archives', 'Photo Archives'],
         ['bauder', 'https://baudersigns.com/', 'bauder', 'Bauder Signs']
       ]
     }
