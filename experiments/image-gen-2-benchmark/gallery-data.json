@@ -1042,5 +1042,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-30-midday-needlepoint-canal-control-room",
+    "title": "Needlepoint Canal Control Room",
+    "tests": "Tests whether GPT Image 2 can make an operational control-room scene read entirely as stitched needlepoint, with grid canvas, raised knots, limited thread colors, and tactile fiber constraints instead of a photorealistic room, document, specimen tray, or glossy concept art.",
+    "prompt": "Title: Needlepoint Canal Control Room\nFormat name: Needlepoint Control Room\nCategory/kind: embroidery\nTests/explores: Tests whether GPT Image 2 can make an operational control-room scene read entirely as stitched needlepoint, with grid canvas, raised knots, limited thread colors, and tactile fiber constraints instead of a photorealistic room, document, specimen tray, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a photographed handmade needlepoint embroidery panel. The entire image must appear stitched in wool thread on visible open-weave canvas: raised knots, diagonal tent stitches, slight thread fuzz, uneven tension, and a few tiny missed stitches. Subject: an imaginary municipal canal control room seen straight-on, with simplified stitched gauges, lever panels, indicator lamps, canal lock diagrams, rainwater level dials, and two empty swivel chairs. Use a limited thread palette of teal, brick red, cream, mustard, black, and pale gray. The composition should feel like a real textile craft object pinned flat to a neutral wall with small brass tacks at the corners. Include short stitched labels as abstract marks, not readable paragraphs. No people, no dancing, no copyrighted logos or characters, no photorealistic metal, no glossy sci-fi screen, no archive document, no specimen tray, no table layout.",
+    "image": "images/2026-05-30-midday-needlepoint-canal-control-room.png",
+    "date": "2026-05-30",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
