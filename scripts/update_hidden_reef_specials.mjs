@@ -5,6 +5,7 @@ import path from 'node:path';
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const pagePath = path.join(repoRoot, 'prototypes/hidden-reef/index.html');
 const reportDir = path.join(repoRoot, 'tmp', `hidden-reef-specials-${new Date().toISOString().replace(/[:.]/g, '-')}`);
+const homeUrl = 'https://www.thehiddenreef.com/';
 const salesUrl = 'https://www.thehiddenreef.com/sales-online/';
 const args = parseArgs(process.argv.slice(2));
 const write = Boolean(args.write);
@@ -35,6 +36,11 @@ const artBySlug = {
     image: 'assets/site/specials/reef-factory-special-gpt2.jpg',
     label: 'ATO, meters, smart rollers, controllers',
     alt: 'Reef aquarium automation and monitoring equipment beside a reef tank'
+  },
+  aiosale: {
+    image: 'assets/site/product-reef-system.jpg',
+    label: 'Featured AIO aquarium systems',
+    alt: 'All-in-one aquarium system in a clean showroom setting'
   }
 };
 
@@ -68,6 +74,12 @@ const copyBySlug = {
     primaryLabel: 'Shop Reef Factory',
     discountLabel: '40% off Reef Factory',
     localCategory: { label: 'Water care', href: 'category/?cat=maintenance' }
+  },
+  aiosale: {
+    title: 'Innovative Marine AIO Aquariums',
+    primaryLabel: 'Shop AIO Aquariums',
+    discountLabel: 'Homepage feature',
+    localCategory: { label: 'See aquariums', href: 'category/?cat=aquariums' }
   }
 };
 
@@ -140,6 +152,40 @@ async function fetchHtml(url) {
 function slugFromUrl(url) {
   const pathname = new URL(url).pathname.replace(/\/+$/, '');
   return pathname.split('/').pop() || '';
+}
+
+function parseBackgroundImageUrl(value = '', baseUrl = '') {
+  const match = value.match(/background-image:\s*url\((['"]?)(.*?)\1\)/i);
+  return match ? absoluteUrl(match[2], baseUrl) : '';
+}
+
+function inferHomepagePromoTitle(url) {
+  const slug = slugFromUrl(url);
+  if (copyBySlug[slug]?.title) return copyBySlug[slug].title;
+  return titleCaseSale(slug.replace(/-/g, ' '));
+}
+
+function parseHomepagePromos(html) {
+  const promos = [];
+  const seen = new Set();
+  const blockPattern = /<(?:div|section)\b[^>]*style="([^"]*background-image:[^"]*)"[^>]*>[\s\S]*?<a\s+href="([^"]+)"[^>]*class="[^"]*\bbtn\b[^"]*"[^>]*>([\s\S]*?)<\/a>/gi;
+  let match;
+  while ((match = blockPattern.exec(html))) {
+    const url = absoluteUrl(match[2], homeUrl);
+    const slug = slugFromUrl(url);
+    const isSpecial = /\/sales-online\/[^/]+\/?$/.test(new URL(url).pathname) || slug === 'aiosale';
+    if (!isSpecial || seen.has(url)) continue;
+    seen.add(url);
+    promos.push({
+      title: inferHomepagePromoTitle(url),
+      url,
+      slug,
+      count: 0,
+      homepageImage: parseBackgroundImageUrl(match[1], homeUrl),
+      homepageButton: stripTags(match[3])
+    });
+  }
+  return promos;
 }
 
 function parseSaleDepartments(html) {
@@ -253,6 +299,9 @@ function localCategoryFor(title) {
 }
 
 function describeSale(title, products) {
+  if (/aio/i.test(title)) {
+    return 'Their homepage is featuring compact Innovative Marine all-in-one aquariums, a good fit for clean desktop or small-room setups.';
+  }
   if (/red sea/i.test(title)) {
     return 'Save on Red Sea reef test kits, supplements, meters, media, pumps, replacement parts, and aquarium systems while the sale is active.';
   }
@@ -290,6 +339,13 @@ function shortProductName(name) {
 }
 
 function artFor(department, products) {
+  if (department.homepageImage) {
+    return {
+      image: department.homepageImage,
+      label: artBySlug[department.slug]?.label || department.title,
+      alt: artBySlug[department.slug]?.alt || department.title
+    };
+  }
   const configured = artBySlug[department.slug];
   if (configured) return configured;
   const first = products.find(product => product.imageUrl);
@@ -304,8 +360,10 @@ async function enrichDepartment(department) {
   const html = await fetchHtml(department.url);
   const products = parseProductCards(html, department.url);
   const discount = discountFromTitle(department.title, products);
+  const count = department.count || products.length;
   return {
     ...department,
+    count,
     title: copyBySlug[department.slug]?.title || titleCaseSale(department.title),
     eyebrow: eyebrowFor(department.title),
     products,
@@ -356,10 +414,17 @@ function replaceSpecialsTrack(page, renderedSlides) {
 
 await fs.mkdir(reportDir, { recursive: true });
 
+const homeHtml = await fetchHtml(homeUrl);
 const salesHtml = await fetchHtml(salesUrl);
-const departments = parseSaleDepartments(salesHtml).slice(0, maxSpecials);
+const salesDepartments = parseSaleDepartments(salesHtml);
+const salesDepartmentByUrl = new Map(salesDepartments.map(department => [department.url, department]));
+const homepagePromos = parseHomepagePromos(homeHtml).map(promo => ({
+  ...promo,
+  count: salesDepartmentByUrl.get(promo.url)?.count || promo.count
+}));
+const departments = (homepagePromos.length ? homepagePromos : salesDepartments).slice(0, maxSpecials);
 if (!departments.length) {
-  throw new Error('No sale departments parsed from Hidden Reef sales page');
+  throw new Error('No sale departments parsed from Hidden Reef homepage or sales page');
 }
 
 const specials = [];
@@ -373,7 +438,8 @@ const changed = nextPage !== page;
 
 const report = {
   timestamp: new Date().toISOString(),
-  sourceUrl: salesUrl,
+  sourceUrl: homepagePromos.length ? homeUrl : salesUrl,
+  sourceMode: homepagePromos.length ? 'homepage-promos' : 'sales-online-fallback',
   write,
   changed,
   specials: specials.map(special => ({
