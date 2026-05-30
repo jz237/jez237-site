@@ -1,0 +1,233 @@
+<!doctype html>
+<!--
+  FOR AI ASSISTANTS
+  If you're an AI reading this page to help the owner add a plant / pet /
+  garden photo to this site, fetch /llms.txt at the site root for the full
+  operating instructions (destination slugs, photo path conventions, voice
+  rules, HTML templates, output format). Summary below in <section id="ai-agents">.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Jez237 — Home</title>
+  <link rel="icon" type="image/svg+xml" href="assets/brand.svg" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/site-enhance.css" />
+  <link rel="stylesheet" href="assets/design.css?v=galaxy-photo-20260530" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .hero-editorial .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .hero-editorial .actions a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: transform 0.3s var(--ease-out), box-shadow 0.3s ease;
+    }
+    .hero-editorial .actions a:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.3); }
+    .hero-editorial .actions a.primary {
+      background: linear-gradient(120deg, rgba(232,197,122,0.9), rgba(224,102,126,0.85));
+      color: #1d1811;
+    }
+    .hero-editorial .actions a.secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--ink-hi);
+      border: 1px solid rgba(232,197,122,0.25);
+    }
+    /* Weather strip into hero */
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--ink-lo);
+      letter-spacing: 0.02em;
+    }
+    .hero-meta span strong { color: var(--ink-mid); font-weight: 500; }
+  </style>
+  <link rel="stylesheet" href="assets/workbench-theme.css" />
+</head>
+<body class="home-page">
+  <header id="site-nav" class="home-hidden-nav"></header>
+
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="home-title">
+      <div class="galaxy-backdrop" aria-hidden="true">
+        <span class="galaxy-spiral"></span>
+        <span class="galaxy-dust"></span>
+        <span class="galaxy-stars galaxy-stars-a"></span>
+        <span class="galaxy-stars galaxy-stars-b"></span>
+      </div>
+
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="./">
+          <strong>Jez237</strong>
+          <span>Philadelphia · Zone 7a</span>
+        </a>
+        <p class="sidebar-note">A living journal. A garden journal and a workbench.</p>
+
+        <nav class="side-nav" data-site-menu data-active="overview" data-base=""></nav>
+
+        <div class="side-controls" aria-hidden="true">
+          <span>☼</span><span>☾</span><span>⚙</span>
+        </div>
+      </aside>
+
+      <div class="hub-main">
+        <div class="hub-topbar">
+          <div class="home-title-lockup">
+            <span class="home-kicker">Personal command center</span>
+            <h1 id="home-title">Home Base</h1>
+            <p>Projects, garden notes, weather, AI experiments, photos, and whatever gets built next — all gathered in one useful place.</p>
+            <div class="home-signal-row" aria-label="Site focus areas">
+              <span>Philadelphia</span>
+              <span>Zone 7a garden</span>
+              <span>AI workbench</span>
+            </div>
+          </div>
+        </div>
+
+        <section class="hub-card-grid" aria-label="Modular workbench hub">
+          <a class="hub-card" href="plants/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/garden-center.jpg')"></div>
+            <h2>Garden</h2>
+            <p>Plants, beds, soil notes, varieties &amp; experiments</p>
+            <span>View →</span>
+          </a>
+          <a class="hub-card" href="experiments/image-gen-2-benchmark/">
+            <div class="hub-card-media" style="background-image:url('experiments/image-gen-2-benchmark/images/05-weather-map-dragon.png')"></div>
+            <h2>Daily GPT Image 2 Prompts</h2>
+            <p>A growing archive of creative prompts and generated images.</p>
+            <span>Explore →</span>
+          </a>
+          <a class="hub-card" href="https://baudersigns.com/" target="_blank" rel="noopener">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/bauder-signs.jpg')"></div>
+            <h2>Bauder Signs</h2>
+            <p>Signs, vehicle graphics, fleet lettering, and shop work.</p>
+            <span>Visit →</span>
+          </a>
+          <a class="hub-card" href="photos/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/photos.jpg')"></div>
+            <h2>Photos, kept casual</h2>
+            <p>Snapshots from the garden and beyond.</p>
+            <span>Browse →</span>
+          </a>
+          <a class="hub-card" href="games/">
+            <div class="hub-card-media game-card-animation" aria-hidden="true">
+              <i class="game-stars"></i>
+              <i class="game-ship"></i>
+              <i class="game-laser laser-one"></i>
+              <i class="game-laser laser-two"></i>
+              <i class="game-laser laser-three"></i>
+              <i class="game-laser laser-four"></i>
+              <i class="game-asteroid rock-one"></i>
+              <i class="game-asteroid rock-two"></i>
+              <i class="game-asteroid rock-three"></i>
+              <i class="game-asteroid rock-four"></i>
+              <i class="game-pickup"></i>
+              <i class="game-score"></i>
+            </div>
+            <h2>GameMaster Arcade</h2>
+            <p>Playable prototypes &amp; experiments.</p>
+            <span>Play →</span>
+          </a>
+          <a class="hub-card" href="https://jz237.github.io/jez237-site/prototypes/hidden-reef/" target="_blank" rel="noopener">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/hidden-reef.jpg')"></div>
+            <h2>The Hidden Reef</h2>
+            <p>Aquarium store redesign prototype — freshwater, saltwater, pond, and beyond.</p>
+            <span>Explore →</span>
+          </a>
+          <a class="hub-card" href="weather/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/weather-console.jpg')"></div>
+            <h2>Weather Console</h2>
+            <p>Live local forecast, air quality, UV, radar, and hourly conditions.</p>
+            <span>Check →</span>
+          </a>
+          <a class="hub-card" href="https://jz237.github.io/stock-command-center/" target="_blank" rel="noopener">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/stock-command-center.jpg')"></div>
+            <h2>Stock Command Center</h2>
+            <p>Market dashboard, watchlists, charts &amp; trading notes.</p>
+            <span>Launch →</span>
+          </a>
+          <a class="hub-card" href="ai-news/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/ai-news.jpg')"></div>
+            <h2>AI News</h2>
+            <p>AI model &amp; tooling stream. Curated daily.</p>
+            <span>Read →</span>
+          </a>
+          <a class="hub-card" href="ops/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/operations-statistics.jpg')"></div>
+            <h2>Operations &amp; Statistics</h2>
+            <p>Computer info, agent stats, runtime notes, and whatever belongs on the dashboard next.</p>
+            <span>Inspect →</span>
+          </a>
+          <a class="hub-card" href="experiments/ai-explainer/">
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/ai-explainer.jpg?v=neural-network-20260526')"></div>
+            <h2>How AI Works</h2>
+            <p>Interactive demos for agents, tokens, context, prompts, tools, and failure modes.</p>
+            <span>Learn →</span>
+          </a>
+        </section>
+
+        <section class="quick-glance" aria-label="Quick glance">
+          <h2>Quick Glance</h2>
+          <div class="glance-grid">
+            <div><span>Weather</span><strong>61°F · Partly Cloudy</strong></div>
+            <div><span>Next Task</span><strong>Water new plantings</strong></div>
+            <div><span>Next Event</span><strong>Prune grapevine · May 20</strong></div>
+            <div><span>Moon Phase</span><strong>Waxing Gibbous</strong></div>
+            <div><span>AI News</span><strong>3 new updates</strong></div>
+            <div><span>Markets</span><strong>Stock Command Center linked</strong></div>
+            <div><span>Garden Zone</span><strong>Zone 7a</strong></div>
+          </div>
+        </section>
+
+        <section id="ai-agents" class="below-hub ai-agent-hub">
+          <article>
+            <span class="module-kicker">For AI assistants</span>
+            <h2>Adding photos with an AI</h2>
+            <p>Upload a plant, pet, or garden photo and say “add this to my garden site at github.com/jz237/jez237-site”. The assistant should fetch <a href="llms.txt">/llms.txt</a> for full instructions.</p>
+            <details>
+              <summary>Show the full AI prompt here</summary>
+              <div><span id="ai-agents-prompt">Loading instructions from /llms.txt…</span></div>
+            </details>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);">
+      <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a>
+    </footer>
+    <script>
+      // Lazy-load the llms.txt contents into the collapsible when opened
+      (function () {
+        const det = document.querySelector('#ai-agents details');
+        const mount = document.getElementById('ai-agents-prompt');
+        if (!det || !mount) return;
+        let loaded = false;
+        det.addEventListener('toggle', async () => {
+          if (!det.open || loaded) return;
+          try {
+            const r = await fetch('llms.txt');
+            mount.textContent = r.ok ? await r.text() : 'Could not load /llms.txt';
+            loaded = true;
+          } catch (e) {
+            mount.textContent = 'Could not load /llms.txt (' + e.message + ')';
+          }
+        });
+      })();
+    </script>
+  </main>
+
+  <script src="assets/app.js"></script>
+  <script src="assets/site-enhance.js" defer></script>
+  <script src="assets/side-menu.js?v=nav-sections-20260526" defer></script>
+  <script src="assets/nav.js" defer></script>
+</body>
+</html>
