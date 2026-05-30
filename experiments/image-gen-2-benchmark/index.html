@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>GPT Image 2 — Daily Image Prompts</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/design.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c0f14;
+      --panel: #141923;
+      --panel-2: #1b2230;
+      --text: #eef3fb;
+      --muted: #aab6c8;
+      --accent: #8bd3ff;
+      --line: rgba(255,255,255,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139,211,255,.16), transparent 34rem),
+        radial-gradient(circle at 80% 10%, rgba(255,178,102,.12), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .gallery-hero, main, footer { max-width: 1180px; margin: 0 auto; }
+    .gallery-hero {
+      position: relative;
+      top: auto;
+      z-index: 1;
+      padding: 56px 22px 28px;
+    }
+    .gallery-hero-inner { max-width: 1180px; margin: 0 auto; }
+    h1 { margin: 0 0 12px; font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.07em; line-height: .92; }
+    .lede { max-width: 850px; color: var(--muted); font-size: 1.1rem; }
+    .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .pill, .control, button.control {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font: inherit;
+    }
+    a.pill { text-decoration: none; color: var(--accent); }
+    .control { min-height: 40px; }
+    select.control, input.control { outline: none; }
+    button.control { cursor: pointer; color: var(--text); }
+    .compact-toolbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: var(--nav-height, 54px);
+      z-index: 9;
+      padding: 8px clamp(12px, 2vw, 22px);
+      background: rgba(12,15,20,.92);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 36px rgba(0,0,0,.28);
+      backdrop-filter: blur(16px) saturate(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(1.1);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity .16s ease, transform .16s ease;
+    }
+    .compact-toolbar.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .compact-toolbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto minmax(220px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+    }
+    .compact-title {
+      font-weight: 800;
+      white-space: nowrap;
+      letter-spacing: -0.02em;
+    }
+    .compact-controls {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      min-width: 0;
+    }
+    .compact-controls .control {
+      min-height: 34px;
+      padding: 6px 10px;
+      font-size: .9rem;
+    }
+    #toolbar-search { width: min(42vw, 420px); }
+    .compact-count {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: .86rem;
+      white-space: nowrap;
+    }
+    main { padding: 12px 22px 70px; }
+    .gallery-list { display: block; }
+    .load-more-row { display: flex; justify-content: center; margin: 30px 0 0; }
+    .day-group { margin-top: 28px; }
+    .day-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 0 4px 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .day-heading h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2.2rem); letter-spacing: -.04em; }
+    .day-heading span { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+    .image-wrap { background: #05070a; aspect-ratio: 1 / 1; display:flex; align-items:center; justify-content:center; position: relative; }
+    .image-wrap.portrait { aspect-ratio: 2 / 3; }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(5,7,10,.62);
+      color: rgba(238,243,251,.86);
+      font-size: .78rem;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-wrap.portrait img { object-fit: contain; background: #05070a; }
+    .image-wrap img { cursor: zoom-in; }
+    .content { padding: 20px; background: linear-gradient(180deg, rgba(20,25,35,.95), rgba(20,25,35,.82)); }
+    .kicker { color: var(--accent); text-transform: uppercase; font-size: .74rem; letter-spacing: .14em; font-weight: 800; }
+    h3 { margin: 7px 0 10px; font-size: 1.35rem; line-height: 1.08; }
+    .tests { color: var(--muted); margin: 0 0 14px; }
+    details { border-top: 1px solid var(--line); padding-top: 14px; }
+    summary { cursor: pointer; color: var(--text); font-weight: 750; margin-bottom: 10px; }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #d8e3f3;
+      background: rgba(0,0,0,.26);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: .84rem;
+    }
+    .empty { color: var(--muted); padding: 32px; border: 1px dashed var(--line); border-radius: 22px; }
+    footer { padding: 0 22px 50px; color: var(--muted); }
+    .lightbox { position: fixed; inset: 0; z-index: 50; display: none; background: rgba(3,5,8,.94); backdrop-filter: blur(14px); color: var(--text); }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr; }
+    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(12,15,20,.78); }
+    .lightbox-title { min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: var(--muted); font-size: .88rem; font-weight: 500; }
+    .lightbox-close { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.06); color: var(--text); padding: 8px 12px; cursor: pointer; font: inherit; }
+    .lightbox-stage { min-height: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox-stage img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 28px 90px rgba(0,0,0,.55); cursor: zoom-in; }
+    .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
+    .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+    @media (max-width: 680px) {
+      .compact-toolbar-inner {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+      #toolbar-search { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+      .day-heading { display: block; }
+      .lightbox-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <header class="gallery-hero">
+    <div class="gallery-hero-inner">
+      <h1>GPT Image 2<br>Daily Image Prompts</h1>
+      <p class="lede">A growing archive of creative GPT Image 2 prompts and generated images. Four new prompts are scheduled throughout each day, then posted here and in the AI photos Discord channel.</p>
+      <div class="meta">
+        <span class="pill">Model: openai/gpt-image-2</span>
+        <span class="pill" id="count-pill">Images: loading…</span>
+        <span class="pill">Prompts collapsed by default</span>
+        <a class="pill" href="../../">← Home</a>
+      </div>
+      <div class="controls" aria-label="Gallery controls">
+        <input class="control" id="search" type="search" placeholder="Search prompts…">
+        <select class="control" id="date-filter"><option value="all">All dates</option></select>
+      </div>
+    </div>
+  </header>
+
+  <div class="compact-toolbar" id="compact-toolbar" aria-label="Gallery quick controls">
+    <div class="compact-toolbar-inner">
+      <div class="compact-title">GPT Image 2</div>
+      <div class="compact-controls">
+        <input class="control" id="toolbar-search" type="search" placeholder="Search prompts...">
+        <select class="control" id="toolbar-date-filter"><option value="all">All dates</option></select>
+      </div>
+      <span class="compact-count" id="toolbar-count">Images: loading...</span>
+    </div>
+  </div>
+
+  <main>
+    <div id="gallery" class="gallery-list" aria-live="polite"></div>
+    <div class="load-more-row" id="load-more-row">
+      <button class="control" id="load-more" type="button">Load more</button>
+    </div>
+  </main>
+
+  <footer>
+    Images are stored beside this page in <code>images/</code>; prompt metadata is saved as <code>gallery-data.json</code>. Click any image for fullscreen, then click it again for true 1:1 size.
+  </footer>
+
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+  </div>
+
+  <script>
+    (function () {
+      const gallery = document.getElementById('gallery');
+      const countPill = document.getElementById('count-pill');
+      const search = document.getElementById('search');
+      const dateFilter = document.getElementById('date-filter');
+      const toolbar = document.getElementById('compact-toolbar');
+      const toolbarSearch = document.getElementById('toolbar-search');
+      const toolbarDateFilter = document.getElementById('toolbar-date-filter');
+      const toolbarCount = document.getElementById('toolbar-count');
+      const loadMore = document.getElementById('load-more');
+      const loadMoreRow = document.getElementById('load-more-row');
+      const hero = document.querySelector('.gallery-hero');
+      const siteNav = document.getElementById('site-nav');
+      const pageSize = 12;
+      let allItems = [];
+      let visibleCount = pageSize;
+      let ticking = false;
+
+      function updateHeroChrome() {
+        if (siteNav) document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 54}px`);
+        if (!toolbar || !hero) return;
+        const threshold = hero.offsetTop + hero.offsetHeight - 40;
+        toolbar.classList.toggle('is-visible', window.scrollY > threshold);
+      }
+
+      window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateHeroChrome();
+          ticking = false;
+        });
+      }, { passive: true });
+      window.addEventListener('resize', updateHeroChrome);
+      window.addEventListener('load', updateHeroChrome);
+      setTimeout(updateHeroChrome, 0);
+      setTimeout(updateHeroChrome, 150);
+
+      const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const formatDate = (value) => {
+        if (!value) return 'Undated';
+        const [y, m, d] = value.split('-').map(Number);
+        const dt = new Date(y, (m || 1) - 1, d || 1);
+        return dt.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      };
+
+      function filteredItems() {
+        const q = search.value.trim().toLowerCase();
+        const date = dateFilter.value;
+        return allItems.filter((item) => {
+          if (date !== 'all' && item.date !== date) return false;
+          if (!q) return true;
+          return [item.title, item.prompt, item.tests, item.batch].some((v) => String(v || '').toLowerCase().includes(q));
+        });
+      }
+
+      function render() {
+        const items = filteredItems();
+        const shown = items.slice(0, visibleCount);
+        countPill.textContent = `Images: ${allItems.length}`;
+        toolbarCount.textContent = `Images: ${allItems.length}`;
+        loadMoreRow.hidden = visibleCount >= items.length;
+        if (!shown.length) {
+          gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
+          return;
+        }
+        const groups = new Map();
+        shown.forEach((item) => {
+          const key = item.date || 'undated';
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(item);
+        });
+        gallery.innerHTML = Array.from(groups.entries()).map(([date, group]) => `
+          <section class="day-group">
+            <div class="day-heading"><h2>${escapeHtml(formatDate(date))}</h2><span>${group.length} shown</span></div>
+            <div class="grid">
+              ${group.map(cardHtml).join('')}
+            </div>
+          </section>
+        `).join('');
+        bindImages();
+      }
+
+      function cardHtml(item) {
+        const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        return `
+          <article class="card" id="${escapeHtml(item.id)}">
+            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="content">
+              <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
+              <h3>${escapeHtml(item.title)}</h3>
+              ${item.tests ? `<p class="tests"><strong>Explores:</strong> ${escapeHtml(item.tests)}</p>` : ''}
+              <details>
+                <summary>Show prompt</summary>
+                <pre>${escapeHtml(item.prompt)}</pre>
+              </details>
+            </div>
+          </article>`;
+      }
+
+      function populateDates() {
+        const dates = [...new Set(allItems.map((item) => item.date).filter(Boolean))].sort().reverse();
+        const options = '<option value="all">All dates</option>' + dates.map((date) => `<option value="${escapeHtml(date)}">${escapeHtml(formatDate(date))}</option>`).join('');
+        dateFilter.innerHTML = options;
+        toolbarDateFilter.innerHTML = options;
+      }
+
+      function applyFilters(nextSearch, nextDate) {
+        search.value = nextSearch;
+        toolbarSearch.value = nextSearch;
+        dateFilter.value = nextDate;
+        toolbarDateFilter.value = nextDate;
+        visibleCount = pageSize;
+        render();
+      }
+
+      search.addEventListener('input', () => applyFilters(search.value, dateFilter.value));
+      toolbarSearch.addEventListener('input', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
+      dateFilter.addEventListener('change', () => applyFilters(search.value, dateFilter.value));
+      toolbarDateFilter.addEventListener('change', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
+      loadMore.addEventListener('click', () => { visibleCount += pageSize; render(); });
+
+      fetch('gallery-data.json', { cache: 'no-cache' })
+        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load gallery-data.json')))
+        .then((items) => {
+          allItems = items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')) || String(b.id || '').localeCompare(String(a.id || '')));
+          populateDates();
+          render();
+        })
+        .catch((err) => { gallery.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
+
+      const viewer = document.getElementById('image-lightbox');
+      const stage = document.getElementById('lightbox-stage');
+      const image = document.getElementById('lightbox-image');
+      const title = document.getElementById('lightbox-title');
+      const close = document.getElementById('lightbox-close');
+
+      function bindImages() {
+        document.querySelectorAll('.image-wrap img').forEach((thumb) => {
+          thumb.setAttribute('tabindex', '0');
+          thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
+          thumb.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openViewer(thumb.currentSrc || thumb.src, thumb.alt);
+            }
+          });
+        });
+      }
+      function openViewer(src, alt) {
+        image.src = src;
+        image.alt = alt || 'Expanded generated image';
+        title.textContent = alt || 'Generated image';
+        viewer.classList.add('open');
+        viewer.classList.remove('actual');
+        viewer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        close.focus({ preventScroll: true });
+      }
+      function closeViewer() {
+        viewer.classList.remove('open', 'actual');
+        viewer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        image.removeAttribute('src');
+      }
+      image.addEventListener('click', (event) => {
+        event.stopPropagation();
+        viewer.classList.toggle('actual');
+        if (viewer.classList.contains('actual')) {
+          stage.scrollLeft = Math.max(0, (image.naturalWidth - stage.clientWidth) / 2);
+          stage.scrollTop = Math.max(0, (image.naturalHeight - stage.clientHeight) / 2);
+        }
+      });
+      stage.addEventListener('click', (event) => { if (event.target === stage) closeViewer(); });
+      close.addEventListener('click', closeViewer);
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer.classList.contains('open')) closeViewer(); });
+    })();
+  </script>
+  <script src="../../assets/nav.js" defer></script>
+</body>
+</html>
