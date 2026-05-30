@@ -852,25 +852,22 @@ header#site-nav .links a:hover { transform: translateY(-1px); }
 }
 body.home-page {
   background:
-    radial-gradient(ellipse at 0% 54%, rgba(76,211,255,0.55), transparent 31%),
-    radial-gradient(ellipse at 100% 54%, rgba(40,153,255,0.48), transparent 33%),
+    radial-gradient(ellipse at 0% 54%, rgba(76,211,255,0.28), transparent 34%),
+    radial-gradient(ellipse at 100% 54%, rgba(40,153,255,0.26), transparent 36%),
     linear-gradient(180deg, #020711, #061833 62%, #020711) !important;
 }
 body.home-page::before {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -7vh -10vw;
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 0% 52%, rgba(102,226,255,0.62), transparent 31%),
-    radial-gradient(ellipse at 100% 51%, rgba(52,158,255,0.54), transparent 33%),
-    radial-gradient(ellipse at 30% 48%, rgba(240,252,255,0.54) 0 5%, rgba(107,225,255,0.48) 13%, rgba(14,176,255,0.3) 30%, transparent 57%),
-    radial-gradient(ellipse at 72% 31%, rgba(38,155,255,0.28), transparent 42%),
-    radial-gradient(circle at 79% 74%, rgba(54,211,255,0.17), transparent 26%),
-    radial-gradient(circle, rgba(255,255,255,0.34) 0 1px, transparent 1.6px) 0 0 / 48px 36px,
-    radial-gradient(circle, rgba(114,226,255,0.28) 0 1px, transparent 1.8px) 21px 14px / 84px 63px,
-    linear-gradient(180deg, #020711, #061833 62%, #020711);
+    linear-gradient(90deg, rgba(2,7,17,0.86), rgba(2,7,17,0.04) 18%, rgba(2,7,17,0.02) 82%, rgba(2,7,17,0.86)),
+    linear-gradient(180deg, rgba(2,7,17,0.48), rgba(2,7,17,0.02) 25%, rgba(2,7,17,0.14) 68%, rgba(2,7,17,0.76)),
+    url("galaxy-home-20260530.png") center 41% / cover no-repeat;
+  opacity: 0.76;
+  filter: saturate(1.18) contrast(1.06);
   animation: galaxy-drift 24s ease-in-out infinite alternate;
 }
 .desktop-hub {
@@ -887,28 +884,39 @@ body.home-page::before {
 }
 .desktop-hub::before {
   content: "";
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  inset: -12vh -22vw -16vh;
   z-index: -2;
   background:
-    radial-gradient(ellipse at 35% 44%, rgba(103,221,255,0.32), transparent 38%),
-    radial-gradient(ellipse at 73% 24%, rgba(19,133,255,0.22), transparent 34%),
-    radial-gradient(circle at 82% 72%, rgba(54,211,255,0.18), transparent 24%),
-    linear-gradient(180deg, #020711, #061833 62%, #020711);
+    linear-gradient(90deg, rgba(2,7,17,0.8), rgba(2,7,17,0.0) 16%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.8)),
+    linear-gradient(180deg, rgba(2,7,17,0.76), rgba(2,7,17,0.0) 24%, rgba(2,7,17,0.18) 72%, rgba(2,7,17,0.86)),
+    url("galaxy-home-20260530.png") center 42% / cover no-repeat;
+  opacity: 0.96;
+  filter: saturate(1.28) contrast(1.08);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  animation: galaxy-drift 28s ease-in-out infinite alternate;
 }
 .galaxy-backdrop {
   position: absolute;
-  inset: -12%;
+  inset: -10vh -18vw -14vh;
   z-index: 0;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 30% 48%, rgba(240,252,255,0.9) 0 7%, rgba(107,225,255,0.86) 14%, rgba(14,176,255,0.56) 31%, transparent 55%),
-    radial-gradient(ellipse at 47% 40%, rgba(59,198,255,0.62), transparent 38%),
-    radial-gradient(ellipse at 76% 30%, rgba(16,124,255,0.36), transparent 42%),
-    radial-gradient(ellipse at 72% 82%, rgba(39,201,255,0.3), transparent 34%),
-    linear-gradient(180deg, #01040c 0%, #041634 56%, #010612 100%);
+    linear-gradient(90deg, rgba(1,4,12,0.68), rgba(1,4,12,0.0) 13%, rgba(1,4,12,0.0) 87%, rgba(1,4,12,0.68)),
+    linear-gradient(180deg, rgba(1,4,12,0.78), rgba(1,4,12,0.02) 22%, rgba(1,4,12,0.1) 68%, rgba(1,4,12,0.82)),
+    url("galaxy-home-20260530.png") center 43% / cover no-repeat;
+  filter: saturate(1.36) contrast(1.08);
   transform: translateZ(0);
   pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(180deg, transparent, #000 8%, #000 89%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(180deg, transparent, #000 8%, #000 89%, transparent);
+  mask-composite: intersect;
 }
 .galaxy-backdrop::before,
 .galaxy-backdrop::after,
@@ -919,86 +927,42 @@ body.home-page::before {
   pointer-events: none;
 }
 .galaxy-backdrop::before {
-  left: -18%;
-  top: 2%;
-  width: 106%;
-  height: 82%;
+  inset: 0;
   background:
-    radial-gradient(ellipse at 38% 58%, rgba(255,255,255,0.98) 0 9%, rgba(156,239,255,0.82) 15%, rgba(25,183,255,0.42) 34%, transparent 62%),
-    repeating-radial-gradient(ellipse at 38% 58%,
-      transparent 0 42px,
-      rgba(215,248,255,0.3) 47px 53px,
-      rgba(66,210,255,0.14) 58px 72px,
-      transparent 84px 128px),
-    conic-gradient(from 212deg at 38% 58%,
-      transparent 0 22deg,
-      rgba(235,252,255,0.56) 34deg 55deg,
-      rgba(46,195,255,0.28) 66deg 88deg,
-      transparent 100deg 156deg,
-      rgba(221,249,255,0.5) 172deg 196deg,
-      rgba(43,195,255,0.25) 208deg 238deg,
-      transparent 252deg 360deg);
-  border-radius: 50%;
-  filter: blur(0.4px) saturate(1.38);
-  opacity: 1;
+    radial-gradient(ellipse at 32% 47%, rgba(247,252,255,0.38), transparent 18%),
+    radial-gradient(ellipse at 43% 51%, rgba(95,210,255,0.24), transparent 38%),
+    radial-gradient(ellipse at 70% 67%, rgba(41,221,255,0.18), transparent 25%);
+  filter: blur(2px) saturate(1.24);
+  opacity: 0.9;
   mix-blend-mode: screen;
-  transform: rotate(-11deg) scaleX(1.28) scaleY(0.62);
-  animation: galaxy-turn 86s linear infinite;
+  animation: galaxy-drift 30s ease-in-out infinite alternate;
 }
 .galaxy-backdrop::after {
   inset: 0;
   z-index: 5;
   background:
-    radial-gradient(ellipse at 31% 46%, transparent 0 34%, rgba(1,5,14,0.18) 59%, rgba(1,5,14,0.62) 88%),
-    linear-gradient(180deg, rgba(1,5,14,0.18), rgba(1,5,14,0.02) 38%, rgba(1,5,14,0.46));
+    radial-gradient(ellipse at 31% 46%, transparent 0 40%, rgba(1,5,14,0.1) 64%, rgba(1,5,14,0.58) 94%),
+    linear-gradient(180deg, rgba(1,5,14,0.22), rgba(1,5,14,0.0) 38%, rgba(1,5,14,0.52));
 }
 .galaxy-spiral {
-  left: 31%;
-  top: 45%;
-  width: min(130vw, 1680px);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%) rotate(-14deg) scaleX(1.36) scaleY(0.58);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(255,255,255,1) 0 5%, rgba(177,242,255,0.86) 8%, rgba(62,207,255,0.42) 17%, transparent 36%),
-    conic-gradient(from 28deg,
-      transparent 0 12deg,
-      rgba(230,251,255,0.72) 18deg 34deg,
-      rgba(47,199,255,0.38) 43deg 70deg,
-      transparent 84deg 146deg,
-      rgba(241,253,255,0.66) 166deg 188deg,
-      rgba(45,198,255,0.36) 202deg 236deg,
-      transparent 250deg 360deg);
-  filter: blur(1.8px) saturate(1.58);
-  opacity: 0.96;
-  mix-blend-mode: screen;
-  animation: galaxy-turn 118s linear infinite reverse;
+  display: none !important;
 }
 .galaxy-spiral::before {
-  content: "";
-  position: absolute;
-  inset: 8%;
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse at 62% 40%, rgba(255,96,188,0.22), transparent 21%),
-    radial-gradient(ellipse at 37% 64%, rgba(38,210,255,0.26), transparent 24%),
-    repeating-radial-gradient(ellipse at 50% 50%, transparent 0 28px, rgba(109,217,255,0.08) 31px 34px, transparent 38px 68px);
-  transform: rotate(24deg) scaleX(1.16) scaleY(0.56);
+  content: none;
 }
 .galaxy-dust {
   inset: 0;
   z-index: 3;
   background:
-    radial-gradient(ellipse at 16% 28%, rgba(117,224,255,0.28), transparent 22%),
-    radial-gradient(ellipse at 52% 38%, rgba(58,198,255,0.32), transparent 28%),
-    radial-gradient(circle at 76% 28%, rgba(78,167,255,0.2), transparent 22%),
-    radial-gradient(circle at 72% 78%, rgba(124,250,255,0.16), transparent 24%),
-    radial-gradient(circle at 31% 78%, rgba(166,236,255,0.16), transparent 18%);
-  filter: blur(9px);
-  opacity: 1;
+    radial-gradient(ellipse at 17% 78%, rgba(72,221,255,0.18), transparent 27%),
+    radial-gradient(ellipse at 83% 18%, rgba(61,143,255,0.2), transparent 28%),
+    radial-gradient(circle at 76% 72%, rgba(124,250,255,0.12), transparent 23%);
+  filter: blur(11px);
+  opacity: 0.78;
   animation: galaxy-drift 18s ease-in-out infinite alternate;
 }
 .galaxy-stars {
+  display: none !important;
   inset: 0;
   z-index: 4;
   background-repeat: repeat;
