@@ -43,6 +43,23 @@ node --check prototypes/hidden-reef/assets/product-data.js
 node --check prototypes/hidden-reef/assets/products.js
 node --check scripts/refresh_hidden_reef_products.mjs
 
+node - <<'NODE'
+const cp = require('node:child_process');
+const fs = require('node:fs');
+const file = 'prototypes/hidden-reef/assets/product-data.js';
+const current = fs.readFileSync(file, 'utf8');
+const previous = cp.execFileSync('git', ['show', `HEAD:${file}`], {
+  encoding: 'utf8',
+  maxBuffer: 10 * 1024 * 1024
+});
+const ignoreRefreshTimestamp = value =>
+  value.replace(/^\/\/ Presentation refresh:.*$/m, '// Presentation refresh: <ignored>');
+if (current !== previous && ignoreRefreshTimestamp(current) === ignoreRefreshTimestamp(previous)) {
+  fs.writeFileSync(file, previous);
+  console.log('Only the inventory refresh timestamp changed; no commit or deploy needed.');
+}
+NODE
+
 if git diff --quiet -- "${TRACKED_PATHS[@]}"; then
   echo "Hidden Reef inventory already current; no commit or deploy needed."
   exit 0
