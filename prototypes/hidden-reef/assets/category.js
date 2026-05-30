@@ -171,9 +171,13 @@
     if (!el) return;
     const meta = window.THR_PRODUCT_META || {};
     const total = Number(meta.total || 0).toLocaleString();
+    const publicProducts = Number(meta.publicSitemapProducts || 0).toLocaleString();
     const updated = formatUpdatedAt(meta.refreshedAt);
     const updatedText = updated ? ` Updated ${updated}.` : '';
-    el.textContent = `Preview catalog. Prices and availability can change; confirm with the store before making a special trip. ${total} catalog items are checked daily.${updatedText}`;
+    const coverageText = meta.publicSitemapProducts
+      ? `${publicProducts} public product pages are covered, with ${total} catalog rows including variants and category listings.`
+      : `${total} catalog items are checked daily.`;
+    el.textContent = `Preview catalog. Prices and availability can change; confirm with the store before making a special trip. ${coverageText}${updatedText}`;
   }
 
   function parsePrice(price) {
