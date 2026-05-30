@@ -154,6 +154,28 @@
     return price;
   }
 
+  function formatUpdatedAt(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+  }
+
+  function renderInventoryStatus() {
+    const el = document.getElementById('inventory-status');
+    if (!el) return;
+    const meta = window.THR_PRODUCT_META || {};
+    const total = Number(meta.total || 0).toLocaleString();
+    const updated = formatUpdatedAt(meta.refreshedAt);
+    const updatedText = updated ? ` Updated ${updated}.` : '';
+    el.textContent = `Preview catalog. Prices and availability can change; confirm with the store before making a special trip. ${total} catalog items are checked daily.${updatedText}`;
+  }
+
   function parsePrice(price) {
     const number = parseFloat(String(price || '').replace(/[^0-9.]/g, ''));
     return Number.isFinite(number) ? number : null;
@@ -802,7 +824,7 @@
     el.innerHTML = html;
   }
 
-  function renderCountBar(shown, total, sub) {
+  function renderCountBar(shown, total, sub, rawTotal) {
     const el = document.getElementById('count-bar');
     if (!el) return;
     const controls = getActiveControls();
@@ -810,19 +832,24 @@
       ? document.querySelector('#category-filter option:checked')?.textContent || ''
       : '';
     const label = selectedCategory || currentResultLabel || (sub ? sub.name : 'All products');
-    el.innerHTML = `<span>${label}</span><span class="total">${shown} of ${total} products shown</span>`;
+    const rawCount = Number(rawTotal || 0);
+    const variantNote = rawCount && rawCount !== total
+      ? `<small>${rawCount.toLocaleString()} catalog items including variants</small>`
+      : '';
+    el.innerHTML = `<span>${label}</span><span class="total">${shown} of ${total.toLocaleString()} product cards shown${variantNote}</span>`;
   }
 
   function updateProductView(page) {
     currentPage = page || 1;
     const filteredProducts = applyProductControls(baseProducts);
+    const rawFilteredCount = filteredProducts.length;
     currentProducts = window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
     const totalPages = Math.max(1, Math.ceil(currentProducts.length / PRODUCTS_PER_PAGE));
     currentPage = Math.min(currentPage, totalPages);
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const shown = Math.max(0, Math.min(PRODUCTS_PER_PAGE, currentProducts.length - start));
     renderProducts(currentProducts, currentPage);
-    renderCountBar(shown, currentProducts.length, currentSubcategory);
+    renderCountBar(shown, currentProducts.length, currentSubcategory, rawFilteredCount);
     renderPagination(currentProducts.length, currentPage);
   }
 
@@ -845,6 +872,7 @@
 
     renderBreadcrumb(cat, sub);
     renderHeader(cat, sub);
+    renderInventoryStatus();
     renderDepartmentSwitcher(cat ? cat.slug : '');
     renderDepartmentSidebar(cat);
 
