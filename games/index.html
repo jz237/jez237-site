@@ -646,156 +646,264 @@
     // Re-jitter after each filter change (re-renders new cards)
     filters.addEventListener('click', jitterIconDelays);
 
-    // Hero canvas animation — mini jousting scene
+    // Hero canvas animation - adapted from Night Fireworks Show
     (function(){
-      const c=document.getElementById('hero-canvas');
-      if(!c)return;
-      const ctx=c.getContext('2d');
-      let W,H;
-      function resize(){W=c.width=c.offsetWidth*devicePixelRatio;H=c.height=c.offsetHeight*devicePixelRatio;ctx.imageSmoothingEnabled=true;}
-      resize();window.addEventListener('resize',resize);
-
-      // Particles: embers, feathers, lava bubbles
-      let particles=[];
-      const colors=['#FF6B35','#FFD700','#FF4444','#FF8800','#FFAA00','#FF2200'];
-      function spawnParticle(x,y,type){
-        const angle=Math.random()*Math.PI*2;
-        const speed=type==='feather'?40+Math.random()*80:30+Math.random()*60;
-        particles.push({
-          x,y,vx:Math.cos(angle)*speed,vy:type==='feather'?-60-Math.random()*100:Math.sin(angle)*speed-50,
-          life:type==='feather'?1.5+Math.random()*1.5:0.8+Math.random()*1.2,
-          maxLife:0,r:type==='feather'?1+Math.random()*2:2+Math.random()*3,
-          type,color:colors[Math.floor(Math.random()*colors.length)],
-          rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-0.5)*6,
-          gravity:type==='feather'?100:200
-        });
-        particles[particles.length-1].maxLife=particles[particles.length-1].life;
+      const canvas=document.getElementById('hero-canvas');
+      if(!canvas)return;
+      const ctx=canvas.getContext('2d');
+      const TAU=Math.PI*2;
+      const palettes=[
+        ['#fff4c7','#ffd766','#ff9e42','#ff5a36'],
+        ['#fefefe','#ff8ac8','#ff5f7a','#d42b58'],
+        ['#f4ffda','#b8ff7a','#5bd368','#1f9759'],
+        ['#ffffff','#8fd9ff','#59a8ff','#4775ff'],
+        ['#ffffff','#d7b0ff','#af76ff','#833dff'],
+        ['#fff8dc','#44d1ff','#7f6bff','#ff5fa2']
+      ];
+      const state={w:0,h:0,dpr:1,now:0,last:0,wind:0,auto:0,rockets:[],sparks:[],smoke:[],flashes:[],embers:[],stars:[],skyline:[]};
+      const rand=(min,max)=>Math.random()*(max-min)+min;
+      const pick=a=>a[(Math.random()*a.length)|0];
+      const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+      const lerp=(a,b,t)=>a+(b-a)*t;
+      function hexToRgba(hex,alpha){
+        const clean=hex.replace('#','');
+        const int=parseInt(clean.length===3?clean.split('').map(p=>p+p).join(''):clean,16);
+        return 'rgba('+((int>>16)&255)+','+((int>>8)&255)+','+(int&255)+','+alpha+')';
       }
-
-      // Mini knights (2-3) that bounce around
-      let knights=[];
-      function spawnKnight(){
-        knights.push({
-          x:Math.random()*W*0.6+W*0.2,y:H*0.2+Math.random()*H*0.4,
-          vx:(Math.random()-0.5)*60,vy:0,
-          facing:Math.random()>0.5?1:-1,
-          flapTimer:Math.random()*0.8,wingUp:false,
-          color:Math.random()>0.5?'#FFD700':'#4488FF'
-        });
+      function resize(){
+        const box=canvas.getBoundingClientRect();
+        state.w=Math.max(1,box.width);
+        state.h=Math.max(1,box.height);
+        state.dpr=Math.min(window.devicePixelRatio||1,2);
+        canvas.width=Math.floor(state.w*state.dpr);
+        canvas.height=Math.floor(state.h*state.dpr);
+        ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
+        buildBackdrop();
       }
-      spawnKnight();spawnKnight();spawnKnight();
-
-      let t=0;
-      function frame(dt){
-        t+=dt;
-        // Lava at bottom 30%
-        const lavaY=H*0.72;
-
-        // Background gradient (cave)
-        const bg=ctx.createLinearGradient(0,0,0,H);
-        bg.addColorStop(0,'#0a0818');
-        bg.addColorStop(0.5,'#120e2a');
-        bg.addColorStop(0.75,'#1a0a1e');
-        bg.addColorStop(1,'#2a0500');
-        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-
-        // Lava glow from below
-        const glow=ctx.createLinearGradient(0,lavaY-40,0,H);
-        glow.addColorStop(0,'rgba(255,80,0,0)');
-        glow.addColorStop(0.3,'rgba(255,60,0,0.12)');
-        glow.addColorStop(1,'rgba(255,40,0,0.25)');
-        ctx.fillStyle=glow;ctx.fillRect(0,lavaY-40,W,H-lavaY+40);
-
-        // Lava surface
-        ctx.fillStyle='#FF3300';
-        for(let x=0;x<W;x+=6){
-          const waveH=4*Math.sin(x*0.02+t*4)+3*Math.sin(x*0.05+t*7);
-          ctx.fillStyle=(x%12<6)?'#FFAA00':'#FF5500';
-          ctx.fillRect(x,lavaY+waveH,6,4);
+      function buildBackdrop(){
+        state.stars=[];state.skyline=[];
+        for(let i=0;i<70;i++){
+          state.stars.push({x:Math.random()*state.w,y:Math.random()*state.h*.66,size:rand(.45,1.5),alpha:rand(.18,.75),twinkle:rand(.5,1.4)});
         }
-
-        // Mini knights
-        for(const k of knights){
-          k.flapTimer-=dt;
-          if(k.flapTimer<=0){
-            k.vy=-120-Math.random()*60;
-            k.flapTimer=0.6+Math.random()*1.2;
-            k.wingUp=!k.wingUp;
-            // Feather burst on flap
-            for(let i=0;i<3;i++)spawnParticle(k.x,k.y+10,'feather');
+        let x=-20;
+        while(x<state.w+30){
+          const width=rand(22,58),height=rand(state.h*.13,state.h*.34),lights=[];
+          const rows=Math.max(1,Math.floor(height/14));
+          for(let r=0;r<rows;r++){
+            if(Math.random()>.38)lights.push({x:rand(4,width-7),y:8+r*12,w:rand(1.5,3.5),h:rand(2,4),a:rand(.08,.22)});
           }
-          k.vy+=180*dt;
-          k.y+=k.vy*dt;
-          k.x+=k.vx*dt;
-          if(k.y>lavaY-20){k.y=lavaY-20;k.vy=-100-Math.random()*60;}
-          if(k.y<20){k.y=20;k.vy=50;}
-          if(k.x<-30)k.x=W+30;
-          if(k.x>W+30)k.x=-30;
-          // Draw mini knight (simple but recognizable)
-          ctx.save();
-          ctx.translate(k.x,k.y);
-          ctx.scale(k.facing*1.2,1.2);
-          ctx.globalAlpha=0.5;
-          // Body
-          ctx.fillStyle=k.color;
-          ctx.beginPath();ctx.ellipse(0,0,14,10,0,0,Math.PI*2);ctx.fill();
-          // Head
-          ctx.beginPath();ctx.ellipse(12,-8,6,5,0.2,0,Math.PI*2);ctx.fill();
-          // Eye
-          ctx.fillStyle='#FFF';ctx.beginPath();ctx.arc(15,-9,1.5,0,Math.PI*2);ctx.fill();
-          ctx.fillStyle='#000';ctx.beginPath();ctx.arc(15.5,-9,0.7,0,Math.PI*2);ctx.fill();
-          // Beak
-          ctx.fillStyle='#FF9900';ctx.beginPath();ctx.moveTo(18,-8);ctx.lineTo(24,-6);ctx.lineTo(18,-4);ctx.closePath();ctx.fill();
-          // Wings
-          const wa=k.wingUp?-0.6:0.4;
-          ctx.save();ctx.translate(-6,-2);ctx.rotate(wa);
-          ctx.fillStyle=k.color==='#FFD700'?'#FFFFFF':'#88CCFF';
-          ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-18,k.wingUp?-12:10);ctx.lineTo(-8,k.wingUp?-8:6);ctx.closePath();ctx.fill();
-          ctx.restore();
-          // Helmet
-          ctx.fillStyle=k.color==='#FFD700'?'#FFD700':'#00A8FF';
-          ctx.beginPath();ctx.arc(2,-14,5,Math.PI,Math.PI*2);ctx.lineTo(7,-10);ctx.lineTo(-3,-10);ctx.closePath();ctx.fill();
-          // Plume
-          ctx.fillStyle='#FF3333';ctx.beginPath();ctx.moveTo(2,-19);ctx.quadraticCurveTo(-8,-24+Math.sin(t*6)*2,-14,-18);ctx.quadraticCurveTo(-6,-17,0,-15);ctx.closePath();ctx.fill();
-          ctx.restore();
-        }
-
-        // Particles
-        for(let i=particles.length-1;i>=0;i--){
-          const p=particles[i];
-          p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.gravity*dt;
-          p.vx*=0.99;p.rot+=p.rotSpeed*dt;p.life-=dt;
-          if(p.life<=0){particles.splice(i,1);continue;}
-          const alpha=Math.min(1,p.life/p.maxLife*2);
-          ctx.save();ctx.globalAlpha=alpha*0.6;
-          ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-          ctx.fillStyle=p.color;
-          if(p.type==='feather'){
-            ctx.beginPath();ctx.ellipse(0,0,p.r*2,p.r*0.6,0,0,Math.PI*2);ctx.fill();
-          } else {
-            ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();
-          }
-          ctx.restore();
-        }
-
-        // Occasional ember from lava
-        if(Math.random()<dt*8){
-          spawnParticle(Math.random()*W,lavaY+Math.random()*10,'ember');
-        }
-        // Occasional feather from knights
-        if(Math.random()<dt*2&&knights.length>0){
-          const k=knights[Math.floor(Math.random()*knights.length)];
-          spawnParticle(k.x+(Math.random()-0.5)*10,k.y,'feather');
+          state.skyline.push({x,width,height,lights});
+          x+=width-rand(4,12);
         }
       }
-
-      let lastT=0;
+      function addSmoke(x,y,radius,count,tint,alpha){
+        for(let i=0;i<count;i++){
+          state.smoke.push({x:x+rand(-radius*.18,radius*.18),y:y+rand(-radius*.1,radius*.1),vx:rand(-10,10),vy:rand(-10,-3),radius:rand(radius*.08,radius*.2),growth:rand(7,20),alpha:rand(alpha*.35,alpha),ttl:rand(1.5,3.4),life:0,tint});
+        }
+      }
+      function addSpark(cfg){
+        state.sparks.push({x:cfg.x,y:cfg.y,vx:cfg.vx,vy:cfg.vy,drag:cfg.drag,gravity:cfg.gravity,radius:cfg.radius,color:cfg.color,glow:cfg.glow,ttl:cfg.ttl,life:0,trail:[],ember:cfg.ember||false,crackle:cfg.crackle||false,strobe:cfg.strobe||0,fadeFloor:cfg.fadeFloor||.06});
+      }
+      function createRocket(xRatio,targetX,targetY,heavy){
+        const x=clamp(state.w*xRatio,18,state.w-18);
+        const y=state.h+rand(4,18);
+        const tx=targetX==null?lerp(state.w*.15,state.w*.85,xRatio):targetX;
+        const ty=targetY==null?rand(state.h*.08,state.h*.45):targetY;
+        const travel=Math.max(.42,(y-ty)/rand(260,360));
+        const palette=pick(palettes);
+        const roll=Math.random();
+        const shell=roll>.76?'willow':roll>.56?'crackle':roll>.34?'ring':roll>.16?'palm':'peony';
+        state.rockets.push({x,y,vx:(tx-x)/travel,vy:-rand(230,heavy?380:320),life:0,targetY:ty,fuse:rand(.62,1.05),shell,palette,size:heavy?rand(1.05,1.42):rand(.72,1.06),heavy:!!heavy,trail:[]});
+      }
+      function explodeRocket(rocket){
+        const x=rocket.x,y=rocket.y,palette=rocket.palette,core=palette[0],size=rocket.size,style=rocket.shell;
+        let layers=rocket.heavy?2:1;
+        if(style==='crackle')layers=2;
+        state.flashes.push({x,y,radius:rand(30,64)*size,color:core,life:0,ttl:rocket.heavy ? .34 : .24,alpha:rocket.heavy ? .2 : .14});
+        addSmoke(x,y,52*size,rocket.heavy?12:7,'232,236,244',.16);
+        addSmoke(x,y,28*size,rocket.heavy?7:4,'255,175,130',.11);
+        for(let layer=0;layer<layers;layer++){
+          const count=Math.floor((rocket.heavy?62:42)*(1-layer*.18));
+          const speed=rand(54,122)*size*(1+layer*.24);
+          for(let i=0;i<count;i++){
+            const angle=rand(0,TAU);
+            let spread=style==='ring'?rand(.78,.96):style==='palm'?Math.pow(Math.random(),1.9):style==='willow'?Math.pow(Math.random(),1.15):Math.pow(Math.random(),.72);
+            const shellSpeed=speed*spread;
+            let vy=Math.sin(angle)*shellSpeed+rand(-8,8);
+            if(style==='ring')vy*=.48;
+            if(style==='palm')vy=Math.sin(angle)*shellSpeed*.3-shellSpeed*.42;
+            const color=pick(palette);
+            addSpark({x,y,vx:Math.cos(angle)*shellSpeed+rand(-8,8),vy,drag:style==='willow' ? .989 : .984,gravity:style==='willow'?72:style==='palm'?88:82,radius:rand(.75,1.8)*size,color,glow:rand(8,18)*size,ttl:style==='willow'?rand(1.15,1.9):rand(.85,1.45),ember:Math.random()>.58,crackle:style==='crackle'&&Math.random()>.85,strobe:color==='#ffffff'?rand(0,18):0,fadeFloor:rand(.02,.08)});
+          }
+        }
+        for(let i=0;i<(rocket.heavy?14:8);i++){
+          state.embers.push({x:x+rand(-14,14),y:y+rand(-14,14),vx:rand(-24,24),vy:rand(6,58),radius:rand(.6,1.8)*size,life:0,ttl:rand(.65,1.7),color:pick(['#ffdf9b','#ff9f50','#ff7347','#fff8db'])});
+        }
+        if(rocket.heavy&&Math.random()>.62){
+          for(let i=0;i<3;i++){
+            const a=i/3*TAU+rand(-.12,.12);
+            createRocket(x/state.w,x+Math.cos(a)*rand(45,95),y+Math.sin(a)*rand(18,58),false);
+          }
+        }
+      }
+      function updateRocket(r,dt){
+        r.life+=dt;r.vx+=state.wind*dt*.45;r.x+=r.vx*dt;r.y+=r.vy*dt;r.vy+=108*dt;
+        r.trail.push({x:r.x,y:r.y,age:0});
+        if(r.trail.length>18)r.trail.shift();
+        r.trail.forEach(p=>p.age+=dt);
+        if(r.vy>=-18||r.y<=r.targetY||r.life>=r.fuse){explodeRocket(r);return false;}
+        return r.x>-80&&r.x<state.w+80&&r.y<state.h+40;
+      }
+      function updateSpark(s,dt){
+        s.life+=dt;s.vx*=s.drag;s.vy=s.vy*s.drag+s.gravity*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;
+        s.trail.push({x:s.x,y:s.y,age:0});
+        if(s.trail.length>12)s.trail.shift();
+        s.trail.forEach(p=>p.age+=dt);
+        if(s.crackle&&Math.random()>.86)state.flashes.push({x:s.x,y:s.y,radius:rand(5,13),color:s.color,life:0,ttl:.12,alpha:.2});
+        if(s.ember&&Math.random()>.94)addSmoke(s.x,s.y,s.glow*.45,1,'185,190,210',.08);
+        return s.life<s.ttl;
+      }
+      function updateSmoke(p,dt){p.life+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.radius+=p.growth*dt;return p.life<p.ttl;}
+      function updateFlash(f,dt){f.life+=dt;return f.life<f.ttl;}
+      function updateEmber(e,dt){e.life+=dt;e.x+=e.vx*dt;e.y+=e.vy*dt;e.vy+=38*dt;return e.life<e.ttl&&e.y<state.h+20;}
+      function schedule(dt){
+        state.auto-=dt;
+        const busy=state.rockets.length+state.sparks.length*.007;
+        if(state.auto<=0&&busy<3.8){
+          createRocket(rand(.12,.88),null,null,Math.random()>.68);
+          state.auto=rand(.18,.48);
+        }
+      }
+      function drawBackground(){
+        const bg=ctx.createLinearGradient(0,0,0,state.h);
+        bg.addColorStop(0,'#06111f');
+        bg.addColorStop(.52,'#081a2d');
+        bg.addColorStop(1,'#10070f');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,state.w,state.h);
+        ctx.save();
+        ctx.globalCompositeOperation='screen';
+        const ground=ctx.createRadialGradient(state.w*.5,state.h*1.08,0,state.w*.5,state.h*1.08,state.w*.8);
+        ground.addColorStop(0,'rgba(255,137,66,.18)');
+        ground.addColorStop(.45,'rgba(127,107,255,.08)');
+        ground.addColorStop(1,'rgba(255,137,66,0)');
+        ctx.fillStyle=ground;ctx.fillRect(0,0,state.w,state.h);
+        for(const star of state.stars){
+          const pulse=.55+.45*Math.sin(state.now*star.twinkle+star.x);
+          ctx.globalAlpha=star.alpha*pulse;
+          ctx.fillStyle='#dfe9ff';
+          ctx.beginPath();ctx.arc(star.x,star.y,star.size,0,TAU);ctx.fill();
+        }
+        ctx.restore();
+        const horizon=state.h*.8;
+        ctx.fillStyle='rgba(3,7,18,.82)';
+        for(const b of state.skyline){
+          ctx.fillRect(b.x,horizon-b.height,b.width,b.height);
+          ctx.fillStyle='rgba(255,216,141,.22)';
+          for(const l of b.lights)ctx.fillRect(b.x+l.x,horizon-b.height+l.y,l.w,l.h);
+          ctx.fillStyle='rgba(3,7,18,.82)';
+        }
+        const veil=ctx.createRadialGradient(state.w*.5,state.h*.48,state.w*.05,state.w*.5,state.h*.5,state.w*.55);
+        veil.addColorStop(0,'rgba(8,8,20,.55)');
+        veil.addColorStop(.65,'rgba(8,8,20,.2)');
+        veil.addColorStop(1,'rgba(8,8,20,0)');
+        ctx.fillStyle=veil;ctx.fillRect(0,0,state.w,state.h);
+      }
+      function drawSmoke(){
+        for(const p of state.smoke){
+          const fade=1-p.life/p.ttl;
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius);
+          g.addColorStop(0,'rgba('+p.tint+','+(p.alpha*fade)+')');
+          g.addColorStop(.4,'rgba('+p.tint+','+(p.alpha*fade*.45)+')');
+          g.addColorStop(1,'rgba(30,35,45,0)');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,TAU);ctx.fill();
+        }
+      }
+      function drawRocket(r){
+        ctx.save();ctx.globalCompositeOperation='lighter';
+        for(let i=0;i<r.trail.length;i++){
+          const p=r.trail[i],ratio=i/r.trail.length,alpha=ratio*.16,radius=1.5+ratio*5.5;
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius);
+          g.addColorStop(0,'rgba(255,246,219,'+alpha+')');
+          g.addColorStop(.45,'rgba(255,169,89,'+(alpha*.7)+')');
+          g.addColorStop(1,'rgba(255,80,25,0)');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,radius,0,TAU);ctx.fill();
+        }
+        const glow=ctx.createRadialGradient(r.x,r.y,0,r.x,r.y,22);
+        glow.addColorStop(0,'rgba(255,255,240,.55)');
+        glow.addColorStop(.3,'rgba(255,200,110,.28)');
+        glow.addColorStop(1,'rgba(255,110,48,0)');
+        ctx.fillStyle=glow;ctx.beginPath();ctx.arc(r.x,r.y,22,0,TAU);ctx.fill();
+        ctx.restore();
+      }
+      function drawSpark(s){
+        ctx.save();ctx.globalCompositeOperation='lighter';
+        for(let i=1;i<s.trail.length;i++){
+          const prev=s.trail[i-1],point=s.trail[i],ratio=i/s.trail.length;
+          ctx.strokeStyle=hexToRgba(s.color,ratio*.13);
+          ctx.lineWidth=Math.max(.35,s.radius*ratio*.7);
+          ctx.beginPath();ctx.moveTo(prev.x,prev.y);ctx.lineTo(point.x,point.y);ctx.stroke();
+        }
+        const visible=!s.strobe||((s.life*1000+s.x)%s.strobe>s.strobe*.4);
+        if(visible){
+          const fade=Math.max(s.fadeFloor,1-s.life/s.ttl);
+          const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.glow);
+          g.addColorStop(0,s.color+'88');
+          g.addColorStop(.2,s.color+'44');
+          g.addColorStop(.48,s.color+'14');
+          g.addColorStop(1,s.color+'00');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(s.x,s.y,s.glow,0,TAU);ctx.fill();
+          ctx.globalAlpha=fade;ctx.fillStyle=s.color;ctx.beginPath();ctx.arc(s.x,s.y,s.radius,0,TAU);ctx.fill();
+        }
+        ctx.restore();
+      }
+      function drawFlash(f){
+        const t=f.life/f.ttl,alpha=f.alpha*(1-t);
+        ctx.save();ctx.globalCompositeOperation='screen';
+        const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.radius*(1+t*.8));
+        g.addColorStop(0,hexToRgba(f.color,alpha));
+        g.addColorStop(.5,hexToRgba(f.color,alpha*.34));
+        g.addColorStop(1,hexToRgba(f.color,0));
+        ctx.fillStyle=g;ctx.beginPath();ctx.arc(f.x,f.y,f.radius*(1+t*.8),0,TAU);ctx.fill();
+        ctx.restore();
+      }
+      function drawEmber(e){
+        const fade=1-e.life/e.ttl;
+        ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=fade*.78;ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(e.x,e.y,e.radius,0,TAU);ctx.fill();ctx.restore();
+      }
       function loop(ts){
+        if(!state.last)state.last=ts;
+        const dt=Math.min(.033,(ts-state.last)/1000);
+        state.last=ts;state.now+=dt;state.wind=Math.sin(state.now*.18)*5+Math.sin(state.now*.71)*2;
+        schedule(dt);
+        state.rockets=state.rockets.filter(r=>updateRocket(r,dt));
+        state.sparks=state.sparks.filter(s=>updateSpark(s,dt));
+        state.smoke=state.smoke.filter(p=>updateSmoke(p,dt));
+        state.flashes=state.flashes.filter(f=>updateFlash(f,dt));
+        state.embers=state.embers.filter(e=>updateEmber(e,dt));
+        if(state.sparks.length>520)state.sparks.splice(0,state.sparks.length-520);
+        if(state.smoke.length>140)state.smoke.splice(0,state.smoke.length-140);
+        drawBackground();
+        drawSmoke();
+        state.flashes.forEach(drawFlash);
+        state.rockets.forEach(drawRocket);
+        state.sparks.forEach(drawSpark);
+        state.embers.forEach(drawEmber);
         requestAnimationFrame(loop);
-        const dt=lastT?Math.min((ts-lastT)/1000,0.05):0.016;
-        lastT=ts;
-        frame(dt);
       }
+      resize();
+      window.addEventListener('resize',resize);
+      for(let i=0;i<5;i++){
+        explodeRocket({
+          x:rand(state.w*.13,state.w*.87),
+          y:rand(state.h*.1,state.h*.46),
+          palette:pick(palettes),
+          size:rand(.82,1.28),
+          shell:pick(['peony','ring','crackle','willow','palm']),
+          heavy:i%2===0,
+          trail:[]
+        });
+      }
+      for(let i=0;i<4;i++)createRocket(rand(.18,.82),null,rand(state.h*.12,state.h*.42),i===1);
       requestAnimationFrame(loop);
     })();
   </script>
