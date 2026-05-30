@@ -1,7 +1,23 @@
 {
   "date": "2026-05-30",
-  "updatedAt": "2026-05-30T00:00:01.237260+00:00",
+  "updatedAt": "2026-05-30T01:00:01.201245+00:00",
   "items": [
+    {
+      "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
+      "url": "https://www.marktechpost.com/2026/05/29/how-to-use-agenttrove-streaming-1-7m-agentic-traces-and-building-a-clean-sharegpt-sft-dataset-in-python",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "AgentTrove is the largest open-source collection of agentic interaction traces, with 1.7M rows in a ShareGPT-style layout. This hands-on Python tutorial shows how to stream the dataset without full downloads, normalize agent turns, extract commands, analyze trajectories, and export successful traces into a clean SFT fine-tuning dataset.\nThe post How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-wide-horizontal-tech-blog-banner-with-_exn1JoBlVYKF8lccW5kKUQ_EVzgbipGSKeV7Wo-w24mrw.png",
+      "published": "2026-05-30T00:46:05+00:00",
+      "firstSeen": "2026-05-30T01:00:01.201245+00:00",
+      "lastSeen": "2026-05-30T01:00:01.201245+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.0129
+    },
     {
       "title": "Ji-jun Park, Soo-joon Choi, Jiwon Jeong, Taeyang Yoon, Ju-Wan Lee",
       "url": "https://llm-stats.com/ai-news",
@@ -11,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-30T00:00:09.414782+00:00",
+      "published": "2026-05-30T01:00:09.790452+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T00:00:01.237260+00:00",
+      "lastSeen": "2026-05-30T01:00:01.201245+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
