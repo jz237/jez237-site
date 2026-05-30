@@ -240,6 +240,15 @@ function serializeProducts(productsBySlug, metadata) {
     lines.push(`  ]${slugIndex === slugs.length - 1 ? '' : ','}`);
   });
   lines.push('};', '', 'window.THR_PRODUCTS = THR_PRODUCTS;', '');
+  lines.push(
+    'const THR_PRODUCT_META = ' + JSON.stringify({
+      total,
+      subcategories: slugs.length,
+      refreshedAt: metadata.timestamp
+    }) + ';',
+    'window.THR_PRODUCT_META = THR_PRODUCT_META;',
+    ''
+  );
   return lines.join('\n');
 }
 
