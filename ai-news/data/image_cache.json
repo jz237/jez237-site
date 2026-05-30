@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-30T16:00:01.437838+00:00",
+  "updatedAt": "2026-05-30T16:14:44.220303+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8592,6 +8592,10 @@
     "https://techcrunch.com/2026/05/30/i-put-googles-24-7-ai-assistant-gemini-spark-to-work-and-its-actually-pretty-useful": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/gemini-spark-GettyImages-2276583186-1.jpg?w=1024",
       "checkedAt": "2026-05-30T16:00:01.437838+00:00"
+    },
+    "https://www.techrepublic.com/article/top-prompt-engineering-certifications": {
+      "image": "",
+      "checkedAt": "2026-05-30T16:14:44.220303+00:00"
     }
   }
 }
