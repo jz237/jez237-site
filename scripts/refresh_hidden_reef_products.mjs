@@ -28,6 +28,7 @@ const defaultSlugs = [
 
 const args = parseArgs(process.argv.slice(2));
 const write = Boolean(args.write);
+const pruneMissing = Boolean(args['prune-missing']);
 const maxPages = Number(args['max-pages'] || 2);
 const slugs = String(args.slugs || '')
   .split(',')
@@ -43,6 +44,8 @@ function parseArgs(argv) {
     const arg = argv[index];
     if (arg === '--write') {
       parsed.write = true;
+    } else if (arg === '--prune-missing') {
+      parsed['prune-missing'] = true;
     } else if (arg.startsWith('--')) {
       const key = arg.slice(2);
       parsed[key] = argv[index + 1];
@@ -193,7 +196,7 @@ function uniqueByProduct(products) {
   });
 }
 
-function mergeProducts(fresh, existing) {
+function mergeProducts(fresh, existing, options = {}) {
   const existingByUrl = new Map();
   existing.forEach(product => {
     if (product.productUrl) existingByUrl.set(productKey(product), product);
@@ -206,6 +209,9 @@ function mergeProducts(fresh, existing) {
       ...(previous?.images ? { images: previous.images } : {})
     };
   });
+  if (options.pruneMissing) {
+    return uniqueByProduct(freshWithBarcodes);
+  }
   const freshKeys = new Set(freshWithBarcodes.map(productKey));
   const tail = existing.filter(product => !freshKeys.has(productKey(product)));
   return uniqueByProduct([...freshWithBarcodes, ...tail]);
@@ -253,6 +259,7 @@ await fs.mkdir(reportDir, { recursive: true });
 const report = {
   timestamp,
   write,
+  pruneMissing,
   maxPages,
   requestedSlugs: refreshSlugs,
   refreshed: [],
@@ -272,7 +279,7 @@ for (const slug of refreshSlugs) {
       report.errors.push({ slug, sourceUrl: source.sourceUrl, error: 'No products parsed' });
       continue;
     }
-    const merged = mergeProducts(scraped.products, existing);
+    const merged = mergeProducts(scraped.products, existing, { pruneMissing });
     productsBySlug[slug] = merged;
     report.refreshed.push({
       slug,
