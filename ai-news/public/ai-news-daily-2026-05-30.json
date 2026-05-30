@@ -1,7 +1,23 @@
 {
   "date": "2026-05-30",
-  "updatedAt": "2026-05-30T03:00:01.597612+00:00",
+  "updatedAt": "2026-05-30T04:00:01.260497+00:00",
   "items": [
+    {
+      "title": "Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4",
+      "url": "https://www.marktechpost.com/2026/05/29/hermes-agent-ships-tool-search-for-mcp-anthropic-evals-show-49-to-74-accuracy-gain-on-opus-4",
+      "source": "MarkTechPost",
+      "sourceUrl": "https://www.marktechpost.com/feed/",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "Nous Research's Hermes Agent adds Tool Search to fix MCP context bloat using BM25 progressive schema disclosure.\nThe post Hermes Agent Ships Tool Search for MCP: Anthropic Evals Show 49% to 74% Accuracy Gain on Opus 4 appeared first on MarkTechPost.",
+      "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/Screenshot-2026-05-29-at-7.56.04-PM-1-150x150.png",
+      "published": "2026-05-30T03:11:59+00:00",
+      "firstSeen": "2026-05-30T04:00:01.260497+00:00",
+      "lastSeen": "2026-05-30T04:00:01.260497+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 11.3958
+    },
     {
       "title": "How to Use AgentTrove: Streaming 1.7M Agentic Traces and Building a Clean ShareGPT SFT Dataset in Python",
       "url": "https://www.marktechpost.com/2026/05/29/how-to-use-agenttrove-streaming-1-7m-agentic-traces-and-building-a-clean-sharegpt-sft-dataset-in-python",
@@ -13,13 +29,13 @@
       "image": "https://www.marktechpost.com/wp-content/uploads/2026/05/a-wide-horizontal-tech-blog-banner-with-_exn1JoBlVYKF8lccW5kKUQ_EVzgbipGSKeV7Wo-w24mrw.png",
       "published": "2026-05-30T00:46:05+00:00",
       "firstSeen": "2026-05-30T01:00:01.201245+00:00",
-      "lastSeen": "2026-05-30T03:00:01.597612+00:00",
+      "lastSeen": "2026-05-30T04:00:01.260497+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9539
+      "score": 5.9255
     },
     {
-      "title": "RightNow-Arabic-0.5B-Turbo: An Open Sub-1B Arabic Language Model via Vocabulary Injection and Edge-First Deployment",
+      "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -27,12 +43,12 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-30T03:00:11.420793+00:00",
+      "published": "2026-05-30T04:00:08.804126+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-30T03:00:01.597612+00:00",
+      "lastSeen": "2026-05-30T04:00:01.260497+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.36
+      "score": 2.71
     }
   ],
   "errors": []
