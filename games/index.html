@@ -717,14 +717,22 @@
         0 7px 0 rgba(0,0,0,.2);
       transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
     }
+    .game-card .icon-wrap {
+      outline: 1px solid rgba(255,255,255,.08);
+      outline-offset: -5px;
+    }
     .game-card .icon-wrap::before {
       z-index: 0;
       background:
+        radial-gradient(circle at 8px 8px, rgba(255,255,255,.72) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at calc(100% - 8px) 8px, rgba(255,255,255,.54) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 8px calc(100% - 8px), rgba(0,0,0,.42) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at calc(100% - 8px) calc(100% - 8px), rgba(0,0,0,.46) 0 1.5px, transparent 2.5px),
         linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
         repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 5px),
         radial-gradient(circle at 50% 58%, color-mix(in srgb, var(--icon-a, #4d96ff) 20%, transparent), transparent 58%);
-      background-size: 12px 12px, 12px 12px, 100% 100%, 100% 100%;
+      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 12px 12px, 12px 12px, 100% 100%, 100% 100%;
       mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
       opacity: .82;
     }
@@ -762,6 +770,7 @@
       inset: 0;
       border-radius: inherit;
       background:
+        radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--icon-hot, #fff) 26%, transparent), transparent 24%),
         linear-gradient(90deg, rgba(255,255,255,.1), transparent 18%, transparent 82%, rgba(0,0,0,.16)),
         repeating-linear-gradient(0deg, rgba(255,255,255,.055) 0 1px, transparent 1px 4px);
       box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--icon-hot, #fff) 20%, transparent);
@@ -792,6 +801,14 @@
       overflow: visible;
       padding: 3px 10px 6px;
       filter: drop-shadow(0 3px 0 rgba(0,0,0,.34)) drop-shadow(0 0 14px color-mix(in srgb, var(--icon-a, #4d96ff) 64%, transparent));
+      transition: filter .22s ease, transform .22s ease;
+    }
+    .game-card:hover .arcade-svg {
+      transform: translateY(-2px) scale(1.035);
+      filter:
+        drop-shadow(0 4px 0 rgba(0,0,0,.32))
+        drop-shadow(0 0 18px color-mix(in srgb, var(--icon-hot, #fff) 78%, transparent))
+        drop-shadow(0 0 24px color-mix(in srgb, var(--icon-a, #4d96ff) 62%, transparent));
     }
     .arcade-icon.icon-fireworks { background: radial-gradient(circle at 40% 28%, color-mix(in srgb, var(--icon-hot, #fff) 35%, transparent), transparent 9%), radial-gradient(circle at 70% 40%, color-mix(in srgb, var(--icon-c, #ff5fa2) 28%, transparent), transparent 14%), linear-gradient(180deg,#101944,#080b20 74%); }
     .arcade-icon.icon-crystal { background: radial-gradient(circle at 50% 72%, color-mix(in srgb, var(--icon-a, #4d96ff) 36%, transparent), transparent 28%), linear-gradient(180deg,#061821,#0d1028 72%); }
