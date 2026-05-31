@@ -1145,3 +1145,26 @@ p,
     touch-action: pan-y;
   }
 }
+
+body.garden-backdrop {
+  background:
+    linear-gradient(180deg, rgba(162,203,229,.68) 0%, rgba(179,212,146,.58) 34%, rgba(34,51,25,.86) 100%),
+    url("garden/garden-page-bg-20260531.webp") center top / cover no-repeat fixed !important;
+  color: var(--earth-text, var(--wb-text)) !important;
+}
+
+body.garden-backdrop::before {
+  background: none !important;
+}
+
+body.garden-backdrop header#site-nav,
+body.garden-backdrop > header:not(.home-hidden-nav) {
+  background: rgba(27,38,24,.78) !important;
+  border-bottom-color: rgba(202,225,173,.22) !important;
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  body.garden-backdrop {
+    background-attachment: scroll !important;
+  }
+}

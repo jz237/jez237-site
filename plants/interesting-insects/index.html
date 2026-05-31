@@ -16,8 +16,13 @@
       --earth-text: #f1e7d9;
       --earth-muted: #ccb9a4;
     }
-    body { background: radial-gradient(circle at top, #433126 0%, #1c1611 56%, #130e0b 100%); color: var(--earth-text); }
-    header { background: rgba(28,22,17,.84); border-bottom: 1px solid var(--earth-border); }
+    body {
+      background:
+        linear-gradient(180deg, rgba(162,203,229,.68) 0%, rgba(179,212,146,.58) 34%, rgba(34,51,25,.86) 100%),
+        url("../../assets/garden/garden-page-bg-20260531.webp") center top / cover no-repeat fixed;
+      color: var(--earth-text);
+    }
+    header { background: rgba(27,38,24,.78); border-bottom: 1px solid rgba(202,225,173,.22); }
     a { color: #dfc790; }
     .hero, .gallery-card {
       border: 1px solid var(--earth-border);
@@ -68,11 +73,12 @@
     @media (max-width: 640px) {
       .gallery { grid-template-columns: 1fr; }
       .gallery-card.featured { grid-column: span 1; }
+      body { background-attachment: scroll; }
     }
   </style>
   <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
-<body>
+<body class="garden-backdrop">
   <header id="site-nav"></header>
   <main class="container">
     <section class="hero">
