@@ -1078,5 +1078,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-31-morning-canal-lights-sample-wheel",
+    "title": "Canal Lights Sample Wheel",
+    "tests": "Tests whether GPT Image 2 can make a circular nail-polish sample wheel read instantly as the visual format, using glossy painted plastic nail tips, tiny repeated details, salon-counter lighting, and divided miniature scenery without becoming a poster, document, specimen tray, or fashion hand photo.",
+    "prompt": "Title: Canal Lights Sample Wheel\nFormat name: Nail Salon Sample Wheel\nCategory/kind: object\nTests/explores: Tests whether GPT Image 2 can make a circular nail-polish sample wheel read instantly as the visual format, using glossy painted plastic nail tips, tiny repeated details, salon-counter lighting, and divided miniature scenery without becoming a poster, document, specimen tray, or fashion hand photo.\n\nCreate a square 1024x1024 image that is unmistakably a real nail salon polish sample wheel photographed on a clean glass salon counter. The selected visual format must be obvious at first glance: a circular fan of individual plastic nail tips attached to a central metal rivet, each nail tip painted with glossy lacquer, tiny brush ridges, gel topcoat reflections, small glitter flecks, numbered but unreadable tabs, and the wheel casting a soft shadow on glass.\n\nSubject: the painted nail tips together form an invented nighttime canal-light system for a quiet city. Each nail carries one small fragment: moonlit lock gates, teal canal water, amber signal lamps, tiny bridge arches, rain gutters, maintenance boats, pearl-white wake lines, lavender window reflections, and black silhouettes of mooring posts. The separate nail tips should align into a radial panorama only when seen as the whole wheel, like a miniature civic scene broken across salon swatches.\n\nComposition: direct overhead product photograph with the sample wheel centered and filling most of the frame. Include a cropped clear acrylic polish stand, a few blank cotton pads, one chrome cuticle pusher, and soft reflections in the glass counter for scale. No human hands, no faces, no models, no salon brand marks. Keep the image tactile and photographic: glossy lacquer thickness, scuffed plastic backs, tiny dust specks, curved highlights, and slight color differences between tips.\n\nPalette and mood: black lacquer, teal canal blue, amber lamp yellow, pearl white, muted lavender, soft gray glass, chrome highlights, tiny silver glitter. Quiet, precise, glossy, oddly civic, and materially grounded.\n\nHard exclusions: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no logos, no readable brand names, no watermark, no signature, no poster layout, no archive document, no specimen tray, no glossy fantasy concept art.",
+    "image": "images/2026-05-31-morning-canal-lights-sample-wheel.png",
+    "date": "2026-05-31",
+    "batch": "Daily Prompt",
+    "slot": "morning",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
