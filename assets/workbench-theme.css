@@ -888,7 +888,6 @@ p,
     width: 100% !important;
     max-width: 100% !important;
     padding: 0 !important;
-    overflow-x: hidden !important;
   }
   .desktop-hub {
     width: 100% !important;
@@ -897,13 +896,11 @@ p,
     border-radius: 0;
     box-shadow: none;
     min-height: auto;
-    overflow-x: hidden !important;
   }
   .hub-main {
     width: 100% !important;
     max-width: 100% !important;
     padding: 14px 10px 28px !important;
-    overflow-x: hidden !important;
   }
   .weather-page-intro {
     margin-bottom: 10px !important;
@@ -1115,5 +1112,36 @@ p,
   }
   .weather-five-day > div {
     min-height: 132px;
+  }
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  html.home-root,
+  html.home-root body.home-page {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: clip !important;
+    overflow-y: auto !important;
+    overscroll-behavior-x: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.home-page,
+  body.home-page .workbench-home,
+  body.home-page .desktop-hub,
+  body.home-page .hub-main {
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+    touch-action: pan-y;
+  }
+
+  body.home-page {
+    overflow-y: auto !important;
+  }
+
+  body.home-page *,
+  body.home-page *::before,
+  body.home-page *::after {
+    touch-action: pan-y;
   }
 }
