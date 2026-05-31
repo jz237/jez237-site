@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-31T16:00:01.181185+00:00",
+  "updatedAt": "2026-05-31T17:00:01.160369+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8628,6 +8628,10 @@
     "https://techcrunch.com/2026/05/31/making-sense-of-the-debate-over-ai-psychosis": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/03/s.jpg?resize=1200,840",
       "checkedAt": "2026-05-31T16:00:01.181185+00:00"
+    },
+    "https://simonwillison.net/2026/May/31/the-solution-might-be-cancelling-my-ai-subscription": {
+      "image": "",
+      "checkedAt": "2026-05-31T17:00:01.160369+00:00"
     }
   }
 }
