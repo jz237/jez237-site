@@ -19,13 +19,14 @@
     .sound-hero p { position:relative; z-index:1; max-width: 780px; color: var(--ink-mid); font-size: clamp(15px, 2vw, 19px); line-height:1.55; }
     .sound-lab-stats { position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
     .sound-lab-stats span { padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.055); color:var(--ink-mid); font-size:13px; }
-    .sound-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .sound-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
     .sound-card { position:relative; overflow:hidden; display:grid; gap:16px; padding:20px; border:1px solid rgba(255,255,255,.11); border-radius:24px; background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.026)); box-shadow: 0 16px 42px rgba(0,0,0,.22); }
     .sound-card::before { content:""; position:absolute; inset:-40% -20% auto auto; width:180px; height:180px; border-radius:999px; background: radial-gradient(circle, rgba(110,203,255,.18), transparent 68%); }
-    .sound-card h2 { margin:8px 0 8px; font-size: clamp(24px, 3vw, 38px); line-height: .96; letter-spacing:-.04em; }
+    .sound-card h2 { margin:8px 0 8px; font-size: clamp(20px, 2vw, 30px); line-height: .96; letter-spacing:-.04em; }
     .sound-card p { margin:0; color:var(--ink-lo); line-height:1.48; }
     .sound-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
     .sound-meta span { padding:7px 9px; border-radius:999px; background:rgba(0,0,0,.22); color:var(--ink-lo); font-size:12px; }
+    .sound-file { display:block; margin-top:10px; color:var(--ink-lo); font-size:11px; line-height:1.35; overflow-wrap:anywhere; opacity:.82; }
     .sound-card audio { position:relative; z-index:1; width:100%; filter: saturate(1.1); }
     .sound-wave { height:58px; display:flex; align-items:end; gap:7px; opacity:.9; }
     .sound-wave span { flex:1; min-width:8px; border-radius: 999px 999px 4px 4px; background: linear-gradient(180deg, rgba(232,197,122,.95), rgba(224,102,126,.7)); height: calc(18px + ((var(--i) + 1) * 5px)); }
@@ -33,7 +34,9 @@
     .sound-wave span:nth-child(3) { height:32px; } .sound-wave span:nth-child(4) { height:56px; } .sound-wave span:nth-child(5) { height:24px; } .sound-wave span:nth-child(6) { height:42px; }
     .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
     .sound-note strong { color: var(--ink-hi); }
-    @media (max-width: 860px) { .sound-grid { grid-template-columns:1fr; } .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
+    @media (max-width: 1160px) { .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 700px) { .sound-grid { grid-template-columns:1fr; } }
+    @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
 <body>
@@ -71,6 +74,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>Zoh Coh Loh</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: zoh-coh-loh.mp3</span>
               <div class="sound-meta"><span>1:00</span><span>1.4 MB</span><span>May 25, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/01-zoh-coh-loh.mp3"></audio>
@@ -81,6 +85,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>Zohcohloh</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: zohcohloh.mp3</span>
               <div class="sound-meta"><span>2:41</span><span>3.7 MB</span><span>May 25, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/02-zohcohloh.mp3"></audio>
@@ -91,6 +96,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>Death Blow Keeper Of The Tide</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: death-blow-keeper-of-the-tide.mp3</span>
               <div class="sound-meta"><span>1:32</span><span>2.1 MB</span><span>May 25, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/03-death-blow-keeper-of-the-tide.mp3"></audio>
@@ -101,6 +107,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>heavy metal marty</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: heavy_metal_marty.mp3</span>
               <div class="sound-meta"><span>4:03</span><span>7.4 MB</span><span>May 25, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/04-heavy_metal_marty.mp3"></audio>
@@ -111,6 +118,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>he&#x27;s-not-weird-he&#x27;s-limited-edition</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: hes-not-weird-hes-limited-edition.mp3</span>
               <div class="sound-meta"><span>1:45</span><span>3.2 MB</span><span>May 25, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/05-hes-not-weird-hes-limited-edition.mp3"></audio>
@@ -121,6 +129,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>Ziggy Hidden Reef Prog Metal</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: ziggy-hidden-reef-prog-metal.mp3</span>
               <div class="sound-meta"><span>2:30</span><span>3.4 MB</span><span>May 26, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/06-ziggy-hidden-reef-prog-metal.mp3"></audio>
@@ -131,6 +140,7 @@
               <span class="sound-tag">#ai-sound · jez237</span>
               <h2>Cable Labyrinth Progressive Rock</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: cable-labyrinth-progressive-rock.mp3</span>
               <div class="sound-meta"><span>2:57</span><span>4.1 MB</span><span>May 26, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/07-cable-labyrinth-progressive-rock.mp3"></audio>
@@ -141,6 +151,7 @@
               <span class="sound-tag">#ai-sound · OClaw</span>
               <h2>Randy Barbershop Name Rhyme</h2>
               <p>Copied from #chat: the last two Randy name-rhyme songs. Generated locally on Spark ACE-Step `acestep-v15-xl-turbo` + `acestep-5Hz-lm-4B`, default 100 steps.</p>
+              <span class="sound-file">File: 20260528-201140-randy-barbershop-name-rhyme.mp3</span>
               <div class="sound-meta"><span>1:15</span><span>1.7 MB</span><span>May 29, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/08-20260528-201140-randy-barbershop-name-rhyme.mp3"></audio>
@@ -151,6 +162,7 @@
               <span class="sound-tag">#ai-sound · OClaw</span>
               <h2>Randy Acapella Name Rhyme No Music</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: 20260528-201342-randy-acapella-name-rhyme-no-music.mp3</span>
               <div class="sound-meta"><span>0:45</span><span>1.0 MB</span><span>May 29, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/09-20260528-201342-randy-acapella-name-rhyme-no-music.mp3"></audio>
@@ -161,6 +173,7 @@
               <span class="sound-tag">#ai-sound · OClaw</span>
               <h2>Multi Name Acapella Name Rhyme</h2>
               <p>Posted in the AI Sounds Discord channel.</p>
+              <span class="sound-file">File: 20260528-202103-multi-name-acapella-name-rhyme.mp3</span>
               <div class="sound-meta"><span>1:20</span><span>1.8 MB</span><span>May 29, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/10-20260528-202103-multi-name-acapella-name-rhyme.mp3"></audio>
@@ -171,6 +184,7 @@
               <span class="sound-tag">#ai-sound · Towelie</span>
               <h2>Randy Cherry GSC Heavy Metal</h2>
               <p>Copied over from #smoke-shop: Randy smoking Cherry GSC, heavy metal edition. As Kit Boga would say, that one&#x27;s a banger, maaan.</p>
+              <span class="sound-file">File: randy-cherry-gsc-heavy-metal-9f7c943d-ed1a-4521-aa45-c7d4da9e15e5.mp3</span>
               <div class="sound-meta"><span>3:31</span><span>6.4 MB</span><span>May 30, 2026</span></div>
             </div>
             <audio controls preload="metadata" src="audio/11-randy-cherry-gsc-heavy-metal-9f7c943d-ed1a-4521-aa45-c7d4da9e15e5.mp3"></audio>
