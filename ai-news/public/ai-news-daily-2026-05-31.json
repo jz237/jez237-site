@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "updatedAt": "2026-05-31T12:18:53.263272+00:00",
+  "updatedAt": "2026-05-31T14:00:01.688387+00:00",
   "items": [
     {
       "title": "Quoting Karen Kwok for Reuters Breakingviews",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-05-31T01:48:12+00:00",
       "firstSeen": "2026-05-31T02:00:01.577584+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0115
+      "score": 3.9739
     },
     {
       "title": "20 Snap alumni launched an angel fund for the next generation of social media. They think “social” and “media” have split.",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/snap-alumni-ghost-angels-fund-next-gen-social-media.avif",
       "published": "2026-05-31T09:36:51+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4705
+      "score": 3.4238
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -48,7 +48,23 @@
       "lastSeen": "2026-05-31T04:48:21.799870+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.503
+      "score": 2.4622
+    },
+    {
+      "title": "I went looking for the AI weed vape that gives you Bitcoin for smoking",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/933916/ai-powered-crypto-cannabis-vape",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "The crypto weed vape found me on 4/20, the high holiday of cannabis enthusiasts everywhere. It arrived over Slack with the thumbnail of a man exhaling a plume of vapor, the words \"every hit delivers Bitcoin\" emblazoned across it. It claimed to be advertising a device called Gudtrip, and I thought everything about it sounded [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268553_We_went_looking_for_the_weed_vape_that_gives_you_Bitcoin_for_smoking_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-05-31T13:00:00+00:00",
+      "firstSeen": "2026-05-31T14:00:01.688387+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3299
     },
     {
       "title": "How Turkey Hacked the Hair Transplant Industry",
@@ -61,10 +77,26 @@
       "image": "https://media.wired.com/photos/6a15b365e372bcf500f31f9b/master/pass/GettyImages-1280800924.jpg",
       "published": "2026-05-31T09:00:00+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1932
+      "score": 2.1473
+    },
+    {
+      "title": "LG Electronics stock jumped 24% in a day after unveiling Google-based car tech that cuts automaker costs",
+      "url": "https://thenextweb.com/news/lg-electronics-stock-surge-google-android-automotive",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "LG Electronics shares surged as much as 23.95% after the company announced a range of automotive solutions built on Google’s Android Automotive operating system. The stock last traded at 279,500 won. It was one of the largest single-day moves for the company in recent years. The core product is a multi-display system that uses a [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/lg-electronics-stock-surge-google-android-automotive.avif",
+      "published": "2026-05-31T13:24:58+00:00",
+      "firstSeen": "2026-05-31T14:00:01.688387+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1323
     },
     {
       "title": "The people who trained Tesla’s self-driving AI won’t ride in it",
@@ -77,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-insiders-dont-trust-fsd-self-driving-reuters.avif",
       "published": "2026-05-31T10:15:44+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.089
+      "score": 2.0415
     },
     {
       "title": "SoftBank is investing €75 billion to build 5 gigawatts of AI data centres in France. It’s Son’s biggest European bet.",
@@ -93,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/softbank-75-billion-ai-data-centres-france-macron.avif",
       "published": "2026-05-31T08:50:13+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0487
+      "score": 2.003
     },
     {
       "title": "DuckDuckGo installs jumped 18% after Google killed the blue links. On Apple devices, the spike hit 70%.",
@@ -109,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/duckduckgo-user-surge-google-ai-search-overhaul.avif",
       "published": "2026-05-31T09:56:34+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0799
+      "score": 0.0327
     },
     {
       "title": "A 9-gigawatt data centre outraged a Utah community. The governor just issued new rules.",
@@ -125,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/utah-governor-data-centre-rules-oleary-stratos-backlash.avif",
       "published": "2026-05-31T09:07:26+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
+      "lastSeen": "2026-05-31T14:00:01.688387+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0433
+      "score": -1.0894
     }
   ],
   "errors": [
