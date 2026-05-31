@@ -21,12 +21,14 @@
       --earth-water: #8fc8df;
     }
     body {
-      background: radial-gradient(circle at top, #453226 0%, var(--earth-bg) 52%, #15100c 100%);
+      background:
+        linear-gradient(180deg, rgba(162,203,229,.68) 0%, rgba(179,212,146,.58) 34%, rgba(34,51,25,.86) 100%),
+        url("../assets/garden/garden-page-bg-20260531.webp") center top / cover no-repeat fixed;
       color: var(--earth-text);
     }
     header {
-      background: rgba(31, 23, 17, 0.82);
-      border-bottom: 1px solid var(--earth-border);
+      background: rgba(27, 38, 24, 0.78);
+      border-bottom: 1px solid rgba(202,225,173,.22);
     }
     a { color: #dec590; }
     .garden-hero {
@@ -279,6 +281,7 @@
     .wx-strip span { color: var(--earth-text); }
 
     @media (max-width: 600px) {
+      body { background-attachment: scroll; }
       .day-cell { min-height: 54px; padding: 4px 4px; }
       .day-num { font-size: 11px; }
       .tag { font-size: 9px; padding: 1px 3px; }
@@ -287,7 +290,7 @@
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
 </head>
-<body>
+<body class="garden-backdrop">
   <header id="site-nav"></header>
 
   <main class="container">
