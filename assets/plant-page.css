@@ -14,6 +14,7 @@
   --earth-accent-2: #d29463;
   --earth-accent-3: #d8c07b;
   --earth-water: #8fc8df;
+  --garden-bg-image: url("garden/garden-page-bg-20260531.webp");
 
   /* Per-page customizables (override in page's :root) */
   --hero-bg: linear-gradient(135deg, rgba(80,58,40,.95), rgba(46,63,38,.92));
@@ -21,12 +22,15 @@
 }
 
 body {
-  background: radial-gradient(circle at top, #453226 0%, var(--earth-bg) 52%, #120d0a 100%);
+  background:
+    linear-gradient(180deg, rgba(7, 25, 16, .76) 0%, rgba(19, 62, 31, .7) 38%, rgba(7, 18, 10, .9) 100%),
+    linear-gradient(90deg, rgba(5, 16, 10, .54) 0%, rgba(25, 76, 35, .2) 46%, rgba(4, 15, 9, .56) 100%),
+    var(--garden-bg-image) center top / cover no-repeat scroll;
   color: var(--earth-text);
   font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
 }
 
-header { background: rgba(30,23,18,.84); border-bottom: 1px solid var(--earth-border); }
+header { background: rgba(27,38,24,.78); border-bottom: 1px solid rgba(202,225,173,.22); }
 a { color: #dfc791; }
 
 /* Editorial serif for titles (opt-in) */
