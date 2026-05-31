@@ -282,6 +282,9 @@
   }
 
   function initDemoCart() {
+    document.querySelectorAll('.cart-button strong').forEach(label => {
+      label.textContent = 'Cart';
+    });
     ensureCartDrawer();
     renderCart();
     document.addEventListener('click', event => {
