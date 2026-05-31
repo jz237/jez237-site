@@ -1066,5 +1066,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-31-afternoon-tide-hall-underfoot",
+    "title": "Tide Hall Underfoot",
+    "tests": "Tests whether GPT Image 2 can make the image read instantly as an overhead photograph of a luxury marble inlay floor, using stone veins, polished lobby lighting, grout seams, and foot-level architectural context instead of a document, specimen tray, poster, or glossy concept-art scene.",
+    "prompt": "Title: Tide Hall Underfoot\nFormat name: Marble Inlay Floor\nCategory/kind: mosaic\nTests/explores: Tests whether GPT Image 2 can make the image read instantly as an overhead photograph of a luxury marble inlay floor, using stone veins, polished lobby lighting, grout seams, and foot-level architectural context instead of a document, specimen tray, poster, or glossy concept-art scene.\n\nCreate a square 1024x1024 image that is unmistakably a real overhead architectural photograph of an ornate marble inlay floor in a quiet old hotel lobby. The selected visual format must be obvious at first glance: polished marble slabs, precise stone pieces fitted into an inlaid mosaic, natural veining in each color, thin grout lines, beveled stone edges, subtle waxy reflections from ceiling lights, tiny scratches, a few dust specks in corners, and the lower edges of brass stanchions and dark wood baseboards at the frame margins for scale.\n\nSubject formed entirely by the marble inlay: an invented tide-clock map for a subterranean harbor, seen as a floor medallion. Use flowing stone shapes to show concentric tidal rings, canal gates, crescent breakwaters, compass-like current arrows, small shell-shaped locks, moon phases, and a central round pool motif made from blue-green stone. It should feel like a strange civic map permanently installed underfoot, not a wall image and not a tabletop object.\n\nComposition: direct top-down view, the circular medallion centered but cropped slightly by the square frame, with surrounding rectangular floor tiles extending to the edges. Keep all imagery flat in the stone surface; no raised sculpture. Include no people, no shoes, no readable real-world text, no logos, and no brand marks.\n\nPalette and mood: cool white Carrara marble, deep green serpentine, black Nero marble, warm ochre travertine, rose marble accents, brass reflections, soft amber lobby light. Elegant, quiet, tactile, slightly uncanny, physically plausible.\n\nHard exclusions: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no watermark, no signature, no archive paper, no lab tray, no poster layout.",
+    "image": "images/2026-05-31-afternoon-tide-hall-underfoot.png",
+    "date": "2026-05-31",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
