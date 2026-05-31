@@ -20,8 +20,13 @@
       --earth-accent-2: #d29563;
       --earth-accent-3: #b05d72;
     }
-    body { background: radial-gradient(circle at top, #433126 0%, #1d1612 56%, #120d0a 100%); color: var(--earth-text); }
-    header { background: rgba(29,22,18,.84); border-bottom: 1px solid var(--earth-border); }
+    body {
+      background:
+        linear-gradient(180deg, rgba(162,203,229,.68) 0%, rgba(179,212,146,.58) 34%, rgba(34,51,25,.86) 100%),
+        url("../../assets/garden/garden-page-bg-20260531.webp") center top / cover no-repeat fixed;
+      color: var(--earth-text);
+    }
+    header { background: rgba(27,38,24,.78); border-bottom: 1px solid rgba(202,225,173,.22); }
     a { color: #dfc791; }
     .hero, .panel, .entry-card { border: 1px solid var(--earth-border); border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,.18); }
     .hero { background: linear-gradient(135deg, rgba(80,58,40,.95), rgba(46,63,38,.92)); padding: 24px; }
@@ -66,7 +71,10 @@
       margin-top: 14px;
       font-style: italic;
     }
-    @media (max-width: 860px) { .split { grid-template-columns:1fr; } }
+    @media (max-width: 860px) {
+      .split { grid-template-columns:1fr; }
+      body { background-attachment: scroll; }
+    }
 
     .lightbox {
       display: none;
@@ -85,7 +93,7 @@
   </style>
   <link rel="stylesheet" href="../../assets/workbench-theme.css" />
 </head>
-<body>
+<body class="garden-backdrop">
   <header id="site-nav"></header>
 
   <main class="container">
