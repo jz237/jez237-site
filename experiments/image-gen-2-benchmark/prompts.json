@@ -1066,5 +1066,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-05-30-evening-moon-tide-spoke-orchestra",
+    "title": "Moon Tide Spoke Orchestra",
+    "tests": "Tests whether GPT Image 2 can make bicycle spoke card art read instantly as the visual format, with a centered wheel-hub composition, clipped plastic cards, pavement shadows, scuffed outdoor materials, and a circular moon-tide music scene instead of a poster, document, specimen tray, or glossy concept art.",
+    "prompt": "Title: Moon Tide Spoke Orchestra\nFormat name: Bicycle Spoke Card Art\nCategory/kind: object\n\nCreate a square 1024x1024 image that is unmistakably a real bicycle wheel photographed from directly above on sunlit pavement. The entire image is built around plastic bicycle spoke cards clipped into the spokes, with the wheel hub exactly at the center and many colorful rectangular cards radiating outward like a kinetic fan. The cards together form an invented scene called \"Moon Tide Spoke Orchestra\": tiny illustrated moon phases, harbor buoys, tuning forks, eelgrass shapes, and wave-staff music marks appear across separate spoke cards, aligning into one circular composition only because they are mounted in the wheel.\n\nVisual rules for the selected format: plastic spoke cards clipped into a real wheel; strong rotational composition with metal spokes and hub center; outdoor pavement background with small shadows; scuffed card edges, punched slots, zip ties, scratches, and slight sun fading. Use flat screen-printed colors with no brand logos, no copyrighted characters, no racing team marks, no dancing, no stage performance, no archive document, no specimen tray, no glossy AI concept art, and no fantasy landscape. Make the format obvious at first glance.",
+    "image": "images/2026-05-30-evening-moon-tide-spoke-orchestra.png",
+    "date": "2026-05-30",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
