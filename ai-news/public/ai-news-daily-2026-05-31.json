@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "updatedAt": "2026-05-31T15:00:01.813985+00:00",
+  "updatedAt": "2026-05-31T16:00:01.181185+00:00",
   "items": [
     {
       "title": "Quoting Karen Kwok for Reuters Breakingviews",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-05-31T01:48:12+00:00",
       "firstSeen": "2026-05-31T02:00:01.577584+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9524
+      "score": 3.9315
     },
     {
       "title": "Apple destroyed the mid-tier watch market. Now it’s coming for the $200 billion eyewear industry.",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-smart-glasses-eyewear-market-disruption-watch-playbook.avif",
       "published": "2026-05-31T14:39:37+00:00",
       "firstSeen": "2026-05-31T14:54:17.490552+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9397
+      "score": 3.9098
     },
     {
       "title": "20 Snap alumni launched an angel fund for the next generation of social media. They think “social” and “media” have split.",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/snap-alumni-ghost-angels-fund-next-gen-social-media.avif",
       "published": "2026-05-31T09:36:51+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3971
+      "score": 3.3712
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -64,7 +64,23 @@
       "lastSeen": "2026-05-31T04:48:21.799870+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4388
+      "score": 2.4161
+    },
+    {
+      "title": "Making sense of the debate over AI psychosis",
+      "url": "https://techcrunch.com/2026/05/31/making-sense-of-the-debate-over-ai-psychosis",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "On the latest episode of Equity, we debate whether tech CEOs are \"uniquely prone to AI psychosis.\"",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/03/s.jpg?resize=1200%2C840",
+      "published": "2026-05-31T15:30:00+00:00",
+      "firstSeen": "2026-05-31T16:00:01.181185+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2748
     },
     {
       "title": "I went looking for the AI weed vape that gives you Bitcoin for smoking",
@@ -77,10 +93,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268553_We_went_looking_for_the_weed_vape_that_gives_you_Bitcoin_for_smoking_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-31T13:00:00+00:00",
       "firstSeen": "2026-05-31T14:00:01.688387+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3005
+      "score": 2.272
     },
     {
       "title": "How Turkey Hacked the Hair Transplant Industry",
@@ -93,10 +109,10 @@
       "image": "https://media.wired.com/photos/6a15b365e372bcf500f31f9b/master/pass/GettyImages-1280800924.jpg",
       "published": "2026-05-31T09:00:00+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.0956
     },
     {
       "title": "Tesla has 42 robotaxis in Texas. Waymo has 577. The gap is now public record.",
@@ -109,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-robotaxi-fleet-42-vehicles-waymo-577-texas.avif",
       "published": "2026-05-31T13:44:44+00:00",
       "firstSeen": "2026-05-31T14:54:17.490552+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1123
+      "score": 2.0832
     },
     {
       "title": "LG Electronics stock jumped 24% in a day after unveiling Google-based car tech that cuts automaker costs",
@@ -125,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/lg-electronics-stock-surge-google-android-automotive.avif",
       "published": "2026-05-31T13:24:58+00:00",
       "firstSeen": "2026-05-31T14:00:01.688387+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1026
+      "score": 2.0738
     },
     {
       "title": "The people who trained Tesla’s self-driving AI won’t ride in it",
@@ -141,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-insiders-dont-trust-fsd-self-driving-reuters.avif",
       "published": "2026-05-31T10:15:44+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0143
+      "score": 1.9879
     },
     {
       "title": "SoftBank is investing €75 billion to build 5 gigawatts of AI data centres in France. It’s Son’s biggest European bet.",
@@ -157,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/softbank-75-billion-ai-data-centres-france-macron.avif",
       "published": "2026-05-31T08:50:13+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9769
+      "score": 1.9515
     },
     {
       "title": "DuckDuckGo installs jumped 18% after Google killed the blue links. On Apple devices, the spike hit 70%.",
@@ -173,26 +189,10 @@
       "image": "https://media.thenextweb.com/2026/05/duckduckgo-user-surge-google-ai-search-overhaul.avif",
       "published": "2026-05-31T09:56:34+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
+      "lastSeen": "2026-05-31T16:00:01.181185+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0058
-    },
-    {
-      "title": "A 9-gigawatt data centre outraged a Utah community. The governor just issued new rules.",
-      "url": "https://thenextweb.com/news/utah-governor-data-centre-rules-oleary-stratos-backlash",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Utah Governor Spencer Cox signed an executive order on Friday establishing a “higher bar for data center development” in the state. The order is effective immediately. It follows months of community outrage over the Stratos Project, a 40,000-acre hyperscale data centre campus backed by “Shark Tank” investor Kevin O’Leary that could reach 9 gigawatts of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/utah-governor-data-centre-rules-oleary-stratos-backlash.avif",
-      "published": "2026-05-31T09:07:26+00:00",
-      "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.1157
+      "score": -0.0204
     }
   ],
   "errors": [
