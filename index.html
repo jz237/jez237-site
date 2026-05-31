@@ -54,6 +54,26 @@
       letter-spacing: 0.02em;
     }
     .hero-meta span strong { color: var(--ink-mid); font-weight: 500; }
+    .ai-sounds-card-animation {
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 10px;
+      background: radial-gradient(circle at 30% 18%, rgba(110,203,255,.28), transparent 34%), radial-gradient(circle at 72% 62%, rgba(224,102,126,.32), transparent 36%), linear-gradient(145deg, #111827, #090b12);
+      overflow: hidden;
+    }
+    .ai-sounds-card-animation i {
+      display: block;
+      width: 12%;
+      border-radius: 999px 999px 8px 8px;
+      background: linear-gradient(180deg, rgba(232,197,122,.95), rgba(224,102,126,.72));
+      box-shadow: 0 0 28px rgba(232,197,122,.22);
+    }
+    .ai-sounds-card-animation i:nth-child(1) { height: 38%; }
+    .ai-sounds-card-animation i:nth-child(2) { height: 72%; background: linear-gradient(180deg, rgba(110,203,255,.9), rgba(139,92,246,.7)); }
+    .ai-sounds-card-animation i:nth-child(3) { height: 92%; }
+    .ai-sounds-card-animation i:nth-child(4) { height: 60%; background: linear-gradient(180deg, rgba(110,203,255,.9), rgba(139,92,246,.7)); }
+    .ai-sounds-card-animation i:nth-child(5) { height: 46%; }
   </style>
   <link rel="stylesheet" href="assets/workbench-theme.css" />
 </head>
@@ -164,6 +184,14 @@
             <h2>AI News</h2>
             <p>AI model &amp; tooling stream. Curated daily.</p>
             <span>Read →</span>
+          </a>
+          <a class="hub-card" href="ai-sounds/">
+            <div class="hub-card-media ai-sounds-card-animation" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <h2>Artificial Intelligence Sounds</h2>
+            <p>Generative music, sound sketches, and machine-made riffs from the lab.</p>
+            <span>Listen →</span>
           </a>
           <a class="hub-card" href="ops/">
             <div class="hub-card-media" style="background-image:url('assets/home-cards/operations-statistics-thumb-20260530.webp')"></div>
