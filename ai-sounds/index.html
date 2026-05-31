@@ -19,11 +19,12 @@
     .sound-hero p { position:relative; z-index:1; max-width: 780px; color: var(--ink-mid); font-size: clamp(15px, 2vw, 19px); line-height:1.55; }
     .sound-lab-stats { position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
     .sound-lab-stats span { padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.055); color:var(--ink-mid); font-size:13px; }
-    .sound-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-    .sound-card { position:relative; overflow:hidden; display:grid; gap:16px; padding:20px; border:1px solid rgba(255,255,255,.11); border-radius:24px; background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.026)); box-shadow: 0 16px 42px rgba(0,0,0,.22); }
+    .sound-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .sound-card { position:relative; overflow:hidden; display:grid; gap:16px; padding:20px; border:1px solid rgba(255,255,255,.14); border-radius:24px; background: linear-gradient(145deg, rgba(4,10,22,.72), rgba(2,7,16,.54)); box-shadow: 0 16px 42px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
     .sound-card::before { content:""; position:absolute; inset:-40% -20% auto auto; width:180px; height:180px; border-radius:999px; background: radial-gradient(circle, rgba(110,203,255,.18), transparent 68%); }
+    .sound-card-copy { position:relative; z-index:1; }
     .sound-card h2 { margin:8px 0 8px; font-size: clamp(20px, 2vw, 30px); line-height: .96; letter-spacing:-.04em; }
-    .sound-card p { margin:0; color:var(--ink-lo); line-height:1.48; }
+    .sound-card p { margin:0; color:#c8d6de; line-height:1.48; }
     .sound-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
     .sound-meta span { padding:7px 9px; border-radius:999px; background:rgba(0,0,0,.22); color:var(--ink-lo); font-size:12px; }
     .sound-file { display:block; margin-top:10px; color:var(--ink-lo); font-size:11px; line-height:1.35; overflow-wrap:anywhere; opacity:.82; }
