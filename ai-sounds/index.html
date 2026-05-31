@@ -27,6 +27,12 @@
     .sound-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
     .sound-meta span { padding:7px 9px; border-radius:999px; background:rgba(0,0,0,.22); color:var(--ink-lo); font-size:12px; }
     .sound-file { display:block; margin-top:10px; color:var(--ink-lo); font-size:11px; line-height:1.35; overflow-wrap:anywhere; opacity:.82; }
+    .sound-details { position:relative; z-index:1; margin-top:14px; border-top:1px solid rgba(255,255,255,.1); padding-top:12px; }
+    .sound-details summary { cursor:pointer; width:max-content; color:var(--brand-gold); font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .sound-details summary:hover { color:var(--ink-hi); }
+    .sound-detail-body { display:grid; gap:10px; margin-top:12px; padding:12px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(0,0,0,.18); color:var(--ink-lo); font-size:12px; line-height:1.45; }
+    .sound-detail-body p { margin:0; color:var(--ink-lo); }
+    .sound-detail-body strong { display:block; margin-bottom:3px; color:var(--ink-hi); font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
     .sound-card audio { position:relative; z-index:1; width:100%; filter: saturate(1.1); }
     .sound-wave { height:58px; display:flex; align-items:end; gap:7px; opacity:.9; }
     .sound-wave span { flex:1; min-width:8px; border-radius: 999px 999px 4px 4px; background: linear-gradient(180deg, rgba(232,197,122,.95), rgba(224,102,126,.7)); height: calc(18px + ((var(--i) + 1) * 5px)); }
@@ -76,6 +82,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: zoh-coh-loh.mp3</span>
               <div class="sound-meta"><span>1:00</span><span>1.4 MB</span><span>May 25, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Male choir chanting "Zoh Coh Loh" with an upbeat suspense build and a rising cinematic crescendo.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step experiment; preserved from the Zocalo choir/crescendo run.</p>
+                  <p><strong>Context</strong>One of the first Zocalo chant sketches that worked well enough to archive.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/01-zoh-coh-loh.mp3"></audio>
           </article>
@@ -87,6 +101,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: zohcohloh.mp3</span>
               <div class="sound-meta"><span>2:41</span><span>3.7 MB</span><span>May 25, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Extended "Zoh Coh Loh" male choir crescendo, combining two strong takes into a longer dramatic version.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step; assembled from generated Zocalo chant/crescendo material.</p>
+                  <p><strong>Lineage</strong>Longer companion to the shorter Zoh Coh Loh take.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/02-zohcohloh.mp3"></audio>
           </article>
@@ -98,6 +120,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: death-blow-keeper-of-the-tide.mp3</span>
               <div class="sound-meta"><span>1:32</span><span>2.1 MB</span><span>May 25, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Comic epic choir song around "Death Blow, Keeper of the Tide" with pool-water myth energy and a crescendo.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step; generated as a character/theme sketch.</p>
+                  <p><strong>Context</strong>Archived because the phrase landed like a ridiculous ceremonial title.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/03-death-blow-keeper-of-the-tide.mp3"></audio>
           </article>
@@ -109,6 +139,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: heavy_metal_marty.mp3</span>
               <div class="sound-meta"><span>4:03</span><span>7.4 MB</span><span>May 25, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>A heavy metal Marty song with big distorted guitars, dramatic buildup, and shop-cat myth energy.</p>
+                  <p><strong>Recipe</strong>AI music generation experiment; final archived MP3 copied into the site audio room.</p>
+                  <p><strong>Context</strong>Marty is a recurring shop character, so this one belongs with the character songs.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/04-heavy_metal_marty.mp3"></audio>
           </article>
@@ -120,6 +158,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: hes-not-weird-hes-limited-edition.mp3</span>
               <div class="sound-meta"><span>1:45</span><span>3.2 MB</span><span>May 25, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Funny anthem built around the phrase "he's not weird, he's limited edition."</p>
+                  <p><strong>Recipe</strong>AI music generation experiment; preserved from the Discord audio channel.</p>
+                  <p><strong>Context</strong>A phrase-first track where the title is the hook.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/05-hes-not-weird-hes-limited-edition.mp3"></audio>
           </article>
@@ -131,6 +177,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: ziggy-hidden-reef-prog-metal.mp3</span>
               <div class="sound-meta"><span>2:30</span><span>3.4 MB</span><span>May 26, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Ziggy and Hidden Reef as a progressive metal track, with aquarium-drama atmosphere and a hard-rock edge.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step test; one of several Ziggy/Hidden Reef variants.</p>
+                  <p><strong>Lineage</strong>Related local drafts included choir, acapella, organ, and suspense variants.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/06-ziggy-hidden-reef-prog-metal.mp3"></audio>
           </article>
@@ -142,6 +196,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: cable-labyrinth-progressive-rock.mp3</span>
               <div class="sound-meta"><span>2:57</span><span>4.1 MB</span><span>May 26, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Progressive rock about a cable labyrinth: tangled wires, technical chaos, and a dramatic problem-solving groove.</p>
+                  <p><strong>Recipe</strong>AI music generation experiment copied from Discord into the permanent audio page.</p>
+                  <p><strong>Context</strong>Fits the workbench/tech-life side of the site.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/07-cable-labyrinth-progressive-rock.mp3"></audio>
           </article>
@@ -153,6 +215,14 @@
               <p>Copied from #chat: the last two Randy name-rhyme songs. Generated locally on Spark ACE-Step `acestep-v15-xl-turbo` + `acestep-5Hz-lm-4B`, default 100 steps.</p>
               <span class="sound-file">File: 20260528-201140-randy-barbershop-name-rhyme.mp3</span>
               <div class="sound-meta"><span>1:15</span><span>1.7 MB</span><span>May 29, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Barbershop-style name-rhyme song built around Randy, with a playful vocal quartet feel.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step using `acestep-v15-xl-turbo` + `acestep-5Hz-lm-4B`, default 100 steps.</p>
+                  <p><strong>Source</strong>Copied from #chat after the Randy name-rhyme run.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/08-20260528-201140-randy-barbershop-name-rhyme.mp3"></audio>
           </article>
@@ -164,6 +234,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: 20260528-201342-randy-acapella-name-rhyme-no-music.mp3</span>
               <div class="sound-meta"><span>0:45</span><span>1.0 MB</span><span>May 29, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Randy name-rhyme as an acapella vocal piece, no backing music.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step using `acestep-v15-xl-turbo` + `acestep-5Hz-lm-4B`, default 100 steps.</p>
+                  <p><strong>Lineage</strong>Companion take to the barbershop Randy version.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/09-20260528-201342-randy-acapella-name-rhyme-no-music.mp3"></audio>
           </article>
@@ -175,6 +253,14 @@
               <p>Posted in the AI Sounds Discord channel.</p>
               <span class="sound-file">File: 20260528-202103-multi-name-acapella-name-rhyme.mp3</span>
               <div class="sound-meta"><span>1:20</span><span>1.8 MB</span><span>May 29, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt idea</strong>Multi-name acapella rhyme song, expanding the Randy name-rhyme format to a group chant.</p>
+                  <p><strong>Recipe</strong>Local Spark ACE-Step, generated during the same name-rhyme experiment series.</p>
+                  <p><strong>Context</strong>Kept as the broader group version of the vocal-name experiment.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/10-20260528-202103-multi-name-acapella-name-rhyme.mp3"></audio>
           </article>
@@ -186,6 +272,14 @@
               <p>Copied over from #smoke-shop: Randy smoking Cherry GSC, heavy metal edition. As Kit Boga would say, that one&#x27;s a banger, maaan.</p>
               <span class="sound-file">File: randy-cherry-gsc-heavy-metal-9f7c943d-ed1a-4521-aa45-c7d4da9e15e5.mp3</span>
               <div class="sound-meta"><span>3:31</span><span>6.4 MB</span><span>May 30, 2026</span></div>
+              <details class="sound-details">
+                <summary>Track notes</summary>
+                <div class="sound-detail-body">
+                  <p><strong>Prompt</strong>Original 2-minute heavy metal song: big distorted guitars, galloping palm-muted riffs, thunderous drums, driving bass, dramatic lead guitar harmonies, gritty adult male vocals, and a triumphant smoky story about Randy smoking Cherry GSC.</p>
+                  <p><strong>Recipe</strong>Generated with `fal/fal-ai/minimax-music/v2.6` through OpenClaw music generation.</p>
+                  <p><strong>Source</strong>Copied from #smoke-shop into #ai-sound, then archived here.</p>
+                </div>
+              </details>
             </div>
             <audio controls preload="metadata" src="audio/11-randy-cherry-gsc-heavy-metal-9f7c943d-ed1a-4521-aa45-c7d4da9e15e5.mp3"></audio>
           </article>
