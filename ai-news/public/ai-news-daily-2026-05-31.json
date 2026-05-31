@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "updatedAt": "2026-05-31T14:54:17.490552+00:00",
+  "updatedAt": "2026-05-31T15:00:01.813985+00:00",
   "items": [
     {
       "title": "Quoting Karen Kwok for Reuters Breakingviews",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-05-31T01:48:12+00:00",
       "firstSeen": "2026-05-31T02:00:01.577584+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9544
+      "score": 3.9524
     },
     {
       "title": "Apple destroyed the mid-tier watch market. Now it’s coming for the $200 billion eyewear industry.",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/apple-smart-glasses-eyewear-market-disruption-watch-playbook.avif",
       "published": "2026-05-31T14:39:37+00:00",
       "firstSeen": "2026-05-31T14:54:17.490552+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.9426
+      "score": 3.9397
     },
     {
       "title": "20 Snap alumni launched an angel fund for the next generation of social media. They think “social” and “media” have split.",
@@ -45,10 +45,10 @@
       "image": "https://media.thenextweb.com/2026/05/snap-alumni-ghost-angels-fund-next-gen-social-media.avif",
       "published": "2026-05-31T09:36:51+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3997
+      "score": 3.3971
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -64,7 +64,7 @@
       "lastSeen": "2026-05-31T04:48:21.799870+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.441
+      "score": 2.4388
     },
     {
       "title": "I went looking for the AI weed vape that gives you Bitcoin for smoking",
@@ -77,10 +77,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268553_We_went_looking_for_the_weed_vape_that_gives_you_Bitcoin_for_smoking_CVirginia2.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-05-31T13:00:00+00:00",
       "firstSeen": "2026-05-31T14:00:01.688387+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3033
+      "score": 2.3005
     },
     {
       "title": "How Turkey Hacked the Hair Transplant Industry",
@@ -93,10 +93,10 @@
       "image": "https://media.wired.com/photos/6a15b365e372bcf500f31f9b/master/pass/GettyImages-1280800924.jpg",
       "published": "2026-05-31T09:00:00+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1236
+      "score": 2.1211
     },
     {
       "title": "Tesla has 42 robotaxis in Texas. Waymo has 577. The gap is now public record.",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-robotaxi-fleet-42-vehicles-waymo-577-texas.avif",
       "published": "2026-05-31T13:44:44+00:00",
       "firstSeen": "2026-05-31T14:54:17.490552+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1151
+      "score": 2.1123
     },
     {
       "title": "LG Electronics stock jumped 24% in a day after unveiling Google-based car tech that cuts automaker costs",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/lg-electronics-stock-surge-google-android-automotive.avif",
       "published": "2026-05-31T13:24:58+00:00",
       "firstSeen": "2026-05-31T14:00:01.688387+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1054
+      "score": 2.1026
     },
     {
       "title": "The people who trained Tesla’s self-driving AI won’t ride in it",
@@ -141,10 +141,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-insiders-dont-trust-fsd-self-driving-reuters.avif",
       "published": "2026-05-31T10:15:44+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0169
+      "score": 2.0143
     },
     {
       "title": "SoftBank is investing €75 billion to build 5 gigawatts of AI data centres in France. It’s Son’s biggest European bet.",
@@ -157,10 +157,10 @@
       "image": "https://media.thenextweb.com/2026/05/softbank-75-billion-ai-data-centres-france-macron.avif",
       "published": "2026-05-31T08:50:13+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9794
+      "score": 1.9769
     },
     {
       "title": "DuckDuckGo installs jumped 18% after Google killed the blue links. On Apple devices, the spike hit 70%.",
@@ -173,10 +173,10 @@
       "image": "https://media.thenextweb.com/2026/05/duckduckgo-user-surge-google-ai-search-overhaul.avif",
       "published": "2026-05-31T09:56:34+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0084
+      "score": 0.0058
     },
     {
       "title": "A 9-gigawatt data centre outraged a Utah community. The governor just issued new rules.",
@@ -189,17 +189,17 @@
       "image": "https://media.thenextweb.com/2026/05/utah-governor-data-centre-rules-oleary-stratos-backlash.avif",
       "published": "2026-05-31T09:07:26+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T14:54:17.490552+00:00",
+      "lastSeen": "2026-05-31T15:00:01.813985+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.1132
+      "score": -1.1157
     }
   ],
   "errors": [
     {
       "source": "MarkTechPost",
       "url": "https://www.marktechpost.com/feed/",
-      "error": "not well-formed (invalid token): line 1, column 119"
+      "error": "HTTP Error 403: Forbidden"
     }
   ]
 }
