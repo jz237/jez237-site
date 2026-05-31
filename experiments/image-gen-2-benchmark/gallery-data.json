@@ -1066,17 +1066,5 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
-  },
-  {
-    "id": "2026-05-31-afternoon-braille-volcano-library-map",
-    "title": "Braille Volcano Library Map",
-    "tests": "Tests whether GPT Image 2 can make an invented underground library landscape read entirely through tactile embossed-map language: raised dots, relief contour lines, side-lit white paper, minimal ink, and touch-first navigation instead of a poster, archive document, specimen tray, or glossy concept art.",
-    "prompt": "Title: Braille Volcano Library Map\nFormat name: Braille Embossed Map\nCategory/kind: tactile\nTests/explores: Tests whether GPT Image 2 can make an invented underground library landscape read entirely through tactile embossed-map language: raised dots, relief contour lines, side-lit white paper, minimal ink, and touch-first navigation instead of a poster, archive document, specimen tray, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a close product photograph of a white braille embossed tactile map sheet under strong raking side light. The selected visual format must be obvious at first glance: fields of raised braille dots, embossed route lines, raised contour ridges, shallow debossed zones, a few simple black ink registration marks, curled heavy paper edges, and crisp shadows from the relief texture.\n\nSubject: the tactile map depicts an imaginary quiet volcano library built inside a dormant caldera. Show the place only through embossed map language: concentric raised contour rings for the crater, branching raised paths for book tunnels, dot clusters for reading rooms, tiny raised stair symbols, a circular central archive shaft, heat-vent warning texture, and a few tactile symbols for quiet rooms and elevator cores. It should feel like a real accessibility map for touch navigation, not an illustrated fantasy scene.\n\nComposition: direct overhead with a slight low side light from the left so every raised dot casts a small shadow. The map sheet fills most of the frame on a matte charcoal drafting table; include one plain metal stylus and a small blank corner tab for scale. Keep the design spare and tactile, with generous white paper space and no dense readable paragraphs.\n\nPalette and mood: warm white paper, soft gray relief shadows, charcoal table, tiny black ink marks, brushed steel stylus. Calm, precise, accessible, architectural, and quietly impossible.\n\nHard exclusions: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no people, no copyrighted characters, no logos, no watermark, no signature, no archive packet, no specimen tray, no glossy fantasy concept art.",
-    "image": "images/2026-05-31-afternoon-braille-volcano-library-map.png",
-    "date": "2026-05-31",
-    "batch": "Daily Prompt",
-    "slot": "afternoon",
-    "model": "openai/gpt-image-2",
-    "size": "1024x1024"
   }
 ]
