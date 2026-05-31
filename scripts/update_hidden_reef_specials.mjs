@@ -55,7 +55,21 @@ const copyBySlug = {
     title: 'Innovative Marine MTO Systems',
     primaryLabel: 'Shop MTO Systems',
     discountLabel: '50% off MTO reef systems',
-    localCategory: { label: 'Plan a setup', href: 'category/?cat=equipment' }
+    localCategory: { label: 'Plan a setup', href: 'category/?cat=equipment' },
+    imageText: [
+      'Innovative Marine',
+      'Built to inspire. Designed for life.',
+      'Made-to-Order Aquariums',
+      'Made to order. Built for you. Worth the wait.',
+      'Save 50% on all MTO orders',
+      '112-240 gallons. Wide range of sizes.',
+      'Tank + stand or complete system. Choose your perfect setup.',
+      'Premium euro-braced designs. Built stronger. Built safer.',
+      'Please allow 4-6 months. Crafted with care just for you.',
+      'Order yours today',
+      'Trusted quality, built in California',
+      'Available at The Hidden Reef'
+    ]
   },
   'innovative-marine-10-off-25-100-g-complete': {
     title: 'Innovative Marine 25-100 Gallon Sale',
@@ -79,7 +93,23 @@ const copyBySlug = {
     title: 'Innovative Marine AIO Aquariums',
     primaryLabel: 'Shop AIO Aquariums',
     discountLabel: 'Homepage feature',
-    localCategory: { label: 'See aquariums', href: 'category/?cat=aquariums' }
+    localCategory: { label: 'See aquariums', href: 'category/?cat=aquariums' },
+    imageText: [
+      'NUVO Starter Kits',
+      'Ready to ship. In stock. Lowest price.',
+      'Fusion 15 AIO Cube Aquarium. Desktop starter kit.',
+      'Fusion 15 dimensions: 15 in x 15 in x 15 in.',
+      'Fusion 15 price: $99.99.',
+      'Fusion 20 AIO Long Aquarium. Desktop starter kit.',
+      'Fusion 20 dimensions: 23.6 in x 15 in x 13 in.',
+      'Fusion 20 price: $169.99.',
+      'All-in-one filtration',
+      'Sleek, modern design',
+      'Easy setup and maintenance',
+      'Vibrant reef ready',
+      'Shop now',
+      'Premium quality. Beautiful results. Right on your desk.'
+    ]
   }
 };
 
@@ -373,7 +403,8 @@ async function enrichDepartment(department) {
     art: artFor(department, products),
     discountLabel: copyBySlug[department.slug]?.discountLabel || '',
     primaryLabel: copyBySlug[department.slug]?.primaryLabel || 'Shop Sale',
-    localCategory: copyBySlug[department.slug]?.localCategory || localCategoryFor(department.title)
+    localCategory: copyBySlug[department.slug]?.localCategory || localCategoryFor(department.title),
+    imageText: copyBySlug[department.slug]?.imageText || []
   };
 }
 
@@ -382,6 +413,14 @@ function renderSlide(special) {
   const burst = special.discount ? `${special.discount}%<small>off</small>` : 'Sale<small>now</small>';
   const countText = `${special.count} sale ${special.count === 1 ? 'item' : 'items'}`;
   const example = special.example ? `\n                <li>${escapeHtml(special.example)}</li>` : '';
+  const imageText = special.imageText.length
+    ? `\n              <div class="special-promo-text">
+                <h3>Promo details</h3>
+                <ul>
+                  ${special.imageText.map(item => `<li>${escapeHtml(item)}</li>`).join('\n                  ')}
+                </ul>
+              </div>`
+    : '';
   return `          <article class="special-slide">
             <div class="special-copy">
               <em>${escapeHtml(special.eyebrow)}</em>
@@ -390,7 +429,7 @@ function renderSlide(special) {
               <ul class="special-meta">
                 <li>${escapeHtml(discountText)}</li>
                 <li>${escapeHtml(countText)}</li>${example}
-              </ul>
+              </ul>${imageText}
               <div class="special-actions">
                 <a class="btn" href="${escapeHtml(special.url)}" target="_blank" rel="noopener">${escapeHtml(special.primaryLabel)}</a>
                 <a class="btn secondary" href="${escapeHtml(special.localCategory.href)}">${escapeHtml(special.localCategory.label)}</a>
