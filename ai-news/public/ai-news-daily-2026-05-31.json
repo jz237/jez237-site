@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "updatedAt": "2026-05-31T05:00:01.544343+00:00",
+  "updatedAt": "2026-05-31T04:48:21.799870+00:00",
   "items": [
     {
       "title": "Quoting Karen Kwok for Reuters Breakingviews",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-05-31T01:48:12+00:00",
       "firstSeen": "2026-05-31T02:00:01.577584+00:00",
-      "lastSeen": "2026-05-31T05:00:01.544343+00:00",
+      "lastSeen": "2026-05-31T04:48:21.799870+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.1965
+      "score": 4.202
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -27,9 +27,9 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-05-31T05:00:08.976650+00:00",
+      "published": "2026-05-31T04:48:38.075673+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-05-31T05:00:01.544343+00:00",
+      "lastSeen": "2026-05-31T04:48:21.799870+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.71
