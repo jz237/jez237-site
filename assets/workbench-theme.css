@@ -1148,7 +1148,8 @@ p,
 
 body.garden-backdrop {
   background:
-    linear-gradient(180deg, rgba(162,203,229,.68) 0%, rgba(179,212,146,.58) 34%, rgba(34,51,25,.86) 100%),
+    linear-gradient(180deg, rgba(7,25,16,.76) 0%, rgba(19,62,31,.7) 38%, rgba(7,18,10,.9) 100%),
+    linear-gradient(90deg, rgba(5,16,10,.54) 0%, rgba(25,76,35,.2) 46%, rgba(4,15,9,.56) 100%),
     url("garden/garden-page-bg-20260531.webp") center top / cover no-repeat fixed !important;
   color: var(--earth-text, var(--wb-text)) !important;
 }
