@@ -563,6 +563,45 @@
       font-size: 12px;
       font-weight: 850;
     }
+    .special-promo-text {
+      display: grid;
+      gap: 8px;
+      max-width: 720px;
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(64,217,255,0.08), transparent 42%),
+        rgba(2,17,29,0.46);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .special-promo-text h3 {
+      margin: 0;
+      color: #dff8ff;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .special-promo-text ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .special-promo-text li {
+      padding: 5px 7px;
+      border: 1px solid rgba(159,198,214,0.18);
+      border-radius: 5px;
+      color: #bfe7f4;
+      background: rgba(8,35,52,0.54);
+      font-size: 11.5px;
+      font-weight: 780;
+      line-height: 1.25;
+    }
     .special-actions {
       display: flex;
       flex-wrap: wrap;
@@ -731,6 +770,10 @@
       display: flex;
       gap: 8px;
     }
+    .special-playback {
+      display: flex;
+      justify-content: center;
+    }
     .special-control {
       display: grid;
       place-items: center;
@@ -743,6 +786,33 @@
       font-size: 20px;
       font-weight: 900;
       cursor: pointer;
+    }
+    .special-pause {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 104px;
+      height: 38px;
+      padding: 0 12px;
+      gap: 7px;
+      border: 1px solid rgba(116,205,235,0.28);
+      border-radius: 6px;
+      color: #dff8ff;
+      background: rgba(8,35,52,0.72);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .special-pause::before {
+      content: "Ⅱ";
+      color: #40d9ff;
+      font-size: 13px;
+      line-height: 1;
+    }
+    .special-pause.is-paused::before {
+      content: "▶";
     }
     .special-dots {
       display: flex;
@@ -1825,6 +1895,17 @@
         font-size: 11px;
         line-height: 1.25;
       }
+      .special-promo-text {
+        padding: 10px;
+      }
+      .special-promo-text ul {
+        max-height: 142px;
+        overflow: auto;
+        padding-right: 2px;
+      }
+      .special-promo-text li {
+        font-size: 11px;
+      }
       .special-actions {
         gap: 8px;
       }
@@ -1873,7 +1954,17 @@
         font-size: 11px;
       }
       .special-controls {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 8px;
         padding: 0 14px 12px;
+      }
+      .special-playback {
+        justify-content: end;
+      }
+      .special-dots {
+        grid-column: 1 / -1;
       }
       .categories { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .category-intro { display: block; }
@@ -2937,6 +3028,23 @@
                 <li>50 sale items</li>
                 <li>Examples: INT 112 LAGOON AQUARIUM W / APS STAND WHITE (MADE TO ORDER) $2,796.50, INT 112 LAGOON AQUARIUM W / APS STAND BLACK (MADE TO ORDER) $2,796.50</li>
               </ul>
+              <div class="special-promo-text">
+                <h3>Promo details</h3>
+                <ul>
+                  <li>Innovative Marine</li>
+                  <li>Built to inspire. Designed for life.</li>
+                  <li>Made-to-Order Aquariums</li>
+                  <li>Made to order. Built for you. Worth the wait.</li>
+                  <li>Save 50% on all MTO orders</li>
+                  <li>112-240 gallons. Wide range of sizes.</li>
+                  <li>Tank + stand or complete system. Choose your perfect setup.</li>
+                  <li>Premium euro-braced designs. Built stronger. Built safer.</li>
+                  <li>Please allow 4-6 months. Crafted with care just for you.</li>
+                  <li>Order yours today</li>
+                  <li>Trusted quality, built in California</li>
+                  <li>Available at The Hidden Reef</li>
+                </ul>
+              </div>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/sales-online/sale-innovative-marine-mto-50-off/" target="_blank" rel="noopener">Shop MTO Systems</a>
                 <a class="btn secondary" href="category/?cat=equipment">Plan a setup</a>
@@ -2958,6 +3066,25 @@
                 <li>2 sale items</li>
                 <li>Examples: FUSION AIO 20 LONG AQUARIUM $169.99, FUSION 15 AIO CUBE AQUARIUM DESKTOP $99.99</li>
               </ul>
+              <div class="special-promo-text">
+                <h3>Promo details</h3>
+                <ul>
+                  <li>NUVO Starter Kits</li>
+                  <li>Ready to ship. In stock. Lowest price.</li>
+                  <li>Fusion 15 AIO Cube Aquarium. Desktop starter kit.</li>
+                  <li>Fusion 15 dimensions: 15 in x 15 in x 15 in.</li>
+                  <li>Fusion 15 price: $99.99.</li>
+                  <li>Fusion 20 AIO Long Aquarium. Desktop starter kit.</li>
+                  <li>Fusion 20 dimensions: 23.6 in x 15 in x 13 in.</li>
+                  <li>Fusion 20 price: $169.99.</li>
+                  <li>All-in-one filtration</li>
+                  <li>Sleek, modern design</li>
+                  <li>Easy setup and maintenance</li>
+                  <li>Vibrant reef ready</li>
+                  <li>Shop now</li>
+                  <li>Premium quality. Beautiful results. Right on your desk.</li>
+                </ul>
+              </div>
               <div class="special-actions">
                 <a class="btn" href="https://www.thehiddenreef.com/tags/aiosale/" target="_blank" rel="noopener">Shop AIO Aquariums</a>
                 <a class="btn secondary" href="category/?cat=aquariums">See aquariums</a>
@@ -2975,6 +3102,9 @@
         <div class="special-arrows">
           <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
           <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
+        </div>
+        <div class="special-playback">
+          <button class="special-pause" id="special-pause" type="button" aria-pressed="false">Pause</button>
         </div>
         <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
       </div>
@@ -3151,9 +3281,11 @@
 	    const specialsTrack = document.getElementById('specials-track');
 	    const specialSlides = Array.from(document.querySelectorAll('.special-slide'));
 	    const specialDots = document.getElementById('special-dots');
+	    const specialPause = document.getElementById('special-pause');
 	    if (specialsTrack && specialSlides.length && specialDots) {
 	      let activeSpecial = 0;
 	      let specialsTimer = null;
+	      let specialsPaused = false;
 	      specialDots.innerHTML = specialSlides.map((slide, index) =>
 	        '<button class="special-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-special-index="' + index + '" aria-label="Show special ' + (index + 1) + '"></button>'
 	      ).join('');
@@ -3167,11 +3299,24 @@
 	      }
 	      function startSpecialsTimer() {
 	        window.clearInterval(specialsTimer);
-	        if (specialSlides.length <= 1) return;
+	        if (specialSlides.length <= 1 || specialsPaused) return;
 	        specialsTimer = window.setInterval(() => {
 	          if (document.hidden) return;
 	          setSpecial(activeSpecial + 1);
 	        }, 6500);
+	      }
+	      function setSpecialsPaused(paused) {
+	        specialsPaused = paused;
+	        if (specialPause) {
+	          specialPause.classList.toggle('is-paused', specialsPaused);
+	          specialPause.setAttribute('aria-pressed', specialsPaused ? 'true' : 'false');
+	          specialPause.textContent = specialsPaused ? 'Resume' : 'Pause';
+	        }
+	        if (specialsPaused) {
+	          window.clearInterval(specialsTimer);
+	        } else {
+	          startSpecialsTimer();
+	        }
 	      }
 	      document.querySelectorAll('[data-special-dir]').forEach(button => {
 	        button.addEventListener('click', () => {
@@ -3184,6 +3329,9 @@
 	          setSpecial(Number(dot.dataset.specialIndex || 0));
 	          startSpecialsTimer();
 	        });
+	      });
+	      specialPause?.addEventListener('click', () => {
+	        setSpecialsPaused(!specialsPaused);
 	      });
 	      startSpecialsTimer();
 	    }
