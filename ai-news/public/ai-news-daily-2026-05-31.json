@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "updatedAt": "2026-05-31T12:00:01.694630+00:00",
+  "updatedAt": "2026-05-31T12:18:53.263272+00:00",
   "items": [
     {
       "title": "Quoting Karen Kwok for Reuters Breakingviews",
@@ -13,10 +13,10 @@
       "image": "",
       "published": "2026-05-31T01:48:12+00:00",
       "firstSeen": "2026-05-31T02:00:01.577584+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0187
+      "score": 4.0115
     },
     {
       "title": "20 Snap alumni launched an angel fund for the next generation of social media. They think “social” and “media” have split.",
@@ -29,10 +29,10 @@
       "image": "https://media.thenextweb.com/2026/05/snap-alumni-ghost-angels-fund-next-gen-social-media.avif",
       "published": "2026-05-31T09:36:51+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4794
+      "score": 3.4705
     },
     {
       "title": "Massive Multitask Language Understanding benchmark testing knowledge across 57 diverse subjects including STEM, humanities, social sciences, and professional domains",
@@ -48,7 +48,7 @@
       "lastSeen": "2026-05-31T04:48:21.799870+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5109
+      "score": 2.503
     },
     {
       "title": "How Turkey Hacked the Hair Transplant Industry",
@@ -61,10 +61,10 @@
       "image": "https://media.wired.com/photos/6a15b365e372bcf500f31f9b/master/pass/GettyImages-1280800924.jpg",
       "published": "2026-05-31T09:00:00+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.202
+      "score": 2.1932
     },
     {
       "title": "The people who trained Tesla’s self-driving AI won’t ride in it",
@@ -77,10 +77,10 @@
       "image": "https://media.thenextweb.com/2026/05/tesla-insiders-dont-trust-fsd-self-driving-reuters.avif",
       "published": "2026-05-31T10:15:44+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0981
+      "score": 2.089
     },
     {
       "title": "SoftBank is investing €75 billion to build 5 gigawatts of AI data centres in France. It’s Son’s biggest European bet.",
@@ -93,10 +93,10 @@
       "image": "https://media.thenextweb.com/2026/05/softbank-75-billion-ai-data-centres-france-macron.avif",
       "published": "2026-05-31T08:50:13+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0575
+      "score": 2.0487
     },
     {
       "title": "DuckDuckGo installs jumped 18% after Google killed the blue links. On Apple devices, the spike hit 70%.",
@@ -109,10 +109,10 @@
       "image": "https://media.thenextweb.com/2026/05/duckduckgo-user-surge-google-ai-search-overhaul.avif",
       "published": "2026-05-31T09:56:34+00:00",
       "firstSeen": "2026-05-31T11:00:01.694069+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.0889
+      "score": 0.0799
     },
     {
       "title": "A 9-gigawatt data centre outraged a Utah community. The governor just issued new rules.",
@@ -125,10 +125,10 @@
       "image": "https://media.thenextweb.com/2026/05/utah-governor-data-centre-rules-oleary-stratos-backlash.avif",
       "published": "2026-05-31T09:07:26+00:00",
       "firstSeen": "2026-05-31T10:00:01.780294+00:00",
-      "lastSeen": "2026-05-31T12:00:01.694630+00:00",
+      "lastSeen": "2026-05-31T12:18:53.263272+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": -1.0345
+      "score": -1.0433
     }
   ],
   "errors": [
