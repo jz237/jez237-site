@@ -1,28 +1,36 @@
 /* === plant-cards.css — shared card-grid styles for rebuilt plant pages ===
-   Uses the site's blue color system from styles.css.
+   Uses a shared garden backdrop and readable dark card surfaces.
    Each plant page only adds its hero gradient tint.
    Load AFTER styles.css. plant-enhance.css still loads for ambient effects.
 */
 
 :root {
-  --pc-bg: #0b0f14;
-  --pc-panel: #121923;
-  --pc-panel-2: #1b2230;
-  --pc-text: #e8edf3;
-  --pc-muted: #97a4b5;
-  --pc-accent: #4f8cff;
+  --pc-bg: #d8e9c5;
+  --pc-panel: #172416;
+  --pc-panel-2: #22321d;
+  --pc-text: #f2f8ed;
+  --pc-muted: #c7d8c0;
+  --pc-accent: #9fd45f;
   --pc-border: rgba(255,255,255,.12);
-  --pc-shadow: 0 18px 50px rgba(0,0,0,.35);
+  --pc-shadow: 0 18px 50px rgba(12,27,12,.36);
   --pc-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --pc-garden-bg: url("garden/garden-page-bg-20260531.webp");
 }
 
-/* Base page overrides — blue theme, not earth tones */
-body.plant-page {
-  background: linear-gradient(180deg, #0b0f14 0%, #0f1520 100%);
+html {
+  background: #d8e9c5;
+}
+
+/* Base page overrides — bright garden backdrop with readable dark panels */
+body {
+  background:
+    linear-gradient(180deg, rgba(162, 203, 229, .72) 0%, rgba(183, 218, 155, .64) 34%, rgba(36, 63, 31, .82) 100%),
+    var(--pc-garden-bg) center top / cover no-repeat fixed;
   color: var(--pc-text);
 }
 
-.plant-page a { color: #8eb6ff; }
+.plant-page a,
+body a { color: #bde986; }
 
 /* ---- Header ---- */
 .plant-header {
@@ -68,13 +76,13 @@ body.plant-page {
   padding: 4px 10px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.1);
-  background: rgba(255,255,255,.04);
+  background: rgba(16,35,17,.38);
   color: var(--pc-muted);
   letter-spacing: 0.3px;
   text-transform: uppercase;
   font-weight: 600;
 }
-.meta-pill.season { border-color: rgba(79,140,255,.35); color: var(--pc-accent); }
+.meta-pill.season { border-color: rgba(159,212,95,.38); color: var(--pc-accent); }
 .meta-pill.type { border-color: rgba(255,180,102,.3); color: #ffb466; }
 
 /* ---- Card Grid (same pattern as AI images page) ---- */
@@ -96,7 +104,7 @@ main {
 .card {
   overflow: hidden;
   border: 1px solid var(--pc-border);
-  background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+  background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(13,29,13,.42));
   border-radius: 24px;
   box-shadow: var(--pc-shadow);
   transition: transform 0.45s var(--pc-ease), box-shadow 0.45s var(--pc-ease), border-color 0.3s ease;
@@ -105,10 +113,10 @@ main {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 24px 56px rgba(0,0,0,.42);
-  border-color: rgba(79,140,255,.3);
+  border-color: rgba(159,212,95,.34);
 }
 .card-image-wrap {
-  background: #050709;
+  background: #0d170d;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   position: relative;
@@ -142,7 +150,7 @@ main {
 
 .card-content {
   padding: 18px 20px 20px;
-  background: linear-gradient(180deg, rgba(18,25,35,.95), rgba(18,25,35,.82));
+  background: linear-gradient(180deg, rgba(23,36,22,.96), rgba(20,32,19,.9));
   min-width: 0;
 }
 .card-kicker {
@@ -199,6 +207,15 @@ main {
   padding-left: 12px;
   margin-top: 8px;
   font-style: italic;
+}
+
+.dir-item,
+.garden-feature-link {
+  box-shadow: 0 16px 36px rgba(12,27,12,.24);
+}
+
+.garden-feature-link {
+  background: linear-gradient(135deg, rgba(159,212,95,.13), rgba(93,154,197,.12)) !important;
 }
 .card-notes .notes-body ul {
   margin: 8px 0 0;
@@ -270,7 +287,7 @@ main {
 .lb-nav button:hover,
 .lightbox-nav button:hover {
   background: rgba(255,255,255,.12);
-  border-color: rgba(79,140,255,.35);
+  border-color: rgba(159,212,95,.35);
 }
 .lb-nav .counter,
 .lightbox-nav .counter { color: var(--pc-muted); font-size: .85rem; }
@@ -279,4 +296,5 @@ main {
 @media (max-width: 680px) {
   .card-grid { grid-template-columns: 1fr; }
   .lb-hint { display: none; }
+  body { background-attachment: scroll; }
 }
