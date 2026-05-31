@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Artificial Intelligence Sounds — Jez237</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css?v=ai-sounds-20260530" />
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .sound-hero { position: relative; overflow: hidden; margin-bottom: 24px; padding: clamp(22px, 5vw, 52px); border: 1px solid rgba(232,197,122,.18); border-radius: 30px; background: radial-gradient(circle at 20% 10%, rgba(224,102,126,.28), transparent 34%), radial-gradient(circle at 80% 30%, rgba(110,203,255,.22), transparent 36%), linear-gradient(135deg, rgba(18,20,31,.92), rgba(9,12,20,.76)); box-shadow: 0 24px 70px rgba(0,0,0,.34); }
+    .sound-hero::after { content:""; position:absolute; inset:auto -12% -38% 28%; height: 190px; background: repeating-linear-gradient(90deg, rgba(232,197,122,.0) 0 18px, rgba(232,197,122,.28) 18px 22px); filter: blur(.2px); opacity:.45; transform: rotate(-4deg); }
+    .sound-kicker, .sound-tag { display:inline-flex; width:max-content; align-items:center; gap:8px; color: var(--brand-gold); text-transform: uppercase; letter-spacing:.16em; font-size: 11px; font-weight:700; }
+    .sound-hero h1 { position:relative; z-index:1; margin:.35em 0 .25em; font-size: clamp(42px, 8vw, 96px); line-height:.86; letter-spacing:-.07em; }
+    .sound-hero p { position:relative; z-index:1; max-width: 780px; color: var(--ink-mid); font-size: clamp(15px, 2vw, 19px); line-height:1.55; }
+    .sound-lab-stats { position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+    .sound-lab-stats span { padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.055); color:var(--ink-mid); font-size:13px; }
+    .sound-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .sound-card { position:relative; overflow:hidden; display:grid; gap:16px; padding:20px; border:1px solid rgba(255,255,255,.11); border-radius:24px; background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.026)); box-shadow: 0 16px 42px rgba(0,0,0,.22); }
+    .sound-card::before { content:""; position:absolute; inset:-40% -20% auto auto; width:180px; height:180px; border-radius:999px; background: radial-gradient(circle, rgba(110,203,255,.18), transparent 68%); }
+    .sound-card h2 { margin:8px 0 8px; font-size: clamp(24px, 3vw, 38px); line-height: .96; letter-spacing:-.04em; }
+    .sound-card p { margin:0; color:var(--ink-lo); line-height:1.48; }
+    .sound-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .sound-meta span { padding:7px 9px; border-radius:999px; background:rgba(0,0,0,.22); color:var(--ink-lo); font-size:12px; }
+    .sound-card audio { position:relative; z-index:1; width:100%; filter: saturate(1.1); }
+    .sound-wave { height:58px; display:flex; align-items:end; gap:7px; opacity:.9; }
+    .sound-wave span { flex:1; min-width:8px; border-radius: 999px 999px 4px 4px; background: linear-gradient(180deg, rgba(232,197,122,.95), rgba(224,102,126,.7)); height: calc(18px + ((var(--i) + 1) * 5px)); }
+    .sound-wave span:nth-child(2) { height:48px; background:linear-gradient(180deg, rgba(110,203,255,.9), rgba(139,92,246,.65)); }
+    .sound-wave span:nth-child(3) { height:32px; } .sound-wave span:nth-child(4) { height:56px; } .sound-wave span:nth-child(5) { height:24px; } .sound-wave span:nth-child(6) { height:42px; }
+    .sound-note { margin-top:18px; padding:18px 20px; border:1px solid rgba(232,197,122,.16); border-radius:22px; background:rgba(232,197,122,.055); color:var(--ink-lo); }
+    .sound-note strong { color: var(--ink-hi); }
+    @media (max-width: 860px) { .sound-grid { grid-template-columns:1fr; } .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
+  </style>
+</head>
+<body>
+  <header id="site-nav" class="home-hidden-nav"></header>
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="sounds-title">
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="../"><strong>Jez237</strong><span>Philadelphia · Zone 7a</span></a>
+        <p class="sidebar-note">A living journal. A garden journal and a workbench.</p>
+        <nav class="side-nav" data-site-menu data-active="ai-sounds" data-base="../"></nav>
+        <div class="side-controls" aria-hidden="true"><span>☼</span><span>☾</span><span>⚙</span></div>
+      </aside>
+      <div class="hub-main">
+        <div class="hub-topbar">
+          <div>
+            <span class="sound-kicker">AI + Media Lab</span>
+            <h1 id="sounds-title">Artificial Intelligence Sounds</h1>
+            <p>A listening room for generative audio experiments: prog-rock sketches, organ burners, bass grooves, and weird little machine-made songs from the lab.</p>
+            <div class="sound-lab-stats"><span>8 tracks</span><span>Generated with local AI audio tooling</span><span>Curated for Jez237</span></div>
+          </div>
+          <div class="topbar-actions"><a href="../">Overview</a><button type="button" aria-label="Menu">☰</button></div>
+        </div>
+        <section class="sound-hero" aria-label="Artificial intelligence sounds intro">
+          <span class="sound-kicker">Synthetic riffs · human taste</span>
+          <h1>Machine music, hand picked.</h1>
+          <p>These are not stock loops. They are experiments from the AI sound bench — quick sparks, strange textures, and surprisingly musical accidents worth keeping.</p>
+        </section>
+        <section class="sound-grid" aria-label="AI-generated sound archive">
+          <article class="sound-card" style="--i:0">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Rock / 1970s</span>
+              <h2>Straight 1970s Rock</h2>
+              <p>AI-generated 70s hard-rock sketch with guitars, drums, and throwback energy.</p>
+              <div class="sound-meta"><span>1:30</span><span>2.1 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260530-182950-jez-straight-1970s-rock-take10.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:1">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Metal / organ</span>
+              <h2>70s Metal Organ Burner</h2>
+              <p>Heavy organ-driven burner with proto-metal weight and cathedral swagger.</p>
+              <div class="sound-meta"><span>1:30</span><span>2.1 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260530-181147-jez-70s-metal-organ-burner-take6.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:2">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Blues rock</span>
+              <h2>Spacey 70s Blues Rock</h2>
+              <p>A looser cosmic highway blues-rock experiment with synth haze.</p>
+              <div class="sound-meta"><span>1:30</span><span>2.1 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260530-181251-jez-spacey-70s-blues-rock-take7.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:3">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Arena rock</span>
+              <h2>Cosmic Highway Rock</h2>
+              <p>Road-trip rock filtered through generative space dust.</p>
+              <div class="sound-meta"><span>1:30</span><span>2.1 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260530-181337-jez-cosmic-highway-rock-take8.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:4">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Prog rock</span>
+              <h2>Inner Lights Prog Rock</h2>
+              <p>Progressive rock idea with a glowing, reflective center.</p>
+              <div class="sound-meta"><span>1:30</span><span>2.1 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260530-175545-jez-inner-lights-prog-rock-take3.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:5">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Keyboard / prog</span>
+              <h2>Keyboard Rock 60s</h2>
+              <p>Synth and keyboard-forward sketch inspired by classic prog textures.</p>
+              <div class="sound-meta"><span>1:00</span><span>1.4 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260529-203301-rick-wakeman-keyboard-rock-60s.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:6">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Bass / groove</span>
+              <h2>Varied Solo Bass Song</h2>
+              <p>Bass-forward oddball groove experiment with slap and lead movement.</p>
+              <div class="sound-meta"><span>2:30</span><span>3.4 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260529-203020-les-claypool-varied-solo-bass-song.mp3"></audio>
+          </article>
+          <article class="sound-card" style="--i:7">
+            <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="sound-card-copy">
+              <span class="sound-tag">Prog metal</span>
+              <h2>Discord Prog Metal Anthem</h2>
+              <p>A punchy prog-metal anthem born from the AI sound lab.</p>
+              <div class="sound-meta"><span>2:00</span><span>2.7 MB</span><span>AI generated</span></div>
+            </div>
+            <audio controls preload="metadata" src="audio/20260528-193848-jez-discord-prog-metal-anthem.mp3"></audio>
+          </article>
+        </section>
+        <section class="sound-note"><strong>Note:</strong> This page is a public showcase, so it includes curated exported audio only — no prompts, private session data, or hidden workspace files.</section>
+      </div>
+    </section>
+    <footer style="margin-top:60px;padding:30px 0;text-align:center;color:var(--ink-lo);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);"><a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a></footer>
+  </main>
+  <script src="../assets/app.js"></script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/side-menu.js?v=ai-sounds-20260530" defer></script>
+  <script src="../assets/nav.js" defer></script>
+</body>
+</html>
