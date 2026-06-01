@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-06-01T14:11:22.608642+00:00",
+  "updatedAt": "2026-06-01T15:00:02.058795+00:00",
   "items": [
     {
-      "title": "When LLMs Learn to Be Consistently Wrong: A Multi-Model Study of Linear Representations of Synthetic Deception",
+      "title": "LLMs Without Deep Neural Networks: New Architecture, Benefits and Case Study",
       "url": "https://llm-stats.com/ai-news",
       "source": "LLM Stats AI News",
       "sourceUrl": "https://llm-stats.com/ai-news",
@@ -10,12 +10,125 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-01T14:11:30.047191+00:00",
+      "published": "2026-06-01T15:00:21.335208+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "b9453",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9453",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "model: Add EXAONE 4.5 implementations (#21733)\n\n\nAdd EXAONE 4.5 and Add GQA for MMproj\n\n\nmtmd: EXAONE 4.5 vision markers and projector path\n\n\nEXAONE 4.5 uses  and  for image boundaries; Qwen keeps\n&lt;|vision_start|&gt; and &lt;|vision_end|&gt;.\nRoute EXAONE 4.5 through the Qwen2.5-VL-style encode path (window attention\npattern, optional mmproj input norm). Update exaone4_5 projector weights and\nconvert_hf_to_gguf for mmproj export.\n\nmtmd: load EXAONE4 nextn tensors correctly\n\nAlign EXAONE4 tensor registration with EXAONE_MOE for NextN/MTP slots and avoid skip-flag propagation on duplicated ro",
+      "image": "https://opengraph.githubassets.com/70e3ac50cd906e7b2fb939ec43a9b4f467a4066dc0df40365f86252877945b35/ggml-org/llama.cpp/releases/tag/b9453",
+      "published": "2026-06-01T14:57:47+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 11.9189
+    },
+    {
+      "title": "DuckDuckGo makes its ‘no-AI’ search engine easier to access as its traffic booms",
+      "url": "https://techcrunch.com/2026/06/01/duckduckgo-makes-its-no-ai-search-engine-easier-to-access-as-its-traffic-booms",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "Alternative search engine DuckDuckGo launches 'no AI' web extensions for Chrome and Firefox users.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200%2C784",
+      "published": "2026-06-01T14:49:10+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.4845
+    },
+    {
+      "title": "Microsoft to unveil new AI models and Windows improvements at Build",
+      "url": "https://www.theverge.com/report/940861/microsoft-build-ai-models-windows-dev-mode-what-to-expect",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Microsoft is heading to San Francisco this week in a bid to win back developers at its Build conference. I've been attending Build since the days when Microsoft called it the Professional Developers Conference, and I can't remember a more pivotal moment. As Microsoft continues to reshuffle its entire business around AI, it's moving Build [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/MS_BUILD.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-01T14:39:03+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3494
+    },
+    {
+      "title": "AI is blowing up music. How should the Grammys handle it?",
+      "url": "https://www.theverge.com/podcast/940831/ai-grammys-music-recording-harvey-mason",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "Today I’m talking with Harvey Mason Jr., who is CEO of the Recording Academy — that’s the outfit that puts on the Grammy Awards. I last talked to Harvey in 2024, when it was obvious that generative AI would upend the music industry, but still not exactly clear how that would happen.&#160; Well, it’s been [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260601_Mason_Grammys.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
+      "published": "2026-06-01T14:30:00+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4448
+    },
+    {
+      "title": "b9452",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9452",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "vulkan: Block-load Q3_K/Q6_K block data and subtract on 32b ints (#23056)\nQ2_K/Q3_K/Q6_K do much better when using MMVQ on Intel BMG even\nthough they're only 2-byte aligned, and Q3_K still wins on\nNVIDIA as well.\nmesa isn't all that great at coalescing back-to-back loads from\nalternating arrays, so we force it instead. Further, we can do\nsubtraction directly on a full int32_t rather than an i8vec4\nwith bit twiddling because the high bit is always free to start.\nOn Intel BMG on mesa, the switch to MMVQ provides an immediate\n~57% perf increase in tg128 for unsloth/Qwen3.5-9B-GGUF:Q3_K and\n~78% p",
+      "image": "https://opengraph.githubassets.com/29ad4f337ed9fe0640267fda0f8c354e0becbdfa430611d09abc07724f989bcd/ggml-org/llama.cpp/releases/tag/b9452",
+      "published": "2026-06-01T14:22:30+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2011
+    },
+    {
+      "title": "Salesforce is acquiring Contentful to give Agentforce a content layer that can assemble experiences on the fly",
+      "url": "https://thenextweb.com/news/salesforce-acquires-contentful-headless-cms-agentforce",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Salesforce has signed a definitive agreement to acquire Contentful, the API-first headless content management platform used by more than 4,800 enterprises to deliver digital experiences across web, mobile, and emerging channels. The deal, announced on Sunday, does not disclose financial terms. Contentful was last valued at more than $3 billion in a 2021 Series F round [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/salesforce-acquires-contentful-headless-cms-agentforce.avif",
+      "published": "2026-06-01T14:21:30+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5306
+    },
+    {
+      "title": "AI is crushing startup valuations for companies that raised before ChatGPT existed",
+      "url": "https://thenextweb.com/news/ai-startup-valuations-pre-chatgpt-fallen-unicorns",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "The AI boom has created a two-speed startup economy. Companies building on generative AI are raising at historically unprecedented valuations, while startups that last raised capital before ChatGPT launched in November 2022 are watching their worth collapse. According to PitchBook valuation estimates, more than 220 companies that once held billion-dollar valuations have now fallen below that threshold, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ai-startup-valuations-pre-chatgpt-fallen-unicorns.avif",
+      "published": "2026-06-01T14:10:10+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 9.5249
     },
     {
       "title": "Strava blames zero-code AI apps and scrapers as it tightens API access",
@@ -24,14 +137,14 @@
       "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
       "sourceWeight": 0.9,
       "category": "AI",
-      "summary": "The popular fitness-tracking platform, Strava, is restricting access to its API as part of efforts to clamp down on AI scraping, as reported earlier by TechCrunch. Developers who want to build an app using Strava's features now need to pay for a flat $11.99 / month subscription. In an update on its developer hub, Strava [&#8230;]",
+      "summary": "The popular fitness-tracking platform, Strava, is restricting access to its API as part of efforts to clamp down on AI scraping, as reported earlier by TechCrunch. Developers who want to build an app using Strava's data now need to pay for a flat $11.99 / month subscription. In an update on its developer hub, Strava [&#8230;]",
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STKB305_STRAVA_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:06:44+00:00",
       "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.1576
+      "score": 4.1332
     },
     {
       "title": "Beyond LLMs: Why Scalable Enterprise AI Adoption Depends on Agent Logic",
@@ -44,10 +157,26 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/65b12ed52be9660f0b7e5f72/zJb7AUFeIDNyokJYMK1Ae.jpeg",
       "published": "2026-06-01T13:51:18+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.1198
+      "score": 5.0955
+    },
+    {
+      "title": "Akeso’s lung cancer drug reduces death risk by 34%, marking the first Chinese drug at ASCO’s top stage in 61 years",
+      "url": "https://thenextweb.com/news/akeso-ivonescimab-lung-cancer-asco-china-biotech",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Akeso, the Chinese biotechnology company whose drug ivonescimab was dubbed “biotech’s DeepSeek moment” last year, has reported phase three clinical trial results showing a 34% reduction in the risk of death for patients with advanced squamous non-small cell lung cancer. The data, filed with the Hong Kong stock exchange on Monday and selected for the American Society [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/akeso-ivonescimab-lung-cancer-asco-china-biotech.avif",
+      "published": "2026-06-01T13:49:09+00:00",
+      "firstSeen": "2026-06-01T15:00:02.058795+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1145
     },
     {
       "title": "b9451",
@@ -60,10 +189,10 @@
       "image": "https://opengraph.githubassets.com/3b94bee40ff47a6910d5fc31a7af61f4970bb7393307bb595e5629cde8d58f97/ggml-org/llama.cpp/releases/tag/b9451",
       "published": "2026-06-01T13:15:03+00:00",
       "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1917
+      "score": 0.1678
     },
     {
       "title": "Open and closed models are on different exponentials",
@@ -76,10 +205,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/6b994b97-89a2-4101-ad81-aa3ffe274b75_3182x1790.png",
       "published": "2026-06-01T13:03:48+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3261
+      "score": 2.3024
     },
     {
       "title": "US export controls are pushing China’s AI chip industry away from GPUs and toward custom silicon",
@@ -92,10 +221,10 @@
       "image": "https://media.thenextweb.com/2026/06/china-ai-chip-asic-gpu-nvidia-export-controls.avif",
       "published": "2026-06-01T12:14:30+00:00",
       "firstSeen": "2026-06-01T13:00:01.116384+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4921
+      "score": 3.4688
     },
     {
       "title": "AI eclipsed nuclear weapons as the dominant threat at Asia’s premier defense summit",
@@ -108,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/shangri-la-dialogue-ai-dangers-nuclear-weapons-defense.avif",
       "published": "2026-06-01T11:09:32+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0612
+      "score": 2.0387
     },
     {
       "title": "LG Electronics has quadrupled this year. The catalyst: a meeting with Jensen Huang about physical AI.",
@@ -124,10 +253,10 @@
       "image": "https://media.thenextweb.com/2026/06/lg-electronics-quadruples-nvidia-physical-ai-meeting.avif",
       "published": "2026-06-01T11:06:52+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0599
+      "score": 2.0374
     },
     {
       "title": "Jensen Huang opens Computex with Vera Rubin in production and a move into Windows PCs",
@@ -140,10 +269,10 @@
       "image": "https://media.thenextweb.com/2026/06/NVIDIA-GTC-Taipei-.avif",
       "published": "2026-06-01T11:00:38+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.057
+      "score": 2.0346
     },
     {
       "title": "Norse Atlantic Airways Offers Dirt-Cheap Tickets. There’s a Catch",
@@ -156,10 +285,10 @@
       "image": "https://media.wired.com/photos/6a15c83805d6069616b25809/master/pass/Norse-Atlantic-Airways-Went-Tech-First-With-Customer-Service-Business-2151560857.jpg",
       "published": "2026-06-01T11:00:00+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1967
+      "score": 2.1743
     },
     {
       "title": "Nadella quietly dismantled Microsoft’s leadership structure. The SLT that ran the company for decades is gone.",
@@ -172,10 +301,10 @@
       "image": "https://media.thenextweb.com/2026/06/microsoft-nadella-ai-reboot-leadership-restructure-slt.avif",
       "published": "2026-06-01T10:45:07+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0498
+      "score": 2.0275
     },
     {
       "title": "Nvidia looks beyond China’s Unitree for its humanoid robot push",
@@ -188,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/02/Nvidias-Q4-results-could-make-or-break-confidence-in-the-AI-hardware-market.avif",
       "published": "2026-06-01T09:00:24+00:00",
       "firstSeen": "2026-06-01T10:00:01.323806+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4025
+      "score": 3.3813
     },
     {
       "title": "PLD Space raises its Kourou launch-complex investment to €35m",
@@ -204,10 +333,10 @@
       "image": "https://media.thenextweb.com/2026/06/PLD-Space-Miura.avif",
       "published": "2026-06-01T08:48:13+00:00",
       "firstSeen": "2026-06-01T10:00:01.323806+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3971
+      "score": 3.376
     },
     {
       "title": "Vertice buys Vendr to build what it calls the largest procurement dataset",
@@ -223,7 +352,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9849
+      "score": 1.9641
     },
     {
       "title": "Runway picks London for its European headquarters with a $200m UK pledge",
@@ -239,7 +368,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9714
+      "score": 5.9509
     },
     {
       "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
@@ -255,7 +384,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.9664
+      "score": 7.946
     },
     {
       "title": "Two days to go: TNW’s Amsterdam gathering on what it takes to win in AI-native SaaS",
@@ -271,7 +400,7 @@
       "lastSeen": "2026-06-01T12:08:11.286344+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.951
+      "score": 1.9309
     },
     {
       "title": "MiniMax eyes a Shanghai listing after a 400% run in Hong Kong",
@@ -287,7 +416,7 @@
       "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9509
+      "score": 1.9309
     },
     {
       "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
@@ -303,7 +432,7 @@
       "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9386
+      "score": 3.9188
     },
     {
       "title": "ASML spinout Invisix raises €20M to see inside the chips optics can’t",
@@ -319,7 +448,7 @@
       "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.3262
+      "score": 3.3067
     },
     {
       "title": "China formalises tougher outbound-investment rules after the Meta-Manus blockade",
@@ -335,7 +464,7 @@
       "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 1.608
+      "score": 1.5889
     },
     {
       "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
@@ -348,10 +477,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
       "published": "2026-06-01T05:00:56+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8425
+      "score": 4.8236
     },
     {
       "title": "NVIDIA Factory Operations Blueprint Gives Factories a New AI Brain",
@@ -364,10 +493,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/robotics-factory-ai-computer-1280x680-5259650.jpg",
       "published": "2026-06-01T05:00:47+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0425
+      "score": 2.0235
     },
     {
       "title": "Taiwan’s Industry Titans Turbocharge World’s AI Infrastructure Buildout With NVIDIA",
@@ -380,10 +509,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Taiwan-AI-Infra-blog-KV-still.jpg",
       "published": "2026-06-01T05:00:41+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.7425
+      "score": 3.7235
     },
     {
       "title": "US moves to close the loophole letting Nvidia’s top chips reach Chinese firms abroad",
@@ -399,7 +528,7 @@
       "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9023
+      "score": 1.8833
     },
     {
       "title": "SoftBank overtakes Toyota as Japan’s most valuable company on the AI rally",
@@ -415,7 +544,7 @@
       "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8981
+      "score": 3.8792
     },
     {
       "title": "How Cosmos 3 Helps Physical AI Think Before It Acts",
@@ -428,10 +557,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Featured-image.png",
       "published": "2026-06-01T04:45:07+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0363
+      "score": 2.0175
     },
     {
       "title": "May 2026 newsletter",
@@ -444,11 +573,11 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.5363
+      "score": 16.5174
     },
     {
       "title": "Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action",
@@ -461,10 +590,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "published": "2026-06-01T04:44:55+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.8763
+      "score": 4.8574
     },
     {
       "title": "Dell’s $699 XPS 13 walks straight into MacBook Neo territory",
@@ -480,7 +609,7 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.5929
+      "score": 2.5742
     },
     {
       "title": "NVIDIA Levels Up Local AI Agents Across RTX PCs and DGX Spark",
@@ -493,10 +622,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-06-01T04:30:11+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.2305
+      "score": 7.2118
     },
     {
       "title": "Revolut, Mistral and Wayve founders back Balderton’s ‘Built in Europe’ push",
@@ -512,135 +641,7 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2789
-    },
-    {
-      "title": "b9445: ci: remove redundant or duplicate jobs (#23927)",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9445",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "remove redundant apple job\n\nopenvino gpu and cpu test can share the same build and machine\nUpdate build-rpc.yml\nUpdate build-openvino.yml\ncpu any doesnt make sense as we have an arm job already, so do high perf on both x86 and arm\nremove duplicate x86 vulkan\ncombine backend sampling\nUpdate server.yml\nrun server on arm as windows is x86\n\n\nemdawn on one machine only\n\n\nfix openvino, remove cpu tag as we dont have many x64 machines with that tag",
-      "image": "https://repository-images.githubusercontent.com/612354784/c59e3320-a236-4182-941f-ea3f1a0f50e7",
-      "published": "2026-06-01T03:32:17+00:00",
-      "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3383
-    },
-    {
-      "title": "datasette 1.0a32",
-      "url": "https://simonwillison.net/2026/May/31/datasette",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Release: datasette 1.0a32\n        A minor bugfix release. Fixes a bug with INSERT ... RETURNING queries via the new /db/-/execute-write endpoint and a bunch of base_url issues which showed up when I was experimenting with Service Workers yesterday.\n    \n    \n        Tags: datasette, annotated-release-notes",
-      "image": "",
-      "published": "2026-05-31T23:23:38+00:00",
-      "firstSeen": "2026-06-01T00:00:01.758141+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.6193
-    },
-    {
-      "title": "b9444",
-      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9444",
-      "source": "llama.cpp Releases",
-      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
-      "sourceWeight": 0.8,
-      "category": "AI",
-      "summary": "server : handle If-None-Match weak ETags (#23916)\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) - CUDA 13.3 DLLs\nWindows x64 (Vulkan)\nWindows x64 (SYCL) DISABLED\nWindows x64 (HIP)\n\nopenEuler:\n\n",
-      "image": "https://opengraph.githubassets.com/450bb204194773d5b4560809d04ae578217aabaad68ddb099747aa78b06cea0c/ggml-org/llama.cpp/releases/tag/b9444",
-      "published": "2026-05-31T21:53:07+00:00",
-      "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -0.1806
-    },
-    {
-      "title": "Erin Brockovich takes aim at data center secrecy",
-      "url": "https://techcrunch.com/2026/05/31/erin-brockovich-takes-aim-at-data-center-secrecy",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Environmental activist Erin Brockovich has a new mission.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200%2C800",
-      "published": "2026-05-31T21:05:14+00:00",
-      "firstSeen": "2026-05-31T22:00:01.668772+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.874
-    },
-    {
-      "title": "China just told its tech giants to stop fighting on price and start investing in AI",
-      "url": "https://thenextweb.com/news/china-platform-regulation-ai-investment-qiushi-signal",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "A top-level Communist Party publication has signaled a shift in how Beijing intends to govern its largest internet platforms. A draft commentary set to appear in the Qiushi journal on Monday says the focus will be on balancing support for growth with enhanced regulatory oversight. The message is directed at companies including Alibaba, Meituan, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/china-platform-regulation-ai-investment-qiushi-signal.avif",
-      "published": "2026-05-31T16:49:15+00:00",
-      "firstSeen": "2026-05-31T18:00:02.013239+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.7576
-    },
-    {
-      "title": "The solution might be cancelling my AI subscription",
-      "url": "https://simonwillison.net/2026/May/31/the-solution-might-be-cancelling-my-ai-subscription",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The solution might be cancelling my AI subscription\nI find this post by David Wilson very relatable. David lists 16+ projects he's spun up with AI tooling, and concludes:\n\nI didn't mean to build most of these things. Usually the Claude session started with something like \"write a quick script for X\", and one hour later the result is not a quick script for X, nor in the usual case is my problem solved, whatever the original itch happened to be.\nOn that last point, this technology is horrific for attention. It's a thermonuclear ADHD amplifier and I have seen the same effect in every single one o",
-      "image": "",
-      "published": "2026-05-31T16:31:32+00:00",
-      "firstSeen": "2026-05-31T17:00:01.160369+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 6.8926
-    },
-    {
-      "title": "Making sense of the debate over AI psychosis",
-      "url": "https://techcrunch.com/2026/05/31/making-sense-of-the-debate-over-ai-psychosis",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "On the latest episode of Equity, we debate whether tech CEOs are \"uniquely prone to AI psychosis.\"",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/03/s.jpg?resize=1200%2C840",
-      "published": "2026-05-31T15:30:00+00:00",
-      "firstSeen": "2026-05-31T16:00:01.181185+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.7757
-    },
-    {
-      "title": "Apple destroyed the mid-tier watch market. Now it’s coming for the $200 billion eyewear industry.",
-      "url": "https://thenextweb.com/news/apple-smart-glasses-eyewear-market-disruption-watch-playbook",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "When Apple launched the Apple Watch in 2015, the mid-tier wristwatch market had a handful of dominant companies. Swatch Group sold watches under Tissot, Hamilton, and Longines. Fossil Group sold under Michael Kors, Armani, and Kate Spade. Movado sold under Coach, Hugo Boss, and Tommy Hilfiger. Ten years later, the damage is quantifiable. Swatch’s revenue [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/apple-smart-glasses-eyewear-market-disruption-watch-playbook.avif",
-      "published": "2026-05-31T14:39:37+00:00",
-      "firstSeen": "2026-05-31T14:54:17.490552+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.4222
+      "score": 6.2605
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +654,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1372
+      "score": 1.1368
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +670,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3022
+      "score": 0.3019
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,7 +686,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1202
@@ -701,7 +702,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-06-01T14:11:22.608642+00:00",
+      "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9099
