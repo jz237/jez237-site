@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T17:00:01.264343+00:00",
+  "updatedAt": "2026-06-01T18:00:01.158576+00:00",
   "items": [
     {
       "title": "Hwa Hui Tew, Junn Yong Loo, Fang Yu Leong, Julia K. Lau, Ding Fan, Hernando Ombao, Rapha\\\"el C. -W. Phan, Chee Pin Ta...",
@@ -10,12 +10,108 @@
       "category": "AI",
       "summary": "",
       "image": "https://llm-stats.com/og/main.png",
-      "published": "2026-06-01T17:00:06.180353+00:00",
+      "published": "2026-06-01T18:00:14.524658+00:00",
       "firstSeen": "2026-05-29T21:00:01.522609+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.36
+    },
+    {
+      "title": "v0.30.0-rc32: llama-server followups (#16353)",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc32",
+      "source": "Ollama Releases",
+      "sourceUrl": "https://github.com/ollama/ollama/releases.atom",
+      "sourceWeight": 0.9,
+      "category": "AI",
+      "summary": "llama-server followups\n\nMisc fixes for #16031\n\nAdd back dropped ROCm build flag for multi-GPU support on windows\nFix amdhip64_*.dll version detection for \"latest\" selection\nFix embeddings API for consistent normalize behavior with prior versions\n\n\n\nci: set up for automated llama.cpp update testing\n\n\nreduce batch for fa-disabled, and constrained vram\n\n\nmlx: fix v3 load bug on m5\n\n\nImagegen was incorrectly loading v3 first.  This DRYs out the loading code so imagegen gets the same new v4/v3 selection logic.\n\n\nfix reload bug on embedding models\n\n\nbump version\n\n\nsteer user how to enable iGPU when ",
+      "image": "https://opengraph.githubassets.com/ba017001f9d13428ceaa03ae8eb00565d23f543c1d5e69f9b978c6eb29086b51/ollama/ollama",
+      "published": "2026-06-01T17:44:21+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.352
+    },
+    {
+      "title": "Anthropic files confidentially for an IPO, potentially beating OpenAI to Wall Street after eclipsing it in valuation",
+      "url": "https://thenextweb.com/news/anthropic-ipo-confidential-filing-openai-race-965-billion",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Anthropic has confidentially submitted draft registration paperwork for an initial public offering with the Securities and Exchange Commission, the company announced in a blog post on Monday. The number of shares to be offered and the price have not been set. The filing positions Anthropic to potentially reach the public market as soon as this fall, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/anthropic-claude-word-lawyers-legal-ai.avif",
+      "published": "2026-06-01T17:23:03+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.4813
+    },
+    {
+      "title": "b9455",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b9455",
+      "source": "llama.cpp Releases",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "sourceWeight": 0.8,
+      "category": "AI",
+      "summary": "TP: quantized KV cache support (#23792)\n\n\nTP: quantized KV cache support\n\n\nfix partial view\n\n\nremove overly strict assert\n\n\n\nmacOS/iOS:\n\nmacOS Apple Silicon (arm64)\nmacOS Apple Silicon (arm64, KleidiAI enabled) DISABLED\nmacOS Intel (x64)\niOS XCFramework\n\nLinux:\n\nUbuntu x64 (CPU)\nUbuntu arm64 (CPU)\nUbuntu s390x (CPU)\nUbuntu x64 (Vulkan)\nUbuntu arm64 (Vulkan)\nUbuntu x64 (ROCm 7.2)\nUbuntu x64 (OpenVINO)\nUbuntu x64 (SYCL FP32) DISABLED\n\nAndroid:\n\nAndroid arm64 (CPU)\n\nWindows:\n\nWindows x64 (CPU)\nWindows arm64 (CPU)\nWindows x64 (CUDA 12) - CUDA 12.4 DLLs\nWindows x64 (CUDA 13) - CUDA 13.3 DLLs\nWindow",
+      "image": "https://opengraph.githubassets.com/692ea654907a4b544c5beb82174299c258f2f4a0e6ded82bf43c339eb4ce7048/ggml-org/llama.cpp/releases/tag/b9455",
+      "published": "2026-06-01T17:22:29+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.201
+    },
+    {
+      "title": "Anthropic Confidentially Files for What Could Be the Largest IPO Ever",
+      "url": "https://www.wired.com/story/anthropic-files-s1-ipo-sec",
+      "source": "Wired AI",
+      "sourceUrl": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "sourceWeight": 0.85,
+      "category": "AI",
+      "summary": "The AI giant behind Claude submitted paperwork on Monday that would take it public, just a couple of weeks after SpaceX’s splashy IPO announcement.",
+      "image": "https://media.wired.com/photos/6a1db04538f4e0fcb2641f17/master/pass/Anthropic-Goes-Public-Business-2274306161.jpg",
+      "published": "2026-06-01T17:17:58+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.6188
+    },
+    {
+      "title": "Florida becomes the first state to sue OpenAI, naming Altman personally and calling ChatGPT a defective product",
+      "url": "https://thenextweb.com/news/florida-sues-openai-altman-chatgpt-safety-children",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Florida has sued OpenAI and CEO Sam Altman in what appears to be the first lawsuit by a US state against the maker of ChatGPT. The civil complaint, filed Monday in state court by Attorney General James Uthmeier, accuses OpenAI of violating product liability laws, engaging in deceptive trade practices, and releasing ChatGPT while knowing it [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Sam-Altman.avif",
+      "published": "2026-06-01T17:14:23+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.227
+    },
+    {
+      "title": "A strike at one Michigan axle plant could choke production of GM’s most profitable vehicles",
+      "url": "https://thenextweb.com/news/uaw-strike-gm-truck-axle-supplier-dauch",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Nearly 1,000 unionised workers at a Dauch Corp plant in Three Rivers, Michigan, walked off the job at midnight on Sunday after the United Auto Workers declared an unfair labour practice strike over stalled contract negotiations. The factory makes axles for the Chevrolet Silverado and GMC Sierra pickup trucks, two of General Motors’ most profitable vehicles, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/uaw-strike-gm-truck-axle-supplier-dauch.avif",
+      "published": "2026-06-01T16:50:12+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.115
     },
     {
       "title": "Anthropic is finally giving the EU access to Mythos, ending weeks of standoff over the world’s most powerful cybersecurity AI",
@@ -28,10 +124,10 @@
       "image": "https://media.thenextweb.com/2026/06/anthropic-mythos-eu-enisa-cybersecurity-access.avif",
       "published": "2026-06-01T16:43:30+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5416
+      "score": 10.5117
     },
     {
       "title": "Anthropic has officially filed to go public",
@@ -44,10 +140,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469941/STK202_DARIO_AMODEI_CVIRGINIA_D.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T16:40:38+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3502
+      "score": 7.3203
     },
     {
       "title": "Anthropic files to go public",
@@ -60,10 +156,26 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2261854833.jpg?resize=1200%2C800",
       "published": "2026-06-01T16:36:55+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.2783
+      "score": 5.2485
+    },
+    {
+      "title": "How we used Gemini to build Google I/O 2026",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/io-2026-google-ai",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "category": "AI",
+      "summary": "A collage of I/O-related images, including the Antigravity Coffee Co. pop-up, a colorful jellyfish and a still from the Timmy TPU video. The word AI repeats three times on the left of the image, and there are colorful icons, including a sparkle, as well.",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AI_IO.max-600x600.format-webp.webp",
+      "published": "2026-06-01T16:00:00+00:00",
+      "firstSeen": "2026-06-01T18:00:01.158576+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.3705
     },
     {
       "title": "This AI weather startup is out-forecasting government agencies",
@@ -76,10 +188,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Pic-8.jpg?resize=1200%2C675",
       "published": "2026-06-01T16:00:00+00:00",
       "firstSeen": "2026-06-01T17:00:01.264343+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2599
+      "score": 2.2305
     },
     {
       "title": "Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains",
@@ -92,10 +204,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/60ef2a438432bc401cd0abbe/tFjSaWUOM_pVsgKjHrAHt.png",
       "published": "2026-06-01T15:45:17+00:00",
       "firstSeen": "2026-06-01T16:00:01.502471+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.3926
+      "score": 2.3635
     },
     {
       "title": "b9453",
@@ -108,11 +220,11 @@
       "image": "https://opengraph.githubassets.com/70e3ac50cd906e7b2fb939ec43a9b4f467a4066dc0df40365f86252877945b35/ggml-org/llama.cpp/releases/tag/b9453",
       "published": "2026-06-01T14:57:47+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.8595
+      "score": 11.831
     },
     {
       "title": "QTREX is betting on the layer beneath quantum computing",
@@ -125,10 +237,10 @@
       "image": "https://media.thenextweb.com/2026/06/qtrex-quantum-computing-interconnect-bottleneck.avif",
       "published": "2026-06-01T14:51:10+00:00",
       "firstSeen": "2026-06-01T16:00:01.502471+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0863
+      "score": 2.0579
     },
     {
       "title": "DuckDuckGo makes its ‘no-AI’ search engine easier to access as its traffic booms",
@@ -141,10 +253,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200%2C784",
       "published": "2026-06-01T14:49:10+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4253
+      "score": 6.397
     },
     {
       "title": "Microsoft to unveil new AI models and Windows improvements at Build",
@@ -157,10 +269,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/MS_BUILD.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:39:03+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.2905
+      "score": 2.2623
     },
     {
       "title": "AI is blowing up music. How should the Grammys handle it?",
@@ -173,10 +285,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260601_Mason_Grammys.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:30:00+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3862
+      "score": 3.3581
     },
     {
       "title": "b9452",
@@ -189,10 +301,10 @@
       "image": "https://opengraph.githubassets.com/29ad4f337ed9fe0640267fda0f8c354e0becbdfa430611d09abc07724f989bcd/ggml-org/llama.cpp/releases/tag/b9452",
       "published": "2026-06-01T14:22:30+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1426
+      "score": 2.1146
     },
     {
       "title": "Salesforce is acquiring Contentful to give Agentforce a content layer that can assemble experiences on the fly",
@@ -205,10 +317,10 @@
       "image": "https://media.thenextweb.com/2026/06/salesforce-acquires-contentful-headless-cms-agentforce.avif",
       "published": "2026-06-01T14:21:30+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.4722
+      "score": 5.4442
     },
     {
       "title": "AI is crushing startup valuations for companies that raised before ChatGPT existed",
@@ -221,10 +333,10 @@
       "image": "https://media.thenextweb.com/2026/06/ai-startup-valuations-pre-chatgpt-fallen-unicorns.avif",
       "published": "2026-06-01T14:10:10+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.4668
+      "score": 9.439
     },
     {
       "title": "Strava blames zero-code AI apps and scrapers as it tightens API access",
@@ -237,10 +349,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STKB305_STRAVA_B.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&amp%3Bw=1200",
       "published": "2026-06-01T14:06:44+00:00",
       "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 4.0752
+      "score": 4.0474
     },
     {
       "title": "Beyond LLMs: Why Scalable Enterprise AI Adoption Depends on Agent Logic",
@@ -253,10 +365,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/65b12ed52be9660f0b7e5f72/zJb7AUFeIDNyokJYMK1Ae.jpeg",
       "published": "2026-06-01T13:51:18+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.038
+      "score": 5.0104
     },
     {
       "title": "Akeso’s lung cancer drug reduces death risk by 34%, marking the first Chinese drug at ASCO’s top stage in 61 years",
@@ -269,10 +381,10 @@
       "image": "https://media.thenextweb.com/2026/06/akeso-ivonescimab-lung-cancer-asco-china-biotech.avif",
       "published": "2026-06-01T13:49:09+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.057
+      "score": 4.0294
     },
     {
       "title": "b9451",
@@ -285,10 +397,10 @@
       "image": "https://opengraph.githubassets.com/3b94bee40ff47a6910d5fc31a7af61f4970bb7393307bb595e5629cde8d58f97/ggml-org/llama.cpp/releases/tag/b9451",
       "published": "2026-06-01T13:15:03+00:00",
       "firstSeen": "2026-06-01T14:11:22.608642+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
-      "score": 0.1112
+      "score": 0.084
     },
     {
       "title": "Open and closed models are on different exponentials",
@@ -301,10 +413,10 @@
       "image": "https://substack-post-media.s3.amazonaws.com/public/images/6b994b97-89a2-4101-ad81-aa3ffe274b75_3182x1790.png",
       "published": "2026-06-01T13:03:48+00:00",
       "firstSeen": "2026-06-01T14:00:01.238741+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.246
+      "score": 2.219
     },
     {
       "title": "US export controls are pushing China’s AI chip industry away from GPUs and toward custom silicon",
@@ -317,10 +429,10 @@
       "image": "https://media.thenextweb.com/2026/06/china-ai-chip-asic-gpu-nvidia-export-controls.avif",
       "published": "2026-06-01T12:14:30+00:00",
       "firstSeen": "2026-06-01T13:00:01.116384+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4138
+      "score": 3.3874
     },
     {
       "title": "AI eclipsed nuclear weapons as the dominant threat at Asia’s premier defense summit",
@@ -333,10 +445,10 @@
       "image": "https://media.thenextweb.com/2026/06/shangri-la-dialogue-ai-dangers-nuclear-weapons-defense.avif",
       "published": "2026-06-01T11:09:32+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9852
+      "score": 1.9596
     },
     {
       "title": "LG Electronics has quadrupled this year. The catalyst: a meeting with Jensen Huang about physical AI.",
@@ -352,7 +464,7 @@
       "lastSeen": "2026-06-01T17:00:01.264343+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9841
+      "score": 1.9585
     },
     {
       "title": "Jensen Huang opens Computex with Vera Rubin in production and a move into Windows PCs",
@@ -368,7 +480,7 @@
       "lastSeen": "2026-06-01T17:00:01.264343+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9814
+      "score": 1.9559
     },
     {
       "title": "Norse Atlantic Airways Offers Dirt-Cheap Tickets. There’s a Catch",
@@ -381,10 +493,10 @@
       "image": "https://media.wired.com/photos/6a15c83805d6069616b25809/master/pass/Norse-Atlantic-Airways-Went-Tech-First-With-Customer-Service-Business-2151560857.jpg",
       "published": "2026-06-01T11:00:00+00:00",
       "firstSeen": "2026-06-01T12:00:01.897495+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1211
+      "score": 2.0956
     },
     {
       "title": "Nadella quietly dismantled Microsoft’s leadership structure. The SLT that ran the company for decades is gone.",
@@ -400,7 +512,7 @@
       "lastSeen": "2026-06-01T17:00:01.264343+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9747
+      "score": 1.9494
     },
     {
       "title": "Nvidia looks beyond China’s Unitree for its humanoid robot push",
@@ -416,7 +528,7 @@
       "lastSeen": "2026-06-01T16:00:01.502471+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.331
+      "score": 3.3068
     },
     {
       "title": "PLD Space raises its Kourou launch-complex investment to €35m",
@@ -432,7 +544,7 @@
       "lastSeen": "2026-06-01T15:00:02.058795+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.326
+      "score": 3.302
     },
     {
       "title": "Vertice buys Vendr to build what it calls the largest procurement dataset",
@@ -448,7 +560,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.9147
+      "score": 1.891
     },
     {
       "title": "Runway picks London for its European headquarters with a $200m UK pledge",
@@ -464,7 +576,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9022
+      "score": 5.8789
     },
     {
       "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
@@ -480,7 +592,7 @@
       "lastSeen": "2026-06-01T14:11:22.608642+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.8975
+      "score": 7.8743
     },
     {
       "title": "Two days to go: TNW’s Amsterdam gathering on what it takes to win in AI-native SaaS",
@@ -496,7 +608,7 @@
       "lastSeen": "2026-06-01T12:08:11.286344+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8833
+      "score": 1.8605
     },
     {
       "title": "MiniMax eyes a Shanghai listing after a 400% run in Hong Kong",
@@ -512,7 +624,7 @@
       "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.8833
+      "score": 1.8604
     },
     {
       "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
@@ -528,119 +640,7 @@
       "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8719
-    },
-    {
-      "title": "ASML spinout Invisix raises €20M to see inside the chips optics can’t",
-      "url": "https://thenextweb.com/news/invisix-20m-seed-soft-xray-metrology",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Modern chips have a measurement problem that sounds almost philosophical: they have become too complex to look at. As logic and memory devices stack into three dimensions and shrink to a few nanometres, the optical tools that check each layer can no longer resolve the structures buried inside. Invisix, an Eindhoven startup spun out of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Invisix.avif",
-      "published": "2026-06-01T06:00:00+00:00",
-      "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.2604
-    },
-    {
-      "title": "China formalises tougher outbound-investment rules after the Meta-Manus blockade",
-      "url": "https://thenextweb.com/news/china-toughens-outbound-investment-rules-meta-manus",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "Beijing’s new framework codifies the technology-tracing approach the NDRC used to unwind Meta’s $2bn Manus acquisition, making cross-border AI deals materially harder. China has formalised a tougher framework for outbound-investment review, codifying the legal-and-administrative posture the National Development and Reform Commission used to unwind Meta’s $2bn acquisition of AI-agent startup Manus in April. The updated rules, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/beijing-warns-eu-china-russia-sanctions.avif",
-      "published": "2026-06-01T05:14:49+00:00",
-      "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 1.5436
-    },
-    {
-      "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
-      "url": "https://blogs.nvidia.com/blog/ai-cloud-ecosystem",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "The NVIDIA AI Cloud ecosystem is accelerating the global buildout of AI factory infrastructure. Partners are expanding capacity to meet growing demand from enterprises, startups, nations, AI labs and developers scaling agentic AI applications.  NVIDIA AI Clouds are a growing ecosystem of purpose-built clouds serving the exploding token demand behind today’s most popular AI applications. [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
-      "published": "2026-06-01T05:00:56+00:00",
-      "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 4.7785
-    },
-    {
-      "title": "NVIDIA Factory Operations Blueprint Gives Factories a New AI Brain",
-      "url": "https://blogs.nvidia.com/blog/factory-operations-fox-blueprint-ai-brain",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As factories move from isolated automation to plant-wide intelligence, manufacturers need AI systems that can connect live machine signals, quality systems, work instructions and operational alerts into a unified decision layer.  Today at GTC Taipei at COMPUTEX, NVIDIA announced the NVIDIA Factory Operations Blueprint (FOX) — a reference design for building an autonomous factory manager [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/robotics-factory-ai-computer-1280x680-5259650.jpg",
-      "published": "2026-06-01T05:00:47+00:00",
-      "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.9785
-    },
-    {
-      "title": "Taiwan’s Industry Titans Turbocharge World’s AI Infrastructure Buildout With NVIDIA",
-      "url": "https://blogs.nvidia.com/blog/taiwan-ecosystem-ai-infrastructure",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "Taiwan is home to more than 500 NVIDIA ecosystem partners. More than 1 million NVIDIA MGX rack components for NVIDIA Vera Rubin infrastructure come together in Taiwan, from across 25 factory sites. As Vera Rubin ramps into full production to power agentic AI factories worldwide, that ecosystem spans the full supply chain — from key [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Taiwan-AI-Infra-blog-KV-still.jpg",
-      "published": "2026-06-01T05:00:41+00:00",
-      "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.6784
-    },
-    {
-      "title": "US moves to close the loophole letting Nvidia’s top chips reach Chinese firms abroad",
-      "url": "https://thenextweb.com/news/us-nvidia-amd-china-subsidiary-chip-curbs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "New Commerce Department guidance ties export-licence rules to where a company is headquartered, not where it sits, snaring the overseas units of Chinese AI firms. For about a year, there was a way around America’s toughest chip controls, and it was a matter of geography. A Chinese AI company barred from buying Nvidia’s best processors [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/03/NVIDIA-invests-2-billion-in-Nebius.avif",
-      "published": "2026-06-01T05:00:19+00:00",
-      "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 1.8383
-    },
-    {
-      "title": "SoftBank overtakes Toyota as Japan’s most valuable company on the AI rally",
-      "url": "https://thenextweb.com/news/softbank-overtakes-toyota-japan-most-valuable-company",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "category": "AI",
-      "summary": "SoftBank’s market cap topped Toyota’s on Monday for the first time in 23 years, lifted by its ~$65bn OpenAI stake and a Nikkei breaking 67,000 for the first time. SoftBank Group overtook Toyota Motor on Monday to become Japan’s most valuable listed company, the first time the auto giant has been dethroned from the top [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
-      "published": "2026-06-01T04:49:41+00:00",
-      "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T09:00:01.648799+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.8344
+      "score": 3.8494
     },
     {
       "title": "Dean Lomax on discovering ichthyosaurs and defying nay-sayers",
@@ -653,10 +653,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-26T08:30:00+00:00",
       "firstSeen": "2026-05-26T08:41:33.144051+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 1.1359
+      "score": 1.1355
     },
     {
       "title": "The Life Scientific: Hiranya Peiris",
@@ -669,10 +669,10 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-25T20:00:00+00:00",
       "firstSeen": "2026-05-25T21:00:01.605108+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 0.3012
+      "score": 0.3009
     },
     {
       "title": "Helen Hastie on the future of human-robot relations",
@@ -685,7 +685,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0m1wsx5.jpg",
       "published": "2026-05-19T08:30:00+00:00",
       "firstSeen": "2026-05-19T08:37:13.454426+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 1.1201
@@ -701,7 +701,7 @@
       "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
       "published": "2026-05-18T20:00:00+00:00",
       "firstSeen": "2026-05-18T20:42:45.878006+00:00",
-      "lastSeen": "2026-06-01T17:00:01.264343+00:00",
+      "lastSeen": "2026-06-01T18:00:01.158576+00:00",
       "editorial_allow": false,
       "editorial_reason": "framework_or_plumbing",
       "score": -1.9099
