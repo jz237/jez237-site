@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T14:00:01.238741+00:00",
+  "updatedAt": "2026-06-01T14:11:22.608642+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8652,6 +8652,54 @@
     "https://huggingface.co/blog/ibm-research/agent-logic-and-scalable-ai-adoption": {
       "image": "https://cdn-uploads.huggingface.co/production/uploads/65b12ed52be9660f0b7e5f72/zJb7AUFeIDNyokJYMK1Ae.jpeg",
       "checkedAt": "2026-06-01T14:00:01.238741+00:00"
+    },
+    "https://www.theverge.com/gadgets/940854/strava-restricts-api-access-ai-apps": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STKB305_STRAVA_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9451": {
+      "image": "https://opengraph.githubassets.com/3b94bee40ff47a6910d5fc31a7af61f4970bb7393307bb595e5629cde8d58f97/ggml-org/llama.cpp/releases/tag/b9451",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9445": {
+      "image": "https://repository-images.githubusercontent.com/612354784/c59e3320-a236-4182-941f-ea3f1a0f50e7",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9444": {
+      "image": "https://opengraph.githubassets.com/450bb204194773d5b4560809d04ae578217aabaad68ddb099747aa78b06cea0c/ggml-org/llama.cpp/releases/tag/b9444",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9442": {
+      "image": "https://opengraph.githubassets.com/4a316fe88d1caf8db29bcb2a6fa0d886dfaaecac27ec14b0f00560a13b99cb00/ggml-org/llama.cpp/releases/tag/b9442",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9441": {
+      "image": "https://opengraph.githubassets.com/a4f1726d5f1e32a811fb541ebe4ca98c540a86e59cad6a4c9da8c44d2087b050/ggml-org/llama.cpp/releases/tag/b9441",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9439": {
+      "image": "https://opengraph.githubassets.com/679c51cbfd2978be6453b62e4259329d68beb27b1d5bf388134f907458accacf/ggml-org/llama.cpp/releases/tag/b9439",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.88.0-rc.1": {
+      "image": "https://opengraph.githubassets.com/a75a71c89000c17a094783229a04ad53cc3ab9597144ccfe545130f9a6d34bed/BerriAI/litellm/releases/tag/v1.88.0-rc.1",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.84.4": {
+      "image": "https://opengraph.githubassets.com/bd342547d081682e9f796d372c0e492f2b4aec489ba34e4b6a3df9061aee1cca/BerriAI/litellm/releases/tag/v1.84.4",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9438": {
+      "image": "https://repository-images.githubusercontent.com/612354784/c59e3320-a236-4182-941f-ea3f1a0f50e7",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9437": {
+      "image": "https://opengraph.githubassets.com/7191f3597201886282b2dabd21d4e2e5ef501c4b56b55670d34f56792df2a5f3/ggml-org/llama.cpp/releases/tag/b9437",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9436": {
+      "image": "https://opengraph.githubassets.com/4f43436b9d31716a8527e0e4a027daec3e82ba41be7fba5709afe9a7700f4960/ggml-org/llama.cpp/releases/tag/b9436",
+      "checkedAt": "2026-06-01T14:11:22.608642+00:00"
     }
   }
 }
