@@ -1174,5 +1174,17 @@
     "slot": "evening",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-01-evening-portrait-as-porcelain-kintsugi-teapot",
+    "title": "Portrait as Porcelain Kintsugi Teapot",
+    "tests": "Tests whether GPT Image 2 can make a source-photo transformation template feel like a finished photographed object example while preserving a generic portrait likeness through porcelain relief, object logic, kintsugi repairs, and conservation-room context without rendering prompt-card instructions.",
+    "prompt": "Use the uploaded reference photo and preserve the person identity, pose, expression, head angle, hairstyle silhouette, glasses or distinctive accessories, and recognizable facial proportions, then transform the person into an elegant porcelain kintsugi teapot displayed on a dark walnut tea table in a quiet museum conservation room. Rebuild the face and torso as white glazed ceramic, suggest facial features through subtle sculpted porcelain relief, turn accessories into raised cobalt glaze details, make one arm or shoulder read as the teapot handle, angle the spout to match the portrait direction, and add gold kintsugi seams, tiny chips, lacquer ridges, tea stains, ceramic shards, cotton gloves, a blank brass label holder, and soft afternoon window light. Keep the subject recognizable as the source person while changing the material, object logic, lighting, and setting into a tactile repaired-porcelain artifact. Avoid extra limbs, duplicate faces, readable text, real logos, watermark, placeholder marks, and losing the likeness.\n\nSource photo needed: a clear portrait photo of a person.\n\nReusable template: Use the uploaded reference photo and preserve the [PERSON] identity, pose, expression, head angle, hairstyle silhouette, distinctive accessories, and recognizable facial proportions, then transform [PERSON] into a [OBJECT OR ARTIFACT] made from [MATERIAL] in [SETTING] with [MOOD] lighting. Rebuild the subject so the original pose and likeness remain readable, while changing the body, clothing, background, surface texture, and props into a cohesive [STYLE] artifact. Avoid extra limbs, duplicate faces, text/logo artifacts, placeholder marks, and losing the source likeness.\n\nWhat to preserve: identity, pose, expression, head angle, hairstyle outline, glasses or distinctive accessories, facial proportions, and overall portrait composition.\n\nWhat to change: convert the person into a porcelain kintsugi teapot with sculpted facial relief, gold repair seams, blue glaze details, handle-and-spout object logic, museum conservation-room props, and tactile ceramic surface detail.\n\nExample substitution: Use a clear portrait of a person wearing round glasses; preserve their half-smile, head tilt, glasses, and short hair, then turn them into a white porcelain kintsugi teapot on a walnut tea table with quiet museum-window light.",
+    "image": "images/2026-06-01-evening-portrait-as-porcelain-kintsugi-teapot.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "evening",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
