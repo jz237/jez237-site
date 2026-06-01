@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "updatedAt": "2026-06-01T07:00:01.217253+00:00",
+  "updatedAt": "2026-06-01T08:00:01.959709+00:00",
   "items": [
     {
       "title": "May 2026 newsletter",
@@ -13,11 +13,27 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.7233
+      "score": 16.695
+    },
+    {
+      "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
+      "url": "https://thenextweb.com/news/nvidia-vera-chip-anthropic-openai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Jensen Huang spent a portion of his Computex keynote reading out a guest list. Anthropic, OpenAI, SpaceX and Oracle, the Nvidia chief executive told the audience in Taipei on Monday, are among the first big users of Vera, the company’s new in-house processor. Nvidia, a firm that built its empire on graphics chips, would now [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
+      "published": "2026-06-01T07:36:51+00:00",
+      "firstSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1383
     },
     {
       "title": "NVIDIA Levels Up Local AI Agents Across RTX PCs and DGX Spark",
@@ -30,10 +46,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-06-01T04:30:11+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.4163
+      "score": 7.3882
     },
     {
       "title": "Revolut, Mistral and Wayve founders back Balderton’s ‘Built in Europe’ push",
@@ -46,10 +62,10 @@
       "image": "https://media.thenextweb.com/2026/05/Balderton-Capital-.avif",
       "published": "2026-06-01T04:00:17+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.4622
+      "score": 6.4344
     },
     {
       "title": "Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action",
@@ -62,10 +78,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "published": "2026-06-01T04:44:55+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.0633
+      "score": 5.035
     },
     {
       "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
@@ -78,10 +94,26 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
       "published": "2026-06-01T05:00:56+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 5.031
+      "score": 5.0025
+    },
+    {
+      "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
+      "url": "https://thenextweb.com/news/meta-mci-employee-mouse-tracking-eu-gdpr-collision",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "category": "AI",
+      "summary": "Internal documents show the Model Capability Initiative captures emails and chats US employees exchange with European colleagues, putting the AI-agent training programme on a collision course with GDPR. Meta’s Model Capability Initiative, the surveillance programme it deployed across US employee workstations in April to capture keystrokes, mouse clicks and screen contents for AI-agent training, is [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "published": "2026-06-01T06:30:28+00:00",
+      "firstSeen": "2026-06-01T08:00:01.959709+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 4.1053
     },
     {
       "title": "SoftBank overtakes Toyota as Japan’s most valuable company on the AI rally",
@@ -94,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif",
       "published": "2026-06-01T04:49:41+00:00",
       "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0856
+      "score": 4.0572
     },
     {
       "title": "Taiwan’s Industry Titans Turbocharge World’s AI Infrastructure Buildout With NVIDIA",
@@ -110,10 +142,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Taiwan-AI-Infra-blog-KV-still.jpg",
       "published": "2026-06-01T05:00:41+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9309
+      "score": 3.9024
     },
     {
       "title": "ASML spinout Invisix raises €20M to see inside the chips optics can’t",
@@ -126,10 +158,10 @@
       "image": "https://media.thenextweb.com/2026/05/Invisix.avif",
       "published": "2026-06-01T06:00:00+00:00",
       "firstSeen": "2026-06-01T07:00:01.217253+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5199
+      "score": 3.4905
     },
     {
       "title": "Dell’s $699 XPS 13 walks straight into MacBook Neo territory",
@@ -142,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/05/DELL.avif",
       "published": "2026-06-01T04:36:28+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
+      "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.7793
+      "score": 2.7511
     },
     {
       "title": "Humanity's Last Exam (HLE) is a multi-modal academic benchmark with 2,500 questions across mathematics, humanities, and natural sciences, designed to test LLM capabilities at the frontier of human knowledge with unambiguous, verifiable solutions",
@@ -161,39 +193,7 @@
       "lastSeen": "2026-06-01T07:00:01.217253+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.71
-    },
-    {
-      "title": "NVIDIA Factory Operations Blueprint Gives Factories a New AI Brain",
-      "url": "https://blogs.nvidia.com/blog/factory-operations-fox-blueprint-ai-brain",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "As factories move from isolated automation to plant-wide intelligence, manufacturers need AI systems that can connect live machine signals, quality systems, work instructions and operational alerts into a unified decision layer.  Today at GTC Taipei at COMPUTEX, NVIDIA announced the NVIDIA Factory Operations Blueprint (FOX) — a reference design for building an autonomous factory manager [&#8230;]",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/robotics-factory-ai-computer-1280x680-5259650.jpg",
-      "published": "2026-06-01T05:00:47+00:00",
-      "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2309
-    },
-    {
-      "title": "How Cosmos 3 Helps Physical AI Think Before It Acts",
-      "url": "https://blogs.nvidia.com/blog/cosmos-3-physical-ai-open-world-foundation-model",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "category": "AI",
-      "summary": "",
-      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Featured-image.png",
-      "published": "2026-06-01T04:45:07+00:00",
-      "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T07:00:01.217253+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.2234
+      "score": 2.6799
     }
   ],
   "errors": [
