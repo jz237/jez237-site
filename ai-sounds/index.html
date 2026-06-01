@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <script>(function(){try{var root=document.documentElement;if(localStorage.getItem("theme")==="light")root.setAttribute("data-theme","light");var touch=navigator.maxTouchPoints&&navigator.maxTouchPoints>0;var wide=window.innerWidth>=761||Math.min(screen.width||0,screen.height||0)>=700;if(touch&&wide)root.classList.add("is-touch-tablet");}catch(e){}})();</script>
   <title>Artificial Intelligence Sounds — Jez237</title>
   <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
-  <link rel="stylesheet" href="../assets/design.css" />
-  <link rel="stylesheet" href="../assets/workbench-theme.css?v=ai-sounds-20260530" />
+  <link rel="stylesheet" href="../assets/design.css?v=tablet-ai-sounds-20260531" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css?v=ai-sounds-tablet-20260531" />
   <style>
     main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
     .sound-hero { position: relative; overflow: hidden; margin-bottom: 24px; padding: clamp(22px, 5vw, 52px); border: 1px solid rgba(232,197,122,.18); border-radius: 30px; background: radial-gradient(circle at 20% 10%, rgba(224,102,126,.28), transparent 34%), radial-gradient(circle at 80% 30%, rgba(110,203,255,.22), transparent 36%), linear-gradient(135deg, rgba(18,20,31,.92), rgba(9,12,20,.76)); box-shadow: 0 24px 70px rgba(0,0,0,.34); }
@@ -46,10 +46,45 @@
     .sound-note strong { color: var(--ink-hi); }
     @media (max-width: 1160px) { .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 700px) { .sound-grid { grid-template-columns:1fr; } }
+    @media (min-width: 761px) {
+      .is-touch-tablet body.ai-sounds-page .desktop-hub {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .is-touch-tablet body.ai-sounds-page .hub-sidebar {
+        display: none;
+      }
+      .is-touch-tablet body.ai-sounds-page .hub-main {
+        padding: 24px clamp(18px, 3vw, 28px) 30px !important;
+      }
+      .is-touch-tablet body.ai-sounds-page .hub-topbar {
+        max-width: 820px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      .is-touch-tablet body.ai-sounds-page .sound-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .is-touch-tablet body.ai-sounds-page .sound-hero,
+      .is-touch-tablet body.ai-sounds-page .sound-card,
+      .is-touch-tablet body.ai-sounds-page .sound-wave,
+      .is-touch-tablet body.ai-sounds-page .sound-detail-body {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        transition: none !important;
+      }
+      .is-touch-tablet body.ai-sounds-page .sound-card {
+        box-shadow: 0 12px 26px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.06);
+      }
+      .is-touch-tablet body.ai-sounds-page .sound-wave {
+        height: 96px;
+      }
+    }
     @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } .sound-hero { border-radius:22px; } }
   </style>
 </head>
-<body>
+<body class="ai-sounds-page">
   <header id="site-nav" class="home-hidden-nav"></header>
   <main class="container workbench-home">
     <section class="desktop-hub" aria-labelledby="sounds-title">
