@@ -1090,5 +1090,17 @@
     "slot": "morning",
     "model": "openai/gpt-image-2",
     "size": "1024x1536"
+  },
+  {
+    "id": "2026-06-01-midday-level-b-rain-oracle",
+    "title": "Level B Rain Oracle",
+    "tests": "Tests whether GPT Image 2 can make a fictional scene read instantly as a parking-garage CCTV monitor image through CRT bezel context, wide-angle camera distortion, scanlines, washed fluorescent lighting, and surveillance-screen artifacts rather than a poster, document, specimen tray, or glossy concept art.",
+    "prompt": "Title: Level B Rain Oracle\nFormat name: Parking Garage Security Monitor\nCategory/kind: surveillance\nTests/explores: Tests whether GPT Image 2 can make a fictional scene read instantly as a parking-garage CCTV monitor image through CRT bezel context, wide-angle camera distortion, scanlines, washed fluorescent lighting, and surveillance-screen artifacts rather than a poster, document, specimen tray, or glossy concept art.\n\nCreate a square 1024x1024 image that is unmistakably a photograph of an old parking garage security monitor showing one CCTV feed. The selected visual format must be obvious at first glance: a chunky black CRT monitor bezel, slightly curved glass, greenish grayscale video, horizontal scanlines, bloom, dust on the screen, tiny unreadable timestamp blocks, camera number boxes, and reflections of a dim security desk on the glass.\n\nScene inside the CCTV feed: an empty underground parking level after heavy rain. No people and no vehicles in motion. The puddles on the concrete floor have arranged themselves into a precise impossible weather diagram, with ring-shaped ripples, drain arrows, oil-slick contour bands, and reflections from fluorescent tubes forming a quiet map of tomorrow's storm. Include concrete pillars with simple painted bands, low ceiling pipes, a ramp disappearing into shadow, a yellow speed bump, damp tire marks, and a square floor drain at the center of the puddle pattern.\n\nComposition: straight-on documentary photo of the monitor occupying most of the frame, with the surveillance image framed by black plastic, small physical buttons, ventilation slots, and a coiled cable at the bottom edge. The CCTV camera viewpoint within the screen should be high in a corner, wide angle, slightly fisheye, with compressed perspective and soft video noise. Keep the weather diagram subtle and made entirely from real garage materials: water, reflections, oil sheen, grime, drain geometry, and fluorescent glare.\n\nPalette and mood: institutional green-gray video, black plastic bezel, sodium yellow highlights, wet concrete charcoal, pale cyan fluorescent reflections, tiny amber indicator light. Quiet, mundane, eerie, low-resolution, physically plausible.\n\nHard exclusions: no dancing, no dancers, no dance poses, no ballet, no ballroom, no stage dance, no ceremonial dance, no implied choreography, no performers, no copyrighted characters, no real logos, no readable brand names, no watermark, no signature, no archive paper, no lab tray, no poster layout, no glossy concept art.",
+    "image": "images/2026-06-01-midday-level-b-rain-oracle.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "midday",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
