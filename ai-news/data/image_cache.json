@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T20:00:01.910682+00:00",
+  "updatedAt": "2026-06-01T21:00:01.828388+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8820,6 +8820,26 @@
     "https://www.techrepublic.com/article/news-google-gemini-usage-limits-complaints": {
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06012026-google-gemini-usage-limits-complaints.jpg?f=jpeg",
       "checkedAt": "2026-06-01T20:00:01.910682+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/florida-sues-openai-sam-altman-in-first-of-its-kind-lawsuit-over-violent-incidents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200,800",
+      "checkedAt": "2026-06-01T21:00:01.828388+00:00"
+    },
+    "https://www.theverge.com/tech/941215/windows-laptops-nvidia-rtx-spark-apple-m1-arm-price-ram": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Screenshot_20260531_212701.png?quality=90&amp;strip=all&amp;crop=0%2C9.3778095086996%2C100%2C81.244380982601&amp;w=1200",
+      "checkedAt": "2026-06-01T21:00:01.828388+00:00"
+    },
+    "http://www.bbc.co.uk/programmes/w3ct8jsf": {
+      "image": "https://ichef.bbci.co.uk/images/ic/1200x675/p0kxnch7.jpg",
+      "checkedAt": "2026-06-01T21:00:01.828388+00:00"
+    },
+    "https://www.theverge.com/tech/941138/google-gemini-spark-ai-agent-hands-on": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-0ebbe911-9fbb-4f68-97b0-b7361d7cb53c.jpeg?quality=90&amp;strip=all&amp;crop=0%2C10.604950381935%2C100%2C78.79009923613&amp;w=1200",
+      "checkedAt": "2026-06-01T21:00:01.828388+00:00"
+    },
+    "https://www.theverge.com/tech/941179/meta-instagram-ai-support-chatbot-exploit-hacked": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/meta-chatbot-support.png?quality=90&amp;strip=all&amp;crop=0%2C9.2919928911091%2C100%2C81.416014217782&amp;w=1200",
+      "checkedAt": "2026-06-01T21:00:01.828388+00:00"
     }
   }
 }
