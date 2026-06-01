@@ -1,207 +1,264 @@
-# llms.txt — instructions for AI assistants helping with this site
+# llms.txt - instructions for AI assistants helping with this site
 
-Site:   jez237-site (github.com/jz237/jez237-site → https://jz237.github.io/jez237-site/)
-Owner:  Jez
-Purpose: personal garden journal, photo archive, and workbench.
+Site: jez237-site
+Repository: https://github.com/jz237/jez237-site
+Live URL: https://jz237.github.io/jez237-site/
+Owner: Jez
+Timezone: America/New_York
 
-If a user uploads a plant, pet, garden, or insect photo and asks you to
-"add it to my site" / "put it in the right section" / similar, follow
-these instructions exactly.
+Purpose: this is Jez's personal web workbench. It includes a garden and
+plant progress journal, photo archive, AI news stream, AI sound archive,
+image-generation prompt gallery, playable experiments, weather console,
+operations pages, and prototypes.
 
-## 1. Identify the subject
+If the user asks you to add, update, or organize something on this site,
+use these instructions before writing code or snippets.
 
-Look at the image carefully. What is it?
+## Current site map
 
-- PLANT — note common name, cultivar if visible, current stage (bud
-  break, bloom, leaf-out, full leaf, fall color, dormant, fruiting).
-- BED / COMPOSITION — note which plants are visible and the scene type.
-- INSECT / POLLINATOR — note the species if identifiable and what it's
-  doing (visiting flower, feeding on host, resting, etc).
-- PET — one of the house cats (Luca, Cosmo, Taco, Marty). Note pose or
-  activity if it's memorable.
-- GARDEN SCENE without a clear plant subject — goes to photos/garden/.
+- `/` - home dashboard and section hub.
+- `/plants/` - 2026 garden progress, plant timelines, garden scenes,
+  insects, wildlife, and past-year references.
+- `/garden/` - practical garden calendar and timing notes.
+- `/photos/` - casual photo archive, including cats and garden images.
+- `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
+  generated image gallery.
+- `/ai-news/` - curated AI model and tooling news feed.
+- `/ai-sounds/` - AI-generated music and sound archive copied from
+  Discord's AI Sounds channel.
+- `/games/` - GameMaster Arcade and playable prototypes.
+- `/weather/` - local weather console.
+- `/ops/` - operations, stats, runtime notes, and dashboard material.
+- `/experiments/ai-explainer/` - interactive "How AI Works" explainer.
+- `/prototypes/hidden-reef/` - Hidden Reef aquarium store prototype.
+- External cards on the home page point to Bauder Signs and Stock
+  Command Center.
 
-If you genuinely cannot tell what the image is, ask before acting.
+## Path rules
 
-## 2. Choose the destination
+The site is served locally from the repo root and on GitHub Pages at the
+`/jez237-site/` subpath. There is no `<base>` tag. Use depth-aware
+relative paths in HTML, CSS, JS, and inline styles.
 
-Existing PLANT pages live at `/plants/<slug>/index.html`. Current slugs:
+Never use root-absolute paths like `/assets/...`, `/photos/...`, or
+`/plants/...` inside site files. They break on GitHub Pages.
 
-| Slug                        | Subject                                                   |
-| --------------------------- | --------------------------------------------------------- |
-| climbing-hydrangea          | Climbing hydrangea vine on trellis                        |
-| dwarf-peach-tree            | Young dwarf peach, pink spring bloom                      |
-| forsythia                   | Forsythia trained on lattice                              |
-| garden-beds                 | Combined side-house foundation bed + mixed perennial bed  |
-| grapevine                   | Grape arch on lattice                                     |
-| interesting-insects         | Pollinators, caterpillars, butterflies                    |
-| past-years                  | 2025 and earlier reference shots                          |
-| pugster-butterfly-bushes    | Pugster buddleia                                          |
-| rising-sun-redbud           | Rising Sun Cercis canadensis                              |
-| shaina                      | Shaina Japanese maple                                     |
-| twomblys-red-sentinel       | Twombly's Red Sentinel Japanese maple                     |
-| white-rose-bush             | Old white rose bush                                       |
+Examples:
 
-Decision tree:
+| Page depth | Example page | Asset prefix |
+| ---------- | ------------ | ------------ |
+| 0 | `/index.html` | `assets/styles.css` |
+| 1 | `/plants/index.html` | `../assets/styles.css` |
+| 2 | `/plants/<slug>/index.html` | `../../assets/styles.css` |
 
-- Photo matches an existing plant slug → **add a dated entry to that page**.
-- Photo is a NEW plant not yet tracked → **create a new plant page** (see template below).
-- Photo is a bed / multi-plant composition → add to `/plants/garden-beds/`.
-- Photo is an insect or pollinator → add to `/plants/interesting-insects/`.
-- Photo is a cat → add to `/photos/cats/` (gallery is image files plus a list — see the page for pattern).
-- Photo is a general garden scene → add to `/photos/garden/`.
+Fully qualified external URLs are fine. Existing navigation scripts may
+build their own links; do not rewrite those unless you understand the
+pattern.
 
-## 3. File the photo
+## Garden and plant photos
 
-Save the image at:
+If Jez uploads a plant, pet, garden, or insect photo and asks you to add
+it to the site, first identify the subject:
+
+- Plant: common name, cultivar if visible, stage, and condition.
+- Bed or composition: plants visible and the scene type.
+- Insect or wildlife: species if identifiable and behavior.
+- Cat: Luca, Cosmo, Taco, or Marty, if recognizable.
+- General garden scene: wider view without one clear plant subject.
+
+Use the actual photo date if known; otherwise use today's date.
+
+Current plant/reference slugs:
+
+| Slug | Subject |
+| ---- | ------- |
+| `baptisia` | Baptisia / Lemon Meringue |
+| `climbing-hydrangea` | Climbing hydrangea vine |
+| `coreopsis` | Coreopsis |
+| `dwarf-peach-tree` | Young dwarf peach tree |
+| `forsythia` | Forsythia trained on lattice |
+| `garden-beds` | Multi-plant beds and compositions |
+| `grapevine` | Grapevine and arbor/lattice views |
+| `interesting-insects` | Pollinators, butterflies, caterpillars, wildlife |
+| `lemony-lace-elderberry` | Lemony Lace elderberry |
+| `little-henry-sweetspire` | Little Henry sweetspire |
+| `narrow-upright-yew` | Narrow upright yew |
+| `orange-rocket-barberry` | Orange Rocket barberry |
+| `past-years` | 2025 and earlier reference photos |
+| `pugster-butterfly-bushes` | Pugster butterfly bushes |
+| `rhododendron` | Rhododendron |
+| `rising-sun-redbud` | Rising Sun redbud |
+| `salvia` | Salvia |
+| `shaina` | Shaina Japanese maple |
+| `speedwell` | Speedwell |
+| `sunshine-ligustrum` | Sunshine ligustrum |
+| `twomblys-red-sentinel` | Twombly's Red Sentinel Japanese maple |
+| `variegated-japanese-euonymus` | Variegated Japanese euonymus |
+| `white-rose-bush` | Old white rose bush |
+
+Destination rules:
+
+- Existing plant -> add a dated entry to `/plants/<slug>/index.html`.
+- New tracked plant -> create `/plants/<new-slug>/index.html` and add it
+  to `/plants/index.html`.
+- Bed or mixed composition -> use `/plants/garden-beds/`.
+- Insect, pollinator, caterpillar, wildlife -> use
+  `/plants/interesting-insects/`.
+- Cat -> use `/photos/cats/`.
+- General garden scene -> use `/photos/garden/` or the garden scenes
+  section of `/plants/`.
+
+Garden image path:
+
 `photos/garden/images/YYYY/MM/<slug>-YYYY-MM-DD[-variant].jpg`
 
 Examples:
-- `photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg`
-- `photos/garden/images/2026/04/dwarf-peach-tree-2026-03-29.jpg`
-- `photos/garden/images/2026/04/side-house-bed-2026-04-16-shaina-angle.jpg`
 
-Cat photos live at: `photos/cats/images/<descriptive-name>.jpg`
+- `photos/garden/images/2026/05/rising-sun-redbud-2026-05-06.jpg`
+- `photos/garden/images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg`
 
-Use the actual date the photo was taken when known; otherwise today's date.
+Cat image path:
 
-### CRITICAL — path conventions in HTML
+`photos/cats/images/<descriptive-name>.jpg`
 
-The site is served at the repo root locally AND at
-`https://jz237.github.io/jez237-site/` on GitHub Pages. There is **no
-`<base>` tag**, so every relative URL in HTML resolves against the
-CURRENT DOCUMENT's URL. Use depth-aware relative paths, not
-root-absolute.
+## Garden writing voice
 
-| Page depth              | Example page path                | Asset prefix          |
-| ----------------------- | -------------------------------- | --------------------- |
-| 0 (site root)           | `/index.html`, `/404.html`       | `assets/styles.css`   |
-| 1 (section)             | `/plants/index.html`             | `../assets/styles.css`|
-| 2 (sub-page — most plant pages) | `/plants/<slug>/index.html` | `../../assets/styles.css` |
+Garden entries should sound observational, specific, and a little
+reflective. Do not write marketing copy, generic captions, listicles, or
+emoji-heavy prose.
 
-NEVER use root-absolute paths (`/assets/...`, `/photos/...`, `/plants/...`) in
-`href`, `src`, `<link>`, `<script>`, or `background-image: url(...)` —
-they break on GitHub Pages because the site lives at the `/jez237-site/`
-subpath. The only exceptions: fully qualified `https://...` URLs (fine),
-and nav.js-generated links (which construct the subpath themselves).
+Good entry pattern:
 
-Plant sub-pages are **depth 2** — every asset or photo reference must
-start with `../../`. Check your paths before outputting.
+- Entry title: 3-6 words.
+- Date format: `May 31, 2026`.
+- One paragraph of 2-4 concrete sentences.
+- One italic quote line in `<div class="quote">`.
+- 3-5 bullet observations.
+- Newest entries first within each timeline.
 
-## 4. Write in the site's voice
+Useful vocabulary: bud break, leaf-out, bloom, first flush, structure,
+framework, composition, layered, anchor plant, soft layer, sculptural,
+brick-edged bed, lattice, foundation bed.
 
-Entries are editorial, observational, specific, and a bit reflective —
-not precious or overwrought. See existing pages (especially
-`/plants/dwarf-peach-tree/` and `/plants/rising-sun-redbud/`) for tone.
-
-Style rules:
-- One descriptive paragraph of 2-4 sentences.
-- End with an italic pull-quote in a `<div class="quote">` — one
-  memorable sentence about this specific moment.
-- Bullet list of 3-5 concrete observations (no filler).
-- Entry title: 3-6 words, character-appropriate.
-- Dated header formatted like "April 16, 2026".
-- Avoid: emoji-heavy prose, marketing copy, listicle-style bullets, "Wow!"
-
-Vocabulary the site uses a lot (safe to match): bud break, leaf-out,
-spring flare, bloom overlap, structure, framework, composition, layered,
-anchor plant, soft layer, sculptural, in the brick-edged bed, the lattice.
-
-## 5. Template — new timeline entry (for existing plant page)
-
-Insert inside the target page's `<section class="timeline-stack">`:
+Template for an existing plant page:
 
 ```html
 <article class="timeline-entry">
   <div class="split">
     <div>
-      <div class="entry-date">April 16, 2026</div>
-      <h2 class="entry-title">Short evocative title</h2>
+      <div class="entry-date">May 31, 2026</div>
+      <h2 class="entry-title">Short specific title</h2>
       <div class="entry-copy">
-        Two or three sentences of observation in the voice above. Keep
-        it concrete and specific — what stage the plant is at, what the
-        light is doing, what the surrounding planting adds.
-        <div class="quote">One italic sentence that captures the moment.</div>
+        Two or three concrete sentences about the plant, light, stage,
+        surrounding bed, or change since the last entry.
+        <div class="quote">One sentence that captures this exact moment.</div>
       </div>
     </div>
     <div>
-      <img class="photo" src="../../photos/garden/images/2026/04/<slug>-2026-04-16.jpg" alt="Descriptive alt text" loading="lazy" decoding="async" />
+      <img class="photo" src="../../photos/garden/images/2026/05/<slug>-2026-05-31.jpg" alt="Short descriptive alt text" loading="lazy" decoding="async">
     </div>
   </div>
   <ul class="bullet-list">
-    <li>first concrete observation</li>
-    <li>second observation</li>
-    <li>third observation</li>
+    <li>First concrete observation.</li>
+    <li>Second concrete observation.</li>
+    <li>Third concrete observation.</li>
   </ul>
 </article>
 ```
 
-Entries on each page are ordered by date, newest first.
+For a new plant page, copy the structure from an existing page such as
+`/plants/dwarf-peach-tree/index.html`, then add a directory card to
+`/plants/index.html`.
 
-## 6. Template — new plant page (`/plants/<new-slug>/index.html`)
+## AI news
 
-Copy the structure from `/plants/dwarf-peach-tree/index.html`. Key parts
-to change:
-- `<title>` — "Plant Name — Plant Progress"
-- `.kicker` — "Plant Progress · Latin name"
-- `<h1 class="title">` — plant name
-- `<p class="muted">` — one-line lede about the plant's character
-- `:root { --earth-accent... }` in the inline `<style>` — accent colors
-  that suit the plant (pink for peach, blue-green for maple, etc).
-  Keep it tasteful and not neon.
-- First `<section class="panel split">` — an editorial intro paragraph
-  (not a duplicate of the first timeline entry's photo).
-- `<section class="timeline-stack">` — one initial timeline entry.
+AI news lives in `/ai-news/`.
 
-After creating the page, also add a feature card to
-`/plants/index.html`'s "All live pages" grid:
+Important files:
 
-```html
-<a class="feature-card tilt" href="./<new-slug>/">
-  <div class="feature-media" style="background-image:url('../photos/garden/images/2026/04/<slug>-2026-04-16.jpg')"></div>
-  <div class="feature-copy">
-    <div class="mini-date">live page</div>
-    <h3>Plant Name</h3>
-    <p>One sentence summary.</p>
-    <div class="meta-pills"><span class="pill">tag1</span><span class="pill">tag2</span></div>
-  </div>
-</a>
-```
+- `ai-news/feeds.json` - source list.
+- `ai-news/fetch_ai_news.py` - fetch, dedupe, score, and output script.
+- `ai-news/data/items.json` - persistent item store.
+- `ai-news/public/ai-news-latest.json` - latest public feed.
+- `ai-news/public/ai-news-daily-YYYY-MM-DD.json` - daily digest.
+- `ai-news/index.html` - rendered page shell.
 
-## 7. Output
+To add or adjust feeds, edit `ai-news/feeds.json`, then run the fetch
+script from the `ai-news/` directory. Validate that JSON output updates
+and that the page still loads from relative paths. Some sources may rate
+limit or block fetches; do not fake items from unavailable feeds.
 
-Deliver to the user, in this order:
+Recent feed focus includes AI model/tooling releases such as Ollama,
+LiteLLM, Hugging Face Transformers, llama.cpp, and Model Context
+Protocol SDK releases.
 
-1. **Destination**: the exact page URL and whether you're adding to an
-   existing page or creating a new one.
-2. **Filename**: where the image should be saved (full relative path).
-3. **HTML snippet(s)**: exactly what to paste and where.
-   - For an existing page: show the `<article class="timeline-entry">`
-     block and name the line number or nearest marker to insert before.
-   - For a new page: show the full file contents.
-   - If landing-page card changes are needed, show those too.
-4. **Commit message** in the style of: `feat: add April 16 entry for
-   rising-sun-redbud` or `feat: add new plant page for japanese-maple-bloodgood`.
+## Image prompt gallery
 
-Do NOT invent plant species, cultivars, dates, or past history.
-Do NOT change the site voice or color palette mid-entry.
-Do NOT add entries to pages whose subject doesn't match the image.
+The Daily GPT Image 2 prompt gallery lives at
+`/experiments/image-gen-2-benchmark/`.
 
-If anything is ambiguous, ask before acting.
+Important files:
 
-## 8. Image considerations
+- `experiments/image-gen-2-benchmark/index.html`
+- `experiments/image-gen-2-benchmark/prompts.json`
+- `experiments/image-gen-2-benchmark/gallery-data.json`
+- Image assets under that experiment's folders.
 
-- Expected aspect ratio: photos are displayed at 4:5 or 16:10 crops
-  (controlled by CSS `--photo-aspect`).
-- Large images are fine — no resize required on your end.
-- Alt text: describe what's in the frame in 6-12 words. Accessibility
-  matters, so avoid "image of" / "photo of" prefixes.
+Keep prompt records factual: prompt text, date, model/context if already
+tracked, and the generated image path. Do not invent prompts or dates.
 
-## 9. Related files
+## AI sounds
 
-- `content/site.json` — featured cards on the home page. Only touch if
-  the new plant is especially featured-worthy.
-- `garden/index.html` — the practical calendar. Only touch if the entry
-  is about a task/timing, not a photo.
-- `assets/plant-page.css` and `assets/design.css` — site-wide styles,
-  do not modify without reason.
+AI sounds live in `/ai-sounds/`.
+
+The page preserves AI-generated tracks copied from Discord's AI Sounds
+channel. Future updates should keep the focus on individual tracks:
+title, file, duration/size/date where known, prompt idea, recipe,
+context, and audio file.
+
+Do not invent generic artwork. If adding per-track images, use artwork
+Jez provided or explicitly approved.
+
+## Games, weather, ops, and prototypes
+
+- Add new playable experiments through `/games/index.html` using the
+  existing card and link patterns.
+- Weather console changes should stay inside `/weather/` unless the
+  home-page card also needs copy or art updates.
+- Ops/stat pages should stay inside `/ops/` unless promoted to the home
+  page.
+- Hidden Reef prototype work belongs under `/prototypes/hidden-reef/`
+  unless Jez asks to deploy it elsewhere.
+
+## Home page
+
+The home page is a workbench hub. If adding a major new site section,
+update both:
+
+- the card grid in `/index.html`
+- the assistant-facing overview in this `llms.txt`
+
+Do not use `content/site.json` as the only source of truth for the
+current home page; the live home card grid is currently hardcoded in
+`index.html`.
+
+## Output to Jez
+
+When proposing or completing a site update, report:
+
+1. What changed.
+2. The exact files changed.
+3. Any commands run to validate or regenerate data.
+4. The commit hash if pushed.
+
+If the task involves an uploaded image and you are not directly editing
+the repo, provide:
+
+1. Destination page.
+2. Image filename/path.
+3. HTML snippet and insertion point.
+4. Suggested commit message.
+
+Do not invent plant IDs, cultivars, dates, prompts, track details, news
+items, or history. Ask if the subject or destination is genuinely
+ambiguous.
