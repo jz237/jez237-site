@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T17:00:01.264343+00:00",
+  "updatedAt": "2026-06-01T18:00:01.158576+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8760,6 +8760,22 @@
     "https://techcrunch.com/2026/06/01/this-ai-weather-startup-is-out-forecasting-government-agencies": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/06/Pic-8.jpg?resize=1200,675",
       "checkedAt": "2026-06-01T17:00:01.264343+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc32": {
+      "image": "https://opengraph.githubassets.com/ba017001f9d13428ceaa03ae8eb00565d23f543c1d5e69f9b978c6eb29086b51/ollama/ollama",
+      "checkedAt": "2026-06-01T18:00:01.158576+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9455": {
+      "image": "https://opengraph.githubassets.com/692ea654907a4b544c5beb82174299c258f2f4a0e6ded82bf43c339eb4ce7048/ggml-org/llama.cpp/releases/tag/b9455",
+      "checkedAt": "2026-06-01T18:00:01.158576+00:00"
+    },
+    "https://www.anthropic.com/news/confidential-draft-s1-sec": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
+      "checkedAt": "2026-06-01T18:00:01.158576+00:00"
+    },
+    "https://techcrunch.com/2026/05/30/the-groupthink-boom-what-three-top-vcs-really-think-about-the-ai-frenzy": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/SVC-Athens-2.jpg?w=800",
+      "checkedAt": "2026-06-01T18:00:01.158576+00:00"
     }
   }
 }
