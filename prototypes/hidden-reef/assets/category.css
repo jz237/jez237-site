@@ -221,13 +221,18 @@ body.department-page .section-band + .section-band {
   max-height: 540px;
   filter: drop-shadow(0 18px 24px rgba(13,47,65,.18));
   transform-origin: center;
-  transition: filter .18s ease;
+  transition: filter .18s ease, transform .18s ease;
   pointer-events: none;
 }
 .link-modal__media.is-zoomed {
   cursor: crosshair;
 }
 .link-modal__media.is-zoomed .link-modal__image {
+  filter: drop-shadow(0 22px 30px rgba(13,47,65,.24));
+}
+.link-modal__media.is-touch-zoomed .link-modal__image {
+  transform: scale(var(--modal-touch-scale, 2.6));
+  transform-origin: var(--modal-touch-x, 50%) var(--modal-touch-y, 50%);
   filter: drop-shadow(0 22px 30px rgba(13,47,65,.24));
 }
 .link-modal__zoom-lens {
@@ -472,6 +477,8 @@ body.department-page .section-band + .section-band {
     min-height: 180px;
     max-height: 34vh;
     padding: 14px;
+    cursor: zoom-in;
+    touch-action: none;
   }
   .link-modal__gallery {
     grid-template-columns: 1fr;

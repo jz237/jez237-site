@@ -1,5 +1,9 @@
 (function () {
   const IMAGE_ZOOM_SCALE = 2.55;
+  const TOUCH_ZOOM_SCALE = 2.6;
+  const TOUCH_ZOOM_MIN = 1;
+  const TOUCH_ZOOM_MAX = 4;
+  const DOUBLE_TAP_MS = 320;
 
   function ensureModal() {
     let modal = document.querySelector('.link-modal');
@@ -75,11 +79,18 @@
     const panel = modal.querySelector('.link-modal__panel');
     const media = modal.querySelector('.link-modal__media');
     const zoomImage = modal.querySelector('.link-modal__zoom-image');
-    media?.classList.remove('is-zoomed');
+    const image = modal.querySelector('.link-modal__image');
+    media?.classList.remove('is-zoomed', 'is-touch-zoomed');
     panel?.classList.remove('is-image-zooming');
     if (media) {
       media.style.removeProperty('--modal-lens-x');
       media.style.removeProperty('--modal-lens-y');
+      media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+    }
+    if (image) {
+      image.style.removeProperty('--modal-touch-scale');
+      image.style.removeProperty('--modal-touch-x');
+      image.style.removeProperty('--modal-touch-y');
     }
     if (zoomImage) {
       zoomImage.style.removeProperty('--modal-zoom-x');
@@ -88,9 +99,69 @@
     }
   }
 
+  function touchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  function touchCenter(touches) {
+    return {
+      clientX: (touches[0].clientX + touches[1].clientX) / 2,
+      clientY: (touches[0].clientY + touches[1].clientY) / 2
+    };
+  }
+
+  function pointToPercent(media, point) {
+    const rect = media.getBoundingClientRect();
+    return {
+      x: Math.min(100, Math.max(0, ((point.clientX - rect.left) / rect.width) * 100)),
+      y: Math.min(100, Math.max(0, ((point.clientY - rect.top) / rect.height) * 100))
+    };
+  }
+
+  function clampTouchScale(scale) {
+    return Math.min(TOUCH_ZOOM_MAX, Math.max(TOUCH_ZOOM_MIN, scale));
+  }
+
+  function setTouchImageZoom(modal, scale, point) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return TOUCH_ZOOM_MIN;
+    const nextScale = clampTouchScale(scale);
+    if (nextScale <= TOUCH_ZOOM_MIN + 0.02) {
+      image.style.removeProperty('--modal-touch-scale');
+      image.style.removeProperty('--modal-touch-x');
+      image.style.removeProperty('--modal-touch-y');
+      media.classList.remove('is-touch-zoomed');
+      media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      return TOUCH_ZOOM_MIN;
+    }
+    resetImageZoom(modal);
+    if (point) {
+      const origin = pointToPercent(media, point);
+      image.style.setProperty('--modal-touch-x', origin.x.toFixed(2) + '%');
+      image.style.setProperty('--modal-touch-y', origin.y.toFixed(2) + '%');
+    }
+    image.style.setProperty('--modal-touch-scale', nextScale.toFixed(2));
+    media.classList.add('is-touch-zoomed');
+    media.dataset.touchScale = nextScale.toFixed(2);
+    return nextScale;
+  }
+
   function initImageZoom(modal) {
     const media = modal.querySelector('.link-modal__media');
     if (!media) return;
+    const hint = modal.querySelector('.link-modal__zoom-hint');
+    if (hint && window.matchMedia?.('(pointer: coarse)').matches) {
+      hint.textContent = 'Double tap or pinch to zoom';
+    }
+    let lastTapAt = 0;
+    let currentTouchScale = TOUCH_ZOOM_MIN;
+    let pinchStartDistance = 0;
+    let pinchStartScale = TOUCH_ZOOM_MIN;
+    let pinching = false;
+    let pinchJustEnded = false;
 
     media.addEventListener('pointermove', event => {
       if (event.pointerType !== 'mouse') return;
@@ -104,6 +175,50 @@
     media.addEventListener('pointerdown', event => {
       if (event.pointerType !== 'mouse') resetImageZoom(modal);
     });
+
+    media.addEventListener('touchstart', event => {
+      if (event.touches.length === 2) {
+        event.preventDefault();
+        pinching = true;
+        pinchStartDistance = touchDistance(event.touches);
+        currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+        pinchStartScale = currentTouchScale;
+      }
+    }, { passive: false });
+
+    media.addEventListener('touchmove', event => {
+      if (event.touches.length === 2 && pinchStartDistance > 0) {
+        event.preventDefault();
+        const nextScale = pinchStartScale * (touchDistance(event.touches) / pinchStartDistance);
+        currentTouchScale = setTouchImageZoom(modal, nextScale, touchCenter(event.touches));
+      } else if (currentTouchScale > TOUCH_ZOOM_MIN) {
+        event.preventDefault();
+      }
+    }, { passive: false });
+
+    media.addEventListener('touchend', event => {
+      if (pinching && event.touches.length < 2) {
+        pinching = false;
+        pinchStartDistance = 0;
+        pinchJustEnded = true;
+        window.setTimeout(() => { pinchJustEnded = false; }, DOUBLE_TAP_MS);
+        return;
+      }
+      if (event.touches.length || pinchJustEnded || !event.changedTouches.length) return;
+
+      const now = Date.now();
+      const tap = event.changedTouches[0];
+      if (now - lastTapAt <= DOUBLE_TAP_MS) {
+        event.preventDefault();
+        currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+        currentTouchScale = currentTouchScale > TOUCH_ZOOM_MIN
+          ? setTouchImageZoom(modal, TOUCH_ZOOM_MIN)
+          : setTouchImageZoom(modal, TOUCH_ZOOM_SCALE, tap);
+        lastTapAt = 0;
+      } else {
+        lastTapAt = now;
+      }
+    }, { passive: false });
   }
 
   function escapeHtml(value) {
