@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T14:11:22.608642+00:00",
+  "updatedAt": "2026-06-01T15:00:02.058795+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8700,6 +8700,42 @@
     "https://github.com/ggml-org/llama.cpp/releases/tag/b9436": {
       "image": "https://opengraph.githubassets.com/4f43436b9d31716a8527e0e4a027daec3e82ba41be7fba5709afe9a7700f4960/ggml-org/llama.cpp/releases/tag/b9436",
       "checkedAt": "2026-06-01T14:11:22.608642+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9453": {
+      "image": "https://opengraph.githubassets.com/70e3ac50cd906e7b2fb939ec43a9b4f467a4066dc0df40365f86252877945b35/ggml-org/llama.cpp/releases/tag/b9453",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://techcrunch.com/2026/06/01/duckduckgo-makes-its-no-ai-search-engine-easier-to-access-as-its-traffic-booms": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200,784",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://www.theverge.com/report/940861/microsoft-build-ai-models-windows-dev-mode-what-to-expect": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/MS_BUILD.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://www.theverge.com/podcast/940831/ai-grammys-music-recording-harvey-mason": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260601_Mason_Grammys.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9452": {
+      "image": "https://opengraph.githubassets.com/29ad4f337ed9fe0640267fda0f8c354e0becbdfa430611d09abc07724f989bcd/ggml-org/llama.cpp/releases/tag/b9452",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9434": {
+      "image": "https://opengraph.githubassets.com/52e95de28aa696d00d1b248a59d82cd99e6bb721e88ff7b1ef1cd7a195c62e68/ggml-org/llama.cpp/releases/tag/b9434",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v1.27.2": {
+      "image": "https://opengraph.githubassets.com/8a5234f2b2936503e2b6b1f4735dcfd2051c9b290cd99ccf6f293a79a50dfc57/modelcontextprotocol/python-sdk/releases/tag/v1.27.2",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc31": {
+      "image": "https://opengraph.githubassets.com/04b5ca7707cef45da6811ab885e7936c0f983de9615c870b74ef53f9de97989d/ollama/ollama/releases/tag/v0.30.0-rc31",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
+    },
+    "https://github.com/ollama/ollama/releases/tag/v0.30.0-rc30": {
+      "image": "https://opengraph.githubassets.com/32b040cdc5131bff1b45aa55722820a5ca28a5e6f73eceef9a009efae6ca2166/ollama/ollama",
+      "checkedAt": "2026-06-01T15:00:02.058795+00:00"
     }
   }
 }
