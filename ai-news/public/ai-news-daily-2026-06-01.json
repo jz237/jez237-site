@@ -1,0 +1,12 @@
+{
+  "date": "2026-06-01",
+  "updatedAt": "2026-06-01T00:00:01.758141+00:00",
+  "items": [],
+  "errors": [
+    {
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-31T23:17:47.833060+00:00",
+  "updatedAt": "2026-06-01T00:00:01.758141+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8636,6 +8636,10 @@
     "https://techcrunch.com/2026/05/31/erin-brockovich-takes-aim-at-data-center-secrecy": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800",
       "checkedAt": "2026-05-31T22:00:01.668772+00:00"
+    },
+    "https://simonwillison.net/2026/May/31/datasette": {
+      "image": "",
+      "checkedAt": "2026-06-01T00:00:01.758141+00:00"
     }
   }
 }
