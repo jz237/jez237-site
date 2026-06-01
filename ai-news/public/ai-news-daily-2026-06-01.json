@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "updatedAt": "2026-06-01T10:00:01.323806+00:00",
+  "updatedAt": "2026-06-01T11:00:01.590672+00:00",
   "items": [
     {
       "title": "May 2026 newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.6407
+      "score": 16.6147
     },
     {
       "title": "NVIDIA names Anthropic and OpenAI among first users of its Vera chip",
@@ -30,10 +30,10 @@
       "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
       "published": "2026-06-01T07:36:51+00:00",
       "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0795
+      "score": 8.0512
     },
     {
       "title": "NVIDIA Levels Up Local AI Agents Across RTX PCs and DGX Spark",
@@ -46,10 +46,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/computex-2026-nv-blog-1280x680-1.jpg",
       "published": "2026-06-01T04:30:11+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.3342
+      "score": 7.3084
     },
     {
       "title": "Revolut, Mistral and Wayve founders back Balderton’s ‘Built in Europe’ push",
@@ -65,7 +65,7 @@
       "lastSeen": "2026-06-01T08:00:01.959709+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3812
+      "score": 6.3557
     },
     {
       "title": "Runway picks London for its European headquarters with a $200m UK pledge",
@@ -78,10 +78,10 @@
       "image": "https://media.thenextweb.com/2026/06/Runaway-founders.avif",
       "published": "2026-06-01T07:48:44+00:00",
       "firstSeen": "2026-06-01T09:00:01.648799+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0851
+      "score": 6.0568
     },
     {
       "title": "Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action",
@@ -94,10 +94,10 @@
       "image": "https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png",
       "published": "2026-06-01T04:44:55+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9807
+      "score": 4.9546
     },
     {
       "title": "NVIDIA AI Cloud Ecosystem Expands Worldwide to Meet Global AI Compute Demand",
@@ -110,10 +110,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/partner-social-ncp-ai-factory-announcement-1920x1080-1.jpg",
       "published": "2026-06-01T05:00:56+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.9478
+      "score": 4.9215
     },
     {
       "title": "Meta’s employee mouse-click tracking tool is collecting EU data it said it would not collect",
@@ -126,10 +126,10 @@
       "image": "https://media.thenextweb.com/2026/04/Meta.avif",
       "published": "2026-06-01T06:30:28+00:00",
       "firstSeen": "2026-06-01T08:00:01.959709+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0483
+      "score": 4.0209
     },
     {
       "title": "SoftBank overtakes Toyota as Japan’s most valuable company on the AI rally",
@@ -145,7 +145,7 @@
       "lastSeen": "2026-06-01T09:00:01.648799+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 4.0028
+      "score": 3.9767
     },
     {
       "title": "Taiwan’s Industry Titans Turbocharge World’s AI Infrastructure Buildout With NVIDIA",
@@ -158,10 +158,10 @@
       "image": "https://blogs.nvidia.com/wp-content/uploads/2026/05/Taiwan-AI-Infra-blog-KV-still.jpg",
       "published": "2026-06-01T05:00:41+00:00",
       "firstSeen": "2026-06-01T05:12:45.609088+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8477
+      "score": 3.8214
     },
     {
       "title": "Nvidia looks beyond China’s Unitree for its humanoid robot push",
@@ -174,10 +174,10 @@
       "image": "https://media.thenextweb.com/2026/02/Nvidias-Q4-results-could-make-or-break-confidence-in-the-AI-hardware-market.avif",
       "published": "2026-06-01T09:00:24+00:00",
       "firstSeen": "2026-06-01T10:00:01.323806+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5201
+      "score": 3.4907
     },
     {
       "title": "PLD Space raises its Kourou launch-complex investment to €35m",
@@ -190,10 +190,10 @@
       "image": "https://media.thenextweb.com/2026/06/PLD-Space-Miura.avif",
       "published": "2026-06-01T08:48:13+00:00",
       "firstSeen": "2026-06-01T10:00:01.323806+00:00",
-      "lastSeen": "2026-06-01T10:00:01.323806+00:00",
+      "lastSeen": "2026-06-01T11:00:01.590672+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.514
+      "score": 3.4849
     }
   ],
   "errors": [
