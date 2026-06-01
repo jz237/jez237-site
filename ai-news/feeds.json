@@ -143,5 +143,35 @@
     "url": "https://www.microsoft.com/en-us/research/feed/",
     "weight": 0.9,
     "category": "AI"
+  },
+  {
+    "name": "Ollama Releases",
+    "url": "https://github.com/ollama/ollama/releases.atom",
+    "weight": 0.9,
+    "category": "AI"
+  },
+  {
+    "name": "LiteLLM Releases",
+    "url": "https://github.com/BerriAI/litellm/releases.atom",
+    "weight": 0.85,
+    "category": "AI"
+  },
+  {
+    "name": "Hugging Face Transformers Releases",
+    "url": "https://github.com/huggingface/transformers/releases.atom",
+    "weight": 0.85,
+    "category": "AI"
+  },
+  {
+    "name": "llama.cpp Releases",
+    "url": "https://github.com/ggml-org/llama.cpp/releases.atom",
+    "weight": 0.8,
+    "category": "AI"
+  },
+  {
+    "name": "Model Context Protocol Python SDK Releases",
+    "url": "https://github.com/modelcontextprotocol/python-sdk/releases.atom",
+    "weight": 0.8,
+    "category": "AI"
   }
 ]
