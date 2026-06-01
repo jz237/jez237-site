@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "updatedAt": "2026-06-01T23:00:01.883335+00:00",
+  "updatedAt": "2026-06-01T22:15:41.447646+00:00",
   "items": [
     {
       "title": "May 2026 newsletter",
@@ -13,11 +13,11 @@
       "image": "",
       "published": "2026-06-01T04:45:00+00:00",
       "firstSeen": "2026-06-01T05:00:01.136943+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.3526
+      "score": 16.3663
     },
     {
       "title": "OpenAI frontier models and Codex are now available on AWS",
@@ -30,11 +30,11 @@
       "image": "https://images.ctfassets.net/kftzwdyauwt9/2Tbsus4QAtPDAlsIM3vYO2/87f4c6894832d7937e54ecb3c245fdbe/OAI_AWS_Partnership_16x9_Art_Card.png?w=1600&amp%3Bh=900&amp%3Bfit=fill",
       "published": "2026-06-01T10:00:00+00:00",
       "firstSeen": "2026-06-01T22:00:01.536287+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.9166
+      "score": 14.9325
     },
     {
       "title": "Florida becomes the first state to sue OpenAI, naming Altman personally and calling ChatGPT a defective product",
@@ -50,7 +50,7 @@
       "lastSeen": "2026-06-01T18:15:39.492139+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.0873
+      "score": 12.1068
     },
     {
       "title": "b9453",
@@ -63,11 +63,11 @@
       "image": "https://opengraph.githubassets.com/70e3ac50cd906e7b2fb939ec43a9b4f467a4066dc0df40365f86252877945b35/ggml-org/llama.cpp/releases/tag/b9453",
       "published": "2026-06-01T14:57:47+00:00",
       "firstSeen": "2026-06-01T15:00:02.058795+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.6999
+      "score": 11.7181
     },
     {
       "title": "Gemini’s new AI agent is about as good as Google’s demo",
@@ -80,10 +80,10 @@
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/lcimg-0ebbe911-9fbb-4f68-97b0-b7361d7cb53c.jpeg?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C10.604950381935%2C100%2C78.79009923613&amp%3Bw=1200",
       "published": "2026-06-01T20:00:00+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.972
+      "score": 10.993
     },
     {
       "title": "Anthropic is finally giving the EU access to Mythos, ending weeks of standoff over the world’s most powerful cybersecurity AI",
@@ -99,7 +99,7 @@
       "lastSeen": "2026-06-01T18:15:39.492139+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.374
+      "score": 10.3932
     },
     {
       "title": "Anthropic’s IPO filing means Salesforce’s early AI bet is about to become its most profitable investment",
@@ -112,10 +112,10 @@
       "image": "https://media.thenextweb.com/2026/05/salesforce-agentforce-saaspocalypse-ai-promise-reality-1.avif",
       "published": "2026-06-01T18:11:08+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1123
+      "score": 10.1322
     },
     {
       "title": "Anthropic Confidentially Files for What Could Be the Largest IPO Ever",
@@ -128,10 +128,10 @@
       "image": "https://media.wired.com/photos/6a1db04538f4e0fcb2641f17/master/pass/Anthropic-Goes-Public-Business-2274306161.jpg",
       "published": "2026-06-01T17:17:58+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4789
+      "score": 9.4984
     },
     {
       "title": "AI is crushing startup valuations for companies that raised before ChatGPT existed",
@@ -147,7 +147,7 @@
       "lastSeen": "2026-06-01T18:15:39.492139+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 9.3107
+      "score": 9.3286
     },
     {
       "title": "Florida sues OpenAI, Sam Altman, in first-of-its-kind lawsuit over violent incidents",
@@ -160,10 +160,10 @@
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200%2C800",
       "published": "2026-06-01T20:03:40+00:00",
       "firstSeen": "2026-06-01T21:00:01.828388+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2038
+      "score": 9.2248
     },
     {
       "title": "v0.30.0",
@@ -176,10 +176,10 @@
       "image": "https://opengraph.githubassets.com/ba017001f9d13428ceaa03ae8eb00565d23f543c1d5e69f9b978c6eb29086b51/ollama/ollama",
       "published": "2026-06-01T19:04:28+00:00",
       "firstSeen": "2026-06-01T18:00:01.158576+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 9.1463
+      "score": 9.1668
     },
     {
       "title": "Google Eases Gemini Usage Limits After Complaints",
@@ -192,10 +192,10 @@
       "image": "https://assets.techrepublic.com/uploads/2026/06/tr-06012026-google-gemini-usage-limits-complaints.jpg?f=jpeg",
       "published": "2026-06-01T08:54:57+00:00",
       "firstSeen": "2026-06-01T20:00:01.910682+00:00",
-      "lastSeen": "2026-06-01T23:00:01.883335+00:00",
+      "lastSeen": "2026-06-01T22:15:41.447646+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.8938
+      "score": 8.9093
     }
   ],
   "errors": [
