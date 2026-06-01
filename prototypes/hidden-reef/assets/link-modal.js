@@ -11,7 +11,7 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image. Hover to zoom in the preview pane."><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span><span class="link-modal__zoom-hint">Roll over image to zoom in</span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -152,10 +152,6 @@
   function initImageZoom(modal) {
     const media = modal.querySelector('.link-modal__media');
     if (!media) return;
-    const hint = modal.querySelector('.link-modal__zoom-hint');
-    if (hint && window.matchMedia?.('(pointer: coarse)').matches) {
-      hint.textContent = 'Double tap or pinch to zoom';
-    }
     let lastTapAt = 0;
     let currentTouchScale = TOUCH_ZOOM_MIN;
     let pinchStartDistance = 0;
