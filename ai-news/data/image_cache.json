@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T18:00:01.158576+00:00",
+  "updatedAt": "2026-06-01T18:15:39.492139+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -8776,6 +8776,10 @@
     "https://techcrunch.com/2026/05/30/the-groupthink-boom-what-three-top-vcs-really-think-about-the-ai-frenzy": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/SVC-Athens-2.jpg?w=800",
       "checkedAt": "2026-06-01T18:00:01.158576+00:00"
+    },
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b9457": {
+      "image": "https://opengraph.githubassets.com/5d1a282c7130fbed3aadfdee97625c1052c8cfad95bb6dc05ed477dcfea1bc37/ggml-org/llama.cpp/releases/tag/b9457",
+      "checkedAt": "2026-06-01T18:15:39.492139+00:00"
     }
   }
 }
