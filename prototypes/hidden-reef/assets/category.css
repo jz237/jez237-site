@@ -489,12 +489,14 @@ body.department-page .section-band + .section-band {
   .link-modal__gallery.has-thumbs {
     grid-template-columns: 1fr;
   }
-  .link-modal__media {
+  .link-modal__media,
+  .link-modal__gallery.has-thumbs .link-modal__media {
     grid-column: 1;
+    grid-row: 1;
   }
   .link-modal__thumbs {
     grid-column: 1;
-    grid-row: auto;
+    grid-row: 2;
     flex-direction: row;
     padding: 8px;
     overflow-x: auto;
