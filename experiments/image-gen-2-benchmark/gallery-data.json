@@ -1150,5 +1150,17 @@
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-06-01-afternoon-pet-as-neon-tube-laundromat-sign",
+    "title": "Pet as Neon Tube Laundromat Sign",
+    "tests": "Tests a reusable pet reference-photo transformation template: preserving markings, pose, and silhouette while converting the animal into a physical neon-sign object in a new environment.",
+    "prompt": "Use the uploaded reference photo and preserve the pet identity, pose, silhouette, eye placement, ear shape, tail shape, and most recognizable markings, then transform the pet into a freestanding neon tube sign figure inside a rainy late-night laundromat window. Rebuild the body entirely from glowing bent glass tubes in warm amber, cream, and pale green, with clear acrylic supports, black electrode caps, visible transformer wires, wet window reflections, and softly blurred washing machines in the background. Keep the pet recognizable through its markings and posture while changing the material, lighting, and setting. Negative constraints: no extra limbs, no text or logo artifacts, no placeholder boxes, and do not lose the face or key markings.\n\nSource photo needed: a clear pet photo.\n\nReusable template: Use the uploaded reference photo and preserve the [PET] identity, pose, silhouette, eye placement, ear shape, tail shape, and most recognizable markings, then transform the [PET] into a freestanding [MATERIAL/OBJECT] figure in [SETTING]. Keep [KEY MARKINGS OR FEATURES] recognizable while changing the body material, lighting, and environment to [MOOD]. Avoid extra limbs, text/logo artifacts, placeholder boxes, and any change that makes the pet unrecognizable.\n\nExample substitution: Use a clear orange tabby cat photo, preserve the curled seated pose, striped forehead, ringed tail, white muzzle, and almond eyes, then turn the cat into a neon tube sign figure in a rainy laundromat window.",
+    "image": "images/2026-06-01-afternoon-pet-as-neon-tube-laundromat-sign.png",
+    "date": "2026-06-01",
+    "batch": "Daily Prompt",
+    "slot": "afternoon",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
