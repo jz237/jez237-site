@@ -208,7 +208,8 @@ body.department-page .section-band + .section-band {
   position: relative;
   display: grid;
   grid-column: 1;
-  align-items: center;
+  align-items: start;
+  justify-items: center;
   min-height: 520px;
   padding: 24px;
   overflow: hidden;
@@ -219,6 +220,7 @@ body.department-page .section-band + .section-band {
 .link-modal__image {
   height: auto;
   max-height: 540px;
+  align-self: start;
   filter: drop-shadow(0 18px 24px rgba(13,47,65,.18));
   transform-origin: center;
   transition: filter .18s ease, transform .18s ease;
